@@ -21,6 +21,7 @@ git lfs install
 git clone https://github.com/ROTNITE/METAROY.git
 cd METAROY
 git lfs pull
+if (-not (Test-Path 'benchmarks/MetaRescue_Benchmark_v0_5_2/secret.env')) { Set-Content -Encoding ascii 'benchmarks/MetaRescue_Benchmark_v0_5_2/secret.env' 'API=' }
 python -m pip install -r requirements.txt
 ```
 
@@ -31,6 +32,8 @@ Unreal Engine 5.8.4, Visual Studio C++ и Windows SDK. Если движок у�
 `MR_UNREAL_ENGINE`. Для результатов на компьютере без диска D перед запуском
 задайте, например, `$env:METARESCUE_OUTPUT = "$env:USERPROFILE\MetaRescue-output"`.
 Движок, локальные кэши и инструменты сборки в репозиторий не входят.
+Команда создаёт пустой локальный шаблон `secret.env` для тестов бенчмарка,
+если его ещё нет; этот файл исключён из Git, чтобы не публиковать ключи.
 
 - [Единые инструкции и краткий контекст проекта](AGENTS.md).
 - [Точка продолжения v0.5.2](docs/quarter-v052-handoff.md).
