@@ -1,0 +1,321 @@
+{
+  "id": "Case",
+  "source": "blender/Meshy_AI_Rescue_Equipment_Case_20261109_image-to-3d-texture.blend",
+  "source_sha256": "f2eb81307c3be243a1a2734a323d8257fc0a4618d276193a9d3f4f434d0b5c73",
+  "blend": "Case.blend",
+  "parts": [
+    {
+      "object": "Body",
+      "role": "body",
+      "triangles": 9580,
+      "location_m": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "rotation_deg": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "parent": null,
+      "dimensions_m": [
+        0.7964612245559692,
+        0.4468075633049011,
+        0.40108010172843933
+      ],
+      "materials": [
+        "M_Case_Baked"
+      ],
+      "fbx": "parts/Body.fbx"
+    },
+    {
+      "object": "CaseLid",
+      "role": "case_lid",
+      "axis": "X",
+      "extracted_faces": 8419,
+      "triangles": 8419,
+      "location_m": [
+        0.0,
+        0.20000000298023224,
+        0.3499999940395355
+      ],
+      "rotation_deg": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "parent": null,
+      "dimensions_m": [
+        0.7997427582740784,
+        0.44642722606658936,
+        0.226403146982193
+      ],
+      "materials": [
+        "M_Case_Baked"
+      ],
+      "fbx": "parts/CaseLid.fbx"
+    },
+    {
+      "object": "LiningFloor",
+      "role": "static",
+      "triangles": 108,
+      "location_m": [
+        0.0,
+        0.0,
+        0.05000000074505806
+      ],
+      "rotation_deg": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "parent": null,
+      "dimensions_m": [
+        0.7099999785423279,
+        0.36000001430511475,
+        0.02500000037252903
+      ],
+      "materials": [
+        "M_Rig_CaseInterior"
+      ],
+      "fbx": "parts/LiningFloor.fbx"
+    },
+    {
+      "object": "LiningRear",
+      "role": "static",
+      "triangles": 108,
+      "location_m": [
+        0.0,
+        0.17000000178813934,
+        0.20999999344348907
+      ],
+      "rotation_deg": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "parent": null,
+      "dimensions_m": [
+        0.7099999785423279,
+        0.02500000037252903,
+        0.3100000023841858
+      ],
+      "materials": [
+        "M_Rig_CaseInterior"
+      ],
+      "fbx": "parts/LiningRear.fbx"
+    },
+    {
+      "object": "LiningFront",
+      "role": "static",
+      "triangles": 108,
+      "location_m": [
+        0.0,
+        -0.17000000178813934,
+        0.20999999344348907
+      ],
+      "rotation_deg": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "parent": null,
+      "dimensions_m": [
+        0.7099999785423279,
+        0.02500000037252903,
+        0.3100000023841858
+      ],
+      "materials": [
+        "M_Rig_CaseInterior"
+      ],
+      "fbx": "parts/LiningFront.fbx"
+    },
+    {
+      "object": "LiningEnd1",
+      "role": "static",
+      "triangles": 108,
+      "location_m": [
+        -0.3499999940395355,
+        0.0,
+        0.20999999344348907
+      ],
+      "rotation_deg": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "parent": null,
+      "dimensions_m": [
+        0.02500000037252903,
+        0.3499999940395355,
+        0.3100000023841858
+      ],
+      "materials": [
+        "M_Rig_CaseInterior"
+      ],
+      "fbx": "parts/LiningEnd1.fbx"
+    },
+    {
+      "object": "LiningEnd2",
+      "role": "static",
+      "triangles": 108,
+      "location_m": [
+        0.3499999940395355,
+        0.0,
+        0.20999999344348907
+      ],
+      "rotation_deg": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "parent": null,
+      "dimensions_m": [
+        0.02500000037252903,
+        0.3499999940395355,
+        0.3100000023841858
+      ],
+      "materials": [
+        "M_Rig_CaseInterior"
+      ],
+      "fbx": "parts/LiningEnd2.fbx"
+    }
+  ],
+  "materials": [
+    {
+      "name": "M_Case_Baked",
+      "glass": false,
+      "inputs": {
+        "Base Color": [
+          0.800000011920929,
+          0.800000011920929,
+          0.800000011920929,
+          1.0
+        ],
+        "Metallic": 0.0,
+        "Roughness": 0.5,
+        "Transmission Weight": 0.0,
+        "IOR": 1.5,
+        "Alpha": 1.0,
+        "Emission Color": [
+          1.0,
+          1.0,
+          1.0,
+          1.0
+        ],
+        "Emission Strength": 0.0
+      },
+      "links": [
+        {
+          "from": "Principled BSDF",
+          "output": "BSDF",
+          "to": "Material Output",
+          "input": "Surface"
+        },
+        {
+          "from": "Image Texture",
+          "output": "Color",
+          "to": "Principled BSDF",
+          "input": "Base Color"
+        },
+        {
+          "from": "Image Texture.001",
+          "output": "Color",
+          "to": "Separate Color",
+          "input": "Color"
+        },
+        {
+          "from": "Separate Color",
+          "output": "Green",
+          "to": "Principled BSDF",
+          "input": "Roughness"
+        },
+        {
+          "from": "Separate Color",
+          "output": "Blue",
+          "to": "Principled BSDF",
+          "input": "Metallic"
+        },
+        {
+          "from": "Image Texture.002",
+          "output": "Color",
+          "to": "Normal Map",
+          "input": "Color"
+        },
+        {
+          "from": "Normal Map",
+          "output": "Normal",
+          "to": "Principled BSDF",
+          "input": "Normal"
+        }
+      ],
+      "images": [
+        {
+          "node": "Image Texture",
+          "image": "T_Case_BaseColor",
+          "file": "textures/T_0_T_Case_BaseColor.png",
+          "colorspace": "sRGB"
+        },
+        {
+          "node": "Image Texture.001",
+          "image": "T_Case_ORM",
+          "file": "textures/T_1_T_Case_ORM.png",
+          "colorspace": "Non-Color"
+        },
+        {
+          "node": "Image Texture.002",
+          "image": "T_Case_Normal",
+          "file": "textures/T_2_T_Case_Normal.png",
+          "colorspace": "Non-Color"
+        }
+      ]
+    },
+    {
+      "name": "M_Rig_CaseInterior",
+      "glass": false,
+      "inputs": {
+        "Base Color": [
+          0.06499999761581421,
+          0.08500000089406967,
+          0.07999999821186066,
+          1.0
+        ],
+        "Metallic": 0.0,
+        "Roughness": 0.8999999761581421,
+        "Transmission Weight": 0.0,
+        "IOR": 1.5,
+        "Alpha": 1.0,
+        "Emission Color": [
+          1.0,
+          1.0,
+          1.0,
+          1.0
+        ],
+        "Emission Strength": 0.0
+      },
+      "links": [
+        {
+          "from": "Principled BSDF",
+          "output": "BSDF",
+          "to": "Material Output",
+          "input": "Surface"
+        }
+      ],
+      "images": []
+    }
+  ],
+  "repairs": [
+    "Separated hinged lid and added internal lining; rigid preview open/close."
+  ],
+  "actions": [
+    {
+      "name": "CaseOpen",
+      "frames": [
+        1.0,
+        160.0
+      ]
+    }
+  ],
+  "animation_runtime": "Rigid meshes driven from Unreal actuator state; Blender actions are inspectable demonstrations."
+}

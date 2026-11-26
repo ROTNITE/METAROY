@@ -1,0 +1,27 @@
+{
+  "command": [
+    "C:/Users/rotn1/Documents/ChatGPT/metaroy/unreal/MetaRescue/MetaRescue.uproject",
+    "/Game/Maps/RescueQuarter",
+    "-game",
+    "-RenderOffscreen",
+    "-windowed",
+    "-ResX=1600",
+    "-ResY=1000",
+    "-ForceRes",
+    "-unattended",
+    "-NoSound",
+    "-nosplash",
+    "-MRExternalControl",
+    "-MRVisualProbe=windows",
+    "-MRSmoke",
+    "-MRQuitAfter=22",
+    "-MREnvironment=static",
+    "-ExecCmds=r.Lumen.Visualize 5",
+    "-stdout",
+    "-FullStdOutLogOutput"
+  ],
+  "map_sha256": "D17D39751ECA0BE1AD1FF352C40F5803E287614EE66279F7F8DCFBBBAEE9FB4C",
+  "dll_sha256": "1C8F27E709FC67A1899F0C189FB84524E3331CD9E562E3108027CC0C31396FF6",
+  "purpose": "Lumen surface-cache diagnostic, not acceptance",
+  "started_at": "2026-11-10T23:07:17.5099255+03:00"
+}

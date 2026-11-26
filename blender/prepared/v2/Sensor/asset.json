@@ -1,0 +1,167 @@
+{
+  "id": "Sensor",
+  "source": "blender/Meshy_AI_Stationary_Sensor_Node_20261109_image-to-3d-texture.blend",
+  "source_sha256": "a899a5c9f5424acfb62875b46d64e6da6e1bcf82938473e2d235cd82d4ea5a4b",
+  "blend": "Sensor.blend",
+  "parts": [
+    {
+      "object": "Body",
+      "role": "body",
+      "triangles": 13884,
+      "location_m": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "rotation_deg": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "parent": null,
+      "dimensions_m": [
+        0.8781999945640564,
+        0.7741844058036804,
+        1.1337085962295532
+      ],
+      "materials": [
+        "M_Sensor_Baked"
+      ],
+      "fbx": "parts/Body.fbx"
+    },
+    {
+      "object": "SensorHead",
+      "role": "sensor_head",
+      "axis": "Z",
+      "limits_deg": [
+        -50,
+        50
+      ],
+      "extracted_faces": 10116,
+      "triangles": 10116,
+      "location_m": [
+        0.0,
+        0.0,
+        1.159999966621399
+      ],
+      "rotation_deg": [
+        0.0,
+        0.0,
+        -50.0000002530119
+      ],
+      "parent": null,
+      "dimensions_m": [
+        0.6034843921661377,
+        0.7182400226593018,
+        0.6886440515518188
+      ],
+      "materials": [
+        "M_Sensor_Baked"
+      ],
+      "fbx": "parts/SensorHead.fbx"
+    }
+  ],
+  "materials": [
+    {
+      "name": "M_Sensor_Baked",
+      "glass": false,
+      "inputs": {
+        "Base Color": [
+          0.800000011920929,
+          0.800000011920929,
+          0.800000011920929,
+          1.0
+        ],
+        "Metallic": 0.0,
+        "Roughness": 0.5,
+        "Transmission Weight": 0.0,
+        "IOR": 1.5,
+        "Alpha": 1.0,
+        "Emission Color": [
+          1.0,
+          1.0,
+          1.0,
+          1.0
+        ],
+        "Emission Strength": 0.0
+      },
+      "links": [
+        {
+          "from": "Principled BSDF",
+          "output": "BSDF",
+          "to": "Material Output",
+          "input": "Surface"
+        },
+        {
+          "from": "Image Texture",
+          "output": "Color",
+          "to": "Principled BSDF",
+          "input": "Base Color"
+        },
+        {
+          "from": "Image Texture.001",
+          "output": "Color",
+          "to": "Separate Color",
+          "input": "Color"
+        },
+        {
+          "from": "Separate Color",
+          "output": "Green",
+          "to": "Principled BSDF",
+          "input": "Roughness"
+        },
+        {
+          "from": "Separate Color",
+          "output": "Blue",
+          "to": "Principled BSDF",
+          "input": "Metallic"
+        },
+        {
+          "from": "Image Texture.002",
+          "output": "Color",
+          "to": "Normal Map",
+          "input": "Color"
+        },
+        {
+          "from": "Normal Map",
+          "output": "Normal",
+          "to": "Principled BSDF",
+          "input": "Normal"
+        }
+      ],
+      "images": [
+        {
+          "node": "Image Texture",
+          "image": "T_Sensor_BaseColor",
+          "file": "textures/T_0_T_Sensor_BaseColor.png",
+          "colorspace": "sRGB"
+        },
+        {
+          "node": "Image Texture.001",
+          "image": "T_Sensor_ORM",
+          "file": "textures/T_1_T_Sensor_ORM.png",
+          "colorspace": "Non-Color"
+        },
+        {
+          "node": "Image Texture.002",
+          "image": "T_Sensor_Normal",
+          "file": "textures/T_2_T_Sensor_Normal.png",
+          "colorspace": "Non-Color"
+        }
+      ]
+    }
+  ],
+  "repairs": [
+    "Separated camera head above swivel from fixed tripod; bounded eased scan."
+  ],
+  "actions": [
+    {
+      "name": "SensorScan",
+      "frames": [
+        1.0,
+        181.0
+      ]
+    }
+  ],
+  "animation_runtime": "Rigid meshes driven from Unreal actuator state; Blender actions are inspectable demonstrations."
+}

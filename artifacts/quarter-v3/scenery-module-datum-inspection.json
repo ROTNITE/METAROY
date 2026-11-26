@@ -1,0 +1,128 @@
+{
+  "passed": true,
+  "source_sha256": "20fbf0191b5dd01cb03f5fe92eec563bdb1348e1867222c5691eb5e16b619134",
+  "method": "Read actual saved Blender mesh-local and world vertex minima after matrix bake and visible feet/wheels; runtime module loader uses zero translation. Each joined module at z=0 and identity translation. Grounded individual fragments retain catalog offset and runtime GroundedAssembly remeasures vertices.",
+  "rows": [
+    {
+      "object": "fragment_0",
+      "mesh_local_bottom_m": -0.04500000178813934,
+      "world_bottom_m": 0.0,
+      "location_m": [
+        0.0,
+        0.0,
+        0.04500000178813934
+      ],
+      "module_datum_verified": false
+    },
+    {
+      "object": "fragment_1",
+      "mesh_local_bottom_m": -0.03750000149011612,
+      "world_bottom_m": 0.0,
+      "location_m": [
+        0.0,
+        0.0,
+        0.03750000149011612
+      ],
+      "module_datum_verified": false
+    },
+    {
+      "object": "fragment_2",
+      "mesh_local_bottom_m": -0.0949999988079071,
+      "world_bottom_m": 0.0,
+      "location_m": [
+        0.0,
+        0.0,
+        0.0949999988079071
+      ],
+      "module_datum_verified": false
+    },
+    {
+      "object": "fragment_3",
+      "mesh_local_bottom_m": -0.125,
+      "world_bottom_m": 0.0,
+      "location_m": [
+        0.0,
+        0.0,
+        0.125
+      ],
+      "module_datum_verified": false
+    },
+    {
+      "object": "fragment_4",
+      "mesh_local_bottom_m": 0.0,
+      "world_bottom_m": 0.0,
+      "location_m": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "module_datum_verified": true
+    },
+    {
+      "object": "room_0",
+      "mesh_local_bottom_m": 0.0,
+      "world_bottom_m": 0.0,
+      "location_m": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "module_datum_verified": true
+    },
+    {
+      "object": "room_1",
+      "mesh_local_bottom_m": 0.0,
+      "world_bottom_m": 0.0,
+      "location_m": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "module_datum_verified": true
+    },
+    {
+      "object": "room_2",
+      "mesh_local_bottom_m": 0.0,
+      "world_bottom_m": 0.0,
+      "location_m": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "module_datum_verified": true
+    },
+    {
+      "object": "courtyard_bench",
+      "mesh_local_bottom_m": 0.0,
+      "world_bottom_m": 0.0,
+      "location_m": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "module_datum_verified": true
+    },
+    {
+      "object": "service_bins",
+      "mesh_local_bottom_m": 0.0,
+      "world_bottom_m": 0.0,
+      "location_m": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "module_datum_verified": true
+    },
+    {
+      "object": "roof_vent",
+      "mesh_local_bottom_m": 0.0,
+      "world_bottom_m": 0.0,
+      "location_m": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "module_datum_verified": true
+    }
+  ]
+}

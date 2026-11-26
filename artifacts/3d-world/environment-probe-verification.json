@@ -1,0 +1,10 @@
+{
+  "passed": true,
+  "road_speed_cm_s": 229.30970001220703,
+  "mud_speed_cm_s": 129.87047576904297,
+  "water_stop_y_cm": 11891.862420623582,
+  "water_distance_cm": 500.3327331542969,
+  "probe_samples": 182,
+  "mission_agents": 7,
+  "additional_validation_vehicles": 2
+}

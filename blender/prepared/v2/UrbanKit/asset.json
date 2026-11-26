@@ -1,0 +1,5050 @@
+{
+  "id": "UrbanKit",
+  "source": "blender/vendor/modular_urban_apartments_facade_4k/modular_urban_apartments_facade_4k.blend",
+  "source_sha256": "170ef3dd2246418a1c3539de606b71a94c8692690aa153e8d6990b3798230d3a",
+  "blend": "UrbanKit.blend",
+  "parts": [
+    {
+      "object": "wall_door_centered_large_01",
+      "role": "module",
+      "catalog_position_m": [
+        9.500001907348633,
+        -4.371138828673793e-08,
+        0.0
+      ],
+      "triangles": 1404,
+      "location_m": [
+        9.500001907348633,
+        -4.371138828673793e-08,
+        0.0
+      ],
+      "rotation_deg": [
+        0.0,
+        -0.0,
+        0.0
+      ],
+      "parent": null,
+      "dimensions_m": [
+        2.999998092651367,
+        0.18000000715255737,
+        3.0
+      ],
+      "materials": [
+        "modular_urban_apartments_facade_plaster"
+      ],
+      "fbx": "parts/wall_door_centered_large_01.fbx"
+    },
+    {
+      "object": "wall_door_angled_large_01",
+      "role": "module",
+      "catalog_position_m": [
+        2.499999523162842,
+        1.4999995231628418,
+        0.0
+      ],
+      "triangles": 1242,
+      "location_m": [
+        2.499999523162842,
+        1.4999995231628418,
+        0.0
+      ],
+      "rotation_deg": [
+        0.0,
+        -0.0,
+        0.0
+      ],
+      "parent": null,
+      "dimensions_m": [
+        3.0000009536743164,
+        3.000000238418579,
+        3.0
+      ],
+      "materials": [
+        "modular_urban_apartments_facade_plaster"
+      ],
+      "fbx": "parts/wall_door_angled_large_01.fbx"
+    },
+    {
+      "object": "wall_door_angled_small_01",
+      "role": "module",
+      "catalog_position_m": [
+        5.999999523162842,
+        1.0,
+        0.0
+      ],
+      "triangles": 1008,
+      "location_m": [
+        5.999999523162842,
+        1.0,
+        0.0
+      ],
+      "rotation_deg": [
+        0.0,
+        -0.0,
+        0.0
+      ],
+      "parent": null,
+      "dimensions_m": [
+        2.0000007152557373,
+        2.0,
+        3.0
+      ],
+      "materials": [
+        "modular_urban_apartments_facade_plaster"
+      ],
+      "fbx": "parts/wall_door_angled_small_01.fbx"
+    },
+    {
+      "object": "wall_window_angled_large_01",
+      "role": "module",
+      "catalog_position_m": [
+        2.499999761581421,
+        1.5,
+        4.0
+      ],
+      "triangles": 1482,
+      "location_m": [
+        2.499999761581421,
+        1.5,
+        4.0
+      ],
+      "rotation_deg": [
+        0.0,
+        -0.0,
+        0.0
+      ],
+      "parent": null,
+      "dimensions_m": [
+        3.000000476837158,
+        3.0,
+        3.0
+      ],
+      "materials": [
+        "modular_urban_apartments_facade_plaster"
+      ],
+      "fbx": "parts/wall_window_angled_large_01.fbx"
+    },
+    {
+      "object": "wall_window_angled_small_01",
+      "role": "module",
+      "catalog_position_m": [
+        5.999999523162842,
+        1.0,
+        4.0
+      ],
+      "triangles": 1136,
+      "location_m": [
+        5.999999523162842,
+        1.0,
+        4.0
+      ],
+      "rotation_deg": [
+        0.0,
+        -0.0,
+        0.0
+      ],
+      "parent": null,
+      "dimensions_m": [
+        2.0000007152557373,
+        2.0,
+        3.0
+      ],
+      "materials": [
+        "modular_urban_apartments_facade_plaster"
+      ],
+      "fbx": "parts/wall_window_angled_small_01.fbx"
+    },
+    {
+      "object": "wall_window_centered_large_01",
+      "role": "module",
+      "catalog_position_m": [
+        9.5,
+        0.0,
+        4.0
+      ],
+      "triangles": 1780,
+      "location_m": [
+        9.5,
+        0.0,
+        4.0
+      ],
+      "rotation_deg": [
+        0.0,
+        -0.0,
+        0.0
+      ],
+      "parent": null,
+      "dimensions_m": [
+        3.0,
+        0.18000000715255737,
+        3.0
+      ],
+      "materials": [
+        "modular_urban_apartments_facade_plaster"
+      ],
+      "fbx": "parts/wall_window_centered_large_01.fbx"
+    },
+    {
+      "object": "wall_window_centered_large_02",
+      "role": "module",
+      "catalog_position_m": [
+        9.5,
+        0.0,
+        8.0
+      ],
+      "triangles": 1780,
+      "location_m": [
+        9.5,
+        0.0,
+        8.0
+      ],
+      "rotation_deg": [
+        0.0,
+        -0.0,
+        0.0
+      ],
+      "parent": null,
+      "dimensions_m": [
+        3.0,
+        0.18000000715255737,
+        3.0
+      ],
+      "materials": [
+        "modular_urban_apartments_facade_plaster"
+      ],
+      "fbx": "parts/wall_window_centered_large_02.fbx"
+    },
+    {
+      "object": "wall_window_angled_small_02",
+      "role": "module",
+      "catalog_position_m": [
+        5.999999523162842,
+        1.0,
+        8.0
+      ],
+      "triangles": 1136,
+      "location_m": [
+        5.999999523162842,
+        1.0,
+        8.0
+      ],
+      "rotation_deg": [
+        0.0,
+        -0.0,
+        0.0
+      ],
+      "parent": null,
+      "dimensions_m": [
+        2.0000007152557373,
+        2.0,
+        3.0
+      ],
+      "materials": [
+        "modular_urban_apartments_facade_plaster"
+      ],
+      "fbx": "parts/wall_window_angled_small_02.fbx"
+    },
+    {
+      "object": "wall_window_angled_large_02",
+      "role": "module",
+      "catalog_position_m": [
+        2.499999761581421,
+        1.5,
+        8.0
+      ],
+      "triangles": 1482,
+      "location_m": [
+        2.499999761581421,
+        1.5,
+        8.0
+      ],
+      "rotation_deg": [
+        0.0,
+        -0.0,
+        0.0
+      ],
+      "parent": null,
+      "dimensions_m": [
+        3.000000476837158,
+        3.0,
+        3.0
+      ],
+      "materials": [
+        "modular_urban_apartments_facade_plaster"
+      ],
+      "fbx": "parts/wall_window_angled_large_02.fbx"
+    },
+    {
+      "object": "wall_window_centered_large_03",
+      "role": "module",
+      "catalog_position_m": [
+        9.5,
+        0.09000005573034286,
+        12.0
+      ],
+      "triangles": 896,
+      "location_m": [
+        9.5,
+        0.09000005573034286,
+        12.0
+      ],
+      "rotation_deg": [
+        0.0,
+        -0.0,
+        0.0
+      ],
+      "parent": null,
+      "dimensions_m": [
+        3.0,
+        0.18000011146068573,
+        3.0
+      ],
+      "materials": [
+        "modular_urban_apartments_facade_plaster"
+      ],
+      "fbx": "parts/wall_window_centered_large_03.fbx"
+    },
+    {
+      "object": "wall_window_centered_double_03",
+      "role": "module",
+      "catalog_position_m": [
+        17.5,
+        0.09000006318092346,
+        12.0
+      ],
+      "triangles": 992,
+      "location_m": [
+        17.5,
+        0.09000006318092346,
+        12.0
+      ],
+      "rotation_deg": [
+        0.0,
+        -0.0,
+        0.0
+      ],
+      "parent": null,
+      "dimensions_m": [
+        3.0,
+        0.18000012636184692,
+        3.0
+      ],
+      "materials": [
+        "modular_urban_apartments_facade_plaster"
+      ],
+      "fbx": "parts/wall_window_centered_double_03.fbx"
+    },
+    {
+      "object": "wall_window_centered_double_02",
+      "role": "module",
+      "catalog_position_m": [
+        17.5,
+        0.0,
+        8.0
+      ],
+      "triangles": 1864,
+      "location_m": [
+        17.5,
+        0.0,
+        8.0
+      ],
+      "rotation_deg": [
+        0.0,
+        -0.0,
+        0.0
+      ],
+      "parent": null,
+      "dimensions_m": [
+        3.0,
+        0.18000000715255737,
+        3.0
+      ],
+      "materials": [
+        "modular_urban_apartments_facade_plaster"
+      ],
+      "fbx": "parts/wall_window_centered_double_02.fbx"
+    },
+    {
+      "object": "wall_window_centered_double_01",
+      "role": "module",
+      "catalog_position_m": [
+        17.5,
+        0.0,
+        4.0
+      ],
+      "triangles": 1832,
+      "location_m": [
+        17.5,
+        0.0,
+        4.0
+      ],
+      "rotation_deg": [
+        0.0,
+        -0.0,
+        0.0
+      ],
+      "parent": null,
+      "dimensions_m": [
+        3.0,
+        0.18000000715255737,
+        3.0
+      ],
+      "materials": [
+        "modular_urban_apartments_facade_plaster"
+      ],
+      "fbx": "parts/wall_window_centered_double_01.fbx"
+    },
+    {
+      "object": "wall_door_centered_small_01",
+      "role": "module",
+      "catalog_position_m": [
+        13.5,
+        -2.1855694143368964e-08,
+        0.0
+      ],
+      "triangles": 1908,
+      "location_m": [
+        13.5,
+        -2.1855694143368964e-08,
+        0.0
+      ],
+      "rotation_deg": [
+        0.0,
+        -0.0,
+        0.0
+      ],
+      "parent": null,
+      "dimensions_m": [
+        3.0,
+        0.18000005185604095,
+        3.0
+      ],
+      "materials": [
+        "modular_urban_apartments_facade_plaster"
+      ],
+      "fbx": "parts/wall_door_centered_small_01.fbx"
+    },
+    {
+      "object": "wall_door_centered_small_02",
+      "role": "module",
+      "catalog_position_m": [
+        17.5,
+        0.0,
+        0.0
+      ],
+      "triangles": 2028,
+      "location_m": [
+        17.5,
+        0.0,
+        0.0
+      ],
+      "rotation_deg": [
+        0.0,
+        -0.0,
+        0.0
+      ],
+      "parent": null,
+      "dimensions_m": [
+        3.0,
+        0.18000000715255737,
+        3.0
+      ],
+      "materials": [
+        "modular_urban_apartments_facade_plaster"
+      ],
+      "fbx": "parts/wall_door_centered_small_02.fbx"
+    },
+    {
+      "object": "wall_window_centered_small_02",
+      "role": "module",
+      "catalog_position_m": [
+        13.5,
+        0.0,
+        8.0
+      ],
+      "triangles": 2164,
+      "location_m": [
+        13.5,
+        0.0,
+        8.0
+      ],
+      "rotation_deg": [
+        0.0,
+        -0.0,
+        0.0
+      ],
+      "parent": null,
+      "dimensions_m": [
+        3.0,
+        0.18000000715255737,
+        3.0
+      ],
+      "materials": [
+        "modular_urban_apartments_facade_plaster"
+      ],
+      "fbx": "parts/wall_window_centered_small_02.fbx"
+    },
+    {
+      "object": "wall_window_centered_small_03",
+      "role": "module",
+      "catalog_position_m": [
+        13.5,
+        0.09000005573034286,
+        12.0
+      ],
+      "triangles": 1072,
+      "location_m": [
+        13.5,
+        0.09000005573034286,
+        12.0
+      ],
+      "rotation_deg": [
+        0.0,
+        -0.0,
+        0.0
+      ],
+      "parent": null,
+      "dimensions_m": [
+        3.0,
+        0.18000011146068573,
+        3.0
+      ],
+      "materials": [
+        "modular_urban_apartments_facade_plaster"
+      ],
+      "fbx": "parts/wall_window_centered_small_03.fbx"
+    },
+    {
+      "object": "wall_window_centered_small_01",
+      "role": "module",
+      "catalog_position_m": [
+        13.5,
+        0.0,
+        4.0
+      ],
+      "triangles": 2164,
+      "location_m": [
+        13.5,
+        0.0,
+        4.0
+      ],
+      "rotation_deg": [
+        0.0,
+        -0.0,
+        0.0
+      ],
+      "parent": null,
+      "dimensions_m": [
+        3.0,
+        0.18000000715255737,
+        3.0
+      ],
+      "materials": [
+        "modular_urban_apartments_facade_plaster"
+      ],
+      "fbx": "parts/wall_window_centered_small_01.fbx"
+    },
+    {
+      "object": "wall_window_offset_small_05",
+      "role": "module",
+      "catalog_position_m": [
+        21.5,
+        0.09000006318092346,
+        12.0
+      ],
+      "triangles": 1072,
+      "location_m": [
+        21.5,
+        0.09000006318092346,
+        12.0
+      ],
+      "rotation_deg": [
+        0.0,
+        -0.0,
+        0.0
+      ],
+      "parent": null,
+      "dimensions_m": [
+        3.0,
+        0.18000012636184692,
+        3.0
+      ],
+      "materials": [
+        "modular_urban_apartments_facade_plaster"
+      ],
+      "fbx": "parts/wall_window_offset_small_05.fbx"
+    },
+    {
+      "object": "wall_window_offset_small_03",
+      "role": "module",
+      "catalog_position_m": [
+        21.5,
+        0.0,
+        8.0
+      ],
+      "triangles": 2180,
+      "location_m": [
+        21.5,
+        0.0,
+        8.0
+      ],
+      "rotation_deg": [
+        0.0,
+        -0.0,
+        0.0
+      ],
+      "parent": null,
+      "dimensions_m": [
+        3.0,
+        0.18000000715255737,
+        3.0
+      ],
+      "materials": [
+        "modular_urban_apartments_facade_plaster"
+      ],
+      "fbx": "parts/wall_window_offset_small_03.fbx"
+    },
+    {
+      "object": "wall_window_offset_small_01",
+      "role": "module",
+      "catalog_position_m": [
+        21.5,
+        0.0,
+        4.0
+      ],
+      "triangles": 2164,
+      "location_m": [
+        21.5,
+        0.0,
+        4.0
+      ],
+      "rotation_deg": [
+        0.0,
+        -0.0,
+        0.0
+      ],
+      "parent": null,
+      "dimensions_m": [
+        3.0,
+        0.18000000715255737,
+        3.0
+      ],
+      "materials": [
+        "modular_urban_apartments_facade_plaster"
+      ],
+      "fbx": "parts/wall_window_offset_small_01.fbx"
+    },
+    {
+      "object": "wall_window_offset_small_06",
+      "role": "module",
+      "catalog_position_m": [
+        21.5,
+        2.0900001525878906,
+        12.0
+      ],
+      "triangles": 1072,
+      "location_m": [
+        21.5,
+        2.0900001525878906,
+        12.0
+      ],
+      "rotation_deg": [
+        0.0,
+        -0.0,
+        0.0
+      ],
+      "parent": null,
+      "dimensions_m": [
+        3.0,
+        0.18000012636184692,
+        3.0
+      ],
+      "materials": [
+        "modular_urban_apartments_facade_plaster"
+      ],
+      "fbx": "parts/wall_window_offset_small_06.fbx"
+    },
+    {
+      "object": "wall_window_offset_small_04",
+      "role": "module",
+      "catalog_position_m": [
+        21.5,
+        2.0,
+        8.0
+      ],
+      "triangles": 2180,
+      "location_m": [
+        21.5,
+        2.0,
+        8.0
+      ],
+      "rotation_deg": [
+        0.0,
+        -0.0,
+        0.0
+      ],
+      "parent": null,
+      "dimensions_m": [
+        3.0,
+        0.18000000715255737,
+        3.0
+      ],
+      "materials": [
+        "modular_urban_apartments_facade_plaster"
+      ],
+      "fbx": "parts/wall_window_offset_small_04.fbx"
+    },
+    {
+      "object": "wall_window_offset_small_02",
+      "role": "module",
+      "catalog_position_m": [
+        21.5,
+        2.0,
+        4.0
+      ],
+      "triangles": 2164,
+      "location_m": [
+        21.5,
+        2.0,
+        4.0
+      ],
+      "rotation_deg": [
+        0.0,
+        -0.0,
+        0.0
+      ],
+      "parent": null,
+      "dimensions_m": [
+        3.0,
+        0.18000000715255737,
+        3.0
+      ],
+      "materials": [
+        "modular_urban_apartments_facade_plaster"
+      ],
+      "fbx": "parts/wall_window_offset_small_02.fbx"
+    },
+    {
+      "object": "wall_door_offset_small_01",
+      "role": "module",
+      "catalog_position_m": [
+        21.5,
+        0.0,
+        0.0
+      ],
+      "triangles": 2028,
+      "location_m": [
+        21.5,
+        0.0,
+        0.0
+      ],
+      "rotation_deg": [
+        0.0,
+        -0.0,
+        0.0
+      ],
+      "parent": null,
+      "dimensions_m": [
+        3.0,
+        0.18000000715255737,
+        3.0
+      ],
+      "materials": [
+        "modular_urban_apartments_facade_plaster"
+      ],
+      "fbx": "parts/wall_door_offset_small_01.fbx"
+    },
+    {
+      "object": "wall_door_offset_small_02",
+      "role": "module",
+      "catalog_position_m": [
+        21.5,
+        2.0,
+        0.0
+      ],
+      "triangles": 2028,
+      "location_m": [
+        21.5,
+        2.0,
+        0.0
+      ],
+      "rotation_deg": [
+        0.0,
+        -0.0,
+        0.0
+      ],
+      "parent": null,
+      "dimensions_m": [
+        3.0,
+        0.18000000715255737,
+        3.0
+      ],
+      "materials": [
+        "modular_urban_apartments_facade_plaster"
+      ],
+      "fbx": "parts/wall_door_offset_small_02.fbx"
+    },
+    {
+      "object": "wall_door_window_small_010",
+      "role": "module",
+      "catalog_position_m": [
+        25.5,
+        2.0900001525878906,
+        12.0
+      ],
+      "triangles": 800,
+      "location_m": [
+        25.5,
+        2.0900001525878906,
+        12.0
+      ],
+      "rotation_deg": [
+        0.0,
+        -0.0,
+        0.0
+      ],
+      "parent": null,
+      "dimensions_m": [
+        3.0,
+        0.18000012636184692,
+        3.0
+      ],
+      "materials": [
+        "modular_urban_apartments_facade_plaster"
+      ],
+      "fbx": "parts/wall_door_window_small_010.fbx"
+    },
+    {
+      "object": "wall_door_window_small_06",
+      "role": "module",
+      "catalog_position_m": [
+        25.5,
+        2.0,
+        8.0
+      ],
+      "triangles": 1712,
+      "location_m": [
+        25.5,
+        2.0,
+        8.0
+      ],
+      "rotation_deg": [
+        0.0,
+        -0.0,
+        0.0
+      ],
+      "parent": null,
+      "dimensions_m": [
+        3.0,
+        0.18000000715255737,
+        3.0
+      ],
+      "materials": [
+        "modular_urban_apartments_facade_plaster"
+      ],
+      "fbx": "parts/wall_door_window_small_06.fbx"
+    },
+    {
+      "object": "wall_door_window_small_02",
+      "role": "module",
+      "catalog_position_m": [
+        25.5,
+        2.0,
+        4.0
+      ],
+      "triangles": 1696,
+      "location_m": [
+        25.5,
+        2.0,
+        4.0
+      ],
+      "rotation_deg": [
+        0.0,
+        -0.0,
+        0.0
+      ],
+      "parent": null,
+      "dimensions_m": [
+        3.0,
+        0.18000000715255737,
+        3.0
+      ],
+      "materials": [
+        "modular_urban_apartments_facade_plaster"
+      ],
+      "fbx": "parts/wall_door_window_small_02.fbx"
+    },
+    {
+      "object": "wall_door_window_small_01",
+      "role": "module",
+      "catalog_position_m": [
+        25.5,
+        0.0,
+        4.0
+      ],
+      "triangles": 1696,
+      "location_m": [
+        25.5,
+        0.0,
+        4.0
+      ],
+      "rotation_deg": [
+        0.0,
+        -0.0,
+        0.0
+      ],
+      "parent": null,
+      "dimensions_m": [
+        3.0,
+        0.18000000715255737,
+        3.0
+      ],
+      "materials": [
+        "modular_urban_apartments_facade_plaster"
+      ],
+      "fbx": "parts/wall_door_window_small_01.fbx"
+    },
+    {
+      "object": "wall_door_window_small_05",
+      "role": "module",
+      "catalog_position_m": [
+        25.5,
+        0.0,
+        8.0
+      ],
+      "triangles": 1712,
+      "location_m": [
+        25.5,
+        0.0,
+        8.0
+      ],
+      "rotation_deg": [
+        0.0,
+        -0.0,
+        0.0
+      ],
+      "parent": null,
+      "dimensions_m": [
+        3.0,
+        0.18000000715255737,
+        3.0
+      ],
+      "materials": [
+        "modular_urban_apartments_facade_plaster"
+      ],
+      "fbx": "parts/wall_door_window_small_05.fbx"
+    },
+    {
+      "object": "wall_door_window_small_09",
+      "role": "module",
+      "catalog_position_m": [
+        25.5,
+        0.09000006318092346,
+        12.0
+      ],
+      "triangles": 800,
+      "location_m": [
+        25.5,
+        0.09000006318092346,
+        12.0
+      ],
+      "rotation_deg": [
+        0.0,
+        -0.0,
+        0.0
+      ],
+      "parent": null,
+      "dimensions_m": [
+        3.0,
+        0.18000012636184692,
+        3.0
+      ],
+      "materials": [
+        "modular_urban_apartments_facade_plaster"
+      ],
+      "fbx": "parts/wall_door_window_small_09.fbx"
+    },
+    {
+      "object": "wall_door_window_small_013",
+      "role": "module",
+      "catalog_position_m": [
+        25.5,
+        6.090000152587891,
+        12.0
+      ],
+      "triangles": 736,
+      "location_m": [
+        25.5,
+        6.090000152587891,
+        12.0
+      ],
+      "rotation_deg": [
+        0.0,
+        -0.0,
+        0.0
+      ],
+      "parent": null,
+      "dimensions_m": [
+        3.0,
+        0.18000012636184692,
+        3.0
+      ],
+      "materials": [
+        "modular_urban_apartments_facade_plaster"
+      ],
+      "fbx": "parts/wall_door_window_small_013.fbx"
+    },
+    {
+      "object": "wall_door_window_small_08",
+      "role": "module",
+      "catalog_position_m": [
+        25.5,
+        6.0,
+        8.0
+      ],
+      "triangles": 1592,
+      "location_m": [
+        25.5,
+        6.0,
+        8.0
+      ],
+      "rotation_deg": [
+        0.0,
+        -0.0,
+        0.0
+      ],
+      "parent": null,
+      "dimensions_m": [
+        3.0,
+        0.18000005185604095,
+        3.0
+      ],
+      "materials": [
+        "modular_urban_apartments_facade_plaster"
+      ],
+      "fbx": "parts/wall_door_window_small_08.fbx"
+    },
+    {
+      "object": "wall_door_window_small_04",
+      "role": "module",
+      "catalog_position_m": [
+        25.5,
+        6.0,
+        4.0
+      ],
+      "triangles": 1576,
+      "location_m": [
+        25.5,
+        6.0,
+        4.0
+      ],
+      "rotation_deg": [
+        0.0,
+        -0.0,
+        0.0
+      ],
+      "parent": null,
+      "dimensions_m": [
+        3.0,
+        0.18000005185604095,
+        3.0
+      ],
+      "materials": [
+        "modular_urban_apartments_facade_plaster"
+      ],
+      "fbx": "parts/wall_door_window_small_04.fbx"
+    },
+    {
+      "object": "wall_door_window_small_012",
+      "role": "module",
+      "catalog_position_m": [
+        25.5,
+        4.090000152587891,
+        12.0
+      ],
+      "triangles": 736,
+      "location_m": [
+        25.5,
+        4.090000152587891,
+        12.0
+      ],
+      "rotation_deg": [
+        0.0,
+        -0.0,
+        0.0
+      ],
+      "parent": null,
+      "dimensions_m": [
+        3.0,
+        0.18000012636184692,
+        3.0
+      ],
+      "materials": [
+        "modular_urban_apartments_facade_plaster"
+      ],
+      "fbx": "parts/wall_door_window_small_012.fbx"
+    },
+    {
+      "object": "wall_door_window_small_07",
+      "role": "module",
+      "catalog_position_m": [
+        25.5,
+        4.0,
+        8.0
+      ],
+      "triangles": 1592,
+      "location_m": [
+        25.5,
+        4.0,
+        8.0
+      ],
+      "rotation_deg": [
+        0.0,
+        -0.0,
+        0.0
+      ],
+      "parent": null,
+      "dimensions_m": [
+        3.0,
+        0.18000005185604095,
+        3.0
+      ],
+      "materials": [
+        "modular_urban_apartments_facade_plaster"
+      ],
+      "fbx": "parts/wall_door_window_small_07.fbx"
+    },
+    {
+      "object": "wall_door_window_small_03",
+      "role": "module",
+      "catalog_position_m": [
+        25.5,
+        4.0,
+        4.0
+      ],
+      "triangles": 1576,
+      "location_m": [
+        25.5,
+        4.0,
+        4.0
+      ],
+      "rotation_deg": [
+        0.0,
+        -0.0,
+        0.0
+      ],
+      "parent": null,
+      "dimensions_m": [
+        3.0,
+        0.18000005185604095,
+        3.0
+      ],
+      "materials": [
+        "modular_urban_apartments_facade_plaster"
+      ],
+      "fbx": "parts/wall_door_window_small_03.fbx"
+    },
+    {
+      "object": "wall_standard_standard_01",
+      "role": "module",
+      "catalog_position_m": [
+        -1.5,
+        0.0,
+        0.0
+      ],
+      "triangles": 2496,
+      "location_m": [
+        -1.5,
+        0.0,
+        0.0
+      ],
+      "rotation_deg": [
+        0.0,
+        -0.0,
+        0.0
+      ],
+      "parent": null,
+      "dimensions_m": [
+        3.0,
+        0.18000000715255737,
+        3.0
+      ],
+      "materials": [
+        "modular_urban_apartments_facade_plaster"
+      ],
+      "fbx": "parts/wall_standard_standard_01.fbx"
+    },
+    {
+      "object": "wall_standard_angled_large_01",
+      "role": "module",
+      "catalog_position_m": [
+        -9.5,
+        1.4999998807907104,
+        0.0
+      ],
+      "triangles": 1872,
+      "location_m": [
+        -9.5,
+        1.4999998807907104,
+        0.0
+      ],
+      "rotation_deg": [
+        0.0,
+        -0.0,
+        0.0
+      ],
+      "parent": null,
+      "dimensions_m": [
+        3.0000009536743164,
+        3.0,
+        3.0
+      ],
+      "materials": [
+        "modular_urban_apartments_facade_plaster"
+      ],
+      "fbx": "parts/wall_standard_angled_large_01.fbx"
+    },
+    {
+      "object": "wall_standard_angled_small_01",
+      "role": "module",
+      "catalog_position_m": [
+        -16.0,
+        1.0,
+        0.0
+      ],
+      "triangles": 1344,
+      "location_m": [
+        -16.0,
+        1.0,
+        0.0
+      ],
+      "rotation_deg": [
+        0.0,
+        -0.0,
+        0.0
+      ],
+      "parent": null,
+      "dimensions_m": [
+        2.0000007152557373,
+        2.0,
+        3.0
+      ],
+      "materials": [
+        "modular_urban_apartments_facade_plaster"
+      ],
+      "fbx": "parts/wall_standard_angled_small_01.fbx"
+    },
+    {
+      "object": "wall_standard_corner_large_01",
+      "role": "module",
+      "catalog_position_m": [
+        -5.5,
+        1.4999998807907104,
+        0.0
+      ],
+      "triangles": 2304,
+      "location_m": [
+        -5.5,
+        1.4999998807907104,
+        0.0
+      ],
+      "rotation_deg": [
+        0.0,
+        -0.0,
+        0.0
+      ],
+      "parent": null,
+      "dimensions_m": [
+        3.0,
+        3.0,
+        3.0
+      ],
+      "materials": [
+        "modular_urban_apartments_facade_plaster"
+      ],
+      "fbx": "parts/wall_standard_corner_large_01.fbx"
+    },
+    {
+      "object": "wall_standard_corner_large_02",
+      "role": "module",
+      "catalog_position_m": [
+        -5.499999523162842,
+        2.5,
+        0.0
+      ],
+      "triangles": 2304,
+      "location_m": [
+        -5.499999523162842,
+        2.5,
+        0.0
+      ],
+      "rotation_deg": [
+        0.0,
+        -0.0,
+        0.0
+      ],
+      "parent": null,
+      "dimensions_m": [
+        3.0000009536743164,
+        3.000000238418579,
+        3.0
+      ],
+      "materials": [
+        "modular_urban_apartments_facade_plaster"
+      ],
+      "fbx": "parts/wall_standard_corner_large_02.fbx"
+    },
+    {
+      "object": "wall_standard_corner_small_01",
+      "role": "module",
+      "catalog_position_m": [
+        -13.0,
+        1.0,
+        5.960464477539063e-08
+      ],
+      "triangles": 1536,
+      "location_m": [
+        -13.0,
+        1.0,
+        5.960464477539063e-08
+      ],
+      "rotation_deg": [
+        0.0,
+        -0.0,
+        0.0
+      ],
+      "parent": null,
+      "dimensions_m": [
+        2.0,
+        2.0,
+        3.0
+      ],
+      "materials": [
+        "modular_urban_apartments_facade_plaster"
+      ],
+      "fbx": "parts/wall_standard_corner_small_01.fbx"
+    },
+    {
+      "object": "wall_standard_corner_small_02",
+      "role": "module",
+      "catalog_position_m": [
+        -13.0,
+        3.0,
+        5.960464477539063e-08
+      ],
+      "triangles": 1536,
+      "location_m": [
+        -13.0,
+        3.0,
+        5.960464477539063e-08
+      ],
+      "rotation_deg": [
+        0.0,
+        -0.0,
+        0.0
+      ],
+      "parent": null,
+      "dimensions_m": [
+        2.0000009536743164,
+        2.0,
+        3.0
+      ],
+      "materials": [
+        "modular_urban_apartments_facade_plaster"
+      ],
+      "fbx": "parts/wall_standard_corner_small_02.fbx"
+    },
+    {
+      "object": "wall_door_offset_small_04",
+      "role": "module",
+      "catalog_position_m": [
+        21.5,
+        6.0,
+        0.0
+      ],
+      "triangles": 1908,
+      "location_m": [
+        21.5,
+        6.0,
+        0.0
+      ],
+      "rotation_deg": [
+        0.0,
+        -0.0,
+        0.0
+      ],
+      "parent": null,
+      "dimensions_m": [
+        3.0,
+        0.18000005185604095,
+        3.0
+      ],
+      "materials": [
+        "modular_urban_apartments_facade_plaster"
+      ],
+      "fbx": "parts/wall_door_offset_small_04.fbx"
+    },
+    {
+      "object": "wall_door_offset_small_03",
+      "role": "module",
+      "catalog_position_m": [
+        21.5,
+        4.0,
+        0.0
+      ],
+      "triangles": 1908,
+      "location_m": [
+        21.5,
+        4.0,
+        0.0
+      ],
+      "rotation_deg": [
+        0.0,
+        -0.0,
+        0.0
+      ],
+      "parent": null,
+      "dimensions_m": [
+        3.0,
+        0.18000005185604095,
+        3.0
+      ],
+      "materials": [
+        "modular_urban_apartments_facade_plaster"
+      ],
+      "fbx": "parts/wall_door_offset_small_03.fbx"
+    },
+    {
+      "object": "wall_pier_angled_01",
+      "role": "module",
+      "catalog_position_m": [
+        -17.986316680908203,
+        0.04571041837334633,
+        0.0
+      ],
+      "triangles": 288,
+      "location_m": [
+        -17.986316680908203,
+        0.04571041837334633,
+        0.0
+      ],
+      "rotation_deg": [
+        0.0,
+        -0.0,
+        0.0
+      ],
+      "parent": null,
+      "dimensions_m": [
+        0.3726333975791931,
+        0.19142106175422668,
+        3.0
+      ],
+      "materials": [
+        "modular_urban_apartments_facade_plaster"
+      ],
+      "fbx": "parts/wall_pier_angled_01.fbx"
+    },
+    {
+      "object": "wall_pier_corner_01",
+      "role": "module",
+      "catalog_position_m": [
+        -19.924999237060547,
+        0.07499921321868896,
+        0.0
+      ],
+      "triangles": 288,
+      "location_m": [
+        -19.924999237060547,
+        0.07499921321868896,
+        0.0
+      ],
+      "rotation_deg": [
+        0.0,
+        -0.0,
+        0.0
+      ],
+      "parent": null,
+      "dimensions_m": [
+        0.25,
+        0.2499997615814209,
+        3.0
+      ],
+      "materials": [
+        "modular_urban_apartments_facade_plaster"
+      ],
+      "fbx": "parts/wall_pier_corner_01.fbx"
+    },
+    {
+      "object": "wall_pier_corner_02",
+      "role": "module",
+      "catalog_position_m": [
+        -20.149999618530273,
+        1.8499993085861206,
+        0.0
+      ],
+      "triangles": 288,
+      "location_m": [
+        -20.149999618530273,
+        1.8499993085861206,
+        0.0
+      ],
+      "rotation_deg": [
+        0.0,
+        -0.0,
+        0.0
+      ],
+      "parent": null,
+      "dimensions_m": [
+        0.2999997138977051,
+        0.29999852180480957,
+        2.999999761581421
+      ],
+      "materials": [
+        "modular_urban_apartments_facade_plaster"
+      ],
+      "fbx": "parts/wall_pier_corner_02.fbx"
+    },
+    {
+      "object": "wall_pier_standard_01",
+      "role": "module",
+      "catalog_position_m": [
+        -22.0,
+        -0.02499985694885254,
+        0.0
+      ],
+      "triangles": 192,
+      "location_m": [
+        -22.0,
+        -0.02499985694885254,
+        0.0
+      ],
+      "rotation_deg": [
+        0.0,
+        -0.0,
+        0.0
+      ],
+      "parent": null,
+      "dimensions_m": [
+        0.2499997913837433,
+        0.04999995231628418,
+        3.0
+      ],
+      "materials": [
+        "modular_urban_apartments_facade_plaster"
+      ],
+      "fbx": "parts/wall_pier_standard_01.fbx"
+    },
+    {
+      "object": "door_angled_small_01",
+      "role": "module",
+      "catalog_position_m": [
+        5.515604019165039,
+        0.5156042575836182,
+        0.0
+      ],
+      "triangles": 1360,
+      "location_m": [
+        5.515604019165039,
+        0.5156042575836182,
+        0.0
+      ],
+      "rotation_deg": [
+        0.0,
+        -0.0,
+        0.0
+      ],
+      "parent": null,
+      "dimensions_m": [
+        1.3547253608703613,
+        1.3547253608703613,
+        2.809999704360962
+      ],
+      "materials": [
+        "modular_urban_apartments_facade_objects",
+        "modular_urban_apartments_facade_glass"
+      ],
+      "fbx": "parts/door_angled_small_01.fbx"
+    },
+    {
+      "object": "door_centered_small_01",
+      "role": "module",
+      "catalog_position_m": [
+        13.5,
+        0.019999980926513672,
+        0.0
+      ],
+      "triangles": 1360,
+      "location_m": [
+        13.5,
+        0.019999980926513672,
+        0.0
+      ],
+      "rotation_deg": [
+        0.0,
+        -0.0,
+        0.0
+      ],
+      "parent": null,
+      "dimensions_m": [
+        1.4800057411193848,
+        0.440000057220459,
+        2.809999704360962
+      ],
+      "materials": [
+        "modular_urban_apartments_facade_objects",
+        "modular_urban_apartments_facade_glass"
+      ],
+      "fbx": "parts/door_centered_small_01.fbx"
+    },
+    {
+      "object": "door_centered_large_01",
+      "role": "module",
+      "catalog_position_m": [
+        9.500001907348633,
+        0.019999980926513672,
+        0.0
+      ],
+      "triangles": 1711,
+      "location_m": [
+        9.500001907348633,
+        0.019999980926513672,
+        0.0
+      ],
+      "rotation_deg": [
+        0.0,
+        -0.0,
+        0.0
+      ],
+      "parent": null,
+      "dimensions_m": [
+        2.080005645751953,
+        0.440000057220459,
+        2.809999704360962
+      ],
+      "materials": [
+        "modular_urban_apartments_facade_objects",
+        "modular_urban_apartments_facade_glass"
+      ],
+      "fbx": "parts/door_centered_large_01.fbx"
+    },
+    {
+      "object": "door_angled_large_01",
+      "role": "module",
+      "catalog_position_m": [
+        2.0156030654907227,
+        1.01560378074646,
+        0.0
+      ],
+      "triangles": 1711,
+      "location_m": [
+        2.0156030654907227,
+        1.01560378074646,
+        0.0
+      ],
+      "rotation_deg": [
+        0.0,
+        -0.0,
+        0.0
+      ],
+      "parent": null,
+      "dimensions_m": [
+        1.778989315032959,
+        1.778989315032959,
+        2.809999704360962
+      ],
+      "materials": [
+        "modular_urban_apartments_facade_objects",
+        "modular_urban_apartments_facade_glass"
+      ],
+      "fbx": "parts/door_angled_large_01.fbx"
+    },
+    {
+      "object": "door_offset_small_01",
+      "role": "module",
+      "catalog_position_m": [
+        22.25,
+        0.08500011265277863,
+        9.5367431640625e-07
+      ],
+      "triangles": 790,
+      "location_m": [
+        22.25,
+        0.08500011265277863,
+        9.5367431640625e-07
+      ],
+      "rotation_deg": [
+        0.0,
+        -0.0,
+        0.0
+      ],
+      "parent": null,
+      "dimensions_m": [
+        1.1200001239776611,
+        0.23000013828277588,
+        2.2599997520446777
+      ],
+      "materials": [
+        "modular_urban_apartments_facade_objects"
+      ],
+      "fbx": "parts/door_offset_small_01.fbx"
+    },
+    {
+      "object": "door_offset_small_02",
+      "role": "module",
+      "catalog_position_m": [
+        20.75,
+        2.0850000381469727,
+        9.5367431640625e-07
+      ],
+      "triangles": 790,
+      "location_m": [
+        20.75,
+        2.0850000381469727,
+        9.5367431640625e-07
+      ],
+      "rotation_deg": [
+        0.0,
+        -0.0,
+        0.0
+      ],
+      "parent": null,
+      "dimensions_m": [
+        1.1200002431869507,
+        0.23000013828277588,
+        2.2599997520446777
+      ],
+      "materials": [
+        "modular_urban_apartments_facade_objects"
+      ],
+      "fbx": "parts/door_offset_small_02.fbx"
+    },
+    {
+      "object": "door_centered_small_02",
+      "role": "module",
+      "catalog_position_m": [
+        17.5,
+        0.08500011265277863,
+        9.5367431640625e-07
+      ],
+      "triangles": 790,
+      "location_m": [
+        17.5,
+        0.08500011265277863,
+        9.5367431640625e-07
+      ],
+      "rotation_deg": [
+        0.0,
+        -0.0,
+        0.0
+      ],
+      "parent": null,
+      "dimensions_m": [
+        1.1200002431869507,
+        0.23000013828277588,
+        2.2599997520446777
+      ],
+      "materials": [
+        "modular_urban_apartments_facade_objects"
+      ],
+      "fbx": "parts/door_centered_small_02.fbx"
+    },
+    {
+      "object": "door_window_small_01",
+      "role": "module",
+      "catalog_position_m": [
+        25.499996185302734,
+        0.044996269047260284,
+        3.999999761581421
+      ],
+      "triangles": 1637,
+      "location_m": [
+        25.499996185302734,
+        0.044996269047260284,
+        3.999999761581421
+      ],
+      "rotation_deg": [
+        0.0,
+        -0.0,
+        0.0
+      ],
+      "parent": null,
+      "dimensions_m": [
+        2.6200098991394043,
+        0.39000749588012695,
+        2.299999713897705
+      ],
+      "materials": [
+        "modular_urban_apartments_facade_objects",
+        "modular_urban_apartments_facade_glass"
+      ],
+      "fbx": "parts/door_window_small_01.fbx"
+    },
+    {
+      "object": "door_window_small_05",
+      "role": "module",
+      "catalog_position_m": [
+        25.499996185302734,
+        0.044996269047260284,
+        8.000000953674316
+      ],
+      "triangles": 1597,
+      "location_m": [
+        25.499996185302734,
+        0.044996269047260284,
+        8.000000953674316
+      ],
+      "rotation_deg": [
+        0.0,
+        -0.0,
+        0.0
+      ],
+      "parent": null,
+      "dimensions_m": [
+        2.6200098991394043,
+        0.39000749588012695,
+        2.2999985218048096
+      ],
+      "materials": [
+        "modular_urban_apartments_facade_objects",
+        "modular_urban_apartments_facade_glass"
+      ],
+      "fbx": "parts/door_window_small_05.fbx"
+    },
+    {
+      "object": "door_window_small_09",
+      "role": "module",
+      "catalog_position_m": [
+        25.56999969482422,
+        0.08696292340755463,
+        12.000000953674316
+      ],
+      "triangles": 1195,
+      "location_m": [
+        25.56999969482422,
+        0.08696292340755463,
+        12.000000953674316
+      ],
+      "rotation_deg": [
+        0.0,
+        -0.0,
+        0.0
+      ],
+      "parent": null,
+      "dimensions_m": [
+        2.4800004959106445,
+        0.2548743784427643,
+        2.2599997520446777
+      ],
+      "materials": [
+        "modular_urban_apartments_facade_objects",
+        "modular_urban_apartments_facade_glass",
+        "modular_urban_apartments_facade_trim_01"
+      ],
+      "fbx": "parts/door_window_small_09.fbx"
+    },
+    {
+      "object": "door_window_small_03",
+      "role": "module",
+      "catalog_position_m": [
+        25.589996337890625,
+        4.019999980926514,
+        3.999999761581421
+      ],
+      "triangles": 2207,
+      "location_m": [
+        25.589996337890625,
+        4.019999980926514,
+        3.999999761581421
+      ],
+      "rotation_deg": [
+        0.0,
+        -0.0,
+        0.0
+      ],
+      "parent": null,
+      "dimensions_m": [
+        2.8000123500823975,
+        0.440000057220459,
+        2.809999942779541
+      ],
+      "materials": [
+        "modular_urban_apartments_facade_objects",
+        "modular_urban_apartments_facade_glass"
+      ],
+      "fbx": "parts/door_window_small_03.fbx"
+    },
+    {
+      "object": "door_window_small_07",
+      "role": "module",
+      "catalog_position_m": [
+        25.589996337890625,
+        4.019999980926514,
+        8.0
+      ],
+      "triangles": 2167,
+      "location_m": [
+        25.589996337890625,
+        4.019999980926514,
+        8.0
+      ],
+      "rotation_deg": [
+        0.0,
+        -0.0,
+        0.0
+      ],
+      "parent": null,
+      "dimensions_m": [
+        2.8000123500823975,
+        0.440000057220459,
+        2.809999704360962
+      ],
+      "materials": [
+        "modular_urban_apartments_facade_objects",
+        "modular_urban_apartments_facade_glass"
+      ],
+      "fbx": "parts/door_window_small_07.fbx"
+    },
+    {
+      "object": "door_window_small_011",
+      "role": "module",
+      "catalog_position_m": [
+        25.660001754760742,
+        4.019999980926514,
+        12.0
+      ],
+      "triangles": 1765,
+      "location_m": [
+        25.660001754760742,
+        4.019999980926514,
+        12.0
+      ],
+      "rotation_deg": [
+        0.0,
+        -0.0,
+        0.0
+      ],
+      "parent": null,
+      "dimensions_m": [
+        2.6600029468536377,
+        0.440000057220459,
+        2.809999704360962
+      ],
+      "materials": [
+        "modular_urban_apartments_facade_objects",
+        "modular_urban_apartments_facade_glass",
+        "modular_urban_apartments_facade_trim_01"
+      ],
+      "fbx": "parts/door_window_small_011.fbx"
+    },
+    {
+      "object": "door_offset_small_04",
+      "role": "module",
+      "catalog_position_m": [
+        20.75,
+        6.019999980926514,
+        0.0
+      ],
+      "triangles": 1360,
+      "location_m": [
+        20.75,
+        6.019999980926514,
+        0.0
+      ],
+      "rotation_deg": [
+        0.0,
+        -0.0,
+        0.0
+      ],
+      "parent": null,
+      "dimensions_m": [
+        1.4800057411193848,
+        0.440000057220459,
+        2.809999704360962
+      ],
+      "materials": [
+        "modular_urban_apartments_facade_objects",
+        "modular_urban_apartments_facade_glass"
+      ],
+      "fbx": "parts/door_offset_small_04.fbx"
+    },
+    {
+      "object": "door_offset_small_03",
+      "role": "module",
+      "catalog_position_m": [
+        22.25,
+        4.019999980926514,
+        0.0
+      ],
+      "triangles": 1360,
+      "location_m": [
+        22.25,
+        4.019999980926514,
+        0.0
+      ],
+      "rotation_deg": [
+        0.0,
+        -0.0,
+        0.0
+      ],
+      "parent": null,
+      "dimensions_m": [
+        1.4800057411193848,
+        0.440000057220459,
+        2.809999704360962
+      ],
+      "materials": [
+        "modular_urban_apartments_facade_objects",
+        "modular_urban_apartments_facade_glass"
+      ],
+      "fbx": "parts/door_offset_small_03.fbx"
+    },
+    {
+      "object": "door_window_small_02",
+      "role": "module",
+      "catalog_position_m": [
+        25.500003814697266,
+        2.0449962615966797,
+        3.999999761581421
+      ],
+      "triangles": 1637,
+      "location_m": [
+        25.500003814697266,
+        2.0449962615966797,
+        3.999999761581421
+      ],
+      "rotation_deg": [
+        0.0,
+        -0.0,
+        0.0
+      ],
+      "parent": null,
+      "dimensions_m": [
+        2.620009422302246,
+        0.39000749588012695,
+        2.299999713897705
+      ],
+      "materials": [
+        "modular_urban_apartments_facade_objects",
+        "modular_urban_apartments_facade_glass"
+      ],
+      "fbx": "parts/door_window_small_02.fbx"
+    },
+    {
+      "object": "door_window_small_04",
+      "role": "module",
+      "catalog_position_m": [
+        25.410003662109375,
+        6.019999980926514,
+        3.999999761581421
+      ],
+      "triangles": 2207,
+      "location_m": [
+        25.410003662109375,
+        6.019999980926514,
+        3.999999761581421
+      ],
+      "rotation_deg": [
+        0.0,
+        -0.0,
+        0.0
+      ],
+      "parent": null,
+      "dimensions_m": [
+        2.8000125885009766,
+        0.440000057220459,
+        2.809999942779541
+      ],
+      "materials": [
+        "modular_urban_apartments_facade_objects",
+        "modular_urban_apartments_facade_glass"
+      ],
+      "fbx": "parts/door_window_small_04.fbx"
+    },
+    {
+      "object": "door_window_small_06",
+      "role": "module",
+      "catalog_position_m": [
+        25.500003814697266,
+        2.0449962615966797,
+        8.000000953674316
+      ],
+      "triangles": 1597,
+      "location_m": [
+        25.500003814697266,
+        2.0449962615966797,
+        8.000000953674316
+      ],
+      "rotation_deg": [
+        0.0,
+        -0.0,
+        0.0
+      ],
+      "parent": null,
+      "dimensions_m": [
+        2.620009422302246,
+        0.39000749588012695,
+        2.2999985218048096
+      ],
+      "materials": [
+        "modular_urban_apartments_facade_objects",
+        "modular_urban_apartments_facade_glass"
+      ],
+      "fbx": "parts/door_window_small_06.fbx"
+    },
+    {
+      "object": "door_window_small_08",
+      "role": "module",
+      "catalog_position_m": [
+        25.410003662109375,
+        6.019999980926514,
+        8.0
+      ],
+      "triangles": 2167,
+      "location_m": [
+        25.410003662109375,
+        6.019999980926514,
+        8.0
+      ],
+      "rotation_deg": [
+        0.0,
+        -0.0,
+        0.0
+      ],
+      "parent": null,
+      "dimensions_m": [
+        2.8000125885009766,
+        0.440000057220459,
+        2.809999704360962
+      ],
+      "materials": [
+        "modular_urban_apartments_facade_objects",
+        "modular_urban_apartments_facade_glass"
+      ],
+      "fbx": "parts/door_window_small_08.fbx"
+    },
+    {
+      "object": "door_window_small_010",
+      "role": "module",
+      "catalog_position_m": [
+        25.43000030517578,
+        2.086962938308716,
+        12.000000953674316
+      ],
+      "triangles": 1195,
+      "location_m": [
+        25.43000030517578,
+        2.086962938308716,
+        12.000000953674316
+      ],
+      "rotation_deg": [
+        0.0,
+        -0.0,
+        0.0
+      ],
+      "parent": null,
+      "dimensions_m": [
+        2.4800000190734863,
+        0.25487440824508667,
+        2.2599997520446777
+      ],
+      "materials": [
+        "modular_urban_apartments_facade_objects",
+        "modular_urban_apartments_facade_glass",
+        "modular_urban_apartments_facade_trim_01"
+      ],
+      "fbx": "parts/door_window_small_010.fbx"
+    },
+    {
+      "object": "door_window_small_012",
+      "role": "module",
+      "catalog_position_m": [
+        25.339998245239258,
+        6.019999980926514,
+        12.0
+      ],
+      "triangles": 1765,
+      "location_m": [
+        25.339998245239258,
+        6.019999980926514,
+        12.0
+      ],
+      "rotation_deg": [
+        0.0,
+        -0.0,
+        0.0
+      ],
+      "parent": null,
+      "dimensions_m": [
+        2.6600029468536377,
+        0.440000057220459,
+        2.809999704360962
+      ],
+      "materials": [
+        "modular_urban_apartments_facade_objects",
+        "modular_urban_apartments_facade_glass",
+        "modular_urban_apartments_facade_trim_01"
+      ],
+      "fbx": "parts/door_window_small_012.fbx"
+    },
+    {
+      "object": "window_centered_large_02",
+      "role": "module",
+      "catalog_position_m": [
+        9.5,
+        0.044996269047260284,
+        8.300000190734863
+      ],
+      "triangles": 1264,
+      "location_m": [
+        9.5,
+        0.044996269047260284,
+        8.300000190734863
+      ],
+      "rotation_deg": [
+        0.0,
+        -0.0,
+        0.0
+      ],
+      "parent": null,
+      "dimensions_m": [
+        2.12001895904541,
+        0.39000749588012695,
+        1.9999996423721313
+      ],
+      "materials": [
+        "modular_urban_apartments_facade_objects",
+        "modular_urban_apartments_facade_glass"
+      ],
+      "fbx": "parts/window_centered_large_02.fbx"
+    },
+    {
+      "object": "window_angled_small_02",
+      "role": "module",
+      "catalog_position_m": [
+        5.532953262329102,
+        0.5329530239105225,
+        8.300000190734863
+      ],
+      "triangles": 807,
+      "location_m": [
+        5.532953262329102,
+        0.5329530239105225,
+        8.300000190734863
+      ],
+      "rotation_deg": [
+        0.0,
+        -0.0,
+        0.0
+      ],
+      "parent": null,
+      "dimensions_m": [
+        1.0654690265655518,
+        1.0654690265655518,
+        1.9999996423721313
+      ],
+      "materials": [
+        "modular_urban_apartments_facade_objects",
+        "modular_urban_apartments_facade_glass"
+      ],
+      "fbx": "parts/window_angled_small_02.fbx"
+    },
+    {
+      "object": "window_angled_large_02",
+      "role": "module",
+      "catalog_position_m": [
+        2.068308115005493,
+        0.9975974559783936,
+        8.300000190734863
+      ],
+      "triangles": 1264,
+      "location_m": [
+        2.068308115005493,
+        0.9975974559783936,
+        8.300000190734863
+      ],
+      "rotation_deg": [
+        0.0,
+        -0.0,
+        0.0
+      ],
+      "parent": null,
+      "dimensions_m": [
+        1.772575855255127,
+        1.772575855255127,
+        1.9999996423721313
+      ],
+      "materials": [
+        "modular_urban_apartments_facade_objects",
+        "modular_urban_apartments_facade_glass"
+      ],
+      "fbx": "parts/window_angled_large_02.fbx"
+    },
+    {
+      "object": "window_centered_large_01",
+      "role": "module",
+      "catalog_position_m": [
+        9.5,
+        0.044996269047260284,
+        3.999999761581421
+      ],
+      "triangles": 1408,
+      "location_m": [
+        9.5,
+        0.044996269047260284,
+        3.999999761581421
+      ],
+      "rotation_deg": [
+        0.0,
+        -0.0,
+        0.0
+      ],
+      "parent": null,
+      "dimensions_m": [
+        2.12001895904541,
+        0.39000749588012695,
+        2.299999713897705
+      ],
+      "materials": [
+        "modular_urban_apartments_facade_objects",
+        "modular_urban_apartments_facade_glass"
+      ],
+      "fbx": "parts/window_centered_large_01.fbx"
+    },
+    {
+      "object": "window_angled_small_01",
+      "role": "module",
+      "catalog_position_m": [
+        5.532953262329102,
+        0.5329530239105225,
+        3.999999761581421
+      ],
+      "triangles": 847,
+      "location_m": [
+        5.532953262329102,
+        0.5329530239105225,
+        3.999999761581421
+      ],
+      "rotation_deg": [
+        0.0,
+        -0.0,
+        0.0
+      ],
+      "parent": null,
+      "dimensions_m": [
+        1.0654690265655518,
+        1.0654690265655518,
+        2.299999713897705
+      ],
+      "materials": [
+        "modular_urban_apartments_facade_objects",
+        "modular_urban_apartments_facade_glass"
+      ],
+      "fbx": "parts/window_angled_small_01.fbx"
+    },
+    {
+      "object": "window_angled_large_01",
+      "role": "module",
+      "catalog_position_m": [
+        2.0329527854919434,
+        1.0329527854919434,
+        3.999999761581421
+      ],
+      "triangles": 1408,
+      "location_m": [
+        2.0329527854919434,
+        1.0329527854919434,
+        3.999999761581421
+      ],
+      "rotation_deg": [
+        0.0,
+        -0.0,
+        0.0
+      ],
+      "parent": null,
+      "dimensions_m": [
+        1.7725756168365479,
+        1.7725759744644165,
+        2.299999713897705
+      ],
+      "materials": [
+        "modular_urban_apartments_facade_objects",
+        "modular_urban_apartments_facade_glass"
+      ],
+      "fbx": "parts/window_angled_large_01.fbx"
+    },
+    {
+      "object": "window_centered_large_03",
+      "role": "module",
+      "catalog_position_m": [
+        9.5,
+        0.061962924897670746,
+        12.45300006866455
+      ],
+      "triangles": 730,
+      "location_m": [
+        9.5,
+        0.061962924897670746,
+        12.45300006866455
+      ],
+      "rotation_deg": [
+        0.0,
+        -0.0,
+        0.0
+      ],
+      "parent": null,
+      "dimensions_m": [
+        1.7400000095367432,
+        0.20487436652183533,
+        1.684638261795044
+      ],
+      "materials": [
+        "modular_urban_apartments_facade_objects",
+        "modular_urban_apartments_facade_glass",
+        "modular_urban_apartments_facade_trim_01"
+      ],
+      "fbx": "parts/window_centered_large_03.fbx"
+    },
+    {
+      "object": "window_centered_double_02",
+      "role": "module",
+      "catalog_position_m": [
+        17.5,
+        0.044996269047260284,
+        8.300000190734863
+      ],
+      "triangles": 1614,
+      "location_m": [
+        17.5,
+        0.044996269047260284,
+        8.300000190734863
+      ],
+      "rotation_deg": [
+        0.0,
+        -0.0,
+        0.0
+      ],
+      "parent": null,
+      "dimensions_m": [
+        2.62001895904541,
+        0.39000749588012695,
+        1.9999996423721313
+      ],
+      "materials": [
+        "modular_urban_apartments_facade_objects",
+        "modular_urban_apartments_facade_glass"
+      ],
+      "fbx": "parts/window_centered_double_02.fbx"
+    },
+    {
+      "object": "window_centered_double_01",
+      "role": "module",
+      "catalog_position_m": [
+        17.5,
+        0.044996269047260284,
+        3.999999761581421
+      ],
+      "triangles": 1694,
+      "location_m": [
+        17.5,
+        0.044996269047260284,
+        3.999999761581421
+      ],
+      "rotation_deg": [
+        0.0,
+        -0.0,
+        0.0
+      ],
+      "parent": null,
+      "dimensions_m": [
+        2.62001895904541,
+        0.39000749588012695,
+        2.299999713897705
+      ],
+      "materials": [
+        "modular_urban_apartments_facade_objects",
+        "modular_urban_apartments_facade_glass"
+      ],
+      "fbx": "parts/window_centered_double_01.fbx"
+    },
+    {
+      "object": "window_centered_double_03",
+      "role": "module",
+      "catalog_position_m": [
+        17.5,
+        0.08696292340755463,
+        12.45300006866455
+      ],
+      "triangles": 810,
+      "location_m": [
+        17.5,
+        0.08696292340755463,
+        12.45300006866455
+      ],
+      "rotation_deg": [
+        0.0,
+        -0.0,
+        0.0
+      ],
+      "parent": null,
+      "dimensions_m": [
+        2.3400001525878906,
+        0.2548743784427643,
+        1.684638261795044
+      ],
+      "materials": [
+        "modular_urban_apartments_facade_trim_01",
+        "modular_urban_apartments_facade_objects",
+        "modular_urban_apartments_facade_glass"
+      ],
+      "fbx": "parts/window_centered_double_03.fbx"
+    },
+    {
+      "object": "window_offset_small_03",
+      "role": "module",
+      "catalog_position_m": [
+        22.25,
+        0.044996269047260284,
+        8.300000190734863
+      ],
+      "triangles": 807,
+      "location_m": [
+        22.25,
+        0.044996269047260284,
+        8.300000190734863
+      ],
+      "rotation_deg": [
+        0.0,
+        -0.0,
+        0.0
+      ],
+      "parent": null,
+      "dimensions_m": [
+        1.1200191974639893,
+        0.39000749588012695,
+        1.9999996423721313
+      ],
+      "materials": [
+        "modular_urban_apartments_facade_objects",
+        "modular_urban_apartments_facade_glass"
+      ],
+      "fbx": "parts/window_offset_small_03.fbx"
+    },
+    {
+      "object": "window_offset_small_01",
+      "role": "module",
+      "catalog_position_m": [
+        22.25,
+        0.044996269047260284,
+        3.999999761581421
+      ],
+      "triangles": 847,
+      "location_m": [
+        22.25,
+        0.044996269047260284,
+        3.999999761581421
+      ],
+      "rotation_deg": [
+        0.0,
+        -0.0,
+        0.0
+      ],
+      "parent": null,
+      "dimensions_m": [
+        1.1200191974639893,
+        0.39000749588012695,
+        2.299999713897705
+      ],
+      "materials": [
+        "modular_urban_apartments_facade_objects",
+        "modular_urban_apartments_facade_glass"
+      ],
+      "fbx": "parts/window_offset_small_01.fbx"
+    },
+    {
+      "object": "window_offset_small_05",
+      "role": "module",
+      "catalog_position_m": [
+        22.25,
+        0.08696292340755463,
+        12.45300006866455
+      ],
+      "triangles": 405,
+      "location_m": [
+        22.25,
+        0.08696292340755463,
+        12.45300006866455
+      ],
+      "rotation_deg": [
+        0.0,
+        -0.0,
+        0.0
+      ],
+      "parent": null,
+      "dimensions_m": [
+        0.8400001525878906,
+        0.2548743784427643,
+        1.684638261795044
+      ],
+      "materials": [
+        "modular_urban_apartments_facade_trim_01",
+        "modular_urban_apartments_facade_objects",
+        "modular_urban_apartments_facade_glass"
+      ],
+      "fbx": "parts/window_offset_small_05.fbx"
+    },
+    {
+      "object": "window_offset_small_04",
+      "role": "module",
+      "catalog_position_m": [
+        20.75,
+        2.0449962615966797,
+        8.300000190734863
+      ],
+      "triangles": 807,
+      "location_m": [
+        20.75,
+        2.0449962615966797,
+        8.300000190734863
+      ],
+      "rotation_deg": [
+        0.0,
+        -0.0,
+        0.0
+      ],
+      "parent": null,
+      "dimensions_m": [
+        1.1200190782546997,
+        0.39000749588012695,
+        1.9999996423721313
+      ],
+      "materials": [
+        "modular_urban_apartments_facade_objects",
+        "modular_urban_apartments_facade_glass"
+      ],
+      "fbx": "parts/window_offset_small_04.fbx"
+    },
+    {
+      "object": "window_offset_small_02",
+      "role": "module",
+      "catalog_position_m": [
+        20.75,
+        2.0449962615966797,
+        3.999999761581421
+      ],
+      "triangles": 847,
+      "location_m": [
+        20.75,
+        2.0449962615966797,
+        3.999999761581421
+      ],
+      "rotation_deg": [
+        0.0,
+        -0.0,
+        0.0
+      ],
+      "parent": null,
+      "dimensions_m": [
+        1.1200190782546997,
+        0.39000749588012695,
+        2.299999713897705
+      ],
+      "materials": [
+        "modular_urban_apartments_facade_objects",
+        "modular_urban_apartments_facade_glass"
+      ],
+      "fbx": "parts/window_offset_small_02.fbx"
+    },
+    {
+      "object": "window_offset_small_06",
+      "role": "module",
+      "catalog_position_m": [
+        20.75,
+        2.086962938308716,
+        12.45300006866455
+      ],
+      "triangles": 405,
+      "location_m": [
+        20.75,
+        2.086962938308716,
+        12.45300006866455
+      ],
+      "rotation_deg": [
+        0.0,
+        -0.0,
+        0.0
+      ],
+      "parent": null,
+      "dimensions_m": [
+        0.8400001525878906,
+        0.25487440824508667,
+        1.684638261795044
+      ],
+      "materials": [
+        "modular_urban_apartments_facade_trim_01",
+        "modular_urban_apartments_facade_objects",
+        "modular_urban_apartments_facade_glass"
+      ],
+      "fbx": "parts/window_offset_small_06.fbx"
+    },
+    {
+      "object": "window_centered_small_02",
+      "role": "module",
+      "catalog_position_m": [
+        13.5,
+        0.044996269047260284,
+        8.300000190734863
+      ],
+      "triangles": 807,
+      "location_m": [
+        13.5,
+        0.044996269047260284,
+        8.300000190734863
+      ],
+      "rotation_deg": [
+        0.0,
+        -0.0,
+        0.0
+      ],
+      "parent": null,
+      "dimensions_m": [
+        1.1200190782546997,
+        0.39000749588012695,
+        1.9999996423721313
+      ],
+      "materials": [
+        "modular_urban_apartments_facade_objects",
+        "modular_urban_apartments_facade_glass"
+      ],
+      "fbx": "parts/window_centered_small_02.fbx"
+    },
+    {
+      "object": "window_centered_small_01",
+      "role": "module",
+      "catalog_position_m": [
+        13.5,
+        0.044996269047260284,
+        3.999999761581421
+      ],
+      "triangles": 847,
+      "location_m": [
+        13.5,
+        0.044996269047260284,
+        3.999999761581421
+      ],
+      "rotation_deg": [
+        0.0,
+        -0.0,
+        0.0
+      ],
+      "parent": null,
+      "dimensions_m": [
+        1.1200190782546997,
+        0.39000749588012695,
+        2.299999713897705
+      ],
+      "materials": [
+        "modular_urban_apartments_facade_objects",
+        "modular_urban_apartments_facade_glass"
+      ],
+      "fbx": "parts/window_centered_small_01.fbx"
+    },
+    {
+      "object": "window_centered_small_03",
+      "role": "module",
+      "catalog_position_m": [
+        13.5,
+        0.08696292340755463,
+        12.45300006866455
+      ],
+      "triangles": 405,
+      "location_m": [
+        13.5,
+        0.08696292340755463,
+        12.45300006866455
+      ],
+      "rotation_deg": [
+        0.0,
+        -0.0,
+        0.0
+      ],
+      "parent": null,
+      "dimensions_m": [
+        0.8400001525878906,
+        0.2548743784427643,
+        1.684638261795044
+      ],
+      "materials": [
+        "modular_urban_apartments_facade_trim_01",
+        "modular_urban_apartments_facade_objects",
+        "modular_urban_apartments_facade_glass"
+      ],
+      "fbx": "parts/window_centered_small_03.fbx"
+    },
+    {
+      "object": "base_end_02",
+      "role": "module",
+      "catalog_position_m": [
+        -23.80000114440918,
+        -0.1000000387430191,
+        -2.0
+      ],
+      "triangles": 14,
+      "location_m": [
+        -23.80000114440918,
+        -0.1000000387430191,
+        -2.0
+      ],
+      "rotation_deg": [
+        0.0,
+        -0.0,
+        0.0
+      ],
+      "parent": null,
+      "dimensions_m": [
+        0.2000001072883606,
+        0.2000001072883606,
+        0.75
+      ],
+      "materials": [
+        "modular_urban_apartments_facade_trim_01"
+      ],
+      "fbx": "parts/base_end_02.fbx"
+    },
+    {
+      "object": "base_end_01",
+      "role": "module",
+      "catalog_position_m": [
+        -24.19999885559082,
+        -0.1000000387430191,
+        -2.0
+      ],
+      "triangles": 14,
+      "location_m": [
+        -24.19999885559082,
+        -0.1000000387430191,
+        -2.0
+      ],
+      "rotation_deg": [
+        0.0,
+        -0.0,
+        0.0
+      ],
+      "parent": null,
+      "dimensions_m": [
+        0.2000001072883606,
+        0.2000001072883606,
+        0.75
+      ],
+      "materials": [
+        "modular_urban_apartments_facade_trim_01"
+      ],
+      "fbx": "parts/base_end_01.fbx"
+    },
+    {
+      "object": "base_standard_01",
+      "role": "module",
+      "catalog_position_m": [
+        -1.5,
+        -0.10000000149011612,
+        -2.0
+      ],
+      "triangles": 8,
+      "location_m": [
+        -1.5,
+        -0.10000000149011612,
+        -2.0
+      ],
+      "rotation_deg": [
+        0.0,
+        -0.0,
+        0.0
+      ],
+      "parent": null,
+      "dimensions_m": [
+        3.0,
+        0.20000000298023224,
+        0.75
+      ],
+      "materials": [
+        "modular_urban_apartments_facade_trim_01"
+      ],
+      "fbx": "parts/base_standard_01.fbx"
+    },
+    {
+      "object": "base_angled_large_01",
+      "role": "module",
+      "catalog_position_m": [
+        -9.600000381469727,
+        1.4000000953674316,
+        -2.0
+      ],
+      "triangles": 32,
+      "location_m": [
+        -9.600000381469727,
+        1.4000000953674316,
+        -2.0
+      ],
+      "rotation_deg": [
+        0.0,
+        -0.0,
+        0.0
+      ],
+      "parent": null,
+      "dimensions_m": [
+        3.1999995708465576,
+        3.200000286102295,
+        0.75
+      ],
+      "materials": [
+        "modular_urban_apartments_facade_trim_01"
+      ],
+      "fbx": "parts/base_angled_large_01.fbx"
+    },
+    {
+      "object": "base_angled_small_01",
+      "role": "module",
+      "catalog_position_m": [
+        -16.099998474121094,
+        0.8999999761581421,
+        -2.0
+      ],
+      "triangles": 32,
+      "location_m": [
+        -16.099998474121094,
+        0.8999999761581421,
+        -2.0
+      ],
+      "rotation_deg": [
+        0.0,
+        -0.0,
+        0.0
+      ],
+      "parent": null,
+      "dimensions_m": [
+        2.1999995708465576,
+        2.200000047683716,
+        0.75
+      ],
+      "materials": [
+        "modular_urban_apartments_facade_trim_01"
+      ],
+      "fbx": "parts/base_angled_small_01.fbx"
+    },
+    {
+      "object": "base_corner_large_02",
+      "role": "module",
+      "catalog_position_m": [
+        -5.5,
+        2.5,
+        -2.0
+      ],
+      "triangles": 16,
+      "location_m": [
+        -5.5,
+        2.5,
+        -2.0
+      ],
+      "rotation_deg": [
+        0.0,
+        -0.0,
+        0.0
+      ],
+      "parent": null,
+      "dimensions_m": [
+        3.0,
+        3.0,
+        0.75
+      ],
+      "materials": [
+        "modular_urban_apartments_facade_trim_01"
+      ],
+      "fbx": "parts/base_corner_large_02.fbx"
+    },
+    {
+      "object": "base_corner_large_01",
+      "role": "module",
+      "catalog_position_m": [
+        -5.599999904632568,
+        1.399999976158142,
+        -2.0
+      ],
+      "triangles": 16,
+      "location_m": [
+        -5.599999904632568,
+        1.399999976158142,
+        -2.0
+      ],
+      "rotation_deg": [
+        0.0,
+        -0.0,
+        0.0
+      ],
+      "parent": null,
+      "dimensions_m": [
+        3.200000047683716,
+        3.200000047683716,
+        0.75
+      ],
+      "materials": [
+        "modular_urban_apartments_facade_trim_01"
+      ],
+      "fbx": "parts/base_corner_large_01.fbx"
+    },
+    {
+      "object": "base_corner_small_02",
+      "role": "module",
+      "catalog_position_m": [
+        -13.0,
+        3.0,
+        -1.999999761581421
+      ],
+      "triangles": 16,
+      "location_m": [
+        -13.0,
+        3.0,
+        -1.999999761581421
+      ],
+      "rotation_deg": [
+        0.0,
+        -0.0,
+        0.0
+      ],
+      "parent": null,
+      "dimensions_m": [
+        2.0,
+        2.0,
+        0.75
+      ],
+      "materials": [
+        "modular_urban_apartments_facade_trim_01"
+      ],
+      "fbx": "parts/base_corner_small_02.fbx"
+    },
+    {
+      "object": "base_corner_small_01",
+      "role": "module",
+      "catalog_position_m": [
+        -13.100000381469727,
+        0.8999999761581421,
+        -1.999999761581421
+      ],
+      "triangles": 16,
+      "location_m": [
+        -13.100000381469727,
+        0.8999999761581421,
+        -1.999999761581421
+      ],
+      "rotation_deg": [
+        0.0,
+        -0.0,
+        0.0
+      ],
+      "parent": null,
+      "dimensions_m": [
+        2.200000047683716,
+        2.200000047683716,
+        0.75
+      ],
+      "materials": [
+        "modular_urban_apartments_facade_trim_01"
+      ],
+      "fbx": "parts/base_corner_small_01.fbx"
+    },
+    {
+      "object": "dado_end_02",
+      "role": "module",
+      "catalog_position_m": [
+        -23.830001831054688,
+        -1.6391277313232422e-07,
+        -1.0
+      ],
+      "triangles": 16,
+      "location_m": [
+        -23.830001831054688,
+        -1.6391277313232422e-07,
+        -1.0
+      ],
+      "rotation_deg": [
+        0.0,
+        -0.0,
+        0.0
+      ],
+      "parent": null,
+      "dimensions_m": [
+        0.1400000900030136,
+        0.08000028133392334,
+        0.4999999701976776
+      ],
+      "materials": [
+        "modular_urban_apartments_facade_trim_01"
+      ],
+      "fbx": "parts/dado_end_02.fbx"
+    },
+    {
+      "object": "dado_end_01",
+      "role": "module",
+      "catalog_position_m": [
+        -24.169998168945312,
+        -2.0489096641540527e-08,
+        -1.0
+      ],
+      "triangles": 16,
+      "location_m": [
+        -24.169998168945312,
+        -2.0489096641540527e-08,
+        -1.0
+      ],
+      "rotation_deg": [
+        0.0,
+        -0.0,
+        0.0
+      ],
+      "parent": null,
+      "dimensions_m": [
+        0.14000029861927032,
+        0.08000002801418304,
+        0.4999999701976776
+      ],
+      "materials": [
+        "modular_urban_apartments_facade_trim_01"
+      ],
+      "fbx": "parts/dado_end_01.fbx"
+    },
+    {
+      "object": "dado_door_centered_large_01",
+      "role": "module",
+      "catalog_position_m": [
+        9.500001907348633,
+        -1.601874828338623e-07,
+        -1.0
+      ],
+      "triangles": 48,
+      "location_m": [
+        9.500001907348633,
+        -1.601874828338623e-07,
+        -1.0
+      ],
+      "rotation_deg": [
+        0.0,
+        -0.0,
+        0.0
+      ],
+      "parent": null,
+      "dimensions_m": [
+        3.0,
+        0.08000030368566513,
+        0.4999999701976776
+      ],
+      "materials": [
+        "modular_urban_apartments_facade_trim_01"
+      ],
+      "fbx": "parts/dado_door_centered_large_01.fbx"
+    },
+    {
+      "object": "dado_door_centered_small_01",
+      "role": "module",
+      "catalog_position_m": [
+        13.5,
+        -1.601874828338623e-07,
+        -1.0
+      ],
+      "triangles": 48,
+      "location_m": [
+        13.5,
+        -1.601874828338623e-07,
+        -1.0
+      ],
+      "rotation_deg": [
+        0.0,
+        -0.0,
+        0.0
+      ],
+      "parent": null,
+      "dimensions_m": [
+        3.0,
+        0.08000030368566513,
+        0.4999999701976776
+      ],
+      "materials": [
+        "modular_urban_apartments_facade_trim_01"
+      ],
+      "fbx": "parts/dado_door_centered_small_01.fbx"
+    },
+    {
+      "object": "dado_door_angled_large_01",
+      "role": "module",
+      "catalog_position_m": [
+        2.4800000190734863,
+        1.4800001382827759,
+        -1.0
+      ],
+      "triangles": 32,
+      "location_m": [
+        2.4800000190734863,
+        1.4800001382827759,
+        -1.0
+      ],
+      "rotation_deg": [
+        0.0,
+        -0.0,
+        0.0
+      ],
+      "parent": null,
+      "dimensions_m": [
+        3.0399999618530273,
+        3.0400004386901855,
+        0.5000000596046448
+      ],
+      "materials": [
+        "modular_urban_apartments_facade_trim_01"
+      ],
+      "fbx": "parts/dado_door_angled_large_01.fbx"
+    },
+    {
+      "object": "dado_door_angled_small_01",
+      "role": "module",
+      "catalog_position_m": [
+        5.980000019073486,
+        0.9799998998641968,
+        -1.0
+      ],
+      "triangles": 32,
+      "location_m": [
+        5.980000019073486,
+        0.9799998998641968,
+        -1.0
+      ],
+      "rotation_deg": [
+        0.0,
+        -0.0,
+        0.0
+      ],
+      "parent": null,
+      "dimensions_m": [
+        2.0399999618530273,
+        2.0399999618530273,
+        0.4999999701976776
+      ],
+      "materials": [
+        "modular_urban_apartments_facade_trim_01"
+      ],
+      "fbx": "parts/dado_door_angled_small_01.fbx"
+    },
+    {
+      "object": "dado_door_centered_small_02",
+      "role": "module",
+      "catalog_position_m": [
+        17.5,
+        -1.601874828338623e-07,
+        -1.0
+      ],
+      "triangles": 48,
+      "location_m": [
+        17.5,
+        -1.601874828338623e-07,
+        -1.0
+      ],
+      "rotation_deg": [
+        0.0,
+        -0.0,
+        0.0
+      ],
+      "parent": null,
+      "dimensions_m": [
+        3.0,
+        0.08000030368566513,
+        0.4999999701976776
+      ],
+      "materials": [
+        "modular_urban_apartments_facade_trim_01"
+      ],
+      "fbx": "parts/dado_door_centered_small_02.fbx"
+    },
+    {
+      "object": "dado_door_offset_small_01",
+      "role": "module",
+      "catalog_position_m": [
+        21.5,
+        -1.601874828338623e-07,
+        -1.0
+      ],
+      "triangles": 40,
+      "location_m": [
+        21.5,
+        -1.601874828338623e-07,
+        -1.0
+      ],
+      "rotation_deg": [
+        0.0,
+        -0.0,
+        0.0
+      ],
+      "parent": null,
+      "dimensions_m": [
+        3.0,
+        0.08000030368566513,
+        0.5000000596046448
+      ],
+      "materials": [
+        "modular_urban_apartments_facade_trim_01"
+      ],
+      "fbx": "parts/dado_door_offset_small_01.fbx"
+    },
+    {
+      "object": "dado_door_offset_small_02",
+      "role": "module",
+      "catalog_position_m": [
+        21.5,
+        1.999999761581421,
+        -1.0
+      ],
+      "triangles": 40,
+      "location_m": [
+        21.5,
+        1.999999761581421,
+        -1.0
+      ],
+      "rotation_deg": [
+        0.0,
+        -0.0,
+        0.0
+      ],
+      "parent": null,
+      "dimensions_m": [
+        3.0000014305114746,
+        0.08000030368566513,
+        0.4999999701976776
+      ],
+      "materials": [
+        "modular_urban_apartments_facade_trim_01"
+      ],
+      "fbx": "parts/dado_door_offset_small_02.fbx"
+    },
+    {
+      "object": "dado_door_window_small_01",
+      "role": "module",
+      "catalog_position_m": [
+        25.5,
+        -1.564621925354004e-07,
+        -1.0
+      ],
+      "triangles": 32,
+      "location_m": [
+        25.5,
+        -1.564621925354004e-07,
+        -1.0
+      ],
+      "rotation_deg": [
+        0.0,
+        -0.0,
+        0.0
+      ],
+      "parent": null,
+      "dimensions_m": [
+        3.0000016689300537,
+        0.08000029623508453,
+        0.4999999701976776
+      ],
+      "materials": [
+        "modular_urban_apartments_facade_trim_01"
+      ],
+      "fbx": "parts/dado_door_window_small_01.fbx"
+    },
+    {
+      "object": "dado_standard_standard_01",
+      "role": "module",
+      "catalog_position_m": [
+        -1.5,
+        -0.020000016316771507,
+        -1.0
+      ],
+      "triangles": 8,
+      "location_m": [
+        -1.5,
+        -0.020000016316771507,
+        -1.0
+      ],
+      "rotation_deg": [
+        0.0,
+        -0.0,
+        0.0
+      ],
+      "parent": null,
+      "dimensions_m": [
+        3.0,
+        0.040000032633543015,
+        0.4999999701976776
+      ],
+      "materials": [
+        "modular_urban_apartments_facade_trim_01"
+      ],
+      "fbx": "parts/dado_standard_standard_01.fbx"
+    },
+    {
+      "object": "dado_standard_angled_large_01",
+      "role": "module",
+      "catalog_position_m": [
+        -9.520000457763672,
+        1.4799998998641968,
+        -1.0
+      ],
+      "triangles": 32,
+      "location_m": [
+        -9.520000457763672,
+        1.4799998998641968,
+        -1.0
+      ],
+      "rotation_deg": [
+        0.0,
+        -0.0,
+        0.0
+      ],
+      "parent": null,
+      "dimensions_m": [
+        3.0399997234344482,
+        3.0400002002716064,
+        0.5000000596046448
+      ],
+      "materials": [
+        "modular_urban_apartments_facade_trim_01"
+      ],
+      "fbx": "parts/dado_standard_angled_large_01.fbx"
+    },
+    {
+      "object": "dado_standard_angled_small_01",
+      "role": "module",
+      "catalog_position_m": [
+        -16.020000457763672,
+        0.9800000190734863,
+        -1.0
+      ],
+      "triangles": 24,
+      "location_m": [
+        -16.020000457763672,
+        0.9800000190734863,
+        -1.0
+      ],
+      "rotation_deg": [
+        0.0,
+        -0.0,
+        0.0
+      ],
+      "parent": null,
+      "dimensions_m": [
+        2.0399999618530273,
+        2.0399999618530273,
+        0.4999999701976776
+      ],
+      "materials": [
+        "modular_urban_apartments_facade_trim_01"
+      ],
+      "fbx": "parts/dado_standard_angled_small_01.fbx"
+    },
+    {
+      "object": "dado_standard_corner_large_01",
+      "role": "module",
+      "catalog_position_m": [
+        -5.520000457763672,
+        1.4800000190734863,
+        -1.0
+      ],
+      "triangles": 16,
+      "location_m": [
+        -5.520000457763672,
+        1.4800000190734863,
+        -1.0
+      ],
+      "rotation_deg": [
+        0.0,
+        -0.0,
+        0.0
+      ],
+      "parent": null,
+      "dimensions_m": [
+        3.0400004386901855,
+        3.0399999618530273,
+        0.4999999701976776
+      ],
+      "materials": [
+        "modular_urban_apartments_facade_trim_01"
+      ],
+      "fbx": "parts/dado_standard_corner_large_01.fbx"
+    },
+    {
+      "object": "dado_standard_corner_large_02",
+      "role": "module",
+      "catalog_position_m": [
+        -5.5,
+        2.5,
+        -1.0
+      ],
+      "triangles": 16,
+      "location_m": [
+        -5.5,
+        2.5,
+        -1.0
+      ],
+      "rotation_deg": [
+        0.0,
+        -0.0,
+        0.0
+      ],
+      "parent": null,
+      "dimensions_m": [
+        3.0,
+        3.000000238418579,
+        0.4999999701976776
+      ],
+      "materials": [
+        "modular_urban_apartments_facade_trim_01"
+      ],
+      "fbx": "parts/dado_standard_corner_large_02.fbx"
+    },
+    {
+      "object": "dado_standard_corner_small_01",
+      "role": "module",
+      "catalog_position_m": [
+        -13.020000457763672,
+        0.9799999594688416,
+        -0.9999998807907104
+      ],
+      "triangles": 16,
+      "location_m": [
+        -13.020000457763672,
+        0.9799999594688416,
+        -0.9999998807907104
+      ],
+      "rotation_deg": [
+        0.0,
+        -0.0,
+        0.0
+      ],
+      "parent": null,
+      "dimensions_m": [
+        2.0400004386901855,
+        2.0399999618530273,
+        0.4999999701976776
+      ],
+      "materials": [
+        "modular_urban_apartments_facade_trim_01"
+      ],
+      "fbx": "parts/dado_standard_corner_small_01.fbx"
+    },
+    {
+      "object": "dado_standard_corner_small_02",
+      "role": "module",
+      "catalog_position_m": [
+        -13.0,
+        3.0,
+        -0.9999998807907104
+      ],
+      "triangles": 16,
+      "location_m": [
+        -13.0,
+        3.0,
+        -0.9999998807907104
+      ],
+      "rotation_deg": [
+        0.0,
+        -0.0,
+        0.0
+      ],
+      "parent": null,
+      "dimensions_m": [
+        1.9999998807907104,
+        2.000000238418579,
+        0.5000000596046448
+      ],
+      "materials": [
+        "modular_urban_apartments_facade_trim_01"
+      ],
+      "fbx": "parts/dado_standard_corner_small_02.fbx"
+    },
+    {
+      "object": "dado_pier_pedestal_01",
+      "role": "module",
+      "catalog_position_m": [
+        -22.0,
+        -0.06500033289194107,
+        -1.0
+      ],
+      "triangles": 50,
+      "location_m": [
+        -22.0,
+        -0.06500033289194107,
+        -1.0
+      ],
+      "rotation_deg": [
+        0.0,
+        -0.0,
+        0.0
+      ],
+      "parent": null,
+      "dimensions_m": [
+        0.39999935030937195,
+        0.12999995052814484,
+        0.5399999618530273
+      ],
+      "materials": [
+        "modular_urban_apartments_facade_trim_01"
+      ],
+      "fbx": "parts/dado_pier_pedestal_01.fbx"
+    },
+    {
+      "object": "dado_pier_angled_01",
+      "role": "module",
+      "catalog_position_m": [
+        -18.00495719909668,
+        0.04460127651691437,
+        -1.0
+      ],
+      "triangles": 68,
+      "location_m": [
+        -18.00495719909668,
+        0.04460127651691437,
+        -1.0
+      ],
+      "rotation_deg": [
+        0.0,
+        -0.0,
+        0.0
+      ],
+      "parent": null,
+      "dimensions_m": [
+        0.5699125528335571,
+        0.3492027521133423,
+        0.5399999618530273
+      ],
+      "materials": [
+        "modular_urban_apartments_facade_trim_01"
+      ],
+      "fbx": "parts/dado_pier_angled_01.fbx"
+    },
+    {
+      "object": "dado_pier_corner_01",
+      "role": "module",
+      "catalog_position_m": [
+        -19.924999237060547,
+        0.07499921321868896,
+        -1.0
+      ],
+      "triangles": 68,
+      "location_m": [
+        -19.924999237060547,
+        0.07499921321868896,
+        -1.0
+      ],
+      "rotation_deg": [
+        0.0,
+        -0.0,
+        0.0
+      ],
+      "parent": null,
+      "dimensions_m": [
+        0.4100000262260437,
+        0.4099997878074646,
+        0.5399999618530273
+      ],
+      "materials": [
+        "modular_urban_apartments_facade_trim_01"
+      ],
+      "fbx": "parts/dado_pier_corner_01.fbx"
+    },
+    {
+      "object": "dado_pier_corner_02",
+      "role": "module",
+      "catalog_position_m": [
+        -20.189998626708984,
+        1.8099992275238037,
+        -1.0
+      ],
+      "triangles": 68,
+      "location_m": [
+        -20.189998626708984,
+        1.8099992275238037,
+        -1.0
+      ],
+      "rotation_deg": [
+        0.0,
+        -0.0,
+        0.0
+      ],
+      "parent": null,
+      "dimensions_m": [
+        0.37999969720840454,
+        0.3799985349178314,
+        0.5399999022483826
+      ],
+      "materials": [
+        "modular_urban_apartments_facade_trim_01"
+      ],
+      "fbx": "parts/dado_pier_corner_02.fbx"
+    },
+    {
+      "object": "cornice_end_02",
+      "role": "module",
+      "catalog_position_m": [
+        -23.830001831054688,
+        0.02999994345009327,
+        3.3999996185302734
+      ],
+      "triangles": 36,
+      "location_m": [
+        -23.830001831054688,
+        0.02999994345009327,
+        3.3999996185302734
+      ],
+      "rotation_deg": [
+        0.0,
+        -0.0,
+        0.0
+      ],
+      "parent": null,
+      "dimensions_m": [
+        0.13999998569488525,
+        0.14000001549720764,
+        0.20000045001506805
+      ],
+      "materials": [
+        "modular_urban_apartments_facade_trim_01"
+      ],
+      "fbx": "parts/cornice_end_02.fbx"
+    },
+    {
+      "object": "cornice_end_01",
+      "role": "module",
+      "catalog_position_m": [
+        -24.169998168945312,
+        0.02999994345009327,
+        3.3999996185302734
+      ],
+      "triangles": 36,
+      "location_m": [
+        -24.169998168945312,
+        0.02999994345009327,
+        3.3999996185302734
+      ],
+      "rotation_deg": [
+        0.0,
+        -0.0,
+        0.0
+      ],
+      "parent": null,
+      "dimensions_m": [
+        0.13999998569488525,
+        0.14000001549720764,
+        0.20000045001506805
+      ],
+      "materials": [
+        "modular_urban_apartments_facade_trim_01"
+      ],
+      "fbx": "parts/cornice_end_01.fbx"
+    },
+    {
+      "object": "cornice_standard_standard_01",
+      "role": "module",
+      "catalog_position_m": [
+        -1.5,
+        -0.019999999552965164,
+        3.3999996185302734
+      ],
+      "triangles": 18,
+      "location_m": [
+        -1.5,
+        -0.019999999552965164,
+        3.3999996185302734
+      ],
+      "rotation_deg": [
+        0.0,
+        -0.0,
+        0.0
+      ],
+      "parent": null,
+      "dimensions_m": [
+        3.0,
+        0.03999999910593033,
+        0.19999997317790985
+      ],
+      "materials": [
+        "modular_urban_apartments_facade_trim_01"
+      ],
+      "fbx": "parts/cornice_standard_standard_01.fbx"
+    },
+    {
+      "object": "cornice_standard_angled_large_01",
+      "role": "module",
+      "catalog_position_m": [
+        -9.520000457763672,
+        1.4800000190734863,
+        3.3999996185302734
+      ],
+      "triangles": 72,
+      "location_m": [
+        -9.520000457763672,
+        1.4800000190734863,
+        3.3999996185302734
+      ],
+      "rotation_deg": [
+        0.0,
+        -0.0,
+        0.0
+      ],
+      "parent": null,
+      "dimensions_m": [
+        3.0399999618530273,
+        3.0399999618530273,
+        0.20000045001506805
+      ],
+      "materials": [
+        "modular_urban_apartments_facade_trim_01"
+      ],
+      "fbx": "parts/cornice_standard_angled_large_01.fbx"
+    },
+    {
+      "object": "cornice_standard_angled_small_01",
+      "role": "module",
+      "catalog_position_m": [
+        -16.019996643066406,
+        0.9800000190734863,
+        3.3999996185302734
+      ],
+      "triangles": 72,
+      "location_m": [
+        -16.019996643066406,
+        0.9800000190734863,
+        3.3999996185302734
+      ],
+      "rotation_deg": [
+        0.0,
+        -0.0,
+        0.0
+      ],
+      "parent": null,
+      "dimensions_m": [
+        2.0399999618530273,
+        2.0399999618530273,
+        0.20000021159648895
+      ],
+      "materials": [
+        "modular_urban_apartments_facade_trim_01"
+      ],
+      "fbx": "parts/cornice_standard_angled_small_01.fbx"
+    },
+    {
+      "object": "cornice_standard_corner_large_01",
+      "role": "module",
+      "catalog_position_m": [
+        -5.519999980926514,
+        1.4799998998641968,
+        3.3999998569488525
+      ],
+      "triangles": 36,
+      "location_m": [
+        -5.519999980926514,
+        1.4799998998641968,
+        3.3999998569488525
+      ],
+      "rotation_deg": [
+        0.0,
+        -0.0,
+        0.0
+      ],
+      "parent": null,
+      "dimensions_m": [
+        3.0400002002716064,
+        3.0399999618530273,
+        0.20000045001506805
+      ],
+      "materials": [
+        "modular_urban_apartments_facade_trim_01"
+      ],
+      "fbx": "parts/cornice_standard_corner_large_01.fbx"
+    },
+    {
+      "object": "cornice_standard_corner_large_02",
+      "role": "module",
+      "catalog_position_m": [
+        -5.5,
+        2.5,
+        3.4000003337860107
+      ],
+      "triangles": 36,
+      "location_m": [
+        -5.5,
+        2.5,
+        3.4000003337860107
+      ],
+      "rotation_deg": [
+        0.0,
+        -0.0,
+        0.0
+      ],
+      "parent": null,
+      "dimensions_m": [
+        3.0,
+        3.0,
+        0.19999997317790985
+      ],
+      "materials": [
+        "modular_urban_apartments_facade_trim_01"
+      ],
+      "fbx": "parts/cornice_standard_corner_large_02.fbx"
+    },
+    {
+      "object": "cornice_standard_corner_small_01",
+      "role": "module",
+      "catalog_position_m": [
+        -13.020000457763672,
+        0.9800000190734863,
+        3.3999996185302734
+      ],
+      "triangles": 36,
+      "location_m": [
+        -13.020000457763672,
+        0.9800000190734863,
+        3.3999996185302734
+      ],
+      "rotation_deg": [
+        0.0,
+        -0.0,
+        0.0
+      ],
+      "parent": null,
+      "dimensions_m": [
+        2.0400002002716064,
+        2.0399999618530273,
+        0.20000045001506805
+      ],
+      "materials": [
+        "modular_urban_apartments_facade_trim_01"
+      ],
+      "fbx": "parts/cornice_standard_corner_small_01.fbx"
+    },
+    {
+      "object": "cornice_standard_corner_small_02",
+      "role": "module",
+      "catalog_position_m": [
+        -13.0,
+        3.0,
+        3.3999998569488525
+      ],
+      "triangles": 36,
+      "location_m": [
+        -13.0,
+        3.0,
+        3.3999998569488525
+      ],
+      "rotation_deg": [
+        0.0,
+        -0.0,
+        0.0
+      ],
+      "parent": null,
+      "dimensions_m": [
+        2.0,
+        2.0,
+        0.19999997317790985
+      ],
+      "materials": [
+        "modular_urban_apartments_facade_trim_01"
+      ],
+      "fbx": "parts/cornice_standard_corner_small_02.fbx"
+    },
+    {
+      "object": "cornice_pier_angled_01",
+      "role": "module",
+      "catalog_position_m": [
+        -17.99874496459961,
+        0.03838806226849556,
+        3.3999993801116943
+      ],
+      "triangles": 56,
+      "location_m": [
+        -17.99874496459961,
+        0.03838806226849556,
+        3.3999993801116943
+      ],
+      "rotation_deg": [
+        0.0,
+        -0.0,
+        0.0
+      ],
+      "parent": null,
+      "dimensions_m": [
+        0.4974862337112427,
+        0.27677634358406067,
+        0.20000013709068298
+      ],
+      "materials": [
+        "modular_urban_apartments_facade_trim_01"
+      ],
+      "fbx": "parts/cornice_pier_angled_01.fbx"
+    },
+    {
+      "object": "cornice_pier_corner_01",
+      "role": "module",
+      "catalog_position_m": [
+        -19.924999237060547,
+        0.07499921321868896,
+        3.3999993801116943
+      ],
+      "triangles": 56,
+      "location_m": [
+        -19.924999237060547,
+        0.07499921321868896,
+        3.3999993801116943
+      ],
+      "rotation_deg": [
+        0.0,
+        -0.0,
+        0.0
+      ],
+      "parent": null,
+      "dimensions_m": [
+        0.3500000238418579,
+        0.3499997854232788,
+        0.20000013709068298
+      ],
+      "materials": [
+        "modular_urban_apartments_facade_trim_01"
+      ],
+      "fbx": "parts/cornice_pier_corner_01.fbx"
+    },
+    {
+      "object": "cornice_pier_standard_01",
+      "role": "module",
+      "catalog_position_m": [
+        -22.000001907348633,
+        -0.04999985545873642,
+        3.3999993801116943
+      ],
+      "triangles": 42,
+      "location_m": [
+        -22.000001907348633,
+        -0.04999985545873642,
+        3.3999993801116943
+      ],
+      "rotation_deg": [
+        0.0,
+        -0.0,
+        0.0
+      ],
+      "parent": null,
+      "dimensions_m": [
+        0.3499990403652191,
+        0.09999994933605194,
+        0.20000013709068298
+      ],
+      "materials": [
+        "modular_urban_apartments_facade_trim_01"
+      ],
+      "fbx": "parts/cornice_pier_standard_01.fbx"
+    },
+    {
+      "object": "cornice_pier_corner_02",
+      "role": "module",
+      "catalog_position_m": [
+        -20.174999237060547,
+        1.8249993324279785,
+        3.3999991416931152
+      ],
+      "triangles": 56,
+      "location_m": [
+        -20.174999237060547,
+        1.8249993324279785,
+        3.3999991416931152
+      ],
+      "rotation_deg": [
+        0.0,
+        -0.0,
+        0.0
+      ],
+      "parent": null,
+      "dimensions_m": [
+        0.34999972581863403,
+        0.3499985337257385,
+        0.20000004768371582
+      ],
+      "materials": [
+        "modular_urban_apartments_facade_trim_01"
+      ],
+      "fbx": "parts/cornice_pier_corner_02.fbx"
+    },
+    {
+      "object": "crown_standard_angled_large_01",
+      "role": "module",
+      "catalog_position_m": [
+        -9.664999961853027,
+        1.3350000381469727,
+        4.0
+      ],
+      "triangles": 1236,
+      "location_m": [
+        -9.664999961853027,
+        1.3350000381469727,
+        4.0
+      ],
+      "rotation_deg": [
+        0.0,
+        -0.0,
+        0.0
+      ],
+      "parent": null,
+      "dimensions_m": [
+        3.3299999237060547,
+        3.3299999237060547,
+        0.75
+      ],
+      "materials": [
+        "modular_urban_apartments_facade_trim_02"
+      ],
+      "fbx": "parts/crown_standard_angled_large_01.fbx"
+    },
+    {
+      "object": "crown_standard_standard_01",
+      "role": "module",
+      "catalog_position_m": [
+        -1.500001072883606,
+        -0.11500002443790436,
+        4.0
+      ],
+      "triangles": 684,
+      "location_m": [
+        -1.500001072883606,
+        -0.11500002443790436,
+        4.0
+      ],
+      "rotation_deg": [
+        0.0,
+        -0.0,
+        0.0
+      ],
+      "parent": null,
+      "dimensions_m": [
+        3.0000016689300537,
+        0.429999977350235,
+        0.75
+      ],
+      "materials": [
+        "modular_urban_apartments_facade_trim_02"
+      ],
+      "fbx": "parts/crown_standard_standard_01.fbx"
+    },
+    {
+      "object": "crown_standard_angled_small_01",
+      "role": "module",
+      "catalog_position_m": [
+        -16.164997100830078,
+        0.8350000381469727,
+        4.0
+      ],
+      "triangles": 930,
+      "location_m": [
+        -16.164997100830078,
+        0.8350000381469727,
+        4.0
+      ],
+      "rotation_deg": [
+        0.0,
+        -0.0,
+        0.0
+      ],
+      "parent": null,
+      "dimensions_m": [
+        2.3299999237060547,
+        2.3299999237060547,
+        0.75
+      ],
+      "materials": [
+        "modular_urban_apartments_facade_trim_02"
+      ],
+      "fbx": "parts/crown_standard_angled_small_01.fbx"
+    },
+    {
+      "object": "crown_end_02",
+      "role": "module",
+      "catalog_position_m": [
+        -23.685001373291016,
+        -0.11499996483325958,
+        4.0
+      ],
+      "triangles": 316,
+      "location_m": [
+        -23.685001373291016,
+        -0.11499996483325958,
+        4.0
+      ],
+      "rotation_deg": [
+        0.0,
+        -0.0,
+        0.0
+      ],
+      "parent": null,
+      "dimensions_m": [
+        0.4300003945827484,
+        0.4300001561641693,
+        0.75
+      ],
+      "materials": [
+        "modular_urban_apartments_facade_trim_02"
+      ],
+      "fbx": "parts/crown_end_02.fbx"
+    },
+    {
+      "object": "crown_end_01",
+      "role": "module",
+      "catalog_position_m": [
+        -24.31499671936035,
+        -0.11499996483325958,
+        4.0
+      ],
+      "triangles": 316,
+      "location_m": [
+        -24.31499671936035,
+        -0.11499996483325958,
+        4.0
+      ],
+      "rotation_deg": [
+        0.0,
+        -0.0,
+        0.0
+      ],
+      "parent": null,
+      "dimensions_m": [
+        0.4300003945827484,
+        0.4300001561641693,
+        0.75
+      ],
+      "materials": [
+        "modular_urban_apartments_facade_trim_02"
+      ],
+      "fbx": "parts/crown_end_01.fbx"
+    },
+    {
+      "object": "crown_standard_corner_large_01",
+      "role": "module",
+      "catalog_position_m": [
+        -5.665000915527344,
+        1.335000991821289,
+        4.0
+      ],
+      "triangles": 1568,
+      "location_m": [
+        -5.665000915527344,
+        1.335000991821289,
+        4.0
+      ],
+      "rotation_deg": [
+        0.0,
+        -0.0,
+        0.0
+      ],
+      "parent": null,
+      "dimensions_m": [
+        3.3300015926361084,
+        3.3300018310546875,
+        0.75
+      ],
+      "materials": [
+        "modular_urban_apartments_facade_trim_02"
+      ],
+      "fbx": "parts/crown_standard_corner_large_01.fbx"
+    },
+    {
+      "object": "crown_standard_corner_large_02",
+      "role": "module",
+      "catalog_position_m": [
+        -5.449999809265137,
+        2.550001382827759,
+        4.0
+      ],
+      "triangles": 1422,
+      "location_m": [
+        -5.449999809265137,
+        2.550001382827759,
+        4.0
+      ],
+      "rotation_deg": [
+        0.0,
+        -0.0,
+        0.0
+      ],
+      "parent": null,
+      "dimensions_m": [
+        3.100003719329834,
+        3.1000027656555176,
+        0.75
+      ],
+      "materials": [
+        "modular_urban_apartments_facade_trim_02"
+      ],
+      "fbx": "parts/crown_standard_corner_large_02.fbx"
+    },
+    {
+      "object": "crown_standard_corner_small_01",
+      "role": "module",
+      "catalog_position_m": [
+        -13.165000915527344,
+        0.8350009918212891,
+        3.999999761581421
+      ],
+      "triangles": 1160,
+      "location_m": [
+        -13.165000915527344,
+        0.8350009918212891,
+        3.999999761581421
+      ],
+      "rotation_deg": [
+        0.0,
+        -0.0,
+        0.0
+      ],
+      "parent": null,
+      "dimensions_m": [
+        2.330000638961792,
+        2.3300018310546875,
+        0.75
+      ],
+      "materials": [
+        "modular_urban_apartments_facade_trim_02"
+      ],
+      "fbx": "parts/crown_standard_corner_small_01.fbx"
+    },
+    {
+      "object": "crown_standard_corner_small_02",
+      "role": "module",
+      "catalog_position_m": [
+        -12.950000762939453,
+        3.050001859664917,
+        3.999999761581421
+      ],
+      "triangles": 1014,
+      "location_m": [
+        -12.950000762939453,
+        3.050001859664917,
+        3.999999761581421
+      ],
+      "rotation_deg": [
+        0.0,
+        -0.0,
+        0.0
+      ],
+      "parent": null,
+      "dimensions_m": [
+        2.100003719329834,
+        2.100001811981201,
+        0.75
+      ],
+      "materials": [
+        "modular_urban_apartments_facade_trim_02"
+      ],
+      "fbx": "parts/crown_standard_corner_small_02.fbx"
+    },
+    {
+      "object": "crown_pier_pedestal_01",
+      "role": "module",
+      "catalog_position_m": [
+        -22.0,
+        -0.16249993443489075,
+        3.944999933242798
+      ],
+      "triangles": 216,
+      "location_m": [
+        -22.0,
+        -0.16249993443489075,
+        3.944999933242798
+      ],
+      "rotation_deg": [
+        0.0,
+        -0.0,
+        0.0
+      ],
+      "parent": null,
+      "dimensions_m": [
+        0.7099997997283936,
+        0.5249999761581421,
+        0.8349999785423279
+      ],
+      "materials": [
+        "modular_urban_apartments_facade_trim_02"
+      ],
+      "fbx": "parts/crown_pier_pedestal_01.fbx"
+    },
+    {
+      "object": "crown_pier_corner_01",
+      "role": "module",
+      "catalog_position_m": [
+        -19.997499465942383,
+        0.0025004148483276367,
+        3.944999933242798
+      ],
+      "triangles": 214,
+      "location_m": [
+        -19.997499465942383,
+        0.0025004148483276367,
+        3.944999933242798
+      ],
+      "rotation_deg": [
+        0.0,
+        -0.0,
+        0.0
+      ],
+      "parent": null,
+      "dimensions_m": [
+        0.8550006151199341,
+        0.8550006151199341,
+        0.8350000381469727
+      ],
+      "materials": [
+        "modular_urban_apartments_facade_trim_02"
+      ],
+      "fbx": "parts/crown_pier_corner_01.fbx"
+    },
+    {
+      "object": "crown_pier_angled_01",
+      "role": "module",
+      "catalog_position_m": [
+        -18.089988708496094,
+        -0.011480018496513367,
+        3.944999933242798
+      ],
+      "triangles": 214,
+      "location_m": [
+        -18.089988708496094,
+        -0.011480018496513367,
+        3.944999933242798
+      ],
+      "rotation_deg": [
+        0.0,
+        -0.0,
+        0.0
+      ],
+      "parent": null,
+      "dimensions_m": [
+        1.0720901489257812,
+        0.8257213830947876,
+        0.8350000977516174
+      ],
+      "materials": [
+        "modular_urban_apartments_facade_trim_02"
+      ],
+      "fbx": "parts/crown_pier_angled_01.fbx"
+    },
+    {
+      "object": "crown_pier_corner_02",
+      "role": "module",
+      "catalog_position_m": [
+        -20.21500015258789,
+        1.7849984169006348,
+        3.9449996948242188
+      ],
+      "triangles": 222,
+      "location_m": [
+        -20.21500015258789,
+        1.7849984169006348,
+        3.9449996948242188
+      ],
+      "rotation_deg": [
+        0.0,
+        -0.0,
+        0.0
+      ],
+      "parent": null,
+      "dimensions_m": [
+        0.630003035068512,
+        0.6300016641616821,
+        0.8349995613098145
+      ],
+      "materials": [
+        "modular_urban_apartments_facade_trim_02"
+      ],
+      "fbx": "parts/crown_pier_corner_02.fbx"
+    }
+  ],
+  "materials": [
+    {
+      "name": "modular_urban_apartments_facade_glass",
+      "glass": true,
+      "inputs": {
+        "Base Color": [
+          0.7200000286102295,
+          0.8399999737739563,
+          0.8799999952316284,
+          1.0
+        ],
+        "Metallic": 0.0,
+        "Roughness": 0.10999999940395355,
+        "Transmission Weight": 1.0,
+        "IOR": 1.100000023841858,
+        "Alpha": 1.0,
+        "Emission Color": [
+          0.0,
+          0.0,
+          0.0,
+          1.0
+        ],
+        "Emission Strength": 1.0
+      },
+      "links": [
+        {
+          "from": "Principled BSDF",
+          "output": "BSDF",
+          "to": "Material Output",
+          "input": "Surface"
+        },
+        {
+          "from": "Image Texture.003",
+          "output": "Color",
+          "to": "Normal Map",
+          "input": "Color"
+        },
+        {
+          "from": "Normal Map",
+          "output": "Normal",
+          "to": "Principled BSDF",
+          "input": "Normal"
+        },
+        {
+          "from": "Reroute",
+          "output": "Output",
+          "to": "Image Texture",
+          "input": "Vector"
+        },
+        {
+          "from": "Reroute",
+          "output": "Output",
+          "to": "Image Texture.001",
+          "input": "Vector"
+        },
+        {
+          "from": "Reroute",
+          "output": "Output",
+          "to": "Image Texture.002",
+          "input": "Vector"
+        },
+        {
+          "from": "Reroute",
+          "output": "Output",
+          "to": "Image Texture.003",
+          "input": "Vector"
+        },
+        {
+          "from": "Reroute",
+          "output": "Output",
+          "to": "Image Texture.004",
+          "input": "Vector"
+        },
+        {
+          "from": "Mapping",
+          "output": "Vector",
+          "to": "Reroute",
+          "input": "Input"
+        },
+        {
+          "from": "Texture Coordinate",
+          "output": "UV",
+          "to": "Mapping",
+          "input": "Vector"
+        }
+      ],
+      "images": [
+        {
+          "node": "Image Texture",
+          "image": "modular_urban_apartments_facade_objects_diff.png",
+          "file": "textures/T_0_modular_urban_apartments_facade_objects_diff.png",
+          "colorspace": "sRGB"
+        },
+        {
+          "node": "Image Texture.001",
+          "image": "modular_urban_apartments_facade_objects_metal.png",
+          "file": "textures/T_1_modular_urban_apartments_facade_objects_metal.png",
+          "colorspace": "Non-Color"
+        },
+        {
+          "node": "Image Texture.002",
+          "image": "modular_urban_apartments_facade_objects_rough.png",
+          "file": "textures/T_2_modular_urban_apartments_facade_objects_rough.png",
+          "colorspace": "Non-Color"
+        },
+        {
+          "node": "Image Texture.003",
+          "image": "modular_urban_apartments_facade_objects_nor_gl.png",
+          "file": "textures/T_3_modular_urban_apartments_facade_objects_nor_gl.png",
+          "colorspace": "Non-Color"
+        },
+        {
+          "node": "Image Texture.004",
+          "image": "modular_urban_apartments_facade_objects_alpha.png",
+          "file": "textures/T_4_modular_urban_apartments_facade_objects_alpha.png",
+          "colorspace": "Non-Color"
+        }
+      ]
+    },
+    {
+      "name": "modular_urban_apartments_facade_objects",
+      "glass": false,
+      "inputs": {
+        "Base Color": [
+          0.05311586707830429,
+          0.05311586707830429,
+          0.05311586707830429,
+          1.0
+        ],
+        "Metallic": 0.0,
+        "Roughness": 0.5,
+        "Transmission Weight": 0.0,
+        "IOR": 1.4500000476837158,
+        "Alpha": 1.0,
+        "Emission Color": [
+          0.0,
+          0.0,
+          0.0,
+          1.0
+        ],
+        "Emission Strength": 1.0
+      },
+      "links": [
+        {
+          "from": "Principled BSDF",
+          "output": "BSDF",
+          "to": "Material Output",
+          "input": "Surface"
+        },
+        {
+          "from": "Image Texture",
+          "output": "Color",
+          "to": "Principled BSDF",
+          "input": "Base Color"
+        },
+        {
+          "from": "Image Texture.001",
+          "output": "Color",
+          "to": "Principled BSDF",
+          "input": "Metallic"
+        },
+        {
+          "from": "Image Texture.002",
+          "output": "Color",
+          "to": "Principled BSDF",
+          "input": "Roughness"
+        },
+        {
+          "from": "Image Texture.003",
+          "output": "Color",
+          "to": "Normal Map",
+          "input": "Color"
+        },
+        {
+          "from": "Normal Map",
+          "output": "Normal",
+          "to": "Principled BSDF",
+          "input": "Normal"
+        },
+        {
+          "from": "Image Texture.004",
+          "output": "Color",
+          "to": "Principled BSDF",
+          "input": "Alpha"
+        },
+        {
+          "from": "Reroute",
+          "output": "Output",
+          "to": "Image Texture",
+          "input": "Vector"
+        },
+        {
+          "from": "Reroute",
+          "output": "Output",
+          "to": "Image Texture.001",
+          "input": "Vector"
+        },
+        {
+          "from": "Reroute",
+          "output": "Output",
+          "to": "Image Texture.002",
+          "input": "Vector"
+        },
+        {
+          "from": "Reroute",
+          "output": "Output",
+          "to": "Image Texture.003",
+          "input": "Vector"
+        },
+        {
+          "from": "Reroute",
+          "output": "Output",
+          "to": "Image Texture.004",
+          "input": "Vector"
+        },
+        {
+          "from": "Mapping",
+          "output": "Vector",
+          "to": "Reroute",
+          "input": "Input"
+        },
+        {
+          "from": "Texture Coordinate",
+          "output": "UV",
+          "to": "Mapping",
+          "input": "Vector"
+        }
+      ],
+      "images": [
+        {
+          "node": "Image Texture",
+          "image": "modular_urban_apartments_facade_objects_diff.png",
+          "file": "textures/T_0_modular_urban_apartments_facade_objects_diff.png",
+          "colorspace": "sRGB"
+        },
+        {
+          "node": "Image Texture.001",
+          "image": "modular_urban_apartments_facade_objects_metal.png",
+          "file": "textures/T_1_modular_urban_apartments_facade_objects_metal.png",
+          "colorspace": "Non-Color"
+        },
+        {
+          "node": "Image Texture.002",
+          "image": "modular_urban_apartments_facade_objects_rough.png",
+          "file": "textures/T_2_modular_urban_apartments_facade_objects_rough.png",
+          "colorspace": "Non-Color"
+        },
+        {
+          "node": "Image Texture.003",
+          "image": "modular_urban_apartments_facade_objects_nor_gl.png",
+          "file": "textures/T_3_modular_urban_apartments_facade_objects_nor_gl.png",
+          "colorspace": "Non-Color"
+        },
+        {
+          "node": "Image Texture.004",
+          "image": "modular_urban_apartments_facade_objects_alpha.png",
+          "file": "textures/T_4_modular_urban_apartments_facade_objects_alpha.png",
+          "colorspace": "Non-Color"
+        }
+      ]
+    },
+    {
+      "name": "modular_urban_apartments_facade_plaster",
+      "glass": false,
+      "inputs": {
+        "Base Color": [
+          0.800000011920929,
+          0.800000011920929,
+          0.800000011920929,
+          1.0
+        ],
+        "Metallic": 0.0,
+        "Roughness": 0.5,
+        "Transmission Weight": 0.0,
+        "IOR": 1.4500000476837158,
+        "Alpha": 1.0,
+        "Emission Color": [
+          0.0,
+          0.0,
+          0.0,
+          1.0
+        ],
+        "Emission Strength": 1.0
+      },
+      "links": [
+        {
+          "from": "Principled BSDF",
+          "output": "BSDF",
+          "to": "Material Output",
+          "input": "Surface"
+        },
+        {
+          "from": "Image Texture",
+          "output": "Color",
+          "to": "Principled BSDF",
+          "input": "Base Color"
+        },
+        {
+          "from": "Image Texture.001",
+          "output": "Color",
+          "to": "Principled BSDF",
+          "input": "Roughness"
+        },
+        {
+          "from": "Image Texture.002",
+          "output": "Color",
+          "to": "Normal Map",
+          "input": "Color"
+        },
+        {
+          "from": "Normal Map",
+          "output": "Normal",
+          "to": "Principled BSDF",
+          "input": "Normal"
+        },
+        {
+          "from": "Reroute",
+          "output": "Output",
+          "to": "Image Texture",
+          "input": "Vector"
+        },
+        {
+          "from": "Reroute",
+          "output": "Output",
+          "to": "Image Texture.001",
+          "input": "Vector"
+        },
+        {
+          "from": "Reroute",
+          "output": "Output",
+          "to": "Image Texture.002",
+          "input": "Vector"
+        },
+        {
+          "from": "Mapping",
+          "output": "Vector",
+          "to": "Reroute",
+          "input": "Input"
+        },
+        {
+          "from": "Texture Coordinate",
+          "output": "UV",
+          "to": "Mapping",
+          "input": "Vector"
+        }
+      ],
+      "images": [
+        {
+          "node": "Image Texture",
+          "image": "modular_urban_apartments_facade_plaster_diff.png",
+          "file": "textures/T_5_modular_urban_apartments_facade_plaster_diff.png",
+          "colorspace": "sRGB"
+        },
+        {
+          "node": "Image Texture.001",
+          "image": "modular_urban_apartments_facade_plaster_rough.png",
+          "file": "textures/T_6_modular_urban_apartments_facade_plaster_rough.png",
+          "colorspace": "Non-Color"
+        },
+        {
+          "node": "Image Texture.002",
+          "image": "modular_urban_apartments_facade_plaster_nor_gl.png",
+          "file": "textures/T_7_modular_urban_apartments_facade_plaster_nor_gl.png",
+          "colorspace": "Non-Color"
+        }
+      ]
+    },
+    {
+      "name": "modular_urban_apartments_facade_trim_01",
+      "glass": false,
+      "inputs": {
+        "Base Color": [
+          0.800000011920929,
+          0.800000011920929,
+          0.800000011920929,
+          1.0
+        ],
+        "Metallic": 0.0,
+        "Roughness": 0.5,
+        "Transmission Weight": 0.0,
+        "IOR": 1.4500000476837158,
+        "Alpha": 1.0,
+        "Emission Color": [
+          0.0,
+          0.0,
+          0.0,
+          1.0
+        ],
+        "Emission Strength": 1.0
+      },
+      "links": [
+        {
+          "from": "Principled BSDF",
+          "output": "BSDF",
+          "to": "Material Output",
+          "input": "Surface"
+        },
+        {
+          "from": "Image Texture",
+          "output": "Color",
+          "to": "Principled BSDF",
+          "input": "Base Color"
+        },
+        {
+          "from": "Image Texture.001",
+          "output": "Color",
+          "to": "Principled BSDF",
+          "input": "Roughness"
+        },
+        {
+          "from": "Image Texture.002",
+          "output": "Color",
+          "to": "Normal Map",
+          "input": "Color"
+        },
+        {
+          "from": "Normal Map",
+          "output": "Normal",
+          "to": "Principled BSDF",
+          "input": "Normal"
+        },
+        {
+          "from": "Reroute",
+          "output": "Output",
+          "to": "Image Texture",
+          "input": "Vector"
+        },
+        {
+          "from": "Reroute",
+          "output": "Output",
+          "to": "Image Texture.001",
+          "input": "Vector"
+        },
+        {
+          "from": "Reroute",
+          "output": "Output",
+          "to": "Image Texture.002",
+          "input": "Vector"
+        },
+        {
+          "from": "Mapping",
+          "output": "Vector",
+          "to": "Reroute",
+          "input": "Input"
+        },
+        {
+          "from": "Texture Coordinate",
+          "output": "UV",
+          "to": "Mapping",
+          "input": "Vector"
+        }
+      ],
+      "images": [
+        {
+          "node": "Image Texture",
+          "image": "modular_urban_apartments_facade_trim_01_diff.png",
+          "file": "textures/T_8_modular_urban_apartments_facade_trim_01_diff.png",
+          "colorspace": "sRGB"
+        },
+        {
+          "node": "Image Texture.001",
+          "image": "modular_urban_apartments_facade_trim_01_rough.png",
+          "file": "textures/T_9_modular_urban_apartments_facade_trim_01_rough.png",
+          "colorspace": "Non-Color"
+        },
+        {
+          "node": "Image Texture.002",
+          "image": "modular_urban_apartments_facade_trim_01_nor_gl.png",
+          "file": "textures/T_10_modular_urban_apartments_facade_trim_01_nor_gl.png",
+          "colorspace": "Non-Color"
+        }
+      ]
+    },
+    {
+      "name": "modular_urban_apartments_facade_trim_02",
+      "glass": false,
+      "inputs": {
+        "Base Color": [
+          0.18214786052703857,
+          0.15475399792194366,
+          0.8000000715255737,
+          1.0
+        ],
+        "Metallic": 0.0,
+        "Roughness": 0.5,
+        "Transmission Weight": 0.0,
+        "IOR": 1.4500000476837158,
+        "Alpha": 1.0,
+        "Emission Color": [
+          0.0,
+          0.0,
+          0.0,
+          1.0
+        ],
+        "Emission Strength": 1.0
+      },
+      "links": [
+        {
+          "from": "Principled BSDF",
+          "output": "BSDF",
+          "to": "Material Output",
+          "input": "Surface"
+        },
+        {
+          "from": "Image Texture",
+          "output": "Color",
+          "to": "Principled BSDF",
+          "input": "Base Color"
+        },
+        {
+          "from": "Image Texture.001",
+          "output": "Color",
+          "to": "Principled BSDF",
+          "input": "Roughness"
+        },
+        {
+          "from": "Image Texture.002",
+          "output": "Color",
+          "to": "Normal Map",
+          "input": "Color"
+        },
+        {
+          "from": "Normal Map",
+          "output": "Normal",
+          "to": "Principled BSDF",
+          "input": "Normal"
+        },
+        {
+          "from": "Reroute",
+          "output": "Output",
+          "to": "Image Texture",
+          "input": "Vector"
+        },
+        {
+          "from": "Reroute",
+          "output": "Output",
+          "to": "Image Texture.001",
+          "input": "Vector"
+        },
+        {
+          "from": "Reroute",
+          "output": "Output",
+          "to": "Image Texture.002",
+          "input": "Vector"
+        },
+        {
+          "from": "Mapping",
+          "output": "Vector",
+          "to": "Reroute",
+          "input": "Input"
+        },
+        {
+          "from": "Texture Coordinate",
+          "output": "UV",
+          "to": "Mapping",
+          "input": "Vector"
+        }
+      ],
+      "images": [
+        {
+          "node": "Image Texture",
+          "image": "modular_urban_apartments_facade_trim_02_diff.png",
+          "file": "textures/T_11_modular_urban_apartments_facade_trim_02_diff.png",
+          "colorspace": "sRGB"
+        },
+        {
+          "node": "Image Texture.001",
+          "image": "modular_urban_apartments_facade_trim_02_rough.png",
+          "file": "textures/T_12_modular_urban_apartments_facade_trim_02_rough.png",
+          "colorspace": "Non-Color"
+        },
+        {
+          "node": "Image Texture.002",
+          "image": "modular_urban_apartments_facade_trim_02_nor_gl.png",
+          "file": "textures/T_13_modular_urban_apartments_facade_trim_02_nor_gl.png",
+          "colorspace": "Non-Color"
+        }
+      ]
+    }
+  ],
+  "repairs": [
+    "Real transmission glass replaces opaque window slot; planar walls gain 18 cm thickness; each of 147 modules exported separately."
+  ],
+  "actions": [],
+  "animation_runtime": "Rigid meshes driven from Unreal actuator state; Blender actions are inspectable demonstrations.",
+  "kind": "modular_catalog"
+}

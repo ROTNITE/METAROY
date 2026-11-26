@@ -1,0 +1,615 @@
+{
+  "id": "modular_industrial_pipes_01",
+  "source": "blender/vendor/modular_industrial_pipes_01_4k/modular_industrial_pipes_01_4k.blend",
+  "sha256": "3793b5b10437063383279ff7cc9c4548a730634caa28b9eb16c872a883c44d08",
+  "units": {
+    "system": "METRIC",
+    "scale_length": 1.0
+  },
+  "bounds_min": [
+    -0.7035520076751709,
+    -0.17943133413791656,
+    -1.002319574356079
+  ],
+  "bounds_max": [
+    0.6992496252059937,
+    0.12816427648067474,
+    0.9523200392723083
+  ],
+  "dimensions": [
+    1.4028016328811646,
+    0.3075956106185913,
+    1.9546396732330322
+  ],
+  "objects": [
+    {
+      "name": "modular_industrial_pipes_01_pipe01",
+      "type": "MESH",
+      "parent": null,
+      "location": [
+        0.3999999761581421,
+        0.025000035762786865,
+        -0.5249999761581421
+      ],
+      "rotation": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "hidden_render": false,
+      "vertices": 366,
+      "triangles": 600,
+      "uv_layers": [
+        "UVChannel_1"
+      ],
+      "bounds_min": [
+        0.29644614458084106,
+        -0.07816074788570404,
+        -0.9545309543609619
+      ],
+      "bounds_max": [
+        0.5035537481307983,
+        0.12816065549850464,
+        -0.09546902775764465
+      ],
+      "materials": [
+        "modular_industrial_pipes_01_group01"
+      ],
+      "modifiers": []
+    },
+    {
+      "name": "modular_industrial_pipes_01_pipe02",
+      "type": "MESH",
+      "parent": null,
+      "location": [
+        -0.5999999642372131,
+        0.02500000037252903,
+        -0.02499999850988388
+      ],
+      "rotation": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "hidden_render": false,
+      "vertices": 390,
+      "triangles": 648,
+      "uv_layers": [
+        "UVChannel_1"
+      ],
+      "bounds_min": [
+        -0.7035520076751709,
+        -0.0781603679060936,
+        -1.002319574356079
+      ],
+      "bounds_max": [
+        -0.4964480996131897,
+        0.12816062569618225,
+        0.9523200392723083
+      ],
+      "materials": [
+        "modular_industrial_pipes_01_group01"
+      ],
+      "modifiers": []
+    },
+    {
+      "name": "modular_industrial_pipes_01_pipe03",
+      "type": "MESH",
+      "parent": null,
+      "location": [
+        -0.20000000298023224,
+        0.025000005960464478,
+        -0.32500001788139343
+      ],
+      "rotation": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "hidden_render": false,
+      "vertices": 558,
+      "triangles": 984,
+      "uv_layers": [
+        "UVChannel_1"
+      ],
+      "bounds_min": [
+        -0.5074371695518494,
+        -0.07852515578269958,
+        -0.9953025579452515
+      ],
+      "bounds_max": [
+        0.09121154248714447,
+        0.127851665019989,
+        0.3190821707248688
+      ],
+      "materials": [
+        "modular_industrial_pipes_01_group01"
+      ],
+      "modifiers": []
+    },
+    {
+      "name": "modular_industrial_pipes_01_pipe04",
+      "type": "MESH",
+      "parent": null,
+      "location": [
+        -0.09999998658895493,
+        0.02499997615814209,
+        0.6750000715255737
+      ],
+      "rotation": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "hidden_render": false,
+      "vertices": 486,
+      "triangles": 840,
+      "uv_layers": [
+        "UVChannel_1"
+      ],
+      "bounds_min": [
+        -0.3967278301715851,
+        -0.07816057652235031,
+        0.4845903515815735
+      ],
+      "bounds_max": [
+        0.027421467006206512,
+        0.12816019356250763,
+        0.9291917681694031
+      ],
+      "materials": [
+        "modular_industrial_pipes_01_group01"
+      ],
+      "modifiers": []
+    },
+    {
+      "name": "modular_industrial_pipes_01_pipe05",
+      "type": "MESH",
+      "parent": null,
+      "location": [
+        0.3999999761581421,
+        0.02499997615814209,
+        0.675000011920929
+      ],
+      "rotation": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "hidden_render": false,
+      "vertices": 558,
+      "triangles": 984,
+      "uv_layers": [
+        "UVChannel_1"
+      ],
+      "bounds_min": [
+        0.10116180777549744,
+        -0.07818447053432465,
+        0.45857924222946167
+      ],
+      "bounds_max": [
+        0.6992496252059937,
+        0.1281605213880539,
+        0.891445517539978
+      ],
+      "materials": [
+        "modular_industrial_pipes_01_group02"
+      ],
+      "modifiers": []
+    },
+    {
+      "name": "modular_industrial_pipes_01_pipe06",
+      "type": "MESH",
+      "parent": null,
+      "location": [
+        0.3999999761581421,
+        0.024999991059303284,
+        0.17500001192092896
+      ],
+      "rotation": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "hidden_render": false,
+      "vertices": 642,
+      "triangles": 1088,
+      "uv_layers": [
+        "UVChannel_1"
+      ],
+      "bounds_min": [
+        0.2964441478252411,
+        -0.0782172828912735,
+        -0.0038982629776000977
+      ],
+      "bounds_max": [
+        0.6051748394966125,
+        0.12816427648067474,
+        0.3536601662635803
+      ],
+      "materials": [
+        "modular_industrial_pipes_01_group02"
+      ],
+      "modifiers": []
+    },
+    {
+      "name": "modular_industrial_pipes_01_pipe07",
+      "type": "MESH",
+      "parent": null,
+      "location": [
+        0.0,
+        0.02499999850988388,
+        0.07500000298023224
+      ],
+      "rotation": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "hidden_render": false,
+      "vertices": 834,
+      "triangles": 1408,
+      "uv_layers": [
+        "UVChannel_1"
+      ],
+      "bounds_min": [
+        -0.17840716242790222,
+        -0.07822123914957047,
+        -0.1309194415807724
+      ],
+      "bounds_max": [
+        0.17839862406253815,
+        0.1281604766845703,
+        0.2801610827445984
+      ],
+      "materials": [
+        "modular_industrial_pipes_01_group02"
+      ],
+      "modifiers": []
+    },
+    {
+      "name": "modular_industrial_pipes_01_pipe08",
+      "type": "MESH",
+      "parent": null,
+      "location": [
+        -0.2999999523162842,
+        0.025000035762786865,
+        -0.7250000238418579
+      ],
+      "rotation": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "hidden_render": false,
+      "vertices": 2963,
+      "triangles": 5788,
+      "uv_layers": [
+        "UVChannel_1"
+      ],
+      "bounds_min": [
+        -0.40355318784713745,
+        -0.17943133413791656,
+        -0.9137434363365173
+      ],
+      "bounds_max": [
+        -0.13725818693637848,
+        0.12816093862056732,
+        -0.5349146127700806
+      ],
+      "materials": [
+        "modular_industrial_pipes_01_group02"
+      ],
+      "modifiers": []
+    }
+  ],
+  "materials": [
+    {
+      "name": "modular_industrial_pipes_01_group01",
+      "nodes": [
+        {
+          "name": "Material Output",
+          "type": "OUTPUT_MATERIAL"
+        },
+        {
+          "name": "Principled BSDF",
+          "type": "BSDF_PRINCIPLED",
+          "inputs": {
+            "Base Color": {
+              "linked": true,
+              "value": [
+                0.800000011920929,
+                0.800000011920929,
+                0.800000011920929,
+                1.0
+              ]
+            },
+            "Metallic": {
+              "linked": true,
+              "value": 0.0
+            },
+            "Roughness": {
+              "linked": true,
+              "value": 0.5
+            },
+            "IOR": {
+              "linked": false,
+              "value": 1.4500000476837158
+            },
+            "Alpha": {
+              "linked": false,
+              "value": 1.0
+            },
+            "Transmission Weight": {
+              "linked": false,
+              "value": 0.0
+            }
+          }
+        },
+        {
+          "name": "Image Texture",
+          "type": "TEX_IMAGE",
+          "image": "modular_industrial_pipes_01_group01_diff.png"
+        },
+        {
+          "name": "Image Texture.001",
+          "type": "TEX_IMAGE",
+          "image": "modular_industrial_pipes_01_group01_metal.png"
+        },
+        {
+          "name": "Image Texture.002",
+          "type": "TEX_IMAGE",
+          "image": "modular_industrial_pipes_01_group01_rough.png"
+        },
+        {
+          "name": "Image Texture.003",
+          "type": "TEX_IMAGE",
+          "image": "modular_industrial_pipes_01_group01_nor_gl.png"
+        },
+        {
+          "name": "Normal Map",
+          "type": "NORMAL_MAP"
+        },
+        {
+          "name": "Mapping",
+          "type": "MAPPING"
+        },
+        {
+          "name": "Reroute",
+          "type": "REROUTE"
+        },
+        {
+          "name": "Texture Coordinate",
+          "type": "TEX_COORD"
+        },
+        {
+          "name": "Frame",
+          "type": "FRAME"
+        },
+        {
+          "name": "Frame.001",
+          "type": "FRAME"
+        }
+      ]
+    },
+    {
+      "name": "modular_industrial_pipes_01_group02",
+      "nodes": [
+        {
+          "name": "Material Output",
+          "type": "OUTPUT_MATERIAL"
+        },
+        {
+          "name": "Principled BSDF",
+          "type": "BSDF_PRINCIPLED",
+          "inputs": {
+            "Base Color": {
+              "linked": true,
+              "value": [
+                0.800000011920929,
+                0.800000011920929,
+                0.800000011920929,
+                1.0
+              ]
+            },
+            "Metallic": {
+              "linked": true,
+              "value": 0.0
+            },
+            "Roughness": {
+              "linked": true,
+              "value": 0.5
+            },
+            "IOR": {
+              "linked": false,
+              "value": 1.4500000476837158
+            },
+            "Alpha": {
+              "linked": false,
+              "value": 1.0
+            },
+            "Transmission Weight": {
+              "linked": false,
+              "value": 0.0
+            }
+          }
+        },
+        {
+          "name": "Image Texture",
+          "type": "TEX_IMAGE",
+          "image": "modular_industrial_pipes_01_group02_diff.png"
+        },
+        {
+          "name": "Image Texture.001",
+          "type": "TEX_IMAGE",
+          "image": "modular_industrial_pipes_01_group02_metal.png"
+        },
+        {
+          "name": "Image Texture.002",
+          "type": "TEX_IMAGE",
+          "image": "modular_industrial_pipes_01_group02_rough.png"
+        },
+        {
+          "name": "Image Texture.003",
+          "type": "TEX_IMAGE",
+          "image": "modular_industrial_pipes_01_group02_nor_gl.png"
+        },
+        {
+          "name": "Normal Map",
+          "type": "NORMAL_MAP"
+        },
+        {
+          "name": "Mapping",
+          "type": "MAPPING"
+        },
+        {
+          "name": "Reroute",
+          "type": "REROUTE"
+        },
+        {
+          "name": "Texture Coordinate",
+          "type": "TEX_COORD"
+        },
+        {
+          "name": "Frame",
+          "type": "FRAME"
+        },
+        {
+          "name": "Frame.001",
+          "type": "FRAME"
+        }
+      ]
+    }
+  ],
+  "images": [
+    {
+      "name": "modular_industrial_pipes_01_group01_diff.png",
+      "size": [
+        4096,
+        4096
+      ],
+      "packed": false,
+      "filepath": "//textures\\modular_industrial_pipes_01_group01_diff_4k.png",
+      "colorspace": "sRGB",
+      "exists": true
+    },
+    {
+      "name": "modular_industrial_pipes_01_group01_metal.png",
+      "size": [
+        4096,
+        4096
+      ],
+      "packed": false,
+      "filepath": "//textures\\modular_industrial_pipes_01_group01_metal_4k.png",
+      "colorspace": "Non-Color",
+      "exists": true
+    },
+    {
+      "name": "modular_industrial_pipes_01_group01_nor_gl.png",
+      "size": [
+        4096,
+        4096
+      ],
+      "packed": false,
+      "filepath": "//textures\\modular_industrial_pipes_01_group01_nor_gl_4k.png",
+      "colorspace": "Non-Color",
+      "exists": true
+    },
+    {
+      "name": "modular_industrial_pipes_01_group01_rough.png",
+      "size": [
+        4096,
+        4096
+      ],
+      "packed": false,
+      "filepath": "//textures\\modular_industrial_pipes_01_group01_rough_4k.png",
+      "colorspace": "Non-Color",
+      "exists": true
+    },
+    {
+      "name": "modular_industrial_pipes_01_group02_diff.png",
+      "size": [
+        4096,
+        4096
+      ],
+      "packed": false,
+      "filepath": "//textures\\modular_industrial_pipes_01_group02_diff_4k.png",
+      "colorspace": "sRGB",
+      "exists": true
+    },
+    {
+      "name": "modular_industrial_pipes_01_group02_metal.png",
+      "size": [
+        4096,
+        4096
+      ],
+      "packed": false,
+      "filepath": "//textures\\modular_industrial_pipes_01_group02_metal_4k.png",
+      "colorspace": "Non-Color",
+      "exists": true
+    },
+    {
+      "name": "modular_industrial_pipes_01_group02_nor_gl.png",
+      "size": [
+        4096,
+        4096
+      ],
+      "packed": false,
+      "filepath": "//textures\\modular_industrial_pipes_01_group02_nor_gl_4k.png",
+      "colorspace": "Non-Color",
+      "exists": true
+    },
+    {
+      "name": "modular_industrial_pipes_01_group02_rough.png",
+      "size": [
+        4096,
+        4096
+      ],
+      "packed": false,
+      "filepath": "//textures\\modular_industrial_pipes_01_group02_rough_4k.png",
+      "colorspace": "Non-Color",
+      "exists": true
+    }
+  ],
+  "actions": []
+}

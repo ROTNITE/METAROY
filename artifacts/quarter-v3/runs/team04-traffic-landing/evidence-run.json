@@ -1,0 +1,954 @@
+{
+  "started_at": 1794342423.2285197,
+  "ended_at": 1794342535.269878,
+  "launcher_exit": 0,
+  "wall_elapsed_s": 112.04135823249817,
+  "time_step_mode": "real_time",
+  "requested_fixed_fps": 0,
+  "source_hashes_before": {
+    "unreal/MetaRescue/Source/MetaRescue/MetaRescue.Build.cs": {
+      "sha256": "403dc85e93b2d38304c1f3775dacd2dcdf5b24c04745e3e54f4c7e814a0b114a",
+      "mtime": 1794267233.6113093,
+      "size": 500
+    },
+    "unreal/MetaRescue/Source/MetaRescue/MetaRescue.cpp": {
+      "sha256": "5fa0c6373bb1ff3c8337fb8c9ca901f7a9bc7d27b7dc1027432f65fdafa168df",
+      "mtime": 1794222174.836094,
+      "size": 116
+    },
+    "unreal/MetaRescue/Source/MetaRescue/MRAgent.cpp": {
+      "sha256": "bf332e90d7e56b1368610596b61daf01a242f6d940472eb354077fbe54aca8ea",
+      "mtime": 1794341325.0984461,
+      "size": 22062
+    },
+    "unreal/MetaRescue/Source/MetaRescue/MRAgent.h": {
+      "sha256": "6fc4388ab0accf064304990b18aeb235a6f5a13d76c55a7a7e187e43fcb2a7f2",
+      "mtime": 1794341325.0979726,
+      "size": 3365
+    },
+    "unreal/MetaRescue/Source/MetaRescue/MRAgentSafety.cpp": {
+      "sha256": "a833d09c973c37b12635469951886a7e5d36c5db4a69cdb0bbeb49789721795a",
+      "mtime": 1794342088.2645204,
+      "size": 13567
+    },
+    "unreal/MetaRescue/Source/MetaRescue/MRAssetAssembly.cpp": {
+      "sha256": "f7adf555737db61adf6ed085f013c1ab33ff9091960cb355d057db437c1e1e95",
+      "mtime": 1794319302.3457403,
+      "size": 4834
+    },
+    "unreal/MetaRescue/Source/MetaRescue/MRAssetAssembly.h": {
+      "sha256": "7342e0fb15ee28df571a9a8e73cb4bbc08bf815874b1b35d37dbcb1d2c4e5da0",
+      "mtime": 1794319270.2939696,
+      "size": 843
+    },
+    "unreal/MetaRescue/Source/MetaRescue/MRAssetTools.cpp": {
+      "sha256": "2aa5035479930876c411139a1badd937e0f8361f7b331d439464bc93249b06e3",
+      "mtime": 1794322752.649663,
+      "size": 5486
+    },
+    "unreal/MetaRescue/Source/MetaRescue/MRAssetTools.h": {
+      "sha256": "238be0e2ce564369f86813b619b785abb86853117b6482c598b90bb57cfa44eb",
+      "mtime": 1794318549.8638835,
+      "size": 872
+    },
+    "unreal/MetaRescue/Source/MetaRescue/MRCameraPawn.cpp": {
+      "sha256": "b9da538e13210f5e410921f17b9f45c16cb1f194b5688e763a898d6bea40352f",
+      "mtime": 1794341420.2724872,
+      "size": 9109
+    },
+    "unreal/MetaRescue/Source/MetaRescue/MRCameraPawn.h": {
+      "sha256": "b74575e12593f82e0b63413441e1f64caa582941e7f5844a516cecb1715570e9",
+      "mtime": 1794320479.0956087,
+      "size": 1394
+    },
+    "unreal/MetaRescue/Source/MetaRescue/MRDistrict.cpp": {
+      "sha256": "dc53a388b110f7948732e4f1ba9016add7e9b57dcefbb3a56c0b5957d5b73233",
+      "mtime": 1794323451.3662078,
+      "size": 34223
+    },
+    "unreal/MetaRescue/Source/MetaRescue/MRDistrictEvents.cpp": {
+      "sha256": "60a6e48544abe6ad2044779c2b5ae6d14f306e398a4b425648a97e6ceb432396",
+      "mtime": 1794323018.0742838,
+      "size": 23774
+    },
+    "unreal/MetaRescue/Source/MetaRescue/MRDistrictInstances.cpp": {
+      "sha256": "6df2317357f82eeddbf0ffc9137ed2c7c8f987931c59d3527630a64be749c2c2",
+      "mtime": 1794342135.7382717,
+      "size": 3132
+    },
+    "unreal/MetaRescue/Source/MetaRescue/MRDistrictSettings.h": {
+      "sha256": "3105aefbf94981ecbe525f1c19c81fe6885b161043b7eaf4260ce238cfefd556",
+      "mtime": 1794317543.130745,
+      "size": 1060
+    },
+    "unreal/MetaRescue/Source/MetaRescue/MRDistrictState.cpp": {
+      "sha256": "35641404f791427b45fc005fc43eb03a509690e126b10fa42ef405c5cdd9f013",
+      "mtime": 1794320994.6314256,
+      "size": 4748
+    },
+    "unreal/MetaRescue/Source/MetaRescue/MREnvironment.cpp": {
+      "sha256": "c09e8ff57eda71927458be32458223fe496c8eb864eb40a198651cf88077088d",
+      "mtime": 1794322681.4756775,
+      "size": 7625
+    },
+    "unreal/MetaRescue/Source/MetaRescue/MREnvironment.h": {
+      "sha256": "74e24cf74b17516a3e4d6e9fb4c6e134f0edb207a2157aacdfa00c74cb2dc38d",
+      "mtime": 1794320994.6284196,
+      "size": 1610
+    },
+    "unreal/MetaRescue/Source/MetaRescue/MREnvironmentTests.cpp": {
+      "sha256": "3ffa4e12f579d5de9a4419a899d35e8da55f6f00ff9c71ddfaa63436738dd90e",
+      "mtime": 1794322681.4766803,
+      "size": 4829
+    },
+    "unreal/MetaRescue/Source/MetaRescue/MRGameMode.cpp": {
+      "sha256": "7cab1c99f77ecd180b346ec4e983b653d7ebdd5066daabe9160919b7d4ef1405",
+      "mtime": 1794261206.7272017,
+      "size": 591
+    },
+    "unreal/MetaRescue/Source/MetaRescue/MRGameMode.h": {
+      "sha256": "7c8fbd4a89ebef50262ed90cf3a0e25db704db5ab94e732772887327e8e1d9c8",
+      "mtime": 1794261206.7266514,
+      "size": 451
+    },
+    "unreal/MetaRescue/Source/MetaRescue/MRHUD.cpp": {
+      "sha256": "7417315650450249d3e36e07ee84f582a792cda90c8d26d80ac454a70d7833bd",
+      "mtime": 1794319302.3467636,
+      "size": 4258
+    },
+    "unreal/MetaRescue/Source/MetaRescue/MRHUD.h": {
+      "sha256": "7f710c0f1c190458d31e3bf6d286dc0fa512124c18f8d4b624024dc9a1905441",
+      "mtime": 1794222450.3938253,
+      "size": 216
+    },
+    "unreal/MetaRescue/Source/MetaRescue/MRTrafficProbe.cpp": {
+      "sha256": "0f2d0a75762607aeb88bdbec263b2c9843a4ac3a291158d9601399cc67e95806",
+      "mtime": 1794341325.0996013,
+      "size": 4573
+    },
+    "unreal/MetaRescue/Source/MetaRescue/MRWorld.cpp": {
+      "sha256": "6f85777506ac9ca95b232350edeb6cbcd3fb786dcfa7d71e956cd0c5aa911a5e",
+      "mtime": 1794341967.831352,
+      "size": 41124
+    },
+    "unreal/MetaRescue/Source/MetaRescue/MRWorld.h": {
+      "sha256": "7e223968411ab59a440643dc2c65dae728e6104315c46308160b04de65503e50",
+      "mtime": 1794341967.831352,
+      "size": 7363
+    },
+    "unreal/tools/asset_library_gallery.py": {
+      "sha256": "a7ffdf21d643e65021866311d07259f3e734be010129ba3cd49c8d2981fb2b7c",
+      "mtime": 1794269403.4320593,
+      "size": 4197
+    },
+    "unreal/tools/audit_asset_library.py": {
+      "sha256": "9f4a9830e3fd4cef72a2786ec935ef9cf083fb0ddd5206ec112d8e7fb5314281",
+      "mtime": 1794264386.8020747,
+      "size": 8829
+    },
+    "unreal/tools/audit_blender_assets.py": {
+      "sha256": "c70440773ab3cf1b89555e0d18ca4e84db7059e145af70b7b3770cba2625012d",
+      "mtime": 1794259517.332394,
+      "size": 3369
+    },
+    "unreal/tools/author_quarter_scenario.py": {
+      "sha256": "ef673ba94aad040f95dce9c995ab792e46dd783f96dd5b390a7f7edb50e749ca",
+      "mtime": 1794318759.6473808,
+      "size": 1478
+    },
+    "unreal/tools/author_rescue_props.py": {
+      "sha256": "1d21f9e939d157a76d7addf0050cc4b6aa6d66b3966e112ecd0a9af3b3edb4cb",
+      "mtime": 1794262969.6983943,
+      "size": 16184
+    },
+    "unreal/tools/bake_meshy_surface.py": {
+      "sha256": "993fc69fd5b477c7f10f3991e8e7d17ad929500e906bba0b92ce7270db1fa22a",
+      "mtime": 1794266273.9478283,
+      "size": 4926
+    },
+    "unreal/tools/build_library_scene.py": {
+      "sha256": "be566ed0cdc36d286fa7b4820bb7f034ef1a2f054590ebbbe108d34889545560",
+      "mtime": 1794267407.102128,
+      "size": 285
+    },
+    "unreal/tools/build_quarter.py": {
+      "sha256": "d059153f674a83d1069ad522c5487f5e45fa0d00d41097a4d3ed2224f381524d",
+      "mtime": 1794322787.3075888,
+      "size": 12451
+    },
+    "unreal/tools/build_quarter_effects.py": {
+      "sha256": "db8321e356625a6ae3122fa2e1cfb2d786843191f636e9116965f6f3b2466502",
+      "mtime": 1794319563.4846933,
+      "size": 4594
+    },
+    "unreal/tools/build_quarter_v3.py": {
+      "sha256": "8367832a128c2c5191533dfb7950ad01e2cf4fe0fb98a7740769f80c692797d6",
+      "mtime": 1794323476.5756552,
+      "size": 4422
+    },
+    "unreal/tools/build_rescue_effects.py": {
+      "sha256": "631361660e2ea9b3de542865647efd44e9dd66f3f865b6cfdf0cb2c0112f2ec2",
+      "mtime": 1794268818.470954,
+      "size": 5246
+    },
+    "unreal/tools/build_scene.py": {
+      "sha256": "fb2eb6a61ee89312abe524881a9b84be049c60b8ede172fb7ff213c65b7604f5",
+      "mtime": 1794224138.2322,
+      "size": 8216
+    },
+    "unreal/tools/check_assembly_axes.py": {
+      "sha256": "8e963f72b77d3fdda4c71b35e9c8a2e0d5b232700703b3376aa4d9464a902787",
+      "mtime": 1794267559.8137345,
+      "size": 1307
+    },
+    "unreal/tools/check_environment_probes.py": {
+      "sha256": "090c3eccb4ed86d50944644ea34698b1a4347b7bc137152d3f9e24f018d0f29b",
+      "mtime": 1794268364.3111527,
+      "size": 1858
+    },
+    "unreal/tools/check_quarter.py": {
+      "sha256": "b596da6274ff43cad568d77a8b251a335f06e84cc6b02b948d0b19a9c5df996e",
+      "mtime": 1794270486.0207148,
+      "size": 4828
+    },
+    "unreal/tools/check_quarter_v3_run.py": {
+      "sha256": "92ab6616555c696a7abd4a6ae24684ced1a8cc25c4e36321929cd510e548d1b5",
+      "mtime": 1794342013.8498557,
+      "size": 19875
+    },
+    "unreal/tools/check_smoke.py": {
+      "sha256": "d9faa850f189dd77ec5f7ac9f0f30f7d1757e0baaef6d50eb31132167769fae6",
+      "mtime": 1794322649.8841457,
+      "size": 4161
+    },
+    "unreal/tools/clean_prepared_library.py": {
+      "sha256": "edf1e33c024b5da1fad34902f04787487cf7bdc4a68a4fb3fcba3b613294f7ec",
+      "mtime": 1794266761.627008,
+      "size": 575
+    },
+    "unreal/tools/compare_quarter_replay.py": {
+      "sha256": "c840bf20e07a188415acd7e04cd55143d14a486a86518c2a73a469f42ac186f4",
+      "mtime": 1794342013.850359,
+      "size": 2106
+    },
+    "unreal/tools/export_scenario.py": {
+      "sha256": "229f86e8e250ff1dc177b973dc2093187db5e64640092f2ada198de65314cd81",
+      "mtime": 1794224138.2271926,
+      "size": 2733
+    },
+    "unreal/tools/finalize_library_scene.py": {
+      "sha256": "11ae6e68922d8253ecb6dfb3225e595274800a82801410a9110ec927783a8603",
+      "mtime": 1794268249.506399,
+      "size": 444
+    },
+    "unreal/tools/import_asset_library.py": {
+      "sha256": "ac7b9d9cd43b634a6042ae64a0e406f37cf1bbc68d34f3c6afaf7ee44872e750",
+      "mtime": 1794321550.2277036,
+      "size": 12982
+    },
+    "unreal/tools/import_authored_props.py": {
+      "sha256": "fbc84ae8975683e88ae1e729560e473177ee441b29ca5d317370740f09e760cc",
+      "mtime": 1794262969.6993935,
+      "size": 3612
+    },
+    "unreal/tools/import_mannequin_rig.py": {
+      "sha256": "ada526b4570f10a2508813dabdc147033e4c6cb2ce312ce813e2b009cc118c57",
+      "mtime": 1794268199.4014153,
+      "size": 3235
+    },
+    "unreal/tools/import_rescue_assets.py": {
+      "sha256": "951c907a4687f00907a7daa5ab29f86f13d0c29b81f78a232c5a3d2977db30ca",
+      "mtime": 1794262555.8609796,
+      "size": 7010
+    },
+    "unreal/tools/inspect_building_windows.py": {
+      "sha256": "1dce833867559c3646cb06ad53acd61a73c7cab9bb7721144a1bba863f5aed2b",
+      "mtime": 1794267761.4046602,
+      "size": 717
+    },
+    "unreal/tools/inspect_effect_parameters.py": {
+      "sha256": "0f311c49856cfd837dfb6730952078cd6dd0ee68b936ced9c369f6bb012d4f85",
+      "mtime": 1794318465.2344687,
+      "size": 464
+    },
+    "unreal/tools/inspect_rescue_pose.py": {
+      "sha256": "41f8036cc266a1663dec23b9aec2e5d8d48ea605eaa09bfebccffa3fa66cd6f3",
+      "mtime": 1794266970.2605357,
+      "size": 634
+    },
+    "unreal/tools/inventory_asset_library.py": {
+      "sha256": "a47028fe04fa0036c50cee3e2993d0280d0df2faf6ab3e6b07b44ac1bff204c3",
+      "mtime": 1794264298.2131426,
+      "size": 2648
+    },
+    "unreal/tools/optimize_rescue_lods.py": {
+      "sha256": "75eb196a1846fe31813c29d823def73271a03457c7e913c3ce4a1964cc1ca98f",
+      "mtime": 1794262367.2188437,
+      "size": 680
+    },
+    "unreal/tools/prepare_blender_assets.py": {
+      "sha256": "0dd9f1420b63a4a4ca2547aa76efc727c95dff6d1cb7f50bfbe845f9538045d2",
+      "mtime": 1794259907.1525824,
+      "size": 7376
+    },
+    "unreal/tools/prepare_mannequin_rig.py": {
+      "sha256": "77d5c7d73e5447e36c6edc61bfc27c07c584081bfeae3bed028909205d001c4a",
+      "mtime": 1794269814.2597017,
+      "size": 8814
+    },
+    "unreal/tools/prepare_mechanized_assets.py": {
+      "sha256": "2ca2cdcf0ac7405b6f91b4af3c07a0162dc0cee37cf7e0aca0715134c4d36daf",
+      "mtime": 1794268518.9416058,
+      "size": 30251
+    },
+    "unreal/tools/prepare_quarter_scenery.py": {
+      "sha256": "d0ea94b5621bf8cea239a69b99a64535de1073ce3676ac293b5b39c3689ea0a2",
+      "mtime": 1794323221.4240851,
+      "size": 11778
+    },
+    "unreal/tools/prepare_static_library.py": {
+      "sha256": "5f2976308fff0fefeab50e66910a633fd180970dd48db2a835809512fb2fbbae",
+      "mtime": 1794268861.1707823,
+      "size": 7754
+    },
+    "unreal/tools/preview_mechanized_assets.py": {
+      "sha256": "eb0d1cfcc9e31a0f970723c83178b729a0a07829d7d7224d1e89fce99086e419",
+      "mtime": 1794265894.980343,
+      "size": 1150
+    },
+    "unreal/tools/probe_asset_api.py": {
+      "sha256": "9aa9cf4856fe227089bd6480a65fc0e7b282bf13c3bb428447745764928d22dc",
+      "mtime": 1794267447.1653774,
+      "size": 485
+    },
+    "unreal/tools/repair_asset_paths.py": {
+      "sha256": "0f3f2dcaf9872a91e8338f3b55b8609a838a2558c226e83d192bed72037038fa",
+      "mtime": 1794259907.15558,
+      "size": 2053
+    },
+    "unreal/tools/run_quarter_validation.py": {
+      "sha256": "4e085713f62d74e7d438b06809c9347b4ca926cf978dc691a8d166326f77849e",
+      "mtime": 1794341988.2026584,
+      "size": 7769
+    },
+    "unreal/tools/verify_asset_library.py": {
+      "sha256": "1841b27baa0025e7bda70313c712178bfecb602cc35241019e3b444d5625927e",
+      "mtime": 1794269814.2602386,
+      "size": 4900
+    },
+    "unreal/tools/verify_blender_preparation.py": {
+      "sha256": "9935cf89764836744bc62020be92ca97ca82fea99c62e8db569873f01e96edd5",
+      "mtime": 1794261402.2382464,
+      "size": 2496
+    },
+    "unreal/tools/verify_mechanized_assets.py": {
+      "sha256": "eead14367578b4972ebec33db400d8223436657a03726213d5a9e966c542a400",
+      "mtime": 1794270626.9245114,
+      "size": 4743
+    },
+    "unreal/tools/verify_quarter_blender.py": {
+      "sha256": "95195f392886f226ea4c08372d7ee7988f4124f6af8bb3be047e54f7b1835182",
+      "mtime": 1794321197.5702403,
+      "size": 2321
+    },
+    "unreal/tools/verify_quarter_map.py": {
+      "sha256": "8fa189341f4639783916f40cb4a86f679fa3612ef62c37370988df819bdb8618",
+      "mtime": 1794269235.8382235,
+      "size": 2109
+    },
+    "unreal/tools/verify_quarter_v3.py": {
+      "sha256": "2ab5d68b8ea50595898c03c8e90c5ffe0ce7c4372a4ef1a709373eb5736aa04c",
+      "mtime": 1794321197.5697095,
+      "size": 2347
+    },
+    "unreal/tools/verify_scene.py": {
+      "sha256": "8ea5882f1d12d0a28ce9d123aba4cb4cd3325c9632010b8624017acaee14574b",
+      "mtime": 1794225933.6074393,
+      "size": 1439
+    },
+    "unreal/MetaRescue/Content/Scenario/library-v2.json": {
+      "sha256": "d876c90f6793f1fc2de5534f92ed5c35802dbdb6ed04d573ec72a884bf4455d8",
+      "mtime": 1794268916.1590593,
+      "size": 509645
+    },
+    "unreal/MetaRescue/Content/Scenario/library-v3.json": {
+      "sha256": "a6aaa6d5e0b9256f90d6945ad7d998f51d18dd127ddde53aedd9597a52c9d4e6",
+      "mtime": 1794323547.2839353,
+      "size": 578429
+    },
+    "unreal/MetaRescue/Content/Scenario/quarter-build.json": {
+      "sha256": "ade390b3afc9ba3d0a83efd3083326984fc6b6118b8c382af31706e82a73b961",
+      "mtime": 1794323551.8852553,
+      "size": 90
+    },
+    "unreal/MetaRescue/Content/Scenario/quarter.json": {
+      "sha256": "264f1ee4381b6308f25e91068b9bd3b3e596bbb7e067b51b8eaa09c6f2273389",
+      "mtime": 1794318759.9694824,
+      "size": 10392
+    },
+    "unreal/MetaRescue/Content/Scenario/scenario.json": {
+      "sha256": "bcb7df4fa7caf4d33540a6c89c78ca8076498fc0210b6aa51aee134bee1c7f1f",
+      "mtime": 1794224147.7761636,
+      "size": 32836
+    },
+    "unreal/MetaRescue/Content/Scenario/scene-build.json": {
+      "sha256": "bb96d4b2391321250c809b47abb754598750454db0bbc3f2a5f0adcf49b35032",
+      "mtime": 1794224159.0771828,
+      "size": 68
+    },
+    "unreal/MetaRescue/Config/DefaultEngine.ini": {
+      "sha256": "d2847c5a120dc011eab4903fc428b6ea3ad4567f5cf92b312a2454361debe123",
+      "mtime": 1794270294.6473763,
+      "size": 1348
+    },
+    "unreal/MetaRescue/Config/DefaultGame.ini": {
+      "sha256": "d78d67f765773d50764687359cfa5ea7166ba53accf5d4a59ca9a3de17bf9643",
+      "mtime": 1794224138.2341926,
+      "size": 219
+    },
+    "unreal/MetaRescue/Config/DefaultInput.ini": {
+      "sha256": "b7fd379a1587a935c632dfb8410d38555e994662d845d299bd672b5582d8ae63",
+      "mtime": 1794241008.7038033,
+      "size": 9591
+    },
+    "unreal/launch.py": {
+      "sha256": "dcfcd5964b9167601636f540153e5a97a10df42ef4b653830a98b00452f8554a",
+      "mtime": 1794341988.2026584,
+      "size": 9333
+    },
+    "unreal/MetaRescue/MetaRescue.uproject": {
+      "sha256": "c46567a30852977bad211c356a4781cc869cc001e5244e227834856773ae8364",
+      "mtime": 1794224138.2332022,
+      "size": 515
+    },
+    "unreal/MetaRescue/Binaries/Win64/UnrealEditor-MetaRescue.dll": {
+      "sha256": "bd9c99ecc83a0ca5008fc955411bb56ad1edf187255a4b743d287ef621c18047",
+      "mtime": 1794342180.5878224,
+      "size": 837120
+    },
+    "unreal/MetaRescue/Content/Maps/RescueQuarter.umap": {
+      "sha256": "d17d39751eca0be1ad1ff352c40f5803e287614ee66279f7f8dcfbbbaee9fb4c",
+      "mtime": 1794323551.8299434,
+      "size": 11615910
+    }
+  },
+  "source_hashes_after": {
+    "unreal/MetaRescue/Source/MetaRescue/MetaRescue.Build.cs": {
+      "sha256": "403dc85e93b2d38304c1f3775dacd2dcdf5b24c04745e3e54f4c7e814a0b114a",
+      "mtime": 1794267233.6113093,
+      "size": 500
+    },
+    "unreal/MetaRescue/Source/MetaRescue/MetaRescue.cpp": {
+      "sha256": "5fa0c6373bb1ff3c8337fb8c9ca901f7a9bc7d27b7dc1027432f65fdafa168df",
+      "mtime": 1794222174.836094,
+      "size": 116
+    },
+    "unreal/MetaRescue/Source/MetaRescue/MRAgent.cpp": {
+      "sha256": "bf332e90d7e56b1368610596b61daf01a242f6d940472eb354077fbe54aca8ea",
+      "mtime": 1794341325.0984461,
+      "size": 22062
+    },
+    "unreal/MetaRescue/Source/MetaRescue/MRAgent.h": {
+      "sha256": "6fc4388ab0accf064304990b18aeb235a6f5a13d76c55a7a7e187e43fcb2a7f2",
+      "mtime": 1794341325.0979726,
+      "size": 3365
+    },
+    "unreal/MetaRescue/Source/MetaRescue/MRAgentSafety.cpp": {
+      "sha256": "a833d09c973c37b12635469951886a7e5d36c5db4a69cdb0bbeb49789721795a",
+      "mtime": 1794342088.2645204,
+      "size": 13567
+    },
+    "unreal/MetaRescue/Source/MetaRescue/MRAssetAssembly.cpp": {
+      "sha256": "f7adf555737db61adf6ed085f013c1ab33ff9091960cb355d057db437c1e1e95",
+      "mtime": 1794319302.3457403,
+      "size": 4834
+    },
+    "unreal/MetaRescue/Source/MetaRescue/MRAssetAssembly.h": {
+      "sha256": "7342e0fb15ee28df571a9a8e73cb4bbc08bf815874b1b35d37dbcb1d2c4e5da0",
+      "mtime": 1794319270.2939696,
+      "size": 843
+    },
+    "unreal/MetaRescue/Source/MetaRescue/MRAssetTools.cpp": {
+      "sha256": "2aa5035479930876c411139a1badd937e0f8361f7b331d439464bc93249b06e3",
+      "mtime": 1794322752.649663,
+      "size": 5486
+    },
+    "unreal/MetaRescue/Source/MetaRescue/MRAssetTools.h": {
+      "sha256": "238be0e2ce564369f86813b619b785abb86853117b6482c598b90bb57cfa44eb",
+      "mtime": 1794318549.8638835,
+      "size": 872
+    },
+    "unreal/MetaRescue/Source/MetaRescue/MRCameraPawn.cpp": {
+      "sha256": "b9da538e13210f5e410921f17b9f45c16cb1f194b5688e763a898d6bea40352f",
+      "mtime": 1794341420.2724872,
+      "size": 9109
+    },
+    "unreal/MetaRescue/Source/MetaRescue/MRCameraPawn.h": {
+      "sha256": "b74575e12593f82e0b63413441e1f64caa582941e7f5844a516cecb1715570e9",
+      "mtime": 1794320479.0956087,
+      "size": 1394
+    },
+    "unreal/MetaRescue/Source/MetaRescue/MRDistrict.cpp": {
+      "sha256": "dc53a388b110f7948732e4f1ba9016add7e9b57dcefbb3a56c0b5957d5b73233",
+      "mtime": 1794323451.3662078,
+      "size": 34223
+    },
+    "unreal/MetaRescue/Source/MetaRescue/MRDistrictEvents.cpp": {
+      "sha256": "60a6e48544abe6ad2044779c2b5ae6d14f306e398a4b425648a97e6ceb432396",
+      "mtime": 1794323018.0742838,
+      "size": 23774
+    },
+    "unreal/MetaRescue/Source/MetaRescue/MRDistrictInstances.cpp": {
+      "sha256": "6df2317357f82eeddbf0ffc9137ed2c7c8f987931c59d3527630a64be749c2c2",
+      "mtime": 1794342135.7382717,
+      "size": 3132
+    },
+    "unreal/MetaRescue/Source/MetaRescue/MRDistrictSettings.h": {
+      "sha256": "3105aefbf94981ecbe525f1c19c81fe6885b161043b7eaf4260ce238cfefd556",
+      "mtime": 1794317543.130745,
+      "size": 1060
+    },
+    "unreal/MetaRescue/Source/MetaRescue/MRDistrictState.cpp": {
+      "sha256": "35641404f791427b45fc005fc43eb03a509690e126b10fa42ef405c5cdd9f013",
+      "mtime": 1794320994.6314256,
+      "size": 4748
+    },
+    "unreal/MetaRescue/Source/MetaRescue/MREnvironment.cpp": {
+      "sha256": "c09e8ff57eda71927458be32458223fe496c8eb864eb40a198651cf88077088d",
+      "mtime": 1794322681.4756775,
+      "size": 7625
+    },
+    "unreal/MetaRescue/Source/MetaRescue/MREnvironment.h": {
+      "sha256": "74e24cf74b17516a3e4d6e9fb4c6e134f0edb207a2157aacdfa00c74cb2dc38d",
+      "mtime": 1794320994.6284196,
+      "size": 1610
+    },
+    "unreal/MetaRescue/Source/MetaRescue/MREnvironmentTests.cpp": {
+      "sha256": "3ffa4e12f579d5de9a4419a899d35e8da55f6f00ff9c71ddfaa63436738dd90e",
+      "mtime": 1794322681.4766803,
+      "size": 4829
+    },
+    "unreal/MetaRescue/Source/MetaRescue/MRGameMode.cpp": {
+      "sha256": "7cab1c99f77ecd180b346ec4e983b653d7ebdd5066daabe9160919b7d4ef1405",
+      "mtime": 1794261206.7272017,
+      "size": 591
+    },
+    "unreal/MetaRescue/Source/MetaRescue/MRGameMode.h": {
+      "sha256": "7c8fbd4a89ebef50262ed90cf3a0e25db704db5ab94e732772887327e8e1d9c8",
+      "mtime": 1794261206.7266514,
+      "size": 451
+    },
+    "unreal/MetaRescue/Source/MetaRescue/MRHUD.cpp": {
+      "sha256": "7417315650450249d3e36e07ee84f582a792cda90c8d26d80ac454a70d7833bd",
+      "mtime": 1794319302.3467636,
+      "size": 4258
+    },
+    "unreal/MetaRescue/Source/MetaRescue/MRHUD.h": {
+      "sha256": "7f710c0f1c190458d31e3bf6d286dc0fa512124c18f8d4b624024dc9a1905441",
+      "mtime": 1794222450.3938253,
+      "size": 216
+    },
+    "unreal/MetaRescue/Source/MetaRescue/MRTrafficProbe.cpp": {
+      "sha256": "0f2d0a75762607aeb88bdbec263b2c9843a4ac3a291158d9601399cc67e95806",
+      "mtime": 1794341325.0996013,
+      "size": 4573
+    },
+    "unreal/MetaRescue/Source/MetaRescue/MRWorld.cpp": {
+      "sha256": "6f85777506ac9ca95b232350edeb6cbcd3fb786dcfa7d71e956cd0c5aa911a5e",
+      "mtime": 1794341967.831352,
+      "size": 41124
+    },
+    "unreal/MetaRescue/Source/MetaRescue/MRWorld.h": {
+      "sha256": "7e223968411ab59a440643dc2c65dae728e6104315c46308160b04de65503e50",
+      "mtime": 1794341967.831352,
+      "size": 7363
+    },
+    "unreal/tools/asset_library_gallery.py": {
+      "sha256": "a7ffdf21d643e65021866311d07259f3e734be010129ba3cd49c8d2981fb2b7c",
+      "mtime": 1794269403.4320593,
+      "size": 4197
+    },
+    "unreal/tools/audit_asset_library.py": {
+      "sha256": "9f4a9830e3fd4cef72a2786ec935ef9cf083fb0ddd5206ec112d8e7fb5314281",
+      "mtime": 1794264386.8020747,
+      "size": 8829
+    },
+    "unreal/tools/audit_blender_assets.py": {
+      "sha256": "c70440773ab3cf1b89555e0d18ca4e84db7059e145af70b7b3770cba2625012d",
+      "mtime": 1794259517.332394,
+      "size": 3369
+    },
+    "unreal/tools/author_quarter_scenario.py": {
+      "sha256": "ef673ba94aad040f95dce9c995ab792e46dd783f96dd5b390a7f7edb50e749ca",
+      "mtime": 1794318759.6473808,
+      "size": 1478
+    },
+    "unreal/tools/author_rescue_props.py": {
+      "sha256": "1d21f9e939d157a76d7addf0050cc4b6aa6d66b3966e112ecd0a9af3b3edb4cb",
+      "mtime": 1794262969.6983943,
+      "size": 16184
+    },
+    "unreal/tools/bake_meshy_surface.py": {
+      "sha256": "993fc69fd5b477c7f10f3991e8e7d17ad929500e906bba0b92ce7270db1fa22a",
+      "mtime": 1794266273.9478283,
+      "size": 4926
+    },
+    "unreal/tools/build_library_scene.py": {
+      "sha256": "be566ed0cdc36d286fa7b4820bb7f034ef1a2f054590ebbbe108d34889545560",
+      "mtime": 1794267407.102128,
+      "size": 285
+    },
+    "unreal/tools/build_quarter.py": {
+      "sha256": "d059153f674a83d1069ad522c5487f5e45fa0d00d41097a4d3ed2224f381524d",
+      "mtime": 1794322787.3075888,
+      "size": 12451
+    },
+    "unreal/tools/build_quarter_effects.py": {
+      "sha256": "db8321e356625a6ae3122fa2e1cfb2d786843191f636e9116965f6f3b2466502",
+      "mtime": 1794319563.4846933,
+      "size": 4594
+    },
+    "unreal/tools/build_quarter_v3.py": {
+      "sha256": "8367832a128c2c5191533dfb7950ad01e2cf4fe0fb98a7740769f80c692797d6",
+      "mtime": 1794323476.5756552,
+      "size": 4422
+    },
+    "unreal/tools/build_rescue_effects.py": {
+      "sha256": "631361660e2ea9b3de542865647efd44e9dd66f3f865b6cfdf0cb2c0112f2ec2",
+      "mtime": 1794268818.470954,
+      "size": 5246
+    },
+    "unreal/tools/build_scene.py": {
+      "sha256": "fb2eb6a61ee89312abe524881a9b84be049c60b8ede172fb7ff213c65b7604f5",
+      "mtime": 1794224138.2322,
+      "size": 8216
+    },
+    "unreal/tools/check_assembly_axes.py": {
+      "sha256": "8e963f72b77d3fdda4c71b35e9c8a2e0d5b232700703b3376aa4d9464a902787",
+      "mtime": 1794267559.8137345,
+      "size": 1307
+    },
+    "unreal/tools/check_environment_probes.py": {
+      "sha256": "090c3eccb4ed86d50944644ea34698b1a4347b7bc137152d3f9e24f018d0f29b",
+      "mtime": 1794268364.3111527,
+      "size": 1858
+    },
+    "unreal/tools/check_quarter.py": {
+      "sha256": "b596da6274ff43cad568d77a8b251a335f06e84cc6b02b948d0b19a9c5df996e",
+      "mtime": 1794270486.0207148,
+      "size": 4828
+    },
+    "unreal/tools/check_quarter_v3_run.py": {
+      "sha256": "92ab6616555c696a7abd4a6ae24684ced1a8cc25c4e36321929cd510e548d1b5",
+      "mtime": 1794342013.8498557,
+      "size": 19875
+    },
+    "unreal/tools/check_smoke.py": {
+      "sha256": "d9faa850f189dd77ec5f7ac9f0f30f7d1757e0baaef6d50eb31132167769fae6",
+      "mtime": 1794322649.8841457,
+      "size": 4161
+    },
+    "unreal/tools/clean_prepared_library.py": {
+      "sha256": "edf1e33c024b5da1fad34902f04787487cf7bdc4a68a4fb3fcba3b613294f7ec",
+      "mtime": 1794266761.627008,
+      "size": 575
+    },
+    "unreal/tools/compare_quarter_replay.py": {
+      "sha256": "c840bf20e07a188415acd7e04cd55143d14a486a86518c2a73a469f42ac186f4",
+      "mtime": 1794342013.850359,
+      "size": 2106
+    },
+    "unreal/tools/export_scenario.py": {
+      "sha256": "229f86e8e250ff1dc177b973dc2093187db5e64640092f2ada198de65314cd81",
+      "mtime": 1794224138.2271926,
+      "size": 2733
+    },
+    "unreal/tools/finalize_library_scene.py": {
+      "sha256": "11ae6e68922d8253ecb6dfb3225e595274800a82801410a9110ec927783a8603",
+      "mtime": 1794268249.506399,
+      "size": 444
+    },
+    "unreal/tools/import_asset_library.py": {
+      "sha256": "ac7b9d9cd43b634a6042ae64a0e406f37cf1bbc68d34f3c6afaf7ee44872e750",
+      "mtime": 1794321550.2277036,
+      "size": 12982
+    },
+    "unreal/tools/import_authored_props.py": {
+      "sha256": "fbc84ae8975683e88ae1e729560e473177ee441b29ca5d317370740f09e760cc",
+      "mtime": 1794262969.6993935,
+      "size": 3612
+    },
+    "unreal/tools/import_mannequin_rig.py": {
+      "sha256": "ada526b4570f10a2508813dabdc147033e4c6cb2ce312ce813e2b009cc118c57",
+      "mtime": 1794268199.4014153,
+      "size": 3235
+    },
+    "unreal/tools/import_rescue_assets.py": {
+      "sha256": "951c907a4687f00907a7daa5ab29f86f13d0c29b81f78a232c5a3d2977db30ca",
+      "mtime": 1794262555.8609796,
+      "size": 7010
+    },
+    "unreal/tools/inspect_building_windows.py": {
+      "sha256": "1dce833867559c3646cb06ad53acd61a73c7cab9bb7721144a1bba863f5aed2b",
+      "mtime": 1794267761.4046602,
+      "size": 717
+    },
+    "unreal/tools/inspect_effect_parameters.py": {
+      "sha256": "0f311c49856cfd837dfb6730952078cd6dd0ee68b936ced9c369f6bb012d4f85",
+      "mtime": 1794318465.2344687,
+      "size": 464
+    },
+    "unreal/tools/inspect_rescue_pose.py": {
+      "sha256": "41f8036cc266a1663dec23b9aec2e5d8d48ea605eaa09bfebccffa3fa66cd6f3",
+      "mtime": 1794266970.2605357,
+      "size": 634
+    },
+    "unreal/tools/inventory_asset_library.py": {
+      "sha256": "a47028fe04fa0036c50cee3e2993d0280d0df2faf6ab3e6b07b44ac1bff204c3",
+      "mtime": 1794264298.2131426,
+      "size": 2648
+    },
+    "unreal/tools/optimize_rescue_lods.py": {
+      "sha256": "75eb196a1846fe31813c29d823def73271a03457c7e913c3ce4a1964cc1ca98f",
+      "mtime": 1794262367.2188437,
+      "size": 680
+    },
+    "unreal/tools/prepare_blender_assets.py": {
+      "sha256": "0dd9f1420b63a4a4ca2547aa76efc727c95dff6d1cb7f50bfbe845f9538045d2",
+      "mtime": 1794259907.1525824,
+      "size": 7376
+    },
+    "unreal/tools/prepare_mannequin_rig.py": {
+      "sha256": "77d5c7d73e5447e36c6edc61bfc27c07c584081bfeae3bed028909205d001c4a",
+      "mtime": 1794269814.2597017,
+      "size": 8814
+    },
+    "unreal/tools/prepare_mechanized_assets.py": {
+      "sha256": "2ca2cdcf0ac7405b6f91b4af3c07a0162dc0cee37cf7e0aca0715134c4d36daf",
+      "mtime": 1794268518.9416058,
+      "size": 30251
+    },
+    "unreal/tools/prepare_quarter_scenery.py": {
+      "sha256": "d0ea94b5621bf8cea239a69b99a64535de1073ce3676ac293b5b39c3689ea0a2",
+      "mtime": 1794323221.4240851,
+      "size": 11778
+    },
+    "unreal/tools/prepare_static_library.py": {
+      "sha256": "5f2976308fff0fefeab50e66910a633fd180970dd48db2a835809512fb2fbbae",
+      "mtime": 1794268861.1707823,
+      "size": 7754
+    },
+    "unreal/tools/preview_mechanized_assets.py": {
+      "sha256": "eb0d1cfcc9e31a0f970723c83178b729a0a07829d7d7224d1e89fce99086e419",
+      "mtime": 1794265894.980343,
+      "size": 1150
+    },
+    "unreal/tools/probe_asset_api.py": {
+      "sha256": "9aa9cf4856fe227089bd6480a65fc0e7b282bf13c3bb428447745764928d22dc",
+      "mtime": 1794267447.1653774,
+      "size": 485
+    },
+    "unreal/tools/repair_asset_paths.py": {
+      "sha256": "0f3f2dcaf9872a91e8338f3b55b8609a838a2558c226e83d192bed72037038fa",
+      "mtime": 1794259907.15558,
+      "size": 2053
+    },
+    "unreal/tools/run_quarter_validation.py": {
+      "sha256": "4e085713f62d74e7d438b06809c9347b4ca926cf978dc691a8d166326f77849e",
+      "mtime": 1794341988.2026584,
+      "size": 7769
+    },
+    "unreal/tools/verify_asset_library.py": {
+      "sha256": "1841b27baa0025e7bda70313c712178bfecb602cc35241019e3b444d5625927e",
+      "mtime": 1794269814.2602386,
+      "size": 4900
+    },
+    "unreal/tools/verify_blender_preparation.py": {
+      "sha256": "9935cf89764836744bc62020be92ca97ca82fea99c62e8db569873f01e96edd5",
+      "mtime": 1794261402.2382464,
+      "size": 2496
+    },
+    "unreal/tools/verify_mechanized_assets.py": {
+      "sha256": "eead14367578b4972ebec33db400d8223436657a03726213d5a9e966c542a400",
+      "mtime": 1794270626.9245114,
+      "size": 4743
+    },
+    "unreal/tools/verify_quarter_blender.py": {
+      "sha256": "95195f392886f226ea4c08372d7ee7988f4124f6af8bb3be047e54f7b1835182",
+      "mtime": 1794321197.5702403,
+      "size": 2321
+    },
+    "unreal/tools/verify_quarter_map.py": {
+      "sha256": "8fa189341f4639783916f40cb4a86f679fa3612ef62c37370988df819bdb8618",
+      "mtime": 1794269235.8382235,
+      "size": 2109
+    },
+    "unreal/tools/verify_quarter_v3.py": {
+      "sha256": "2ab5d68b8ea50595898c03c8e90c5ffe0ce7c4372a4ef1a709373eb5736aa04c",
+      "mtime": 1794321197.5697095,
+      "size": 2347
+    },
+    "unreal/tools/verify_scene.py": {
+      "sha256": "8ea5882f1d12d0a28ce9d123aba4cb4cd3325c9632010b8624017acaee14574b",
+      "mtime": 1794225933.6074393,
+      "size": 1439
+    },
+    "unreal/MetaRescue/Content/Scenario/library-v2.json": {
+      "sha256": "d876c90f6793f1fc2de5534f92ed5c35802dbdb6ed04d573ec72a884bf4455d8",
+      "mtime": 1794268916.1590593,
+      "size": 509645
+    },
+    "unreal/MetaRescue/Content/Scenario/library-v3.json": {
+      "sha256": "a6aaa6d5e0b9256f90d6945ad7d998f51d18dd127ddde53aedd9597a52c9d4e6",
+      "mtime": 1794323547.2839353,
+      "size": 578429
+    },
+    "unreal/MetaRescue/Content/Scenario/quarter-build.json": {
+      "sha256": "ade390b3afc9ba3d0a83efd3083326984fc6b6118b8c382af31706e82a73b961",
+      "mtime": 1794323551.8852553,
+      "size": 90
+    },
+    "unreal/MetaRescue/Content/Scenario/quarter.json": {
+      "sha256": "264f1ee4381b6308f25e91068b9bd3b3e596bbb7e067b51b8eaa09c6f2273389",
+      "mtime": 1794318759.9694824,
+      "size": 10392
+    },
+    "unreal/MetaRescue/Content/Scenario/scenario.json": {
+      "sha256": "bcb7df4fa7caf4d33540a6c89c78ca8076498fc0210b6aa51aee134bee1c7f1f",
+      "mtime": 1794224147.7761636,
+      "size": 32836
+    },
+    "unreal/MetaRescue/Content/Scenario/scene-build.json": {
+      "sha256": "bb96d4b2391321250c809b47abb754598750454db0bbc3f2a5f0adcf49b35032",
+      "mtime": 1794224159.0771828,
+      "size": 68
+    },
+    "unreal/MetaRescue/Config/DefaultEngine.ini": {
+      "sha256": "d2847c5a120dc011eab4903fc428b6ea3ad4567f5cf92b312a2454361debe123",
+      "mtime": 1794270294.6473763,
+      "size": 1348
+    },
+    "unreal/MetaRescue/Config/DefaultGame.ini": {
+      "sha256": "d78d67f765773d50764687359cfa5ea7166ba53accf5d4a59ca9a3de17bf9643",
+      "mtime": 1794224138.2341926,
+      "size": 219
+    },
+    "unreal/MetaRescue/Config/DefaultInput.ini": {
+      "sha256": "b7fd379a1587a935c632dfb8410d38555e994662d845d299bd672b5582d8ae63",
+      "mtime": 1794241008.7038033,
+      "size": 9591
+    },
+    "unreal/launch.py": {
+      "sha256": "dcfcd5964b9167601636f540153e5a97a10df42ef4b653830a98b00452f8554a",
+      "mtime": 1794341988.2026584,
+      "size": 9333
+    },
+    "unreal/MetaRescue/MetaRescue.uproject": {
+      "sha256": "c46567a30852977bad211c356a4781cc869cc001e5244e227834856773ae8364",
+      "mtime": 1794224138.2332022,
+      "size": 515
+    },
+    "unreal/MetaRescue/Binaries/Win64/UnrealEditor-MetaRescue.dll": {
+      "sha256": "bd9c99ecc83a0ca5008fc955411bb56ad1edf187255a4b743d287ef621c18047",
+      "mtime": 1794342180.5878224,
+      "size": 837120
+    },
+    "unreal/MetaRescue/Content/Maps/RescueQuarter.umap": {
+      "sha256": "d17d39751eca0be1ad1ff352c40f5803e287614ee66279f7f8dcfbbbaee9fb4c",
+      "mtime": 1794323551.8299434,
+      "size": 11615910
+    }
+  },
+  "files": {
+    "command.json": {
+      "sha256": "2ad2f86551c526a2dc704666bb66f701b0136933a65895f505520e4d704b70fa",
+      "mtime": 1794342423.2279503,
+      "size": 314
+    },
+    "launcher.log": {
+      "sha256": "f5696f16a30ca7399bc7a6d21aadf8124294e48c0b19b834ba679663329c1502",
+      "mtime": 1794342535.2437255,
+      "size": 270
+    },
+    "Automation/physics-check.log": {
+      "sha256": "5a9c3e2c2f054af815dc9ef25b38d3a63b2943a95f8f1b44a0f386f32d67bfa4",
+      "mtime": 1794342535.2377272,
+      "size": 199
+    },
+    "Automation/physics-smoke.log": {
+      "sha256": "a8c6161df267bfd7ed20e125947697c0f047a3029ef24b346acf7a092459d91d",
+      "mtime": 1794342534.6538303,
+      "size": 215773
+    },
+    "Automation/smoke-run.json": {
+      "sha256": "50ab0e020a3f81b7050b5349a62a331f93537f06c753ad248ac5591498b0ae5c",
+      "mtime": 1794342535.067623,
+      "size": 263
+    },
+    "Screenshots/physics-smoke.png": {
+      "sha256": "effc53c4df67692e008ac2d981c71ff4afab42ab7bfc34228aa0dfe2f6be7b16",
+      "mtime": 1794342459.2853942,
+      "size": 2835555
+    },
+    "Screenshots/quarter-base.png": {
+      "sha256": "c41077a0c6ed1f6c7e3ce8f9421b0d93a4a1444bc663eafca20a6bf6e1cbe927",
+      "mtime": 1794342438.7895627,
+      "size": 2108435
+    },
+    "Screenshots/quarter-collapse.png": {
+      "sha256": "9d5c3169ede79fed68ba6dff757b22e1ea32ab7b7d6034f8e4792a91dd488a86",
+      "mtime": 1794342471.783381,
+      "size": 2390225
+    },
+    "Screenshots/quarter-overview.png": {
+      "sha256": "c6784acf3bcf4004a0b8bcafb95b77b16b1adde78736793ba7dfb3d0692202d4",
+      "mtime": 1794342445.784773,
+      "size": 2822942
+    },
+    "Screenshots/quarter-tunnel.png": {
+      "sha256": "66bcae4bc4a16fcf053eddc0664cc1cdf2525855dc15bfef0ff8478b6efc9369",
+      "mtime": 1794342529.7774599,
+      "size": 2499278
+    },
+    "Screenshots/quarter-water.png": {
+      "sha256": "fcee3e7f4531217333cb8ee939c3741bd1de04f6cc1368de9c0ad7cf2fcbbec0",
+      "mtime": 1794342521.7855008,
+      "size": 2229298
+    },
+    "Screenshots/scene-start.png": {
+      "sha256": "37fcfb03434cf10132f0f23f12caaab1ddb31d7f28e4335d9a0488bba411831c",
+      "mtime": 1794342435.4822304,
+      "size": 2551952
+    },
+    "Telemetry/environment-truth.json": {
+      "sha256": "afe1df3e1b5c677d6c9fd338c7929d2da07491fa1b1da82c7a8244c75e267fd6",
+      "mtime": 1794342432.5871227,
+      "size": 163497
+    },
+    "Telemetry/events.jsonl": {
+      "sha256": "790807a9904bff6709e04a9413f6f3aca442318f2f254b497ba93004bf6ec920",
+      "mtime": 1794342444.230466,
+      "size": 336
+    },
+    "Telemetry/frames.jsonl": {
+      "sha256": "c2b607b0127053bd35ee23e7e2b3cab3d7111145e6a1a51946831cdeeecd2c1b",
+      "mtime": 1794342533.0828493,
+      "size": 675383
+    },
+    "Telemetry/latest.json": {
+      "sha256": "1ce63014a5509caf65e5a3400788985db98a25e41f73152eebe8ed6e7892cca2",
+      "mtime": 1794342533.0808518,
+      "size": 18639
+    },
+    "Telemetry/public-frames.jsonl": {
+      "sha256": "163b8567f3192b47065c505f34d84988b65340bca11686b0368d3b5030e96508",
+      "mtime": 1794342533.0818503,
+      "size": 85875
+    },
+    "Telemetry/public-observation.json": {
+      "sha256": "36859772d1b7ce37c5a8ecd99c26f4bc26ed98caa71af87568d7040fa0d50819",
+      "mtime": 1794342533.0818503,
+      "size": 1704
+    }
+  }
+}

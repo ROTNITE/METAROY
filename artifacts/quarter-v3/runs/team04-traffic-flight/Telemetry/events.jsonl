@@ -1,0 +1,12 @@
+{"type":"episode_started","time_s":0,"target_id":-1}
+{"type":"traffic_probe_initialized","time_s":0,"target_id":-1}
+{"type":"agent_yielding","time_s":0.089248797798063606,"agent_id":2}
+{"type":"person_detected","time_s":0.30703989317407832,"target_id":1}
+{"type":"person_detected","time_s":0.30703989317407832,"target_id":3}
+{"type":"stationary_sensor_observed","time_s":0.30703989317407832,"target_id":8}
+{"type":"agent_motion_resumed","time_s":0.98205099528422579,"agent_id":2}
+{"type":"person_report_received","time_s":1.2152791944681667,"target_id":1}
+{"type":"person_report_received","time_s":1.2152791944681667,"target_id":3}
+{"type":"agent_route_completed","time_s":3.95696360146394,"agent_id":0}
+{"type":"agent_route_completed","time_s":3.95696360146394,"agent_id":1}
+{"type":"agent_route_completed","time_s":4.910240902507212,"agent_id":2}

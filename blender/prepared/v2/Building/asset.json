@@ -1,0 +1,344 @@
+{
+  "id": "Building",
+  "source": "blender/Meshy_AI_Damaged_Building_20261109_image-to-3d-texture.blend",
+  "source_sha256": "5708a1e3514bc143f4c7b5482521e948251002d78c352202618a7c2e0ce1452c",
+  "blend": "Building.blend",
+  "parts": [
+    {
+      "object": "Building",
+      "role": "static",
+      "triangles": 114994,
+      "location_m": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "rotation_deg": [
+        0.0,
+        -0.0,
+        0.0
+      ],
+      "parent": null,
+      "dimensions_m": [
+        11.950923919677734,
+        7.364544868469238,
+        9.594071388244629
+      ],
+      "materials": [
+        "M_Building_Baked"
+      ],
+      "fbx": "parts/Building.fbx"
+    },
+    {
+      "object": "RearWindowGlass",
+      "role": "glass",
+      "removed_infill_faces": 487,
+      "triangles": 108,
+      "location_m": [
+        -5.550000190734863,
+        0.9700000286102295,
+        1.649999976158142
+      ],
+      "rotation_deg": [
+        0.0,
+        -0.0,
+        0.0
+      ],
+      "parent": null,
+      "dimensions_m": [
+        0.017999999225139618,
+        1.100000023841858,
+        1.059999942779541
+      ],
+      "materials": [
+        "M_Rig_Glass"
+      ],
+      "fbx": "parts/RearWindowGlass.fbx"
+    },
+    {
+      "object": "RearWindowGlass.001",
+      "role": "glass",
+      "removed_infill_faces": 568,
+      "triangles": 108,
+      "location_m": [
+        -5.550000190734863,
+        0.9700000286102295,
+        4.400000095367432
+      ],
+      "rotation_deg": [
+        0.0,
+        -0.0,
+        0.0
+      ],
+      "parent": null,
+      "dimensions_m": [
+        0.017999999225139618,
+        1.100000023841858,
+        1.059999942779541
+      ],
+      "materials": [
+        "M_Rig_Glass"
+      ],
+      "fbx": "parts/RearWindowGlass.001.fbx"
+    },
+    {
+      "object": "RearWindowGlass.002",
+      "role": "glass",
+      "removed_infill_faces": 572,
+      "triangles": 108,
+      "location_m": [
+        -5.550000190734863,
+        0.9700000286102295,
+        7.199999809265137
+      ],
+      "rotation_deg": [
+        0.0,
+        -0.0,
+        0.0
+      ],
+      "parent": null,
+      "dimensions_m": [
+        0.017999999225139618,
+        1.100000023841858,
+        1.059999942779541
+      ],
+      "materials": [
+        "M_Rig_Glass"
+      ],
+      "fbx": "parts/RearWindowGlass.002.fbx"
+    },
+    {
+      "object": "RearWindowGlass.003",
+      "role": "glass",
+      "removed_infill_faces": 677,
+      "triangles": 108,
+      "location_m": [
+        -5.550000190734863,
+        -1.25,
+        4.400000095367432
+      ],
+      "rotation_deg": [
+        0.0,
+        -0.0,
+        0.0
+      ],
+      "parent": null,
+      "dimensions_m": [
+        0.017999999225139618,
+        1.100000023841858,
+        1.059999942779541
+      ],
+      "materials": [
+        "M_Rig_Glass"
+      ],
+      "fbx": "parts/RearWindowGlass.003.fbx"
+    },
+    {
+      "object": "RearWindowGlass.004",
+      "role": "glass",
+      "removed_infill_faces": 542,
+      "triangles": 108,
+      "location_m": [
+        -5.550000190734863,
+        -1.25,
+        7.199999809265137
+      ],
+      "rotation_deg": [
+        0.0,
+        -0.0,
+        0.0
+      ],
+      "parent": null,
+      "dimensions_m": [
+        0.017999999225139618,
+        1.100000023841858,
+        1.059999942779541
+      ],
+      "materials": [
+        "M_Rig_Glass"
+      ],
+      "fbx": "parts/RearWindowGlass.004.fbx"
+    },
+    {
+      "object": "FrontWindowGlass",
+      "role": "glass",
+      "removed_infill_faces": 381,
+      "triangles": 108,
+      "location_m": [
+        2.5899999141693115,
+        0.5099999904632568,
+        4.400000095367432
+      ],
+      "rotation_deg": [
+        0.0,
+        -0.0,
+        0.0
+      ],
+      "parent": null,
+      "dimensions_m": [
+        0.017999999225139618,
+        0.5,
+        1.059999942779541
+      ],
+      "materials": [
+        "M_Rig_Glass"
+      ],
+      "fbx": "parts/FrontWindowGlass.fbx"
+    },
+    {
+      "object": "FrontWindowGlass.001",
+      "role": "glass",
+      "removed_infill_faces": 485,
+      "triangles": 108,
+      "location_m": [
+        2.5899999141693115,
+        0.5099999904632568,
+        7.199999809265137
+      ],
+      "rotation_deg": [
+        0.0,
+        -0.0,
+        0.0
+      ],
+      "parent": null,
+      "dimensions_m": [
+        0.017999999225139618,
+        0.5,
+        1.059999942779541
+      ],
+      "materials": [
+        "M_Rig_Glass"
+      ],
+      "fbx": "parts/FrontWindowGlass.001.fbx"
+    }
+  ],
+  "materials": [
+    {
+      "name": "M_Building_Baked",
+      "glass": false,
+      "inputs": {
+        "Base Color": [
+          0.800000011920929,
+          0.800000011920929,
+          0.800000011920929,
+          1.0
+        ],
+        "Metallic": 0.0,
+        "Roughness": 0.5,
+        "Transmission Weight": 0.0,
+        "IOR": 1.5,
+        "Alpha": 1.0,
+        "Emission Color": [
+          1.0,
+          1.0,
+          1.0,
+          1.0
+        ],
+        "Emission Strength": 0.0
+      },
+      "links": [
+        {
+          "from": "Principled BSDF",
+          "output": "BSDF",
+          "to": "Material Output",
+          "input": "Surface"
+        },
+        {
+          "from": "Image Texture",
+          "output": "Color",
+          "to": "Principled BSDF",
+          "input": "Base Color"
+        },
+        {
+          "from": "Image Texture.001",
+          "output": "Color",
+          "to": "Separate Color",
+          "input": "Color"
+        },
+        {
+          "from": "Separate Color",
+          "output": "Green",
+          "to": "Principled BSDF",
+          "input": "Roughness"
+        },
+        {
+          "from": "Separate Color",
+          "output": "Blue",
+          "to": "Principled BSDF",
+          "input": "Metallic"
+        },
+        {
+          "from": "Image Texture.002",
+          "output": "Color",
+          "to": "Normal Map",
+          "input": "Color"
+        },
+        {
+          "from": "Normal Map",
+          "output": "Normal",
+          "to": "Principled BSDF",
+          "input": "Normal"
+        }
+      ],
+      "images": [
+        {
+          "node": "Image Texture",
+          "image": "T_Building_BaseColor",
+          "file": "textures/T_0_T_Building_BaseColor.png",
+          "colorspace": "sRGB"
+        },
+        {
+          "node": "Image Texture.001",
+          "image": "T_Building_ORM",
+          "file": "textures/T_1_T_Building_ORM.png",
+          "colorspace": "Non-Color"
+        },
+        {
+          "node": "Image Texture.002",
+          "image": "T_Building_Normal",
+          "file": "textures/T_2_T_Building_Normal.png",
+          "colorspace": "Non-Color"
+        }
+      ]
+    },
+    {
+      "name": "M_Rig_Glass",
+      "glass": true,
+      "inputs": {
+        "Base Color": [
+          0.7300000190734863,
+          0.8399999737739563,
+          0.8600000143051147,
+          1.0
+        ],
+        "Metallic": 0.0,
+        "Roughness": 0.14000000059604645,
+        "Transmission Weight": 1.0,
+        "IOR": 1.4500000476837158,
+        "Alpha": 1.0,
+        "Emission Color": [
+          1.0,
+          1.0,
+          1.0,
+          1.0
+        ],
+        "Emission Strength": 0.0
+      },
+      "links": [
+        {
+          "from": "Principled BSDF",
+          "output": "BSDF",
+          "to": "Material Output",
+          "input": "Surface"
+        }
+      ],
+      "images": []
+    }
+  ],
+  "repairs": [
+    "Seven surviving facade panes converted to real glazing after measured aperture cuts; broken ground openings remain open.",
+    "Meter scale, ground pivot, UV-preserving reduction; source untouched."
+  ],
+  "actions": [],
+  "animation_runtime": "Rigid meshes driven from Unreal actuator state; Blender actions are inspectable demonstrations."
+}

@@ -1,0 +1,14 @@
+{
+  "passed": true,
+  "seconds": 30.002287100011017,
+  "environment": "static",
+  "seed": 20261109,
+  "event_types": [],
+  "applied": 0,
+  "found": 6,
+  "delivered": 0,
+  "fps": 160.62206613416475,
+  "p95_frame_ms": 7,
+  "memory_mb": 3272.15625,
+  "traffic_probe": null
+}

@@ -1,0 +1,128 @@
+{
+  "id": "Slab",
+  "source": "blender/Meshy_AI_Concrete_Slab_Fragment_20261109_image-to-3d-texture.blend",
+  "source_sha256": "750af13faf24d23b6ceebf176d82cf451d560ab915cc177b1c160136253f861d",
+  "blend": "Slab.blend",
+  "parts": [
+    {
+      "object": "Slab",
+      "role": "static",
+      "triangles": 6999,
+      "location_m": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "rotation_deg": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "parent": null,
+      "dimensions_m": [
+        2.400545597076416,
+        1.355681300163269,
+        0.2656790316104889
+      ],
+      "materials": [
+        "M_Slab_Baked"
+      ],
+      "fbx": "parts/Slab.fbx"
+    }
+  ],
+  "materials": [
+    {
+      "name": "M_Slab_Baked",
+      "glass": false,
+      "inputs": {
+        "Base Color": [
+          0.800000011920929,
+          0.800000011920929,
+          0.800000011920929,
+          1.0
+        ],
+        "Metallic": 0.0,
+        "Roughness": 0.5,
+        "Transmission Weight": 0.0,
+        "IOR": 1.5,
+        "Alpha": 1.0,
+        "Emission Color": [
+          1.0,
+          1.0,
+          1.0,
+          1.0
+        ],
+        "Emission Strength": 0.0
+      },
+      "links": [
+        {
+          "from": "Principled BSDF",
+          "output": "BSDF",
+          "to": "Material Output",
+          "input": "Surface"
+        },
+        {
+          "from": "Image Texture",
+          "output": "Color",
+          "to": "Principled BSDF",
+          "input": "Base Color"
+        },
+        {
+          "from": "Image Texture.001",
+          "output": "Color",
+          "to": "Separate Color",
+          "input": "Color"
+        },
+        {
+          "from": "Separate Color",
+          "output": "Green",
+          "to": "Principled BSDF",
+          "input": "Roughness"
+        },
+        {
+          "from": "Separate Color",
+          "output": "Blue",
+          "to": "Principled BSDF",
+          "input": "Metallic"
+        },
+        {
+          "from": "Image Texture.002",
+          "output": "Color",
+          "to": "Normal Map",
+          "input": "Color"
+        },
+        {
+          "from": "Normal Map",
+          "output": "Normal",
+          "to": "Principled BSDF",
+          "input": "Normal"
+        }
+      ],
+      "images": [
+        {
+          "node": "Image Texture",
+          "image": "T_Slab_BaseColor",
+          "file": "textures/T_0_T_Slab_BaseColor.png",
+          "colorspace": "sRGB"
+        },
+        {
+          "node": "Image Texture.001",
+          "image": "T_Slab_ORM",
+          "file": "textures/T_1_T_Slab_ORM.png",
+          "colorspace": "Non-Color"
+        },
+        {
+          "node": "Image Texture.002",
+          "image": "T_Slab_Normal",
+          "file": "textures/T_2_T_Slab_Normal.png",
+          "colorspace": "Non-Color"
+        }
+      ]
+    }
+  ],
+  "repairs": [
+    "Meter scale, ground pivot, UV-preserving reduction; source untouched."
+  ],
+  "actions": [],
+  "animation_runtime": "Rigid meshes driven from Unreal actuator state; Blender actions are inspectable demonstrations."
+}

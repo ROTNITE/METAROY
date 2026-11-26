@@ -1,0 +1,23 @@
+{
+  "verified": [
+    "Tab overview",
+    "wheel zoom",
+    "W pan",
+    "Space pause/resume",
+    "F9 screenshot"
+  ],
+  "unverified": [
+    "RMB orbit",
+    "individual A/S/D",
+    "F early collapse"
+  ],
+  "pause_observation": "simulation time held at 171.8s; advanced after resume",
+  "pause_limitation": "View changes while paused are displayed after resuming",
+  "screenshot": {
+    "file": "controls-manual.png",
+    "width": 1440,
+    "height": 900,
+    "source": "Unreal F9 in visible game window"
+  },
+  "capture_recovered": true
+}

@@ -1,0 +1,20 @@
+team01-traffic-crossing native exit 0 evidence C:\Users\rotn1\Documents\ChatGPT\metaroy\artifacts\quarter-v3\runs\team01-traffic-crossing
+{"passed": true, "scope": "native state, tape, traffic and evidence checks; visual review remains separate", "seconds": 100.00658618187299, "environment": "static", "seed": 20261109, "event_types": [], "applied": 0, "found": 0, "delivered": 0, "traffic_probe": "crossing", "fps": 156.10397741401013, "p95_frame_ms": 7, "memory_mb": 3380.8984375, "capture_overhead_included": false, "target_60fps_met": true, "tape_events": 0, "due_events": 0, "propagations": 0, "sampled_events": 0, "public_final_checked": true, "public_history_checked": true, "public_history_frames": 50, "not_proven_by_this_verifier": ["visual quality and support geometry", "frame-by-frame collision sweep coverage", "same-seed replay across runs", "physical surface speed/energy comparison"]}
+Traceback (most recent call last):
+  File "C:\Users\rotn1\Documents\ChatGPT\metaroy\unreal\tools\run_quarter_validation.py", line 72, in run
+    assert metadata['source_hashes_before']==metadata['source_hashes_after'],'source or binary changed during native run'
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: source or binary changed during native run
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "C:\Users\rotn1\Documents\ChatGPT\metaroy\unreal\tools\run_quarter_validation.py", line 114, in <module>
+    if __name__=='__main__':main()
+                            ~~~~^^
+  File "C:\Users\rotn1\Documents\ChatGPT\metaroy\unreal\tools\run_quarter_validation.py", line 98, in main
+    run(args.prefix+'-traffic-'+kind,['--environment','static','--traffic-probe',kind],duration(100))
+    ~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\rotn1\Documents\ChatGPT\metaroy\unreal\tools\run_quarter_validation.py", line 75, in run
+    raise RuntimeError('Native validation failed: '+str(error)+'; evidence '+str(out)) from error
+RuntimeError: Native validation failed: source or binary changed during native run; evidence C:\Users\rotn1\Documents\ChatGPT\metaroy\artifacts\quarter-v3\runs\team01-traffic-crossing

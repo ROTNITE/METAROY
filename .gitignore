@@ -1,0 +1,13 @@
+.tools/
+**/__pycache__/
+*.py[cod]
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+*.p12
+*.pfx
+*.crdownload
+/2d движ/project-full-20261124.zip
+/2d движ/project-no-experiment-results-20261124.zip

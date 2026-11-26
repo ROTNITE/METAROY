@@ -1,0 +1,8113 @@
+{
+  "format": "rescue-city-2.2",
+  "base_layout_revision": 3,
+  "settings": {
+    "map_size": 25,
+    "seed": 3246,
+    "preset": "open",
+    "scouts": 1,
+    "rescuers": 2,
+    "people": 3,
+    "horizon": 240.0,
+    "layout": "generated_city",
+    "city_revision": "2.2",
+    "event_profile": "v052",
+    "resource_profile": "contest",
+    "ground_battery_wh": 220.0,
+    "aerial_battery_wh": 120.0,
+    "initial_battery_fraction": 1.0,
+    "energy_reserve_fraction": 0.1,
+    "probabilities": {
+      "collapse": 0,
+      "fire": 0,
+      "flood": 0,
+      "mud": 0,
+      "road_damage": 0,
+      "smoke": 0,
+      "appearance": 0
+    },
+    "sensor_reliability": 1.0,
+    "communication_range_m": 180.0,
+    "communication_latency_s": 0.2,
+    "communication_loss": 0.0,
+    "competition": false
+  },
+  "cell_m": 10.0,
+  "size_m": 250,
+  "bounds": {
+    "kind": "box",
+    "min": [
+      0,
+      0,
+      -12
+    ],
+    "max": [
+      250,
+      250,
+      90
+    ]
+  },
+  "base": {
+    "kind": "box",
+    "min": [
+      0,
+      0,
+      -0.2
+    ],
+    "max": [
+      65.0,
+      42.0,
+      0.2
+    ]
+  },
+  "base_position": [
+    20,
+    22,
+    0
+  ],
+  "spawns": [
+    {
+      "id": "mobile-0",
+      "kind": "ground",
+      "position": [
+        32.0,
+        22,
+        0.95
+      ],
+      "yaw": -90,
+      "exit": [
+        [
+          32.0,
+          18,
+          0.95
+        ],
+        [
+          63.0,
+          18,
+          0.95
+        ],
+        [
+          63.0,
+          10,
+          0.95
+        ]
+      ],
+      "dock": 0,
+      "radius_m": 1.45
+    },
+    {
+      "id": "mobile-1",
+      "kind": "ground",
+      "position": [
+        35.5,
+        22,
+        0.95
+      ],
+      "yaw": -90,
+      "exit": [
+        [
+          35.5,
+          18,
+          0.95
+        ],
+        [
+          63.0,
+          18,
+          0.95
+        ],
+        [
+          63.0,
+          10,
+          0.95
+        ]
+      ],
+      "dock": 1,
+      "radius_m": 1.45
+    },
+    {
+      "id": "mobile-2",
+      "kind": "aerial",
+      "position": [
+        47.0,
+        34.0,
+        0.31
+      ],
+      "yaw": 0,
+      "radius_m": 1.65,
+      "pad": 0
+    }
+  ],
+  "infrastructure": [
+    {
+      "id": "rescue-base",
+      "kind": "base_station",
+      "position": [
+        20,
+        22,
+        0
+      ]
+    },
+    {
+      "id": "charge-base",
+      "kind": "charging_station",
+      "position": [
+        20,
+        13,
+        0
+      ],
+      "charger": {
+        "kind": "ground",
+        "docking_distance_m": 4.0,
+        "ports": 1,
+        "power_w": 1200.0,
+        "capacity_wh": 10000.0
+      }
+    },
+    {
+      "id": "compute-base",
+      "kind": "compute_node",
+      "position": [
+        15,
+        22,
+        0
+      ]
+    },
+    {
+      "id": "sensor-base",
+      "kind": "sensor_node",
+      "position": [
+        22,
+        30,
+        2
+      ]
+    },
+    {
+      "id": "charge-pad-0",
+      "kind": "charging_station",
+      "position": [
+        47.0,
+        34.0,
+        0.31
+      ],
+      "charger": {
+        "kind": "aerial",
+        "agent_id": "mobile-2",
+        "docking_distance_m": 1.5,
+        "ports": 1,
+        "power_w": 600.0,
+        "capacity_wh": 600.0
+      }
+    },
+    {
+      "id": "relay-0-1",
+      "kind": "relay",
+      "position": [
+        54.856,
+        133.311,
+        3.0
+      ],
+      "range_m": 180
+    },
+    {
+      "id": "relay-0-2",
+      "kind": "relay",
+      "position": [
+        41.729,
+        232.651,
+        3.0
+      ],
+      "range_m": 180
+    },
+    {
+      "id": "relay-1-0",
+      "kind": "relay",
+      "position": [
+        154.004,
+        55.741,
+        3.0
+      ],
+      "range_m": 180
+    },
+    {
+      "id": "relay-1-1",
+      "kind": "relay",
+      "position": [
+        139.869,
+        129.21699999999998,
+        3.0
+      ],
+      "range_m": 180
+    },
+    {
+      "id": "relay-1-2",
+      "kind": "relay",
+      "position": [
+        129.786,
+        215.393,
+        3.0
+      ],
+      "range_m": 180
+    },
+    {
+      "id": "relay-2-0",
+      "kind": "relay",
+      "position": [
+        226.973,
+        31.025,
+        3.0
+      ],
+      "range_m": 180
+    },
+    {
+      "id": "relay-2-1",
+      "kind": "relay",
+      "position": [
+        225.491,
+        143.61,
+        3.0
+      ],
+      "range_m": 180
+    },
+    {
+      "id": "relay-2-2",
+      "kind": "relay",
+      "position": [
+        212.464,
+        229.934,
+        3.0
+      ],
+      "range_m": 180
+    }
+  ],
+  "fixed_obstacles": [
+    {
+      "id": "medical-container",
+      "asset": "Medical",
+      "position": [
+        20.0,
+        22.0,
+        0.13
+      ],
+      "yaw": 0.0,
+      "bounds": {
+        "kind": "box",
+        "min": [
+          16.92,
+          20.6784,
+          0.0807
+        ],
+        "max": [
+          23.0794,
+          23.3213,
+          3.3378
+        ]
+      }
+    },
+    {
+      "id": "charge-generator",
+      "asset": "Generator",
+      "position": [
+        15.2,
+        16.3,
+        0.13
+      ],
+      "yaw": 0.0,
+      "bounds": {
+        "kind": "box",
+        "min": [
+          14.7355,
+          15.968,
+          0.0801
+        ],
+        "max": [
+          15.6538,
+          16.632,
+          0.757
+        ]
+      }
+    },
+    {
+      "id": "base-compute-cabinet",
+      "asset": "UtilityBox",
+      "position": [
+        15.0,
+        22.0,
+        0.13
+      ],
+      "yaw": 0.0,
+      "bounds": {
+        "kind": "box",
+        "min": [
+          14.49,
+          21.74,
+          0.08
+        ],
+        "max": [
+          15.51,
+          22.272,
+          1.3003
+        ]
+      }
+    },
+    {
+      "id": "base-sensor-mast",
+      "asset": "Sensor",
+      "position": [
+        22.0,
+        30.0,
+        0.13
+      ],
+      "yaw": 0.0,
+      "bounds": {
+        "kind": "box",
+        "min": [
+          21.4217,
+          29.5214,
+          0.08
+        ],
+        "max": [
+          22.4895,
+          30.5504,
+          1.9801
+        ]
+      }
+    },
+    {
+      "id": "van-service-lane",
+      "asset": "Van",
+      "position": [
+        3.1,
+        25.7,
+        0.08
+      ],
+      "yaw": 90.0,
+      "bounds": {
+        "kind": "box",
+        "min": [
+          1.6,
+          22.5,
+          0
+        ],
+        "max": [
+          4.6,
+          35.5,
+          2.8
+        ]
+      }
+    },
+    {
+      "id": "base-lamp-south",
+      "asset": "Streetlight",
+      "position": [
+        1.0,
+        17.5,
+        0.08
+      ],
+      "yaw": 0.0,
+      "bounds": {
+        "kind": "box",
+        "min": [
+          0.8,
+          17.3,
+          0
+        ],
+        "max": [
+          1.2,
+          17.7,
+          5.5
+        ]
+      }
+    },
+    {
+      "id": "base-lamp-north",
+      "asset": "Streetlight",
+      "position": [
+        1.0,
+        35.8,
+        0.08
+      ],
+      "yaw": 0.0,
+      "bounds": {
+        "kind": "box",
+        "min": [
+          0.8,
+          35.6,
+          0
+        ],
+        "max": [
+          1.2,
+          36.0,
+          5.5
+        ]
+      }
+    }
+  ],
+  "road_graph": {
+    "format": "metarescue.street-graph.v2",
+    "nodes": [
+      {
+        "id": "junction-0",
+        "position": [
+          10.0,
+          10.0,
+          0.0
+        ]
+      },
+      {
+        "id": "junction-1",
+        "position": [
+          10.0,
+          44.095,
+          0.0
+        ]
+      },
+      {
+        "id": "junction-2",
+        "position": [
+          10.0,
+          92.728,
+          0.0
+        ]
+      },
+      {
+        "id": "junction-3",
+        "position": [
+          10.0,
+          126.1,
+          0.0
+        ]
+      },
+      {
+        "id": "junction-4",
+        "position": [
+          10.0,
+          159.472,
+          0.0
+        ]
+      },
+      {
+        "id": "junction-5",
+        "position": [
+          10.0,
+          179.762,
+          0.0
+        ]
+      },
+      {
+        "id": "junction-6",
+        "position": [
+          10.0,
+          200.053,
+          0.0
+        ]
+      },
+      {
+        "id": "junction-7",
+        "position": [
+          10.0,
+          240.0,
+          0.0
+        ]
+      },
+      {
+        "id": "junction-8",
+        "position": [
+          24.385,
+          126.18,
+          0.0
+        ]
+      },
+      {
+        "id": "junction-9",
+        "position": [
+          32.187,
+          177.509,
+          0.0
+        ]
+      },
+      {
+        "id": "junction-10",
+        "position": [
+          33.985,
+          34.535,
+          0.0
+        ]
+      },
+      {
+        "id": "junction-11",
+        "position": [
+          34.331,
+          49.573,
+          0.0
+        ]
+      },
+      {
+        "id": "junction-12",
+        "position": [
+          34.729,
+          225.651,
+          0.0
+        ]
+      },
+      {
+        "id": "junction-13",
+        "position": [
+          37.95,
+          240.0,
+          0.0
+        ]
+      },
+      {
+        "id": "junction-14",
+        "position": [
+          47.449,
+          102.761,
+          0.0
+        ]
+      },
+      {
+        "id": "junction-15",
+        "position": [
+          47.856,
+          126.311,
+          0.0
+        ]
+      },
+      {
+        "id": "junction-16",
+        "position": [
+          48.263,
+          149.86,
+          0.0
+        ]
+      },
+      {
+        "id": "junction-17",
+        "position": [
+          48.948,
+          204.427,
+          0.0
+        ]
+      },
+      {
+        "id": "junction-18",
+        "position": [
+          56.841,
+          10.0,
+          0.0
+        ]
+      },
+      {
+        "id": "junction-19",
+        "position": [
+          57.751,
+          187.748,
+          0.0
+        ]
+      },
+      {
+        "id": "junction-20",
+        "position": [
+          58.662,
+          55.051,
+          0.0
+        ]
+      },
+      {
+        "id": "junction-21",
+        "position": [
+          60.201,
+          159.229,
+          0.0
+        ]
+      },
+      {
+        "id": "junction-22",
+        "position": [
+          61.095,
+          95.271,
+          0.0
+        ]
+      },
+      {
+        "id": "junction-23",
+        "position": [
+          65.453,
+          127.95,
+          0.0
+        ]
+      },
+      {
+        "id": "junction-24",
+        "position": [
+          65.9,
+          240.0,
+          0.0
+        ]
+      },
+      {
+        "id": "junction-25",
+        "position": [
+          67.547,
+          63.973,
+          0.0
+        ]
+      },
+      {
+        "id": "junction-26",
+        "position": [
+          77.982,
+          30.836,
+          0.0
+        ]
+      },
+      {
+        "id": "junction-27",
+        "position": [
+          81.072,
+          10.0,
+          0.0
+        ]
+      },
+      {
+        "id": "junction-28",
+        "position": [
+          82.199,
+          156.205,
+          0.0
+        ]
+      },
+      {
+        "id": "junction-29",
+        "position": [
+          82.745,
+          193.687,
+          0.0
+        ]
+      },
+      {
+        "id": "junction-30",
+        "position": [
+          85.373,
+          240.0,
+          0.0
+        ]
+      },
+      {
+        "id": "junction-31",
+        "position": [
+          89.077,
+          180.209,
+          0.0
+        ]
+      },
+      {
+        "id": "junction-32",
+        "position": [
+          96.68,
+          48.058,
+          0.0
+        ]
+      },
+      {
+        "id": "junction-33",
+        "position": [
+          104.09,
+          152.486,
+          0.0
+        ]
+      },
+      {
+        "id": "junction-34",
+        "position": [
+          104.963,
+          111.2,
+          0.0
+        ]
+      },
+      {
+        "id": "junction-35",
+        "position": [
+          105.302,
+          10.0,
+          0.0
+        ]
+      },
+      {
+        "id": "junction-36",
+        "position": [
+          107.739,
+          199.626,
+          0.0
+        ]
+      },
+      {
+        "id": "junction-37",
+        "position": [
+          107.924,
+          199.457,
+          0.0
+        ]
+      },
+      {
+        "id": "junction-38",
+        "position": [
+          108.756,
+          157.169,
+          0.0
+        ]
+      },
+      {
+        "id": "junction-39",
+        "position": [
+          113.102,
+          67.05,
+          0.0
+        ]
+      },
+      {
+        "id": "junction-40",
+        "position": [
+          118.605,
+          100.306,
+          0.0
+        ]
+      },
+      {
+        "id": "junction-41",
+        "position": [
+          122.766,
+          202.598,
+          0.0
+        ]
+      },
+      {
+        "id": "junction-42",
+        "position": [
+          124.978,
+          100.346,
+          0.0
+        ]
+      },
+      {
+        "id": "junction-43",
+        "position": [
+          129.321,
+          60.256,
+          0.0
+        ]
+      },
+      {
+        "id": "junction-44",
+        "position": [
+          132.047,
+          157.61,
+          0.0
+        ]
+      },
+      {
+        "id": "junction-45",
+        "position": [
+          133.239,
+          175.572,
+          0.0
+        ]
+      },
+      {
+        "id": "junction-46",
+        "position": [
+          136.511,
+          10.0,
+          0.0
+        ]
+      },
+      {
+        "id": "junction-47",
+        "position": [
+          136.786,
+          208.393,
+          0.0
+        ]
+      },
+      {
+        "id": "junction-48",
+        "position": [
+          145.329,
+          52.977,
+          0.0
+        ]
+      },
+      {
+        "id": "junction-49",
+        "position": [
+          146.869,
+          122.217,
+          0.0
+        ]
+      },
+      {
+        "id": "junction-50",
+        "position": [
+          147.004,
+          48.741,
+          0.0
+        ]
+      },
+      {
+        "id": "junction-51",
+        "position": [
+          149.473,
+          69.638,
+          0.0
+        ]
+      },
+      {
+        "id": "junction-52",
+        "position": [
+          151.614,
+          240.0,
+          0.0
+        ]
+      },
+      {
+        "id": "junction-53",
+        "position": [
+          154.562,
+          86.035,
+          0.0
+        ]
+      },
+      {
+        "id": "junction-54",
+        "position": [
+          155.338,
+          158.051,
+          0.0
+        ]
+      },
+      {
+        "id": "junction-55",
+        "position": [
+          159.27,
+          183.15,
+          0.0
+        ]
+      },
+      {
+        "id": "junction-56",
+        "position": [
+          163.035,
+          115.112,
+          0.0
+        ]
+      },
+      {
+        "id": "junction-57",
+        "position": [
+          164.534,
+          10.0,
+          0.0
+        ]
+      },
+      {
+        "id": "junction-58",
+        "position": [
+          165.118,
+          216.342,
+          0.0
+        ]
+      },
+      {
+        "id": "junction-59",
+        "position": [
+          167.491,
+          25.62,
+          0.0
+        ]
+      },
+      {
+        "id": "junction-60",
+        "position": [
+          168.76,
+          144.088,
+          0.0
+        ]
+      },
+      {
+        "id": "junction-61",
+        "position": [
+          171.314,
+          240.0,
+          0.0
+        ]
+      },
+      {
+        "id": "junction-62",
+        "position": [
+          178.442,
+          221.228,
+          0.0
+        ]
+      },
+      {
+        "id": "junction-63",
+        "position": [
+          180.394,
+          89.9,
+          0.0
+        ]
+      },
+      {
+        "id": "junction-64",
+        "position": [
+          185.571,
+          202.455,
+          0.0
+        ]
+      },
+      {
+        "id": "junction-65",
+        "position": [
+          186.4,
+          105.361,
+          0.0
+        ]
+      },
+      {
+        "id": "junction-66",
+        "position": [
+          187.488,
+          136.119,
+          0.0
+        ]
+      },
+      {
+        "id": "junction-67",
+        "position": [
+          189.493,
+          72.247,
+          0.0
+        ]
+      },
+      {
+        "id": "junction-68",
+        "position": [
+          190.133,
+          200.784,
+          0.0
+        ]
+      },
+      {
+        "id": "junction-69",
+        "position": [
+          192.557,
+          10.0,
+          0.0
+        ]
+      },
+      {
+        "id": "junction-70",
+        "position": [
+          192.66,
+          120.722,
+          0.0
+        ]
+      },
+      {
+        "id": "junction-71",
+        "position": [
+          194.239,
+          174.311,
+          0.0
+        ]
+      },
+      {
+        "id": "junction-72",
+        "position": [
+          197.625,
+          53.468,
+          0.0
+        ]
+      },
+      {
+        "id": "junction-73",
+        "position": [
+          198.059,
+          54.33,
+          0.0
+        ]
+      },
+      {
+        "id": "junction-74",
+        "position": [
+          198.345,
+          147.838,
+          0.0
+        ]
+      },
+      {
+        "id": "junction-75",
+        "position": [
+          205.464,
+          222.934,
+          0.0
+        ]
+      },
+      {
+        "id": "junction-76",
+        "position": [
+          205.657,
+          240.0,
+          0.0
+        ]
+      },
+      {
+        "id": "junction-77",
+        "position": [
+          211.628,
+          179.403,
+          0.0
+        ]
+      },
+      {
+        "id": "junction-78",
+        "position": [
+          211.688,
+          93.087,
+          0.0
+        ]
+      },
+      {
+        "id": "junction-79",
+        "position": [
+          216.33,
+          112.942,
+          0.0
+        ]
+      },
+      {
+        "id": "junction-80",
+        "position": [
+          218.491,
+          136.61,
+          0.0
+        ]
+      },
+      {
+        "id": "junction-81",
+        "position": [
+          219.973,
+          38.025,
+          0.0
+        ]
+      },
+      {
+        "id": "junction-82",
+        "position": [
+          240.0,
+          10.0,
+          0.0
+        ]
+      },
+      {
+        "id": "junction-83",
+        "position": [
+          240.0,
+          36.985,
+          0.0
+        ]
+      },
+      {
+        "id": "junction-84",
+        "position": [
+          240.0,
+          63.97,
+          0.0
+        ]
+      },
+      {
+        "id": "junction-85",
+        "position": [
+          240.0,
+          105.163,
+          0.0
+        ]
+      },
+      {
+        "id": "junction-86",
+        "position": [
+          240.0,
+          138.049,
+          0.0
+        ]
+      },
+      {
+        "id": "junction-87",
+        "position": [
+          240.0,
+          170.935,
+          0.0
+        ]
+      },
+      {
+        "id": "junction-88",
+        "position": [
+          240.0,
+          204.487,
+          0.0
+        ]
+      },
+      {
+        "id": "junction-89",
+        "position": [
+          240.0,
+          240.0,
+          0.0
+        ]
+      }
+    ],
+    "edges": [
+      {
+        "from": "junction-0",
+        "to": "junction-1",
+        "width_m": 7.96,
+        "street_class": "street"
+      },
+      {
+        "from": "junction-0",
+        "to": "junction-18",
+        "width_m": 8.17,
+        "street_class": "street"
+      },
+      {
+        "from": "junction-1",
+        "to": "junction-2",
+        "width_m": 8.07,
+        "street_class": "street"
+      },
+      {
+        "from": "junction-1",
+        "to": "junction-11",
+        "width_m": 8.04,
+        "street_class": "street"
+      },
+      {
+        "from": "junction-11",
+        "to": "junction-20",
+        "width_m": 8.04,
+        "street_class": "street"
+      },
+      {
+        "from": "junction-11",
+        "to": "junction-10",
+        "width_m": 5.2,
+        "street_class": "access"
+      },
+      {
+        "from": "junction-2",
+        "to": "junction-3",
+        "width_m": 7.95,
+        "street_class": "street"
+      },
+      {
+        "from": "junction-3",
+        "to": "junction-4",
+        "width_m": 7.95,
+        "street_class": "street"
+      },
+      {
+        "from": "junction-3",
+        "to": "junction-8",
+        "width_m": 5.2,
+        "street_class": "access"
+      },
+      {
+        "from": "junction-2",
+        "to": "junction-14",
+        "width_m": 10.0,
+        "street_class": "avenue"
+      },
+      {
+        "from": "junction-4",
+        "to": "junction-5",
+        "width_m": 7.94,
+        "street_class": "street"
+      },
+      {
+        "from": "junction-5",
+        "to": "junction-6",
+        "width_m": 7.94,
+        "street_class": "street"
+      },
+      {
+        "from": "junction-5",
+        "to": "junction-9",
+        "width_m": 5.2,
+        "street_class": "access"
+      },
+      {
+        "from": "junction-4",
+        "to": "junction-16",
+        "width_m": 7.86,
+        "street_class": "street"
+      },
+      {
+        "from": "junction-6",
+        "to": "junction-7",
+        "width_m": 7.01,
+        "street_class": "street"
+      },
+      {
+        "from": "junction-6",
+        "to": "junction-17",
+        "width_m": 7.68,
+        "street_class": "street"
+      },
+      {
+        "from": "junction-7",
+        "to": "junction-13",
+        "width_m": 7.93,
+        "street_class": "street"
+      },
+      {
+        "from": "junction-13",
+        "to": "junction-24",
+        "width_m": 7.93,
+        "street_class": "street"
+      },
+      {
+        "from": "junction-13",
+        "to": "junction-12",
+        "width_m": 5.2,
+        "street_class": "access"
+      },
+      {
+        "from": "junction-14",
+        "to": "junction-15",
+        "width_m": 7.55,
+        "street_class": "street"
+      },
+      {
+        "from": "junction-15",
+        "to": "junction-16",
+        "width_m": 7.55,
+        "street_class": "street"
+      },
+      {
+        "from": "junction-15",
+        "to": "junction-23",
+        "width_m": 5.2,
+        "street_class": "access"
+      },
+      {
+        "from": "junction-14",
+        "to": "junction-22",
+        "width_m": 10.0,
+        "street_class": "avenue"
+      },
+      {
+        "from": "junction-16",
+        "to": "junction-21",
+        "width_m": 7.44,
+        "street_class": "street"
+      },
+      {
+        "from": "junction-17",
+        "to": "junction-19",
+        "width_m": 7.33,
+        "street_class": "street"
+      },
+      {
+        "from": "junction-17",
+        "to": "junction-24",
+        "width_m": 8.19,
+        "street_class": "street"
+      },
+      {
+        "from": "junction-18",
+        "to": "junction-20",
+        "width_m": 7.63,
+        "street_class": "street"
+      },
+      {
+        "from": "junction-18",
+        "to": "junction-27",
+        "width_m": 8.01,
+        "street_class": "street"
+      },
+      {
+        "from": "junction-27",
+        "to": "junction-35",
+        "width_m": 8.01,
+        "street_class": "street"
+      },
+      {
+        "from": "junction-27",
+        "to": "junction-26",
+        "width_m": 5.2,
+        "street_class": "access"
+      },
+      {
+        "from": "junction-19",
+        "to": "junction-21",
+        "width_m": 7.1,
+        "street_class": "street"
+      },
+      {
+        "from": "junction-19",
+        "to": "junction-29",
+        "width_m": 7.2,
+        "street_class": "street"
+      },
+      {
+        "from": "junction-29",
+        "to": "junction-36",
+        "width_m": 7.2,
+        "street_class": "street"
+      },
+      {
+        "from": "junction-29",
+        "to": "junction-31",
+        "width_m": 5.2,
+        "street_class": "access"
+      },
+      {
+        "from": "junction-20",
+        "to": "junction-25",
+        "width_m": 8.11,
+        "street_class": "street"
+      },
+      {
+        "from": "junction-21",
+        "to": "junction-28",
+        "width_m": 7.18,
+        "street_class": "street"
+      },
+      {
+        "from": "junction-28",
+        "to": "junction-33",
+        "width_m": 7.18,
+        "street_class": "street"
+      },
+      {
+        "from": "junction-22",
+        "to": "junction-25",
+        "width_m": 7.06,
+        "street_class": "street"
+      },
+      {
+        "from": "junction-22",
+        "to": "junction-34",
+        "width_m": 10.0,
+        "street_class": "avenue"
+      },
+      {
+        "from": "junction-24",
+        "to": "junction-30",
+        "width_m": 7.54,
+        "street_class": "street"
+      },
+      {
+        "from": "junction-25",
+        "to": "junction-32",
+        "width_m": 7.43,
+        "street_class": "street"
+      },
+      {
+        "from": "junction-30",
+        "to": "junction-36",
+        "width_m": 7.62,
+        "street_class": "street"
+      },
+      {
+        "from": "junction-30",
+        "to": "junction-52",
+        "width_m": 7.6,
+        "street_class": "street"
+      },
+      {
+        "from": "junction-32",
+        "to": "junction-35",
+        "width_m": 7.39,
+        "street_class": "street"
+      },
+      {
+        "from": "junction-32",
+        "to": "junction-39",
+        "width_m": 6.98,
+        "street_class": "street"
+      },
+      {
+        "from": "junction-33",
+        "to": "junction-34",
+        "width_m": 10.0,
+        "street_class": "avenue"
+      },
+      {
+        "from": "junction-33",
+        "to": "junction-38",
+        "width_m": 10.0,
+        "street_class": "avenue"
+      },
+      {
+        "from": "junction-34",
+        "to": "junction-40",
+        "width_m": 10.0,
+        "street_class": "avenue"
+      },
+      {
+        "from": "junction-35",
+        "to": "junction-46",
+        "width_m": 7.94,
+        "street_class": "street"
+      },
+      {
+        "from": "junction-36",
+        "to": "junction-37",
+        "width_m": 7.34,
+        "street_class": "street"
+      },
+      {
+        "from": "junction-37",
+        "to": "junction-38",
+        "width_m": 10.0,
+        "street_class": "avenue"
+      },
+      {
+        "from": "junction-37",
+        "to": "junction-41",
+        "width_m": 10.0,
+        "street_class": "avenue"
+      },
+      {
+        "from": "junction-41",
+        "to": "junction-47",
+        "width_m": 10.0,
+        "street_class": "avenue"
+      },
+      {
+        "from": "junction-38",
+        "to": "junction-44",
+        "width_m": 7.44,
+        "street_class": "street"
+      },
+      {
+        "from": "junction-44",
+        "to": "junction-54",
+        "width_m": 7.44,
+        "street_class": "street"
+      },
+      {
+        "from": "junction-44",
+        "to": "junction-45",
+        "width_m": 5.2,
+        "street_class": "access"
+      },
+      {
+        "from": "junction-39",
+        "to": "junction-40",
+        "width_m": 10.0,
+        "street_class": "avenue"
+      },
+      {
+        "from": "junction-39",
+        "to": "junction-43",
+        "width_m": 10.0,
+        "street_class": "avenue"
+      },
+      {
+        "from": "junction-43",
+        "to": "junction-48",
+        "width_m": 10.0,
+        "street_class": "avenue"
+      },
+      {
+        "from": "junction-40",
+        "to": "junction-42",
+        "width_m": 10.0,
+        "street_class": "avenue"
+      },
+      {
+        "from": "junction-42",
+        "to": "junction-53",
+        "width_m": 7.32,
+        "street_class": "street"
+      },
+      {
+        "from": "junction-42",
+        "to": "junction-49",
+        "width_m": 10.0,
+        "street_class": "avenue"
+      },
+      {
+        "from": "junction-49",
+        "to": "junction-60",
+        "width_m": 10.0,
+        "street_class": "avenue"
+      },
+      {
+        "from": "junction-49",
+        "to": "junction-56",
+        "width_m": 5.2,
+        "street_class": "access"
+      },
+      {
+        "from": "junction-46",
+        "to": "junction-50",
+        "width_m": 10.0,
+        "street_class": "avenue"
+      },
+      {
+        "from": "junction-46",
+        "to": "junction-57",
+        "width_m": 7.48,
+        "street_class": "street"
+      },
+      {
+        "from": "junction-57",
+        "to": "junction-69",
+        "width_m": 7.48,
+        "street_class": "street"
+      },
+      {
+        "from": "junction-57",
+        "to": "junction-59",
+        "width_m": 5.2,
+        "street_class": "access"
+      },
+      {
+        "from": "junction-47",
+        "to": "junction-52",
+        "width_m": 10.0,
+        "street_class": "avenue"
+      },
+      {
+        "from": "junction-47",
+        "to": "junction-55",
+        "width_m": 7.88,
+        "street_class": "street"
+      },
+      {
+        "from": "junction-48",
+        "to": "junction-50",
+        "width_m": 10.0,
+        "street_class": "avenue"
+      },
+      {
+        "from": "junction-48",
+        "to": "junction-51",
+        "width_m": 7.12,
+        "street_class": "street"
+      },
+      {
+        "from": "junction-51",
+        "to": "junction-53",
+        "width_m": 7.12,
+        "street_class": "street"
+      },
+      {
+        "from": "junction-50",
+        "to": "junction-72",
+        "width_m": 7.61,
+        "street_class": "street"
+      },
+      {
+        "from": "junction-52",
+        "to": "junction-61",
+        "width_m": 7.41,
+        "street_class": "street"
+      },
+      {
+        "from": "junction-53",
+        "to": "junction-63",
+        "width_m": 7.18,
+        "street_class": "street"
+      },
+      {
+        "from": "junction-54",
+        "to": "junction-55",
+        "width_m": 7.29,
+        "street_class": "street"
+      },
+      {
+        "from": "junction-54",
+        "to": "junction-60",
+        "width_m": 7.43,
+        "street_class": "street"
+      },
+      {
+        "from": "junction-55",
+        "to": "junction-64",
+        "width_m": 7.12,
+        "street_class": "street"
+      },
+      {
+        "from": "junction-60",
+        "to": "junction-66",
+        "width_m": 10.0,
+        "street_class": "avenue"
+      },
+      {
+        "from": "junction-61",
+        "to": "junction-62",
+        "width_m": 6.99,
+        "street_class": "street"
+      },
+      {
+        "from": "junction-62",
+        "to": "junction-64",
+        "width_m": 6.99,
+        "street_class": "street"
+      },
+      {
+        "from": "junction-62",
+        "to": "junction-58",
+        "width_m": 5.2,
+        "street_class": "access"
+      },
+      {
+        "from": "junction-61",
+        "to": "junction-76",
+        "width_m": 7.95,
+        "street_class": "street"
+      },
+      {
+        "from": "junction-76",
+        "to": "junction-89",
+        "width_m": 7.95,
+        "street_class": "street"
+      },
+      {
+        "from": "junction-76",
+        "to": "junction-75",
+        "width_m": 5.2,
+        "street_class": "access"
+      },
+      {
+        "from": "junction-63",
+        "to": "junction-65",
+        "width_m": 7.9,
+        "street_class": "street"
+      },
+      {
+        "from": "junction-65",
+        "to": "junction-70",
+        "width_m": 7.9,
+        "street_class": "street"
+      },
+      {
+        "from": "junction-63",
+        "to": "junction-67",
+        "width_m": 7.11,
+        "street_class": "street"
+      },
+      {
+        "from": "junction-67",
+        "to": "junction-73",
+        "width_m": 7.11,
+        "street_class": "street"
+      },
+      {
+        "from": "junction-64",
+        "to": "junction-68",
+        "width_m": 7.47,
+        "street_class": "street"
+      },
+      {
+        "from": "junction-66",
+        "to": "junction-70",
+        "width_m": 7.06,
+        "street_class": "street"
+      },
+      {
+        "from": "junction-66",
+        "to": "junction-74",
+        "width_m": 10.0,
+        "street_class": "avenue"
+      },
+      {
+        "from": "junction-68",
+        "to": "junction-71",
+        "width_m": 7.96,
+        "street_class": "street"
+      },
+      {
+        "from": "junction-71",
+        "to": "junction-74",
+        "width_m": 7.96,
+        "street_class": "street"
+      },
+      {
+        "from": "junction-71",
+        "to": "junction-77",
+        "width_m": 5.2,
+        "street_class": "access"
+      },
+      {
+        "from": "junction-68",
+        "to": "junction-88",
+        "width_m": 7.02,
+        "street_class": "street"
+      },
+      {
+        "from": "junction-69",
+        "to": "junction-72",
+        "width_m": 7.46,
+        "street_class": "street"
+      },
+      {
+        "from": "junction-69",
+        "to": "junction-82",
+        "width_m": 7.79,
+        "street_class": "street"
+      },
+      {
+        "from": "junction-70",
+        "to": "junction-79",
+        "width_m": 8.19,
+        "street_class": "street"
+      },
+      {
+        "from": "junction-79",
+        "to": "junction-85",
+        "width_m": 8.19,
+        "street_class": "street"
+      },
+      {
+        "from": "junction-79",
+        "to": "junction-78",
+        "width_m": 5.2,
+        "street_class": "access"
+      },
+      {
+        "from": "junction-72",
+        "to": "junction-73",
+        "width_m": 7.35,
+        "street_class": "street"
+      },
+      {
+        "from": "junction-73",
+        "to": "junction-84",
+        "width_m": 7.32,
+        "street_class": "street"
+      },
+      {
+        "from": "junction-74",
+        "to": "junction-87",
+        "width_m": 10.0,
+        "street_class": "avenue"
+      },
+      {
+        "from": "junction-82",
+        "to": "junction-83",
+        "width_m": 8.15,
+        "street_class": "street"
+      },
+      {
+        "from": "junction-83",
+        "to": "junction-84",
+        "width_m": 8.15,
+        "street_class": "street"
+      },
+      {
+        "from": "junction-83",
+        "to": "junction-81",
+        "width_m": 5.2,
+        "street_class": "access"
+      },
+      {
+        "from": "junction-84",
+        "to": "junction-85",
+        "width_m": 7.33,
+        "street_class": "street"
+      },
+      {
+        "from": "junction-85",
+        "to": "junction-86",
+        "width_m": 8.2,
+        "street_class": "street"
+      },
+      {
+        "from": "junction-86",
+        "to": "junction-87",
+        "width_m": 8.2,
+        "street_class": "street"
+      },
+      {
+        "from": "junction-86",
+        "to": "junction-80",
+        "width_m": 5.2,
+        "street_class": "access"
+      },
+      {
+        "from": "junction-87",
+        "to": "junction-88",
+        "width_m": 7.05,
+        "street_class": "street"
+      },
+      {
+        "from": "junction-88",
+        "to": "junction-89",
+        "width_m": 7.27,
+        "street_class": "street"
+      }
+    ],
+    "entrances": [
+      {
+        "node_id": "junction-2",
+        "outward": [
+          -1,
+          0
+        ]
+      },
+      {
+        "node_id": "junction-87",
+        "outward": [
+          1,
+          0
+        ]
+      },
+      {
+        "node_id": "junction-46",
+        "outward": [
+          0,
+          -1
+        ]
+      },
+      {
+        "node_id": "junction-52",
+        "outward": [
+          0,
+          1
+        ]
+      }
+    ]
+  },
+  "buildings": [
+    {
+      "id": "building-0",
+      "position": [
+        89.144,
+        36.084,
+        0.0
+      ],
+      "floors": 5,
+      "variant": 1,
+      "bounds": {
+        "kind": "box",
+        "min": [
+          83.46188371245835,
+          30.401883712458336,
+          0
+        ],
+        "max": [
+          94.82611628754167,
+          41.76611628754167,
+          15.7
+        ]
+      },
+      "footprint": {
+        "center": [
+          89.144,
+          36.084
+        ],
+        "half": [
+          4.75,
+          4.75
+        ],
+        "yaw": 102.765
+      },
+      "yaw": 102.765,
+      "block": 1,
+      "street_source": [
+        94.509,
+        37.299
+      ]
+    },
+    {
+      "id": "building-1",
+      "position": [
+        108.554,
+        40.88,
+        0.0
+      ],
+      "floors": 3,
+      "variant": 0,
+      "bounds": {
+        "kind": "box",
+        "min": [
+          102.87188371245834,
+          35.197883712458335,
+          0
+        ],
+        "max": [
+          114.23611628754166,
+          46.56211628754167,
+          9.7
+        ]
+      },
+      "footprint": {
+        "center": [
+          108.554,
+          40.88
+        ],
+        "half": [
+          4.75,
+          4.75
+        ],
+        "yaw": -77.235
+      },
+      "yaw": -77.235,
+      "block": 2,
+      "street_source": [
+        103.19,
+        39.665
+      ]
+    },
+    {
+      "id": "building-2",
+      "position": [
+        128.259,
+        22.757,
+        0.0
+      ],
+      "floors": 3,
+      "variant": 5,
+      "bounds": {
+        "kind": "box",
+        "min": [
+          122.4323993018541,
+          16.930399301854123,
+          0
+        ],
+        "max": [
+          134.08560069814587,
+          28.58360069814588,
+          9.7
+        ]
+      },
+      "footprint": {
+        "center": [
+          128.259,
+          22.757
+        ],
+        "half": [
+          4.75,
+          4.75
+        ],
+        "yaw": 74.845
+      },
+      "yaw": 74.845,
+      "block": 2,
+      "street_source": [
+        133.568,
+        21.319
+      ]
+    },
+    {
+      "id": "building-3",
+      "position": [
+        221.024,
+        49.389,
+        0.0
+      ],
+      "floors": 3,
+      "variant": 2,
+      "bounds": {
+        "kind": "box",
+        "min": [
+          215.33068041007687,
+          43.695680410076875,
+          0
+        ],
+        "max": [
+          226.71731958992314,
+          55.08231958992313,
+          9.7
+        ]
+      },
+      "footprint": {
+        "center": [
+          221.024,
+          49.389
+        ],
+        "half": [
+          4.75,
+          4.75
+        ],
+        "yaw": -167.056
+      },
+      "yaw": -167.056,
+      "block": 4,
+      "street_source": [
+        219.792,
+        54.749
+      ]
+    },
+    {
+      "id": "building-4",
+      "position": [
+        31.933,
+        59.612,
+        0.0
+      ],
+      "floors": 2,
+      "variant": 0,
+      "bounds": {
+        "kind": "box",
+        "min": [
+          26.255675552878337,
+          53.93467555287834,
+          0
+        ],
+        "max": [
+          37.61032444712166,
+          65.28932444712167,
+          6.7
+        ]
+      },
+      "footprint": {
+        "center": [
+          31.933,
+          59.612
+        ],
+        "half": [
+          4.75,
+          4.75
+        ],
+        "yaw": 12.688
+      },
+      "yaw": 12.688,
+      "block": 5,
+      "street_source": [
+        33.141,
+        54.246
+      ]
+    },
+    {
+      "id": "building-5",
+      "position": [
+        48.094,
+        63.25,
+        0.0
+      ],
+      "floors": 4,
+      "variant": 3,
+      "bounds": {
+        "kind": "box",
+        "min": [
+          42.41667555287834,
+          57.57267555287834,
+          0
+        ],
+        "max": [
+          53.771324447121664,
+          68.92732444712166,
+          12.7
+        ]
+      },
+      "footprint": {
+        "center": [
+          48.094,
+          63.25
+        ],
+        "half": [
+          4.75,
+          4.75
+        ],
+        "yaw": 12.688
+      },
+      "yaw": 12.688,
+      "block": 5,
+      "street_source": [
+        49.302,
+        57.884
+      ]
+    },
+    {
+      "id": "building-6",
+      "position": [
+        40.684,
+        89.25,
+        0.0
+      ],
+      "floors": 4,
+      "variant": 0,
+      "bounds": {
+        "kind": "box",
+        "min": [
+          34.86658147133535,
+          83.43258147133535,
+          0
+        ],
+        "max": [
+          46.501418528664644,
+          95.06741852866465,
+          12.7
+        ]
+      },
+      "footprint": {
+        "center": [
+          40.684,
+          89.25
+        ],
+        "half": [
+          4.75,
+          4.75
+        ],
+        "yaw": -165.002
+      },
+      "yaw": -165.002,
+      "block": 5,
+      "street_source": [
+        39.261,
+        94.563
+      ]
+    },
+    {
+      "id": "building-7",
+      "position": [
+        168.738,
+        78.156,
+        0.0
+      ],
+      "floors": 4,
+      "variant": 5,
+      "bounds": {
+        "kind": "box",
+        "min": [
+          163.3374170719185,
+          72.75541707191852,
+          0
+        ],
+        "max": [
+          174.1385829280815,
+          83.5565829280815,
+          12.7
+        ]
+      },
+      "footprint": {
+        "center": [
+          168.738,
+          78.156
+        ],
+        "half": [
+          4.75,
+          4.75
+        ],
+        "yaw": -171.49
+      },
+      "yaw": -171.49,
+      "block": 8,
+      "street_source": [
+        167.924,
+        83.595
+      ]
+    },
+    {
+      "id": "building-8",
+      "position": [
+        193.112,
+        94.137,
+        0.0
+      ],
+      "floors": 4,
+      "variant": 0,
+      "bounds": {
+        "kind": "box",
+        "min": [
+          186.94229070343735,
+          87.96729070343737,
+          0
+        ],
+        "max": [
+          199.28170929656264,
+          100.30670929656263,
+          12.7
+        ]
+      },
+      "footprint": {
+        "center": [
+          193.112,
+          94.137
+        ],
+        "half": [
+          4.75,
+          4.75
+        ],
+        "yaw": -111.701
+      },
+      "yaw": -111.701,
+      "block": 9,
+      "street_source": [
+        188.002,
+        96.17
+      ]
+    },
+    {
+      "id": "building-9",
+      "position": [
+        37.786,
+        126.663,
+        0.0
+      ],
+      "floors": 4,
+      "variant": 1,
+      "bounds": {
+        "kind": "box",
+        "min": [
+          32.95462845714066,
+          121.83162845714065,
+          0
+        ],
+        "max": [
+          42.617371542859345,
+          131.49437154285934,
+          12.7
+        ]
+      },
+      "footprint": {
+        "center": [
+          37.786,
+          126.663
+        ],
+        "half": [
+          4.75,
+          4.75
+        ],
+        "yaw": 89.01
+      },
+      "yaw": 89.01,
+      "block": 10,
+      "street_source": [
+        43.285,
+        126.568
+      ]
+    },
+    {
+      "id": "building-10",
+      "position": [
+        36.375,
+        142.299,
+        0.0
+      ],
+      "floors": 4,
+      "variant": 4,
+      "bounds": {
+        "kind": "box",
+        "min": [
+          30.610851926187262,
+          136.53485192618726,
+          0
+        ],
+        "max": [
+          42.139148073812734,
+          148.06314807381276,
+          12.7
+        ]
+      },
+      "footprint": {
+        "center": [
+          36.375,
+          142.299
+        ],
+        "half": [
+          4.75,
+          4.75
+        ],
+        "yaw": 165.899
+      },
+      "yaw": 165.899,
+      "block": 10,
+      "street_source": [
+        37.715,
+        147.633
+      ]
+    },
+    {
+      "id": "building-11",
+      "position": [
+        93.011,
+        141.914,
+        0.0
+      ],
+      "floors": 3,
+      "variant": 0,
+      "bounds": {
+        "kind": "box",
+        "min": [
+          88.16164438139229,
+          137.06464438139227,
+          0
+        ],
+        "max": [
+          97.8603556186077,
+          146.7633556186077,
+          9.7
+        ]
+      },
+      "footprint": {
+        "center": [
+          93.011,
+          141.914
+        ],
+        "half": [
+          4.75,
+          4.75
+        ],
+        "yaw": 91.211
+      },
+      "yaw": 91.211,
+      "block": 11,
+      "street_source": [
+        98.51,
+        142.03
+      ]
+    },
+    {
+      "id": "building-12",
+      "position": [
+        115.604,
+        142.479,
+        0.0
+      ],
+      "floors": 4,
+      "variant": 0,
+      "bounds": {
+        "kind": "box",
+        "min": [
+          110.7546443813923,
+          137.6296443813923,
+          0
+        ],
+        "max": [
+          120.4533556186077,
+          147.32835561860773,
+          12.7
+        ]
+      },
+      "footprint": {
+        "center": [
+          115.604,
+          142.479
+        ],
+        "half": [
+          4.75,
+          4.75
+        ],
+        "yaw": -88.789
+      },
+      "yaw": -88.789,
+      "block": 12,
+      "street_source": [
+        110.105,
+        142.363
+      ]
+    },
+    {
+      "id": "building-13",
+      "position": [
+        174.037,
+        101.648,
+        0.0
+      ],
+      "floors": 4,
+      "variant": 0,
+      "bounds": {
+        "kind": "box",
+        "min": [
+          167.86729070343736,
+          95.47829070343737,
+          0
+        ],
+        "max": [
+          180.20670929656265,
+          107.81770929656263,
+          12.7
+        ]
+      },
+      "footprint": {
+        "center": [
+          174.037,
+          101.648
+        ],
+        "half": [
+          4.75,
+          4.75
+        ],
+        "yaw": 68.299
+      },
+      "yaw": 68.299,
+      "block": 13,
+      "street_source": [
+        179.148,
+        99.614
+      ]
+    },
+    {
+      "id": "building-14",
+      "position": [
+        219.513,
+        122.838,
+        0.0
+      ],
+      "floors": 4,
+      "variant": 2,
+      "bounds": {
+        "kind": "box",
+        "min": [
+          213.5173652727957,
+          116.84236527279569,
+          0
+        ],
+        "max": [
+          225.5086347272043,
+          128.8336347272043,
+          12.7
+        ]
+      },
+      "footprint": {
+        "center": [
+          219.513,
+          122.838
+        ],
+        "half": [
+          4.75,
+          4.75
+        ],
+        "yaw": -18.194
+      },
+      "yaw": -18.194,
+      "block": 14,
+      "street_source": [
+        217.796,
+        117.613
+      ]
+    },
+    {
+      "id": "building-15",
+      "position": [
+        201.219,
+        134.313,
+        0.0
+      ],
+      "floors": 4,
+      "variant": 1,
+      "bounds": {
+        "kind": "box",
+        "min": [
+          194.5063768821816,
+          127.6003768821816,
+          0
+        ],
+        "max": [
+          207.9316231178184,
+          141.02562311781838,
+          12.7
+        ]
+      },
+      "footprint": {
+        "center": [
+          201.219,
+          134.313
+        ],
+        "half": [
+          4.75,
+          4.75
+        ],
+        "yaw": -132.813
+      },
+      "yaw": -132.813,
+      "block": 14,
+      "street_source": [
+        197.184,
+        138.051
+      ]
+    },
+    {
+      "id": "building-16",
+      "position": [
+        49.178,
+        172.455,
+        0.0
+      ],
+      "floors": 2,
+      "variant": 0,
+      "bounds": {
+        "kind": "box",
+        "min": [
+          44.03886756139568,
+          167.3158675613957,
+          0
+        ],
+        "max": [
+          54.31713243860431,
+          177.59413243860433,
+          6.7
+        ]
+      },
+      "footprint": {
+        "center": [
+          49.178,
+          172.455
+        ],
+        "half": [
+          4.75,
+          4.75
+        ],
+        "yaw": 94.91
+      },
+      "yaw": 94.91,
+      "block": 15,
+      "street_source": [
+        54.658,
+        172.926
+      ]
+    },
+    {
+      "id": "building-17",
+      "position": [
+        40.595,
+        193.285,
+        0.0
+      ],
+      "floors": 3,
+      "variant": 4,
+      "bounds": {
+        "kind": "box",
+        "min": [
+          35.344563733464696,
+          188.0345637334647,
+          0
+        ],
+        "max": [
+          45.8454362665353,
+          198.5354362665353,
+          9.7
+        ]
+      },
+      "footprint": {
+        "center": [
+          40.595,
+          193.285
+        ],
+        "half": [
+          4.75,
+          4.75
+        ],
+        "yaw": -173.592
+      },
+      "yaw": -173.592,
+      "block": 15,
+      "street_source": [
+        39.982,
+        198.751
+      ]
+    },
+    {
+      "id": "building-18",
+      "position": [
+        68.772,
+        174.545,
+        0.0
+      ],
+      "floors": 1,
+      "variant": 4,
+      "bounds": {
+        "kind": "box",
+        "min": [
+          63.63286756139569,
+          169.40586756139567,
+          0
+        ],
+        "max": [
+          73.91113243860433,
+          179.6841324386043,
+          3.7
+        ]
+      },
+      "footprint": {
+        "center": [
+          68.772,
+          174.545
+        ],
+        "half": [
+          4.75,
+          4.75
+        ],
+        "yaw": -85.09
+      },
+      "yaw": -85.09,
+      "block": 16,
+      "street_source": [
+        63.292,
+        174.074
+      ]
+    },
+    {
+      "id": "building-19",
+      "position": [
+        62.309,
+        200.461,
+        0.0
+      ],
+      "floors": 3,
+      "variant": 3,
+      "bounds": {
+        "kind": "box",
+        "min": [
+          55.89105089348166,
+          194.04305089348168,
+          0
+        ],
+        "max": [
+          68.72694910651833,
+          206.87894910651835,
+          9.7
+        ]
+      },
+      "footprint": {
+        "center": [
+          62.309,
+          200.461
+        ],
+        "half": [
+          4.75,
+          4.75
+        ],
+        "yaw": -62.175
+      },
+      "yaw": -62.175,
+      "block": 21,
+      "street_source": [
+        57.445,
+        197.894
+      ]
+    },
+    {
+      "id": "building-20",
+      "position": [
+        126.656,
+        229.9,
+        0.0
+      ],
+      "floors": 2,
+      "variant": 0,
+      "bounds": {
+        "kind": "box",
+        "min": [
+          121.906,
+          225.15,
+          0
+        ],
+        "max": [
+          131.406,
+          234.65,
+          6.7
+        ]
+      },
+      "footprint": {
+        "center": [
+          126.656,
+          229.9
+        ],
+        "half": [
+          4.75,
+          4.75
+        ],
+        "yaw": 180.0
+      },
+      "yaw": 180.0,
+      "block": 22,
+      "street_source": [
+        126.656,
+        235.4
+      ]
+    },
+    {
+      "id": "building-21",
+      "position": [
+        110.426,
+        229.9,
+        0.0
+      ],
+      "floors": 3,
+      "variant": 0,
+      "bounds": {
+        "kind": "box",
+        "min": [
+          105.676,
+          225.15,
+          0
+        ],
+        "max": [
+          115.176,
+          234.65,
+          9.7
+        ]
+      },
+      "footprint": {
+        "center": [
+          110.426,
+          229.9
+        ],
+        "half": [
+          4.75,
+          4.75
+        ],
+        "yaw": 180.0
+      },
+      "yaw": 180.0,
+      "block": 22,
+      "street_source": [
+        110.426,
+        235.4
+      ]
+    },
+    {
+      "id": "building-22",
+      "position": [
+        150.742,
+        211.535,
+        0.0
+      ],
+      "floors": 3,
+      "variant": 4,
+      "bounds": {
+        "kind": "box",
+        "min": [
+          144.42428539388655,
+          205.21728539388656,
+          0
+        ],
+        "max": [
+          157.05971460611343,
+          217.85271460611344,
+          9.7
+        ]
+      },
+      "footprint": {
+        "center": [
+          150.742,
+          211.535
+        ],
+        "half": [
+          4.75,
+          4.75
+        ],
+        "yaw": -115.133
+      },
+      "yaw": -115.133,
+      "block": 23,
+      "street_source": [
+        145.763,
+        213.871
+      ]
+    }
+  ],
+  "people": [
+    {
+      "id": 1,
+      "position": [
+        191.002,
+        236.885,
+        0.06
+      ],
+      "priority": 2,
+      "available_at": 0
+    },
+    {
+      "id": 2,
+      "position": [
+        49.819,
+        96.737,
+        0.06
+      ],
+      "priority": 3,
+      "available_at": 0
+    },
+    {
+      "id": 3,
+      "position": [
+        120.277,
+        85.051,
+        0.06
+      ],
+      "priority": 3,
+      "available_at": 0
+    }
+  ],
+  "facilities": [
+    {
+      "id": "unstable-bay",
+      "kind": "collapse_fixture",
+      "position": [
+        177.84357142857144,
+        167.49785714285713,
+        0.0
+      ],
+      "bounds": {
+        "kind": "box",
+        "min": [
+          168.64357142857145,
+          158.29785714285714,
+          0
+        ],
+        "max": [
+          187.04357142857143,
+          176.69785714285712,
+          10
+        ]
+      }
+    }
+  ],
+  "vegetation_revision": 3,
+  "vegetation_manifest_sha256": "c83ad60b3375bfb97ea606b80b085fe19950e97d41977682802d5e107d01431f",
+  "city_props_manifest_sha256": "04c2f3f1b37187d71c1eafe6ca5c12ad2ea363e19296964dfa3165edfcd84ef9",
+  "lot_covers": [
+    {
+      "kind": "garden",
+      "vertices": [
+        [
+          53.694,
+          48.889
+        ],
+        [
+          14.88,
+          40.151
+        ],
+        [
+          14.88,
+          14.985
+        ],
+        [
+          52.324,
+          14.985
+        ]
+      ]
+    },
+    {
+      "kind": "housing",
+      "vertices": [
+        [
+          99.479,
+          14.905
+        ],
+        [
+          92.663,
+          44.994
+        ],
+        [
+          68.684,
+          58.093
+        ],
+        [
+          63.285,
+          52.671
+        ],
+        [
+          61.758,
+          14.905
+        ]
+      ]
+    },
+    {
+      "kind": "housing",
+      "vertices": [
+        [
+          140.797,
+          48.393
+        ],
+        [
+          140.737,
+          48.544
+        ],
+        [
+          113.274,
+          60.537
+        ],
+        [
+          101.618,
+          47.057
+        ],
+        [
+          108.91,
+          14.87
+        ],
+        [
+          131.717,
+          14.87
+        ]
+      ]
+    },
+    {
+      "kind": "garden",
+      "vertices": [
+        [
+          192.355,
+          48.25
+        ],
+        [
+          151.962,
+          44.479
+        ],
+        [
+          143.88,
+          14.64
+        ],
+        [
+          188.437,
+          14.64
+        ]
+      ]
+    },
+    {
+      "kind": "garden",
+      "vertices": [
+        [
+          235.025,
+          58.148
+        ],
+        [
+          201.945,
+          50.544
+        ],
+        [
+          197.777,
+          14.795
+        ],
+        [
+          235.025,
+          14.795
+        ]
+      ]
+    },
+    {
+      "kind": "housing",
+      "vertices": [
+        [
+          57.559,
+          90.481
+        ],
+        [
+          46.687,
+          96.449
+        ],
+        [
+          14.935,
+          87.942
+        ],
+        [
+          14.935,
+          50.249
+        ],
+        [
+          56.122,
+          59.522
+        ],
+        [
+          62.6,
+          66.028
+        ]
+      ]
+    },
+    {
+      "kind": "park",
+      "vertices": [
+        [
+          112.219,
+          97.855
+        ],
+        [
+          103.867,
+          104.525
+        ],
+        [
+          66.507,
+          90.959
+        ],
+        [
+          71.423,
+          67.115
+        ],
+        [
+          95.827,
+          53.783
+        ],
+        [
+          107.08,
+          66.797
+        ]
+      ]
+    },
+    {
+      "kind": "garden",
+      "vertices": [
+        [
+          149.236,
+          83.546
+        ],
+        [
+          126.681,
+          94.457
+        ],
+        [
+          123.614,
+          94.437
+        ],
+        [
+          119.673,
+          70.619
+        ],
+        [
+          142.804,
+          60.517
+        ]
+      ]
+    },
+    {
+      "kind": "garden",
+      "vertices": [
+        [
+          191.452,
+          57.617
+        ],
+        [
+          177.863,
+          84.981
+        ],
+        [
+          158.071,
+          82.02
+        ],
+        [
+          150.669,
+          55.517
+        ],
+        [
+          151.321,
+          53.87
+        ]
+      ]
+    },
+    {
+      "kind": "housing",
+      "vertices": [
+        [
+          235.435,
+          101.405
+        ],
+        [
+          195.426,
+          114.555
+        ],
+        [
+          185.505,
+          89.625
+        ],
+        [
+          200.438,
+          59.556
+        ],
+        [
+          235.435,
+          67.6
+        ]
+      ]
+    },
+    {
+      "kind": "housing",
+      "vertices": [
+        [
+          43.522,
+          146.071
+        ],
+        [
+          14.875,
+          153.267
+        ],
+        [
+          14.875,
+          100.142
+        ],
+        [
+          42.858,
+          107.639
+        ]
+      ]
+    },
+    {
+      "kind": "service",
+      "vertices": [
+        [
+          98.266,
+          148.838
+        ],
+        [
+          61.618,
+          154.469
+        ],
+        [
+          52.9,
+          147.626
+        ],
+        [
+          52.196,
+          106.886
+        ],
+        [
+          61.592,
+          101.728
+        ],
+        [
+          98.975,
+          115.303
+        ]
+      ]
+    },
+    {
+      "kind": "garden",
+      "vertices": [
+        [
+          161.405,
+          145.08
+        ],
+        [
+          153.413,
+          153.394
+        ],
+        [
+          112.552,
+          152.62
+        ],
+        [
+          110.042,
+          150.1
+        ],
+        [
+          110.803,
+          114.087
+        ],
+        [
+          120.655,
+          106.219
+        ],
+        [
+          122.52,
+          106.231
+        ]
+      ]
+    },
+    {
+      "kind": "housing",
+      "vertices": [
+        [
+          187.737,
+          121.467
+        ],
+        [
+          184.548,
+          130.958
+        ],
+        [
+          170.113,
+          137.1
+        ],
+        [
+          134.019,
+          101.038
+        ],
+        [
+          155.392,
+          90.699
+        ],
+        [
+          176.765,
+          93.897
+        ]
+      ]
+    },
+    {
+      "kind": "housing",
+      "vertices": [
+        [
+          235.0,
+          161.416
+        ],
+        [
+          202.032,
+          143.136
+        ],
+        [
+          193.058,
+          133.45
+        ],
+        [
+          195.928,
+          124.906
+        ],
+        [
+          235.0,
+          112.064
+        ]
+      ]
+    },
+    {
+      "kind": "service",
+      "vertices": [
+        [
+          53.42,
+          186.174
+        ],
+        [
+          46.452,
+          199.377
+        ],
+        [
+          14.87,
+          195.83
+        ],
+        [
+          14.87,
+          163.229
+        ],
+        [
+          47.401,
+          155.057
+        ],
+        [
+          55.544,
+          161.447
+        ]
+      ]
+    },
+    {
+      "kind": "service",
+      "vertices": [
+        [
+          102.137,
+          193.67
+        ],
+        [
+          62.517,
+          184.255
+        ],
+        [
+          64.332,
+          163.137
+        ],
+        [
+          100.792,
+          157.535
+        ],
+        [
+          102.808,
+          159.558
+        ]
+      ]
+    },
+    {
+      "kind": "service",
+      "vertices": [
+        [
+          154.388,
+          181.354
+        ],
+        [
+          136.018,
+          201.979
+        ],
+        [
+          113.91,
+          195.134
+        ],
+        [
+          114.564,
+          161.9
+        ],
+        [
+          151.45,
+          162.598
+        ]
+      ]
+    },
+    {
+      "kind": "park",
+      "vertices": [
+        [
+          185.771,
+          197.069
+        ],
+        [
+          163.489,
+          180.714
+        ],
+        [
+          160.191,
+          159.662
+        ],
+        [
+          169.163,
+          150.329
+        ],
+        [
+          185.98,
+          143.173
+        ],
+        [
+          192.961,
+          150.708
+        ]
+      ]
+    },
+    {
+      "kind": "service",
+      "vertices": [
+        [
+          235.575,
+          199.736
+        ],
+        [
+          195.693,
+          196.775
+        ],
+        [
+          201.929,
+          156.571
+        ],
+        [
+          235.575,
+          175.228
+        ]
+      ]
+    },
+    {
+      "kind": "garden",
+      "vertices": [
+        [
+          14.405,
+          235.135
+        ],
+        [
+          14.405,
+          205.317
+        ],
+        [
+          45.503,
+          208.81
+        ],
+        [
+          58.048,
+          235.135
+        ]
+      ]
+    },
+    {
+      "kind": "housing",
+      "vertices": [
+        [
+          69.208,
+          235.33
+        ],
+        [
+          54.305,
+          204.057
+        ],
+        [
+          60.168,
+          192.948
+        ],
+        [
+          100.717,
+          202.583
+        ],
+        [
+          82.576,
+          235.33
+        ]
+      ]
+    },
+    {
+      "kind": "housing",
+      "vertices": [
+        [
+          93.361,
+          235.3
+        ],
+        [
+          109.522,
+          206.128
+        ],
+        [
+          132.551,
+          213.258
+        ],
+        [
+          142.892,
+          235.3
+        ]
+      ]
+    },
+    {
+      "kind": "garden",
+      "vertices": [
+        [
+          155.971,
+          235.395
+        ],
+        [
+          143.291,
+          208.367
+        ],
+        [
+          160.21,
+          189.372
+        ],
+        [
+          180.252,
+          204.083
+        ],
+        [
+          168.361,
+          235.395
+        ]
+      ]
+    },
+    {
+      "kind": "service",
+      "vertices": [
+        [
+          177.866,
+          235.125
+        ],
+        [
+          188.854,
+          206.188
+        ],
+        [
+          191.3,
+          205.293
+        ],
+        [
+          235.465,
+          208.572
+        ],
+        [
+          235.465,
+          235.125
+        ]
+      ]
+    }
+  ],
+  "background_revision": 2,
+  "features": [
+    {
+      "id": "yard-0",
+      "kind": "shelter",
+      "asset_id": "utility_shelter",
+      "position": [
+        74.51,
+        43.619,
+        0.0
+      ],
+      "yaw": 0.0,
+      "obstacles": [
+        {
+          "kind": "box",
+          "min": [
+            71.51,
+            41.619,
+            0
+          ],
+          "max": [
+            77.51,
+            45.619,
+            2.9
+          ],
+          "footprint": {
+            "center": [
+              74.51,
+              43.619
+            ],
+            "half": [
+              3.0,
+              2.0
+            ],
+            "yaw": 0.0
+          }
+        }
+      ]
+    },
+    {
+      "id": "yard-1",
+      "kind": "parked_vehicle",
+      "asset_id": "covered_car",
+      "position": [
+        71.597,
+        50.856,
+        0.0
+      ],
+      "yaw": -90.0,
+      "obstacles": [
+        {
+          "kind": "box",
+          "min": [
+            69.40687299999999,
+            49.961519,
+            0
+          ],
+          "max": [
+            73.787127,
+            51.750482000000005,
+            1.411113
+          ],
+          "footprint": {
+            "center": [
+              71.597,
+              50.8560005
+            ],
+            "half": [
+              0.8944814999999999,
+              2.190127
+            ],
+            "yaw": -90.0
+          }
+        }
+      ]
+    },
+    {
+      "id": "yard-2",
+      "kind": "vegetation",
+      "asset_id": "street_linden",
+      "position": [
+        91.614,
+        22.784,
+        0.0
+      ],
+      "yaw": -30.533,
+      "obstacles": [
+        {
+          "kind": "box",
+          "min": [
+            91.45400000000001,
+            22.624,
+            0
+          ],
+          "max": [
+            91.774,
+            22.944,
+            2.05
+          ]
+        }
+      ]
+    },
+    {
+      "id": "yard-3",
+      "kind": "shelter",
+      "asset_id": "utility_shelter",
+      "position": [
+        129.013,
+        42.193,
+        0.0
+      ],
+      "yaw": 74.845,
+      "obstacles": [
+        {
+          "kind": "box",
+          "min": [
+            126.2982622335577,
+            38.774471289513166,
+            0
+          ],
+          "max": [
+            131.72773776644232,
+            45.61152871048683,
+            2.9
+          ],
+          "footprint": {
+            "center": [
+              129.013,
+              42.193
+            ],
+            "half": [
+              3.0,
+              2.0
+            ],
+            "yaw": 74.845
+          }
+        }
+      ]
+    },
+    {
+      "id": "yard-4",
+      "kind": "vegetation",
+      "asset_id": "street_linden",
+      "position": [
+        126.307,
+        32.091,
+        0.0
+      ],
+      "yaw": 127.821,
+      "obstacles": [
+        {
+          "kind": "box",
+          "min": [
+            126.147,
+            31.931,
+            0
+          ],
+          "max": [
+            126.467,
+            32.251,
+            2.05
+          ]
+        }
+      ]
+    },
+    {
+      "id": "yard-5",
+      "kind": "vegetation",
+      "asset_id": "street_linden",
+      "position": [
+        117.024,
+        53.164,
+        0.0
+      ],
+      "yaw": -58.807,
+      "obstacles": [
+        {
+          "kind": "box",
+          "min": [
+            116.864,
+            53.004000000000005,
+            0
+          ],
+          "max": [
+            117.184,
+            53.324,
+            2.05
+          ]
+        }
+      ]
+    },
+    {
+      "id": "yard-6",
+      "kind": "vegetation",
+      "asset_id": "pine_sapling",
+      "position": [
+        119.465,
+        32.091,
+        0.0
+      ],
+      "yaw": -55.023,
+      "obstacles": [
+        {
+          "kind": "box",
+          "min": [
+            118.95074204606047,
+            31.53733231013741,
+            0
+          ],
+          "max": [
+            119.99827444167249,
+            32.5999195325452,
+            1.299165
+          ],
+          "footprint": {
+            "center": [
+              119.47450824386648,
+              32.0686259213413
+            ],
+            "half": [
+              0.3940925,
+              0.36351
+            ],
+            "yaw": -55.023
+          }
+        }
+      ]
+    },
+    {
+      "id": "yard-7",
+      "kind": "vegetation",
+      "asset_id": "street_linden",
+      "position": [
+        163.486,
+        34.73,
+        0.0
+      ],
+      "yaw": -26.36,
+      "obstacles": [
+        {
+          "kind": "box",
+          "min": [
+            163.326,
+            34.57,
+            0
+          ],
+          "max": [
+            163.646,
+            34.88999999999999,
+            2.05
+          ]
+        }
+      ]
+    },
+    {
+      "id": "yard-8",
+      "kind": "vegetation",
+      "asset_id": "street_linden",
+      "position": [
+        187.808,
+        44.887,
+        0.0
+      ],
+      "yaw": 178.625,
+      "obstacles": [
+        {
+          "kind": "box",
+          "min": [
+            187.648,
+            44.727000000000004,
+            0
+          ],
+          "max": [
+            187.968,
+            45.047,
+            2.05
+          ]
+        }
+      ]
+    },
+    {
+      "id": "yard-9",
+      "kind": "vegetation",
+      "asset_id": "pine_sapling",
+      "position": [
+        183.979,
+        42.056,
+        0.0
+      ],
+      "yaw": 70.414,
+      "obstacles": [
+        {
+          "kind": "box",
+          "min": [
+            183.5171310909062,
+            41.58357314385337,
+            0
+          ],
+          "max": [
+            184.46630172774726,
+            42.5698659213429,
+            1.299165
+          ],
+          "footprint": {
+            "center": [
+              183.99171640932673,
+              42.07671953259814
+            ],
+            "half": [
+              0.3940925,
+              0.36351
+            ],
+            "yaw": 70.414
+          }
+        }
+      ]
+    },
+    {
+      "id": "yard-10",
+      "kind": "vegetation",
+      "asset_id": "street_linden",
+      "position": [
+        210.137,
+        42.011,
+        0.0
+      ],
+      "yaw": 28.864,
+      "obstacles": [
+        {
+          "kind": "box",
+          "min": [
+            209.977,
+            41.851000000000006,
+            0
+          ],
+          "max": [
+            210.297,
+            42.171,
+            2.05
+          ]
+        }
+      ]
+    },
+    {
+      "id": "yard-11",
+      "kind": "vegetation",
+      "asset_id": "street_linden",
+      "position": [
+        227.543,
+        23.041,
+        0.0
+      ],
+      "yaw": 120.255,
+      "obstacles": [
+        {
+          "kind": "box",
+          "min": [
+            227.383,
+            22.881,
+            0
+          ],
+          "max": [
+            227.703,
+            23.201,
+            2.05
+          ]
+        }
+      ]
+    },
+    {
+      "id": "yard-12",
+      "kind": "vegetation",
+      "asset_id": "stump_split",
+      "position": [
+        208.887,
+        31.286,
+        0.0
+      ],
+      "yaw": -151.729,
+      "obstacles": [
+        {
+          "kind": "box",
+          "min": [
+            207.88709015089725,
+            30.312442538651776,
+            0
+          ],
+          "max": [
+            209.88690984910275,
+            32.25955746134822,
+            0.52289
+          ],
+          "footprint": {
+            "center": [
+              208.887,
+              31.286
+            ],
+            "half": [
+              0.760929,
+              0.696193
+            ],
+            "yaw": -151.729
+          }
+        }
+      ]
+    },
+    {
+      "id": "yard-13",
+      "kind": "vegetation",
+      "asset_id": "street_linden",
+      "position": [
+        46.989,
+        80.097,
+        0.0
+      ],
+      "yaw": -89.38,
+      "obstacles": [
+        {
+          "kind": "box",
+          "min": [
+            46.829,
+            79.937,
+            0
+          ],
+          "max": [
+            47.148999999999994,
+            80.25699999999999,
+            2.05
+          ]
+        }
+      ]
+    },
+    {
+      "id": "yard-14",
+      "kind": "vegetation",
+      "asset_id": "street_linden",
+      "position": [
+        34.202,
+        68.027,
+        0.0
+      ],
+      "yaw": -72.713,
+      "obstacles": [
+        {
+          "kind": "box",
+          "min": [
+            34.042,
+            67.867,
+            0
+          ],
+          "max": [
+            34.361999999999995,
+            68.187,
+            2.05
+          ]
+        }
+      ]
+    },
+    {
+      "id": "yard-15",
+      "kind": "vegetation",
+      "asset_id": "fallen_crown",
+      "position": [
+        54.69,
+        87.662,
+        0.0
+      ],
+      "yaw": 40.546,
+      "obstacles": [
+        {
+          "kind": "box",
+          "min": [
+            52.80689182366359,
+            85.94339982705672,
+            0
+          ],
+          "max": [
+            56.573108176336405,
+            89.38060017294329,
+            1.055176
+          ],
+          "footprint": {
+            "center": [
+              54.69,
+              87.662
+            ],
+            "half": [
+              2.026202,
+              0.528305
+            ],
+            "yaw": 40.546
+          }
+        }
+      ]
+    },
+    {
+      "id": "yard-16",
+      "kind": "vegetation",
+      "asset_id": "street_linden",
+      "position": [
+        85.518,
+        83.971,
+        0.0
+      ],
+      "yaw": -84.758,
+      "obstacles": [
+        {
+          "kind": "box",
+          "min": [
+            85.358,
+            83.811,
+            0
+          ],
+          "max": [
+            85.678,
+            84.131,
+            2.05
+          ]
+        }
+      ]
+    },
+    {
+      "id": "yard-17",
+      "kind": "vegetation",
+      "asset_id": "street_linden",
+      "position": [
+        105.725,
+        91.947,
+        0.0
+      ],
+      "yaw": -41.591,
+      "obstacles": [
+        {
+          "kind": "box",
+          "min": [
+            105.565,
+            91.787,
+            0
+          ],
+          "max": [
+            105.88499999999999,
+            92.107,
+            2.05
+          ]
+        }
+      ]
+    },
+    {
+      "id": "yard-18",
+      "kind": "vegetation",
+      "asset_id": "pine_sapling",
+      "position": [
+        76.012,
+        87.465,
+        0.0
+      ],
+      "yaw": -64.278,
+      "obstacles": [
+        {
+          "kind": "box",
+          "min": [
+            75.51925798838226,
+            86.92858076027244,
+            0
+          ],
+          "max": [
+            76.516314161271,
+            87.95419520197768,
+            1.299165
+          ],
+          "footprint": {
+            "center": [
+              76.01778607482665,
+              87.44138798112506
+            ],
+            "half": [
+              0.3940925,
+              0.36351
+            ],
+            "yaw": -64.278
+          }
+        }
+      ]
+    },
+    {
+      "id": "yard-19",
+      "kind": "vegetation",
+      "asset_id": "pine_sapling",
+      "position": [
+        95.07,
+        63.301,
+        0.0
+      ],
+      "yaw": -29.719,
+      "obstacles": [
+        {
+          "kind": "box",
+          "min": [
+            94.56569382811284,
+            62.77377012421495,
+            0
+          ],
+          "max": [
+            95.61062438041826,
+            63.7959032286021,
+            1.299165
+          ],
+          "footprint": {
+            "center": [
+              95.08815910426556,
+              63.284836676408524
+            ],
+            "half": [
+              0.3940925,
+              0.36351
+            ],
+            "yaw": -29.719
+          }
+        }
+      ]
+    },
+    {
+      "id": "yard-20",
+      "kind": "vegetation",
+      "asset_id": "pine_sapling",
+      "position": [
+        94.314,
+        72.818,
+        0.0
+      ],
+      "yaw": 124.056,
+      "obstacles": [
+        {
+          "kind": "box",
+          "min": [
+            93.78299503919091,
+            72.31045541479808,
+            0
+          ],
+          "max": [
+            94.82671020234014,
+            73.370592628462,
+            1.299165
+          ],
+          "footprint": {
+            "center": [
+              94.30485262076552,
+              72.84052402163005
+            ],
+            "half": [
+              0.3940925,
+              0.36351
+            ],
+            "yaw": 124.056
+          }
+        }
+      ]
+    },
+    {
+      "id": "yard-21",
+      "kind": "vegetation",
+      "asset_id": "fallen_crown",
+      "position": [
+        100.296,
+        96.283,
+        0.0
+      ],
+      "yaw": -149.384,
+      "obstacles": [
+        {
+          "kind": "box",
+          "min": [
+            98.28319477796605,
+            94.79643307881122,
+            0
+          ],
+          "max": [
+            102.30880522203397,
+            97.76956692118878,
+            1.055176
+          ],
+          "footprint": {
+            "center": [
+              100.296,
+              96.283
+            ],
+            "half": [
+              2.026202,
+              0.528305
+            ],
+            "yaw": -149.384
+          }
+        }
+      ]
+    },
+    {
+      "id": "yard-22",
+      "kind": "vegetation",
+      "asset_id": "dry_branches",
+      "position": [
+        102.385,
+        71.76,
+        0.0
+      ],
+      "yaw": -127.136,
+      "obstacles": [
+        {
+          "kind": "box",
+          "min": [
+            101.769636594732,
+            71.23907103905978,
+            0
+          ],
+          "max": [
+            103.000363405268,
+            72.28092896094023,
+            0.340985
+          ],
+          "footprint": {
+            "center": [
+              102.385,
+              71.76
+            ],
+            "half": [
+              0.161532,
+              0.649576
+            ],
+            "yaw": -127.136
+          }
+        }
+      ]
+    },
+    {
+      "id": "yard-23",
+      "kind": "shelter",
+      "asset_id": "utility_shelter",
+      "position": [
+        134.762,
+        75.095,
+        0.0
+      ],
+      "yaw": -23.59,
+      "obstacles": [
+        {
+          "kind": "box",
+          "min": [
+            131.21232404893746,
+            72.06156754763781,
+            0
+          ],
+          "max": [
+            138.31167595106254,
+            78.12843245236219,
+            2.9
+          ],
+          "footprint": {
+            "center": [
+              134.762,
+              75.095
+            ],
+            "half": [
+              3.0,
+              2.0
+            ],
+            "yaw": -23.59
+          }
+        }
+      ]
+    },
+    {
+      "id": "yard-24",
+      "kind": "vegetation",
+      "asset_id": "street_linden",
+      "position": [
+        123.748,
+        74.372,
+        0.0
+      ],
+      "yaw": -63.877,
+      "obstacles": [
+        {
+          "kind": "box",
+          "min": [
+            123.58800000000001,
+            74.212,
+            0
+          ],
+          "max": [
+            123.908,
+            74.532,
+            2.05
+          ]
+        }
+      ]
+    },
+    {
+      "id": "yard-25",
+      "kind": "vegetation",
+      "asset_id": "street_linden",
+      "position": [
+        129.005,
+        85.271,
+        0.0
+      ],
+      "yaw": -143.813,
+      "obstacles": [
+        {
+          "kind": "box",
+          "min": [
+            128.845,
+            85.111,
+            0
+          ],
+          "max": [
+            129.165,
+            85.431,
+            2.05
+          ]
+        }
+      ]
+    },
+    {
+      "id": "yard-26",
+      "kind": "vegetation",
+      "asset_id": "dry_branches",
+      "position": [
+        126.309,
+        89.854,
+        0.0
+      ],
+      "yaw": 48.169,
+      "obstacles": [
+        {
+          "kind": "box",
+          "min": [
+            125.71725954893738,
+            89.30041460817021,
+            0
+          ],
+          "max": [
+            126.90074045106262,
+            90.40758539182978,
+            0.340985
+          ],
+          "footprint": {
+            "center": [
+              126.309,
+              89.854
+            ],
+            "half": [
+              0.161532,
+              0.649576
+            ],
+            "yaw": 48.169
+          }
+        }
+      ]
+    },
+    {
+      "id": "yard-27",
+      "kind": "shelter",
+      "asset_id": "utility_shelter",
+      "position": [
+        164.548,
+        61.624,
+        0.0
+      ],
+      "yaw": 5.335,
+      "obstacles": [
+        {
+          "kind": "box",
+          "min": [
+            161.37503809316124,
+            59.3537273558086,
+            0
+          ],
+          "max": [
+            167.72096190683877,
+            63.8942726441914,
+            2.9
+          ],
+          "footprint": {
+            "center": [
+              164.548,
+              61.624
+            ],
+            "half": [
+              3.0,
+              2.0
+            ],
+            "yaw": 5.335
+          }
+        }
+      ]
+    },
+    {
+      "id": "yard-28",
+      "kind": "vegetation",
+      "asset_id": "street_linden",
+      "position": [
+        166.768,
+        69.575,
+        0.0
+      ],
+      "yaw": 67.069,
+      "obstacles": [
+        {
+          "kind": "box",
+          "min": [
+            166.608,
+            69.415,
+            0
+          ],
+          "max": [
+            166.928,
+            69.735,
+            2.05
+          ]
+        }
+      ]
+    },
+    {
+      "id": "yard-29",
+      "kind": "vegetation",
+      "asset_id": "street_linden",
+      "position": [
+        157.608,
+        58.571,
+        0.0
+      ],
+      "yaw": -10.069,
+      "obstacles": [
+        {
+          "kind": "box",
+          "min": [
+            157.448,
+            58.411,
+            0
+          ],
+          "max": [
+            157.768,
+            58.730999999999995,
+            2.05
+          ]
+        }
+      ]
+    },
+    {
+      "id": "yard-30",
+      "kind": "vegetation",
+      "asset_id": "fallen_crown",
+      "position": [
+        184.117,
+        59.936,
+        0.0
+      ],
+      "yaw": 178.519,
+      "obstacles": [
+        {
+          "kind": "box",
+          "min": [
+            182.07782057215044,
+            59.35550338162857,
+            0
+          ],
+          "max": [
+            186.15617942784954,
+            60.51649661837143,
+            1.055176
+          ],
+          "footprint": {
+            "center": [
+              184.117,
+              59.936
+            ],
+            "half": [
+              2.026202,
+              0.528305
+            ],
+            "yaw": 178.519
+          }
+        }
+      ]
+    },
+    {
+      "id": "yard-31",
+      "kind": "vegetation",
+      "asset_id": "street_linden",
+      "position": [
+        207.287,
+        78.639,
+        0.0
+      ],
+      "yaw": 146.759,
+      "obstacles": [
+        {
+          "kind": "box",
+          "min": [
+            207.127,
+            78.479,
+            0
+          ],
+          "max": [
+            207.447,
+            78.79899999999999,
+            2.05
+          ]
+        }
+      ]
+    },
+    {
+      "id": "yard-32",
+      "kind": "vegetation",
+      "asset_id": "street_linden",
+      "position": [
+        202.807,
+        87.659,
+        0.0
+      ],
+      "yaw": -174.764,
+      "obstacles": [
+        {
+          "kind": "box",
+          "min": [
+            202.647,
+            87.49900000000001,
+            0
+          ],
+          "max": [
+            202.96699999999998,
+            87.819,
+            2.05
+          ]
+        }
+      ]
+    },
+    {
+      "id": "yard-33",
+      "kind": "vegetation",
+      "asset_id": "fallen_crown",
+      "position": [
+        198.237,
+        109.285,
+        0.0
+      ],
+      "yaw": -85.165,
+      "obstacles": [
+        {
+          "kind": "box",
+          "min": [
+            197.53979336573835,
+            107.22147911734785,
+            0
+          ],
+          "max": [
+            198.93420663426164,
+            111.34852088265214,
+            1.055176
+          ],
+          "footprint": {
+            "center": [
+              198.237,
+              109.285
+            ],
+            "half": [
+              2.026202,
+              0.528305
+            ],
+            "yaw": -85.165
+          }
+        }
+      ]
+    },
+    {
+      "id": "yard-34",
+      "kind": "shelter",
+      "asset_id": "utility_shelter",
+      "position": [
+        19.794,
+        143.795,
+        0.0
+      ],
+      "yaw": -90.0,
+      "obstacles": [
+        {
+          "kind": "box",
+          "min": [
+            17.794,
+            140.795,
+            0
+          ],
+          "max": [
+            21.794,
+            146.795,
+            2.9
+          ],
+          "footprint": {
+            "center": [
+              19.794,
+              143.795
+            ],
+            "half": [
+              3.0,
+              2.0
+            ],
+            "yaw": -90.0
+          }
+        }
+      ]
+    },
+    {
+      "id": "yard-35",
+      "kind": "vegetation",
+      "asset_id": "street_linden",
+      "position": [
+        40.211,
+        111.167,
+        0.0
+      ],
+      "yaw": 79.075,
+      "obstacles": [
+        {
+          "kind": "box",
+          "min": [
+            40.051,
+            111.007,
+            0
+          ],
+          "max": [
+            40.370999999999995,
+            111.327,
+            2.05
+          ]
+        }
+      ]
+    },
+    {
+      "id": "yard-36",
+      "kind": "vegetation",
+      "asset_id": "street_linden",
+      "position": [
+        24.712,
+        134.324,
+        0.0
+      ],
+      "yaw": -152.882,
+      "obstacles": [
+        {
+          "kind": "box",
+          "min": [
+            24.552,
+            134.16400000000002,
+            0
+          ],
+          "max": [
+            24.872,
+            134.484,
+            2.05
+          ]
+        }
+      ]
+    },
+    {
+      "id": "yard-37",
+      "kind": "vegetation",
+      "asset_id": "dry_branches",
+      "position": [
+        17.545,
+        148.125,
+        0.0
+      ],
+      "yaw": -163.511,
+      "obstacles": [
+        {
+          "kind": "box",
+          "min": [
+            17.205741151492404,
+            147.4562904729539,
+            0
+          ],
+          "max": [
+            17.8842588485076,
+            148.7937095270461,
+            0.340985
+          ],
+          "footprint": {
+            "center": [
+              17.545,
+              148.125
+            ],
+            "half": [
+              0.161532,
+              0.649576
+            ],
+            "yaw": -163.511
+          }
+        }
+      ]
+    },
+    {
+      "id": "yard-38",
+      "kind": "shelter",
+      "asset_id": "utility_shelter",
+      "position": [
+        71.01016666666666,
+        128.46783333333335,
+        0.0
+      ],
+      "yaw": -90.99,
+      "obstacles": [
+        {
+          "kind": "box",
+          "min": [
+            68.95863151528383,
+            125.4337253558325,
+            0
+          ],
+          "max": [
+            73.0617018180495,
+            131.50194131083418,
+            2.9
+          ],
+          "footprint": {
+            "center": [
+              71.01016666666666,
+              128.46783333333335
+            ],
+            "half": [
+              3.0,
+              2.0
+            ],
+            "yaw": -90.99
+          }
+        }
+      ]
+    },
+    {
+      "id": "yard-39",
+      "kind": "parked_vehicle",
+      "asset_id": "covered_car",
+      "position": [
+        64.888,
+        111.087,
+        0.0
+      ],
+      "yaw": -180.99,
+      "obstacles": [
+        {
+          "kind": "box",
+          "min": [
+            63.95581172788429,
+            108.8817451587379,
+            0
+          ],
+          "max": [
+            65.82018927196646,
+            113.29225482398421,
+            1.411113
+          ],
+          "footprint": {
+            "center": [
+              64.88800049992537,
+              111.08699999136105
+            ],
+            "half": [
+              0.8944814999999999,
+              2.190127
+            ],
+            "yaw": -180.99
+          }
+        }
+      ]
+    },
+    {
+      "id": "yard-40",
+      "kind": "vegetation",
+      "asset_id": "street_linden",
+      "position": [
+        59.239,
+        140.921,
+        0.0
+      ],
+      "yaw": 31.879,
+      "obstacles": [
+        {
+          "kind": "box",
+          "min": [
+            59.079,
+            140.761,
+            0
+          ],
+          "max": [
+            59.398999999999994,
+            141.081,
+            2.05
+          ]
+        }
+      ]
+    },
+    {
+      "id": "yard-41",
+      "kind": "vegetation",
+      "asset_id": "stump_low",
+      "position": [
+        63.381,
+        106.809,
+        0.0
+      ],
+      "yaw": 101.116,
+      "obstacles": [
+        {
+          "kind": "box",
+          "min": [
+            62.46339923669392,
+            105.95628887381793,
+            0
+          ],
+          "max": [
+            64.29860076330608,
+            107.66171112618207,
+            0.572259
+          ],
+          "footprint": {
+            "center": [
+              63.381,
+              106.809
+            ],
+            "half": [
+              0.712793,
+              0.795094
+            ],
+            "yaw": 101.116
+          }
+        }
+      ]
+    },
+    {
+      "id": "yard-42",
+      "kind": "vegetation",
+      "asset_id": "fallen_trunk",
+      "position": [
+        65.577,
+        134.215,
+        0.0
+      ],
+      "yaw": 63.059,
+      "obstacles": [
+        {
+          "kind": "box",
+          "min": [
+            64.7624615825291,
+            132.79263422364147,
+            0
+          ],
+          "max": [
+            66.3915384174709,
+            135.63736577635854,
+            0.290114
+          ],
+          "footprint": {
+            "center": [
+              65.577,
+              134.215
+            ],
+            "half": [
+              1.525076,
+              0.138611
+            ],
+            "yaw": 63.059
+          }
+        }
+      ]
+    },
+    {
+      "id": "yard-43",
+      "kind": "vegetation",
+      "asset_id": "dry_branches",
+      "position": [
+        65.366,
+        121.993,
+        0.0
+      ],
+      "yaw": 59.689,
+      "obstacles": [
+        {
+          "kind": "box",
+          "min": [
+            64.72369777143287,
+            121.52571293538419,
+            0
+          ],
+          "max": [
+            66.00830222856713,
+            122.4602870646158,
+            0.340985
+          ],
+          "footprint": {
+            "center": [
+              65.366,
+              121.993
+            ],
+            "half": [
+              0.161532,
+              0.649576
+            ],
+            "yaw": 59.689
+          }
+        }
+      ]
+    },
+    {
+      "id": "yard-44",
+      "kind": "vegetation",
+      "asset_id": "street_linden",
+      "position": [
+        125.305,
+        124.234,
+        0.0
+      ],
+      "yaw": 49.641,
+      "obstacles": [
+        {
+          "kind": "box",
+          "min": [
+            125.14500000000001,
+            124.074,
+            0
+          ],
+          "max": [
+            125.465,
+            124.39399999999999,
+            2.05
+          ]
+        }
+      ]
+    },
+    {
+      "id": "yard-45",
+      "kind": "vegetation",
+      "asset_id": "street_linden",
+      "position": [
+        143.993,
+        145.888,
+        0.0
+      ],
+      "yaw": 99.639,
+      "obstacles": [
+        {
+          "kind": "box",
+          "min": [
+            143.833,
+            145.728,
+            0
+          ],
+          "max": [
+            144.153,
+            146.048,
+            2.05
+          ]
+        }
+      ]
+    },
+    {
+      "id": "yard-46",
+      "kind": "vegetation",
+      "asset_id": "fallen_crown",
+      "position": [
+        136.97,
+        135.889,
+        0.0
+      ],
+      "yaw": 108.92,
+      "obstacles": [
+        {
+          "kind": "box",
+          "min": [
+            135.81324691373533,
+            133.8009675183426,
+            0
+          ],
+          "max": [
+            138.12675308626467,
+            137.97703248165743,
+            1.055176
+          ],
+          "footprint": {
+            "center": [
+              136.97,
+              135.889
+            ],
+            "half": [
+              2.026202,
+              0.528305
+            ],
+            "yaw": 108.92
+          }
+        }
+      ]
+    },
+    {
+      "id": "yard-47",
+      "kind": "vegetation",
+      "asset_id": "street_linden",
+      "position": [
+        159.854,
+        98.458,
+        0.0
+      ],
+      "yaw": -105.298,
+      "obstacles": [
+        {
+          "kind": "box",
+          "min": [
+            159.69400000000002,
+            98.298,
+            0
+          ],
+          "max": [
+            160.014,
+            98.618,
+            2.05
+          ]
+        }
+      ]
+    },
+    {
+      "id": "yard-48",
+      "kind": "vegetation",
+      "asset_id": "street_linden",
+      "position": [
+        178.805,
+        124.627,
+        0.0
+      ],
+      "yaw": -111.044,
+      "obstacles": [
+        {
+          "kind": "box",
+          "min": [
+            178.645,
+            124.467,
+            0
+          ],
+          "max": [
+            178.965,
+            124.78699999999999,
+            2.05
+          ]
+        }
+      ]
+    },
+    {
+      "id": "yard-49",
+      "kind": "vegetation",
+      "asset_id": "pine_sapling",
+      "position": [
+        157.904,
+        109.319,
+        0.0
+      ],
+      "yaw": 20.596,
+      "obstacles": [
+        {
+          "kind": "box",
+          "min": [
+            157.43125662573775,
+            108.84374495737055,
+            0
+          ],
+          "max": [
+            158.4248124738106,
+            109.80156161895582,
+            1.299165
+          ],
+          "footprint": {
+            "center": [
+              157.92803454977417,
+              109.32265328816318
+            ],
+            "half": [
+              0.3940925,
+              0.36351
+            ],
+            "yaw": 20.596
+          }
+        }
+      ]
+    },
+    {
+      "id": "yard-50",
+      "kind": "vegetation",
+      "asset_id": "street_linden",
+      "position": [
+        218.689,
+        143.734,
+        0.0
+      ],
+      "yaw": 21.541,
+      "obstacles": [
+        {
+          "kind": "box",
+          "min": [
+            218.529,
+            143.574,
+            0
+          ],
+          "max": [
+            218.849,
+            143.894,
+            2.05
+          ]
+        }
+      ]
+    },
+    {
+      "id": "yard-51",
+      "kind": "shelter",
+      "asset_id": "utility_shelter",
+      "position": [
+        39.19383333333334,
+        176.79816666666667,
+        0.0
+      ],
+      "yaw": -90.0,
+      "obstacles": [
+        {
+          "kind": "box",
+          "min": [
+            37.19383333333334,
+            173.79816666666667,
+            0
+          ],
+          "max": [
+            41.19383333333334,
+            179.79816666666667,
+            2.9
+          ],
+          "footprint": {
+            "center": [
+              39.19383333333334,
+              176.79816666666667
+            ],
+            "half": [
+              3.0,
+              2.0
+            ],
+            "yaw": -90.0
+          }
+        }
+      ]
+    },
+    {
+      "id": "yard-52",
+      "kind": "parked_vehicle",
+      "asset_id": "covered_car",
+      "position": [
+        43.462,
+        179.611,
+        0.0
+      ],
+      "yaw": -180.0,
+      "obstacles": [
+        {
+          "kind": "box",
+          "min": [
+            42.567519000000004,
+            177.420873,
+            0
+          ],
+          "max": [
+            44.356482,
+            181.80112699999998,
+            1.411113
+          ],
+          "footprint": {
+            "center": [
+              43.4620005,
+              179.611
+            ],
+            "half": [
+              0.8944814999999999,
+              2.190127
+            ],
+            "yaw": -180.0
+          }
+        }
+      ]
+    },
+    {
+      "id": "yard-53",
+      "kind": "vegetation",
+      "asset_id": "street_linden",
+      "position": [
+        23.383,
+        189.169,
+        0.0
+      ],
+      "yaw": -103.19,
+      "obstacles": [
+        {
+          "kind": "box",
+          "min": [
+            23.223,
+            189.00900000000001,
+            0
+          ],
+          "max": [
+            23.543,
+            189.329,
+            2.05
+          ]
+        }
+      ]
+    },
+    {
+      "id": "yard-54",
+      "kind": "vegetation",
+      "asset_id": "stump_low",
+      "position": [
+        19.492,
+        192.214,
+        0.0
+      ],
+      "yaw": -169.102,
+      "obstacles": [
+        {
+          "kind": "box",
+          "min": [
+            18.641740600052756,
+            191.29848379587315,
+            0
+          ],
+          "max": [
+            20.342259399947245,
+            193.12951620412684,
+            0.572259
+          ],
+          "footprint": {
+            "center": [
+              19.492,
+              192.214
+            ],
+            "half": [
+              0.712793,
+              0.795094
+            ],
+            "yaw": -169.102
+          }
+        }
+      ]
+    },
+    {
+      "id": "yard-55",
+      "kind": "vegetation",
+      "asset_id": "fallen_trunk",
+      "position": [
+        45.842,
+        159.188,
+        0.0
+      ],
+      "yaw": -142.268,
+      "obstacles": [
+        {
+          "kind": "box",
+          "min": [
+            44.551019429684736,
+            158.1450760714584,
+            0
+          ],
+          "max": [
+            47.13298057031526,
+            160.23092392854159,
+            0.290114
+          ],
+          "footprint": {
+            "center": [
+              45.842,
+              159.188
+            ],
+            "half": [
+              1.525076,
+              0.138611
+            ],
+            "yaw": -142.268
+          }
+        }
+      ]
+    },
+    {
+      "id": "yard-56",
+      "kind": "vegetation",
+      "asset_id": "dry_branches",
+      "position": [
+        41.371,
+        183.572,
+        0.0
+      ],
+      "yaw": 60.857,
+      "obstacles": [
+        {
+          "kind": "box",
+          "min": [
+            40.72499115285707,
+            183.11457915549695,
+            0
+          ],
+          "max": [
+            42.01700884714293,
+            184.02942084450305,
+            0.340985
+          ],
+          "footprint": {
+            "center": [
+              41.371,
+              183.572
+            ],
+            "half": [
+              0.161532,
+              0.649576
+            ],
+            "yaw": 60.857
+          }
+        }
+      ]
+    },
+    {
+      "id": "yard-57",
+      "kind": "shelter",
+      "asset_id": "utility_shelter",
+      "position": [
+        97.392,
+        163.981,
+        0.0
+      ],
+      "yaw": -166.633,
+      "obstacles": [
+        {
+          "kind": "box",
+          "min": [
+            94.01089724500522,
+            161.3416188526671,
+            0
+          ],
+          "max": [
+            100.77310275499477,
+            166.6203811473329,
+            2.9
+          ],
+          "footprint": {
+            "center": [
+              97.392,
+              163.981
+            ],
+            "half": [
+              3.0,
+              2.0
+            ],
+            "yaw": -166.633
+          }
+        }
+      ]
+    },
+    {
+      "id": "yard-58",
+      "kind": "parked_vehicle",
+      "asset_id": "covered_car",
+      "position": [
+        98.266,
+        187.469,
+        0.0
+      ],
+      "yaw": -256.63300000000004,
+      "obstacles": [
+        {
+          "kind": "box",
+          "min": [
+            95.92841240206054,
+            186.09242006323205,
+            0
+          ],
+          "max": [
+            100.60358782912705,
+            188.84557896385874,
+            1.411113
+          ],
+          "footprint": {
+            "center": [
+              98.2660001155938,
+              187.46899951354538
+            ],
+            "half": [
+              0.8944814999999999,
+              2.190127
+            ],
+            "yaw": -256.63300000000004
+          }
+        }
+      ]
+    },
+    {
+      "id": "yard-59",
+      "kind": "vegetation",
+      "asset_id": "street_linden",
+      "position": [
+        93.991,
+        170.427,
+        0.0
+      ],
+      "yaw": 129.153,
+      "obstacles": [
+        {
+          "kind": "box",
+          "min": [
+            93.831,
+            170.267,
+            0
+          ],
+          "max": [
+            94.151,
+            170.587,
+            2.05
+          ]
+        }
+      ]
+    },
+    {
+      "id": "yard-60",
+      "kind": "vegetation",
+      "asset_id": "stump_low",
+      "position": [
+        94.395,
+        181.268,
+        0.0
+      ],
+      "yaw": -54.881,
+      "obstacles": [
+        {
+          "kind": "box",
+          "min": [
+            93.33459262899942,
+            180.22756563849694,
+            0
+          ],
+          "max": [
+            95.45540737100058,
+            182.30843436150306,
+            0.572259
+          ],
+          "footprint": {
+            "center": [
+              94.395,
+              181.268
+            ],
+            "half": [
+              0.712793,
+              0.795094
+            ],
+            "yaw": -54.881
+          }
+        }
+      ]
+    },
+    {
+      "id": "yard-61",
+      "kind": "vegetation",
+      "asset_id": "fallen_trunk",
+      "position": [
+        69.414,
+        165.572,
+        0.0
+      ],
+      "yaw": 60.805,
+      "obstacles": [
+        {
+          "kind": "box",
+          "min": [
+            68.54909061796805,
+            164.1730504108846,
+            0
+          ],
+          "max": [
+            70.27890938203196,
+            166.9709495891154,
+            0.290114
+          ],
+          "footprint": {
+            "center": [
+              69.414,
+              165.572
+            ],
+            "half": [
+              1.525076,
+              0.138611
+            ],
+            "yaw": 60.805
+          }
+        }
+      ]
+    },
+    {
+      "id": "yard-62",
+      "kind": "vegetation",
+      "asset_id": "dry_branches",
+      "position": [
+        100.036,
+        190.304,
+        0.0
+      ],
+      "yaw": -95.245,
+      "obstacles": [
+        {
+          "kind": "box",
+          "min": [
+            99.37437743173122,
+            190.08376354239317,
+            0
+          ],
+          "max": [
+            100.69762256826878,
+            190.52423645760683,
+            0.340985
+          ],
+          "footprint": {
+            "center": [
+              100.036,
+              190.304
+            ],
+            "half": [
+              0.161532,
+              0.649576
+            ],
+            "yaw": -95.245
+          }
+        }
+      ]
+    },
+    {
+      "id": "yard-63",
+      "kind": "shelter",
+      "asset_id": "utility_shelter",
+      "position": [
+        133.6148,
+        181.244,
+        0.0
+      ],
+      "yaw": 1.085,
+      "obstacles": [
+        {
+          "kind": "box",
+          "min": [
+            130.5774665075818,
+            179.18755152071543,
+            0
+          ],
+          "max": [
+            136.65213349241822,
+            183.30044847928457,
+            2.9
+          ],
+          "footprint": {
+            "center": [
+              133.6148,
+              181.244
+            ],
+            "half": [
+              3.0,
+              2.0
+            ],
+            "yaw": 1.085
+          }
+        }
+      ]
+    },
+    {
+      "id": "yard-64",
+      "kind": "parked_vehicle",
+      "asset_id": "covered_car",
+      "position": [
+        147.117,
+        181.316,
+        0.0
+      ],
+      "yaw": -88.915,
+      "obstacles": [
+        {
+          "kind": "box",
+          "min": [
+            144.91032804718398,
+            180.38020780984627,
+            0
+          ],
+          "max": [
+            149.32367193388032,
+            182.25179318997445,
+            1.411113
+          ],
+          "footprint": {
+            "center": [
+              147.11699999053215,
+              181.31600049991036
+            ],
+            "half": [
+              0.8944814999999999,
+              2.190127
+            ],
+            "yaw": -88.915
+          }
+        }
+      ]
+    },
+    {
+      "id": "yard-65",
+      "kind": "vegetation",
+      "asset_id": "street_linden",
+      "position": [
+        138.965,
+        175.65,
+        0.0
+      ],
+      "yaw": -145.676,
+      "obstacles": [
+        {
+          "kind": "box",
+          "min": [
+            138.805,
+            175.49,
+            0
+          ],
+          "max": [
+            139.125,
+            175.81,
+            2.05
+          ]
+        }
+      ]
+    },
+    {
+      "id": "yard-66",
+      "kind": "vegetation",
+      "asset_id": "stump_low",
+      "position": [
+        134.336,
+        187.465,
+        0.0
+      ],
+      "yaw": 82.227,
+      "obstacles": [
+        {
+          "kind": "box",
+          "min": [
+            133.4518072629231,
+            186.65122095391757,
+            0
+          ],
+          "max": [
+            135.22019273707693,
+            188.27877904608243,
+            0.572259
+          ],
+          "footprint": {
+            "center": [
+              134.336,
+              187.465
+            ],
+            "half": [
+              0.712793,
+              0.795094
+            ],
+            "yaw": 82.227
+          }
+        }
+      ]
+    },
+    {
+      "id": "yard-67",
+      "kind": "vegetation",
+      "asset_id": "fallen_trunk",
+      "position": [
+        120.807,
+        190.272,
+        0.0
+      ],
+      "yaw": -94.737,
+      "obstacles": [
+        {
+          "kind": "box",
+          "min": [
+            120.54291849208516,
+            188.74068646847942,
+            0
+          ],
+          "max": [
+            121.07108150791484,
+            191.80331353152056,
+            0.290114
+          ],
+          "footprint": {
+            "center": [
+              120.807,
+              190.272
+            ],
+            "half": [
+              1.525076,
+              0.138611
+            ],
+            "yaw": -94.737
+          }
+        }
+      ]
+    },
+    {
+      "id": "yard-68",
+      "kind": "vegetation",
+      "asset_id": "dry_branches",
+      "position": [
+        121.232,
+        168.67,
+        0.0
+      ],
+      "yaw": 44.404,
+      "obstacles": [
+        {
+          "kind": "box",
+          "min": [
+            120.66208077597841,
+            168.0929013491941,
+            0
+          ],
+          "max": [
+            121.80191922402159,
+            169.24709865080587,
+            0.340985
+          ],
+          "footprint": {
+            "center": [
+              121.232,
+              168.67
+            ],
+            "half": [
+              0.161532,
+              0.649576
+            ],
+            "yaw": 44.404
+          }
+        }
+      ]
+    },
+    {
+      "id": "yard-69",
+      "kind": "vegetation",
+      "asset_id": "street_linden",
+      "position": [
+        182.996,
+        186.719,
+        0.0
+      ],
+      "yaw": -135.165,
+      "obstacles": [
+        {
+          "kind": "box",
+          "min": [
+            182.836,
+            186.559,
+            0
+          ],
+          "max": [
+            183.156,
+            186.879,
+            2.05
+          ]
+        }
+      ]
+    },
+    {
+      "id": "yard-70",
+      "kind": "vegetation",
+      "asset_id": "street_linden",
+      "position": [
+        183.132,
+        151.687,
+        0.0
+      ],
+      "yaw": 105.231,
+      "obstacles": [
+        {
+          "kind": "box",
+          "min": [
+            182.972,
+            151.52700000000002,
+            0
+          ],
+          "max": [
+            183.292,
+            151.847,
+            2.05
+          ]
+        }
+      ]
+    },
+    {
+      "id": "yard-71",
+      "kind": "shelter",
+      "asset_id": "utility_shelter",
+      "position": [
+        229.116,
+        193.182,
+        0.0
+      ],
+      "yaw": -81.184,
+      "obstacles": [
+        {
+          "kind": "box",
+          "min": [
+            226.67984337036054,
+            189.91091954488996,
+            0
+          ],
+          "max": [
+            231.55215662963948,
+            196.45308045511,
+            2.9
+          ],
+          "footprint": {
+            "center": [
+              229.116,
+              193.182
+            ],
+            "half": [
+              3.0,
+              2.0
+            ],
+            "yaw": -81.184
+          }
+        }
+      ]
+    },
+    {
+      "id": "yard-72",
+      "kind": "parked_vehicle",
+      "asset_id": "covered_car",
+      "position": [
+        199.764,
+        193.78,
+        0.0
+      ],
+      "yaw": -171.184,
+      "obstacles": [
+        {
+          "kind": "box",
+          "min": [
+            198.54442394043633,
+            191.47865822566067,
+            0
+          ],
+          "max": [
+            200.9835770477493,
+            196.08134192760113,
+            1.411113
+          ],
+          "footprint": {
+            "center": [
+              199.7640004940928,
+              193.7800000766309
+            ],
+            "half": [
+              0.8944814999999999,
+              2.190127
+            ],
+            "yaw": -171.184
+          }
+        }
+      ]
+    },
+    {
+      "id": "yard-73",
+      "kind": "vegetation",
+      "asset_id": "street_linden",
+      "position": [
+        222.656,
+        186.629,
+        0.0
+      ],
+      "yaw": -141.183,
+      "obstacles": [
+        {
+          "kind": "box",
+          "min": [
+            222.496,
+            186.469,
+            0
+          ],
+          "max": [
+            222.816,
+            186.789,
+            2.05
+          ]
+        }
+      ]
+    },
+    {
+      "id": "yard-74",
+      "kind": "vegetation",
+      "asset_id": "stump_low",
+      "position": [
+        207.246,
+        165.125,
+        0.0
+      ],
+      "yaw": -3.628,
+      "obstacles": [
+        {
+          "kind": "box",
+          "min": [
+            206.4843233424717,
+            164.28639514234945,
+            0
+          ],
+          "max": [
+            208.00767665752832,
+            165.96360485765055,
+            0.572259
+          ],
+          "footprint": {
+            "center": [
+              207.246,
+              165.125
+            ],
+            "half": [
+              0.712793,
+              0.795094
+            ],
+            "yaw": -3.628
+          }
+        }
+      ]
+    },
+    {
+      "id": "yard-75",
+      "kind": "vegetation",
+      "asset_id": "fallen_trunk",
+      "position": [
+        210.692,
+        185.74,
+        0.0
+      ],
+      "yaw": 161.374,
+      "obstacles": [
+        {
+          "kind": "box",
+          "min": [
+            209.2025311527502,
+            185.12155590113164,
+            0
+          ],
+          "max": [
+            212.18146884724982,
+            186.35844409886838,
+            0.290114
+          ],
+          "footprint": {
+            "center": [
+              210.692,
+              185.74
+            ],
+            "half": [
+              1.525076,
+              0.138611
+            ],
+            "yaw": 161.374
+          }
+        }
+      ]
+    },
+    {
+      "id": "yard-76",
+      "kind": "vegetation",
+      "asset_id": "dry_branches",
+      "position": [
+        229.116,
+        177.252,
+        0.0
+      ],
+      "yaw": 101.388,
+      "obstacles": [
+        {
+          "kind": "box",
+          "min": [
+            228.4473176737029,
+            176.9653880542274,
+            0
+          ],
+          "max": [
+            229.78468232629712,
+            177.53861194577263,
+            0.340985
+          ],
+          "footprint": {
+            "center": [
+              229.116,
+              177.252
+            ],
+            "half": [
+              0.161532,
+              0.649576
+            ],
+            "yaw": 101.388
+          }
+        }
+      ]
+    },
+    {
+      "id": "yard-77",
+      "kind": "vegetation",
+      "asset_id": "street_linden",
+      "position": [
+        49.53,
+        230.23,
+        0.0
+      ],
+      "yaw": -163.099,
+      "obstacles": [
+        {
+          "kind": "box",
+          "min": [
+            49.370000000000005,
+            230.07,
+            0
+          ],
+          "max": [
+            49.69,
+            230.39,
+            2.05
+          ]
+        }
+      ]
+    },
+    {
+      "id": "yard-78",
+      "kind": "vegetation",
+      "asset_id": "street_linden",
+      "position": [
+        37.249,
+        217.427,
+        0.0
+      ],
+      "yaw": 140.008,
+      "obstacles": [
+        {
+          "kind": "box",
+          "min": [
+            37.089000000000006,
+            217.267,
+            0
+          ],
+          "max": [
+            37.409,
+            217.587,
+            2.05
+          ]
+        }
+      ]
+    },
+    {
+      "id": "yard-79",
+      "kind": "vegetation",
+      "asset_id": "stump_split",
+      "position": [
+        21.162,
+        210.848,
+        0.0
+      ],
+      "yaw": 134.983,
+      "obstacles": [
+        {
+          "kind": "box",
+          "min": [
+            20.131672779930845,
+            209.81764561634242,
+            0
+          ],
+          "max": [
+            22.192327220069153,
+            211.8783543836576,
+            0.52289
+          ],
+          "footprint": {
+            "center": [
+              21.162,
+              210.848
+            ],
+            "half": [
+              0.760929,
+              0.696193
+            ],
+            "yaw": 134.983
+          }
+        }
+      ]
+    },
+    {
+      "id": "yard-80",
+      "kind": "parked_vehicle",
+      "asset_id": "covered_car",
+      "position": [
+        75.972,
+        220.651,
+        0.0
+      ],
+      "yaw": -76.633,
+      "obstacles": [
+        {
+          "kind": "box",
+          "min": [
+            73.63441217087295,
+            219.27442103614126,
+            0
+          ],
+          "max": [
+            78.30958759793945,
+            222.02757993676795,
+            1.411113
+          ],
+          "footprint": {
+            "center": [
+              75.9719998844062,
+              220.65100048645462
+            ],
+            "half": [
+              0.8944814999999999,
+              2.190127
+            ],
+            "yaw": -76.633
+          }
+        }
+      ]
+    },
+    {
+      "id": "yard-81",
+      "kind": "vegetation",
+      "asset_id": "street_linden",
+      "position": [
+        91.066,
+        206.705,
+        0.0
+      ],
+      "yaw": 175.987,
+      "obstacles": [
+        {
+          "kind": "box",
+          "min": [
+            90.906,
+            206.54500000000002,
+            0
+          ],
+          "max": [
+            91.226,
+            206.865,
+            2.05
+          ]
+        }
+      ]
+    },
+    {
+      "id": "yard-82",
+      "kind": "vegetation",
+      "asset_id": "street_linden",
+      "position": [
+        67.491,
+        211.269,
+        0.0
+      ],
+      "yaw": -158.374,
+      "obstacles": [
+        {
+          "kind": "box",
+          "min": [
+            67.331,
+            211.109,
+            0
+          ],
+          "max": [
+            67.651,
+            211.429,
+            2.05
+          ]
+        }
+      ]
+    },
+    {
+      "id": "yard-83",
+      "kind": "vegetation",
+      "asset_id": "stump_split",
+      "position": [
+        81.415,
+        210.827,
+        0.0
+      ],
+      "yaw": 11.106,
+      "obstacles": [
+        {
+          "kind": "box",
+          "min": [
+            80.53421731354742,
+            209.9972712156872,
+            0
+          ],
+          "max": [
+            82.2957826864526,
+            211.6567287843128,
+            0.52289
+          ],
+          "footprint": {
+            "center": [
+              81.415,
+              210.827
+            ],
+            "half": [
+              0.760929,
+              0.696193
+            ],
+            "yaw": 11.106
+          }
+        }
+      ]
+    },
+    {
+      "id": "yard-84",
+      "kind": "vegetation",
+      "asset_id": "street_linden",
+      "position": [
+        101.945,
+        229.068,
+        0.0
+      ],
+      "yaw": -91.447,
+      "obstacles": [
+        {
+          "kind": "box",
+          "min": [
+            101.785,
+            228.90800000000002,
+            0
+          ],
+          "max": [
+            102.10499999999999,
+            229.228,
+            2.05
+          ]
+        }
+      ]
+    },
+    {
+      "id": "yard-85",
+      "kind": "vegetation",
+      "asset_id": "street_linden",
+      "position": [
+        122.286,
+        216.224,
+        0.0
+      ],
+      "yaw": 125.996,
+      "obstacles": [
+        {
+          "kind": "box",
+          "min": [
+            122.126,
+            216.064,
+            0
+          ],
+          "max": [
+            122.446,
+            216.384,
+            2.05
+          ]
+        }
+      ]
+    },
+    {
+      "id": "yard-86",
+      "kind": "vegetation",
+      "asset_id": "fallen_crown",
+      "position": [
+        112.45,
+        210.107,
+        0.0
+      ],
+      "yaw": -156.058,
+      "obstacles": [
+        {
+          "kind": "box",
+          "min": [
+            110.3837467256436,
+            208.80189569303843,
+            0
+          ],
+          "max": [
+            114.5162532743564,
+            211.41210430696157,
+            1.055176
+          ],
+          "footprint": {
+            "center": [
+              112.45,
+              210.107
+            ],
+            "half": [
+              2.026202,
+              0.528305
+            ],
+            "yaw": -156.058
+          }
+        }
+      ]
+    },
+    {
+      "id": "yard-87",
+      "kind": "vegetation",
+      "asset_id": "street_linden",
+      "position": [
+        165.754,
+        228.187,
+        0.0
+      ],
+      "yaw": -17.861,
+      "obstacles": [
+        {
+          "kind": "box",
+          "min": [
+            165.594,
+            228.02700000000002,
+            0
+          ],
+          "max": [
+            165.914,
+            228.347,
+            2.05
+          ]
+        }
+      ]
+    },
+    {
+      "id": "yard-88",
+      "kind": "vegetation",
+      "asset_id": "street_linden",
+      "position": [
+        157.7,
+        228.187,
+        0.0
+      ],
+      "yaw": -139.626,
+      "obstacles": [
+        {
+          "kind": "box",
+          "min": [
+            157.54,
+            228.02700000000002,
+            0
+          ],
+          "max": [
+            157.85999999999999,
+            228.347,
+            2.05
+          ]
+        }
+      ]
+    },
+    {
+      "id": "yard-89",
+      "kind": "vegetation",
+      "asset_id": "dry_branches",
+      "position": [
+        166.713,
+        211.585,
+        0.0
+      ],
+      "yaw": -54.344,
+      "obstacles": [
+        {
+          "kind": "box",
+          "min": [
+            166.0910392795569,
+            211.07510101989237,
+            0
+          ],
+          "max": [
+            167.3349607204431,
+            212.09489898010764,
+            0.340985
+          ],
+          "footprint": {
+            "center": [
+              166.713,
+              211.585
+            ],
+            "half": [
+              0.161532,
+              0.649576
+            ],
+            "yaw": -54.344
+          }
+        }
+      ]
+    },
+    {
+      "id": "yard-90",
+      "kind": "shelter",
+      "asset_id": "utility_shelter",
+      "position": [
+        205.4036,
+        217.54520000000002,
+        0.0
+      ],
+      "yaw": 180.0,
+      "obstacles": [
+        {
+          "kind": "box",
+          "min": [
+            202.4036,
+            215.54520000000002,
+            0
+          ],
+          "max": [
+            208.4036,
+            219.54520000000002,
+            2.9
+          ],
+          "footprint": {
+            "center": [
+              205.4036,
+              217.54520000000002
+            ],
+            "half": [
+              3.0,
+              2.0
+            ],
+            "yaw": 180.0
+          }
+        }
+      ]
+    },
+    {
+      "id": "yard-91",
+      "kind": "parked_vehicle",
+      "asset_id": "covered_car",
+      "position": [
+        191.998,
+        208.346,
+        0.0
+      ],
+      "yaw": 90.0,
+      "obstacles": [
+        {
+          "kind": "box",
+          "min": [
+            189.807873,
+            207.451518,
+            0
+          ],
+          "max": [
+            194.18812699999998,
+            209.24048100000002,
+            1.411113
+          ],
+          "footprint": {
+            "center": [
+              191.998,
+              208.3459995
+            ],
+            "half": [
+              0.8944814999999999,
+              2.190127
+            ],
+            "yaw": 90.0
+          }
+        }
+      ]
+    },
+    {
+      "id": "yard-92",
+      "kind": "vegetation",
+      "asset_id": "street_linden",
+      "position": [
+        187.504,
+        228.972,
+        0.0
+      ],
+      "yaw": 156.053,
+      "obstacles": [
+        {
+          "kind": "box",
+          "min": [
+            187.344,
+            228.812,
+            0
+          ],
+          "max": [
+            187.664,
+            229.132,
+            2.05
+          ]
+        }
+      ]
+    },
+    {
+      "id": "yard-93",
+      "kind": "vegetation",
+      "asset_id": "stump_low",
+      "position": [
+        196.236,
+        209.581,
+        0.0
+      ],
+      "yaw": 124.512,
+      "obstacles": [
+        {
+          "kind": "box",
+          "min": [
+            195.17698312352132,
+            208.5431697640807,
+            0
+          ],
+          "max": [
+            197.29501687647866,
+            210.6188302359193,
+            0.572259
+          ],
+          "footprint": {
+            "center": [
+              196.236,
+              209.581
+            ],
+            "half": [
+              0.712793,
+              0.795094
+            ],
+            "yaw": 124.512
+          }
+        }
+      ]
+    },
+    {
+      "id": "yard-94",
+      "kind": "vegetation",
+      "asset_id": "fallen_trunk",
+      "position": [
+        200.439,
+        214.138,
+        0.0
+      ],
+      "yaw": 136.643,
+      "obstacles": [
+        {
+          "kind": "box",
+          "min": [
+            199.23497003140693,
+            212.99018853971407,
+            0
+          ],
+          "max": [
+            201.64302996859305,
+            215.28581146028594,
+            0.290114
+          ],
+          "footprint": {
+            "center": [
+              200.439,
+              214.138
+            ],
+            "half": [
+              1.525076,
+              0.138611
+            ],
+            "yaw": 136.643
+          }
+        }
+      ]
+    },
+    {
+      "id": "yard-95",
+      "kind": "vegetation",
+      "asset_id": "dry_branches",
+      "position": [
+        214.422,
+        222.819,
+        0.0
+      ],
+      "yaw": 32.16,
+      "obstacles": [
+        {
+          "kind": "box",
+          "min": [
+            213.93949285023663,
+            222.1831105841033,
+            0
+          ],
+          "max": [
+            214.90450714976336,
+            223.45488941589667,
+            0.340985
+          ],
+          "footprint": {
+            "center": [
+              214.422,
+              222.819
+            ],
+            "half": [
+              0.161532,
+              0.649576
+            ],
+            "yaw": 32.16
+          }
+        }
+      ]
+    }
+  ],
+  "parcels": [
+    {
+      "position": [
+        77.00640000000001,
+        37.416399999999996,
+        0.0
+      ],
+      "use": "courtyard",
+      "extent_m": 3.0
+    },
+    {
+      "position": [
+        123.988,
+        39.471,
+        0.0
+      ],
+      "use": "courtyard",
+      "extent_m": 7.0
+    },
+    {
+      "position": [
+        213.6482,
+        38.3536,
+        0.0
+      ],
+      "use": "courtyard",
+      "extent_m": 3.0
+    },
+    {
+      "position": [
+        42.45883333333333,
+        75.6465,
+        0.0
+      ],
+      "use": "courtyard",
+      "extent_m": 5.0
+    },
+    {
+      "position": [
+        93.66533333333332,
+        80.97633333333333,
+        0.0
+      ],
+      "use": "park",
+      "extent_m": 7.0
+    },
+    {
+      "position": [
+        131.3152,
+        81.3428,
+        0.0
+      ],
+      "use": "courtyard",
+      "extent_m": 5.0
+    },
+    {
+      "position": [
+        170.4955,
+        64.24183333333333,
+        0.0
+      ],
+      "use": "courtyard",
+      "extent_m": 7.0
+    },
+    {
+      "position": [
+        210.2226,
+        86.817,
+        0.0
+      ],
+      "use": "courtyard",
+      "extent_m": 3.0
+    },
+    {
+      "position": [
+        126.49857142857142,
+        131.94942857142857,
+        0.0
+      ],
+      "use": "courtyard",
+      "extent_m": 5.0
+    },
+    {
+      "position": [
+        211.6986,
+        136.15540000000001,
+        0.0
+      ],
+      "use": "courtyard",
+      "extent_m": 3.0
+    },
+    {
+      "position": [
+        39.19383333333334,
+        176.79816666666667,
+        0.0
+      ],
+      "use": "service",
+      "extent_m": 3.0
+    },
+    {
+      "position": [
+        73.1422,
+        214.3602,
+        0.0
+      ],
+      "use": "courtyard",
+      "extent_m": 7.0
+    },
+    {
+      "position": [
+        117.8872,
+        217.4952,
+        0.0
+      ],
+      "use": "courtyard",
+      "extent_m": 5.0
+    }
+  ],
+  "surfaces": [
+    {
+      "kind": "paving",
+      "bounds": {
+        "kind": "box",
+        "min": [
+          74.00640000000001,
+          34.416399999999996,
+          0
+        ],
+        "max": [
+          80.00640000000001,
+          40.416399999999996,
+          0.08
+        ]
+      },
+      "cost": 1.0
+    },
+    {
+      "kind": "paving",
+      "bounds": {
+        "kind": "box",
+        "min": [
+          116.988,
+          32.471,
+          0
+        ],
+        "max": [
+          130.988,
+          46.471,
+          0.08
+        ]
+      },
+      "cost": 1.0
+    },
+    {
+      "kind": "paving",
+      "bounds": {
+        "kind": "box",
+        "min": [
+          210.6482,
+          35.3536,
+          0
+        ],
+        "max": [
+          216.6482,
+          41.3536,
+          0.08
+        ]
+      },
+      "cost": 1.0
+    },
+    {
+      "kind": "paving",
+      "bounds": {
+        "kind": "box",
+        "min": [
+          37.45883333333333,
+          70.6465,
+          0
+        ],
+        "max": [
+          47.45883333333333,
+          80.6465,
+          0.08
+        ]
+      },
+      "cost": 1.0
+    },
+    {
+      "kind": "grass",
+      "bounds": {
+        "kind": "box",
+        "min": [
+          86.66533333333332,
+          73.97633333333333,
+          0
+        ],
+        "max": [
+          100.66533333333332,
+          87.97633333333333,
+          0.08
+        ]
+      },
+      "cost": 1.18
+    },
+    {
+      "kind": "paving",
+      "bounds": {
+        "kind": "box",
+        "min": [
+          126.3152,
+          76.3428,
+          0
+        ],
+        "max": [
+          136.3152,
+          86.3428,
+          0.08
+        ]
+      },
+      "cost": 1.0
+    },
+    {
+      "kind": "paving",
+      "bounds": {
+        "kind": "box",
+        "min": [
+          163.4955,
+          57.24183333333333,
+          0
+        ],
+        "max": [
+          177.4955,
+          71.24183333333333,
+          0.08
+        ]
+      },
+      "cost": 1.0
+    },
+    {
+      "kind": "paving",
+      "bounds": {
+        "kind": "box",
+        "min": [
+          207.2226,
+          83.817,
+          0
+        ],
+        "max": [
+          213.2226,
+          89.817,
+          0.08
+        ]
+      },
+      "cost": 1.0
+    },
+    {
+      "kind": "paving",
+      "bounds": {
+        "kind": "box",
+        "min": [
+          121.49857142857142,
+          126.94942857142857,
+          0
+        ],
+        "max": [
+          131.49857142857144,
+          136.94942857142857,
+          0.08
+        ]
+      },
+      "cost": 1.0
+    },
+    {
+      "kind": "paving",
+      "bounds": {
+        "kind": "box",
+        "min": [
+          208.6986,
+          133.15540000000001,
+          0
+        ],
+        "max": [
+          214.6986,
+          139.15540000000001,
+          0.08
+        ]
+      },
+      "cost": 1.0
+    },
+    {
+      "kind": "gravel",
+      "bounds": {
+        "kind": "box",
+        "min": [
+          36.19383333333334,
+          173.79816666666667,
+          0
+        ],
+        "max": [
+          42.19383333333334,
+          179.79816666666667,
+          0.08
+        ]
+      },
+      "cost": 1.18
+    },
+    {
+      "kind": "paving",
+      "bounds": {
+        "kind": "box",
+        "min": [
+          66.1422,
+          207.3602,
+          0
+        ],
+        "max": [
+          80.1422,
+          221.3602,
+          0.08
+        ]
+      },
+      "cost": 1.0
+    },
+    {
+      "kind": "paving",
+      "bounds": {
+        "kind": "box",
+        "min": [
+          112.8872,
+          212.4952,
+          0
+        ],
+        "max": [
+          122.8872,
+          222.4952,
+          0.08
+        ]
+      },
+      "cost": 1.0
+    }
+  ],
+  "background": [
+    {
+      "position": [
+        -16.956,
+        17.283,
+        0.0
+      ],
+      "yaw": 97.0,
+      "kind": "green",
+      "floors": 0,
+      "variant": 3
+    },
+    {
+      "position": [
+        -17.153,
+        136.286,
+        0.0
+      ],
+      "yaw": 102.0,
+      "kind": "housing",
+      "floors": 4,
+      "variant": 0
+    },
+    {
+      "position": [
+        -16.862,
+        149.303,
+        0.0
+      ],
+      "yaw": 102.0,
+      "kind": "housing",
+      "floors": 2,
+      "variant": 1
+    },
+    {
+      "position": [
+        -22.96,
+        178.73,
+        0.0
+      ],
+      "yaw": 102.0,
+      "kind": "housing",
+      "floors": 4,
+      "variant": 1
+    },
+    {
+      "position": [
+        -22.07,
+        192.25,
+        0.0
+      ],
+      "yaw": 102.0,
+      "kind": "housing",
+      "floors": 4,
+      "variant": 1
+    },
+    {
+      "position": [
+        -16.177,
+        217.436,
+        0.0
+      ],
+      "yaw": 102.0,
+      "kind": "housing",
+      "floors": 4,
+      "variant": 1
+    },
+    {
+      "position": [
+        -14.915,
+        230.83,
+        0.0
+      ],
+      "yaw": 102.0,
+      "kind": "housing",
+      "floors": 2,
+      "variant": 3
+    },
+    {
+      "position": [
+        -51.575,
+        16.603,
+        0.0
+      ],
+      "yaw": 83.0,
+      "kind": "housing",
+      "floors": 2,
+      "variant": 0
+    },
+    {
+      "position": [
+        -51.134,
+        29.463,
+        0.0
+      ],
+      "yaw": 83.0,
+      "kind": "housing",
+      "floors": 3,
+      "variant": 2
+    },
+    {
+      "position": [
+        -44.519,
+        54.386,
+        0.0
+      ],
+      "yaw": 97.0,
+      "kind": "housing",
+      "floors": 2,
+      "variant": 1
+    },
+    {
+      "position": [
+        -44.312,
+        67.852,
+        0.0
+      ],
+      "yaw": 97.0,
+      "kind": "housing",
+      "floors": 2,
+      "variant": 3
+    },
+    {
+      "position": [
+        -44.201,
+        113.148,
+        0.0
+      ],
+      "yaw": 78.0,
+      "kind": "green",
+      "floors": 0,
+      "variant": 2
+    },
+    {
+      "position": [
+        -44.366,
+        172.217,
+        0.0
+      ],
+      "yaw": 102.0,
+      "kind": "green",
+      "floors": 0,
+      "variant": 2
+    },
+    {
+      "position": [
+        -82.09,
+        15.066,
+        0.0
+      ],
+      "yaw": 102.0,
+      "kind": "green",
+      "floors": 0,
+      "variant": 0
+    },
+    {
+      "position": [
+        -75.519,
+        58.861,
+        0.0
+      ],
+      "yaw": 90.0,
+      "kind": "service",
+      "floors": 0,
+      "variant": 1
+    },
+    {
+      "position": [
+        -75.221,
+        131.005,
+        0.0
+      ],
+      "yaw": 97.0,
+      "kind": "housing",
+      "floors": 2,
+      "variant": 0
+    },
+    {
+      "position": [
+        -74.673,
+        144.007,
+        0.0
+      ],
+      "yaw": 97.0,
+      "kind": "housing",
+      "floors": 2,
+      "variant": 3
+    },
+    {
+      "position": [
+        -75.009,
+        157.839,
+        0.0
+      ],
+      "yaw": 97.0,
+      "kind": "housing",
+      "floors": 1,
+      "variant": 3
+    },
+    {
+      "position": [
+        -89.735,
+        195.833,
+        0.0
+      ],
+      "yaw": 78.0,
+      "kind": "green",
+      "floors": 0,
+      "variant": 1
+    },
+    {
+      "position": [
+        265.462,
+        18.556,
+        0.0
+      ],
+      "yaw": 83.0,
+      "kind": "housing",
+      "floors": 3,
+      "variant": 2
+    },
+    {
+      "position": [
+        264.478,
+        31.825,
+        0.0
+      ],
+      "yaw": 83.0,
+      "kind": "housing",
+      "floors": 2,
+      "variant": 0
+    },
+    {
+      "position": [
+        264.751,
+        44.49,
+        0.0
+      ],
+      "yaw": 83.0,
+      "kind": "housing",
+      "floors": 2,
+      "variant": 1
+    },
+    {
+      "position": [
+        270.317,
+        66.358,
+        0.0
+      ],
+      "yaw": 102.0,
+      "kind": "housing",
+      "floors": 2,
+      "variant": 0
+    },
+    {
+      "position": [
+        271.189,
+        79.651,
+        0.0
+      ],
+      "yaw": 102.0,
+      "kind": "housing",
+      "floors": 3,
+      "variant": 1
+    },
+    {
+      "position": [
+        270.175,
+        93.19,
+        0.0
+      ],
+      "yaw": 102.0,
+      "kind": "housing",
+      "floors": 3,
+      "variant": 0
+    },
+    {
+      "position": [
+        264.824,
+        118.025,
+        0.0
+      ],
+      "yaw": 102.0,
+      "kind": "green",
+      "floors": 0,
+      "variant": 2
+    },
+    {
+      "position": [
+        272.834,
+        197.262,
+        0.0
+      ],
+      "yaw": 97.0,
+      "kind": "housing",
+      "floors": 4,
+      "variant": 2
+    },
+    {
+      "position": [
+        272.004,
+        210.327,
+        0.0
+      ],
+      "yaw": 97.0,
+      "kind": "housing",
+      "floors": 3,
+      "variant": 0
+    },
+    {
+      "position": [
+        272.687,
+        223.052,
+        0.0
+      ],
+      "yaw": 97.0,
+      "kind": "housing",
+      "floors": 2,
+      "variant": 1
+    },
+    {
+      "position": [
+        272.397,
+        235.892,
+        0.0
+      ],
+      "yaw": 97.0,
+      "kind": "housing",
+      "floors": 3,
+      "variant": 2
+    },
+    {
+      "position": [
+        305.238,
+        15.585,
+        0.0
+      ],
+      "yaw": 83.0,
+      "kind": "housing",
+      "floors": 3,
+      "variant": 0
+    },
+    {
+      "position": [
+        306.136,
+        27.943,
+        0.0
+      ],
+      "yaw": 83.0,
+      "kind": "housing",
+      "floors": 1,
+      "variant": 1
+    },
+    {
+      "position": [
+        305.352,
+        41.495,
+        0.0
+      ],
+      "yaw": 83.0,
+      "kind": "housing",
+      "floors": 2,
+      "variant": 0
+    },
+    {
+      "position": [
+        292.575,
+        61.696,
+        0.0
+      ],
+      "yaw": 83.0,
+      "kind": "housing",
+      "floors": 2,
+      "variant": 2
+    },
+    {
+      "position": [
+        292.091,
+        73.69,
+        0.0
+      ],
+      "yaw": 83.0,
+      "kind": "housing",
+      "floors": 2,
+      "variant": 3
+    },
+    {
+      "position": [
+        291.634,
+        87.406,
+        0.0
+      ],
+      "yaw": 83.0,
+      "kind": "housing",
+      "floors": 2,
+      "variant": 3
+    },
+    {
+      "position": [
+        295.742,
+        117.975,
+        0.0
+      ],
+      "yaw": 102.0,
+      "kind": "housing",
+      "floors": 2,
+      "variant": 2
+    },
+    {
+      "position": [
+        295.502,
+        131.47,
+        0.0
+      ],
+      "yaw": 102.0,
+      "kind": "housing",
+      "floors": 2,
+      "variant": 3
+    },
+    {
+      "position": [
+        295.615,
+        144.739,
+        0.0
+      ],
+      "yaw": 102.0,
+      "kind": "housing",
+      "floors": 1,
+      "variant": 0
+    },
+    {
+      "position": [
+        299.079,
+        198.186,
+        0.0
+      ],
+      "yaw": 78.0,
+      "kind": "housing",
+      "floors": 3,
+      "variant": 0
+    },
+    {
+      "position": [
+        300.793,
+        221.654,
+        0.0
+      ],
+      "yaw": 102.0,
+      "kind": "green",
+      "floors": 0,
+      "variant": 3
+    },
+    {
+      "position": [
+        336.336,
+        98.691,
+        0.0
+      ],
+      "yaw": 97.0,
+      "kind": "green",
+      "floors": 0,
+      "variant": 1
+    },
+    {
+      "position": [
+        338.739,
+        207.726,
+        0.0
+      ],
+      "yaw": 102.0,
+      "kind": "green",
+      "floors": 0,
+      "variant": 1
+    },
+    {
+      "position": [
+        18.318,
+        -14.391,
+        0.0
+      ],
+      "yaw": 7.0,
+      "kind": "housing",
+      "floors": 2,
+      "variant": 1
+    },
+    {
+      "position": [
+        31.96,
+        -14.805,
+        0.0
+      ],
+      "yaw": 7.0,
+      "kind": "housing",
+      "floors": 3,
+      "variant": 1
+    },
+    {
+      "position": [
+        53.008,
+        -16.894,
+        0.0
+      ],
+      "yaw": -7.0,
+      "kind": "housing",
+      "floors": 4,
+      "variant": 0
+    },
+    {
+      "position": [
+        65.729,
+        -17.42,
+        0.0
+      ],
+      "yaw": -7.0,
+      "kind": "housing",
+      "floors": 4,
+      "variant": 0
+    },
+    {
+      "position": [
+        86.225,
+        -15.575,
+        0.0
+      ],
+      "yaw": 0.0,
+      "kind": "housing",
+      "floors": 4,
+      "variant": 3
+    },
+    {
+      "position": [
+        99.362,
+        -15.271,
+        0.0
+      ],
+      "yaw": 0.0,
+      "kind": "housing",
+      "floors": 3,
+      "variant": 0
+    },
+    {
+      "position": [
+        112.672,
+        -15.366,
+        0.0
+      ],
+      "yaw": 0.0,
+      "kind": "housing",
+      "floors": 2,
+      "variant": 3
+    },
+    {
+      "position": [
+        161.103,
+        -15.022,
+        0.0
+      ],
+      "yaw": 0.0,
+      "kind": "housing",
+      "floors": 2,
+      "variant": 0
+    },
+    {
+      "position": [
+        183.616,
+        -21.298,
+        0.0
+      ],
+      "yaw": -7.0,
+      "kind": "housing",
+      "floors": 4,
+      "variant": 0
+    },
+    {
+      "position": [
+        196.219,
+        -21.52,
+        0.0
+      ],
+      "yaw": -7.0,
+      "kind": "housing",
+      "floors": 2,
+      "variant": 0
+    },
+    {
+      "position": [
+        210.366,
+        -21.287,
+        0.0
+      ],
+      "yaw": -7.0,
+      "kind": "housing",
+      "floors": 2,
+      "variant": 0
+    },
+    {
+      "position": [
+        222.789,
+        -22.69,
+        0.0
+      ],
+      "yaw": -7.0,
+      "kind": "housing",
+      "floors": 4,
+      "variant": 0
+    },
+    {
+      "position": [
+        14.804,
+        -43.53,
+        0.0
+      ],
+      "yaw": 7.0,
+      "kind": "housing",
+      "floors": 3,
+      "variant": 0
+    },
+    {
+      "position": [
+        28.527,
+        -42.54,
+        0.0
+      ],
+      "yaw": 7.0,
+      "kind": "housing",
+      "floors": 2,
+      "variant": 2
+    },
+    {
+      "position": [
+        41.786,
+        -42.276,
+        0.0
+      ],
+      "yaw": 7.0,
+      "kind": "housing",
+      "floors": 2,
+      "variant": 2
+    },
+    {
+      "position": [
+        68.645,
+        -45.287,
+        0.0
+      ],
+      "yaw": 0.0,
+      "kind": "green",
+      "floors": 0,
+      "variant": 3
+    },
+    {
+      "position": [
+        160.116,
+        -46.643,
+        0.0
+      ],
+      "yaw": 12.0,
+      "kind": "housing",
+      "floors": 3,
+      "variant": 1
+    },
+    {
+      "position": [
+        173.323,
+        -47.426,
+        0.0
+      ],
+      "yaw": 12.0,
+      "kind": "housing",
+      "floors": 3,
+      "variant": 0
+    },
+    {
+      "position": [
+        196.806,
+        -51.197,
+        0.0
+      ],
+      "yaw": 0.0,
+      "kind": "housing",
+      "floors": 3,
+      "variant": 1
+    },
+    {
+      "position": [
+        209.614,
+        -52.086,
+        0.0
+      ],
+      "yaw": 0.0,
+      "kind": "housing",
+      "floors": 3,
+      "variant": 3
+    },
+    {
+      "position": [
+        223.141,
+        -51.629,
+        0.0
+      ],
+      "yaw": 0.0,
+      "kind": "housing",
+      "floors": 2,
+      "variant": 0
+    },
+    {
+      "position": [
+        52.115,
+        -73.443,
+        0.0
+      ],
+      "yaw": 7.0,
+      "kind": "green",
+      "floors": 0,
+      "variant": 1
+    },
+    {
+      "position": [
+        84.48,
+        -88.977,
+        0.0
+      ],
+      "yaw": 7.0,
+      "kind": "service",
+      "floors": 0,
+      "variant": 0
+    },
+    {
+      "position": [
+        120.484,
+        -76.062,
+        0.0
+      ],
+      "yaw": 0.0,
+      "kind": "green",
+      "floors": 0,
+      "variant": 2
+    },
+    {
+      "position": [
+        155.228,
+        -74.566,
+        0.0
+      ],
+      "yaw": 7.0,
+      "kind": "green",
+      "floors": 0,
+      "variant": 3
+    },
+    {
+      "position": [
+        197.629,
+        -77.45,
+        0.0
+      ],
+      "yaw": 0.0,
+      "kind": "housing",
+      "floors": 2,
+      "variant": 3
+    },
+    {
+      "position": [
+        209.528,
+        -77.825,
+        0.0
+      ],
+      "yaw": 0.0,
+      "kind": "housing",
+      "floors": 2,
+      "variant": 3
+    },
+    {
+      "position": [
+        16.653,
+        268.192,
+        0.0
+      ],
+      "yaw": 12.0,
+      "kind": "housing",
+      "floors": 2,
+      "variant": 3
+    },
+    {
+      "position": [
+        28.972,
+        268.083,
+        0.0
+      ],
+      "yaw": 12.0,
+      "kind": "housing",
+      "floors": 2,
+      "variant": 1
+    },
+    {
+      "position": [
+        55.712,
+        267.094,
+        0.0
+      ],
+      "yaw": -7.0,
+      "kind": "housing",
+      "floors": 3,
+      "variant": 1
+    },
+    {
+      "position": [
+        68.812,
+        267.123,
+        0.0
+      ],
+      "yaw": -7.0,
+      "kind": "housing",
+      "floors": 3,
+      "variant": 2
+    },
+    {
+      "position": [
+        97.149,
+        267.334,
+        0.0
+      ],
+      "yaw": -7.0,
+      "kind": "housing",
+      "floors": 3,
+      "variant": 1
+    },
+    {
+      "position": [
+        110.805,
+        268.623,
+        0.0
+      ],
+      "yaw": -7.0,
+      "kind": "housing",
+      "floors": 2,
+      "variant": 3
+    },
+    {
+      "position": [
+        124.036,
+        267.597,
+        0.0
+      ],
+      "yaw": -7.0,
+      "kind": "housing",
+      "floors": 2,
+      "variant": 3
+    },
+    {
+      "position": [
+        173.069,
+        271.756,
+        0.0
+      ],
+      "yaw": 7.0,
+      "kind": "housing",
+      "floors": 2,
+      "variant": 2
+    },
+    {
+      "position": [
+        185.748,
+        271.89,
+        0.0
+      ],
+      "yaw": 7.0,
+      "kind": "housing",
+      "floors": 3,
+      "variant": 1
+    },
+    {
+      "position": [
+        216.837,
+        272.616,
+        0.0
+      ],
+      "yaw": -7.0,
+      "kind": "housing",
+      "floors": 3,
+      "variant": 1
+    },
+    {
+      "position": [
+        229.535,
+        272.209,
+        0.0
+      ],
+      "yaw": -7.0,
+      "kind": "housing",
+      "floors": 2,
+      "variant": 0
+    },
+    {
+      "position": [
+        15.562,
+        293.499,
+        0.0
+      ],
+      "yaw": -7.0,
+      "kind": "housing",
+      "floors": 1,
+      "variant": 3
+    },
+    {
+      "position": [
+        27.601,
+        294.684,
+        0.0
+      ],
+      "yaw": -7.0,
+      "kind": "housing",
+      "floors": 2,
+      "variant": 3
+    },
+    {
+      "position": [
+        40.99,
+        294.529,
+        0.0
+      ],
+      "yaw": -7.0,
+      "kind": "housing",
+      "floors": 2,
+      "variant": 1
+    },
+    {
+      "position": [
+        53.535,
+        293.677,
+        0.0
+      ],
+      "yaw": -7.0,
+      "kind": "housing",
+      "floors": 2,
+      "variant": 0
+    },
+    {
+      "position": [
+        72.009,
+        304.903,
+        0.0
+      ],
+      "yaw": 0.0,
+      "kind": "green",
+      "floors": 0,
+      "variant": 0
+    },
+    {
+      "position": [
+        110.033,
+        290.176,
+        0.0
+      ],
+      "yaw": 0.0,
+      "kind": "green",
+      "floors": 0,
+      "variant": 3
+    },
+    {
+      "position": [
+        174.742,
+        305.356,
+        0.0
+      ],
+      "yaw": 12.0,
+      "kind": "housing",
+      "floors": 2,
+      "variant": 2
+    },
+    {
+      "position": [
+        188.113,
+        305.928,
+        0.0
+      ],
+      "yaw": 12.0,
+      "kind": "housing",
+      "floors": 1,
+      "variant": 0
+    },
+    {
+      "position": [
+        218.615,
+        297.298,
+        0.0
+      ],
+      "yaw": 12.0,
+      "kind": "service",
+      "floors": 0,
+      "variant": 3
+    },
+    {
+      "position": [
+        16.13,
+        336.36,
+        0.0
+      ],
+      "yaw": 12.0,
+      "kind": "green",
+      "floors": 0,
+      "variant": 1
+    },
+    {
+      "position": [
+        52.178,
+        329.423,
+        0.0
+      ],
+      "yaw": 7.0,
+      "kind": "green",
+      "floors": 0,
+      "variant": 3
+    },
+    {
+      "position": [
+        96.627,
+        335.272,
+        0.0
+      ],
+      "yaw": -12.0,
+      "kind": "housing",
+      "floors": 1,
+      "variant": 3
+    },
+    {
+      "position": [
+        109.585,
+        333.81,
+        0.0
+      ],
+      "yaw": -12.0,
+      "kind": "housing",
+      "floors": 2,
+      "variant": 0
+    },
+    {
+      "position": [
+        122.109,
+        334.168,
+        0.0
+      ],
+      "yaw": -12.0,
+      "kind": "housing",
+      "floors": 1,
+      "variant": 1
+    },
+    {
+      "position": [
+        135.225,
+        333.805,
+        0.0
+      ],
+      "yaw": -12.0,
+      "kind": "housing",
+      "floors": 2,
+      "variant": 2
+    },
+    {
+      "position": [
+        194.163,
+        341.383,
+        0.0
+      ],
+      "yaw": -7.0,
+      "kind": "housing",
+      "floors": 1,
+      "variant": 0
+    },
+    {
+      "position": [
+        206.479,
+        340.688,
+        0.0
+      ],
+      "yaw": -7.0,
+      "kind": "housing",
+      "floors": 1,
+      "variant": 3
+    },
+    {
+      "position": [
+        219.664,
+        341.403,
+        0.0
+      ],
+      "yaw": -7.0,
+      "kind": "housing",
+      "floors": 2,
+      "variant": 2
+    },
+    {
+      "position": [
+        -21.206,
+        -21.822,
+        0.0
+      ],
+      "yaw": 0.0,
+      "kind": "green",
+      "floors": 0,
+      "variant": 0
+    },
+    {
+      "position": [
+        -24.071,
+        272.811,
+        0.0
+      ],
+      "yaw": 0.0,
+      "kind": "green",
+      "floors": 0,
+      "variant": 3
+    },
+    {
+      "position": [
+        274.57,
+        -27.019,
+        0.0
+      ],
+      "yaw": 0.0,
+      "kind": "green",
+      "floors": 0,
+      "variant": 2
+    },
+    {
+      "position": [
+        269.424,
+        276.475,
+        0.0
+      ],
+      "yaw": 90.0,
+      "kind": "green",
+      "floors": 0,
+      "variant": 2
+    }
+  ],
+  "preflight": {
+    "passed": true,
+    "buildings": 23,
+    "solid_parcels": 127,
+    "spawns": 3,
+    "road_nodes": 90,
+    "connected_nodes": 90,
+    "parked_exit_checks": 12,
+    "physical_collision_probe": "pending_native"
+  },
+  "event_model": {
+    "format": "metarescue.events-3d.1.0",
+    "profile": "v052",
+    "probability_window_s": 80.0,
+    "physics_cell_m": 5.0,
+    "placement_model": "irregular_street_sources_and_clipped_five_metre_cells.2",
+    "events": [],
+    "late_people": []
+  }
+}

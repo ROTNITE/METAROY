@@ -1,0 +1,372 @@
+{
+  "id": "concrete_road_barrier_02",
+  "source": "blender/vendor/concrete_road_barrier_02_4k/concrete_road_barrier_02_4k.blend",
+  "sha256": "77616677bd7acdaba857c879c35ff58d864a5f67fc6b8d93461df72ab941dbf0",
+  "units": {
+    "system": "METRIC",
+    "scale_length": 1.0
+  },
+  "bounds_min": [
+    -0.776804506778717,
+    -0.18815204501152039,
+    -0.002822755603119731
+  ],
+  "bounds_max": [
+    0.7901653051376343,
+    0.2540489733219147,
+    1.1091585159301758
+  ],
+  "dimensions": [
+    1.566969871520996,
+    0.44220101833343506,
+    1.1119812726974487
+  ],
+  "objects": [
+    {
+      "name": "concrete_road_barrier_02_LOD0",
+      "type": "MESH",
+      "parent": null,
+      "location": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "rotation": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "hidden_render": false,
+      "vertices": 11909,
+      "triangles": 23822,
+      "uv_layers": [
+        "UVMap"
+      ],
+      "bounds_min": [
+        -0.7761769890785217,
+        -0.18809300661087036,
+        -0.0027944163884967566
+      ],
+      "bounds_max": [
+        0.7892323732376099,
+        0.2540489733219147,
+        1.1091585159301758
+      ],
+      "materials": [
+        "concrete_road_barrier_02"
+      ],
+      "modifiers": [
+        {
+          "name": "Subdivision",
+          "type": "SUBSURF"
+        }
+      ]
+    },
+    {
+      "name": "concrete_road_barrier_02_LOD1",
+      "type": "MESH",
+      "parent": null,
+      "location": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "rotation": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "hidden_render": false,
+      "vertices": 5493,
+      "triangles": 10004,
+      "uv_layers": [
+        "UVMap"
+      ],
+      "bounds_min": [
+        -0.7760775089263916,
+        -0.18809300661087036,
+        -0.002822755603119731
+      ],
+      "bounds_max": [
+        0.7893162369728088,
+        0.2540489733219147,
+        1.1090075969696045
+      ],
+      "materials": [
+        "concrete_road_barrier_02"
+      ],
+      "modifiers": []
+    },
+    {
+      "name": "concrete_road_barrier_02_LOD2",
+      "type": "MESH",
+      "parent": null,
+      "location": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "rotation": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "hidden_render": false,
+      "vertices": 2862,
+      "triangles": 5002,
+      "uv_layers": [
+        "UVMap"
+      ],
+      "bounds_min": [
+        -0.7767910361289978,
+        -0.18815204501152039,
+        -0.0020645030308514833
+      ],
+      "bounds_max": [
+        0.7890916466712952,
+        0.25392600893974304,
+        1.1086269617080688
+      ],
+      "materials": [
+        "concrete_road_barrier_02"
+      ],
+      "modifiers": []
+    },
+    {
+      "name": "concrete_road_barrier_02_LOD3",
+      "type": "MESH",
+      "parent": null,
+      "location": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "rotation": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "hidden_render": false,
+      "vertices": 1505,
+      "triangles": 2500,
+      "uv_layers": [
+        "UVMap"
+      ],
+      "bounds_min": [
+        -0.776804506778717,
+        -0.18690095841884613,
+        -0.002406794810667634
+      ],
+      "bounds_max": [
+        0.790134608745575,
+        0.2537482976913452,
+        1.1087335348129272
+      ],
+      "materials": [
+        "concrete_road_barrier_02"
+      ],
+      "modifiers": []
+    },
+    {
+      "name": "concrete_road_barrier_02_LOD4",
+      "type": "MESH",
+      "parent": null,
+      "location": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "rotation": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "hidden_render": false,
+      "vertices": 808,
+      "triangles": 1250,
+      "uv_layers": [
+        "UVMap"
+      ],
+      "bounds_min": [
+        -0.7756534218788147,
+        -0.18333058059215546,
+        -0.001366445911116898
+      ],
+      "bounds_max": [
+        0.7901653051376343,
+        0.2530946135520935,
+        1.106826663017273
+      ],
+      "materials": [
+        "concrete_road_barrier_02"
+      ],
+      "modifiers": []
+    }
+  ],
+  "materials": [
+    {
+      "name": "concrete_road_barrier_02",
+      "nodes": [
+        {
+          "name": "Frame",
+          "type": "FRAME"
+        },
+        {
+          "name": "Frame.001",
+          "type": "FRAME"
+        },
+        {
+          "name": "Material Output",
+          "type": "OUTPUT_MATERIAL"
+        },
+        {
+          "name": "Image Texture.001",
+          "type": "TEX_IMAGE",
+          "image": "concrete_road_barrier_02_diff.png"
+        },
+        {
+          "name": "Image Texture.002",
+          "type": "TEX_IMAGE",
+          "image": "concrete_road_barrier_02_rough.png"
+        },
+        {
+          "name": "Image Texture.003",
+          "type": "TEX_IMAGE",
+          "image": "concrete_road_barrier_02_nor_gl.png"
+        },
+        {
+          "name": "Normal Map",
+          "type": "NORMAL_MAP"
+        },
+        {
+          "name": "Mapping",
+          "type": "MAPPING"
+        },
+        {
+          "name": "Reroute",
+          "type": "REROUTE"
+        },
+        {
+          "name": "Texture Coordinate",
+          "type": "TEX_COORD"
+        },
+        {
+          "name": "Principled BSDF",
+          "type": "BSDF_PRINCIPLED",
+          "inputs": {
+            "Base Color": {
+              "linked": true,
+              "value": [
+                0.800000011920929,
+                0.800000011920929,
+                0.800000011920929,
+                1.0
+              ]
+            },
+            "Metallic": {
+              "linked": false,
+              "value": 0.0
+            },
+            "Roughness": {
+              "linked": true,
+              "value": 0.5
+            },
+            "IOR": {
+              "linked": false,
+              "value": 1.4500000476837158
+            },
+            "Alpha": {
+              "linked": false,
+              "value": 1.0
+            },
+            "Transmission Weight": {
+              "linked": false,
+              "value": 0.0
+            }
+          }
+        },
+        {
+          "name": "Image Texture",
+          "type": "TEX_IMAGE",
+          "image": "concrete_road_barrier_02_disp.png"
+        },
+        {
+          "name": "Displacement",
+          "type": "DISPLACEMENT"
+        }
+      ]
+    }
+  ],
+  "images": [
+    {
+      "name": "concrete_road_barrier_02_diff.png",
+      "size": [
+        4096,
+        4096
+      ],
+      "packed": false,
+      "filepath": "//textures\\concrete_road_barrier_02_diff_4k.jpg",
+      "colorspace": "sRGB",
+      "exists": true
+    },
+    {
+      "name": "concrete_road_barrier_02_disp.png",
+      "size": [
+        4096,
+        4096
+      ],
+      "packed": false,
+      "filepath": "//textures\\concrete_road_barrier_02_disp_4k.png",
+      "colorspace": "Non-Color",
+      "exists": true
+    },
+    {
+      "name": "concrete_road_barrier_02_nor_gl.png",
+      "size": [
+        4096,
+        4096
+      ],
+      "packed": false,
+      "filepath": "//textures\\concrete_road_barrier_02_nor_gl_4k.exr",
+      "colorspace": "Non-Color",
+      "exists": true
+    },
+    {
+      "name": "concrete_road_barrier_02_rough.png",
+      "size": [
+        4096,
+        4096
+      ],
+      "packed": false,
+      "filepath": "//textures\\concrete_road_barrier_02_rough_4k.exr",
+      "colorspace": "Non-Color",
+      "exists": true
+    }
+  ],
+  "actions": []
+}

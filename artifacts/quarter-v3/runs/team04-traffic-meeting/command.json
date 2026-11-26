@@ -1,0 +1,15 @@
+[
+  "C:\\Users\\rotn1\\AppData\\Local\\Programs\\Python\\Python314\\python.exe",
+  "-B",
+  "-X",
+  "utf8",
+  "C:\\Users\\rotn1\\Documents\\ChatGPT\\metaroy\\unreal\\launch.py",
+  "--quarter",
+  "--smoke",
+  "--smoke-seconds",
+  "100",
+  "--environment",
+  "static",
+  "--traffic-probe",
+  "meeting"
+]

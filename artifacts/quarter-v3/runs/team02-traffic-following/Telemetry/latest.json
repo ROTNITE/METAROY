@@ -1,0 +1,946 @@
+{
+	"kind": "rescue_quarter_environment_demo",
+	"time_s": 100.00609979307046,
+	"seed": 20261109,
+	"discovered": 0,
+	"delivered": 0,
+	"contacts": 3830,
+	"collapse_released": false,
+	"pending_reports": 1,
+	"relay_online": true,
+	"flood_active": false,
+	"dust_active": false,
+	"flood_depth_cm": 0,
+	"average_game_fps": 143.16704564361976,
+	"worst_frame_ms": 224.09280395507812,
+	"fire_effect_active": false,
+	"leak_effect_active": false,
+	"dust_effect_active": false,
+	"environment_mode": "static",
+	"event_seed": 20261109,
+	"world_revision": 0,
+	"events_applied": 0,
+	"process_memory_mb": 3438.98046875,
+	"p95_frame_ms": 8,
+	"active_environment_events":
+	{
+		"collapse": 0,
+		"fire": 0,
+		"flood": 0,
+		"mud": 0,
+		"road_damage": 0,
+		"smoke": 0,
+		"low_visibility": 0,
+		"new_target": 0
+	},
+	"surface_samples": [
+		{
+			"site_id": "unstable_bay",
+			"cost": 1,
+			"depth_cm": 0,
+			"visibility": 1,
+			"blocked": false
+		},
+		{
+			"site_id": "fire_0",
+			"cost": 1,
+			"depth_cm": 0,
+			"visibility": 1,
+			"blocked": false
+		},
+		{
+			"site_id": "fire_1",
+			"cost": 1,
+			"depth_cm": 0,
+			"visibility": 1,
+			"blocked": false
+		},
+		{
+			"site_id": "fire_2",
+			"cost": 1,
+			"depth_cm": 0,
+			"visibility": 1,
+			"blocked": false
+		},
+		{
+			"site_id": "fire_3",
+			"cost": 1,
+			"depth_cm": 0,
+			"visibility": 1,
+			"blocked": false
+		},
+		{
+			"site_id": "fire_4",
+			"cost": 1,
+			"depth_cm": 0,
+			"visibility": 1,
+			"blocked": false
+		},
+		{
+			"site_id": "fire_5",
+			"cost": 1,
+			"depth_cm": 0,
+			"visibility": 1,
+			"blocked": false
+		},
+		{
+			"site_id": "water_0",
+			"cost": 1,
+			"depth_cm": 0,
+			"visibility": 1,
+			"blocked": false
+		},
+		{
+			"site_id": "water_1",
+			"cost": 1,
+			"depth_cm": 0,
+			"visibility": 1,
+			"blocked": false
+		},
+		{
+			"site_id": "water_2",
+			"cost": 1,
+			"depth_cm": 0,
+			"visibility": 1,
+			"blocked": false
+		},
+		{
+			"site_id": "water_3",
+			"cost": 1,
+			"depth_cm": 0,
+			"visibility": 1,
+			"blocked": false
+		},
+		{
+			"site_id": "water_4",
+			"cost": 1,
+			"depth_cm": 0,
+			"visibility": 1,
+			"blocked": false
+		},
+		{
+			"site_id": "water_5",
+			"cost": 1,
+			"depth_cm": 0,
+			"visibility": 1,
+			"blocked": false
+		},
+		{
+			"site_id": "surface_3_0",
+			"cost": 1,
+			"depth_cm": 0,
+			"visibility": 1,
+			"blocked": false
+		},
+		{
+			"site_id": "surface_3_1",
+			"cost": 1,
+			"depth_cm": 0,
+			"visibility": 1,
+			"blocked": false
+		},
+		{
+			"site_id": "surface_3_2",
+			"cost": 1,
+			"depth_cm": 0,
+			"visibility": 1,
+			"blocked": false
+		},
+		{
+			"site_id": "surface_3_3",
+			"cost": 1,
+			"depth_cm": 0,
+			"visibility": 1,
+			"blocked": false
+		},
+		{
+			"site_id": "surface_3_4",
+			"cost": 1,
+			"depth_cm": 0,
+			"visibility": 1,
+			"blocked": false
+		},
+		{
+			"site_id": "surface_3_5",
+			"cost": 1,
+			"depth_cm": 0,
+			"visibility": 1,
+			"blocked": false
+		},
+		{
+			"site_id": "surface_3_6",
+			"cost": 1,
+			"depth_cm": 0,
+			"visibility": 1,
+			"blocked": false
+		},
+		{
+			"site_id": "surface_3_7",
+			"cost": 1,
+			"depth_cm": 0,
+			"visibility": 1,
+			"blocked": false
+		},
+		{
+			"site_id": "surface_3_8",
+			"cost": 1,
+			"depth_cm": 0,
+			"visibility": 1,
+			"blocked": false
+		},
+		{
+			"site_id": "surface_3_9",
+			"cost": 1,
+			"depth_cm": 0,
+			"visibility": 1,
+			"blocked": false
+		},
+		{
+			"site_id": "surface_3_10",
+			"cost": 1,
+			"depth_cm": 0,
+			"visibility": 1,
+			"blocked": false
+		},
+		{
+			"site_id": "surface_3_11",
+			"cost": 1,
+			"depth_cm": 0,
+			"visibility": 1,
+			"blocked": false
+		},
+		{
+			"site_id": "surface_4_0",
+			"cost": 1,
+			"depth_cm": 0,
+			"visibility": 1,
+			"blocked": false
+		},
+		{
+			"site_id": "surface_4_1",
+			"cost": 1,
+			"depth_cm": 0,
+			"visibility": 1,
+			"blocked": false
+		},
+		{
+			"site_id": "surface_4_2",
+			"cost": 1,
+			"depth_cm": 0,
+			"visibility": 1,
+			"blocked": false
+		},
+		{
+			"site_id": "surface_4_3",
+			"cost": 1,
+			"depth_cm": 0,
+			"visibility": 1,
+			"blocked": false
+		},
+		{
+			"site_id": "surface_4_4",
+			"cost": 1,
+			"depth_cm": 0,
+			"visibility": 1,
+			"blocked": false
+		},
+		{
+			"site_id": "surface_4_5",
+			"cost": 1,
+			"depth_cm": 0,
+			"visibility": 1,
+			"blocked": false
+		},
+		{
+			"site_id": "surface_4_6",
+			"cost": 1,
+			"depth_cm": 0,
+			"visibility": 1,
+			"blocked": false
+		},
+		{
+			"site_id": "surface_4_7",
+			"cost": 1,
+			"depth_cm": 0,
+			"visibility": 1,
+			"blocked": false
+		},
+		{
+			"site_id": "surface_4_8",
+			"cost": 1,
+			"depth_cm": 0,
+			"visibility": 1,
+			"blocked": false
+		},
+		{
+			"site_id": "surface_4_9",
+			"cost": 1,
+			"depth_cm": 0,
+			"visibility": 1,
+			"blocked": false
+		},
+		{
+			"site_id": "surface_4_10",
+			"cost": 1,
+			"depth_cm": 0,
+			"visibility": 1,
+			"blocked": false
+		},
+		{
+			"site_id": "surface_4_11",
+			"cost": 1,
+			"depth_cm": 0,
+			"visibility": 1,
+			"blocked": false
+		},
+		{
+			"site_id": "surface_5_0",
+			"cost": 1,
+			"depth_cm": 0,
+			"visibility": 1,
+			"blocked": false
+		},
+		{
+			"site_id": "surface_5_1",
+			"cost": 1,
+			"depth_cm": 0,
+			"visibility": 1,
+			"blocked": false
+		},
+		{
+			"site_id": "surface_5_2",
+			"cost": 1,
+			"depth_cm": 0,
+			"visibility": 1,
+			"blocked": false
+		},
+		{
+			"site_id": "surface_5_3",
+			"cost": 1,
+			"depth_cm": 0,
+			"visibility": 1,
+			"blocked": false
+		},
+		{
+			"site_id": "surface_5_4",
+			"cost": 1,
+			"depth_cm": 0,
+			"visibility": 1,
+			"blocked": false
+		},
+		{
+			"site_id": "surface_5_5",
+			"cost": 1,
+			"depth_cm": 0,
+			"visibility": 1,
+			"blocked": false
+		},
+		{
+			"site_id": "surface_5_6",
+			"cost": 1,
+			"depth_cm": 0,
+			"visibility": 1,
+			"blocked": false
+		},
+		{
+			"site_id": "surface_5_7",
+			"cost": 1,
+			"depth_cm": 0,
+			"visibility": 1,
+			"blocked": false
+		},
+		{
+			"site_id": "surface_5_8",
+			"cost": 1,
+			"depth_cm": 0,
+			"visibility": 1,
+			"blocked": false
+		},
+		{
+			"site_id": "surface_5_9",
+			"cost": 1,
+			"depth_cm": 0,
+			"visibility": 1,
+			"blocked": false
+		},
+		{
+			"site_id": "surface_5_10",
+			"cost": 1,
+			"depth_cm": 0,
+			"visibility": 1,
+			"blocked": false
+		},
+		{
+			"site_id": "surface_5_11",
+			"cost": 1,
+			"depth_cm": 0,
+			"visibility": 1,
+			"blocked": false
+		},
+		{
+			"site_id": "surface_6_0",
+			"cost": 1,
+			"depth_cm": 0,
+			"visibility": 1,
+			"blocked": false
+		},
+		{
+			"site_id": "surface_6_1",
+			"cost": 1,
+			"depth_cm": 0,
+			"visibility": 1,
+			"blocked": false
+		},
+		{
+			"site_id": "surface_6_2",
+			"cost": 1,
+			"depth_cm": 0,
+			"visibility": 1,
+			"blocked": false
+		},
+		{
+			"site_id": "surface_6_3",
+			"cost": 1,
+			"depth_cm": 0,
+			"visibility": 1,
+			"blocked": false
+		},
+		{
+			"site_id": "surface_6_4",
+			"cost": 1,
+			"depth_cm": 0,
+			"visibility": 1,
+			"blocked": false
+		},
+		{
+			"site_id": "surface_6_5",
+			"cost": 1,
+			"depth_cm": 0,
+			"visibility": 1,
+			"blocked": false
+		},
+		{
+			"site_id": "surface_6_6",
+			"cost": 1,
+			"depth_cm": 0,
+			"visibility": 1,
+			"blocked": false
+		},
+		{
+			"site_id": "surface_6_7",
+			"cost": 1,
+			"depth_cm": 0,
+			"visibility": 1,
+			"blocked": false
+		},
+		{
+			"site_id": "surface_6_8",
+			"cost": 1,
+			"depth_cm": 0,
+			"visibility": 1,
+			"blocked": false
+		},
+		{
+			"site_id": "surface_6_9",
+			"cost": 1,
+			"depth_cm": 0,
+			"visibility": 1,
+			"blocked": false
+		},
+		{
+			"site_id": "surface_6_10",
+			"cost": 1,
+			"depth_cm": 0,
+			"visibility": 1,
+			"blocked": false
+		},
+		{
+			"site_id": "surface_6_11",
+			"cost": 1,
+			"depth_cm": 0,
+			"visibility": 1,
+			"blocked": false
+		},
+		{
+			"site_id": "latent_0",
+			"cost": 1,
+			"depth_cm": 0,
+			"visibility": 1,
+			"blocked": false
+		},
+		{
+			"site_id": "latent_1",
+			"cost": 1,
+			"depth_cm": 0,
+			"visibility": 1,
+			"blocked": false
+		},
+		{
+			"site_id": "latent_2",
+			"cost": 1,
+			"depth_cm": 0,
+			"visibility": 1,
+			"blocked": false
+		},
+		{
+			"site_id": "latent_3",
+			"cost": 1,
+			"depth_cm": 0,
+			"visibility": 1,
+			"blocked": false
+		},
+		{
+			"site_id": "latent_4",
+			"cost": 1,
+			"depth_cm": 0,
+			"visibility": 1,
+			"blocked": false
+		},
+		{
+			"site_id": "latent_5",
+			"cost": 1,
+			"depth_cm": 0,
+			"visibility": 1,
+			"blocked": false
+		},
+		{
+			"site_id": "latent_6",
+			"cost": 1,
+			"depth_cm": 0,
+			"visibility": 1,
+			"blocked": false
+		},
+		{
+			"site_id": "latent_7",
+			"cost": 1,
+			"depth_cm": 0,
+			"visibility": 1,
+			"blocked": false
+		},
+		{
+			"site_id": "latent_8",
+			"cost": 1,
+			"depth_cm": 0,
+			"visibility": 1,
+			"blocked": false
+		},
+		{
+			"site_id": "latent_9",
+			"cost": 1,
+			"depth_cm": 0,
+			"visibility": 1,
+			"blocked": false
+		},
+		{
+			"site_id": "latent_10",
+			"cost": 1,
+			"depth_cm": 0,
+			"visibility": 1,
+			"blocked": false
+		},
+		{
+			"site_id": "latent_11",
+			"cost": 1,
+			"depth_cm": 0,
+			"visibility": 1,
+			"blocked": false
+		},
+		{
+			"site_id": "latent_12",
+			"cost": 1,
+			"depth_cm": 0,
+			"visibility": 1,
+			"blocked": false
+		},
+		{
+			"site_id": "latent_13",
+			"cost": 1,
+			"depth_cm": 0,
+			"visibility": 1,
+			"blocked": false
+		},
+		{
+			"site_id": "latent_14",
+			"cost": 1,
+			"depth_cm": 0,
+			"visibility": 1,
+			"blocked": false
+		}
+	],
+	"event_effect_samples": [],
+	"flood_geometry_audit":
+	{
+		"sample_count": 0,
+		"inside_building_samples": 0,
+		"min_ground_cm": 1000,
+		"max_ground_cm": -1000
+	},
+	"physics_bodies": [
+		{
+			"initial_z_cm": 871,
+			"collapse_piece": true,
+			"z_cm": 871,
+			"simulating": false,
+			"speed_cm_s": 0
+		},
+		{
+			"initial_z_cm": 871,
+			"collapse_piece": true,
+			"z_cm": 871,
+			"simulating": false,
+			"speed_cm_s": 0
+		},
+		{
+			"initial_z_cm": 871,
+			"collapse_piece": true,
+			"z_cm": 871,
+			"simulating": false,
+			"speed_cm_s": 0
+		},
+		{
+			"initial_z_cm": 871,
+			"collapse_piece": true,
+			"z_cm": 871,
+			"simulating": false,
+			"speed_cm_s": 0
+		},
+		{
+			"initial_z_cm": 871,
+			"collapse_piece": true,
+			"z_cm": 871,
+			"simulating": false,
+			"speed_cm_s": 0
+		},
+		{
+			"initial_z_cm": 85.372600240299903,
+			"collapse_piece": false,
+			"z_cm": 57.425650469099857,
+			"simulating": true,
+			"speed_cm_s": 0
+		},
+		{
+			"initial_z_cm": 58.686548047172998,
+			"collapse_piece": false,
+			"z_cm": 50.479077914348792,
+			"simulating": true,
+			"speed_cm_s": 0
+		},
+		{
+			"initial_z_cm": 68.670775680902324,
+			"collapse_piece": false,
+			"z_cm": 50.402317002711833,
+			"simulating": true,
+			"speed_cm_s": 0
+		},
+		{
+			"initial_z_cm": 84.243320808357538,
+			"collapse_piece": false,
+			"z_cm": 47.919961663283338,
+			"simulating": true,
+			"speed_cm_s": 0
+		},
+		{
+			"initial_z_cm": 56.078496805607735,
+			"collapse_piece": false,
+			"z_cm": 44.451101066990176,
+			"simulating": true,
+			"speed_cm_s": 0
+		},
+		{
+			"initial_z_cm": 68.78955885469297,
+			"collapse_piece": false,
+			"z_cm": 36.899237565359805,
+			"simulating": true,
+			"speed_cm_s": 0
+		},
+		{
+			"initial_z_cm": 62.348485886470641,
+			"collapse_piece": false,
+			"z_cm": 69.894991451834244,
+			"simulating": true,
+			"speed_cm_s": 0
+		},
+		{
+			"initial_z_cm": 60.768356202893919,
+			"collapse_piece": false,
+			"z_cm": 54.414111980415726,
+			"simulating": true,
+			"speed_cm_s": 0
+		},
+		{
+			"initial_z_cm": 89.750192559754382,
+			"collapse_piece": false,
+			"z_cm": 66.414609676121643,
+			"simulating": true,
+			"speed_cm_s": 0
+		},
+		{
+			"initial_z_cm": 59.835987837240381,
+			"collapse_piece": false,
+			"z_cm": 49.759930593588329,
+			"simulating": true,
+			"speed_cm_s": 0
+		},
+		{
+			"initial_z_cm": 61.946552209126068,
+			"collapse_piece": false,
+			"z_cm": 50.643655484718401,
+			"simulating": true,
+			"speed_cm_s": 0
+		},
+		{
+			"initial_z_cm": 62.992334144806414,
+			"collapse_piece": false,
+			"z_cm": 43.150240588749085,
+			"simulating": true,
+			"speed_cm_s": 0
+		},
+		{
+			"initial_z_cm": 76.955465902674547,
+			"collapse_piece": false,
+			"z_cm": 48.065217026460651,
+			"simulating": true,
+			"speed_cm_s": 0
+		},
+		{
+			"initial_z_cm": 78.242893932266725,
+			"collapse_piece": false,
+			"z_cm": 46.640766047871544,
+			"simulating": true,
+			"speed_cm_s": 0
+		},
+		{
+			"initial_z_cm": 62.076178271163457,
+			"collapse_piece": false,
+			"z_cm": 50.27351890823477,
+			"simulating": true,
+			"speed_cm_s": 0
+		},
+		{
+			"initial_z_cm": 49.155798641701921,
+			"collapse_piece": false,
+			"z_cm": 40.485917147166873,
+			"simulating": true,
+			"speed_cm_s": 0
+		},
+		{
+			"initial_z_cm": 77.563538280814242,
+			"collapse_piece": false,
+			"z_cm": 51.106856705562429,
+			"simulating": true,
+			"speed_cm_s": 0
+		},
+		{
+			"initial_z_cm": 51.15651182139424,
+			"collapse_piece": false,
+			"z_cm": 39.673312569822386,
+			"simulating": true,
+			"speed_cm_s": 0
+		}
+	],
+	"agents": [
+		{
+			"id": 0,
+			"aerial": true,
+			"state": "landed",
+			"energy": 119.99861145019531,
+			"x_cm": -1600.0035924385638,
+			"y_cm": 100.0087050545216,
+			"z_cm": 29.000001362529574,
+			"distance_cm": 2.0112745761871338,
+			"simulating": true,
+			"support_contacts": 0,
+			"mass_kg": 12,
+			"route_blocked": false,
+			"speed_cm_s": 0.00059199766485433611,
+			"yaw_deg": -0.0061691528339906637,
+			"rotor_rpm": 0,
+			"ramp_deployment": 0,
+			"radio_link": true,
+			"surface_speed_factor": 1,
+			"water_depth_cm": 0,
+			"key": "aerial_0",
+			"command_id": "",
+			"stop_reason": "",
+			"vehicle_contacts": 0,
+			"stop_obstacle": "",
+			"waypoint_x_cm": -1600.0035924385638,
+			"waypoint_y_cm": 100.0087050545216,
+			"carrying": false
+		},
+		{
+			"id": 1,
+			"aerial": true,
+			"state": "landed",
+			"energy": 119.99861145019531,
+			"x_cm": -1600.0035924385638,
+			"y_cm": 550.00870505452156,
+			"z_cm": 29.000001362529574,
+			"distance_cm": 2.0112745761871338,
+			"simulating": true,
+			"support_contacts": 0,
+			"mass_kg": 12,
+			"route_blocked": false,
+			"speed_cm_s": 0.00084169304184191981,
+			"yaw_deg": -0.0061691528339906637,
+			"rotor_rpm": 0,
+			"ramp_deployment": 0,
+			"radio_link": true,
+			"surface_speed_factor": 1,
+			"water_depth_cm": 0,
+			"key": "aerial_1",
+			"command_id": "",
+			"stop_reason": "",
+			"vehicle_contacts": 0,
+			"stop_obstacle": "",
+			"waypoint_x_cm": -1600.0035924385638,
+			"waypoint_y_cm": 550.00870505452156,
+			"carrying": false
+		},
+		{
+			"id": 2,
+			"aerial": true,
+			"state": "landed",
+			"energy": 119.99861145019531,
+			"x_cm": -1600.0035686348419,
+			"y_cm": 1000.0088679656766,
+			"z_cm": 28.999999864838514,
+			"distance_cm": 2.0112845897674561,
+			"simulating": true,
+			"support_contacts": 0,
+			"mass_kg": 12,
+			"route_blocked": false,
+			"speed_cm_s": 0.0011895941183151489,
+			"yaw_deg": -0.006137699946350491,
+			"rotor_rpm": 0,
+			"ramp_deployment": 0,
+			"radio_link": true,
+			"surface_speed_factor": 1,
+			"water_depth_cm": 0,
+			"key": "aerial_2",
+			"command_id": "",
+			"stop_reason": "",
+			"vehicle_contacts": 0,
+			"stop_obstacle": "",
+			"waypoint_x_cm": -1600.0035686348419,
+			"waypoint_y_cm": 1000.0088679656766,
+			"carrying": false
+		},
+		{
+			"id": 0,
+			"aerial": false,
+			"state": "external_route",
+			"energy": 237.27450561523438,
+			"x_cm": 5500,
+			"y_cm": 10422.368637125523,
+			"z_cm": 48.833336508861009,
+			"distance_cm": 3324.24365234375,
+			"simulating": true,
+			"support_contacts": 6,
+			"mass_kg": 240.00001525878906,
+			"route_blocked": false,
+			"speed_cm_s": 3.4447743928467389e-06,
+			"yaw_deg": 89.999999999999986,
+			"rotor_rpm": 0,
+			"ramp_deployment": 0,
+			"radio_link": true,
+			"surface_speed_factor": 1,
+			"water_depth_cm": 0,
+			"key": "ground_0",
+			"command_id": "probe_initial",
+			"stop_reason": "yield_to_vehicle",
+			"vehicle_contacts": 0,
+			"stop_obstacle": "ground_1",
+			"waypoint_x_cm": 5500,
+			"waypoint_y_cm": 10800,
+			"carrying": false
+		},
+		{
+			"id": 1,
+			"aerial": false,
+			"state": "idle",
+			"energy": 237.25924682617188,
+			"x_cm": 5500,
+			"y_cm": 11140.974140510139,
+			"z_cm": 48.833336157307826,
+			"distance_cm": 3342.845458984375,
+			"simulating": true,
+			"support_contacts": 6,
+			"mass_kg": 240.00001525878906,
+			"route_blocked": false,
+			"speed_cm_s": 3.4447743928467389e-06,
+			"yaw_deg": 89.999999999999986,
+			"rotor_rpm": 0,
+			"ramp_deployment": 0,
+			"radio_link": true,
+			"surface_speed_factor": 1,
+			"water_depth_cm": 0,
+			"key": "ground_1",
+			"command_id": "probe_initial",
+			"stop_reason": "",
+			"vehicle_contacts": 0,
+			"stop_obstacle": "",
+			"waypoint_x_cm": 5500,
+			"waypoint_y_cm": 11140.974140510139,
+			"carrying": false
+		},
+		{
+			"id": 2,
+			"aerial": false,
+			"state": "idle",
+			"energy": 239.96330261230469,
+			"x_cm": -440,
+			"y_cm": 200,
+			"z_cm": 71.787531091194097,
+			"distance_cm": 45.006629943847656,
+			"simulating": true,
+			"support_contacts": 6,
+			"mass_kg": 240.00001525878906,
+			"route_blocked": false,
+			"speed_cm_s": 0,
+			"yaw_deg": -89.99999998924649,
+			"rotor_rpm": 0,
+			"ramp_deployment": 0,
+			"radio_link": true,
+			"surface_speed_factor": 1,
+			"water_depth_cm": 0,
+			"key": "ground_2",
+			"command_id": "",
+			"stop_reason": "",
+			"vehicle_contacts": 0,
+			"stop_obstacle": "",
+			"waypoint_x_cm": -440,
+			"waypoint_y_cm": 200,
+			"carrying": false
+		},
+		{
+			"id": 3,
+			"aerial": false,
+			"state": "idle",
+			"energy": 239.96330261230469,
+			"x_cm": -110,
+			"y_cm": 200,
+			"z_cm": 71.787531091194097,
+			"distance_cm": 45.006629943847656,
+			"simulating": true,
+			"support_contacts": 6,
+			"mass_kg": 240.00001525878906,
+			"route_blocked": false,
+			"speed_cm_s": 0,
+			"yaw_deg": -89.99999998924649,
+			"rotor_rpm": 0,
+			"ramp_deployment": 0,
+			"radio_link": true,
+			"surface_speed_factor": 1,
+			"water_depth_cm": 0,
+			"key": "ground_3",
+			"command_id": "",
+			"stop_reason": "",
+			"vehicle_contacts": 0,
+			"stop_obstacle": "",
+			"waypoint_x_cm": -110,
+			"waypoint_y_cm": 200,
+			"carrying": false
+		}
+	]
+}

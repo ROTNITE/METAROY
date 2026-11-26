@@ -1,0 +1,479 @@
+{
+  "id": "portable_generator",
+  "source": "blender/vendor/portable_generator_4k/portable_generator_4k.blend",
+  "sha256": "32b918d87004e34c7f5b2b105fbbc9b99a85fb1ee93105f51bf0af6b805437bd",
+  "units": {
+    "system": "METRIC",
+    "scale_length": 1.0
+  },
+  "bounds_min": [
+    -0.41451746225357056,
+    -0.28200000524520874,
+    5.806691478937864e-05
+  ],
+  "bounds_max": [
+    0.4038233458995819,
+    0.28200000524520874,
+    0.5769813060760498
+  ],
+  "dimensions": [
+    0.8183407783508301,
+    0.5640000104904175,
+    0.5769232511520386
+  ],
+  "objects": [
+    {
+      "name": "portable_generator",
+      "type": "MESH",
+      "parent": null,
+      "location": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "rotation": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "hidden_render": false,
+      "vertices": 14812,
+      "triangles": 26299,
+      "uv_layers": [
+        "UVMap"
+      ],
+      "bounds_min": [
+        -0.41451746225357056,
+        -0.28200000524520874,
+        5.806691478937864e-05
+      ],
+      "bounds_max": [
+        0.4038233458995819,
+        0.28200000524520874,
+        0.5769813060760498
+      ],
+      "materials": [
+        "portable_generator",
+        "portable_generator_glass"
+      ],
+      "modifiers": [
+        {
+          "name": "WeightedNormal",
+          "type": "WEIGHTED_NORMAL"
+        }
+      ],
+      "animation": {
+        "action": "frame.002Action.001",
+        "nla_tracks": []
+      }
+    },
+    {
+      "name": "portable_generator_dial",
+      "type": "MESH",
+      "parent": null,
+      "location": [
+        0.09225182980298996,
+        -0.2403021901845932,
+        0.41630613803863525
+      ],
+      "rotation": [
+        -0.206404447555542,
+        -0.0,
+        0.0
+      ],
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "hidden_render": false,
+      "vertices": 29,
+      "triangles": 38,
+      "uv_layers": [
+        "UVMap"
+      ],
+      "bounds_min": [
+        0.08894561976194382,
+        -0.24425765872001648,
+        0.4126642942428589
+      ],
+      "bounds_max": [
+        0.09948038309812546,
+        -0.23284566402435303,
+        0.44352784752845764
+      ],
+      "materials": [
+        "portable_generator"
+      ],
+      "modifiers": [
+        {
+          "name": "WeightedNormal",
+          "type": "WEIGHTED_NORMAL"
+        }
+      ]
+    },
+    {
+      "name": "portable_generator_switch",
+      "type": "MESH",
+      "parent": null,
+      "location": [
+        -0.260182648897171,
+        -0.23846513032913208,
+        0.4379270672798157
+      ],
+      "rotation": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "hidden_render": false,
+      "vertices": 22,
+      "triangles": 32,
+      "uv_layers": [
+        "UVMap"
+      ],
+      "bounds_min": [
+        -0.2734799385070801,
+        -0.2554129660129547,
+        0.4288279414176941
+      ],
+      "bounds_max": [
+        -0.24688531458377838,
+        -0.2171836644411087,
+        0.4487878978252411
+      ],
+      "materials": [
+        "portable_generator"
+      ],
+      "modifiers": [
+        {
+          "name": "WeightedNormal",
+          "type": "WEIGHTED_NORMAL"
+        }
+      ]
+    },
+    {
+      "name": "portable_generator_toggle",
+      "type": "MESH",
+      "parent": null,
+      "location": [
+        0.01236033532768488,
+        -0.23424559831619263,
+        0.4290839433670044
+      ],
+      "rotation": [
+        -0.206404447555542,
+        -0.0,
+        0.0
+      ],
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "hidden_render": false,
+      "vertices": 28,
+      "triangles": 50,
+      "uv_layers": [
+        "UVMap"
+      ],
+      "bounds_min": [
+        0.008292530663311481,
+        -0.24766689538955688,
+        0.4249008297920227
+      ],
+      "bounds_max": [
+        0.016428139060735703,
+        -0.23210301995277405,
+        0.4356286823749542
+      ],
+      "materials": [
+        "portable_generator"
+      ],
+      "modifiers": [
+        {
+          "name": "WeightedNormal",
+          "type": "WEIGHTED_NORMAL"
+        }
+      ]
+    }
+  ],
+  "materials": [
+    {
+      "name": "portable_generator",
+      "nodes": [
+        {
+          "name": "Principled BSDF",
+          "type": "BSDF_PRINCIPLED",
+          "inputs": {
+            "Base Color": {
+              "linked": true,
+              "value": [
+                0.800000011920929,
+                0.800000011920929,
+                0.800000011920929,
+                1.0
+              ]
+            },
+            "Metallic": {
+              "linked": true,
+              "value": 0.0
+            },
+            "Roughness": {
+              "linked": true,
+              "value": 0.5
+            },
+            "IOR": {
+              "linked": false,
+              "value": 1.5
+            },
+            "Alpha": {
+              "linked": false,
+              "value": 1.0
+            },
+            "Transmission Weight": {
+              "linked": false,
+              "value": 0.0
+            }
+          }
+        },
+        {
+          "name": "Material Output",
+          "type": "OUTPUT_MATERIAL"
+        },
+        {
+          "name": "Image Texture",
+          "type": "TEX_IMAGE",
+          "image": "portable_generator_diff.png"
+        },
+        {
+          "name": "Image Texture.001",
+          "type": "TEX_IMAGE",
+          "image": "portable_generator_metal.png"
+        },
+        {
+          "name": "Image Texture.002",
+          "type": "TEX_IMAGE",
+          "image": "portable_generator_rough.png"
+        },
+        {
+          "name": "Image Texture.003",
+          "type": "TEX_IMAGE",
+          "image": "portable_generator_nor_gl.png"
+        },
+        {
+          "name": "Normal Map",
+          "type": "NORMAL_MAP"
+        },
+        {
+          "name": "Mapping",
+          "type": "MAPPING"
+        },
+        {
+          "name": "Reroute",
+          "type": "REROUTE"
+        },
+        {
+          "name": "Texture Coordinate",
+          "type": "TEX_COORD"
+        },
+        {
+          "name": "Frame",
+          "type": "FRAME"
+        },
+        {
+          "name": "Frame.001",
+          "type": "FRAME"
+        },
+        {
+          "name": "Image Texture.005",
+          "type": "TEX_IMAGE",
+          "image": "portable_generator_spec.png"
+        }
+      ]
+    },
+    {
+      "name": "portable_generator_glass",
+      "nodes": [
+        {
+          "name": "Principled BSDF",
+          "type": "BSDF_PRINCIPLED",
+          "inputs": {
+            "Base Color": {
+              "linked": true,
+              "value": [
+                0.800000011920929,
+                0.800000011920929,
+                0.800000011920929,
+                1.0
+              ]
+            },
+            "Metallic": {
+              "linked": true,
+              "value": 0.0
+            },
+            "Roughness": {
+              "linked": true,
+              "value": 0.5
+            },
+            "IOR": {
+              "linked": false,
+              "value": 1.5
+            },
+            "Alpha": {
+              "linked": true,
+              "value": 1.0
+            },
+            "Transmission Weight": {
+              "linked": false,
+              "value": 1.0
+            }
+          }
+        },
+        {
+          "name": "Material Output",
+          "type": "OUTPUT_MATERIAL"
+        },
+        {
+          "name": "Image Texture",
+          "type": "TEX_IMAGE",
+          "image": "portable_generator_diff.png"
+        },
+        {
+          "name": "Image Texture.001",
+          "type": "TEX_IMAGE",
+          "image": "portable_generator_metal.png"
+        },
+        {
+          "name": "Image Texture.002",
+          "type": "TEX_IMAGE",
+          "image": "portable_generator_rough.png"
+        },
+        {
+          "name": "Image Texture.003",
+          "type": "TEX_IMAGE",
+          "image": "portable_generator_nor_gl.png"
+        },
+        {
+          "name": "Normal Map",
+          "type": "NORMAL_MAP"
+        },
+        {
+          "name": "Mapping",
+          "type": "MAPPING"
+        },
+        {
+          "name": "Reroute",
+          "type": "REROUTE"
+        },
+        {
+          "name": "Texture Coordinate",
+          "type": "TEX_COORD"
+        },
+        {
+          "name": "Frame",
+          "type": "FRAME"
+        },
+        {
+          "name": "Frame.001",
+          "type": "FRAME"
+        },
+        {
+          "name": "Image Texture.005",
+          "type": "TEX_IMAGE",
+          "image": "portable_generator_alpha.png"
+        }
+      ]
+    }
+  ],
+  "images": [
+    {
+      "name": "portable_generator_alpha.png",
+      "size": [
+        4096,
+        4096
+      ],
+      "packed": false,
+      "filepath": "//textures\\portable_generator_alpha_4k.png",
+      "colorspace": "Non-Color",
+      "exists": true
+    },
+    {
+      "name": "portable_generator_diff.png",
+      "size": [
+        4096,
+        4096
+      ],
+      "packed": false,
+      "filepath": "//textures\\portable_generator_diff_4k.jpg",
+      "colorspace": "sRGB",
+      "exists": true
+    },
+    {
+      "name": "portable_generator_metal.png",
+      "size": [
+        4096,
+        4096
+      ],
+      "packed": false,
+      "filepath": "//textures\\portable_generator_metal_4k.exr",
+      "colorspace": "Non-Color",
+      "exists": true
+    },
+    {
+      "name": "portable_generator_nor_gl.png",
+      "size": [
+        4096,
+        4096
+      ],
+      "packed": false,
+      "filepath": "//textures\\portable_generator_nor_gl_4k.exr",
+      "colorspace": "Non-Color",
+      "exists": true
+    },
+    {
+      "name": "portable_generator_rough.png",
+      "size": [
+        4096,
+        4096
+      ],
+      "packed": false,
+      "filepath": "//textures\\portable_generator_rough_4k.exr",
+      "colorspace": "Non-Color",
+      "exists": true
+    },
+    {
+      "name": "portable_generator_spec.png",
+      "size": [
+        4096,
+        4096
+      ],
+      "packed": false,
+      "filepath": "//textures\\portable_generator_spec_4k.png",
+      "colorspace": "Non-Color",
+      "exists": true
+    }
+  ],
+  "actions": [
+    {
+      "name": "frame.002Action.001",
+      "frames": [
+        0.0,
+        0.0
+      ],
+      "slots": [
+        "OBframe.002"
+      ]
+    }
+  ]
+}

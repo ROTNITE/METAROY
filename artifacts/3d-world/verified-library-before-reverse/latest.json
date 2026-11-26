@@ -1,0 +1,330 @@
+{
+	"kind": "rescue_quarter_environment_demo",
+	"time_s": 240.00629753520479,
+	"seed": 20261109,
+	"discovered": 9,
+	"delivered": 3,
+	"contacts": 25476,
+	"collapse_released": true,
+	"pending_reports": 0,
+	"relay_online": true,
+	"flood_active": true,
+	"dust_active": false,
+	"flood_depth_cm": 42,
+	"average_game_fps": 162.08174625390831,
+	"worst_frame_ms": 210.17819213867188,
+	"fire_effect_active": true,
+	"leak_effect_active": true,
+	"dust_effect_active": false,
+	"physics_bodies": [
+		{
+			"initial_z_cm": 70,
+			"z_cm": 61.011019543058957,
+			"simulating": true,
+			"speed_cm_s": 0
+		},
+		{
+			"initial_z_cm": 97,
+			"z_cm": 27.23367421829396,
+			"simulating": true,
+			"speed_cm_s": 0
+		},
+		{
+			"initial_z_cm": 124,
+			"z_cm": 50.279066382914159,
+			"simulating": true,
+			"speed_cm_s": 0
+		},
+		{
+			"initial_z_cm": 151,
+			"z_cm": 29.958007026440534,
+			"simulating": true,
+			"speed_cm_s": 0
+		},
+		{
+			"initial_z_cm": 178,
+			"z_cm": 57.611477384226362,
+			"simulating": true,
+			"speed_cm_s": 0
+		},
+		{
+			"initial_z_cm": 205,
+			"z_cm": 70.218170846037893,
+			"simulating": true,
+			"speed_cm_s": 0
+		},
+		{
+			"initial_z_cm": 232,
+			"z_cm": 26.974427695861205,
+			"simulating": true,
+			"speed_cm_s": 0
+		},
+		{
+			"initial_z_cm": 259,
+			"z_cm": 27.980387656048169,
+			"simulating": true,
+			"speed_cm_s": 0
+		},
+		{
+			"initial_z_cm": 286,
+			"z_cm": 92.249175149377535,
+			"simulating": true,
+			"speed_cm_s": 0
+		},
+		{
+			"initial_z_cm": 313,
+			"z_cm": 95.138195400508081,
+			"simulating": true,
+			"speed_cm_s": 0
+		},
+		{
+			"initial_z_cm": 340,
+			"z_cm": 63.060734806028961,
+			"simulating": true,
+			"speed_cm_s": 0
+		},
+		{
+			"initial_z_cm": 367,
+			"z_cm": 130.2711622722546,
+			"simulating": true,
+			"speed_cm_s": 0
+		},
+		{
+			"initial_z_cm": 394,
+			"z_cm": 96.29639447564378,
+			"simulating": true,
+			"speed_cm_s": 0
+		},
+		{
+			"initial_z_cm": 421,
+			"z_cm": 93.148529570300198,
+			"simulating": true,
+			"speed_cm_s": 0
+		},
+		{
+			"initial_z_cm": 448,
+			"z_cm": 70.655032611664936,
+			"simulating": true,
+			"speed_cm_s": 0
+		},
+		{
+			"initial_z_cm": 475,
+			"z_cm": 67.544083752532174,
+			"simulating": true,
+			"speed_cm_s": 0
+		},
+		{
+			"initial_z_cm": 502,
+			"z_cm": 95.037256513071966,
+			"simulating": true,
+			"speed_cm_s": 0
+		},
+		{
+			"initial_z_cm": 529,
+			"z_cm": 87.923462256584983,
+			"simulating": true,
+			"speed_cm_s": 0
+		},
+		{
+			"initial_z_cm": 850,
+			"z_cm": 119.00863298572106,
+			"simulating": true,
+			"speed_cm_s": 0
+		},
+		{
+			"initial_z_cm": 915,
+			"z_cm": 189.50598476986312,
+			"simulating": true,
+			"speed_cm_s": 0
+		},
+		{
+			"initial_z_cm": 980,
+			"z_cm": 235.39018295161074,
+			"simulating": true,
+			"speed_cm_s": 0
+		},
+		{
+			"initial_z_cm": 1045,
+			"z_cm": 180.38654834377377,
+			"simulating": true,
+			"speed_cm_s": 0
+		},
+		{
+			"initial_z_cm": 1110,
+			"z_cm": 186.02491874769245,
+			"simulating": true,
+			"speed_cm_s": 0
+		}
+	],
+	"agents": [
+		{
+			"id": 0,
+			"aerial": true,
+			"state": "landed",
+			"energy": 89.742721557617188,
+			"x_cm": -1659.0278693882369,
+			"y_cm": 78.75368253600297,
+			"z_cm": 29.00000128373356,
+			"distance_cm": 43851.69140625,
+			"simulating": true,
+			"support_contacts": 0,
+			"mass_kg": 12,
+			"route_blocked": false,
+			"speed_cm_s": 0.0001935666093449724,
+			"yaw_deg": -161.70771607707437,
+			"rotor_rpm": 0,
+			"ramp_deployment": 0,
+			"radio_link": true,
+			"surface_speed_factor": 1,
+			"water_depth_cm": 0
+		},
+		{
+			"id": 1,
+			"aerial": true,
+			"state": "landed",
+			"energy": 77.310615539550781,
+			"x_cm": -1661.0457247591391,
+			"y_cm": 535.3150181011639,
+			"z_cm": 28.99999928215502,
+			"distance_cm": 61868.83203125,
+			"simulating": true,
+			"support_contacts": 0,
+			"mass_kg": 12,
+			"route_blocked": false,
+			"speed_cm_s": 0.00021050140716893348,
+			"yaw_deg": -167.49423739874251,
+			"rotor_rpm": 0,
+			"ramp_deployment": 0,
+			"radio_link": true,
+			"surface_speed_factor": 1,
+			"water_depth_cm": 0
+		},
+		{
+			"id": 2,
+			"aerial": true,
+			"state": "landed",
+			"energy": 71.89654541015625,
+			"x_cm": -1663.2363844011475,
+			"y_cm": 996.36602645968742,
+			"z_cm": 28.999998588905711,
+			"distance_cm": 69715,
+			"simulating": true,
+			"support_contacts": 0,
+			"mass_kg": 12,
+			"route_blocked": false,
+			"speed_cm_s": 0.00054589257335927507,
+			"yaw_deg": -175.21186037154061,
+			"rotor_rpm": 0,
+			"ramp_deployment": 0,
+			"radio_link": true,
+			"surface_speed_factor": 1,
+			"water_depth_cm": 0
+		},
+		{
+			"id": 0,
+			"aerial": false,
+			"state": "outbound",
+			"energy": 197.81631469726562,
+			"x_cm": 5627.1024833373785,
+			"y_cm": 5515.9290532524874,
+			"z_cm": 48.833332896151973,
+			"distance_cm": 44765.953125,
+			"simulating": true,
+			"support_contacts": 6,
+			"mass_kg": 240.00001525878906,
+			"route_blocked": false,
+			"speed_cm_s": 282.32769421050523,
+			"yaw_deg": -1.2982960626031859,
+			"rotor_rpm": 0,
+			"ramp_deployment": 0,
+			"radio_link": true,
+			"surface_speed_factor": 1,
+			"water_depth_cm": 0
+		},
+		{
+			"id": 1,
+			"aerial": false,
+			"state": "outbound",
+			"energy": 199.52044677734375,
+			"x_cm": 1149.80621389671,
+			"y_cm": -127.4332923102593,
+			"z_cm": 48.833330736065641,
+			"distance_cm": 41159.3203125,
+			"simulating": true,
+			"support_contacts": 6,
+			"mass_kg": 240.00001525878906,
+			"route_blocked": false,
+			"speed_cm_s": 236.99652820013199,
+			"yaw_deg": 74.092927561882007,
+			"rotor_rpm": 0,
+			"ramp_deployment": 0,
+			"radio_link": true,
+			"surface_speed_factor": 1,
+			"water_depth_cm": 0
+		},
+		{
+			"id": 2,
+			"aerial": false,
+			"state": "inbound",
+			"energy": 199.1163330078125,
+			"x_cm": 999.90651123380371,
+			"y_cm": 3402.1291764096418,
+			"z_cm": 48.956672730829602,
+			"distance_cm": 42042.18359375,
+			"simulating": true,
+			"support_contacts": 6,
+			"mass_kg": 320.00003051757812,
+			"route_blocked": true,
+			"speed_cm_s": 0.46713979871782685,
+			"yaw_deg": -21.421553556079633,
+			"rotor_rpm": 0,
+			"ramp_deployment": 0,
+			"radio_link": true,
+			"surface_speed_factor": 1,
+			"water_depth_cm": 0
+		},
+		{
+			"id": 3,
+			"aerial": false,
+			"state": "outbound",
+			"energy": 216.093017578125,
+			"x_cm": 1238.5195270118829,
+			"y_cm": 3408.1321094083414,
+			"z_cm": 48.668866670124537,
+			"distance_cm": 25315.767578125,
+			"simulating": true,
+			"support_contacts": 6,
+			"mass_kg": 240.00001525878906,
+			"route_blocked": true,
+			"speed_cm_s": 0.52970034888570827,
+			"yaw_deg": 158.67404057771031,
+			"rotor_rpm": 0,
+			"ramp_deployment": 0,
+			"radio_link": true,
+			"surface_speed_factor": 1,
+			"water_depth_cm": 0
+		}
+	],
+	"mechanics_probes": [
+		{
+			"id": 100,
+			"x_cm": 14500,
+			"y_cm": 11892.924722090165,
+			"z_cm": 48.833264131493955,
+			"speed_cm_s": 0,
+			"surface_factor": 1,
+			"distance_cm": 501.3917236328125,
+			"blocked": true
+		},
+		{
+			"id": 101,
+			"x_cm": 5500,
+			"y_cm": 9378.3565167378601,
+			"z_cm": 48.833335325277595,
+			"speed_cm_s": 0,
+			"surface_factor": 1,
+			"distance_cm": 2386.815673828125,
+			"blocked": false
+		}
+	]
+}

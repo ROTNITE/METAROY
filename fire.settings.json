@@ -1,0 +1,31 @@
+{
+  "map_size": 25,
+  "seed": 3246,
+  "preset": "open",
+  "scouts": 1,
+  "rescuers": 2,
+  "people": 3,
+  "horizon": 240.0,
+  "layout": "generated_city",
+  "city_revision": "2.2",
+  "event_profile": "v052",
+  "resource_profile": "contest",
+  "ground_battery_wh": 220.0,
+  "aerial_battery_wh": 120.0,
+  "initial_battery_fraction": 1.0,
+  "energy_reserve_fraction": 0.1,
+  "sensor_reliability": 1.0,
+  "communication_range_m": 180.0,
+  "communication_latency_s": 0.2,
+  "communication_loss": 0.0,
+  "competition": false,
+  "probabilities": {
+    "collapse": 0,
+    "fire": 100,
+    "flood": 0,
+    "mud": 0,
+    "road_damage": 0,
+    "smoke": 0,
+    "appearance": 0
+  }
+}

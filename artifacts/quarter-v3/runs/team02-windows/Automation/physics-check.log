@@ -1,0 +1,8 @@
+Traceback (most recent call last):
+  File "C:\Users\rotn1\Documents\ChatGPT\metaroy\unreal\tools\check_smoke.py", line 70, in <module>
+    verify(parser.parse_args().saved)
+    ~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\rotn1\Documents\ChatGPT\metaroy\unreal\tools\check_smoke.py", line 57, in verify
+    assert any(a['distance_cm']>1000 for a in state['agents'] if not a['aerial']),'no ground movement'
+           ~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: no ground movement

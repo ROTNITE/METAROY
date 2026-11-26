@@ -1,0 +1,7 @@
+{
+  "passed": true,
+  "native_actor": "MRWorld",
+  "static_mesh_components": 1343,
+  "scenario_source": "0.3",
+  "map": "/Game/Maps/RescueDistrict"
+}

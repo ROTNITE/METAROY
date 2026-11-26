@@ -1,0 +1,81 @@
+Blender 4.5.15 LTS (hash 5afeabba6097 built 2026-10-22 01:35:27)
+Read blend: "C:\Users\rotn1\Documents\ChatGPT\metaroy\blender\Meshy_AI_Medical_Aid_Container_20261109_image-to-3d-texture.blend"
+Fra:1 Mem:628.12M (Peak 682.86M) | Time:96:22:27.14 | Mem:0.00M, Peak:0.00M | Scene | Synchronizing object | BakeSource_High
+Fra:1 Mem:658.10M (Peak 710.02M) | Time:96:22:27.22 | Mem:0.00M, Peak:0.00M | Scene | Initializing
+Fra:1 Mem:658.10M (Peak 710.02M) | Time:96:22:27.22 | Mem:0.00M, Peak:0.00M | Scene | Updating Images | Loading Image_2
+Fra:1 Mem:658.10M (Peak 710.02M) | Time:96:22:27.22 | Mem:0.00M, Peak:0.00M | Scene | Updating Images | Loading T_Medical_BaseColor
+Fra:1 Mem:722.10M (Peak 722.10M) | Time:96:22:27.22 | Mem:0.00M, Peak:0.00M | Scene | Updating Images | Loading Image_1
+Info: Baking map saved to internal image, save it externally or pack it
+MR_SURFACE_BAKED Medical BaseColor 2048
+Fra:1 Mem:633.36M (Peak 1373.97M) | Time:96:22:29.59 | Mem:0.00M, Peak:0.00M | Scene | Synchronizing object | BakeSource_High
+Fra:1 Mem:658.13M (Peak 1373.97M) | Time:96:22:29.67 | Mem:0.00M, Peak:0.00M | Scene | Initializing
+Fra:1 Mem:658.12M (Peak 1373.97M) | Time:96:22:29.67 | Mem:0.00M, Peak:0.00M | Scene | Updating Images | Loading Image_2
+Fra:1 Mem:658.12M (Peak 1373.97M) | Time:96:22:29.67 | Mem:0.00M, Peak:0.00M | Scene | Updating Images | Loading T_Medical_ORM
+Fra:1 Mem:722.12M (Peak 1373.97M) | Time:96:22:29.67 | Mem:0.00M, Peak:0.00M | Scene | Updating Images | Loading Image_1
+Info: Baking map saved to internal image, save it externally or pack it
+MR_SURFACE_BAKED Medical ORM 2048
+Fra:1 Mem:633.38M (Peak 1373.97M) | Time:96:22:32.02 | Mem:0.00M, Peak:0.00M | Scene | Synchronizing object | BakeSource_High
+Fra:1 Mem:661.63M (Peak 1373.97M) | Time:96:22:32.10 | Mem:0.00M, Peak:0.00M | Scene | Initializing
+Fra:1 Mem:661.63M (Peak 1373.97M) | Time:96:22:32.10 | Mem:0.00M, Peak:0.00M | Scene | Updating Images | Loading Image_2
+Fra:1 Mem:661.63M (Peak 1373.97M) | Time:96:22:32.10 | Mem:0.00M, Peak:0.00M | Scene | Updating Images | Loading T_Medical_Normal
+Fra:1 Mem:741.63M (Peak 1373.97M) | Time:96:22:32.10 | Mem:0.00M, Peak:0.00M | Scene | Updating Images | Loading Image_1
+Info: Baking map saved to internal image, save it externally or pack it
+MR_SURFACE_BAKED Medical Normal 2048
+Info: Saved as "Medical.blend"
+
+FBX export starting... 'C:\\Users\\rotn1\\Documents\\ChatGPT\\metaroy\\blender\\prepared\\v2\\Medical\\parts\\Body.fbx'
+export finished in 0.0990 sec.
+
+FBX export starting... 'C:\\Users\\rotn1\\Documents\\ChatGPT\\metaroy\\blender\\prepared\\v2\\Medical\\parts\\MedicalGlass_-1_0.fbx'
+export finished in 0.0050 sec.
+
+FBX export starting... 'C:\\Users\\rotn1\\Documents\\ChatGPT\\metaroy\\blender\\prepared\\v2\\Medical\\parts\\MedicalGlass_-1_1.fbx'
+export finished in 0.0040 sec.
+
+FBX export starting... 'C:\\Users\\rotn1\\Documents\\ChatGPT\\metaroy\\blender\\prepared\\v2\\Medical\\parts\\WindowMullion.fbx'
+export finished in 0.0050 sec.
+
+FBX export starting... 'C:\\Users\\rotn1\\Documents\\ChatGPT\\metaroy\\blender\\prepared\\v2\\Medical\\parts\\WindowMullion.001.fbx'
+export finished in 0.0050 sec.
+
+FBX export starting... 'C:\\Users\\rotn1\\Documents\\ChatGPT\\metaroy\\blender\\prepared\\v2\\Medical\\parts\\WindowMullion.002.fbx'
+export finished in 0.0050 sec.
+
+FBX export starting... 'C:\\Users\\rotn1\\Documents\\ChatGPT\\metaroy\\blender\\prepared\\v2\\Medical\\parts\\WindowSill.fbx'
+export finished in 0.0050 sec.
+
+FBX export starting... 'C:\\Users\\rotn1\\Documents\\ChatGPT\\metaroy\\blender\\prepared\\v2\\Medical\\parts\\WindowSill.001.fbx'
+export finished in 0.0052 sec.
+
+FBX export starting... 'C:\\Users\\rotn1\\Documents\\ChatGPT\\metaroy\\blender\\prepared\\v2\\Medical\\parts\\MedicalGlass_1_0.fbx'
+export finished in 0.0047 sec.
+
+FBX export starting... 'C:\\Users\\rotn1\\Documents\\ChatGPT\\metaroy\\blender\\prepared\\v2\\Medical\\parts\\MedicalGlass_1_1.fbx'
+export finished in 0.0051 sec.
+
+FBX export starting... 'C:\\Users\\rotn1\\Documents\\ChatGPT\\metaroy\\blender\\prepared\\v2\\Medical\\parts\\WindowMullion.003.fbx'
+export finished in 0.0059 sec.
+
+FBX export starting... 'C:\\Users\\rotn1\\Documents\\ChatGPT\\metaroy\\blender\\prepared\\v2\\Medical\\parts\\WindowMullion.004.fbx'
+export finished in 0.0055 sec.
+
+FBX export starting... 'C:\\Users\\rotn1\\Documents\\ChatGPT\\metaroy\\blender\\prepared\\v2\\Medical\\parts\\WindowMullion.005.fbx'
+export finished in 0.0051 sec.
+
+FBX export starting... 'C:\\Users\\rotn1\\Documents\\ChatGPT\\metaroy\\blender\\prepared\\v2\\Medical\\parts\\WindowSill.002.fbx'
+export finished in 0.0050 sec.
+
+FBX export starting... 'C:\\Users\\rotn1\\Documents\\ChatGPT\\metaroy\\blender\\prepared\\v2\\Medical\\parts\\WindowSill.003.fbx'
+export finished in 0.0054 sec.
+
+FBX export starting... 'C:\\Users\\rotn1\\Documents\\ChatGPT\\metaroy\\blender\\prepared\\v2\\Medical\\parts\\MedicalInteriorFloor.fbx'
+export finished in 0.0046 sec.
+
+FBX export starting... 'C:\\Users\\rotn1\\Documents\\ChatGPT\\metaroy\\blender\\prepared\\v2\\Medical\\parts\\MedicalBench.fbx'
+export finished in 0.0060 sec.
+
+FBX export starting... 'C:\\Users\\rotn1\\Documents\\ChatGPT\\metaroy\\blender\\prepared\\v2\\Medical\\parts\\MedicalCabinet.fbx'
+export finished in 0.0050 sec.
+MR_MECHANIZED Medical 18 parts 39499 triangles
+
+Blender quit

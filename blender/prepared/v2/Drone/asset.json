@@ -1,0 +1,327 @@
+{
+  "id": "Drone",
+  "source": "blender/Meshy_AI_Rescue_Scout_Drone_20261109_image-to-3d-texture.blend",
+  "source_sha256": "c06e6b9e3dd55dde26517d83f5404152c78b986594c9b66e68ee5f864344423b",
+  "blend": "Drone.blend",
+  "parts": [
+    {
+      "object": "Body",
+      "role": "body",
+      "triangles": 37865,
+      "location_m": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "rotation_deg": [
+        0.0,
+        -0.0,
+        0.0
+      ],
+      "parent": null,
+      "dimensions_m": [
+        1.3000733852386475,
+        0.910656213760376,
+        0.5668160319328308
+      ],
+      "materials": [
+        "M_Drone_Baked"
+      ],
+      "fbx": "parts/Body.fbx"
+    },
+    {
+      "object": "Rotor_0",
+      "role": "rotor",
+      "spin": 1,
+      "axis": "Z",
+      "pivot_m": [
+        0.37335681915283203,
+        0.3361286520957947,
+        0.39800000190734863
+      ],
+      "extracted_faces": 2767,
+      "triangles": 2767,
+      "location_m": [
+        0.37335681915283203,
+        0.3361286520957947,
+        0.39800000190734863
+      ],
+      "rotation_deg": [
+        0.0,
+        -0.0,
+        0.0
+      ],
+      "parent": null,
+      "dimensions_m": [
+        0.4774540066719055,
+        0.4183380603790283,
+        0.06279030442237854
+      ],
+      "materials": [
+        "M_Drone_Baked"
+      ],
+      "fbx": "parts/Rotor_0.fbx"
+    },
+    {
+      "object": "Rotor_1",
+      "role": "rotor",
+      "spin": -1,
+      "axis": "Z",
+      "pivot_m": [
+        0.429187536239624,
+        -0.33568456768989563,
+        0.47999998927116394
+      ],
+      "extracted_faces": 2984,
+      "triangles": 2984,
+      "location_m": [
+        0.429187536239624,
+        -0.33568456768989563,
+        0.47999998927116394
+      ],
+      "rotation_deg": [
+        0.0,
+        -0.0,
+        0.0
+      ],
+      "parent": null,
+      "dimensions_m": [
+        0.34786927700042725,
+        0.4198341965675354,
+        0.10169437527656555
+      ],
+      "materials": [
+        "M_Drone_Baked"
+      ],
+      "fbx": "parts/Rotor_1.fbx"
+    },
+    {
+      "object": "Rotor_2",
+      "role": "rotor",
+      "spin": -1,
+      "axis": "Z",
+      "pivot_m": [
+        -0.36820125579833984,
+        0.3054831027984619,
+        0.39800000190734863
+      ],
+      "extracted_faces": 3007,
+      "triangles": 3007,
+      "location_m": [
+        -0.36820125579833984,
+        0.3054831027984619,
+        0.39800000190734863
+      ],
+      "rotation_deg": [
+        0.0,
+        -0.0,
+        0.0
+      ],
+      "parent": null,
+      "dimensions_m": [
+        0.4349129796028137,
+        0.41732633113861084,
+        0.06594836711883545
+      ],
+      "materials": [
+        "M_Drone_Baked"
+      ],
+      "fbx": "parts/Rotor_2.fbx"
+    },
+    {
+      "object": "Rotor_3",
+      "role": "rotor",
+      "spin": 1,
+      "axis": "Z",
+      "pivot_m": [
+        -0.33671069145202637,
+        -0.32684817910194397,
+        0.47999998927116394
+      ],
+      "extracted_faces": 2770,
+      "triangles": 2770,
+      "location_m": [
+        -0.33671069145202637,
+        -0.32684817910194397,
+        0.47999998927116394
+      ],
+      "rotation_deg": [
+        0.0,
+        -0.0,
+        0.0
+      ],
+      "parent": null,
+      "dimensions_m": [
+        0.41981691122055054,
+        0.2895558774471283,
+        0.09646755456924438
+      ],
+      "materials": [
+        "M_Drone_Baked"
+      ],
+      "fbx": "parts/Rotor_3.fbx"
+    },
+    {
+      "object": "Gimbal",
+      "role": "gimbal",
+      "axis": "Y",
+      "limits_deg": [
+        -35,
+        35
+      ],
+      "extracted_faces": 607,
+      "triangles": 607,
+      "location_m": [
+        0.25999999046325684,
+        0.0,
+        0.20499999821186066
+      ],
+      "rotation_deg": [
+        0.0,
+        -12.000000333930423,
+        0.0
+      ],
+      "parent": null,
+      "dimensions_m": [
+        0.14908742904663086,
+        0.28327497839927673,
+        0.2542189955711365
+      ],
+      "materials": [
+        "M_Drone_Baked"
+      ],
+      "fbx": "parts/Gimbal.fbx"
+    }
+  ],
+  "materials": [
+    {
+      "name": "M_Drone_Baked",
+      "glass": false,
+      "inputs": {
+        "Base Color": [
+          0.800000011920929,
+          0.800000011920929,
+          0.800000011920929,
+          1.0
+        ],
+        "Metallic": 0.0,
+        "Roughness": 0.5,
+        "Transmission Weight": 0.0,
+        "IOR": 1.5,
+        "Alpha": 1.0,
+        "Emission Color": [
+          1.0,
+          1.0,
+          1.0,
+          1.0
+        ],
+        "Emission Strength": 0.0
+      },
+      "links": [
+        {
+          "from": "Principled BSDF",
+          "output": "BSDF",
+          "to": "Material Output",
+          "input": "Surface"
+        },
+        {
+          "from": "Image Texture",
+          "output": "Color",
+          "to": "Principled BSDF",
+          "input": "Base Color"
+        },
+        {
+          "from": "Image Texture.001",
+          "output": "Color",
+          "to": "Separate Color",
+          "input": "Color"
+        },
+        {
+          "from": "Separate Color",
+          "output": "Green",
+          "to": "Principled BSDF",
+          "input": "Roughness"
+        },
+        {
+          "from": "Separate Color",
+          "output": "Blue",
+          "to": "Principled BSDF",
+          "input": "Metallic"
+        },
+        {
+          "from": "Image Texture.002",
+          "output": "Color",
+          "to": "Normal Map",
+          "input": "Color"
+        },
+        {
+          "from": "Normal Map",
+          "output": "Normal",
+          "to": "Principled BSDF",
+          "input": "Normal"
+        }
+      ],
+      "images": [
+        {
+          "node": "Image Texture",
+          "image": "T_Drone_BaseColor",
+          "file": "textures/T_0_T_Drone_BaseColor.png",
+          "colorspace": "sRGB"
+        },
+        {
+          "node": "Image Texture.001",
+          "image": "T_Drone_ORM",
+          "file": "textures/T_1_T_Drone_ORM.png",
+          "colorspace": "Non-Color"
+        },
+        {
+          "node": "Image Texture.002",
+          "image": "T_Drone_Normal",
+          "file": "textures/T_2_T_Drone_Normal.png",
+          "colorspace": "Non-Color"
+        }
+      ]
+    }
+  ],
+  "repairs": [
+    "Separated four textured rotors and camera; opposite diagonal spin; fixed motor/landing gear."
+  ],
+  "actions": [
+    {
+      "name": "CameraSweep",
+      "frames": [
+        1.0,
+        121.0
+      ]
+    },
+    {
+      "name": "RotorLoop_0",
+      "frames": [
+        1.0,
+        31.0
+      ]
+    },
+    {
+      "name": "RotorLoop_1",
+      "frames": [
+        1.0,
+        31.0
+      ]
+    },
+    {
+      "name": "RotorLoop_2",
+      "frames": [
+        1.0,
+        31.0
+      ]
+    },
+    {
+      "name": "RotorLoop_3",
+      "frames": [
+        1.0,
+        31.0
+      ]
+    }
+  ],
+  "animation_runtime": "Rigid meshes driven from Unreal actuator state; Blender actions are inspectable demonstrations."
+}

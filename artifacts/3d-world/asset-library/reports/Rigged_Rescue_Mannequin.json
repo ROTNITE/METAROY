@@ -1,0 +1,381 @@
+{
+  "id": "Rigged_Rescue_Mannequin",
+  "source": "blender/Meshy_AI_Rigged_Rescue_Mannequin_20261109_animated_mixamo_All_animation.glb",
+  "sha256": "7345979bbc81e97b7a847bc876c8cfa3192d5c984650c4f3943e109eebfbc4cb",
+  "units": {
+    "system": "METRIC",
+    "scale_length": 1.0
+  },
+  "bounds_min": [
+    -0.9510578513145447,
+    -0.9999999403953552,
+    -1.0
+  ],
+  "bounds_max": [
+    0.9510578513145447,
+    0.9999999403953552,
+    1.726891279220581
+  ],
+  "dimensions": [
+    1.9021157026290894,
+    1.9999998807907104,
+    2.726891279220581
+  ],
+  "objects": [
+    {
+      "name": "Armature",
+      "type": "ARMATURE",
+      "parent": null,
+      "location": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "rotation": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "scale": [
+        0.009999999776482582,
+        0.009999999776482582,
+        0.009999999776482582
+      ],
+      "hidden_render": false,
+      "bones": [
+        {
+          "name": "mixamorig:Hips",
+          "parent": null
+        },
+        {
+          "name": "mixamorig:Spine",
+          "parent": "mixamorig:Hips"
+        },
+        {
+          "name": "mixamorig:Spine1",
+          "parent": "mixamorig:Spine"
+        },
+        {
+          "name": "mixamorig:Spine2",
+          "parent": "mixamorig:Spine1"
+        },
+        {
+          "name": "mixamorig:Neck",
+          "parent": "mixamorig:Spine2"
+        },
+        {
+          "name": "mixamorig:Head",
+          "parent": "mixamorig:Neck"
+        },
+        {
+          "name": "mixamorig:HeadTop_End",
+          "parent": "mixamorig:Head"
+        },
+        {
+          "name": "headfront",
+          "parent": "mixamorig:Head"
+        },
+        {
+          "name": "mixamorig:LeftShoulder",
+          "parent": "mixamorig:Spine2"
+        },
+        {
+          "name": "mixamorig:LeftArm",
+          "parent": "mixamorig:LeftShoulder"
+        },
+        {
+          "name": "mixamorig:LeftForeArm",
+          "parent": "mixamorig:LeftArm"
+        },
+        {
+          "name": "mixamorig:LeftHand",
+          "parent": "mixamorig:LeftForeArm"
+        },
+        {
+          "name": "mixamorig:RightShoulder",
+          "parent": "mixamorig:Spine2"
+        },
+        {
+          "name": "mixamorig:RightArm",
+          "parent": "mixamorig:RightShoulder"
+        },
+        {
+          "name": "mixamorig:RightForeArm",
+          "parent": "mixamorig:RightArm"
+        },
+        {
+          "name": "mixamorig:RightHand",
+          "parent": "mixamorig:RightForeArm"
+        },
+        {
+          "name": "mixamorig:LeftUpLeg",
+          "parent": "mixamorig:Hips"
+        },
+        {
+          "name": "mixamorig:LeftLeg",
+          "parent": "mixamorig:LeftUpLeg"
+        },
+        {
+          "name": "mixamorig:LeftFoot",
+          "parent": "mixamorig:LeftLeg"
+        },
+        {
+          "name": "mixamorig:LeftToeBase",
+          "parent": "mixamorig:LeftFoot"
+        },
+        {
+          "name": "mixamorig:RightUpLeg",
+          "parent": "mixamorig:Hips"
+        },
+        {
+          "name": "mixamorig:RightLeg",
+          "parent": "mixamorig:RightUpLeg"
+        },
+        {
+          "name": "mixamorig:RightFoot",
+          "parent": "mixamorig:RightLeg"
+        },
+        {
+          "name": "mixamorig:RightToeBase",
+          "parent": "mixamorig:RightFoot"
+        }
+      ],
+      "animation": {
+        "action": "Running",
+        "nla_tracks": [
+          {
+            "name": "Walking",
+            "strips": [
+              {
+                "name": "Walking",
+                "action": "Walking",
+                "start": 1.0,
+                "end": 25.799999237060547
+              }
+            ]
+          },
+          {
+            "name": "Running",
+            "strips": [
+              {
+                "name": "Running",
+                "action": "Running",
+                "start": 1.0,
+                "end": 16.200000762939453
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "name": "char1",
+      "type": "MESH",
+      "parent": "Armature",
+      "location": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "rotation": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "hidden_render": false,
+      "vertices": 107754,
+      "triangles": 195252,
+      "uv_layers": [
+        "UVMap"
+      ],
+      "bounds_min": [
+        -0.3472957909107208,
+        -0.5698002576828003,
+        0.09374544024467468
+      ],
+      "bounds_max": [
+        0.3641858696937561,
+        0.5689033269882202,
+        1.726891279220581
+      ],
+      "materials": [
+        "Material_0"
+      ],
+      "modifiers": [
+        {
+          "name": "Armature",
+          "type": "ARMATURE"
+        }
+      ]
+    },
+    {
+      "name": "Icosphere",
+      "type": "MESH",
+      "parent": null,
+      "location": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "rotation": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "hidden_render": false,
+      "vertices": 42,
+      "triangles": 80,
+      "uv_layers": [
+        "UVMap"
+      ],
+      "bounds_min": [
+        -0.9510578513145447,
+        -0.9999999403953552,
+        -1.0
+      ],
+      "bounds_max": [
+        0.9510578513145447,
+        0.9999999403953552,
+        1.0
+      ],
+      "materials": [],
+      "modifiers": []
+    }
+  ],
+  "materials": [
+    {
+      "name": "Material_0",
+      "nodes": [
+        {
+          "name": "Principled BSDF",
+          "type": "BSDF_PRINCIPLED",
+          "inputs": {
+            "Base Color": {
+              "linked": true,
+              "value": [
+                0.800000011920929,
+                0.800000011920929,
+                0.800000011920929,
+                1.0
+              ]
+            },
+            "Metallic": {
+              "linked": true,
+              "value": 0.0
+            },
+            "Roughness": {
+              "linked": true,
+              "value": 0.5
+            },
+            "IOR": {
+              "linked": false,
+              "value": 1.5
+            },
+            "Alpha": {
+              "linked": false,
+              "value": 1.0
+            },
+            "Transmission Weight": {
+              "linked": false,
+              "value": 0.0
+            }
+          }
+        },
+        {
+          "name": "Material Output",
+          "type": "OUTPUT_MATERIAL"
+        },
+        {
+          "name": "Image Texture",
+          "type": "TEX_IMAGE",
+          "image": "Image_0"
+        },
+        {
+          "name": "Separate Color",
+          "type": "SEPARATE_COLOR"
+        },
+        {
+          "name": "Image Texture.001",
+          "type": "TEX_IMAGE",
+          "image": "Image_1"
+        },
+        {
+          "name": "Normal Map",
+          "type": "NORMAL_MAP"
+        },
+        {
+          "name": "Image Texture.002",
+          "type": "TEX_IMAGE",
+          "image": "Image_2"
+        }
+      ]
+    }
+  ],
+  "images": [
+    {
+      "name": "Image_0",
+      "size": [
+        4096,
+        4096
+      ],
+      "packed": true,
+      "filepath": "",
+      "colorspace": "sRGB",
+      "exists": true
+    },
+    {
+      "name": "Image_1",
+      "size": [
+        2048,
+        2048
+      ],
+      "packed": true,
+      "filepath": "",
+      "colorspace": "Non-Color",
+      "exists": true
+    },
+    {
+      "name": "Image_2",
+      "size": [
+        4096,
+        4096
+      ],
+      "packed": true,
+      "filepath": "",
+      "colorspace": "Non-Color",
+      "exists": true
+    }
+  ],
+  "actions": [
+    {
+      "name": "Running",
+      "frames": [
+        0.0,
+        15.199999809265137
+      ],
+      "slots": [
+        "OBArmature"
+      ]
+    },
+    {
+      "name": "Walking",
+      "frames": [
+        0.0,
+        24.799999237060547
+      ],
+      "slots": [
+        "OBArmature"
+      ]
+    }
+  ]
+}

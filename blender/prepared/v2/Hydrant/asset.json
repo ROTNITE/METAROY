@@ -1,0 +1,562 @@
+{
+  "id": "Hydrant",
+  "source": "blender/vendor/fire_hydrant_4k/fire_hydrant_4k.blend",
+  "source_sha256": "e47e0b9cdc1caad4fe647257b1233ea9036f497a52dbd9b8f2715631f7cfb12e",
+  "blend": "Hydrant.blend",
+  "parts": [
+    {
+      "object": "fire_hydrant",
+      "role": "module",
+      "catalog_position_m": [
+        -0.3007751703262329,
+        -0.015338264405727386,
+        -8.87151836650446e-05
+      ],
+      "triangles": 22888,
+      "location_m": [
+        -0.3007751703262329,
+        -0.015338264405727386,
+        -8.87151836650446e-05
+      ],
+      "rotation_deg": [
+        0.0,
+        -0.0,
+        0.0
+      ],
+      "parent": null,
+      "dimensions_m": [
+        0.25415173172950745,
+        0.28374987840652466,
+        0.799456000328064
+      ],
+      "materials": [
+        "fire_hydrant"
+      ],
+      "fbx": "parts/fire_hydrant.fbx"
+    },
+    {
+      "object": "fire_hydrant_cap_01",
+      "role": "module",
+      "catalog_position_m": [
+        -0.30003780126571655,
+        -0.14873987436294556,
+        0.30560681223869324
+      ],
+      "triangles": 2204,
+      "location_m": [
+        -0.30003780126571655,
+        -0.14873987436294556,
+        0.30560681223869324
+      ],
+      "rotation_deg": [
+        0.0,
+        -0.0,
+        0.0
+      ],
+      "parent": null,
+      "dimensions_m": [
+        0.2513880729675293,
+        0.0849340483546257,
+        0.2492586076259613
+      ],
+      "materials": [
+        "fire_hydrant"
+      ],
+      "fbx": "parts/fire_hydrant_cap_01.fbx"
+    },
+    {
+      "object": "fire_hydrant_cap_02",
+      "role": "module",
+      "catalog_position_m": [
+        -0.1956702321767807,
+        -0.05876072496175766,
+        0.5226336717605591
+      ],
+      "triangles": 1820,
+      "location_m": [
+        -0.1956702321767807,
+        -0.05876072496175766,
+        0.5226336717605591
+      ],
+      "rotation_deg": [
+        0.0,
+        -0.0,
+        0.0
+      ],
+      "parent": null,
+      "dimensions_m": [
+        0.05704978108406067,
+        0.07169449329376221,
+        0.07480490207672119
+      ],
+      "materials": [
+        "fire_hydrant"
+      ],
+      "fbx": "parts/fire_hydrant_cap_02.fbx"
+    },
+    {
+      "object": "fire_hydrant_cap_03",
+      "role": "module",
+      "catalog_position_m": [
+        -0.4083479940891266,
+        -0.06298375874757767,
+        0.5081241726875305
+      ],
+      "triangles": 1820,
+      "location_m": [
+        -0.4083479940891266,
+        -0.06298375874757767,
+        0.5081241726875305
+      ],
+      "rotation_deg": [
+        0.0,
+        -0.0,
+        0.0
+      ],
+      "parent": null,
+      "dimensions_m": [
+        0.06684178113937378,
+        0.09444913268089294,
+        0.1003187894821167
+      ],
+      "materials": [
+        "fire_hydrant"
+      ],
+      "fbx": "parts/fire_hydrant_cap_03.fbx"
+    },
+    {
+      "object": "fire_hydrant_chain",
+      "role": "module",
+      "catalog_position_m": [
+        -0.3038153648376465,
+        -0.10747186094522476,
+        0.195121169090271
+      ],
+      "triangles": 14426,
+      "location_m": [
+        -0.3038153648376465,
+        -0.10747186094522476,
+        0.195121169090271
+      ],
+      "rotation_deg": [
+        0.0,
+        -0.0,
+        0.0
+      ],
+      "parent": null,
+      "dimensions_m": [
+        0.2539564371109009,
+        0.1226964145898819,
+        0.38455909490585327
+      ],
+      "materials": [
+        "fire_hydrant"
+      ],
+      "fbx": "parts/fire_hydrant_chain.fbx"
+    },
+    {
+      "object": "fire_hydrant_aged",
+      "role": "module",
+      "catalog_position_m": [
+        0.299224853515625,
+        -0.015338264405727386,
+        -8.87151836650446e-05
+      ],
+      "triangles": 22888,
+      "location_m": [
+        0.299224853515625,
+        -0.015338264405727386,
+        -8.87151836650446e-05
+      ],
+      "rotation_deg": [
+        0.0,
+        -0.0,
+        0.0
+      ],
+      "parent": null,
+      "dimensions_m": [
+        0.25415173172950745,
+        0.28374987840652466,
+        0.799456000328064
+      ],
+      "materials": [
+        "fire_hydrant_aged"
+      ],
+      "fbx": "parts/fire_hydrant_aged.fbx"
+    },
+    {
+      "object": "fire_hydrant_cap_01_aged",
+      "role": "module",
+      "catalog_position_m": [
+        0.29996222257614136,
+        -0.14873987436294556,
+        0.30560681223869324
+      ],
+      "triangles": 2204,
+      "location_m": [
+        0.29996222257614136,
+        -0.14873987436294556,
+        0.30560681223869324
+      ],
+      "rotation_deg": [
+        0.0,
+        -0.0,
+        0.0
+      ],
+      "parent": null,
+      "dimensions_m": [
+        0.2513880729675293,
+        0.0849340483546257,
+        0.2492586076259613
+      ],
+      "materials": [
+        "fire_hydrant_aged"
+      ],
+      "fbx": "parts/fire_hydrant_cap_01_aged.fbx"
+    },
+    {
+      "object": "fire_hydrant_cap_02_aged",
+      "role": "module",
+      "catalog_position_m": [
+        0.404329776763916,
+        -0.05876072496175766,
+        0.5226336717605591
+      ],
+      "triangles": 1820,
+      "location_m": [
+        0.404329776763916,
+        -0.05876072496175766,
+        0.5226336717605591
+      ],
+      "rotation_deg": [
+        0.0,
+        -0.0,
+        0.0
+      ],
+      "parent": null,
+      "dimensions_m": [
+        0.05704978108406067,
+        0.07169449329376221,
+        0.07480490207672119
+      ],
+      "materials": [
+        "fire_hydrant_aged"
+      ],
+      "fbx": "parts/fire_hydrant_cap_02_aged.fbx"
+    },
+    {
+      "object": "fire_hydrant_cap_03_aged",
+      "role": "module",
+      "catalog_position_m": [
+        0.19165202975273132,
+        -0.06298375874757767,
+        0.5081241726875305
+      ],
+      "triangles": 1820,
+      "location_m": [
+        0.19165202975273132,
+        -0.06298375874757767,
+        0.5081241726875305
+      ],
+      "rotation_deg": [
+        0.0,
+        -0.0,
+        0.0
+      ],
+      "parent": null,
+      "dimensions_m": [
+        0.06684178113937378,
+        0.09444913268089294,
+        0.1003187894821167
+      ],
+      "materials": [
+        "fire_hydrant_aged"
+      ],
+      "fbx": "parts/fire_hydrant_cap_03_aged.fbx"
+    },
+    {
+      "object": "fire_hydrant_chain_aged",
+      "role": "module",
+      "catalog_position_m": [
+        0.29618462920188904,
+        -0.10747186094522476,
+        0.195121169090271
+      ],
+      "triangles": 14426,
+      "location_m": [
+        0.29618462920188904,
+        -0.10747186094522476,
+        0.195121169090271
+      ],
+      "rotation_deg": [
+        0.0,
+        -0.0,
+        0.0
+      ],
+      "parent": null,
+      "dimensions_m": [
+        0.2539564371109009,
+        0.1226964145898819,
+        0.38455909490585327
+      ],
+      "materials": [
+        "fire_hydrant_aged"
+      ],
+      "fbx": "parts/fire_hydrant_chain_aged.fbx"
+    }
+  ],
+  "materials": [
+    {
+      "name": "fire_hydrant",
+      "glass": false,
+      "inputs": {
+        "Base Color": [
+          0.8134579658508301,
+          0.8134579658508301,
+          0.8134579658508301,
+          1.0
+        ],
+        "Metallic": 0.0,
+        "Roughness": 0.5,
+        "Transmission Weight": 0.0,
+        "IOR": 1.4500000476837158,
+        "Alpha": 1.0,
+        "Emission Color": [
+          0.0,
+          0.0,
+          0.0,
+          1.0
+        ],
+        "Emission Strength": 1.0
+      },
+      "links": [
+        {
+          "from": "Principled BSDF",
+          "output": "BSDF",
+          "to": "Material Output",
+          "input": "Surface"
+        },
+        {
+          "from": "Image Texture",
+          "output": "Color",
+          "to": "Principled BSDF",
+          "input": "Base Color"
+        },
+        {
+          "from": "Image Texture.001",
+          "output": "Color",
+          "to": "Principled BSDF",
+          "input": "Metallic"
+        },
+        {
+          "from": "Image Texture.002",
+          "output": "Color",
+          "to": "Principled BSDF",
+          "input": "Roughness"
+        },
+        {
+          "from": "Image Texture.003",
+          "output": "Color",
+          "to": "Normal Map",
+          "input": "Color"
+        },
+        {
+          "from": "Normal Map",
+          "output": "Normal",
+          "to": "Principled BSDF",
+          "input": "Normal"
+        },
+        {
+          "from": "Reroute",
+          "output": "Output",
+          "to": "Image Texture",
+          "input": "Vector"
+        },
+        {
+          "from": "Reroute",
+          "output": "Output",
+          "to": "Image Texture.001",
+          "input": "Vector"
+        },
+        {
+          "from": "Reroute",
+          "output": "Output",
+          "to": "Image Texture.002",
+          "input": "Vector"
+        },
+        {
+          "from": "Reroute",
+          "output": "Output",
+          "to": "Image Texture.003",
+          "input": "Vector"
+        },
+        {
+          "from": "Mapping",
+          "output": "Vector",
+          "to": "Reroute",
+          "input": "Input"
+        },
+        {
+          "from": "Texture Coordinate",
+          "output": "UV",
+          "to": "Mapping",
+          "input": "Vector"
+        }
+      ],
+      "images": [
+        {
+          "node": "Image Texture",
+          "image": "fire_hydrant_diff.png",
+          "file": "textures/T_0_fire_hydrant_diff.png",
+          "colorspace": "sRGB"
+        },
+        {
+          "node": "Image Texture.001",
+          "image": "fire_hydrant_metal.png",
+          "file": "textures/T_1_fire_hydrant_metal.png",
+          "colorspace": "Non-Color"
+        },
+        {
+          "node": "Image Texture.002",
+          "image": "fire_hydrant_rough.png",
+          "file": "textures/T_2_fire_hydrant_rough.png",
+          "colorspace": "Non-Color"
+        },
+        {
+          "node": "Image Texture.003",
+          "image": "fire_hydrant_nor_gl.png",
+          "file": "textures/T_3_fire_hydrant_nor_gl.png",
+          "colorspace": "Non-Color"
+        }
+      ]
+    },
+    {
+      "name": "fire_hydrant_aged",
+      "glass": false,
+      "inputs": {
+        "Base Color": [
+          0.8134579658508301,
+          0.8134579658508301,
+          0.8134579658508301,
+          1.0
+        ],
+        "Metallic": 0.0,
+        "Roughness": 0.5,
+        "Transmission Weight": 0.0,
+        "IOR": 1.4500000476837158,
+        "Alpha": 1.0,
+        "Emission Color": [
+          0.0,
+          0.0,
+          0.0,
+          1.0
+        ],
+        "Emission Strength": 1.0
+      },
+      "links": [
+        {
+          "from": "Principled BSDF",
+          "output": "BSDF",
+          "to": "Material Output",
+          "input": "Surface"
+        },
+        {
+          "from": "Image Texture",
+          "output": "Color",
+          "to": "Principled BSDF",
+          "input": "Base Color"
+        },
+        {
+          "from": "Image Texture.001",
+          "output": "Color",
+          "to": "Principled BSDF",
+          "input": "Metallic"
+        },
+        {
+          "from": "Image Texture.002",
+          "output": "Color",
+          "to": "Principled BSDF",
+          "input": "Roughness"
+        },
+        {
+          "from": "Image Texture.003",
+          "output": "Color",
+          "to": "Normal Map",
+          "input": "Color"
+        },
+        {
+          "from": "Normal Map",
+          "output": "Normal",
+          "to": "Principled BSDF",
+          "input": "Normal"
+        },
+        {
+          "from": "Reroute",
+          "output": "Output",
+          "to": "Image Texture",
+          "input": "Vector"
+        },
+        {
+          "from": "Reroute",
+          "output": "Output",
+          "to": "Image Texture.001",
+          "input": "Vector"
+        },
+        {
+          "from": "Reroute",
+          "output": "Output",
+          "to": "Image Texture.002",
+          "input": "Vector"
+        },
+        {
+          "from": "Reroute",
+          "output": "Output",
+          "to": "Image Texture.003",
+          "input": "Vector"
+        },
+        {
+          "from": "Mapping",
+          "output": "Vector",
+          "to": "Reroute",
+          "input": "Input"
+        },
+        {
+          "from": "Texture Coordinate",
+          "output": "UV",
+          "to": "Mapping",
+          "input": "Vector"
+        }
+      ],
+      "images": [
+        {
+          "node": "Image Texture",
+          "image": "fire_hydrant_aged_diff.png",
+          "file": "textures/T_4_fire_hydrant_aged_diff.png",
+          "colorspace": "sRGB"
+        },
+        {
+          "node": "Image Texture.001",
+          "image": "fire_hydrant_aged_metal.png",
+          "file": "textures/T_5_fire_hydrant_aged_metal.png",
+          "colorspace": "Non-Color"
+        },
+        {
+          "node": "Image Texture.002",
+          "image": "fire_hydrant_aged_rough.png",
+          "file": "textures/T_6_fire_hydrant_aged_rough.png",
+          "colorspace": "Non-Color"
+        },
+        {
+          "node": "Image Texture.003",
+          "image": "fire_hydrant_aged_nor_gl.png",
+          "file": "textures/T_7_fire_hydrant_aged_nor_gl.png",
+          "colorspace": "Non-Color"
+        }
+      ]
+    }
+  ],
+  "repairs": [],
+  "actions": [],
+  "animation_runtime": "Rigid meshes driven from Unreal actuator state; Blender actions are inspectable demonstrations.",
+  "kind": "modular_catalog"
+}

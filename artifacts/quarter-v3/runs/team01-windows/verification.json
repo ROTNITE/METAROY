@@ -1,0 +1,4 @@
+{
+  "passed": false,
+  "error": "launcher/common smoke checks failed; inspect launcher.log"
+}

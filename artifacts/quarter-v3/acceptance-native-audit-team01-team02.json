@@ -1,0 +1,146 @@
+{
+  "checked_at": "2026-11-10T15:15:16.890671+00:00",
+  "scope": "read-only inspection of archived evidence; no Unreal launch, source or verifier changes",
+  "runs": {
+    "team01-traffic-crossing": {
+      "official_result": {
+        "passed": false,
+        "error": "source or binary changed during native run"
+      },
+      "time_s": 100.00658618187299,
+      "source_changes": [
+        "unreal/tools/prepare_quarter_scenery.py"
+      ],
+      "vehicle_contacts": {
+        "aerial_0": 0,
+        "aerial_1": 0,
+        "aerial_2": 0,
+        "ground_0": 0,
+        "ground_1": 0,
+        "ground_2": 0,
+        "ground_3": 0
+      },
+      "common_check_tail": "{\"passed\": true, \"scope\": \"common native smoke checks, not full plan acceptance\", \"time_s\": 100.00658618187299, \"contacts\": 3226, \"discovered\": 0, \"delivered\": 0, \"physics_bodies\": 23, \"agents\": 7}\n"
+    },
+    "team01-windows": {
+      "official_result": {
+        "passed": false,
+        "error": "launcher/common smoke checks failed; inspect launcher.log"
+      },
+      "time_s": 30.002268611395266,
+      "source_changes": [],
+      "vehicle_contacts": {
+        "aerial_0": 0,
+        "aerial_1": 0,
+        "aerial_2": 0,
+        "ground_0": 0,
+        "ground_1": 0,
+        "ground_2": 0,
+        "ground_3": 0
+      },
+      "common_check_tail": "Traceback (most recent call last):\n  File \"C:\\Users\\rotn1\\Documents\\ChatGPT\\metaroy\\unreal\\tools\\check_smoke.py\", line 70, in <module>\n    verify(parser.parse_args().saved)\n    ~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"C:\\Users\\rotn1\\Documents\\ChatGPT\\metaroy\\unreal\\tools\\check_smoke.py\", line 55, in verify\n    assert state['discovered']>0,'no actual sensor detection'\n           ^^^^^^^^^^^^^^^^^^^^^\nAssertionError: no actual sensor detection\n"
+    },
+    "team02-windows": {
+      "official_result": {
+        "passed": false,
+        "error": "('pose changed without executed distance', 'aerial_2')"
+      },
+      "time_s": 30.005797303223517,
+      "source_changes": [],
+      "vehicle_contacts": {
+        "aerial_0": 0,
+        "aerial_1": 0,
+        "aerial_2": 0,
+        "ground_0": 0,
+        "ground_1": 0,
+        "ground_2": 0,
+        "ground_3": 0
+      },
+      "common_check_tail": "Traceback (most recent call last):\n  File \"C:\\Users\\rotn1\\Documents\\ChatGPT\\metaroy\\unreal\\tools\\check_smoke.py\", line 70, in <module>\n    verify(parser.parse_args().saved)\n    ~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"C:\\Users\\rotn1\\Documents\\ChatGPT\\metaroy\\unreal\\tools\\check_smoke.py\", line 57, in verify\n    assert any(a['distance_cm']>1000 for a in state['agents'] if not a['aerial']),'no ground movement'\n           ~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nAssertionError: no ground movement\n",
+      "distance_violations": [
+        {
+          "key": "aerial_2",
+          "time_s": 18.028456906729843,
+          "displacement_cm": 1846.2964732844116,
+          "executed_distance_delta_cm": 1841.638671875,
+          "difference_cm": 4.657801409411604
+        }
+      ],
+      "ground_distances_cm": {
+        "ground_0": 45.053680419921875,
+        "ground_1": 45.053680419921875,
+        "ground_2": 45.053680419921875,
+        "ground_3": 45.053680419921875
+      },
+      "diagnosis": "Post-physics world pose versus agent pre-physics distance appears one tick out of phase; requires coherent movement accounting, not relaxing guard. Independently common smoke had no ground movement in a 30s visual fixture."
+    },
+    "team02-traffic-following": {
+      "official_result": {
+        "passed": false,
+        "error": "following fixture did not finish"
+      },
+      "time_s": 100.00609979307046,
+      "source_changes": [],
+      "agents": [
+        {
+          "key": "aerial_0",
+          "state": "landed",
+          "x_cm": -1600.0035924385638,
+          "y_cm": 100.0087050545216,
+          "stop_reason": "",
+          "vehicle_contacts": 0
+        },
+        {
+          "key": "aerial_1",
+          "state": "landed",
+          "x_cm": -1600.0035924385638,
+          "y_cm": 550.0087050545216,
+          "stop_reason": "",
+          "vehicle_contacts": 0
+        },
+        {
+          "key": "aerial_2",
+          "state": "landed",
+          "x_cm": -1600.003568634842,
+          "y_cm": 1000.0088679656766,
+          "stop_reason": "",
+          "vehicle_contacts": 0
+        },
+        {
+          "key": "ground_0",
+          "state": "external_route",
+          "x_cm": 5500,
+          "y_cm": 10422.368637125523,
+          "stop_reason": "yield_to_vehicle",
+          "vehicle_contacts": 0
+        },
+        {
+          "key": "ground_1",
+          "state": "idle",
+          "x_cm": 5500,
+          "y_cm": 11140.97414051014,
+          "stop_reason": "",
+          "vehicle_contacts": 0
+        },
+        {
+          "key": "ground_2",
+          "state": "idle",
+          "x_cm": -440,
+          "y_cm": 200,
+          "stop_reason": "",
+          "vehicle_contacts": 0
+        },
+        {
+          "key": "ground_3",
+          "state": "idle",
+          "x_cm": -110,
+          "y_cm": 200,
+          "stop_reason": "",
+          "vehicle_contacts": 0
+        }
+      ],
+      "diagnosis": "Leader finishes but follower remains yielding, so zero contacts does not satisfy completion. Requires finite route-endpoint prediction/deadlock fix."
+    }
+  },
+  "appended_at": "2026-11-10T20:08:48.015616+00:00"
+}

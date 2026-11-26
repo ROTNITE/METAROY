@@ -1,0 +1,88 @@
+{
+  "archive": "MetaRescue_Benchmark_v0_3.zip",
+  "archive_sha256": "5b36cc61df3fda83e489fab70aa82a6d0eb695d04cc0c70a7be01c7edc2a3cdc",
+  "imported_on": "2026-11-09",
+  "destination": "benchmarks/metarescue-v0.3",
+  "files": [
+    {
+      "path": "README.md",
+      "bytes": 15403,
+      "sha256": "8d25492aa8195406366ce9ae05360174818ec734ea7e2c41afc7ce43f5f3371e"
+    },
+    {
+      "path": "main part/benchmark_batch.py",
+      "bytes": 2771,
+      "sha256": "13bddefee4ea252d6326abdbd6b81f0502adb6643075e92201d5c89d3efdc43b"
+    },
+    {
+      "path": "main part/optimizer.py",
+      "bytes": 10382,
+      "sha256": "d3014397180a0430670a6e8c3e15c4a523ac8835f77ba041ee3ccd597d47de6f"
+    },
+    {
+      "path": "main part/server.py",
+      "bytes": 3943,
+      "sha256": "6f3811a110ba53e01b474529960724dd7aebb6b51a943ffff8c5aef78d997b7a"
+    },
+    {
+      "path": "main part/simulation.py",
+      "bytes": 20670,
+      "sha256": "cccfedc05fa7ff770988bef3629104e62f325b86c55607693f3c581c8e3182dc"
+    },
+    {
+      "path": "main part/static/app.js",
+      "bytes": 24228,
+      "sha256": "709de43ac3aa9483cc3bb201862accc2d30ded991aec6a1e4905cc27805d0e33"
+    },
+    {
+      "path": "main part/static/index.html",
+      "bytes": 10280,
+      "sha256": "f7233220d96adc8af9db49005ce87f23744e726db3889a78f7167a668e80ec01"
+    },
+    {
+      "path": "main part/static/style.css",
+      "bytes": 9847,
+      "sha256": "5ba0733925cd6a372f7bf3c3cddd7975bc2f7dcb8abfe9577be5cea39775ace9"
+    },
+    {
+      "path": "main part/tests/test_api.py",
+      "bytes": 2423,
+      "sha256": "33eb3972a76dab06a60dc5dc5d5baf1f16af5409b95a8e11d8c12e6f68e687bc"
+    },
+    {
+      "path": "main part/tests/test_engine.py",
+      "bytes": 9163,
+      "sha256": "632812788c2f88fa8c213b84c0adc8ba34e675af24c9fbc3c0a21e1b6bd4fbd2"
+    },
+    {
+      "path": "main part/world.py",
+      "bytes": 15234,
+      "sha256": "ec7055025d4b2a36c83c59676c6debfd2a97380613c11acc5604144a11b6eae1"
+    },
+    {
+      "path": "main.bat",
+      "bytes": 159,
+      "sha256": "8ff6e338af08d4232419a26c16a6af27b633695fdcd1bbd3d01eb39a0b17cf12"
+    },
+    {
+      "path": "main.command",
+      "bytes": 47,
+      "sha256": "0febcf2b83a86f0dc2d04f44498d806b8b3eb2bf46d0b3637ed81ac942d55881"
+    },
+    {
+      "path": "main.py",
+      "bytes": 707,
+      "sha256": "888bfd10f4285617e89e27553eaa1e9999aeb0fddbc4312b1a63dff47becd036"
+    },
+    {
+      "path": "requirements.txt",
+      "bytes": 56,
+      "sha256": "91a5a323ec851ee7660fe7e1d6e0c8464ace430d4bc402a2a76884824b517a39"
+    },
+    {
+      "path": "venv/README.txt",
+      "bytes": 122,
+      "sha256": "d30d42f93914126c974d54a287f73d1405327fa04736e52b580a99d938f95a4f"
+    }
+  ]
+}

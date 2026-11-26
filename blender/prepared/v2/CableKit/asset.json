@@ -1,0 +1,1732 @@
+{
+  "id": "CableKit",
+  "source": "blender/vendor/modular_electric_cables_4k/modular_electric_cables_4k.blend",
+  "source_sha256": "15ca91e7ca4fe1a8c2209c786e88c59b3de06041b2489a3b685e8282c5142878",
+  "blend": "CableKit.blend",
+  "parts": [
+    {
+      "object": "cable_straight_medium",
+      "role": "module",
+      "catalog_position_m": [
+        0.09999999403953552,
+        -0.01275395043194294,
+        -4.2450790105341696e-10
+      ],
+      "triangles": 356,
+      "location_m": [
+        0.09999999403953552,
+        -0.01275395043194294,
+        -4.2450790105341696e-10
+      ],
+      "rotation_deg": [
+        0.0,
+        -0.0,
+        0.0
+      ],
+      "parent": null,
+      "dimensions_m": [
+        0.04162907600402832,
+        0.025936834514141083,
+        0.20725207030773163
+      ],
+      "materials": [
+        "modular_electric_cables"
+      ],
+      "fbx": "parts/cable_straight_medium.fbx"
+    },
+    {
+      "object": "cable_straight_short",
+      "role": "module",
+      "catalog_position_m": [
+        0.050000011920928955,
+        -0.01266716793179512,
+        0.09999998658895493
+      ],
+      "triangles": 356,
+      "location_m": [
+        0.050000011920928955,
+        -0.01266716793179512,
+        0.09999998658895493
+      ],
+      "rotation_deg": [
+        0.0,
+        -0.0,
+        0.0
+      ],
+      "parent": null,
+      "dimensions_m": [
+        0.04162907600402832,
+        0.025936834514141083,
+        0.1072520986199379
+      ],
+      "materials": [
+        "modular_electric_cables"
+      ],
+      "fbx": "parts/cable_straight_short.fbx"
+    },
+    {
+      "object": "cable_mount",
+      "role": "module",
+      "catalog_position_m": [
+        9.313225746154785e-10,
+        -0.012753942981362343,
+        0.2927478849887848
+      ],
+      "triangles": 332,
+      "location_m": [
+        9.313225746154785e-10,
+        -0.012753942981362343,
+        0.2927478849887848
+      ],
+      "rotation_deg": [
+        0.0,
+        -0.0,
+        0.0
+      ],
+      "parent": null,
+      "dimensions_m": [
+        0.04162907600402832,
+        0.025936834514141083,
+        0.01450415514409542
+      ],
+      "materials": [
+        "modular_electric_cables"
+      ],
+      "fbx": "parts/cable_mount.fbx"
+    },
+    {
+      "object": "cable_end",
+      "role": "module",
+      "catalog_position_m": [
+        0.0,
+        -0.01248790044337511,
+        0.3999999463558197
+      ],
+      "triangles": 304,
+      "location_m": [
+        0.0,
+        -0.01248790044337511,
+        0.3999999463558197
+      ],
+      "rotation_deg": [
+        0.0,
+        -0.0,
+        0.0
+      ],
+      "parent": null,
+      "dimensions_m": [
+        0.017318347468972206,
+        0.02540474943816662,
+        0.1044539138674736
+      ],
+      "materials": [
+        "modular_electric_cables"
+      ],
+      "fbx": "parts/cable_end.fbx"
+    },
+    {
+      "object": "cable_straight_long",
+      "role": "module",
+      "catalog_position_m": [
+        0.14999999105930328,
+        -0.012753942981362343,
+        -4.2450787329784134e-10
+      ],
+      "triangles": 1044,
+      "location_m": [
+        0.14999999105930328,
+        -0.012753942981362343,
+        -4.2450787329784134e-10
+      ],
+      "rotation_deg": [
+        0.0,
+        -0.0,
+        0.0
+      ],
+      "parent": null,
+      "dimensions_m": [
+        0.04162907600402832,
+        0.025936834514141083,
+        0.6072520613670349
+      ],
+      "materials": [
+        "modular_electric_cables"
+      ],
+      "fbx": "parts/cable_straight_long.fbx"
+    },
+    {
+      "object": "cable_scurve_1",
+      "role": "module",
+      "catalog_position_m": [
+        0.2579793930053711,
+        -0.01275395043194294,
+        -2.532498932783511e-10
+      ],
+      "triangles": 548,
+      "location_m": [
+        0.2579793930053711,
+        -0.01275395043194294,
+        -2.532498932783511e-10
+      ],
+      "rotation_deg": [
+        0.0,
+        -0.0,
+        0.0
+      ],
+      "parent": null,
+      "dimensions_m": [
+        0.12567034363746643,
+        0.025936834514141083,
+        0.10725206881761551
+      ],
+      "materials": [
+        "modular_electric_cables"
+      ],
+      "fbx": "parts/cable_scurve_1.fbx"
+    },
+    {
+      "object": "cable_scurve_4",
+      "role": "module",
+      "catalog_position_m": [
+        0.33297938108444214,
+        -0.012753965333104134,
+        0.2999999225139618
+      ],
+      "triangles": 548,
+      "location_m": [
+        0.33297938108444214,
+        -0.012753965333104134,
+        0.2999999225139618
+      ],
+      "rotation_deg": [
+        0.0,
+        -0.0,
+        0.0
+      ],
+      "parent": null,
+      "dimensions_m": [
+        0.07567032426595688,
+        0.02593684196472168,
+        0.10725212097167969
+      ],
+      "materials": [
+        "modular_electric_cables"
+      ],
+      "fbx": "parts/cable_scurve_4.fbx"
+    },
+    {
+      "object": "cable_turn_long",
+      "role": "module",
+      "catalog_position_m": [
+        0.31040728092193604,
+        -0.012753942981362343,
+        0.49381810426712036
+      ],
+      "triangles": 596,
+      "location_m": [
+        0.31040728092193604,
+        -0.012753942981362343,
+        0.49381810426712036
+      ],
+      "rotation_deg": [
+        0.0,
+        -0.0,
+        0.0
+      ],
+      "parent": null,
+      "dimensions_m": [
+        0.22081449627876282,
+        0.025936834514141083,
+        0.21343393623828888
+      ],
+      "materials": [
+        "modular_electric_cables"
+      ],
+      "fbx": "parts/cable_turn_long.fbx"
+    },
+    {
+      "object": "cable_turn_short",
+      "role": "module",
+      "catalog_position_m": [
+        0.2511981427669525,
+        -0.012753951363265514,
+        0.09999998658895493
+      ],
+      "triangles": 512,
+      "location_m": [
+        0.2511981427669525,
+        -0.012753951363265514,
+        0.09999998658895493
+      ],
+      "rotation_deg": [
+        0.0,
+        -0.0,
+        0.0
+      ],
+      "parent": null,
+      "dimensions_m": [
+        0.11210787296295166,
+        0.025936834514141083,
+        0.12081454694271088
+      ],
+      "materials": [
+        "modular_electric_cables"
+      ],
+      "fbx": "parts/cable_turn_short.fbx"
+    },
+    {
+      "object": "cable_corner_towards",
+      "role": "module",
+      "catalog_position_m": [
+        0.19999998807907104,
+        -0.05582256615161896,
+        0.19999997317790985
+      ],
+      "triangles": 512,
+      "location_m": [
+        0.19999998807907104,
+        -0.05582256615161896,
+        0.19999997317790985
+      ],
+      "rotation_deg": [
+        0.0,
+        -0.0,
+        0.0
+      ],
+      "parent": null,
+      "dimensions_m": [
+        0.04162908345460892,
+        0.10285909473896027,
+        0.09999996423721313
+      ],
+      "materials": [
+        "modular_electric_cables"
+      ],
+      "fbx": "parts/cable_corner_towards.fbx"
+    },
+    {
+      "object": "cable_10cm",
+      "role": "module",
+      "catalog_position_m": [
+        6.984919309616089e-10,
+        -0.009999992325901985,
+        0.1499999761581421
+      ],
+      "triangles": 24,
+      "location_m": [
+        6.984919309616089e-10,
+        -0.009999992325901985,
+        0.1499999761581421
+      ],
+      "rotation_deg": [
+        0.0,
+        -0.0,
+        0.0
+      ],
+      "parent": null,
+      "dimensions_m": [
+        0.009711608290672302,
+        0.011214014142751694,
+        0.09999999403953552
+      ],
+      "materials": [
+        "modular_electric_cables"
+      ],
+      "fbx": "parts/cable_10cm.fbx"
+    },
+    {
+      "object": "cable_5cm",
+      "role": "module",
+      "catalog_position_m": [
+        6.984919309616089e-10,
+        -0.010086771100759506,
+        0.049999989569187164
+      ],
+      "triangles": 12,
+      "location_m": [
+        6.984919309616089e-10,
+        -0.010086771100759506,
+        0.049999989569187164
+      ],
+      "rotation_deg": [
+        0.0,
+        -0.0,
+        0.0
+      ],
+      "parent": null,
+      "dimensions_m": [
+        0.009711610153317451,
+        0.011214014142751694,
+        0.05000001937150955
+      ],
+      "materials": [
+        "modular_electric_cables"
+      ],
+      "fbx": "parts/cable_5cm.fbx"
+    },
+    {
+      "object": "cable_2cm",
+      "role": "module",
+      "catalog_position_m": [
+        6.984919309616089e-10,
+        -0.010086771100759506,
+        -8.305643284245434e-09
+      ],
+      "triangles": 12,
+      "location_m": [
+        6.984919309616089e-10,
+        -0.010086771100759506,
+        -8.305643284245434e-09
+      ],
+      "rotation_deg": [
+        0.0,
+        -0.0,
+        0.0
+      ],
+      "parent": null,
+      "dimensions_m": [
+        0.00971161387860775,
+        0.011214014142751694,
+        0.020000025629997253
+      ],
+      "materials": [
+        "modular_electric_cables"
+      ],
+      "fbx": "parts/cable_2cm.fbx"
+    },
+    {
+      "object": "cable_scurve_2",
+      "role": "module",
+      "catalog_position_m": [
+        0.35797935724258423,
+        -0.012753935530781746,
+        -5.788574619636222e-10
+      ],
+      "triangles": 548,
+      "location_m": [
+        0.35797935724258423,
+        -0.012753935530781746,
+        -5.788574619636222e-10
+      ],
+      "rotation_deg": [
+        0.0,
+        -0.0,
+        0.0
+      ],
+      "parent": null,
+      "dimensions_m": [
+        0.12567034363746643,
+        0.025936834514141083,
+        0.20725207030773163
+      ],
+      "materials": [
+        "modular_electric_cables"
+      ],
+      "fbx": "parts/cable_scurve_2.fbx"
+    },
+    {
+      "object": "cable_scurve_3",
+      "role": "module",
+      "catalog_position_m": [
+        0.4329793453216553,
+        -0.012753969058394432,
+        -1.9898215020131005e-10
+      ],
+      "triangles": 548,
+      "location_m": [
+        0.4329793453216553,
+        -0.012753969058394432,
+        -1.9898215020131005e-10
+      ],
+      "rotation_deg": [
+        0.0,
+        -0.0,
+        0.0
+      ],
+      "parent": null,
+      "dimensions_m": [
+        0.07567035406827927,
+        0.025936834514141083,
+        0.20725207030773163
+      ],
+      "materials": [
+        "modular_electric_cables"
+      ],
+      "fbx": "parts/cable_scurve_3.fbx"
+    },
+    {
+      "object": "cable_bridge_2",
+      "role": "module",
+      "catalog_position_m": [
+        0.09999999403953552,
+        -0.014101339504122734,
+        0.29999998211860657
+      ],
+      "triangles": 524,
+      "location_m": [
+        0.09999999403953552,
+        -0.014101339504122734,
+        0.29999998211860657
+      ],
+      "rotation_deg": [
+        0.0,
+        -0.0,
+        0.0
+      ],
+      "parent": null,
+      "dimensions_m": [
+        0.04162907600402832,
+        0.02863161265850067,
+        0.20725207030773163
+      ],
+      "materials": [
+        "modular_electric_cables"
+      ],
+      "fbx": "parts/cable_bridge_2.fbx"
+    },
+    {
+      "object": "cable_bridge_3",
+      "role": "module",
+      "catalog_position_m": [
+        0.09999999403953552,
+        -0.013190177269279957,
+        0.5999999046325684
+      ],
+      "triangles": 524,
+      "location_m": [
+        0.09999999403953552,
+        -0.013190177269279957,
+        0.5999999046325684
+      ],
+      "rotation_deg": [
+        0.0,
+        -0.0,
+        0.0
+      ],
+      "parent": null,
+      "dimensions_m": [
+        0.04162907600402832,
+        0.026809288188815117,
+        0.10725206881761551
+      ],
+      "materials": [
+        "modular_electric_cables"
+      ],
+      "fbx": "parts/cable_bridge_3.fbx"
+    },
+    {
+      "object": "cable_bridge_1",
+      "role": "module",
+      "catalog_position_m": [
+        0.04999999701976776,
+        -0.022694390267133713,
+        0.29999998211860657
+      ],
+      "triangles": 524,
+      "location_m": [
+        0.04999999701976776,
+        -0.022694390267133713,
+        0.29999998211860657
+      ],
+      "rotation_deg": [
+        0.0,
+        -0.0,
+        0.0
+      ],
+      "parent": null,
+      "dimensions_m": [
+        0.04162907600402832,
+        0.04581771790981293,
+        0.20725207030773163
+      ],
+      "materials": [
+        "modular_electric_cables"
+      ],
+      "fbx": "parts/cable_bridge_1.fbx"
+    },
+    {
+      "object": "cable_corner_away",
+      "role": "module",
+      "catalog_position_m": [
+        0.19999998807907104,
+        0.04630809649825096,
+        0.30000001192092896
+      ],
+      "triangles": 512,
+      "location_m": [
+        0.19999998807907104,
+        0.04630809649825096,
+        0.30000001192092896
+      ],
+      "rotation_deg": [
+        0.0,
+        -0.0,
+        0.0
+      ],
+      "parent": null,
+      "dimensions_m": [
+        0.04162908345460892,
+        0.12188789248466492,
+        0.12593688070774078
+      ],
+      "materials": [
+        "modular_electric_cables"
+      ],
+      "fbx": "parts/cable_corner_away.fbx"
+    },
+    {
+      "object": "cable_3way_junction",
+      "role": "module",
+      "catalog_position_m": [
+        0.7872130274772644,
+        -0.013972056098282337,
+        0.5485624074935913
+      ],
+      "triangles": 1464,
+      "location_m": [
+        0.7872130274772644,
+        -0.013972056098282337,
+        0.5485624074935913
+      ],
+      "rotation_deg": [
+        0.0,
+        -0.0,
+        0.0
+      ],
+      "parent": null,
+      "dimensions_m": [
+        0.18720296025276184,
+        0.028546614572405815,
+        0.2086896151304245
+      ],
+      "materials": [
+        "modular_electric_cables"
+      ],
+      "fbx": "parts/cable_3way_junction.fbx"
+    },
+    {
+      "object": "cable_double",
+      "role": "module",
+      "catalog_position_m": [
+        0.5099999904632568,
+        -0.012753971852362156,
+        -4.2450790105341696e-10
+      ],
+      "triangles": 412,
+      "location_m": [
+        0.5099999904632568,
+        -0.012753971852362156,
+        -4.2450790105341696e-10
+      ],
+      "rotation_deg": [
+        0.0,
+        -0.0,
+        0.0
+      ],
+      "parent": null,
+      "dimensions_m": [
+        0.055629126727581024,
+        0.025936834514141083,
+        0.20725207030773163
+      ],
+      "materials": [
+        "modular_electric_cables"
+      ],
+      "fbx": "parts/cable_double.fbx"
+    },
+    {
+      "object": "cable_double_10cm",
+      "role": "module",
+      "catalog_position_m": [
+        0.809999942779541,
+        -0.01000005193054676,
+        0.3999999463558197
+      ],
+      "triangles": 48,
+      "location_m": [
+        0.809999942779541,
+        -0.01000005193054676,
+        0.3999999463558197
+      ],
+      "rotation_deg": [
+        0.0,
+        -0.0,
+        0.0
+      ],
+      "parent": null,
+      "dimensions_m": [
+        0.0297116506844759,
+        0.011214015074074268,
+        0.09999999403953552
+      ],
+      "materials": [
+        "modular_electric_cables"
+      ],
+      "fbx": "parts/cable_double_10cm.fbx"
+    },
+    {
+      "object": "cable_double_alt_long",
+      "role": "module",
+      "catalog_position_m": [
+        1.1008989810943604,
+        -0.011063091456890106,
+        -4.2450787329784134e-10
+      ],
+      "triangles": 1620,
+      "location_m": [
+        1.1008989810943604,
+        -0.011063091456890106,
+        -4.2450787329784134e-10
+      ],
+      "rotation_deg": [
+        0.0,
+        -0.0,
+        0.0
+      ],
+      "parent": null,
+      "dimensions_m": [
+        0.0997326448559761,
+        0.022126194089651108,
+        0.6140738725662231
+      ],
+      "materials": [
+        "modular_electric_cables"
+      ],
+      "fbx": "parts/cable_double_alt_long.fbx"
+    },
+    {
+      "object": "cable_double_alt_short",
+      "role": "module",
+      "catalog_position_m": [
+        1.2995251417160034,
+        -0.011063091456890106,
+        -4.2450790105341696e-10
+      ],
+      "triangles": 604,
+      "location_m": [
+        1.2995251417160034,
+        -0.011063091456890106,
+        -4.2450790105341696e-10
+      ],
+      "rotation_deg": [
+        0.0,
+        -0.0,
+        0.0
+      ],
+      "parent": null,
+      "dimensions_m": [
+        0.09698498994112015,
+        0.022126194089651108,
+        0.21407392621040344
+      ],
+      "materials": [
+        "modular_electric_cables"
+      ],
+      "fbx": "parts/cable_double_alt_short.fbx"
+    },
+    {
+      "object": "cable_double_alt_turn",
+      "role": "module",
+      "catalog_position_m": [
+        1.254607915878296,
+        -0.010848608799278736,
+        0.2999999523162842
+      ],
+      "triangles": 796,
+      "location_m": [
+        1.254607915878296,
+        -0.010848608799278736,
+        0.2999999523162842
+      ],
+      "rotation_deg": [
+        0.0,
+        -0.0,
+        0.0
+      ],
+      "parent": null,
+      "dimensions_m": [
+        0.11893215775489807,
+        0.02212619036436081,
+        0.14896729588508606
+      ],
+      "materials": [
+        "modular_electric_cables"
+      ],
+      "fbx": "parts/cable_double_alt_turn.fbx"
+    },
+    {
+      "object": "cable_double_end",
+      "role": "module",
+      "catalog_position_m": [
+        1.0099762678146362,
+        -0.012444510124623775,
+        0.6499999165534973
+      ],
+      "triangles": 608,
+      "location_m": [
+        1.0099762678146362,
+        -0.012444510124623775,
+        0.6499999165534973
+      ],
+      "rotation_deg": [
+        0.0,
+        -0.0,
+        0.0
+      ],
+      "parent": null,
+      "dimensions_m": [
+        0.03727100044488907,
+        0.02549152821302414,
+        0.10412033647298813
+      ],
+      "materials": [
+        "modular_electric_cables"
+      ],
+      "fbx": "parts/cable_double_end.fbx"
+    },
+    {
+      "object": "cable_double_junction",
+      "role": "module",
+      "catalog_position_m": [
+        0.6532187461853027,
+        -0.012667160481214523,
+        0.3999999463558197
+      ],
+      "triangles": 988,
+      "location_m": [
+        0.6532187461853027,
+        -0.012667160481214523,
+        0.3999999463558197
+      ],
+      "rotation_deg": [
+        0.0,
+        -0.0,
+        0.0
+      ],
+      "parent": null,
+      "dimensions_m": [
+        0.14806662499904633,
+        0.02593684196472168,
+        0.20725207030773163
+      ],
+      "materials": [
+        "modular_electric_cables"
+      ],
+      "fbx": "parts/cable_double_junction.fbx"
+    },
+    {
+      "object": "cable_double_mount",
+      "role": "module",
+      "catalog_position_m": [
+        0.9099999666213989,
+        -0.012968474999070168,
+        0.5927478075027466
+      ],
+      "triangles": 364,
+      "location_m": [
+        0.9099999666213989,
+        -0.012968474999070168,
+        0.5927478075027466
+      ],
+      "rotation_deg": [
+        0.0,
+        -0.0,
+        0.0
+      ],
+      "parent": null,
+      "dimensions_m": [
+        0.055629126727581024,
+        0.025936834514141083,
+        0.01450415700674057
+      ],
+      "materials": [
+        "modular_electric_cables"
+      ],
+      "fbx": "parts/cable_double_mount.fbx"
+    },
+    {
+      "object": "cable_double_scurve",
+      "role": "module",
+      "catalog_position_m": [
+        0.8664792776107788,
+        -0.01275399699807167,
+        -1.7898855730891228e-09
+      ],
+      "triangles": 748,
+      "location_m": [
+        0.8664792776107788,
+        -0.01275399699807167,
+        -1.7898855730891228e-09
+      ],
+      "rotation_deg": [
+        0.0,
+        -0.0,
+        0.0
+      ],
+      "parent": null,
+      "dimensions_m": [
+        0.14267033338546753,
+        0.02593686804175377,
+        0.20725208520889282
+      ],
+      "materials": [
+        "modular_electric_cables"
+      ],
+      "fbx": "parts/cable_double_scurve.fbx"
+    },
+    {
+      "object": "cable_double_turn_long",
+      "role": "module",
+      "catalog_position_m": [
+        0.7011607885360718,
+        -0.012753934599459171,
+        -1.3024283873619424e-09
+      ],
+      "triangles": 1256,
+      "location_m": [
+        0.7011607885360718,
+        -0.012753934599459171,
+        -1.3024283873619424e-09
+      ],
+      "rotation_deg": [
+        0.0,
+        -0.0,
+        0.0
+      ],
+      "parent": null,
+      "dimensions_m": [
+        0.21203330159187317,
+        0.025936845690011978,
+        0.21781456470489502
+      ],
+      "materials": [
+        "modular_electric_cables"
+      ],
+      "fbx": "parts/cable_double_turn_long.fbx"
+    },
+    {
+      "object": "cable_double_turn_short",
+      "role": "module",
+      "catalog_position_m": [
+        0.7511566877365112,
+        -0.012753996066749096,
+        0.2499999850988388
+      ],
+      "triangles": 892,
+      "location_m": [
+        0.7511566877365112,
+        -0.012753996066749096,
+        0.2499999850988388
+      ],
+      "rotation_deg": [
+        0.0,
+        -0.0,
+        0.0
+      ],
+      "parent": null,
+      "dimensions_m": [
+        0.11204144358634949,
+        0.025936834514141083,
+        0.1178145706653595
+      ],
+      "materials": [
+        "modular_electric_cables"
+      ],
+      "fbx": "parts/cable_double_turn_short.fbx"
+    },
+    {
+      "object": "cable_double_uturn",
+      "role": "module",
+      "catalog_position_m": [
+        0.5102260708808899,
+        -0.010000028647482395,
+        0.5999999046325684
+      ],
+      "triangles": 264,
+      "location_m": [
+        0.5102260708808899,
+        -0.010000028647482395,
+        0.5999999046325684
+      ],
+      "rotation_deg": [
+        0.0,
+        -0.0,
+        0.0
+      ],
+      "parent": null,
+      "dimensions_m": [
+        0.034647371619939804,
+        0.011214002966880798,
+        0.04646119847893715
+      ],
+      "materials": [
+        "modular_electric_cables"
+      ],
+      "fbx": "parts/cable_double_uturn.fbx"
+    },
+    {
+      "object": "cable_to_double_1",
+      "role": "module",
+      "catalog_position_m": [
+        0.42352059483528137,
+        -0.012753971852362156,
+        0.2499999850988388
+      ],
+      "triangles": 532,
+      "location_m": [
+        0.42352059483528137,
+        -0.012753971852362156,
+        0.2499999850988388
+      ],
+      "rotation_deg": [
+        0.0,
+        -0.0,
+        0.0
+      ],
+      "parent": null,
+      "dimensions_m": [
+        0.08267039060592651,
+        0.025936834514141083,
+        0.10725206136703491
+      ],
+      "materials": [
+        "modular_electric_cables"
+      ],
+      "fbx": "parts/cable_to_double_1.fbx"
+    },
+    {
+      "object": "cable_to_double_2",
+      "role": "module",
+      "catalog_position_m": [
+        0.42639604210853577,
+        -0.012754039838910103,
+        0.4000000059604645
+      ],
+      "triangles": 652,
+      "location_m": [
+        0.42639604210853577,
+        -0.012754039838910103,
+        0.4000000059604645
+      ],
+      "rotation_deg": [
+        0.0,
+        -0.0,
+        0.0
+      ],
+      "parent": null,
+      "dimensions_m": [
+        0.06283707171678543,
+        0.025936976075172424,
+        0.1072521060705185
+      ],
+      "materials": [
+        "modular_electric_cables"
+      ],
+      "fbx": "parts/cable_to_double_2.fbx"
+    },
+    {
+      "object": "cable_to_double_3",
+      "role": "module",
+      "catalog_position_m": [
+        0.548520565032959,
+        -0.012753971852362156,
+        0.2499999850988388
+      ],
+      "triangles": 556,
+      "location_m": [
+        0.548520565032959,
+        -0.012753971852362156,
+        0.2499999850988388
+      ],
+      "rotation_deg": [
+        0.0,
+        -0.0,
+        0.0
+      ],
+      "parent": null,
+      "dimensions_m": [
+        0.1326703280210495,
+        0.025936834514141083,
+        0.20725205540657043
+      ],
+      "materials": [
+        "modular_electric_cables"
+      ],
+      "fbx": "parts/cable_to_double_3.fbx"
+    },
+    {
+      "object": "cable_to_double_4",
+      "role": "module",
+      "catalog_position_m": [
+        0.9410926103591919,
+        -0.012667352333664894,
+        0.2999999523162842
+      ],
+      "triangles": 724,
+      "location_m": [
+        0.9410926103591919,
+        -0.012667352333664894,
+        0.2999999523162842
+      ],
+      "rotation_deg": [
+        0.0,
+        -0.0,
+        0.0
+      ],
+      "parent": null,
+      "dimensions_m": [
+        0.11781486123800278,
+        0.025937538594007492,
+        0.20717744529247284
+      ],
+      "materials": [
+        "modular_electric_cables"
+      ],
+      "fbx": "parts/cable_to_double_4.fbx"
+    },
+    {
+      "object": "cable_box_3way",
+      "role": "module",
+      "catalog_position_m": [
+        -0.16614563763141632,
+        -0.018211664631962776,
+        0.19999997317790985
+      ],
+      "triangles": 1520,
+      "location_m": [
+        -0.16614563763141632,
+        -0.018211664631962776,
+        0.19999997317790985
+      ],
+      "rotation_deg": [
+        0.0,
+        -0.0,
+        0.0
+      ],
+      "parent": null,
+      "dimensions_m": [
+        0.1322912871837616,
+        0.03685231879353523,
+        0.19999998807907104
+      ],
+      "materials": [
+        "modular_electric_cables_boxes"
+      ],
+      "fbx": "parts/cable_box_3way.fbx"
+    },
+    {
+      "object": "cable_box_4way",
+      "role": "module",
+      "catalog_position_m": [
+        -0.19999998807907104,
+        -0.018211664631962776,
+        0.44999995827674866
+      ],
+      "triangles": 1780,
+      "location_m": [
+        -0.19999998807907104,
+        -0.018211664631962776,
+        0.44999995827674866
+      ],
+      "rotation_deg": [
+        0.0,
+        -0.0,
+        0.0
+      ],
+      "parent": null,
+      "dimensions_m": [
+        0.19999998807907104,
+        0.03685231879353523,
+        0.19999998807907104
+      ],
+      "materials": [
+        "modular_electric_cables_boxes"
+      ],
+      "fbx": "parts/cable_box_4way.fbx"
+    },
+    {
+      "object": "cable_box_double",
+      "role": "module",
+      "catalog_position_m": [
+        -0.28999999165534973,
+        -0.01821167767047882,
+        -4.2450790105341696e-10
+      ],
+      "triangles": 1780,
+      "location_m": [
+        -0.28999999165534973,
+        -0.01821167767047882,
+        -4.2450790105341696e-10
+      ],
+      "rotation_deg": [
+        0.0,
+        -0.0,
+        0.0
+      ],
+      "parent": null,
+      "dimensions_m": [
+        0.06458258628845215,
+        0.036852315068244934,
+        0.19999998807907104
+      ],
+      "materials": [
+        "modular_electric_cables_boxes"
+      ],
+      "fbx": "parts/cable_box_double.fbx"
+    },
+    {
+      "object": "cable_box_double_to_single",
+      "role": "module",
+      "catalog_position_m": [
+        -0.38999998569488525,
+        -0.018211647868156433,
+        -4.2450790105341696e-10
+      ],
+      "triangles": 1520,
+      "location_m": [
+        -0.38999998569488525,
+        -0.018211647868156433,
+        -4.2450790105341696e-10
+      ],
+      "rotation_deg": [
+        0.0,
+        -0.0,
+        0.0
+      ],
+      "parent": null,
+      "dimensions_m": [
+        0.06458258628845215,
+        0.036852315068244934,
+        0.19999998807907104
+      ],
+      "materials": [
+        "modular_electric_cables_boxes"
+      ],
+      "fbx": "parts/cable_box_double_to_single.fbx"
+    },
+    {
+      "object": "cable_box_double_to_single_2",
+      "role": "module",
+      "catalog_position_m": [
+        -0.36114558577537537,
+        -0.018124869093298912,
+        0.3999999463558197
+      ],
+      "triangles": 1520,
+      "location_m": [
+        -0.36114558577537537,
+        -0.018124869093298912,
+        0.3999999463558197
+      ],
+      "rotation_deg": [
+        0.0,
+        -0.0,
+        0.0
+      ],
+      "parent": null,
+      "dimensions_m": [
+        0.12229126691818237,
+        0.036852315068244934,
+        0.1322912871837616
+      ],
+      "materials": [
+        "modular_electric_cables_boxes"
+      ],
+      "fbx": "parts/cable_box_double_to_single_2.fbx"
+    },
+    {
+      "object": "cable_box_turn",
+      "role": "module",
+      "catalog_position_m": [
+        -0.16614563763141632,
+        -0.018211664631962776,
+        -4.245078177866901e-10
+      ],
+      "triangles": 1260,
+      "location_m": [
+        -0.16614563763141632,
+        -0.018211664631962776,
+        -4.245078177866901e-10
+      ],
+      "rotation_deg": [
+        0.0,
+        -0.0,
+        0.0
+      ],
+      "parent": null,
+      "dimensions_m": [
+        0.1322912871837616,
+        0.03685231879353523,
+        0.1322912871837616
+      ],
+      "materials": [
+        "modular_electric_cables_boxes"
+      ],
+      "fbx": "parts/cable_box_turn.fbx"
+    },
+    {
+      "object": "cable_lightswitch",
+      "role": "module",
+      "catalog_position_m": [
+        -0.30000004172325134,
+        -0.027147820219397545,
+        0.2999999523162842
+      ],
+      "triangles": 852,
+      "location_m": [
+        -0.30000004172325134,
+        -0.027147820219397545,
+        0.2999999523162842
+      ],
+      "rotation_deg": [
+        0.0,
+        -0.0,
+        0.0
+      ],
+      "parent": null,
+      "dimensions_m": [
+        0.06797368824481964,
+        0.054724592715501785,
+        0.13594010472297668
+      ],
+      "materials": [
+        "modular_electric_cables_boxes"
+      ],
+      "fbx": "parts/cable_lightswitch.fbx"
+    },
+    {
+      "object": "cable_lightswitch_2",
+      "role": "module",
+      "catalog_position_m": [
+        -0.699999988079071,
+        -0.026112323626875877,
+        0.07619301974773407
+      ],
+      "triangles": 852,
+      "location_m": [
+        -0.699999988079071,
+        -0.026112323626875877,
+        0.07619301974773407
+      ],
+      "rotation_deg": [
+        0.0,
+        -0.0,
+        0.0
+      ],
+      "parent": null,
+      "dimensions_m": [
+        0.05723012611269951,
+        0.052653718739748,
+        0.13105905055999756
+      ],
+      "materials": [
+        "modular_electric_cables_boxes"
+      ],
+      "fbx": "parts/cable_lightswitch_2.fbx"
+    },
+    {
+      "object": "cable_lightswitch_double",
+      "role": "module",
+      "catalog_position_m": [
+        -0.47341388463974,
+        -0.027147816494107246,
+        0.24999992549419403
+      ],
+      "triangles": 1256,
+      "location_m": [
+        -0.47341388463974,
+        -0.027147816494107246,
+        0.24999992549419403
+      ],
+      "rotation_deg": [
+        0.0,
+        -0.0,
+        0.0
+      ],
+      "parent": null,
+      "dimensions_m": [
+        0.09480133652687073,
+        0.054724592715501785,
+        0.2072521299123764
+      ],
+      "materials": [
+        "modular_electric_cables_boxes"
+      ],
+      "fbx": "parts/cable_lightswitch_double.fbx"
+    },
+    {
+      "object": "cable_plug_4x",
+      "role": "module",
+      "catalog_position_m": [
+        -0.5,
+        -0.020625408738851547,
+        0.053055524826049805
+      ],
+      "triangles": 2666,
+      "location_m": [
+        -0.5,
+        -0.020625408738851547,
+        0.053055524826049805
+      ],
+      "rotation_deg": [
+        0.0,
+        -0.0,
+        0.0
+      ],
+      "parent": null,
+      "dimensions_m": [
+        0.09388892352581024,
+        0.04167977720499039,
+        0.15419654548168182
+      ],
+      "materials": [
+        "modular_electric_cables_boxes"
+      ],
+      "fbx": "parts/cable_plug_4x.fbx"
+    },
+    {
+      "object": "cable_plug_covered",
+      "role": "module",
+      "catalog_position_m": [
+        -0.5999999642372131,
+        -0.027098050341010094,
+        0.06488974392414093
+      ],
+      "triangles": 1312,
+      "location_m": [
+        -0.5999999642372131,
+        -0.027098050341010094,
+        0.06488974392414093
+      ],
+      "rotation_deg": [
+        0.0,
+        -0.0,
+        0.0
+      ],
+      "parent": null,
+      "dimensions_m": [
+        0.06354349106550217,
+        0.05462505295872688,
+        0.1423623263835907
+      ],
+      "materials": [
+        "modular_electric_cables_boxes"
+      ],
+      "fbx": "parts/cable_plug_covered.fbx"
+    },
+    {
+      "object": "cable_plug_covered_2",
+      "role": "module",
+      "catalog_position_m": [
+        -0.5000000596046448,
+        -0.03538437560200691,
+        0.47471269965171814
+      ],
+      "triangles": 1566,
+      "location_m": [
+        -0.5000000596046448,
+        -0.03538437560200691,
+        0.47471269965171814
+      ],
+      "rotation_deg": [
+        0.0,
+        -0.0,
+        0.0
+      ],
+      "parent": null,
+      "dimensions_m": [
+        0.05673636496067047,
+        0.07119770348072052,
+        0.18253929913043976
+      ],
+      "materials": [
+        "modular_electric_cables_boxes"
+      ],
+      "fbx": "parts/cable_plug_covered_2.fbx"
+    },
+    {
+      "object": "cable_switch",
+      "role": "module",
+      "catalog_position_m": [
+        -0.6126365065574646,
+        -0.025881465524435043,
+        0.2284272015094757
+      ],
+      "triangles": 3330,
+      "location_m": [
+        -0.6126365065574646,
+        -0.025881465524435043,
+        0.2284272015094757
+      ],
+      "rotation_deg": [
+        0.0,
+        -0.0,
+        0.0
+      ],
+      "parent": null,
+      "dimensions_m": [
+        0.1469024419784546,
+        0.0521940216422081,
+        0.37882474064826965
+      ],
+      "materials": [
+        "modular_electric_cables_boxes"
+      ],
+      "fbx": "parts/cable_switch.fbx"
+    }
+  ],
+  "materials": [
+    {
+      "name": "modular_electric_cables",
+      "glass": false,
+      "inputs": {
+        "Base Color": [
+          0.800000011920929,
+          0.800000011920929,
+          0.800000011920929,
+          1.0
+        ],
+        "Metallic": 0.0,
+        "Roughness": 0.5,
+        "Transmission Weight": 0.0,
+        "IOR": 1.5,
+        "Alpha": 1.0,
+        "Emission Color": [
+          1.0,
+          1.0,
+          1.0,
+          1.0
+        ],
+        "Emission Strength": 0.0
+      },
+      "links": [
+        {
+          "from": "Principled BSDF",
+          "output": "BSDF",
+          "to": "Material Output",
+          "input": "Surface"
+        },
+        {
+          "from": "Image Texture",
+          "output": "Color",
+          "to": "Principled BSDF",
+          "input": "Base Color"
+        },
+        {
+          "from": "Image Texture.001",
+          "output": "Color",
+          "to": "Principled BSDF",
+          "input": "Metallic"
+        },
+        {
+          "from": "Image Texture.002",
+          "output": "Color",
+          "to": "Principled BSDF",
+          "input": "Roughness"
+        },
+        {
+          "from": "Image Texture.003",
+          "output": "Color",
+          "to": "Normal Map",
+          "input": "Color"
+        },
+        {
+          "from": "Normal Map",
+          "output": "Normal",
+          "to": "Principled BSDF",
+          "input": "Normal"
+        },
+        {
+          "from": "Reroute",
+          "output": "Output",
+          "to": "Image Texture",
+          "input": "Vector"
+        },
+        {
+          "from": "Reroute",
+          "output": "Output",
+          "to": "Image Texture.001",
+          "input": "Vector"
+        },
+        {
+          "from": "Reroute",
+          "output": "Output",
+          "to": "Image Texture.002",
+          "input": "Vector"
+        },
+        {
+          "from": "Reroute",
+          "output": "Output",
+          "to": "Image Texture.003",
+          "input": "Vector"
+        },
+        {
+          "from": "Mapping",
+          "output": "Vector",
+          "to": "Reroute",
+          "input": "Input"
+        },
+        {
+          "from": "Texture Coordinate",
+          "output": "UV",
+          "to": "Mapping",
+          "input": "Vector"
+        }
+      ],
+      "images": [
+        {
+          "node": "Image Texture",
+          "image": "modular_electric_cables_diff.png",
+          "file": "textures/T_0_modular_electric_cables_diff.png",
+          "colorspace": "sRGB"
+        },
+        {
+          "node": "Image Texture.001",
+          "image": "modular_electric_cables_metal.png.001",
+          "file": "textures/T_1_modular_electric_cables_metal_png.png",
+          "colorspace": "Non-Color"
+        },
+        {
+          "node": "Image Texture.002",
+          "image": "modular_electric_cables_rough.png",
+          "file": "textures/T_2_modular_electric_cables_rough.png",
+          "colorspace": "Non-Color"
+        },
+        {
+          "node": "Image Texture.003",
+          "image": "modular_electric_cables_nor_gl.png",
+          "file": "textures/T_3_modular_electric_cables_nor_gl.png",
+          "colorspace": "Non-Color"
+        }
+      ]
+    },
+    {
+      "name": "modular_electric_cables_boxes",
+      "glass": false,
+      "inputs": {
+        "Base Color": [
+          0.800000011920929,
+          0.800000011920929,
+          0.800000011920929,
+          1.0
+        ],
+        "Metallic": 0.0,
+        "Roughness": 0.5,
+        "Transmission Weight": 0.0,
+        "IOR": 1.5,
+        "Alpha": 1.0,
+        "Emission Color": [
+          1.0,
+          1.0,
+          1.0,
+          1.0
+        ],
+        "Emission Strength": 0.0
+      },
+      "links": [
+        {
+          "from": "Principled BSDF",
+          "output": "BSDF",
+          "to": "Material Output",
+          "input": "Surface"
+        },
+        {
+          "from": "Image Texture",
+          "output": "Color",
+          "to": "Principled BSDF",
+          "input": "Base Color"
+        },
+        {
+          "from": "Image Texture.001",
+          "output": "Color",
+          "to": "Principled BSDF",
+          "input": "Metallic"
+        },
+        {
+          "from": "Image Texture.002",
+          "output": "Color",
+          "to": "Principled BSDF",
+          "input": "Roughness"
+        },
+        {
+          "from": "Image Texture.003",
+          "output": "Color",
+          "to": "Normal Map",
+          "input": "Color"
+        },
+        {
+          "from": "Normal Map",
+          "output": "Normal",
+          "to": "Principled BSDF",
+          "input": "Normal"
+        },
+        {
+          "from": "Reroute",
+          "output": "Output",
+          "to": "Image Texture",
+          "input": "Vector"
+        },
+        {
+          "from": "Reroute",
+          "output": "Output",
+          "to": "Image Texture.001",
+          "input": "Vector"
+        },
+        {
+          "from": "Reroute",
+          "output": "Output",
+          "to": "Image Texture.002",
+          "input": "Vector"
+        },
+        {
+          "from": "Reroute",
+          "output": "Output",
+          "to": "Image Texture.003",
+          "input": "Vector"
+        },
+        {
+          "from": "Mapping",
+          "output": "Vector",
+          "to": "Reroute",
+          "input": "Input"
+        },
+        {
+          "from": "Texture Coordinate",
+          "output": "UV",
+          "to": "Mapping",
+          "input": "Vector"
+        }
+      ],
+      "images": [
+        {
+          "node": "Image Texture",
+          "image": "modular_electric_cables_boxes_diff.png",
+          "file": "textures/T_4_modular_electric_cables_boxes_diff.png",
+          "colorspace": "sRGB"
+        },
+        {
+          "node": "Image Texture.001",
+          "image": "modular_electric_cables_metal.png",
+          "file": "textures/T_5_modular_electric_cables_metal.png",
+          "colorspace": "Non-Color"
+        },
+        {
+          "node": "Image Texture.002",
+          "image": "modular_electric_cables_boxes_rough.png",
+          "file": "textures/T_6_modular_electric_cables_boxes_rough.png",
+          "colorspace": "Non-Color"
+        },
+        {
+          "node": "Image Texture.003",
+          "image": "modular_electric_cables_boxes_nor_gl.png",
+          "file": "textures/T_7_modular_electric_cables_boxes_nor_gl.png",
+          "colorspace": "Non-Color"
+        }
+      ]
+    }
+  ],
+  "repairs": [],
+  "actions": [],
+  "animation_runtime": "Rigid meshes driven from Unreal actuator state; Blender actions are inspectable demonstrations.",
+  "kind": "modular_catalog"
+}

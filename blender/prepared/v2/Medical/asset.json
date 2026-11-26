@@ -1,0 +1,652 @@
+{
+  "id": "Medical",
+  "source": "blender/Meshy_AI_Medical_Aid_Container_20261109_image-to-3d-texture.blend",
+  "source_sha256": "0a08433dfa59877139fc19a84a144ad3df8ba08a23b48538a437ee4ccc19e81e",
+  "blend": "Medical.blend",
+  "parts": [
+    {
+      "object": "Body",
+      "role": "body",
+      "triangles": 37663,
+      "location_m": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "rotation_deg": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "parent": null,
+      "dimensions_m": [
+        6.059374809265137,
+        2.5428624153137207,
+        3.1571760177612305
+      ],
+      "materials": [
+        "M_Medical_Baked"
+      ],
+      "fbx": "parts/Body.fbx"
+    },
+    {
+      "object": "MedicalGlass_-1_0",
+      "role": "glass",
+      "triangles": 108,
+      "location_m": [
+        0.10000000149011612,
+        -1.225000023841858,
+        1.559999942779541
+      ],
+      "rotation_deg": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "parent": null,
+      "dimensions_m": [
+        0.6499999761581421,
+        0.012000000104308128,
+        0.6800000071525574
+      ],
+      "materials": [
+        "M_Rig_Glass"
+      ],
+      "fbx": "parts/MedicalGlass_-1_0.fbx"
+    },
+    {
+      "object": "MedicalGlass_-1_1",
+      "role": "glass",
+      "triangles": 108,
+      "location_m": [
+        0.7900000214576721,
+        -1.225000023841858,
+        1.559999942779541
+      ],
+      "rotation_deg": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "parent": null,
+      "dimensions_m": [
+        0.6499999761581421,
+        0.012000000104308128,
+        0.6800000071525574
+      ],
+      "materials": [
+        "M_Rig_Glass"
+      ],
+      "fbx": "parts/MedicalGlass_-1_1.fbx"
+    },
+    {
+      "object": "WindowMullion",
+      "role": "static",
+      "triangles": 108,
+      "location_m": [
+        -0.25,
+        -1.2130000591278076,
+        1.559999942779541
+      ],
+      "rotation_deg": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "parent": null,
+      "dimensions_m": [
+        0.03500000014901161,
+        0.05999999865889549,
+        0.7599999904632568
+      ],
+      "materials": [
+        "M_Rig_WindowFrame"
+      ],
+      "fbx": "parts/WindowMullion.fbx"
+    },
+    {
+      "object": "WindowMullion.001",
+      "role": "static",
+      "triangles": 108,
+      "location_m": [
+        0.44999998807907104,
+        -1.2130000591278076,
+        1.559999942779541
+      ],
+      "rotation_deg": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "parent": null,
+      "dimensions_m": [
+        0.03500000014901161,
+        0.05999999865889549,
+        0.7599999904632568
+      ],
+      "materials": [
+        "M_Rig_WindowFrame"
+      ],
+      "fbx": "parts/WindowMullion.001.fbx"
+    },
+    {
+      "object": "WindowMullion.002",
+      "role": "static",
+      "triangles": 108,
+      "location_m": [
+        1.149999976158142,
+        -1.2130000591278076,
+        1.559999942779541
+      ],
+      "rotation_deg": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "parent": null,
+      "dimensions_m": [
+        0.03500000014901161,
+        0.05999999865889549,
+        0.7599999904632568
+      ],
+      "materials": [
+        "M_Rig_WindowFrame"
+      ],
+      "fbx": "parts/WindowMullion.002.fbx"
+    },
+    {
+      "object": "WindowSill",
+      "role": "static",
+      "triangles": 108,
+      "location_m": [
+        0.44999998807907104,
+        -1.225000023841858,
+        1.190000057220459
+      ],
+      "rotation_deg": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "parent": null,
+      "dimensions_m": [
+        1.4500000476837158,
+        0.05999999865889549,
+        0.03500000014901161
+      ],
+      "materials": [
+        "M_Rig_WindowFrame"
+      ],
+      "fbx": "parts/WindowSill.fbx"
+    },
+    {
+      "object": "WindowSill.001",
+      "role": "static",
+      "triangles": 108,
+      "location_m": [
+        0.44999998807907104,
+        -1.225000023841858,
+        1.9299999475479126
+      ],
+      "rotation_deg": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "parent": null,
+      "dimensions_m": [
+        1.4500000476837158,
+        0.05999999865889549,
+        0.03500000014901161
+      ],
+      "materials": [
+        "M_Rig_WindowFrame"
+      ],
+      "fbx": "parts/WindowSill.001.fbx"
+    },
+    {
+      "object": "MedicalGlass_1_0",
+      "role": "glass",
+      "triangles": 108,
+      "location_m": [
+        0.10000000149011612,
+        1.225000023841858,
+        1.559999942779541
+      ],
+      "rotation_deg": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "parent": null,
+      "dimensions_m": [
+        0.6499999761581421,
+        0.012000000104308128,
+        0.6800000071525574
+      ],
+      "materials": [
+        "M_Rig_Glass"
+      ],
+      "fbx": "parts/MedicalGlass_1_0.fbx"
+    },
+    {
+      "object": "MedicalGlass_1_1",
+      "role": "glass",
+      "triangles": 108,
+      "location_m": [
+        0.7900000214576721,
+        1.225000023841858,
+        1.559999942779541
+      ],
+      "rotation_deg": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "parent": null,
+      "dimensions_m": [
+        0.6499999761581421,
+        0.012000000104308128,
+        0.6800000071525574
+      ],
+      "materials": [
+        "M_Rig_Glass"
+      ],
+      "fbx": "parts/MedicalGlass_1_1.fbx"
+    },
+    {
+      "object": "WindowMullion.003",
+      "role": "static",
+      "triangles": 108,
+      "location_m": [
+        -0.25,
+        1.2130000591278076,
+        1.559999942779541
+      ],
+      "rotation_deg": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "parent": null,
+      "dimensions_m": [
+        0.03500000014901161,
+        0.05999999865889549,
+        0.7599999904632568
+      ],
+      "materials": [
+        "M_Rig_WindowFrame"
+      ],
+      "fbx": "parts/WindowMullion.003.fbx"
+    },
+    {
+      "object": "WindowMullion.004",
+      "role": "static",
+      "triangles": 108,
+      "location_m": [
+        0.44999998807907104,
+        1.2130000591278076,
+        1.559999942779541
+      ],
+      "rotation_deg": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "parent": null,
+      "dimensions_m": [
+        0.03500000014901161,
+        0.05999999865889549,
+        0.7599999904632568
+      ],
+      "materials": [
+        "M_Rig_WindowFrame"
+      ],
+      "fbx": "parts/WindowMullion.004.fbx"
+    },
+    {
+      "object": "WindowMullion.005",
+      "role": "static",
+      "triangles": 108,
+      "location_m": [
+        1.149999976158142,
+        1.2130000591278076,
+        1.559999942779541
+      ],
+      "rotation_deg": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "parent": null,
+      "dimensions_m": [
+        0.03500000014901161,
+        0.05999999865889549,
+        0.7599999904632568
+      ],
+      "materials": [
+        "M_Rig_WindowFrame"
+      ],
+      "fbx": "parts/WindowMullion.005.fbx"
+    },
+    {
+      "object": "WindowSill.002",
+      "role": "static",
+      "triangles": 108,
+      "location_m": [
+        0.44999998807907104,
+        1.225000023841858,
+        1.190000057220459
+      ],
+      "rotation_deg": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "parent": null,
+      "dimensions_m": [
+        1.4500000476837158,
+        0.05999999865889549,
+        0.03500000014901161
+      ],
+      "materials": [
+        "M_Rig_WindowFrame"
+      ],
+      "fbx": "parts/WindowSill.002.fbx"
+    },
+    {
+      "object": "WindowSill.003",
+      "role": "static",
+      "triangles": 108,
+      "location_m": [
+        0.44999998807907104,
+        1.225000023841858,
+        1.9299999475479126
+      ],
+      "rotation_deg": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "parent": null,
+      "dimensions_m": [
+        1.4500000476837158,
+        0.05999999865889549,
+        0.03500000014901161
+      ],
+      "materials": [
+        "M_Rig_WindowFrame"
+      ],
+      "fbx": "parts/WindowSill.003.fbx"
+    },
+    {
+      "object": "MedicalInteriorFloor",
+      "role": "static",
+      "triangles": 108,
+      "location_m": [
+        0.3499999940395355,
+        0.0,
+        0.1599999964237213
+      ],
+      "rotation_deg": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "parent": null,
+      "dimensions_m": [
+        4.699999809265137,
+        2.299999952316284,
+        0.07000000029802322
+      ],
+      "materials": [
+        "M_Rig_MedicalInterior"
+      ],
+      "fbx": "parts/MedicalInteriorFloor.fbx"
+    },
+    {
+      "object": "MedicalBench",
+      "role": "static",
+      "triangles": 108,
+      "location_m": [
+        0.6000000238418579,
+        0.8199999928474426,
+        0.550000011920929
+      ],
+      "rotation_deg": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "parent": null,
+      "dimensions_m": [
+        2.299999952316284,
+        0.41999998688697815,
+        0.11999999731779099
+      ],
+      "materials": [
+        "M_Rig_MedicalInterior"
+      ],
+      "fbx": "parts/MedicalBench.fbx"
+    },
+    {
+      "object": "MedicalCabinet",
+      "role": "static",
+      "triangles": 108,
+      "location_m": [
+        1.7999999523162842,
+        0.8199999928474426,
+        0.6800000071525574
+      ],
+      "rotation_deg": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "parent": null,
+      "dimensions_m": [
+        0.699999988079071,
+        0.4000000059604645,
+        1.0
+      ],
+      "materials": [
+        "M_Rig_MedicalInterior"
+      ],
+      "fbx": "parts/MedicalCabinet.fbx"
+    }
+  ],
+  "materials": [
+    {
+      "name": "M_Medical_Baked",
+      "glass": false,
+      "inputs": {
+        "Base Color": [
+          0.800000011920929,
+          0.800000011920929,
+          0.800000011920929,
+          1.0
+        ],
+        "Metallic": 0.0,
+        "Roughness": 0.5,
+        "Transmission Weight": 0.0,
+        "IOR": 1.5,
+        "Alpha": 1.0,
+        "Emission Color": [
+          1.0,
+          1.0,
+          1.0,
+          1.0
+        ],
+        "Emission Strength": 0.0
+      },
+      "links": [
+        {
+          "from": "Principled BSDF",
+          "output": "BSDF",
+          "to": "Material Output",
+          "input": "Surface"
+        },
+        {
+          "from": "Image Texture",
+          "output": "Color",
+          "to": "Principled BSDF",
+          "input": "Base Color"
+        },
+        {
+          "from": "Image Texture.001",
+          "output": "Color",
+          "to": "Separate Color",
+          "input": "Color"
+        },
+        {
+          "from": "Separate Color",
+          "output": "Green",
+          "to": "Principled BSDF",
+          "input": "Roughness"
+        },
+        {
+          "from": "Separate Color",
+          "output": "Blue",
+          "to": "Principled BSDF",
+          "input": "Metallic"
+        },
+        {
+          "from": "Image Texture.002",
+          "output": "Color",
+          "to": "Normal Map",
+          "input": "Color"
+        },
+        {
+          "from": "Normal Map",
+          "output": "Normal",
+          "to": "Principled BSDF",
+          "input": "Normal"
+        }
+      ],
+      "images": [
+        {
+          "node": "Image Texture",
+          "image": "T_Medical_BaseColor",
+          "file": "textures/T_0_T_Medical_BaseColor.png",
+          "colorspace": "sRGB"
+        },
+        {
+          "node": "Image Texture.001",
+          "image": "T_Medical_ORM",
+          "file": "textures/T_1_T_Medical_ORM.png",
+          "colorspace": "Non-Color"
+        },
+        {
+          "node": "Image Texture.002",
+          "image": "T_Medical_Normal",
+          "file": "textures/T_2_T_Medical_Normal.png",
+          "colorspace": "Non-Color"
+        }
+      ]
+    },
+    {
+      "name": "M_Rig_Glass",
+      "glass": true,
+      "inputs": {
+        "Base Color": [
+          0.7799999713897705,
+          0.8999999761581421,
+          0.9200000166893005,
+          1.0
+        ],
+        "Metallic": 0.0,
+        "Roughness": 0.07500000298023224,
+        "Transmission Weight": 1.0,
+        "IOR": 1.4500000476837158,
+        "Alpha": 1.0,
+        "Emission Color": [
+          1.0,
+          1.0,
+          1.0,
+          1.0
+        ],
+        "Emission Strength": 0.0
+      },
+      "links": [
+        {
+          "from": "Principled BSDF",
+          "output": "BSDF",
+          "to": "Material Output",
+          "input": "Surface"
+        }
+      ],
+      "images": []
+    },
+    {
+      "name": "M_Rig_MedicalInterior",
+      "glass": false,
+      "inputs": {
+        "Base Color": [
+          0.6600000262260437,
+          0.7300000190734863,
+          0.7099999785423279,
+          1.0
+        ],
+        "Metallic": 0.05000000074505806,
+        "Roughness": 0.5799999833106995,
+        "Transmission Weight": 0.0,
+        "IOR": 1.5,
+        "Alpha": 1.0,
+        "Emission Color": [
+          1.0,
+          1.0,
+          1.0,
+          1.0
+        ],
+        "Emission Strength": 0.0
+      },
+      "links": [
+        {
+          "from": "Principled BSDF",
+          "output": "BSDF",
+          "to": "Material Output",
+          "input": "Surface"
+        }
+      ],
+      "images": []
+    },
+    {
+      "name": "M_Rig_WindowFrame",
+      "glass": false,
+      "inputs": {
+        "Base Color": [
+          0.6200000047683716,
+          0.6499999761581421,
+          0.6299999952316284,
+          1.0
+        ],
+        "Metallic": 0.550000011920929,
+        "Roughness": 0.3499999940395355,
+        "Transmission Weight": 0.0,
+        "IOR": 1.5,
+        "Alpha": 1.0,
+        "Emission Color": [
+          1.0,
+          1.0,
+          1.0,
+          1.0
+        ],
+        "Emission Strength": 0.0
+      },
+      "links": [
+        {
+          "from": "Principled BSDF",
+          "output": "BSDF",
+          "to": "Material Output",
+          "input": "Surface"
+        }
+      ],
+      "images": []
+    }
+  ],
+  "repairs": [
+    "Removed 2336 opaque infill faces; two-sided paired glazing, frames and simple interior; clear aperture ray verified."
+  ],
+  "actions": [],
+  "animation_runtime": "Rigid meshes driven from Unreal actuator state; Blender actions are inspectable demonstrations."
+}

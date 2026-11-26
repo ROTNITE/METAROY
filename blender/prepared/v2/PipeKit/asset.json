@@ -1,0 +1,502 @@
+{
+  "id": "PipeKit",
+  "source": "blender/vendor/modular_industrial_pipes_01_4k/modular_industrial_pipes_01_4k.blend",
+  "source_sha256": "3793b5b10437063383279ff7cc9c4548a730634caa28b9eb16c872a883c44d08",
+  "blend": "PipeKit.blend",
+  "parts": [
+    {
+      "object": "modular_industrial_pipes_01_pipe01",
+      "role": "module",
+      "catalog_position_m": [
+        0.3999999463558197,
+        0.0249999538064003,
+        -0.9545309543609619
+      ],
+      "triangles": 600,
+      "location_m": [
+        0.3999999463558197,
+        0.0249999538064003,
+        -0.9545309543609619
+      ],
+      "rotation_deg": [
+        0.0,
+        -0.0,
+        0.0
+      ],
+      "parent": null,
+      "dimensions_m": [
+        0.20710761845111847,
+        0.20632138848304749,
+        0.8590619564056396
+      ],
+      "materials": [
+        "modular_industrial_pipes_01_group01"
+      ],
+      "fbx": "parts/modular_industrial_pipes_01_pipe01.fbx"
+    },
+    {
+      "object": "modular_industrial_pipes_01_pipe02",
+      "role": "module",
+      "catalog_position_m": [
+        -0.6000000238418579,
+        0.025000128895044327,
+        -1.002319574356079
+      ],
+      "triangles": 648,
+      "location_m": [
+        -0.6000000238418579,
+        0.025000128895044327,
+        -1.002319574356079
+      ],
+      "rotation_deg": [
+        0.0,
+        -0.0,
+        0.0
+      ],
+      "parent": null,
+      "dimensions_m": [
+        0.2071039080619812,
+        0.20632098615169525,
+        1.9546396732330322
+      ],
+      "materials": [
+        "modular_industrial_pipes_01_group01"
+      ],
+      "fbx": "parts/modular_industrial_pipes_01_pipe02.fbx"
+    },
+    {
+      "object": "modular_industrial_pipes_01_pipe03",
+      "role": "module",
+      "catalog_position_m": [
+        -0.20811280608177185,
+        0.024663254618644714,
+        -0.9953025579452515
+      ],
+      "triangles": 984,
+      "location_m": [
+        -0.20811280608177185,
+        0.024663254618644714,
+        -0.9953025579452515
+      ],
+      "rotation_deg": [
+        0.0,
+        -0.0,
+        0.0
+      ],
+      "parent": null,
+      "dimensions_m": [
+        0.5986486673355103,
+        0.2063768208026886,
+        1.3143846988677979
+      ],
+      "materials": [
+        "modular_industrial_pipes_01_group01"
+      ],
+      "fbx": "parts/modular_industrial_pipes_01_pipe03.fbx"
+    },
+    {
+      "object": "modular_industrial_pipes_01_pipe05",
+      "role": "module",
+      "catalog_position_m": [
+        0.40020573139190674,
+        0.024988025426864624,
+        0.45857924222946167
+      ],
+      "triangles": 984,
+      "location_m": [
+        0.40020573139190674,
+        0.024988025426864624,
+        0.45857924222946167
+      ],
+      "rotation_deg": [
+        0.0,
+        -0.0,
+        0.0
+      ],
+      "parent": null,
+      "dimensions_m": [
+        0.5980877876281738,
+        0.20634499192237854,
+        0.43286627531051636
+      ],
+      "materials": [
+        "modular_industrial_pipes_01_group02"
+      ],
+      "fbx": "parts/modular_industrial_pipes_01_pipe05.fbx"
+    },
+    {
+      "object": "modular_industrial_pipes_01_pipe06",
+      "role": "module",
+      "catalog_position_m": [
+        0.4508094787597656,
+        0.024973496794700623,
+        -0.0038982629776000977
+      ],
+      "triangles": 1088,
+      "location_m": [
+        0.4508094787597656,
+        0.024973496794700623,
+        -0.0038982629776000977
+      ],
+      "rotation_deg": [
+        0.0,
+        -0.0,
+        0.0
+      ],
+      "parent": null,
+      "dimensions_m": [
+        0.30873069167137146,
+        0.20638155937194824,
+        0.3575584292411804
+      ],
+      "materials": [
+        "modular_industrial_pipes_01_group02"
+      ],
+      "fbx": "parts/modular_industrial_pipes_01_pipe06.fbx"
+    },
+    {
+      "object": "modular_industrial_pipes_01_pipe07",
+      "role": "module",
+      "catalog_position_m": [
+        -4.2691826820373535e-06,
+        0.024969618767499924,
+        -0.1309194415807724
+      ],
+      "triangles": 1408,
+      "location_m": [
+        -4.2691826820373535e-06,
+        0.024969618767499924,
+        -0.1309194415807724
+      ],
+      "rotation_deg": [
+        0.0,
+        -0.0,
+        0.0
+      ],
+      "parent": null,
+      "dimensions_m": [
+        0.35680580139160156,
+        0.20638170838356018,
+        0.411080539226532
+      ],
+      "materials": [
+        "modular_industrial_pipes_01_group02"
+      ],
+      "fbx": "parts/modular_industrial_pipes_01_pipe07.fbx"
+    },
+    {
+      "object": "modular_industrial_pipes_01_pipe08",
+      "role": "module",
+      "catalog_position_m": [
+        -0.27040567994117737,
+        -0.02563519775867462,
+        -0.9137434363365173
+      ],
+      "triangles": 5788,
+      "location_m": [
+        -0.27040567994117737,
+        -0.02563519775867462,
+        -0.9137434363365173
+      ],
+      "rotation_deg": [
+        0.0,
+        -0.0,
+        0.0
+      ],
+      "parent": null,
+      "dimensions_m": [
+        0.26629501581192017,
+        0.3075922727584839,
+        0.37882888317108154
+      ],
+      "materials": [
+        "modular_industrial_pipes_01_group02"
+      ],
+      "fbx": "parts/modular_industrial_pipes_01_pipe08.fbx"
+    },
+    {
+      "object": "modular_industrial_pipes_01_pipe04",
+      "role": "module",
+      "catalog_position_m": [
+        -0.184653177857399,
+        0.02499980852007866,
+        0.4845903515815735
+      ],
+      "triangles": 840,
+      "location_m": [
+        -0.184653177857399,
+        0.02499980852007866,
+        0.4845903515815735
+      ],
+      "rotation_deg": [
+        0.0,
+        -0.0,
+        0.0
+      ],
+      "parent": null,
+      "dimensions_m": [
+        0.4241492748260498,
+        0.20632076263427734,
+        0.4446014165878296
+      ],
+      "materials": [
+        "modular_industrial_pipes_01_group01"
+      ],
+      "fbx": "parts/modular_industrial_pipes_01_pipe04.fbx"
+    }
+  ],
+  "materials": [
+    {
+      "name": "modular_industrial_pipes_01_group01",
+      "glass": false,
+      "inputs": {
+        "Base Color": [
+          0.800000011920929,
+          0.800000011920929,
+          0.800000011920929,
+          1.0
+        ],
+        "Metallic": 0.0,
+        "Roughness": 0.5,
+        "Transmission Weight": 0.0,
+        "IOR": 1.4500000476837158,
+        "Alpha": 1.0,
+        "Emission Color": [
+          0.0,
+          0.0,
+          0.0,
+          1.0
+        ],
+        "Emission Strength": 1.0
+      },
+      "links": [
+        {
+          "from": "Principled BSDF",
+          "output": "BSDF",
+          "to": "Material Output",
+          "input": "Surface"
+        },
+        {
+          "from": "Image Texture",
+          "output": "Color",
+          "to": "Principled BSDF",
+          "input": "Base Color"
+        },
+        {
+          "from": "Image Texture.001",
+          "output": "Color",
+          "to": "Principled BSDF",
+          "input": "Metallic"
+        },
+        {
+          "from": "Image Texture.002",
+          "output": "Color",
+          "to": "Principled BSDF",
+          "input": "Roughness"
+        },
+        {
+          "from": "Image Texture.003",
+          "output": "Color",
+          "to": "Normal Map",
+          "input": "Color"
+        },
+        {
+          "from": "Normal Map",
+          "output": "Normal",
+          "to": "Principled BSDF",
+          "input": "Normal"
+        },
+        {
+          "from": "Reroute",
+          "output": "Output",
+          "to": "Image Texture",
+          "input": "Vector"
+        },
+        {
+          "from": "Reroute",
+          "output": "Output",
+          "to": "Image Texture.001",
+          "input": "Vector"
+        },
+        {
+          "from": "Reroute",
+          "output": "Output",
+          "to": "Image Texture.002",
+          "input": "Vector"
+        },
+        {
+          "from": "Reroute",
+          "output": "Output",
+          "to": "Image Texture.003",
+          "input": "Vector"
+        },
+        {
+          "from": "Mapping",
+          "output": "Vector",
+          "to": "Reroute",
+          "input": "Input"
+        },
+        {
+          "from": "Texture Coordinate",
+          "output": "UV",
+          "to": "Mapping",
+          "input": "Vector"
+        }
+      ],
+      "images": [
+        {
+          "node": "Image Texture",
+          "image": "modular_industrial_pipes_01_group01_diff.png",
+          "file": "textures/T_0_modular_industrial_pipes_01_group01_diff.png",
+          "colorspace": "sRGB"
+        },
+        {
+          "node": "Image Texture.001",
+          "image": "modular_industrial_pipes_01_group01_metal.png",
+          "file": "textures/T_1_modular_industrial_pipes_01_group01_metal.png",
+          "colorspace": "Non-Color"
+        },
+        {
+          "node": "Image Texture.002",
+          "image": "modular_industrial_pipes_01_group01_rough.png",
+          "file": "textures/T_2_modular_industrial_pipes_01_group01_rough.png",
+          "colorspace": "Non-Color"
+        },
+        {
+          "node": "Image Texture.003",
+          "image": "modular_industrial_pipes_01_group01_nor_gl.png",
+          "file": "textures/T_3_modular_industrial_pipes_01_group01_nor_gl.png",
+          "colorspace": "Non-Color"
+        }
+      ]
+    },
+    {
+      "name": "modular_industrial_pipes_01_group02",
+      "glass": false,
+      "inputs": {
+        "Base Color": [
+          0.800000011920929,
+          0.800000011920929,
+          0.800000011920929,
+          1.0
+        ],
+        "Metallic": 0.0,
+        "Roughness": 0.5,
+        "Transmission Weight": 0.0,
+        "IOR": 1.4500000476837158,
+        "Alpha": 1.0,
+        "Emission Color": [
+          0.0,
+          0.0,
+          0.0,
+          1.0
+        ],
+        "Emission Strength": 1.0
+      },
+      "links": [
+        {
+          "from": "Principled BSDF",
+          "output": "BSDF",
+          "to": "Material Output",
+          "input": "Surface"
+        },
+        {
+          "from": "Image Texture",
+          "output": "Color",
+          "to": "Principled BSDF",
+          "input": "Base Color"
+        },
+        {
+          "from": "Image Texture.001",
+          "output": "Color",
+          "to": "Principled BSDF",
+          "input": "Metallic"
+        },
+        {
+          "from": "Image Texture.002",
+          "output": "Color",
+          "to": "Principled BSDF",
+          "input": "Roughness"
+        },
+        {
+          "from": "Image Texture.003",
+          "output": "Color",
+          "to": "Normal Map",
+          "input": "Color"
+        },
+        {
+          "from": "Normal Map",
+          "output": "Normal",
+          "to": "Principled BSDF",
+          "input": "Normal"
+        },
+        {
+          "from": "Reroute",
+          "output": "Output",
+          "to": "Image Texture",
+          "input": "Vector"
+        },
+        {
+          "from": "Reroute",
+          "output": "Output",
+          "to": "Image Texture.001",
+          "input": "Vector"
+        },
+        {
+          "from": "Reroute",
+          "output": "Output",
+          "to": "Image Texture.002",
+          "input": "Vector"
+        },
+        {
+          "from": "Reroute",
+          "output": "Output",
+          "to": "Image Texture.003",
+          "input": "Vector"
+        },
+        {
+          "from": "Mapping",
+          "output": "Vector",
+          "to": "Reroute",
+          "input": "Input"
+        },
+        {
+          "from": "Texture Coordinate",
+          "output": "UV",
+          "to": "Mapping",
+          "input": "Vector"
+        }
+      ],
+      "images": [
+        {
+          "node": "Image Texture",
+          "image": "modular_industrial_pipes_01_group02_diff.png",
+          "file": "textures/T_4_modular_industrial_pipes_01_group02_diff.png",
+          "colorspace": "sRGB"
+        },
+        {
+          "node": "Image Texture.001",
+          "image": "modular_industrial_pipes_01_group02_metal.png",
+          "file": "textures/T_5_modular_industrial_pipes_01_group02_metal.png",
+          "colorspace": "Non-Color"
+        },
+        {
+          "node": "Image Texture.002",
+          "image": "modular_industrial_pipes_01_group02_rough.png",
+          "file": "textures/T_6_modular_industrial_pipes_01_group02_rough.png",
+          "colorspace": "Non-Color"
+        },
+        {
+          "node": "Image Texture.003",
+          "image": "modular_industrial_pipes_01_group02_nor_gl.png",
+          "file": "textures/T_7_modular_industrial_pipes_01_group02_nor_gl.png",
+          "colorspace": "Non-Color"
+        }
+      ]
+    }
+  ],
+  "repairs": [],
+  "actions": [],
+  "animation_runtime": "Rigid meshes driven from Unreal actuator state; Blender actions are inspectable demonstrations.",
+  "kind": "modular_catalog"
+}

@@ -1,0 +1,925 @@
+{
+	"kind": "rescue_quarter_environment_demo",
+	"time_s": 130.0001264353632,
+	"seed": 20261109,
+	"discovered": 7,
+	"delivered": 0,
+	"contacts": 3264,
+	"collapse_released": false,
+	"pending_reports": 1,
+	"relay_online": true,
+	"flood_active": false,
+	"dust_active": false,
+	"flood_depth_cm": 0,
+	"average_game_fps": 156.6320590535733,
+	"worst_frame_ms": 210.27729797363281,
+	"fire_effect_active": false,
+	"leak_effect_active": false,
+	"dust_effect_active": false,
+	"environment_mode": "static",
+	"event_seed": 20261109,
+	"world_revision": 0,
+	"events_applied": 0,
+	"process_memory_mb": 3269.99609375,
+	"p95_frame_ms": 7,
+	"active_environment_events":
+	{
+		"collapse": 0,
+		"fire": 0,
+		"flood": 0,
+		"mud": 0,
+		"road_damage": 0,
+		"smoke": 0,
+		"low_visibility": 0,
+		"new_target": 0
+	},
+	"surface_samples": [
+		{
+			"site_id": "unstable_bay",
+			"cost": 1,
+			"depth_cm": 0,
+			"visibility": 1,
+			"blocked": false
+		},
+		{
+			"site_id": "fire_0",
+			"cost": 1,
+			"depth_cm": 0,
+			"visibility": 1,
+			"blocked": false
+		},
+		{
+			"site_id": "fire_1",
+			"cost": 1,
+			"depth_cm": 0,
+			"visibility": 1,
+			"blocked": false
+		},
+		{
+			"site_id": "fire_2",
+			"cost": 1,
+			"depth_cm": 0,
+			"visibility": 1,
+			"blocked": false
+		},
+		{
+			"site_id": "fire_3",
+			"cost": 1,
+			"depth_cm": 0,
+			"visibility": 1,
+			"blocked": false
+		},
+		{
+			"site_id": "fire_4",
+			"cost": 1,
+			"depth_cm": 0,
+			"visibility": 1,
+			"blocked": false
+		},
+		{
+			"site_id": "fire_5",
+			"cost": 1,
+			"depth_cm": 0,
+			"visibility": 1,
+			"blocked": false
+		},
+		{
+			"site_id": "water_0",
+			"cost": 1,
+			"depth_cm": 0,
+			"visibility": 1,
+			"blocked": false
+		},
+		{
+			"site_id": "water_1",
+			"cost": 1,
+			"depth_cm": 0,
+			"visibility": 1,
+			"blocked": false
+		},
+		{
+			"site_id": "water_2",
+			"cost": 1,
+			"depth_cm": 0,
+			"visibility": 1,
+			"blocked": false
+		},
+		{
+			"site_id": "water_3",
+			"cost": 1,
+			"depth_cm": 0,
+			"visibility": 1,
+			"blocked": false
+		},
+		{
+			"site_id": "water_4",
+			"cost": 1,
+			"depth_cm": 0,
+			"visibility": 1,
+			"blocked": false
+		},
+		{
+			"site_id": "water_5",
+			"cost": 1,
+			"depth_cm": 0,
+			"visibility": 1,
+			"blocked": false
+		},
+		{
+			"site_id": "surface_3_0",
+			"cost": 1,
+			"depth_cm": 0,
+			"visibility": 1,
+			"blocked": false
+		},
+		{
+			"site_id": "surface_3_1",
+			"cost": 1,
+			"depth_cm": 0,
+			"visibility": 1,
+			"blocked": false
+		},
+		{
+			"site_id": "surface_3_2",
+			"cost": 1,
+			"depth_cm": 0,
+			"visibility": 1,
+			"blocked": false
+		},
+		{
+			"site_id": "surface_3_3",
+			"cost": 1,
+			"depth_cm": 0,
+			"visibility": 1,
+			"blocked": false
+		},
+		{
+			"site_id": "surface_3_4",
+			"cost": 1,
+			"depth_cm": 0,
+			"visibility": 1,
+			"blocked": false
+		},
+		{
+			"site_id": "surface_3_5",
+			"cost": 1,
+			"depth_cm": 0,
+			"visibility": 1,
+			"blocked": false
+		},
+		{
+			"site_id": "surface_3_6",
+			"cost": 1,
+			"depth_cm": 0,
+			"visibility": 1,
+			"blocked": false
+		},
+		{
+			"site_id": "surface_3_7",
+			"cost": 1,
+			"depth_cm": 0,
+			"visibility": 1,
+			"blocked": false
+		},
+		{
+			"site_id": "surface_3_8",
+			"cost": 1,
+			"depth_cm": 0,
+			"visibility": 1,
+			"blocked": false
+		},
+		{
+			"site_id": "surface_3_9",
+			"cost": 1,
+			"depth_cm": 0,
+			"visibility": 1,
+			"blocked": false
+		},
+		{
+			"site_id": "surface_3_10",
+			"cost": 1,
+			"depth_cm": 0,
+			"visibility": 1,
+			"blocked": false
+		},
+		{
+			"site_id": "surface_3_11",
+			"cost": 1,
+			"depth_cm": 0,
+			"visibility": 1,
+			"blocked": false
+		},
+		{
+			"site_id": "surface_4_0",
+			"cost": 1,
+			"depth_cm": 0,
+			"visibility": 1,
+			"blocked": false
+		},
+		{
+			"site_id": "surface_4_1",
+			"cost": 1,
+			"depth_cm": 0,
+			"visibility": 1,
+			"blocked": false
+		},
+		{
+			"site_id": "surface_4_2",
+			"cost": 1,
+			"depth_cm": 0,
+			"visibility": 1,
+			"blocked": false
+		},
+		{
+			"site_id": "surface_4_3",
+			"cost": 1,
+			"depth_cm": 0,
+			"visibility": 1,
+			"blocked": false
+		},
+		{
+			"site_id": "surface_4_4",
+			"cost": 1,
+			"depth_cm": 0,
+			"visibility": 1,
+			"blocked": false
+		},
+		{
+			"site_id": "surface_4_5",
+			"cost": 1,
+			"depth_cm": 0,
+			"visibility": 1,
+			"blocked": false
+		},
+		{
+			"site_id": "surface_4_6",
+			"cost": 1,
+			"depth_cm": 0,
+			"visibility": 1,
+			"blocked": false
+		},
+		{
+			"site_id": "surface_4_7",
+			"cost": 1,
+			"depth_cm": 0,
+			"visibility": 1,
+			"blocked": false
+		},
+		{
+			"site_id": "surface_4_8",
+			"cost": 1,
+			"depth_cm": 0,
+			"visibility": 1,
+			"blocked": false
+		},
+		{
+			"site_id": "surface_4_9",
+			"cost": 1,
+			"depth_cm": 0,
+			"visibility": 1,
+			"blocked": false
+		},
+		{
+			"site_id": "surface_4_10",
+			"cost": 1,
+			"depth_cm": 0,
+			"visibility": 1,
+			"blocked": false
+		},
+		{
+			"site_id": "surface_4_11",
+			"cost": 1,
+			"depth_cm": 0,
+			"visibility": 1,
+			"blocked": false
+		},
+		{
+			"site_id": "surface_5_0",
+			"cost": 1,
+			"depth_cm": 0,
+			"visibility": 1,
+			"blocked": false
+		},
+		{
+			"site_id": "surface_5_1",
+			"cost": 1,
+			"depth_cm": 0,
+			"visibility": 1,
+			"blocked": false
+		},
+		{
+			"site_id": "surface_5_2",
+			"cost": 1,
+			"depth_cm": 0,
+			"visibility": 1,
+			"blocked": false
+		},
+		{
+			"site_id": "surface_5_3",
+			"cost": 1,
+			"depth_cm": 0,
+			"visibility": 1,
+			"blocked": false
+		},
+		{
+			"site_id": "surface_5_4",
+			"cost": 1,
+			"depth_cm": 0,
+			"visibility": 1,
+			"blocked": false
+		},
+		{
+			"site_id": "surface_5_5",
+			"cost": 1,
+			"depth_cm": 0,
+			"visibility": 1,
+			"blocked": false
+		},
+		{
+			"site_id": "surface_5_6",
+			"cost": 1,
+			"depth_cm": 0,
+			"visibility": 1,
+			"blocked": false
+		},
+		{
+			"site_id": "surface_5_7",
+			"cost": 1,
+			"depth_cm": 0,
+			"visibility": 1,
+			"blocked": false
+		},
+		{
+			"site_id": "surface_5_8",
+			"cost": 1,
+			"depth_cm": 0,
+			"visibility": 1,
+			"blocked": false
+		},
+		{
+			"site_id": "surface_5_9",
+			"cost": 1,
+			"depth_cm": 0,
+			"visibility": 1,
+			"blocked": false
+		},
+		{
+			"site_id": "surface_5_10",
+			"cost": 1,
+			"depth_cm": 0,
+			"visibility": 1,
+			"blocked": false
+		},
+		{
+			"site_id": "surface_5_11",
+			"cost": 1,
+			"depth_cm": 0,
+			"visibility": 1,
+			"blocked": false
+		},
+		{
+			"site_id": "surface_6_0",
+			"cost": 1,
+			"depth_cm": 0,
+			"visibility": 1,
+			"blocked": false
+		},
+		{
+			"site_id": "surface_6_1",
+			"cost": 1,
+			"depth_cm": 0,
+			"visibility": 1,
+			"blocked": false
+		},
+		{
+			"site_id": "surface_6_2",
+			"cost": 1,
+			"depth_cm": 0,
+			"visibility": 1,
+			"blocked": false
+		},
+		{
+			"site_id": "surface_6_3",
+			"cost": 1,
+			"depth_cm": 0,
+			"visibility": 1,
+			"blocked": false
+		},
+		{
+			"site_id": "surface_6_4",
+			"cost": 1,
+			"depth_cm": 0,
+			"visibility": 1,
+			"blocked": false
+		},
+		{
+			"site_id": "surface_6_5",
+			"cost": 1,
+			"depth_cm": 0,
+			"visibility": 1,
+			"blocked": false
+		},
+		{
+			"site_id": "surface_6_6",
+			"cost": 1,
+			"depth_cm": 0,
+			"visibility": 1,
+			"blocked": false
+		},
+		{
+			"site_id": "surface_6_7",
+			"cost": 1,
+			"depth_cm": 0,
+			"visibility": 1,
+			"blocked": false
+		},
+		{
+			"site_id": "surface_6_8",
+			"cost": 1,
+			"depth_cm": 0,
+			"visibility": 1,
+			"blocked": false
+		},
+		{
+			"site_id": "surface_6_9",
+			"cost": 1,
+			"depth_cm": 0,
+			"visibility": 1,
+			"blocked": false
+		},
+		{
+			"site_id": "surface_6_10",
+			"cost": 1,
+			"depth_cm": 0,
+			"visibility": 1,
+			"blocked": false
+		},
+		{
+			"site_id": "surface_6_11",
+			"cost": 1,
+			"depth_cm": 0,
+			"visibility": 1,
+			"blocked": false
+		},
+		{
+			"site_id": "latent_0",
+			"cost": 1,
+			"depth_cm": 0,
+			"visibility": 1,
+			"blocked": false
+		},
+		{
+			"site_id": "latent_1",
+			"cost": 1,
+			"depth_cm": 0,
+			"visibility": 1,
+			"blocked": false
+		},
+		{
+			"site_id": "latent_2",
+			"cost": 1,
+			"depth_cm": 0,
+			"visibility": 1,
+			"blocked": false
+		},
+		{
+			"site_id": "latent_3",
+			"cost": 1,
+			"depth_cm": 0,
+			"visibility": 1,
+			"blocked": false
+		},
+		{
+			"site_id": "latent_4",
+			"cost": 1,
+			"depth_cm": 0,
+			"visibility": 1,
+			"blocked": false
+		},
+		{
+			"site_id": "latent_5",
+			"cost": 1,
+			"depth_cm": 0,
+			"visibility": 1,
+			"blocked": false
+		},
+		{
+			"site_id": "latent_6",
+			"cost": 1,
+			"depth_cm": 0,
+			"visibility": 1,
+			"blocked": false
+		},
+		{
+			"site_id": "latent_7",
+			"cost": 1,
+			"depth_cm": 0,
+			"visibility": 1,
+			"blocked": false
+		},
+		{
+			"site_id": "latent_8",
+			"cost": 1,
+			"depth_cm": 0,
+			"visibility": 1,
+			"blocked": false
+		},
+		{
+			"site_id": "latent_9",
+			"cost": 1,
+			"depth_cm": 0,
+			"visibility": 1,
+			"blocked": false
+		},
+		{
+			"site_id": "latent_10",
+			"cost": 1,
+			"depth_cm": 0,
+			"visibility": 1,
+			"blocked": false
+		},
+		{
+			"site_id": "latent_11",
+			"cost": 1,
+			"depth_cm": 0,
+			"visibility": 1,
+			"blocked": false
+		},
+		{
+			"site_id": "latent_12",
+			"cost": 1,
+			"depth_cm": 0,
+			"visibility": 1,
+			"blocked": false
+		},
+		{
+			"site_id": "latent_13",
+			"cost": 1,
+			"depth_cm": 0,
+			"visibility": 1,
+			"blocked": false
+		},
+		{
+			"site_id": "latent_14",
+			"cost": 1,
+			"depth_cm": 0,
+			"visibility": 1,
+			"blocked": false
+		}
+	],
+	"event_effect_samples": [],
+	"physics_bodies": [
+		{
+			"initial_z_cm": 871,
+			"collapse_piece": true,
+			"z_cm": 871,
+			"simulating": false,
+			"speed_cm_s": 0
+		},
+		{
+			"initial_z_cm": 871,
+			"collapse_piece": true,
+			"z_cm": 871,
+			"simulating": false,
+			"speed_cm_s": 0
+		},
+		{
+			"initial_z_cm": 871,
+			"collapse_piece": true,
+			"z_cm": 871,
+			"simulating": false,
+			"speed_cm_s": 0
+		},
+		{
+			"initial_z_cm": 871,
+			"collapse_piece": true,
+			"z_cm": 871,
+			"simulating": false,
+			"speed_cm_s": 0
+		},
+		{
+			"initial_z_cm": 871,
+			"collapse_piece": true,
+			"z_cm": 871,
+			"simulating": false,
+			"speed_cm_s": 0
+		},
+		{
+			"initial_z_cm": 60.491013681997984,
+			"collapse_piece": false,
+			"z_cm": 39.256373817302958,
+			"simulating": true,
+			"speed_cm_s": 0
+		},
+		{
+			"initial_z_cm": 77.796862772496013,
+			"collapse_piece": false,
+			"z_cm": 54.463518485972735,
+			"simulating": true,
+			"speed_cm_s": 0
+		},
+		{
+			"initial_z_cm": 71.560561353801091,
+			"collapse_piece": false,
+			"z_cm": 53.312093422105846,
+			"simulating": true,
+			"speed_cm_s": 0
+		},
+		{
+			"initial_z_cm": 57.948017727014147,
+			"collapse_piece": false,
+			"z_cm": 56.384049656460739,
+			"simulating": true,
+			"speed_cm_s": 0
+		},
+		{
+			"initial_z_cm": 71.450941095820156,
+			"collapse_piece": false,
+			"z_cm": 42.416034629699006,
+			"simulating": true,
+			"speed_cm_s": 0
+		},
+		{
+			"initial_z_cm": 58.110072651587842,
+			"collapse_piece": false,
+			"z_cm": 44.454333082155109,
+			"simulating": true,
+			"speed_cm_s": 0
+		},
+		{
+			"initial_z_cm": 61.310349318843997,
+			"collapse_piece": false,
+			"z_cm": 41.645158827089304,
+			"simulating": true,
+			"speed_cm_s": 0
+		},
+		{
+			"initial_z_cm": 53.026950372181119,
+			"collapse_piece": false,
+			"z_cm": 39.061897708884288,
+			"simulating": true,
+			"speed_cm_s": 0
+		},
+		{
+			"initial_z_cm": 58.604027224937795,
+			"collapse_piece": false,
+			"z_cm": 51.311651774847796,
+			"simulating": true,
+			"speed_cm_s": 0
+		},
+		{
+			"initial_z_cm": 70.435546121503634,
+			"collapse_piece": false,
+			"z_cm": 73.646037403914718,
+			"simulating": true,
+			"speed_cm_s": 0
+		},
+		{
+			"initial_z_cm": 75.526507640996002,
+			"collapse_piece": false,
+			"z_cm": 44.787934985113793,
+			"simulating": true,
+			"speed_cm_s": 0
+		},
+		{
+			"initial_z_cm": 46.106136732866517,
+			"collapse_piece": false,
+			"z_cm": 35.976923473870912,
+			"simulating": true,
+			"speed_cm_s": 0
+		},
+		{
+			"initial_z_cm": 73.743154424337035,
+			"collapse_piece": false,
+			"z_cm": 52.877316321503073,
+			"simulating": true,
+			"speed_cm_s": 0
+		},
+		{
+			"initial_z_cm": 55.11922801092188,
+			"collapse_piece": false,
+			"z_cm": 38.064227824955694,
+			"simulating": true,
+			"speed_cm_s": 0
+		},
+		{
+			"initial_z_cm": 66.541254829222993,
+			"collapse_piece": false,
+			"z_cm": 71.127901189333173,
+			"simulating": true,
+			"speed_cm_s": 0
+		},
+		{
+			"initial_z_cm": 51.974843934524841,
+			"collapse_piece": false,
+			"z_cm": 43.864082487122673,
+			"simulating": true,
+			"speed_cm_s": 0
+		},
+		{
+			"initial_z_cm": 64.140692150705632,
+			"collapse_piece": false,
+			"z_cm": 51.401231584893132,
+			"simulating": true,
+			"speed_cm_s": 0
+		},
+		{
+			"initial_z_cm": 83.755211523790365,
+			"collapse_piece": false,
+			"z_cm": 55.417956056695239,
+			"simulating": true,
+			"speed_cm_s": 0
+		}
+	],
+	"agents": [
+		{
+			"id": 0,
+			"aerial": true,
+			"state": "landed",
+			"energy": 88.981475830078125,
+			"x_cm": -1659.6222523004626,
+			"y_cm": 78.608145409841512,
+			"z_cm": 28.999995862967037,
+			"distance_cm": 44954.53125,
+			"simulating": true,
+			"support_contacts": 0,
+			"mass_kg": 12,
+			"route_blocked": false,
+			"speed_cm_s": 1.527825108553617e-05,
+			"yaw_deg": -161.51749085343425,
+			"rotor_rpm": 0,
+			"ramp_deployment": 0,
+			"radio_link": true,
+			"surface_speed_factor": 1,
+			"water_depth_cm": 0,
+			"key": "aerial_0",
+			"command_id": "",
+			"stop_reason": "",
+			"vehicle_contacts": 0,
+			"stop_obstacle": "",
+			"carrying": false
+		},
+		{
+			"id": 1,
+			"aerial": true,
+			"state": "landed",
+			"energy": 76.608955383300781,
+			"x_cm": -1660.851449564112,
+			"y_cm": 535.36052443179142,
+			"z_cm": 28.999989489098787,
+			"distance_cm": 62885.71484375,
+			"simulating": true,
+			"support_contacts": 0,
+			"mass_kg": 12,
+			"route_blocked": false,
+			"speed_cm_s": 2.3257783439871646e-05,
+			"yaw_deg": -167.33894378308855,
+			"rotor_rpm": 0,
+			"ramp_deployment": 0,
+			"radio_link": true,
+			"surface_speed_factor": 1,
+			"water_depth_cm": 0,
+			"key": "aerial_1",
+			"command_id": "",
+			"stop_reason": "",
+			"vehicle_contacts": 0,
+			"stop_obstacle": "",
+			"carrying": false
+		},
+		{
+			"id": 2,
+			"aerial": true,
+			"state": "landed",
+			"energy": 70.602523803710938,
+			"x_cm": -1662.8906036769902,
+			"y_cm": 996.35097045938949,
+			"z_cm": 29.000000120489798,
+			"distance_cm": 71590.8125,
+			"simulating": true,
+			"support_contacts": 0,
+			"mass_kg": 12,
+			"route_blocked": false,
+			"speed_cm_s": 1.1438449333679361e-05,
+			"yaw_deg": -175.02943479310196,
+			"rotor_rpm": 0,
+			"ramp_deployment": 0,
+			"radio_link": true,
+			"surface_speed_factor": 1,
+			"water_depth_cm": 0,
+			"key": "aerial_2",
+			"command_id": "",
+			"stop_reason": "",
+			"vehicle_contacts": 0,
+			"stop_obstacle": "",
+			"carrying": false
+		},
+		{
+			"id": 0,
+			"aerial": false,
+			"state": "outbound",
+			"energy": 235.17131042480469,
+			"x_cm": 2060.9519220723337,
+			"y_cm": 1478.82663244785,
+			"z_cm": 55.833333138422532,
+			"distance_cm": 5889.04296875,
+			"simulating": true,
+			"support_contacts": 6,
+			"mass_kg": 240.00001525878906,
+			"route_blocked": true,
+			"speed_cm_s": 1.9584147139539709e-06,
+			"yaw_deg": -2.460738648034293,
+			"rotor_rpm": 0,
+			"ramp_deployment": 0,
+			"radio_link": true,
+			"surface_speed_factor": 1,
+			"water_depth_cm": 0,
+			"key": "ground_0",
+			"command_id": "",
+			"stop_reason": "obstacle_on_route",
+			"vehicle_contacts": 0,
+			"stop_obstacle": "HierarchicalInstancedStaticMeshComponent_51:SM_fragment_3:instance_86",
+			"carrying": false
+		},
+		{
+			"id": 1,
+			"aerial": false,
+			"state": "inbound",
+			"energy": 226.16703796386719,
+			"x_cm": 1168.2583319175105,
+			"y_cm": 2332.7382351413107,
+			"z_cm": 48.833332716818383,
+			"distance_cm": 14917.3916015625,
+			"simulating": true,
+			"support_contacts": 6,
+			"mass_kg": 320.00003051757812,
+			"route_blocked": false,
+			"speed_cm_s": 1.5873233678576071e-06,
+			"yaw_deg": -87.777525230715511,
+			"rotor_rpm": 0,
+			"ramp_deployment": 0,
+			"radio_link": true,
+			"surface_speed_factor": 1,
+			"water_depth_cm": 0,
+			"key": "ground_1",
+			"command_id": "",
+			"stop_reason": "yield_to_vehicle",
+			"vehicle_contacts": 0,
+			"stop_obstacle": "",
+			"carrying": true
+		},
+		{
+			"id": 2,
+			"aerial": false,
+			"state": "outbound",
+			"energy": 231.34239196777344,
+			"x_cm": 1457.6200501003775,
+			"y_cm": 5946.0174400060396,
+			"z_cm": 52.541612607711279,
+			"distance_cm": 10558.6474609375,
+			"simulating": true,
+			"support_contacts": 6,
+			"mass_kg": 240.00001525878906,
+			"route_blocked": true,
+			"speed_cm_s": 0.00038642133586108685,
+			"yaw_deg": 7.4720383458487438,
+			"rotor_rpm": 0,
+			"ramp_deployment": 0,
+			"radio_link": true,
+			"surface_speed_factor": 1,
+			"water_depth_cm": 0,
+			"key": "ground_2",
+			"command_id": "",
+			"stop_reason": "obstacle_on_route",
+			"vehicle_contacts": 0,
+			"stop_obstacle": "HierarchicalInstancedStaticMeshComponent_100:SM_Cube_001:instance_2",
+			"carrying": false
+		},
+		{
+			"id": 3,
+			"aerial": false,
+			"state": "outbound",
+			"energy": 234.90087890625,
+			"x_cm": 1189.5839848730291,
+			"y_cm": 1441.9876601475175,
+			"z_cm": 48.833333778280796,
+			"distance_cm": 6218.564453125,
+			"simulating": true,
+			"support_contacts": 6,
+			"mass_kg": 240.00001525878906,
+			"route_blocked": false,
+			"speed_cm_s": 0,
+			"yaw_deg": 11.362592037844173,
+			"rotor_rpm": 0,
+			"ramp_deployment": 0,
+			"radio_link": true,
+			"surface_speed_factor": 1,
+			"water_depth_cm": 0,
+			"key": "ground_3",
+			"command_id": "",
+			"stop_reason": "yield_to_vehicle",
+			"vehicle_contacts": 0,
+			"stop_obstacle": "",
+			"carrying": false
+		}
+	]
+}

@@ -1,0 +1,241 @@
+{
+  "id": "streetlight",
+  "source": "blender/streetlight.blend",
+  "sha256": "f665c2f72fb6963d494b326f2ed3d39982e1da4d36ff501dd789a406f3c93725",
+  "units": {
+    "system": "METRIC",
+    "scale_length": 1.0
+  },
+  "bounds_min": [
+    -0.17248356342315674,
+    -2.5379040241241455,
+    -4.540722370147705
+  ],
+  "bounds_max": [
+    0.19000031054019928,
+    2.0004050731658936,
+    0.9532105922698975
+  ],
+  "dimensions": [
+    0.3624838590621948,
+    4.538309097290039,
+    5.493932723999023
+  ],
+  "objects": [
+    {
+      "name": "Cube.001",
+      "type": "MESH",
+      "parent": null,
+      "location": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "rotation": [
+        -0.2212555855512619,
+        3.143261432647705,
+        -0.004067880101501942
+      ],
+      "scale": [
+        0.14749231934547424,
+        0.3795967400074005,
+        0.15295541286468506
+      ],
+      "hidden_render": false,
+      "vertices": 2838,
+      "triangles": 5620,
+      "uv_layers": [
+        "UVMap"
+      ],
+      "bounds_min": [
+        -0.17248356342315674,
+        -2.5379040241241455,
+        -4.540722370147705
+      ],
+      "bounds_max": [
+        0.19000031054019928,
+        2.0004050731658936,
+        0.9532105922698975
+      ],
+      "materials": [
+        "Material.003",
+        "Material.002",
+        "Material.001"
+      ],
+      "modifiers": []
+    }
+  ],
+  "materials": [
+    {
+      "name": "Material",
+      "nodes": [
+        {
+          "name": "Material Output",
+          "type": "OUTPUT_MATERIAL"
+        },
+        {
+          "name": "Principled BSDF",
+          "type": "BSDF_PRINCIPLED",
+          "inputs": {
+            "Base Color": {
+              "linked": false,
+              "value": [
+                0.800000011920929,
+                0.800000011920929,
+                0.800000011920929,
+                1.0
+              ]
+            },
+            "Metallic": {
+              "linked": false,
+              "value": 0.0
+            },
+            "Roughness": {
+              "linked": false,
+              "value": 0.4000000059604645
+            },
+            "IOR": {
+              "linked": false,
+              "value": 1.4500000476837158
+            },
+            "Alpha": {
+              "linked": false,
+              "value": 1.0
+            },
+            "Transmission Weight": {
+              "linked": false,
+              "value": 0.0
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Material.001",
+      "nodes": [
+        {
+          "name": "Material Output",
+          "type": "OUTPUT_MATERIAL"
+        },
+        {
+          "name": "Principled BSDF",
+          "type": "BSDF_PRINCIPLED",
+          "inputs": {
+            "Base Color": {
+              "linked": true,
+              "value": [
+                0.455386757850647,
+                0.455386757850647,
+                0.455386757850647,
+                1.0
+              ]
+            },
+            "Metallic": {
+              "linked": false,
+              "value": 0.5681817531585693
+            },
+            "Roughness": {
+              "linked": false,
+              "value": 0.6227272748947144
+            },
+            "IOR": {
+              "linked": false,
+              "value": 1.4500000476837158
+            },
+            "Alpha": {
+              "linked": false,
+              "value": 1.0
+            },
+            "Transmission Weight": {
+              "linked": false,
+              "value": 0.0
+            }
+          }
+        },
+        {
+          "name": "ColorRamp",
+          "type": "VALTORGB"
+        },
+        {
+          "name": "Bump",
+          "type": "BUMP"
+        },
+        {
+          "name": "Voronoi Texture",
+          "type": "TEX_VORONOI"
+        }
+      ]
+    },
+    {
+      "name": "Material.002",
+      "nodes": [
+        {
+          "name": "Material Output",
+          "type": "OUTPUT_MATERIAL"
+        },
+        {
+          "name": "Principled BSDF",
+          "type": "BSDF_PRINCIPLED",
+          "inputs": {
+            "Base Color": {
+              "linked": true,
+              "value": [
+                0.455386757850647,
+                0.455386757850647,
+                0.455386757850647,
+                1.0
+              ]
+            },
+            "Metallic": {
+              "linked": false,
+              "value": 0.2181817591190338
+            },
+            "Roughness": {
+              "linked": false,
+              "value": 0.7772727012634277
+            },
+            "IOR": {
+              "linked": false,
+              "value": 1.4500000476837158
+            },
+            "Alpha": {
+              "linked": false,
+              "value": 1.0
+            },
+            "Transmission Weight": {
+              "linked": false,
+              "value": 0.0
+            }
+          }
+        },
+        {
+          "name": "ColorRamp",
+          "type": "VALTORGB"
+        },
+        {
+          "name": "Bump",
+          "type": "BUMP"
+        },
+        {
+          "name": "Voronoi Texture",
+          "type": "TEX_VORONOI"
+        }
+      ]
+    },
+    {
+      "name": "Material.003",
+      "nodes": [
+        {
+          "name": "Material Output",
+          "type": "OUTPUT_MATERIAL"
+        },
+        {
+          "name": "Emission",
+          "type": "EMISSION"
+        }
+      ]
+    }
+  ],
+  "images": [],
+  "actions": []
+}

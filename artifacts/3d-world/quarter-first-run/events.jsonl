@@ -1,0 +1,15 @@
+{"type":"episode_started","time_s":0,"target_id":-1}
+{"type":"person_detected","time_s":2.4009446156560443,"target_id":1}
+{"type":"demo_rescue_assigned","time_s":2.4009446156560443,"target_id":1}
+{"type":"person_detected","time_s":3.6228948188363574,"target_id":2}
+{"type":"demo_rescue_assigned","time_s":3.6228948188363574,"target_id":2}
+{"type":"person_detected","time_s":6.0606138174771331,"target_id":3}
+{"type":"demo_rescue_assigned","time_s":6.0606138174771331,"target_id":3}
+{"type":"person_detected","time_s":7.8159454045235179,"target_id":9}
+{"type":"demo_rescue_assigned","time_s":7.8159454045235179,"target_id":9}
+{"type":"person_detected","time_s":8.1222548102377914,"target_id":8}
+{"type":"person_detected","time_s":11.56026329746237,"target_id":4}
+{"type":"demo_collapse_released","time_s":18.004438399279024,"target_id":-1}
+{"type":"person_detected","time_s":19.135762697958853,"target_id":6}
+{"type":"person_detected","time_s":20.050087499374058,"target_id":5}
+{"type":"person_detected","time_s":28.015554300451186,"target_id":7}

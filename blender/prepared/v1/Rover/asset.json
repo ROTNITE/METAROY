@@ -1,0 +1,66 @@
+{
+  "id": "Rover",
+  "mesh": "SM_Rover",
+  "source": "blender/Meshy_AI_Rescue_Tracked_Transporter_20261109_image-to-3d-texture.blend",
+  "source_sha256": "95ed8fe82ccee666a6e6f4d575941939129f8499a072ec53d6846569bfe23aa5",
+  "source_triangles": 3639213,
+  "triangles": 60000,
+  "dimensions_m": [
+    2.5008435249328613,
+    1.2662737369537354,
+    1.3006608486175537
+  ],
+  "fbx": "Rover/Rover.fbx",
+  "blend": "Rover/Rover.blend",
+  "textures": {
+    "BaseColor": "Rover/textures/T_Rover_BaseColor.png",
+    "ORM": "Rover/textures/T_Rover_ORM.png",
+    "Normal": "Rover/textures/T_Rover_Normal.png"
+  },
+  "original_material_links": [
+    {
+      "from_node": "Principled BSDF",
+      "from_socket": "BSDF",
+      "to_node": "Material Output",
+      "to_socket": "Surface"
+    },
+    {
+      "from_node": "Image Texture",
+      "from_socket": "Color",
+      "to_node": "Principled BSDF",
+      "to_socket": "Base Color"
+    },
+    {
+      "from_node": "Separate Color",
+      "from_socket": "Blue",
+      "to_node": "Principled BSDF",
+      "to_socket": "Metallic"
+    },
+    {
+      "from_node": "Separate Color",
+      "from_socket": "Green",
+      "to_node": "Principled BSDF",
+      "to_socket": "Roughness"
+    },
+    {
+      "from_node": "Image Texture.001",
+      "from_socket": "Color",
+      "to_node": "Separate Color",
+      "to_socket": "Color"
+    },
+    {
+      "from_node": "Normal Map",
+      "from_socket": "Normal",
+      "to_node": "Principled BSDF",
+      "to_socket": "Normal"
+    },
+    {
+      "from_node": "Image Texture.002",
+      "from_socket": "Color",
+      "to_node": "Normal Map",
+      "to_socket": "Color"
+    }
+  ],
+  "parts": "single visual shell; functional geometry prepared separately",
+  "collision": "not included; runtime collision proxies are separate"
+}

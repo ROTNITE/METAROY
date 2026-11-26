@@ -1,0 +1,53 @@
+{
+  "research_candidate": "info-repeat-tune-1.5-0.75",
+  "rounds": 18,
+  "stop": "budget_or_candidates_exhausted",
+  "production_changed": false,
+  "final": {
+    "base": {
+      "n": 4096,
+      "m1": 0.6578060665463009,
+      "saved": 30576,
+      "energy": 0.22799980210201778,
+      "clipped": 130.4129865353559,
+      "errors": 0,
+      "reserve": 0,
+      "rejections": 696
+    },
+    "candidate": {
+      "n": 4096,
+      "m1": 0.6666548505476728,
+      "saved": 30986,
+      "energy": 0.2262093047495938,
+      "clipped": 130.3129563531358,
+      "errors": 0,
+      "reserve": 0,
+      "rejections": 696
+    },
+    "delta": 0.008848784001371892,
+    "by_suite": {
+      "physical": 0.01400069927901959,
+      "mixed": 0.021394436726467975,
+      "mixed_stress": 0.0,
+      "variable_stress": 0.0
+    },
+    "ci": [
+      0.007092036517085345,
+      0.010610763070479867
+    ],
+    "checks": {
+      "m1": true,
+      "saved": true,
+      "energy": true,
+      "time": true,
+      "errors": true,
+      "reserve": true,
+      "rejections": true,
+      "suite": true,
+      "confidence": true
+    },
+    "passed": true,
+    "score": 0.008848784001371901
+  },
+  "recommended_for_3d_validation": "info-repeat-tune-1.5-0.75"
+}

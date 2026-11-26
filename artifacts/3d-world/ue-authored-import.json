@@ -1,0 +1,154 @@
+{
+  "assets": [
+    {
+      "id": "Medical",
+      "mesh": "/Game/RescueAssets/Authored/Medical/SM_Medical.SM_Medical",
+      "dimensions_cm": [
+        722.3999633789062,
+        315.00006103515625,
+        355.49997171759605
+      ],
+      "triangles": 10140
+    },
+    {
+      "id": "Relay",
+      "mesh": "/Game/RescueAssets/Authored/Relay/SM_Relay.SM_Relay",
+      "dimensions_cm": [
+        141.98545455932617,
+        156.5882568359375,
+        395.0000305175781
+      ],
+      "triangles": 1784
+    },
+    {
+      "id": "Sensor",
+      "mesh": "/Game/RescueAssets/Authored/Sensor/SM_Sensor.SM_Sensor",
+      "dimensions_cm": [
+        78.21775817871094,
+        89.30408096313477,
+        203.63721871376038
+      ],
+      "triangles": 1636
+    },
+    {
+      "id": "Dock",
+      "mesh": "/Game/RescueAssets/Authored/Dock/SM_Dock.SM_Dock",
+      "dimensions_cm": [
+        316.00001525878906,
+        185.00003051757812,
+        60.000004559755325
+      ],
+      "triangles": 684
+    },
+    {
+      "id": "Barrier",
+      "mesh": "/Game/RescueAssets/Authored/Barrier/SM_Barrier.SM_Barrier",
+      "dimensions_cm": [
+        200.0,
+        60.00001907348633,
+        85.0
+      ],
+      "triangles": 1020
+    },
+    {
+      "id": "Lamp",
+      "mesh": "/Game/RescueAssets/Authored/Lamp/SM_Lamp.SM_Lamp",
+      "dimensions_cm": [
+        142.50000190734863,
+        30.000003814697266,
+        625.4999464154243
+      ],
+      "triangles": 788
+    },
+    {
+      "id": "Crate",
+      "mesh": "/Game/RescueAssets/Authored/Crate/SM_Crate.SM_Crate",
+      "dimensions_cm": [
+        80.00000762939453,
+        52.350006103515625,
+        52.0
+      ],
+      "triangles": 888
+    },
+    {
+      "id": "Fence",
+      "mesh": "/Game/RescueAssets/Authored/Fence/SM_Fence.SM_Fence",
+      "dimensions_cm": [
+        323.99998474121094,
+        24.00002670288086,
+        180.0
+      ],
+      "triangles": 1728
+    },
+    {
+      "id": "Person",
+      "mesh": "/Game/RescueAssets/Authored/Person/SM_Person.SM_Person",
+      "dimensions_cm": [
+        180.00000762939453,
+        66.00000762939453,
+        32.99999952316284
+      ],
+      "triangles": 4596
+    },
+    {
+      "id": "Slab",
+      "mesh": "/Game/RescueAssets/Authored/Slab/SM_Slab.SM_Slab",
+      "dimensions_cm": [
+        304.50274658203125,
+        157.72669982910156,
+        28.606547832489014
+      ],
+      "triangles": 244
+    },
+    {
+      "id": "Beam",
+      "mesh": "/Game/RescueAssets/Authored/Beam/SM_Beam.SM_Beam",
+      "dimensions_cm": [
+        300.0,
+        26.000024795532227,
+        37.49999976158142
+      ],
+      "triangles": 324
+    },
+    {
+      "id": "Doorway",
+      "mesh": "/Game/RescueAssets/Authored/Doorway/SM_Doorway.SM_Doorway",
+      "dimensions_cm": [
+        299.99998474121094,
+        32.00002670288086,
+        320.0
+      ],
+      "triangles": 324
+    },
+    {
+      "id": "LoadingRamp",
+      "mesh": "/Game/RescueAssets/Authored/LoadingRamp/SM_LoadingRamp.SM_LoadingRamp",
+      "dimensions_cm": [
+        130.0,
+        84.50000762939453,
+        13.0
+      ],
+      "triangles": 1620
+    },
+    {
+      "id": "Rubble",
+      "mesh": "/Game/RescueAssets/Authored/Rubble/SM_Rubble.SM_Rubble",
+      "dimensions_cm": [
+        219.9289779663086,
+        179.7719268798828,
+        64.98650932312012
+      ],
+      "triangles": 5100
+    },
+    {
+      "id": "UtilityTunnel",
+      "mesh": "/Game/RescueAssets/Authored/UtilityTunnel/SM_UtilityTunnel.SM_UtilityTunnel",
+      "dimensions_cm": [
+        1200.0001220703125,
+        1400.0001220703125,
+        550.0
+      ],
+      "triangles": 8368
+    }
+  ]
+}

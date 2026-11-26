@@ -1,0 +1,66 @@
+{
+  "id": "Drone",
+  "mesh": "SM_Drone",
+  "source": "blender/Meshy_AI_Rescue_Scout_Drone_20261109_image-to-3d-texture.blend",
+  "source_sha256": "c06e6b9e3dd55dde26517d83f5404152c78b986594c9b66e68ee5f864344423b",
+  "source_triangles": 762024,
+  "triangles": 30000,
+  "dimensions_m": [
+    1.3005690574645996,
+    1.0623351335525513,
+    0.5716608166694641
+  ],
+  "fbx": "Drone/Drone.fbx",
+  "blend": "Drone/Drone.blend",
+  "textures": {
+    "BaseColor": "Drone/textures/T_Drone_BaseColor.png",
+    "ORM": "Drone/textures/T_Drone_ORM.png",
+    "Normal": "Drone/textures/T_Drone_Normal.png"
+  },
+  "original_material_links": [
+    {
+      "from_node": "Principled BSDF",
+      "from_socket": "BSDF",
+      "to_node": "Material Output",
+      "to_socket": "Surface"
+    },
+    {
+      "from_node": "Image Texture",
+      "from_socket": "Color",
+      "to_node": "Principled BSDF",
+      "to_socket": "Base Color"
+    },
+    {
+      "from_node": "Separate Color",
+      "from_socket": "Blue",
+      "to_node": "Principled BSDF",
+      "to_socket": "Metallic"
+    },
+    {
+      "from_node": "Separate Color",
+      "from_socket": "Green",
+      "to_node": "Principled BSDF",
+      "to_socket": "Roughness"
+    },
+    {
+      "from_node": "Image Texture.001",
+      "from_socket": "Color",
+      "to_node": "Separate Color",
+      "to_socket": "Color"
+    },
+    {
+      "from_node": "Normal Map",
+      "from_socket": "Normal",
+      "to_node": "Principled BSDF",
+      "to_socket": "Normal"
+    },
+    {
+      "from_node": "Image Texture.002",
+      "from_socket": "Color",
+      "to_node": "Normal Map",
+      "to_socket": "Color"
+    }
+  ],
+  "parts": "single visual shell; functional geometry prepared separately",
+  "collision": "not included; runtime collision proxies are separate"
+}

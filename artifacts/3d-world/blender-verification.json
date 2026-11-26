@@ -1,0 +1,56 @@
+{
+  "passed": true,
+  "prepared": [
+    {
+      "id": "Rover",
+      "triangles": 60000,
+      "source_preserved": true,
+      "external_textures": [
+        "blender/prepared/v1/Rover/textures/T_Rover_BaseColor.png",
+        "blender/prepared/v1/Rover/textures/T_Rover_Normal.png",
+        "blender/prepared/v1/Rover/textures/T_Rover_ORM.png"
+      ]
+    },
+    {
+      "id": "Drone",
+      "triangles": 30000,
+      "source_preserved": true,
+      "external_textures": [
+        "blender/prepared/v1/Drone/textures/T_Drone_BaseColor.png",
+        "blender/prepared/v1/Drone/textures/T_Drone_Normal.png",
+        "blender/prepared/v1/Drone/textures/T_Drone_ORM.png"
+      ]
+    },
+    {
+      "id": "Stretcher",
+      "triangles": 16000,
+      "source_preserved": true,
+      "external_textures": [
+        "blender/prepared/v1/Stretcher/textures/T_Stretcher_BaseColor.png",
+        "blender/prepared/v1/Stretcher/textures/T_Stretcher_Normal.png",
+        "blender/prepared/v1/Stretcher/textures/T_Stretcher_ORM.png"
+      ]
+    },
+    {
+      "id": "Building",
+      "triangles": 90000,
+      "source_preserved": true,
+      "external_textures": [
+        "blender/prepared/v1/Building/textures/T_Building_BaseColor.png",
+        "blender/prepared/v1/Building/textures/T_Building_Normal.png",
+        "blender/prepared/v1/Building/textures/T_Building_ORM.png"
+      ]
+    },
+    {
+      "id": "WindowWall",
+      "triangles": 17999,
+      "source_preserved": true,
+      "external_textures": [
+        "blender/prepared/v1/WindowWall/textures/T_WindowWall_BaseColor.png",
+        "blender/prepared/v1/WindowWall/textures/T_WindowWall_Normal.png",
+        "blender/prepared/v1/WindowWall/textures/T_WindowWall_ORM.png"
+      ]
+    }
+  ],
+  "authored_models": 15
+}

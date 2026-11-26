@@ -1,0 +1,8473 @@
+{
+  "id": "modular_urban_apartments_facade",
+  "source": "blender/vendor/modular_urban_apartments_facade_4k/modular_urban_apartments_facade_4k.blend",
+  "sha256": "170ef3dd2246418a1c3539de606b71a94c8692690aa153e8d6990b3798230d3a",
+  "units": {
+    "system": "METRIC",
+    "scale_length": 1.0
+  },
+  "bounds_min": [
+    -24.529996871948242,
+    -0.4249999225139618,
+    -2.0
+  ],
+  "bounds_max": [
+    27.0,
+    6.239999771118164,
+    15.0
+  ],
+  "dimensions": [
+    51.529998779296875,
+    6.664999485015869,
+    17.0
+  ],
+  "objects": [
+    {
+      "name": "base_angled_large_01",
+      "type": "MESH",
+      "parent": null,
+      "location": [
+        -8.0,
+        4.76837158203125e-07,
+        -2.0
+      ],
+      "rotation": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "hidden_render": false,
+      "vertices": 25,
+      "triangles": 32,
+      "uv_layers": [
+        "UVMap"
+      ],
+      "bounds_min": [
+        -11.199999809265137,
+        -0.20000000298023224,
+        -2.0
+      ],
+      "bounds_max": [
+        -8.0,
+        3.000000238418579,
+        -1.25
+      ],
+      "materials": [
+        "modular_urban_apartments_facade_trim_01"
+      ],
+      "modifiers": [
+        {
+          "name": "Bevel",
+          "type": "BEVEL"
+        },
+        {
+          "name": "Auto Smooth",
+          "type": "NODES"
+        },
+        {
+          "name": "WeightedNormal",
+          "type": "WEIGHTED_NORMAL"
+        }
+      ]
+    },
+    {
+      "name": "base_angled_small_01",
+      "type": "MESH",
+      "parent": null,
+      "location": [
+        -15.0,
+        5.960464477539062e-07,
+        -2.0
+      ],
+      "rotation": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "hidden_render": false,
+      "vertices": 25,
+      "triangles": 32,
+      "uv_layers": [
+        "UVMap"
+      ],
+      "bounds_min": [
+        -17.199996948242188,
+        -0.20000000298023224,
+        -2.0
+      ],
+      "bounds_max": [
+        -14.999998092651367,
+        2.0,
+        -1.25
+      ],
+      "materials": [
+        "modular_urban_apartments_facade_trim_01"
+      ],
+      "modifiers": [
+        {
+          "name": "Bevel",
+          "type": "BEVEL"
+        },
+        {
+          "name": "Auto Smooth",
+          "type": "NODES"
+        },
+        {
+          "name": "WeightedNormal",
+          "type": "WEIGHTED_NORMAL"
+        }
+      ]
+    },
+    {
+      "name": "base_corner_large_01",
+      "type": "MESH",
+      "parent": null,
+      "location": [
+        -4.0,
+        0.0,
+        -2.0
+      ],
+      "rotation": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "hidden_render": false,
+      "vertices": 15,
+      "triangles": 16,
+      "uv_layers": [
+        "UVMap"
+      ],
+      "bounds_min": [
+        -7.199999809265137,
+        -0.20000004768371582,
+        -2.0
+      ],
+      "bounds_max": [
+        -4.0,
+        3.0,
+        -1.25
+      ],
+      "materials": [
+        "modular_urban_apartments_facade_trim_01"
+      ],
+      "modifiers": [
+        {
+          "name": "Bevel",
+          "type": "BEVEL"
+        },
+        {
+          "name": "Auto Smooth",
+          "type": "NODES"
+        },
+        {
+          "name": "WeightedNormal",
+          "type": "WEIGHTED_NORMAL"
+        }
+      ]
+    },
+    {
+      "name": "base_corner_large_02",
+      "type": "MESH",
+      "parent": null,
+      "location": [
+        -4.0,
+        1.0,
+        -2.0
+      ],
+      "rotation": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "hidden_render": false,
+      "vertices": 15,
+      "triangles": 16,
+      "uv_layers": [
+        "UVMap"
+      ],
+      "bounds_min": [
+        -7.0,
+        1.0,
+        -2.0
+      ],
+      "bounds_max": [
+        -4.0,
+        4.0,
+        -1.25
+      ],
+      "materials": [
+        "modular_urban_apartments_facade_trim_01"
+      ],
+      "modifiers": [
+        {
+          "name": "Bevel",
+          "type": "BEVEL"
+        },
+        {
+          "name": "Auto Smooth",
+          "type": "NODES"
+        },
+        {
+          "name": "WeightedNormal",
+          "type": "WEIGHTED_NORMAL"
+        }
+      ]
+    },
+    {
+      "name": "base_corner_small_01",
+      "type": "MESH",
+      "parent": null,
+      "location": [
+        -12.0,
+        1.4210854715202004e-14,
+        -2.0
+      ],
+      "rotation": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "hidden_render": false,
+      "vertices": 15,
+      "triangles": 16,
+      "uv_layers": [
+        "UVMap"
+      ],
+      "bounds_min": [
+        -14.199999809265137,
+        -0.20000001788139343,
+        -1.999999761581421
+      ],
+      "bounds_max": [
+        -12.0,
+        2.0,
+        -1.249999761581421
+      ],
+      "materials": [
+        "modular_urban_apartments_facade_trim_01"
+      ],
+      "modifiers": [
+        {
+          "name": "Bevel",
+          "type": "BEVEL"
+        },
+        {
+          "name": "Auto Smooth",
+          "type": "NODES"
+        },
+        {
+          "name": "WeightedNormal",
+          "type": "WEIGHTED_NORMAL"
+        }
+      ]
+    },
+    {
+      "name": "base_corner_small_02",
+      "type": "MESH",
+      "parent": null,
+      "location": [
+        -12.0,
+        2.0,
+        -2.0
+      ],
+      "rotation": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "hidden_render": false,
+      "vertices": 15,
+      "triangles": 16,
+      "uv_layers": [
+        "UVMap"
+      ],
+      "bounds_min": [
+        -14.0,
+        2.0,
+        -1.999999761581421
+      ],
+      "bounds_max": [
+        -12.0,
+        4.0,
+        -1.249999761581421
+      ],
+      "materials": [
+        "modular_urban_apartments_facade_trim_01"
+      ],
+      "modifiers": [
+        {
+          "name": "Bevel",
+          "type": "BEVEL"
+        },
+        {
+          "name": "Auto Smooth",
+          "type": "NODES"
+        },
+        {
+          "name": "WeightedNormal",
+          "type": "WEIGHTED_NORMAL"
+        }
+      ]
+    },
+    {
+      "name": "base_end_01",
+      "type": "MESH",
+      "parent": null,
+      "location": [
+        -24.099998474121094,
+        0.0,
+        -2.0
+      ],
+      "rotation": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "hidden_render": false,
+      "vertices": 13,
+      "triangles": 14,
+      "uv_layers": [
+        "UVMap"
+      ],
+      "bounds_min": [
+        -24.299999237060547,
+        -0.2000000923871994,
+        -2.0
+      ],
+      "bounds_max": [
+        -24.099998474121094,
+        8.742276236262114e-09,
+        -1.25
+      ],
+      "materials": [
+        "modular_urban_apartments_facade_trim_01"
+      ],
+      "modifiers": [
+        {
+          "name": "Bevel",
+          "type": "BEVEL"
+        },
+        {
+          "name": "Auto Smooth",
+          "type": "NODES"
+        },
+        {
+          "name": "WeightedNormal",
+          "type": "WEIGHTED_NORMAL"
+        }
+      ]
+    },
+    {
+      "name": "base_end_02",
+      "type": "MESH",
+      "parent": null,
+      "location": [
+        -23.900001525878906,
+        0.0,
+        -2.0
+      ],
+      "rotation": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "hidden_render": false,
+      "vertices": 13,
+      "triangles": 14,
+      "uv_layers": [
+        "UVMap"
+      ],
+      "bounds_min": [
+        -23.900001525878906,
+        -0.2000000923871994,
+        -2.0
+      ],
+      "bounds_max": [
+        -23.700000762939453,
+        8.742276236262114e-09,
+        -1.25
+      ],
+      "materials": [
+        "modular_urban_apartments_facade_trim_01"
+      ],
+      "modifiers": [
+        {
+          "name": "Bevel",
+          "type": "BEVEL"
+        },
+        {
+          "name": "Auto Smooth",
+          "type": "NODES"
+        },
+        {
+          "name": "WeightedNormal",
+          "type": "WEIGHTED_NORMAL"
+        }
+      ]
+    },
+    {
+      "name": "base_standard_01",
+      "type": "MESH",
+      "parent": null,
+      "location": [
+        0.0,
+        0.0,
+        -2.0
+      ],
+      "rotation": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "hidden_render": false,
+      "vertices": 10,
+      "triangles": 8,
+      "uv_layers": [
+        "UVMap"
+      ],
+      "bounds_min": [
+        -3.0,
+        -0.20000000298023224,
+        -2.0
+      ],
+      "bounds_max": [
+        0.0,
+        0.0,
+        -1.25
+      ],
+      "materials": [
+        "modular_urban_apartments_facade_trim_01"
+      ],
+      "modifiers": [
+        {
+          "name": "Auto Smooth",
+          "type": "NODES"
+        },
+        {
+          "name": "WeightedNormal",
+          "type": "WEIGHTED_NORMAL"
+        }
+      ]
+    },
+    {
+      "name": "cornice_end_01",
+      "type": "MESH",
+      "parent": null,
+      "location": [
+        -24.099998474121094,
+        0.0,
+        3.4000000953674316
+      ],
+      "rotation": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "hidden_render": false,
+      "vertices": 30,
+      "triangles": 36,
+      "uv_layers": [
+        "UVMap"
+      ],
+      "bounds_min": [
+        -24.23999786376953,
+        -0.0400000624358654,
+        3.3999996185302734
+      ],
+      "bounds_max": [
+        -24.09999656677246,
+        0.09999994933605194,
+        3.6000001430511475
+      ],
+      "materials": [
+        "modular_urban_apartments_facade_trim_01"
+      ],
+      "modifiers": [
+        {
+          "name": "Bevel",
+          "type": "BEVEL"
+        },
+        {
+          "name": "Auto Smooth",
+          "type": "NODES"
+        },
+        {
+          "name": "WeightedNormal",
+          "type": "WEIGHTED_NORMAL"
+        }
+      ]
+    },
+    {
+      "name": "cornice_end_02",
+      "type": "MESH",
+      "parent": null,
+      "location": [
+        -23.900001525878906,
+        0.0,
+        3.4000000953674316
+      ],
+      "rotation": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "hidden_render": false,
+      "vertices": 30,
+      "triangles": 36,
+      "uv_layers": [
+        "UVMap"
+      ],
+      "bounds_min": [
+        -23.900001525878906,
+        -0.0400000624358654,
+        3.3999996185302734
+      ],
+      "bounds_max": [
+        -23.760000228881836,
+        0.09999994933605194,
+        3.6000001430511475
+      ],
+      "materials": [
+        "modular_urban_apartments_facade_trim_01"
+      ],
+      "modifiers": [
+        {
+          "name": "Bevel",
+          "type": "BEVEL"
+        },
+        {
+          "name": "Auto Smooth",
+          "type": "NODES"
+        },
+        {
+          "name": "WeightedNormal",
+          "type": "WEIGHTED_NORMAL"
+        }
+      ]
+    },
+    {
+      "name": "cornice_pier_angled_01",
+      "type": "MESH",
+      "parent": null,
+      "location": [
+        -18.0,
+        -1.1920928955078125e-07,
+        3.3999996185302734
+      ],
+      "rotation": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "hidden_render": false,
+      "vertices": 40,
+      "triangles": 56,
+      "uv_layers": [
+        "UVMap"
+      ],
+      "bounds_min": [
+        -18.247488021850586,
+        -0.10000010579824448,
+        3.3999993801116943
+      ],
+      "bounds_max": [
+        -17.750001907348633,
+        0.1767762303352356,
+        3.59999942779541
+      ],
+      "materials": [
+        "modular_urban_apartments_facade_trim_01"
+      ],
+      "modifiers": [
+        {
+          "name": "Auto Smooth",
+          "type": "NODES"
+        },
+        {
+          "name": "WeightedNormal",
+          "type": "WEIGHTED_NORMAL"
+        }
+      ]
+    },
+    {
+      "name": "cornice_pier_corner_01",
+      "type": "MESH",
+      "parent": null,
+      "location": [
+        -20.0,
+        0.0,
+        3.3999996185302734
+      ],
+      "rotation": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "hidden_render": false,
+      "vertices": 40,
+      "triangles": 56,
+      "uv_layers": [
+        "UVMap"
+      ],
+      "bounds_min": [
+        -20.100000381469727,
+        -0.10000067204236984,
+        3.3999993801116943
+      ],
+      "bounds_max": [
+        -19.75,
+        0.24999909102916718,
+        3.59999942779541
+      ],
+      "materials": [
+        "modular_urban_apartments_facade_trim_01"
+      ],
+      "modifiers": [
+        {
+          "name": "Auto Smooth",
+          "type": "NODES"
+        },
+        {
+          "name": "WeightedNormal",
+          "type": "WEIGHTED_NORMAL"
+        }
+      ]
+    },
+    {
+      "name": "cornice_pier_corner_02",
+      "type": "MESH",
+      "parent": null,
+      "location": [
+        -20.0,
+        2.0,
+        3.3999996185302734
+      ],
+      "rotation": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "hidden_render": false,
+      "vertices": 40,
+      "triangles": 56,
+      "uv_layers": [
+        "UVMap"
+      ],
+      "bounds_min": [
+        -20.349998474121094,
+        1.6500000953674316,
+        3.3999991416931152
+      ],
+      "bounds_max": [
+        -20.0,
+        1.9999985694885254,
+        3.599999189376831
+      ],
+      "materials": [
+        "modular_urban_apartments_facade_trim_01"
+      ],
+      "modifiers": [
+        {
+          "name": "Bevel",
+          "type": "BEVEL"
+        },
+        {
+          "name": "Auto Smooth",
+          "type": "NODES"
+        },
+        {
+          "name": "WeightedNormal",
+          "type": "WEIGHTED_NORMAL"
+        }
+      ]
+    },
+    {
+      "name": "cornice_pier_standard_01",
+      "type": "MESH",
+      "parent": null,
+      "location": [
+        -22.0,
+        1.1920928955078125e-07,
+        3.3999996185302734
+      ],
+      "rotation": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "hidden_render": false,
+      "vertices": 32,
+      "triangles": 42,
+      "uv_layers": [
+        "UVMap"
+      ],
+      "bounds_min": [
+        -22.17500114440918,
+        -0.09999983012676239,
+        3.3999993801116943
+      ],
+      "bounds_max": [
+        -21.825002670288086,
+        1.1920928955078125e-07,
+        3.59999942779541
+      ],
+      "materials": [
+        "modular_urban_apartments_facade_trim_01"
+      ],
+      "modifiers": [
+        {
+          "name": "Auto Smooth",
+          "type": "NODES"
+        },
+        {
+          "name": "WeightedNormal",
+          "type": "WEIGHTED_NORMAL"
+        }
+      ]
+    },
+    {
+      "name": "cornice_standard_angled_large_01",
+      "type": "MESH",
+      "parent": null,
+      "location": [
+        -8.0,
+        4.76837158203125e-07,
+        3.4000000953674316
+      ],
+      "rotation": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "hidden_render": false,
+      "vertices": 50,
+      "triangles": 72,
+      "uv_layers": [
+        "UVMap"
+      ],
+      "bounds_min": [
+        -11.039999961853027,
+        -0.03999999910593033,
+        3.3999996185302734
+      ],
+      "bounds_max": [
+        -8.0,
+        3.0,
+        3.6000001430511475
+      ],
+      "materials": [
+        "modular_urban_apartments_facade_trim_01"
+      ],
+      "modifiers": [
+        {
+          "name": "Bevel",
+          "type": "BEVEL"
+        },
+        {
+          "name": "Auto Smooth",
+          "type": "NODES"
+        },
+        {
+          "name": "WeightedNormal",
+          "type": "WEIGHTED_NORMAL"
+        }
+      ]
+    },
+    {
+      "name": "cornice_standard_angled_small_01",
+      "type": "MESH",
+      "parent": null,
+      "location": [
+        -15.0,
+        5.960464477539062e-07,
+        3.4000000953674316
+      ],
+      "rotation": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "hidden_render": false,
+      "vertices": 50,
+      "triangles": 72,
+      "uv_layers": [
+        "UVMap"
+      ],
+      "bounds_min": [
+        -17.039997100830078,
+        -0.03999999910593033,
+        3.3999996185302734
+      ],
+      "bounds_max": [
+        -14.999998092651367,
+        2.0,
+        3.5999999046325684
+      ],
+      "materials": [
+        "modular_urban_apartments_facade_trim_01"
+      ],
+      "modifiers": [
+        {
+          "name": "Bevel",
+          "type": "BEVEL"
+        },
+        {
+          "name": "Auto Smooth",
+          "type": "NODES"
+        },
+        {
+          "name": "WeightedNormal",
+          "type": "WEIGHTED_NORMAL"
+        }
+      ]
+    },
+    {
+      "name": "cornice_standard_corner_large_01",
+      "type": "MESH",
+      "parent": null,
+      "location": [
+        -4.0,
+        0.0,
+        3.4000000953674316
+      ],
+      "rotation": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "hidden_render": false,
+      "vertices": 30,
+      "triangles": 36,
+      "uv_layers": [
+        "UVMap"
+      ],
+      "bounds_min": [
+        -7.039999961853027,
+        -0.04000008478760719,
+        3.3999998569488525
+      ],
+      "bounds_max": [
+        -3.999999761581421,
+        3.0,
+        3.6000001430511475
+      ],
+      "materials": [
+        "modular_urban_apartments_facade_trim_01"
+      ],
+      "modifiers": [
+        {
+          "name": "Bevel",
+          "type": "BEVEL"
+        },
+        {
+          "name": "Auto Smooth",
+          "type": "NODES"
+        },
+        {
+          "name": "WeightedNormal",
+          "type": "WEIGHTED_NORMAL"
+        }
+      ]
+    },
+    {
+      "name": "cornice_standard_corner_large_02",
+      "type": "MESH",
+      "parent": null,
+      "location": [
+        -4.0,
+        1.0,
+        3.4000000953674316
+      ],
+      "rotation": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "hidden_render": false,
+      "vertices": 30,
+      "triangles": 36,
+      "uv_layers": [
+        "UVMap"
+      ],
+      "bounds_min": [
+        -7.0,
+        1.0,
+        3.4000003337860107
+      ],
+      "bounds_max": [
+        -3.999999761581421,
+        4.0,
+        3.6000001430511475
+      ],
+      "materials": [
+        "modular_urban_apartments_facade_trim_01"
+      ],
+      "modifiers": [
+        {
+          "name": "Bevel",
+          "type": "BEVEL"
+        },
+        {
+          "name": "Auto Smooth",
+          "type": "NODES"
+        },
+        {
+          "name": "WeightedNormal",
+          "type": "WEIGHTED_NORMAL"
+        }
+      ]
+    },
+    {
+      "name": "cornice_standard_corner_small_01",
+      "type": "MESH",
+      "parent": null,
+      "location": [
+        -12.0,
+        1.4210854715202004e-14,
+        3.4000000953674316
+      ],
+      "rotation": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "hidden_render": false,
+      "vertices": 30,
+      "triangles": 36,
+      "uv_layers": [
+        "UVMap"
+      ],
+      "bounds_min": [
+        -14.039999961853027,
+        -0.040000010281801224,
+        3.3999996185302734
+      ],
+      "bounds_max": [
+        -12.0,
+        2.0,
+        3.5999999046325684
+      ],
+      "materials": [
+        "modular_urban_apartments_facade_trim_01"
+      ],
+      "modifiers": [
+        {
+          "name": "Bevel",
+          "type": "BEVEL"
+        },
+        {
+          "name": "Auto Smooth",
+          "type": "NODES"
+        },
+        {
+          "name": "WeightedNormal",
+          "type": "WEIGHTED_NORMAL"
+        }
+      ]
+    },
+    {
+      "name": "cornice_standard_corner_small_02",
+      "type": "MESH",
+      "parent": null,
+      "location": [
+        -12.0,
+        2.0,
+        3.4000000953674316
+      ],
+      "rotation": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "hidden_render": false,
+      "vertices": 30,
+      "triangles": 36,
+      "uv_layers": [
+        "UVMap"
+      ],
+      "bounds_min": [
+        -14.0,
+        2.0,
+        3.3999998569488525
+      ],
+      "bounds_max": [
+        -12.0,
+        4.0,
+        3.5999999046325684
+      ],
+      "materials": [
+        "modular_urban_apartments_facade_trim_01"
+      ],
+      "modifiers": [
+        {
+          "name": "Bevel",
+          "type": "BEVEL"
+        },
+        {
+          "name": "Auto Smooth",
+          "type": "NODES"
+        },
+        {
+          "name": "WeightedNormal",
+          "type": "WEIGHTED_NORMAL"
+        }
+      ]
+    },
+    {
+      "name": "cornice_standard_standard_01",
+      "type": "MESH",
+      "parent": null,
+      "location": [
+        0.0,
+        0.0,
+        3.4000000953674316
+      ],
+      "rotation": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "hidden_render": false,
+      "vertices": 20,
+      "triangles": 18,
+      "uv_layers": [
+        "UVMap"
+      ],
+      "bounds_min": [
+        -3.0,
+        -0.03999999910593033,
+        3.3999996185302734
+      ],
+      "bounds_max": [
+        0.0,
+        0.0,
+        3.5999996662139893
+      ],
+      "materials": [
+        "modular_urban_apartments_facade_trim_01"
+      ],
+      "modifiers": [
+        {
+          "name": "Auto Smooth",
+          "type": "NODES"
+        },
+        {
+          "name": "WeightedNormal",
+          "type": "WEIGHTED_NORMAL"
+        }
+      ]
+    },
+    {
+      "name": "crown_end_01",
+      "type": "MESH",
+      "parent": null,
+      "location": [
+        -24.099998474121094,
+        0.0,
+        4.0
+      ],
+      "rotation": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "hidden_render": false,
+      "vertices": 213,
+      "triangles": 316,
+      "uv_layers": [
+        "UVMap"
+      ],
+      "bounds_min": [
+        -24.529996871948242,
+        -0.33000004291534424,
+        4.0
+      ],
+      "bounds_max": [
+        -24.09999656677246,
+        0.10000011324882507,
+        4.75
+      ],
+      "materials": [
+        "modular_urban_apartments_facade_trim_02"
+      ],
+      "modifiers": [
+        {
+          "name": "Bevel",
+          "type": "BEVEL"
+        },
+        {
+          "name": "Auto Smooth",
+          "type": "NODES"
+        },
+        {
+          "name": "WeightedNormal",
+          "type": "WEIGHTED_NORMAL"
+        }
+      ]
+    },
+    {
+      "name": "crown_end_02",
+      "type": "MESH",
+      "parent": null,
+      "location": [
+        -23.900001525878906,
+        0.0,
+        4.0
+      ],
+      "rotation": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "hidden_render": false,
+      "vertices": 213,
+      "triangles": 316,
+      "uv_layers": [
+        "UVMap"
+      ],
+      "bounds_min": [
+        -23.900001525878906,
+        -0.33000004291534424,
+        4.0
+      ],
+      "bounds_max": [
+        -23.470001220703125,
+        0.10000011324882507,
+        4.75
+      ],
+      "materials": [
+        "modular_urban_apartments_facade_trim_02"
+      ],
+      "modifiers": [
+        {
+          "name": "Bevel",
+          "type": "BEVEL"
+        },
+        {
+          "name": "Auto Smooth",
+          "type": "NODES"
+        },
+        {
+          "name": "WeightedNormal",
+          "type": "WEIGHTED_NORMAL"
+        }
+      ]
+    },
+    {
+      "name": "crown_pier_angled_01",
+      "type": "MESH",
+      "parent": null,
+      "location": [
+        -18.0,
+        -1.1920928955078125e-07,
+        4.0
+      ],
+      "rotation": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "hidden_render": false,
+      "vertices": 109,
+      "triangles": 214,
+      "uv_layers": [
+        "UVMap"
+      ],
+      "bounds_min": [
+        -18.626033782958984,
+        -0.42434072494506836,
+        3.944999933242798
+      ],
+      "bounds_max": [
+        -17.553943634033203,
+        0.4013806879520416,
+        4.78000020980835
+      ],
+      "materials": [
+        "modular_urban_apartments_facade_trim_02"
+      ],
+      "modifiers": [
+        {
+          "name": "Bevel",
+          "type": "BEVEL"
+        },
+        {
+          "name": "Auto Smooth",
+          "type": "NODES"
+        },
+        {
+          "name": "WeightedNormal",
+          "type": "WEIGHTED_NORMAL"
+        }
+      ]
+    },
+    {
+      "name": "crown_pier_corner_01",
+      "type": "MESH",
+      "parent": null,
+      "location": [
+        -20.0,
+        0.0,
+        4.0
+      ],
+      "rotation": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "hidden_render": false,
+      "vertices": 109,
+      "triangles": 214,
+      "uv_layers": [
+        "UVMap"
+      ],
+      "bounds_min": [
+        -20.424999237060547,
+        -0.4249998927116394,
+        3.944999933242798
+      ],
+      "bounds_max": [
+        -19.56999969482422,
+        0.4300007224082947,
+        4.78000020980835
+      ],
+      "materials": [
+        "modular_urban_apartments_facade_trim_02"
+      ],
+      "modifiers": [
+        {
+          "name": "Bevel",
+          "type": "BEVEL"
+        },
+        {
+          "name": "Auto Smooth",
+          "type": "NODES"
+        },
+        {
+          "name": "WeightedNormal",
+          "type": "WEIGHTED_NORMAL"
+        }
+      ]
+    },
+    {
+      "name": "crown_pier_corner_02",
+      "type": "MESH",
+      "parent": null,
+      "location": [
+        -20.0,
+        2.0,
+        4.0
+      ],
+      "rotation": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "hidden_render": false,
+      "vertices": 113,
+      "triangles": 222,
+      "uv_layers": [
+        "UVMap"
+      ],
+      "bounds_min": [
+        -20.530000686645508,
+        1.469997525215149,
+        3.9449996948242188
+      ],
+      "bounds_max": [
+        -19.89999771118164,
+        2.099999189376831,
+        4.779999256134033
+      ],
+      "materials": [
+        "modular_urban_apartments_facade_trim_02"
+      ],
+      "modifiers": [
+        {
+          "name": "Bevel",
+          "type": "BEVEL"
+        },
+        {
+          "name": "Auto Smooth",
+          "type": "NODES"
+        },
+        {
+          "name": "WeightedNormal",
+          "type": "WEIGHTED_NORMAL"
+        }
+      ]
+    },
+    {
+      "name": "crown_pier_pedestal_01",
+      "type": "MESH",
+      "parent": null,
+      "location": [
+        -22.0,
+        1.1920928955078125e-07,
+        4.0
+      ],
+      "rotation": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "hidden_render": false,
+      "vertices": 110,
+      "triangles": 216,
+      "uv_layers": [
+        "UVMap"
+      ],
+      "bounds_min": [
+        -22.354999542236328,
+        -0.4249999225139618,
+        3.944999933242798
+      ],
+      "bounds_max": [
+        -21.645000457763672,
+        0.10000006854534149,
+        4.779999732971191
+      ],
+      "materials": [
+        "modular_urban_apartments_facade_trim_02"
+      ],
+      "modifiers": [
+        {
+          "name": "Bevel",
+          "type": "BEVEL"
+        },
+        {
+          "name": "Auto Smooth",
+          "type": "NODES"
+        },
+        {
+          "name": "WeightedNormal",
+          "type": "WEIGHTED_NORMAL"
+        }
+      ]
+    },
+    {
+      "name": "crown_standard_angled_large_01",
+      "type": "MESH",
+      "parent": null,
+      "location": [
+        -8.0,
+        4.76837158203125e-07,
+        4.0
+      ],
+      "rotation": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "hidden_render": false,
+      "vertices": 808,
+      "triangles": 1236,
+      "uv_layers": [
+        "UVMap"
+      ],
+      "bounds_min": [
+        -11.329999923706055,
+        -0.3299999237060547,
+        4.0
+      ],
+      "bounds_max": [
+        -8.0,
+        3.0,
+        4.75
+      ],
+      "materials": [
+        "modular_urban_apartments_facade_trim_02"
+      ],
+      "modifiers": [
+        {
+          "name": "Bevel",
+          "type": "BEVEL"
+        },
+        {
+          "name": "Auto Smooth",
+          "type": "NODES"
+        },
+        {
+          "name": "WeightedNormal",
+          "type": "WEIGHTED_NORMAL"
+        }
+      ]
+    },
+    {
+      "name": "crown_standard_angled_small_01",
+      "type": "MESH",
+      "parent": null,
+      "location": [
+        -15.0,
+        5.960464477539062e-07,
+        4.0
+      ],
+      "rotation": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "hidden_render": false,
+      "vertices": 610,
+      "triangles": 930,
+      "uv_layers": [
+        "UVMap"
+      ],
+      "bounds_min": [
+        -17.329998016357422,
+        -0.3299999237060547,
+        4.0
+      ],
+      "bounds_max": [
+        -14.99999713897705,
+        2.0,
+        4.75
+      ],
+      "materials": [
+        "modular_urban_apartments_facade_trim_02"
+      ],
+      "modifiers": [
+        {
+          "name": "Bevel",
+          "type": "BEVEL"
+        },
+        {
+          "name": "Auto Smooth",
+          "type": "NODES"
+        },
+        {
+          "name": "WeightedNormal",
+          "type": "WEIGHTED_NORMAL"
+        }
+      ]
+    },
+    {
+      "name": "crown_standard_corner_large_01",
+      "type": "MESH",
+      "parent": null,
+      "location": [
+        -4.0,
+        0.0,
+        4.0
+      ],
+      "rotation": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "hidden_render": false,
+      "vertices": 1011,
+      "triangles": 1568,
+      "uv_layers": [
+        "UVMap"
+      ],
+      "bounds_min": [
+        -7.3300018310546875,
+        -0.33000001311302185,
+        4.0
+      ],
+      "bounds_max": [
+        -4.0,
+        3.000001907348633,
+        4.75
+      ],
+      "materials": [
+        "modular_urban_apartments_facade_trim_02"
+      ],
+      "modifiers": [
+        {
+          "name": "Bevel",
+          "type": "BEVEL"
+        },
+        {
+          "name": "Auto Smooth",
+          "type": "NODES"
+        },
+        {
+          "name": "WeightedNormal",
+          "type": "WEIGHTED_NORMAL"
+        }
+      ]
+    },
+    {
+      "name": "crown_standard_corner_large_02",
+      "type": "MESH",
+      "parent": null,
+      "location": [
+        -4.0,
+        1.0,
+        4.0
+      ],
+      "rotation": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "hidden_render": false,
+      "vertices": 938,
+      "triangles": 1422,
+      "uv_layers": [
+        "UVMap"
+      ],
+      "bounds_min": [
+        -7.000001907348633,
+        1.0,
+        4.0
+      ],
+      "bounds_max": [
+        -3.899998188018799,
+        4.100002765655518,
+        4.75
+      ],
+      "materials": [
+        "modular_urban_apartments_facade_trim_02"
+      ],
+      "modifiers": [
+        {
+          "name": "Bevel",
+          "type": "BEVEL"
+        },
+        {
+          "name": "Auto Smooth",
+          "type": "NODES"
+        },
+        {
+          "name": "WeightedNormal",
+          "type": "WEIGHTED_NORMAL"
+        }
+      ]
+    },
+    {
+      "name": "crown_standard_corner_small_01",
+      "type": "MESH",
+      "parent": null,
+      "location": [
+        -12.0,
+        1.4210854715202004e-14,
+        4.0
+      ],
+      "rotation": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "hidden_render": false,
+      "vertices": 747,
+      "triangles": 1160,
+      "uv_layers": [
+        "UVMap"
+      ],
+      "bounds_min": [
+        -14.330001831054688,
+        -0.32999998331069946,
+        3.999999761581421
+      ],
+      "bounds_max": [
+        -12.000000953674316,
+        2.000001907348633,
+        4.75
+      ],
+      "materials": [
+        "modular_urban_apartments_facade_trim_02"
+      ],
+      "modifiers": [
+        {
+          "name": "Bevel",
+          "type": "BEVEL"
+        },
+        {
+          "name": "Auto Smooth",
+          "type": "NODES"
+        },
+        {
+          "name": "WeightedNormal",
+          "type": "WEIGHTED_NORMAL"
+        }
+      ]
+    },
+    {
+      "name": "crown_standard_corner_small_02",
+      "type": "MESH",
+      "parent": null,
+      "location": [
+        -12.0,
+        2.0,
+        4.0
+      ],
+      "rotation": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "hidden_render": false,
+      "vertices": 674,
+      "triangles": 1014,
+      "uv_layers": [
+        "UVMap"
+      ],
+      "bounds_min": [
+        -14.000001907348633,
+        2.0000009536743164,
+        3.999999761581421
+      ],
+      "bounds_max": [
+        -11.899998664855957,
+        4.100002765655518,
+        4.75
+      ],
+      "materials": [
+        "modular_urban_apartments_facade_trim_02"
+      ],
+      "modifiers": [
+        {
+          "name": "Bevel",
+          "type": "BEVEL"
+        },
+        {
+          "name": "Auto Smooth",
+          "type": "NODES"
+        },
+        {
+          "name": "WeightedNormal",
+          "type": "WEIGHTED_NORMAL"
+        }
+      ]
+    },
+    {
+      "name": "crown_standard_standard_01",
+      "type": "MESH",
+      "parent": null,
+      "location": [
+        0.0,
+        0.0,
+        4.0
+      ],
+      "rotation": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "hidden_render": false,
+      "vertices": 470,
+      "triangles": 684,
+      "uv_layers": [
+        "UVMap"
+      ],
+      "bounds_min": [
+        -3.000001907348633,
+        -0.33000001311302185,
+        4.0
+      ],
+      "bounds_max": [
+        -2.384185791015625e-07,
+        0.09999996423721313,
+        4.75
+      ],
+      "materials": [
+        "modular_urban_apartments_facade_trim_02"
+      ],
+      "modifiers": [
+        {
+          "name": "Auto Smooth",
+          "type": "NODES"
+        },
+        {
+          "name": "WeightedNormal",
+          "type": "WEIGHTED_NORMAL"
+        }
+      ]
+    },
+    {
+      "name": "dado_door_angled_large_01",
+      "type": "MESH",
+      "parent": null,
+      "location": [
+        4.0,
+        0.0,
+        -1.0
+      ],
+      "rotation": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "hidden_render": false,
+      "vertices": 30,
+      "triangles": 32,
+      "uv_layers": [
+        "UVMap"
+      ],
+      "bounds_min": [
+        0.9600000381469727,
+        -0.04000002145767212,
+        -1.0
+      ],
+      "bounds_max": [
+        4.0,
+        3.000000238418579,
+        -0.4999999403953552
+      ],
+      "materials": [
+        "modular_urban_apartments_facade_trim_01"
+      ],
+      "modifiers": [
+        {
+          "name": "Bevel",
+          "type": "BEVEL"
+        },
+        {
+          "name": "Auto Smooth",
+          "type": "NODES"
+        },
+        {
+          "name": "WeightedNormal",
+          "type": "WEIGHTED_NORMAL"
+        }
+      ]
+    },
+    {
+      "name": "dado_door_angled_small_01",
+      "type": "MESH",
+      "parent": null,
+      "location": [
+        7.0,
+        5.960464477539063e-08,
+        -1.0
+      ],
+      "rotation": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "hidden_render": false,
+      "vertices": 30,
+      "triangles": 32,
+      "uv_layers": [
+        "UVMap"
+      ],
+      "bounds_min": [
+        4.960000038146973,
+        -0.04000014066696167,
+        -1.0
+      ],
+      "bounds_max": [
+        7.0,
+        2.0,
+        -0.5
+      ],
+      "materials": [
+        "modular_urban_apartments_facade_trim_01"
+      ],
+      "modifiers": [
+        {
+          "name": "Bevel",
+          "type": "BEVEL"
+        },
+        {
+          "name": "Auto Smooth",
+          "type": "NODES"
+        },
+        {
+          "name": "WeightedNormal",
+          "type": "WEIGHTED_NORMAL"
+        }
+      ]
+    },
+    {
+      "name": "dado_door_centered_large_01",
+      "type": "MESH",
+      "parent": null,
+      "location": [
+        11.0,
+        0.0,
+        -1.0
+      ],
+      "rotation": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "hidden_render": false,
+      "vertices": 40,
+      "triangles": 48,
+      "uv_layers": [
+        "UVMap"
+      ],
+      "bounds_min": [
+        8.000001907348633,
+        -0.0400003120303154,
+        -1.0
+      ],
+      "bounds_max": [
+        11.000001907348633,
+        0.03999999165534973,
+        -0.5
+      ],
+      "materials": [
+        "modular_urban_apartments_facade_trim_01"
+      ],
+      "modifiers": [
+        {
+          "name": "Auto Smooth",
+          "type": "NODES"
+        },
+        {
+          "name": "WeightedNormal",
+          "type": "WEIGHTED_NORMAL"
+        }
+      ]
+    },
+    {
+      "name": "dado_door_centered_small_01",
+      "type": "MESH",
+      "parent": null,
+      "location": [
+        15.0,
+        0.0,
+        -1.0
+      ],
+      "rotation": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "hidden_render": false,
+      "vertices": 40,
+      "triangles": 48,
+      "uv_layers": [
+        "UVMap"
+      ],
+      "bounds_min": [
+        12.0,
+        -0.0400003120303154,
+        -1.0
+      ],
+      "bounds_max": [
+        15.0,
+        0.03999999165534973,
+        -0.5
+      ],
+      "materials": [
+        "modular_urban_apartments_facade_trim_01"
+      ],
+      "modifiers": [
+        {
+          "name": "Auto Smooth",
+          "type": "NODES"
+        },
+        {
+          "name": "WeightedNormal",
+          "type": "WEIGHTED_NORMAL"
+        }
+      ]
+    },
+    {
+      "name": "dado_door_centered_small_02",
+      "type": "MESH",
+      "parent": null,
+      "location": [
+        19.0,
+        0.0,
+        -1.0
+      ],
+      "rotation": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "hidden_render": false,
+      "vertices": 40,
+      "triangles": 48,
+      "uv_layers": [
+        "UVMap"
+      ],
+      "bounds_min": [
+        16.0,
+        -0.0400003120303154,
+        -1.0
+      ],
+      "bounds_max": [
+        19.0,
+        0.03999999165534973,
+        -0.5
+      ],
+      "materials": [
+        "modular_urban_apartments_facade_trim_01"
+      ],
+      "modifiers": [
+        {
+          "name": "Auto Smooth",
+          "type": "NODES"
+        },
+        {
+          "name": "WeightedNormal",
+          "type": "WEIGHTED_NORMAL"
+        }
+      ]
+    },
+    {
+      "name": "dado_door_offset_small_01",
+      "type": "MESH",
+      "parent": null,
+      "location": [
+        23.0,
+        0.0,
+        -1.0
+      ],
+      "rotation": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "hidden_render": false,
+      "vertices": 35,
+      "triangles": 40,
+      "uv_layers": [
+        "UVMap"
+      ],
+      "bounds_min": [
+        20.0,
+        -0.0400003120303154,
+        -1.0
+      ],
+      "bounds_max": [
+        23.0,
+        0.03999999165534973,
+        -0.4999999403953552
+      ],
+      "materials": [
+        "modular_urban_apartments_facade_trim_01"
+      ],
+      "modifiers": [
+        {
+          "name": "Auto Smooth",
+          "type": "NODES"
+        },
+        {
+          "name": "WeightedNormal",
+          "type": "WEIGHTED_NORMAL"
+        }
+      ]
+    },
+    {
+      "name": "dado_door_offset_small_02",
+      "type": "MESH",
+      "parent": null,
+      "location": [
+        23.0,
+        2.0,
+        -1.0
+      ],
+      "rotation": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "hidden_render": false,
+      "vertices": 35,
+      "triangles": 40,
+      "uv_layers": [
+        "UVMap"
+      ],
+      "bounds_min": [
+        19.999998092651367,
+        1.959999680519104,
+        -1.0
+      ],
+      "bounds_max": [
+        23.0,
+        2.0399999618530273,
+        -0.5
+      ],
+      "materials": [
+        "modular_urban_apartments_facade_trim_01"
+      ],
+      "modifiers": [
+        {
+          "name": "Auto Smooth",
+          "type": "NODES"
+        },
+        {
+          "name": "WeightedNormal",
+          "type": "WEIGHTED_NORMAL"
+        }
+      ]
+    },
+    {
+      "name": "dado_door_window_small_01",
+      "type": "MESH",
+      "parent": null,
+      "location": [
+        27.0,
+        0.0,
+        -1.0
+      ],
+      "rotation": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "hidden_render": false,
+      "vertices": 30,
+      "triangles": 32,
+      "uv_layers": [
+        "UVMap"
+      ],
+      "bounds_min": [
+        23.999998092651367,
+        -0.0400003045797348,
+        -1.0
+      ],
+      "bounds_max": [
+        27.0,
+        0.03999999165534973,
+        -0.5
+      ],
+      "materials": [
+        "modular_urban_apartments_facade_trim_01"
+      ],
+      "modifiers": [
+        {
+          "name": "Bevel",
+          "type": "BEVEL"
+        },
+        {
+          "name": "Auto Smooth",
+          "type": "NODES"
+        },
+        {
+          "name": "WeightedNormal",
+          "type": "WEIGHTED_NORMAL"
+        }
+      ]
+    },
+    {
+      "name": "dado_end_01",
+      "type": "MESH",
+      "parent": null,
+      "location": [
+        -24.099998474121094,
+        0.0,
+        -1.0
+      ],
+      "rotation": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "hidden_render": false,
+      "vertices": 15,
+      "triangles": 16,
+      "uv_layers": [
+        "UVMap"
+      ],
+      "bounds_min": [
+        -24.23999786376953,
+        -0.040000032633543015,
+        -1.0
+      ],
+      "bounds_max": [
+        -24.099998474121094,
+        0.03999999165534973,
+        -0.5
+      ],
+      "materials": [
+        "modular_urban_apartments_facade_trim_01"
+      ],
+      "modifiers": [
+        {
+          "name": "Bevel",
+          "type": "BEVEL"
+        },
+        {
+          "name": "Auto Smooth",
+          "type": "NODES"
+        },
+        {
+          "name": "WeightedNormal",
+          "type": "WEIGHTED_NORMAL"
+        }
+      ]
+    },
+    {
+      "name": "dado_end_02",
+      "type": "MESH",
+      "parent": null,
+      "location": [
+        -23.900001525878906,
+        0.0,
+        -1.0
+      ],
+      "rotation": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "hidden_render": false,
+      "vertices": 15,
+      "triangles": 16,
+      "uv_layers": [
+        "UVMap"
+      ],
+      "bounds_min": [
+        -23.90000343322754,
+        -0.0400003045797348,
+        -1.0
+      ],
+      "bounds_max": [
+        -23.76000213623047,
+        0.03999997675418854,
+        -0.5
+      ],
+      "materials": [
+        "modular_urban_apartments_facade_trim_01"
+      ],
+      "modifiers": [
+        {
+          "name": "Bevel",
+          "type": "BEVEL"
+        },
+        {
+          "name": "Auto Smooth",
+          "type": "NODES"
+        },
+        {
+          "name": "WeightedNormal",
+          "type": "WEIGHTED_NORMAL"
+        }
+      ]
+    },
+    {
+      "name": "dado_pier_angled_01",
+      "type": "MESH",
+      "parent": null,
+      "location": [
+        -18.0,
+        -1.1920928955078125e-07,
+        -1.0
+      ],
+      "rotation": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "hidden_render": false,
+      "vertices": 46,
+      "triangles": 68,
+      "uv_layers": [
+        "UVMap"
+      ],
+      "bounds_min": [
+        -18.289913177490234,
+        -0.13000009953975677,
+        -1.0
+      ],
+      "bounds_max": [
+        -17.720001220703125,
+        0.2192026525735855,
+        -0.46000003814697266
+      ],
+      "materials": [
+        "modular_urban_apartments_facade_trim_01"
+      ],
+      "modifiers": [
+        {
+          "name": "Auto Smooth",
+          "type": "NODES"
+        },
+        {
+          "name": "WeightedNormal",
+          "type": "WEIGHTED_NORMAL"
+        }
+      ]
+    },
+    {
+      "name": "dado_pier_corner_01",
+      "type": "MESH",
+      "parent": null,
+      "location": [
+        -20.0,
+        0.0,
+        -1.0
+      ],
+      "rotation": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "hidden_render": false,
+      "vertices": 46,
+      "triangles": 68,
+      "uv_layers": [
+        "UVMap"
+      ],
+      "bounds_min": [
+        -20.1299991607666,
+        -0.13000068068504333,
+        -1.0
+      ],
+      "bounds_max": [
+        -19.719999313354492,
+        0.27999910712242126,
+        -0.46000003814697266
+      ],
+      "materials": [
+        "modular_urban_apartments_facade_trim_01"
+      ],
+      "modifiers": [
+        {
+          "name": "Auto Smooth",
+          "type": "NODES"
+        },
+        {
+          "name": "WeightedNormal",
+          "type": "WEIGHTED_NORMAL"
+        }
+      ]
+    },
+    {
+      "name": "dado_pier_corner_02",
+      "type": "MESH",
+      "parent": null,
+      "location": [
+        -20.0,
+        2.0,
+        -1.0
+      ],
+      "rotation": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "hidden_render": false,
+      "vertices": 46,
+      "triangles": 68,
+      "uv_layers": [
+        "UVMap"
+      ],
+      "bounds_min": [
+        -20.3799991607666,
+        1.6200000047683716,
+        -1.0
+      ],
+      "bounds_max": [
+        -20.0,
+        1.9999985694885254,
+        -0.46000009775161743
+      ],
+      "materials": [
+        "modular_urban_apartments_facade_trim_01"
+      ],
+      "modifiers": [
+        {
+          "name": "Bevel",
+          "type": "BEVEL"
+        },
+        {
+          "name": "Auto Smooth",
+          "type": "NODES"
+        },
+        {
+          "name": "WeightedNormal",
+          "type": "WEIGHTED_NORMAL"
+        }
+      ]
+    },
+    {
+      "name": "dado_pier_pedestal_01",
+      "type": "MESH",
+      "parent": null,
+      "location": [
+        -22.0,
+        1.1920928955078125e-07,
+        -1.0
+      ],
+      "rotation": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "hidden_render": false,
+      "vertices": 36,
+      "triangles": 50,
+      "uv_layers": [
+        "UVMap"
+      ],
+      "bounds_min": [
+        -22.19999885559082,
+        -0.1300003081560135,
+        -1.0
+      ],
+      "bounds_max": [
+        -21.80000114440918,
+        -3.5762786865234375e-07,
+        -0.46000003814697266
+      ],
+      "materials": [
+        "modular_urban_apartments_facade_trim_01"
+      ],
+      "modifiers": [
+        {
+          "name": "Auto Smooth",
+          "type": "NODES"
+        },
+        {
+          "name": "WeightedNormal",
+          "type": "WEIGHTED_NORMAL"
+        }
+      ]
+    },
+    {
+      "name": "dado_standard_angled_large_01",
+      "type": "MESH",
+      "parent": null,
+      "location": [
+        -8.0,
+        4.76837158203125e-07,
+        -1.0
+      ],
+      "rotation": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "hidden_render": false,
+      "vertices": 25,
+      "triangles": 32,
+      "uv_layers": [
+        "UVMap"
+      ],
+      "bounds_min": [
+        -11.039999961853027,
+        -0.040000200271606445,
+        -1.0
+      ],
+      "bounds_max": [
+        -8.0,
+        3.0,
+        -0.5
+      ],
+      "materials": [
+        "modular_urban_apartments_facade_trim_01"
+      ],
+      "modifiers": [
+        {
+          "name": "Bevel",
+          "type": "BEVEL"
+        },
+        {
+          "name": "Auto Smooth",
+          "type": "NODES"
+        },
+        {
+          "name": "WeightedNormal",
+          "type": "WEIGHTED_NORMAL"
+        }
+      ]
+    },
+    {
+      "name": "dado_standard_angled_small_01",
+      "type": "MESH",
+      "parent": null,
+      "location": [
+        -15.0,
+        5.960464477539062e-07,
+        -1.0
+      ],
+      "rotation": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "hidden_render": false,
+      "vertices": 20,
+      "triangles": 24,
+      "uv_layers": [
+        "UVMap"
+      ],
+      "bounds_min": [
+        -17.040000915527344,
+        -0.039999961853027344,
+        -1.0
+      ],
+      "bounds_max": [
+        -15.0,
+        2.0,
+        -0.5
+      ],
+      "materials": [
+        "modular_urban_apartments_facade_trim_01"
+      ],
+      "modifiers": [
+        {
+          "name": "Bevel",
+          "type": "BEVEL"
+        },
+        {
+          "name": "Auto Smooth",
+          "type": "NODES"
+        },
+        {
+          "name": "WeightedNormal",
+          "type": "WEIGHTED_NORMAL"
+        }
+      ]
+    },
+    {
+      "name": "dado_standard_corner_large_01",
+      "type": "MESH",
+      "parent": null,
+      "location": [
+        -4.0,
+        0.0,
+        -1.0
+      ],
+      "rotation": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "hidden_render": false,
+      "vertices": 15,
+      "triangles": 16,
+      "uv_layers": [
+        "UVMap"
+      ],
+      "bounds_min": [
+        -7.0400004386901855,
+        -0.040000058710575104,
+        -1.0
+      ],
+      "bounds_max": [
+        -4.0,
+        3.0,
+        -0.5
+      ],
+      "materials": [
+        "modular_urban_apartments_facade_trim_01"
+      ],
+      "modifiers": [
+        {
+          "name": "Bevel",
+          "type": "BEVEL"
+        },
+        {
+          "name": "Auto Smooth",
+          "type": "NODES"
+        },
+        {
+          "name": "WeightedNormal",
+          "type": "WEIGHTED_NORMAL"
+        }
+      ]
+    },
+    {
+      "name": "dado_standard_corner_large_02",
+      "type": "MESH",
+      "parent": null,
+      "location": [
+        -4.0,
+        1.0,
+        -1.0
+      ],
+      "rotation": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "hidden_render": false,
+      "vertices": 15,
+      "triangles": 16,
+      "uv_layers": [
+        "UVMap"
+      ],
+      "bounds_min": [
+        -7.0,
+        1.0,
+        -1.0
+      ],
+      "bounds_max": [
+        -4.0,
+        4.0,
+        -0.5
+      ],
+      "materials": [
+        "modular_urban_apartments_facade_trim_01"
+      ],
+      "modifiers": [
+        {
+          "name": "Bevel",
+          "type": "BEVEL"
+        },
+        {
+          "name": "Auto Smooth",
+          "type": "NODES"
+        },
+        {
+          "name": "WeightedNormal",
+          "type": "WEIGHTED_NORMAL"
+        }
+      ]
+    },
+    {
+      "name": "dado_standard_corner_small_01",
+      "type": "MESH",
+      "parent": null,
+      "location": [
+        -12.0,
+        1.4210854715202004e-14,
+        -1.0
+      ],
+      "rotation": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "hidden_render": false,
+      "vertices": 15,
+      "triangles": 16,
+      "uv_layers": [
+        "UVMap"
+      ],
+      "bounds_min": [
+        -14.040000915527344,
+        -0.04000004380941391,
+        -0.9999998807907104
+      ],
+      "bounds_max": [
+        -12.0,
+        2.0,
+        -0.49999988079071045
+      ],
+      "materials": [
+        "modular_urban_apartments_facade_trim_01"
+      ],
+      "modifiers": [
+        {
+          "name": "Bevel",
+          "type": "BEVEL"
+        },
+        {
+          "name": "Auto Smooth",
+          "type": "NODES"
+        },
+        {
+          "name": "WeightedNormal",
+          "type": "WEIGHTED_NORMAL"
+        }
+      ]
+    },
+    {
+      "name": "dado_standard_corner_small_02",
+      "type": "MESH",
+      "parent": null,
+      "location": [
+        -12.0,
+        2.0,
+        -1.0
+      ],
+      "rotation": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "hidden_render": false,
+      "vertices": 15,
+      "triangles": 16,
+      "uv_layers": [
+        "UVMap"
+      ],
+      "bounds_min": [
+        -14.0,
+        2.0,
+        -0.9999998807907104
+      ],
+      "bounds_max": [
+        -12.0,
+        4.0,
+        -0.49999988079071045
+      ],
+      "materials": [
+        "modular_urban_apartments_facade_trim_01"
+      ],
+      "modifiers": [
+        {
+          "name": "Bevel",
+          "type": "BEVEL"
+        },
+        {
+          "name": "Auto Smooth",
+          "type": "NODES"
+        },
+        {
+          "name": "WeightedNormal",
+          "type": "WEIGHTED_NORMAL"
+        }
+      ]
+    },
+    {
+      "name": "dado_standard_standard_01",
+      "type": "MESH",
+      "parent": null,
+      "location": [
+        0.0,
+        0.0,
+        -1.0
+      ],
+      "rotation": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "hidden_render": false,
+      "vertices": 10,
+      "triangles": 8,
+      "uv_layers": [
+        "UVMap"
+      ],
+      "bounds_min": [
+        -3.0,
+        -0.040000032633543015,
+        -1.0
+      ],
+      "bounds_max": [
+        0.0,
+        0.0,
+        -0.5
+      ],
+      "materials": [
+        "modular_urban_apartments_facade_trim_01"
+      ],
+      "modifiers": [
+        {
+          "name": "Auto Smooth",
+          "type": "NODES"
+        },
+        {
+          "name": "WeightedNormal",
+          "type": "WEIGHTED_NORMAL"
+        }
+      ]
+    },
+    {
+      "name": "door_angled_large_01",
+      "type": "MESH",
+      "parent": null,
+      "location": [
+        4.0,
+        5.960464477539063e-08,
+        0.0
+      ],
+      "rotation": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "hidden_render": false,
+      "vertices": 1014,
+      "triangles": 1711,
+      "uv_layers": [
+        "UVMap"
+      ],
+      "bounds_min": [
+        1.1261084079742432,
+        0.12610912322998047,
+        0.0
+      ],
+      "bounds_max": [
+        2.905097723007202,
+        1.9050984382629395,
+        2.809999704360962
+      ],
+      "materials": [
+        "modular_urban_apartments_facade_objects",
+        "modular_urban_apartments_facade_glass"
+      ],
+      "modifiers": [
+        {
+          "name": "Bevel",
+          "type": "BEVEL"
+        },
+        {
+          "name": "Auto Smooth",
+          "type": "NODES"
+        },
+        {
+          "name": "WeightedNormal",
+          "type": "WEIGHTED_NORMAL"
+        }
+      ]
+    },
+    {
+      "name": "door_angled_small_01",
+      "type": "MESH",
+      "parent": null,
+      "location": [
+        7.0,
+        5.960464477539062e-07,
+        0.0
+      ],
+      "rotation": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "hidden_render": false,
+      "vertices": 809,
+      "triangles": 1360,
+      "uv_layers": [
+        "UVMap"
+      ],
+      "bounds_min": [
+        4.8382415771484375,
+        -0.1617584228515625,
+        0.0
+      ],
+      "bounds_max": [
+        6.192966461181641,
+        1.1929669380187988,
+        2.809999704360962
+      ],
+      "materials": [
+        "modular_urban_apartments_facade_objects",
+        "modular_urban_apartments_facade_glass"
+      ],
+      "modifiers": [
+        {
+          "name": "Bevel",
+          "type": "BEVEL"
+        },
+        {
+          "name": "Auto Smooth",
+          "type": "NODES"
+        },
+        {
+          "name": "WeightedNormal",
+          "type": "WEIGHTED_NORMAL"
+        }
+      ]
+    },
+    {
+      "name": "door_centered_large_01",
+      "type": "MESH",
+      "parent": null,
+      "location": [
+        11.0,
+        0.0,
+        0.0
+      ],
+      "rotation": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "hidden_render": false,
+      "vertices": 1014,
+      "triangles": 1711,
+      "uv_layers": [
+        "UVMap"
+      ],
+      "bounds_min": [
+        8.459999084472656,
+        -0.20000004768371582,
+        0.0
+      ],
+      "bounds_max": [
+        10.54000473022461,
+        0.24000000953674316,
+        2.809999704360962
+      ],
+      "materials": [
+        "modular_urban_apartments_facade_objects",
+        "modular_urban_apartments_facade_glass"
+      ],
+      "modifiers": [
+        {
+          "name": "Auto Smooth",
+          "type": "NODES"
+        },
+        {
+          "name": "WeightedNormal",
+          "type": "WEIGHTED_NORMAL"
+        }
+      ]
+    },
+    {
+      "name": "door_centered_small_01",
+      "type": "MESH",
+      "parent": null,
+      "location": [
+        15.0,
+        0.0,
+        0.0
+      ],
+      "rotation": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "hidden_render": false,
+      "vertices": 809,
+      "triangles": 1360,
+      "uv_layers": [
+        "UVMap"
+      ],
+      "bounds_min": [
+        12.759997367858887,
+        -0.20000004768371582,
+        0.0
+      ],
+      "bounds_max": [
+        14.240002632141113,
+        0.24000000953674316,
+        2.809999704360962
+      ],
+      "materials": [
+        "modular_urban_apartments_facade_objects",
+        "modular_urban_apartments_facade_glass"
+      ],
+      "modifiers": [
+        {
+          "name": "Auto Smooth",
+          "type": "NODES"
+        },
+        {
+          "name": "WeightedNormal",
+          "type": "WEIGHTED_NORMAL"
+        }
+      ]
+    },
+    {
+      "name": "door_centered_small_02",
+      "type": "MESH",
+      "parent": null,
+      "location": [
+        19.0,
+        0.0,
+        0.0
+      ],
+      "rotation": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "hidden_render": false,
+      "vertices": 465,
+      "triangles": 790,
+      "uv_layers": [
+        "UVMap"
+      ],
+      "bounds_min": [
+        16.940000534057617,
+        -0.029999949038028717,
+        9.5367431640625e-07
+      ],
+      "bounds_max": [
+        18.059999465942383,
+        0.20000018179416656,
+        2.260000705718994
+      ],
+      "materials": [
+        "modular_urban_apartments_facade_objects"
+      ],
+      "modifiers": [
+        {
+          "name": "Auto Smooth",
+          "type": "NODES"
+        },
+        {
+          "name": "WeightedNormal",
+          "type": "WEIGHTED_NORMAL"
+        }
+      ]
+    },
+    {
+      "name": "door_offset_small_01",
+      "type": "MESH",
+      "parent": null,
+      "location": [
+        23.0,
+        0.0,
+        0.0
+      ],
+      "rotation": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "hidden_render": false,
+      "vertices": 465,
+      "triangles": 790,
+      "uv_layers": [
+        "UVMap"
+      ],
+      "bounds_min": [
+        21.690000534057617,
+        -0.029999949038028717,
+        9.5367431640625e-07
+      ],
+      "bounds_max": [
+        22.809999465942383,
+        0.20000018179416656,
+        2.260000705718994
+      ],
+      "materials": [
+        "modular_urban_apartments_facade_objects"
+      ],
+      "modifiers": [
+        {
+          "name": "Auto Smooth",
+          "type": "NODES"
+        },
+        {
+          "name": "WeightedNormal",
+          "type": "WEIGHTED_NORMAL"
+        }
+      ]
+    },
+    {
+      "name": "door_offset_small_02",
+      "type": "MESH",
+      "parent": null,
+      "location": [
+        23.0,
+        2.0,
+        0.0
+      ],
+      "rotation": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "hidden_render": false,
+      "vertices": 465,
+      "triangles": 790,
+      "uv_layers": [
+        "UVMap"
+      ],
+      "bounds_min": [
+        20.190000534057617,
+        1.9700000286102295,
+        9.5367431640625e-07
+      ],
+      "bounds_max": [
+        21.309999465942383,
+        2.200000286102295,
+        2.260000705718994
+      ],
+      "materials": [
+        "modular_urban_apartments_facade_objects"
+      ],
+      "modifiers": [
+        {
+          "name": "Auto Smooth",
+          "type": "NODES"
+        },
+        {
+          "name": "WeightedNormal",
+          "type": "WEIGHTED_NORMAL"
+        }
+      ]
+    },
+    {
+      "name": "door_offset_small_03",
+      "type": "MESH",
+      "parent": null,
+      "location": [
+        23.0,
+        4.0,
+        0.0
+      ],
+      "rotation": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "hidden_render": false,
+      "vertices": 809,
+      "triangles": 1360,
+      "uv_layers": [
+        "UVMap"
+      ],
+      "bounds_min": [
+        21.50999641418457,
+        3.799999952316284,
+        0.0
+      ],
+      "bounds_max": [
+        22.99000358581543,
+        4.239999771118164,
+        2.809999704360962
+      ],
+      "materials": [
+        "modular_urban_apartments_facade_objects",
+        "modular_urban_apartments_facade_glass"
+      ],
+      "modifiers": [
+        {
+          "name": "Auto Smooth",
+          "type": "NODES"
+        },
+        {
+          "name": "WeightedNormal",
+          "type": "WEIGHTED_NORMAL"
+        }
+      ]
+    },
+    {
+      "name": "door_offset_small_04",
+      "type": "MESH",
+      "parent": null,
+      "location": [
+        23.0,
+        6.0,
+        0.0
+      ],
+      "rotation": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "hidden_render": false,
+      "vertices": 809,
+      "triangles": 1360,
+      "uv_layers": [
+        "UVMap"
+      ],
+      "bounds_min": [
+        20.00999641418457,
+        5.800000190734863,
+        0.0
+      ],
+      "bounds_max": [
+        21.49000358581543,
+        6.239999771118164,
+        2.809999704360962
+      ],
+      "materials": [
+        "modular_urban_apartments_facade_objects",
+        "modular_urban_apartments_facade_glass"
+      ],
+      "modifiers": [
+        {
+          "name": "Auto Smooth",
+          "type": "NODES"
+        },
+        {
+          "name": "WeightedNormal",
+          "type": "WEIGHTED_NORMAL"
+        }
+      ]
+    },
+    {
+      "name": "door_window_small_01",
+      "type": "MESH",
+      "parent": null,
+      "location": [
+        27.0,
+        0.0,
+        4.0
+      ],
+      "rotation": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "hidden_render": false,
+      "vertices": 972,
+      "triangles": 1637,
+      "uv_layers": [
+        "UVMap"
+      ],
+      "bounds_min": [
+        24.189990997314453,
+        -0.1500074714422226,
+        3.999999761581421
+      ],
+      "bounds_max": [
+        26.809999465942383,
+        0.24000000953674316,
+        6.299999237060547
+      ],
+      "materials": [
+        "modular_urban_apartments_facade_objects",
+        "modular_urban_apartments_facade_glass"
+      ],
+      "modifiers": [
+        {
+          "name": "Auto Smooth",
+          "type": "NODES"
+        },
+        {
+          "name": "WeightedNormal",
+          "type": "WEIGHTED_NORMAL"
+        }
+      ]
+    },
+    {
+      "name": "door_window_small_010",
+      "type": "MESH",
+      "parent": null,
+      "location": [
+        27.0,
+        2.0,
+        12.0
+      ],
+      "rotation": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "hidden_render": false,
+      "vertices": 717,
+      "triangles": 1195,
+      "uv_layers": [
+        "UVMap"
+      ],
+      "bounds_min": [
+        24.190000534057617,
+        1.95952570438385,
+        12.000000953674316
+      ],
+      "bounds_max": [
+        26.670000076293945,
+        2.214400053024292,
+        14.260000228881836
+      ],
+      "materials": [
+        "modular_urban_apartments_facade_objects",
+        "modular_urban_apartments_facade_glass",
+        "modular_urban_apartments_facade_trim_01"
+      ],
+      "modifiers": [
+        {
+          "name": "WeightedNormal",
+          "type": "WEIGHTED_NORMAL"
+        },
+        {
+          "name": "Auto Smooth",
+          "type": "NODES"
+        },
+        {
+          "name": "Bevel",
+          "type": "BEVEL"
+        }
+      ]
+    },
+    {
+      "name": "door_window_small_011",
+      "type": "MESH",
+      "parent": null,
+      "location": [
+        27.0,
+        4.0,
+        12.0
+      ],
+      "rotation": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "hidden_render": false,
+      "vertices": 1061,
+      "triangles": 1765,
+      "uv_layers": [
+        "UVMap"
+      ],
+      "bounds_min": [
+        24.329999923706055,
+        3.799999952316284,
+        12.0
+      ],
+      "bounds_max": [
+        26.99000358581543,
+        4.239999771118164,
+        14.809999465942383
+      ],
+      "materials": [
+        "modular_urban_apartments_facade_objects",
+        "modular_urban_apartments_facade_glass",
+        "modular_urban_apartments_facade_trim_01"
+      ],
+      "modifiers": [
+        {
+          "name": "Auto Smooth",
+          "type": "NODES"
+        },
+        {
+          "name": "WeightedNormal",
+          "type": "WEIGHTED_NORMAL"
+        }
+      ]
+    },
+    {
+      "name": "door_window_small_012",
+      "type": "MESH",
+      "parent": null,
+      "location": [
+        27.0,
+        6.0,
+        12.0
+      ],
+      "rotation": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "hidden_render": false,
+      "vertices": 1061,
+      "triangles": 1765,
+      "uv_layers": [
+        "UVMap"
+      ],
+      "bounds_min": [
+        24.00999641418457,
+        5.800000190734863,
+        12.0
+      ],
+      "bounds_max": [
+        26.670000076293945,
+        6.239999771118164,
+        14.809999465942383
+      ],
+      "materials": [
+        "modular_urban_apartments_facade_objects",
+        "modular_urban_apartments_facade_glass",
+        "modular_urban_apartments_facade_trim_01"
+      ],
+      "modifiers": [
+        {
+          "name": "WeightedNormal",
+          "type": "WEIGHTED_NORMAL"
+        },
+        {
+          "name": "Auto Smooth",
+          "type": "NODES"
+        },
+        {
+          "name": "Bevel",
+          "type": "BEVEL"
+        }
+      ]
+    },
+    {
+      "name": "door_window_small_02",
+      "type": "MESH",
+      "parent": null,
+      "location": [
+        27.0,
+        2.0,
+        4.0
+      ],
+      "rotation": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "hidden_render": false,
+      "vertices": 972,
+      "triangles": 1637,
+      "uv_layers": [
+        "UVMap"
+      ],
+      "bounds_min": [
+        24.190000534057617,
+        1.8499925136566162,
+        3.999999761581421
+      ],
+      "bounds_max": [
+        26.810009002685547,
+        2.240000009536743,
+        6.299999237060547
+      ],
+      "materials": [
+        "modular_urban_apartments_facade_objects",
+        "modular_urban_apartments_facade_glass"
+      ],
+      "modifiers": [
+        {
+          "name": "Auto Smooth",
+          "type": "NODES"
+        },
+        {
+          "name": "WeightedNormal",
+          "type": "WEIGHTED_NORMAL"
+        }
+      ]
+    },
+    {
+      "name": "door_window_small_03",
+      "type": "MESH",
+      "parent": null,
+      "location": [
+        27.0,
+        4.0,
+        4.0
+      ],
+      "rotation": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "hidden_render": false,
+      "vertices": 1316,
+      "triangles": 2207,
+      "uv_layers": [
+        "UVMap"
+      ],
+      "bounds_min": [
+        24.189990997314453,
+        3.799999952316284,
+        3.999999761581421
+      ],
+      "bounds_max": [
+        26.99000358581543,
+        4.239999771118164,
+        6.809999465942383
+      ],
+      "materials": [
+        "modular_urban_apartments_facade_objects",
+        "modular_urban_apartments_facade_glass"
+      ],
+      "modifiers": [
+        {
+          "name": "Auto Smooth",
+          "type": "NODES"
+        },
+        {
+          "name": "WeightedNormal",
+          "type": "WEIGHTED_NORMAL"
+        }
+      ]
+    },
+    {
+      "name": "door_window_small_04",
+      "type": "MESH",
+      "parent": null,
+      "location": [
+        27.0,
+        6.0,
+        4.0
+      ],
+      "rotation": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "hidden_render": false,
+      "vertices": 1316,
+      "triangles": 2207,
+      "uv_layers": [
+        "UVMap"
+      ],
+      "bounds_min": [
+        24.00999641418457,
+        5.800000190734863,
+        3.999999761581421
+      ],
+      "bounds_max": [
+        26.810009002685547,
+        6.239999771118164,
+        6.809999465942383
+      ],
+      "materials": [
+        "modular_urban_apartments_facade_objects",
+        "modular_urban_apartments_facade_glass"
+      ],
+      "modifiers": [
+        {
+          "name": "Auto Smooth",
+          "type": "NODES"
+        },
+        {
+          "name": "WeightedNormal",
+          "type": "WEIGHTED_NORMAL"
+        }
+      ]
+    },
+    {
+      "name": "door_window_small_05",
+      "type": "MESH",
+      "parent": null,
+      "location": [
+        27.0,
+        0.0,
+        8.0
+      ],
+      "rotation": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "hidden_render": false,
+      "vertices": 963,
+      "triangles": 1597,
+      "uv_layers": [
+        "UVMap"
+      ],
+      "bounds_min": [
+        24.189990997314453,
+        -0.1500074714422226,
+        8.000000953674316
+      ],
+      "bounds_max": [
+        26.809999465942383,
+        0.24000000953674316,
+        10.299999237060547
+      ],
+      "materials": [
+        "modular_urban_apartments_facade_objects",
+        "modular_urban_apartments_facade_glass"
+      ],
+      "modifiers": [
+        {
+          "name": "Auto Smooth",
+          "type": "NODES"
+        },
+        {
+          "name": "WeightedNormal",
+          "type": "WEIGHTED_NORMAL"
+        }
+      ]
+    },
+    {
+      "name": "door_window_small_06",
+      "type": "MESH",
+      "parent": null,
+      "location": [
+        27.0,
+        2.0,
+        8.0
+      ],
+      "rotation": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "hidden_render": false,
+      "vertices": 963,
+      "triangles": 1597,
+      "uv_layers": [
+        "UVMap"
+      ],
+      "bounds_min": [
+        24.190000534057617,
+        1.8499925136566162,
+        8.000000953674316
+      ],
+      "bounds_max": [
+        26.810009002685547,
+        2.240000009536743,
+        10.299999237060547
+      ],
+      "materials": [
+        "modular_urban_apartments_facade_objects",
+        "modular_urban_apartments_facade_glass"
+      ],
+      "modifiers": [
+        {
+          "name": "Auto Smooth",
+          "type": "NODES"
+        },
+        {
+          "name": "WeightedNormal",
+          "type": "WEIGHTED_NORMAL"
+        }
+      ]
+    },
+    {
+      "name": "door_window_small_07",
+      "type": "MESH",
+      "parent": null,
+      "location": [
+        27.0,
+        4.0,
+        8.0
+      ],
+      "rotation": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "hidden_render": false,
+      "vertices": 1307,
+      "triangles": 2167,
+      "uv_layers": [
+        "UVMap"
+      ],
+      "bounds_min": [
+        24.189990997314453,
+        3.799999952316284,
+        8.0
+      ],
+      "bounds_max": [
+        26.99000358581543,
+        4.239999771118164,
+        10.809999465942383
+      ],
+      "materials": [
+        "modular_urban_apartments_facade_objects",
+        "modular_urban_apartments_facade_glass"
+      ],
+      "modifiers": [
+        {
+          "name": "Auto Smooth",
+          "type": "NODES"
+        },
+        {
+          "name": "WeightedNormal",
+          "type": "WEIGHTED_NORMAL"
+        }
+      ]
+    },
+    {
+      "name": "door_window_small_08",
+      "type": "MESH",
+      "parent": null,
+      "location": [
+        27.0,
+        6.0,
+        8.0
+      ],
+      "rotation": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "hidden_render": false,
+      "vertices": 1307,
+      "triangles": 2167,
+      "uv_layers": [
+        "UVMap"
+      ],
+      "bounds_min": [
+        24.00999641418457,
+        5.800000190734863,
+        8.0
+      ],
+      "bounds_max": [
+        26.810009002685547,
+        6.239999771118164,
+        10.809999465942383
+      ],
+      "materials": [
+        "modular_urban_apartments_facade_objects",
+        "modular_urban_apartments_facade_glass"
+      ],
+      "modifiers": [
+        {
+          "name": "Auto Smooth",
+          "type": "NODES"
+        },
+        {
+          "name": "WeightedNormal",
+          "type": "WEIGHTED_NORMAL"
+        }
+      ]
+    },
+    {
+      "name": "door_window_small_09",
+      "type": "MESH",
+      "parent": null,
+      "location": [
+        27.0,
+        0.0,
+        12.0
+      ],
+      "rotation": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "hidden_render": false,
+      "vertices": 717,
+      "triangles": 1195,
+      "uv_layers": [
+        "UVMap"
+      ],
+      "bounds_min": [
+        24.329999923706055,
+        -0.040474262088537216,
+        12.000000953674316
+      ],
+      "bounds_max": [
+        26.809999465942383,
+        0.21440011262893677,
+        14.260000228881836
+      ],
+      "materials": [
+        "modular_urban_apartments_facade_objects",
+        "modular_urban_apartments_facade_glass",
+        "modular_urban_apartments_facade_trim_01"
+      ],
+      "modifiers": [
+        {
+          "name": "Auto Smooth",
+          "type": "NODES"
+        },
+        {
+          "name": "WeightedNormal",
+          "type": "WEIGHTED_NORMAL"
+        }
+      ]
+    },
+    {
+      "name": "wall_door_angled_large_01",
+      "type": "MESH",
+      "parent": null,
+      "location": [
+        4.0,
+        5.960464477539063e-08,
+        0.0
+      ],
+      "rotation": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "hidden_render": false,
+      "vertices": 706,
+      "triangles": 1242,
+      "uv_layers": [
+        "UVMap"
+      ],
+      "bounds_min": [
+        0.9999990463256836,
+        -5.894899572922441e-07,
+        0.0
+      ],
+      "bounds_max": [
+        4.0,
+        2.999999523162842,
+        3.0
+      ],
+      "materials": [
+        "modular_urban_apartments_facade_plaster"
+      ],
+      "modifiers": [
+        {
+          "name": "Bevel",
+          "type": "BEVEL"
+        },
+        {
+          "name": "WeightedNormal",
+          "type": "WEIGHTED_NORMAL"
+        },
+        {
+          "name": "Auto Smooth",
+          "type": "NODES"
+        },
+        {
+          "name": "Subdivision",
+          "type": "SUBSURF"
+        }
+      ]
+    },
+    {
+      "name": "wall_door_angled_small_01",
+      "type": "MESH",
+      "parent": null,
+      "location": [
+        7.0,
+        5.960464477539062e-07,
+        0.0
+      ],
+      "rotation": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "hidden_render": false,
+      "vertices": 578,
+      "triangles": 1008,
+      "uv_layers": [
+        "UVMap"
+      ],
+      "bounds_min": [
+        4.999999046325684,
+        -4.911947826258256e-08,
+        0.0
+      ],
+      "bounds_max": [
+        7.0,
+        2.0,
+        3.0
+      ],
+      "materials": [
+        "modular_urban_apartments_facade_plaster"
+      ],
+      "modifiers": [
+        {
+          "name": "Bevel",
+          "type": "BEVEL"
+        },
+        {
+          "name": "WeightedNormal",
+          "type": "WEIGHTED_NORMAL"
+        },
+        {
+          "name": "Auto Smooth",
+          "type": "NODES"
+        },
+        {
+          "name": "Subdivision",
+          "type": "SUBSURF"
+        }
+      ]
+    },
+    {
+      "name": "wall_door_centered_large_01",
+      "type": "MESH",
+      "parent": null,
+      "location": [
+        11.0,
+        0.0,
+        0.0
+      ],
+      "rotation": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "hidden_render": false,
+      "vertices": 352,
+      "triangles": 564,
+      "uv_layers": [
+        "UVMap"
+      ],
+      "bounds_min": [
+        8.00000286102295,
+        -4.371138828673793e-08,
+        0.0
+      ],
+      "bounds_max": [
+        11.000000953674316,
+        -4.371138828673793e-08,
+        3.0
+      ],
+      "materials": [
+        "modular_urban_apartments_facade_plaster"
+      ],
+      "modifiers": [
+        {
+          "name": "Bevel",
+          "type": "BEVEL"
+        },
+        {
+          "name": "WeightedNormal",
+          "type": "WEIGHTED_NORMAL"
+        },
+        {
+          "name": "Auto Smooth",
+          "type": "NODES"
+        },
+        {
+          "name": "Subdivision",
+          "type": "SUBSURF"
+        }
+      ]
+    },
+    {
+      "name": "wall_door_centered_small_01",
+      "type": "MESH",
+      "parent": null,
+      "location": [
+        15.0,
+        0.0,
+        0.0
+      ],
+      "rotation": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "hidden_render": false,
+      "vertices": 478,
+      "triangles": 816,
+      "uv_layers": [
+        "UVMap"
+      ],
+      "bounds_min": [
+        12.0,
+        -4.371138828673793e-08,
+        0.0
+      ],
+      "bounds_max": [
+        15.0,
+        0.0,
+        3.0
+      ],
+      "materials": [
+        "modular_urban_apartments_facade_plaster"
+      ],
+      "modifiers": [
+        {
+          "name": "Bevel",
+          "type": "BEVEL"
+        },
+        {
+          "name": "WeightedNormal",
+          "type": "WEIGHTED_NORMAL"
+        },
+        {
+          "name": "Auto Smooth",
+          "type": "NODES"
+        },
+        {
+          "name": "Subdivision",
+          "type": "SUBSURF"
+        }
+      ]
+    },
+    {
+      "name": "wall_door_centered_small_02",
+      "type": "MESH",
+      "parent": null,
+      "location": [
+        19.0,
+        0.0,
+        0.0
+      ],
+      "rotation": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "hidden_render": false,
+      "vertices": 508,
+      "triangles": 880,
+      "uv_layers": [
+        "UVMap"
+      ],
+      "bounds_min": [
+        16.0,
+        0.0,
+        0.0
+      ],
+      "bounds_max": [
+        19.0,
+        0.0,
+        3.0
+      ],
+      "materials": [
+        "modular_urban_apartments_facade_plaster"
+      ],
+      "modifiers": [
+        {
+          "name": "Bevel",
+          "type": "BEVEL"
+        },
+        {
+          "name": "WeightedNormal",
+          "type": "WEIGHTED_NORMAL"
+        },
+        {
+          "name": "Auto Smooth",
+          "type": "NODES"
+        },
+        {
+          "name": "Subdivision",
+          "type": "SUBSURF"
+        }
+      ]
+    },
+    {
+      "name": "wall_door_offset_small_01",
+      "type": "MESH",
+      "parent": null,
+      "location": [
+        23.0,
+        0.0,
+        0.0
+      ],
+      "rotation": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "hidden_render": false,
+      "vertices": 508,
+      "triangles": 880,
+      "uv_layers": [
+        "UVMap"
+      ],
+      "bounds_min": [
+        20.0,
+        0.0,
+        0.0
+      ],
+      "bounds_max": [
+        23.0,
+        0.0,
+        3.0
+      ],
+      "materials": [
+        "modular_urban_apartments_facade_plaster"
+      ],
+      "modifiers": [
+        {
+          "name": "Bevel",
+          "type": "BEVEL"
+        },
+        {
+          "name": "WeightedNormal",
+          "type": "WEIGHTED_NORMAL"
+        },
+        {
+          "name": "Auto Smooth",
+          "type": "NODES"
+        },
+        {
+          "name": "Subdivision",
+          "type": "SUBSURF"
+        }
+      ]
+    },
+    {
+      "name": "wall_door_offset_small_02",
+      "type": "MESH",
+      "parent": null,
+      "location": [
+        23.0,
+        2.0,
+        0.0
+      ],
+      "rotation": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "hidden_render": false,
+      "vertices": 508,
+      "triangles": 880,
+      "uv_layers": [
+        "UVMap"
+      ],
+      "bounds_min": [
+        20.0,
+        2.0,
+        0.0
+      ],
+      "bounds_max": [
+        23.0,
+        2.0,
+        3.0
+      ],
+      "materials": [
+        "modular_urban_apartments_facade_plaster"
+      ],
+      "modifiers": [
+        {
+          "name": "Bevel",
+          "type": "BEVEL"
+        },
+        {
+          "name": "WeightedNormal",
+          "type": "WEIGHTED_NORMAL"
+        },
+        {
+          "name": "Auto Smooth",
+          "type": "NODES"
+        },
+        {
+          "name": "Subdivision",
+          "type": "SUBSURF"
+        }
+      ]
+    },
+    {
+      "name": "wall_door_offset_small_03",
+      "type": "MESH",
+      "parent": null,
+      "location": [
+        23.0,
+        4.0,
+        0.0
+      ],
+      "rotation": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "hidden_render": false,
+      "vertices": 478,
+      "triangles": 816,
+      "uv_layers": [
+        "UVMap"
+      ],
+      "bounds_min": [
+        20.0,
+        4.0,
+        0.0
+      ],
+      "bounds_max": [
+        23.0,
+        4.0,
+        3.0
+      ],
+      "materials": [
+        "modular_urban_apartments_facade_plaster"
+      ],
+      "modifiers": [
+        {
+          "name": "Bevel",
+          "type": "BEVEL"
+        },
+        {
+          "name": "WeightedNormal",
+          "type": "WEIGHTED_NORMAL"
+        },
+        {
+          "name": "Auto Smooth",
+          "type": "NODES"
+        },
+        {
+          "name": "Subdivision",
+          "type": "SUBSURF"
+        }
+      ]
+    },
+    {
+      "name": "wall_door_offset_small_04",
+      "type": "MESH",
+      "parent": null,
+      "location": [
+        23.0,
+        6.0,
+        0.0
+      ],
+      "rotation": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "hidden_render": false,
+      "vertices": 478,
+      "triangles": 816,
+      "uv_layers": [
+        "UVMap"
+      ],
+      "bounds_min": [
+        20.0,
+        6.0,
+        0.0
+      ],
+      "bounds_max": [
+        23.0,
+        6.0,
+        3.0
+      ],
+      "materials": [
+        "modular_urban_apartments_facade_plaster"
+      ],
+      "modifiers": [
+        {
+          "name": "Bevel",
+          "type": "BEVEL"
+        },
+        {
+          "name": "WeightedNormal",
+          "type": "WEIGHTED_NORMAL"
+        },
+        {
+          "name": "Auto Smooth",
+          "type": "NODES"
+        },
+        {
+          "name": "Subdivision",
+          "type": "SUBSURF"
+        }
+      ]
+    },
+    {
+      "name": "wall_door_window_small_01",
+      "type": "MESH",
+      "parent": null,
+      "location": [
+        27.0,
+        0.0,
+        4.0
+      ],
+      "rotation": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "hidden_render": false,
+      "vertices": 424,
+      "triangles": 672,
+      "uv_layers": [
+        "UVMap"
+      ],
+      "bounds_min": [
+        24.0,
+        0.0,
+        4.0
+      ],
+      "bounds_max": [
+        27.0,
+        0.0,
+        7.0
+      ],
+      "materials": [
+        "modular_urban_apartments_facade_plaster"
+      ],
+      "modifiers": [
+        {
+          "name": "Bevel",
+          "type": "BEVEL"
+        },
+        {
+          "name": "WeightedNormal",
+          "type": "WEIGHTED_NORMAL"
+        },
+        {
+          "name": "Auto Smooth",
+          "type": "NODES"
+        },
+        {
+          "name": "Subdivision",
+          "type": "SUBSURF"
+        }
+      ]
+    },
+    {
+      "name": "wall_door_window_small_010",
+      "type": "MESH",
+      "parent": null,
+      "location": [
+        27.0,
+        2.0,
+        12.0
+      ],
+      "rotation": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "hidden_render": false,
+      "vertices": 486,
+      "triangles": 800,
+      "uv_layers": [
+        "UVMap"
+      ],
+      "bounds_min": [
+        24.0,
+        2.0,
+        12.0
+      ],
+      "bounds_max": [
+        27.0,
+        2.180000066757202,
+        15.0
+      ],
+      "materials": [
+        "modular_urban_apartments_facade_plaster"
+      ],
+      "modifiers": [
+        {
+          "name": "Bevel",
+          "type": "BEVEL"
+        },
+        {
+          "name": "WeightedNormal",
+          "type": "WEIGHTED_NORMAL"
+        },
+        {
+          "name": "Auto Smooth",
+          "type": "NODES"
+        },
+        {
+          "name": "Subdivision",
+          "type": "SUBSURF"
+        }
+      ]
+    },
+    {
+      "name": "wall_door_window_small_012",
+      "type": "MESH",
+      "parent": null,
+      "location": [
+        27.0,
+        4.0,
+        12.0
+      ],
+      "rotation": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "hidden_render": false,
+      "vertices": 456,
+      "triangles": 736,
+      "uv_layers": [
+        "UVMap"
+      ],
+      "bounds_min": [
+        24.0,
+        4.0,
+        12.0
+      ],
+      "bounds_max": [
+        27.0,
+        4.180000305175781,
+        15.0
+      ],
+      "materials": [
+        "modular_urban_apartments_facade_plaster"
+      ],
+      "modifiers": [
+        {
+          "name": "Bevel",
+          "type": "BEVEL"
+        },
+        {
+          "name": "WeightedNormal",
+          "type": "WEIGHTED_NORMAL"
+        },
+        {
+          "name": "Auto Smooth",
+          "type": "NODES"
+        },
+        {
+          "name": "Subdivision",
+          "type": "SUBSURF"
+        }
+      ]
+    },
+    {
+      "name": "wall_door_window_small_013",
+      "type": "MESH",
+      "parent": null,
+      "location": [
+        27.0,
+        6.0,
+        12.0
+      ],
+      "rotation": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "hidden_render": false,
+      "vertices": 456,
+      "triangles": 736,
+      "uv_layers": [
+        "UVMap"
+      ],
+      "bounds_min": [
+        24.0,
+        6.0,
+        12.0
+      ],
+      "bounds_max": [
+        27.0,
+        6.180000305175781,
+        15.0
+      ],
+      "materials": [
+        "modular_urban_apartments_facade_plaster"
+      ],
+      "modifiers": [
+        {
+          "name": "Bevel",
+          "type": "BEVEL"
+        },
+        {
+          "name": "WeightedNormal",
+          "type": "WEIGHTED_NORMAL"
+        },
+        {
+          "name": "Auto Smooth",
+          "type": "NODES"
+        },
+        {
+          "name": "Subdivision",
+          "type": "SUBSURF"
+        }
+      ]
+    },
+    {
+      "name": "wall_door_window_small_02",
+      "type": "MESH",
+      "parent": null,
+      "location": [
+        27.0,
+        2.0,
+        4.0
+      ],
+      "rotation": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "hidden_render": false,
+      "vertices": 424,
+      "triangles": 672,
+      "uv_layers": [
+        "UVMap"
+      ],
+      "bounds_min": [
+        24.0,
+        2.0,
+        4.0
+      ],
+      "bounds_max": [
+        27.0,
+        2.0,
+        7.0
+      ],
+      "materials": [
+        "modular_urban_apartments_facade_plaster"
+      ],
+      "modifiers": [
+        {
+          "name": "Bevel",
+          "type": "BEVEL"
+        },
+        {
+          "name": "WeightedNormal",
+          "type": "WEIGHTED_NORMAL"
+        },
+        {
+          "name": "Auto Smooth",
+          "type": "NODES"
+        },
+        {
+          "name": "Subdivision",
+          "type": "SUBSURF"
+        }
+      ]
+    },
+    {
+      "name": "wall_door_window_small_03",
+      "type": "MESH",
+      "parent": null,
+      "location": [
+        27.0,
+        4.0,
+        4.0
+      ],
+      "rotation": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "hidden_render": false,
+      "vertices": 394,
+      "triangles": 608,
+      "uv_layers": [
+        "UVMap"
+      ],
+      "bounds_min": [
+        24.0,
+        4.0,
+        4.0
+      ],
+      "bounds_max": [
+        27.0,
+        4.0,
+        7.0
+      ],
+      "materials": [
+        "modular_urban_apartments_facade_plaster"
+      ],
+      "modifiers": [
+        {
+          "name": "Bevel",
+          "type": "BEVEL"
+        },
+        {
+          "name": "WeightedNormal",
+          "type": "WEIGHTED_NORMAL"
+        },
+        {
+          "name": "Auto Smooth",
+          "type": "NODES"
+        },
+        {
+          "name": "Subdivision",
+          "type": "SUBSURF"
+        }
+      ]
+    },
+    {
+      "name": "wall_door_window_small_04",
+      "type": "MESH",
+      "parent": null,
+      "location": [
+        27.0,
+        6.0,
+        4.0
+      ],
+      "rotation": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "hidden_render": false,
+      "vertices": 394,
+      "triangles": 608,
+      "uv_layers": [
+        "UVMap"
+      ],
+      "bounds_min": [
+        24.0,
+        6.0,
+        4.0
+      ],
+      "bounds_max": [
+        27.0,
+        6.0,
+        7.0
+      ],
+      "materials": [
+        "modular_urban_apartments_facade_plaster"
+      ],
+      "modifiers": [
+        {
+          "name": "Bevel",
+          "type": "BEVEL"
+        },
+        {
+          "name": "WeightedNormal",
+          "type": "WEIGHTED_NORMAL"
+        },
+        {
+          "name": "Auto Smooth",
+          "type": "NODES"
+        },
+        {
+          "name": "Subdivision",
+          "type": "SUBSURF"
+        }
+      ]
+    },
+    {
+      "name": "wall_door_window_small_05",
+      "type": "MESH",
+      "parent": null,
+      "location": [
+        27.0,
+        0.0,
+        8.0
+      ],
+      "rotation": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "hidden_render": false,
+      "vertices": 428,
+      "triangles": 672,
+      "uv_layers": [
+        "UVMap"
+      ],
+      "bounds_min": [
+        24.0,
+        0.0,
+        8.0
+      ],
+      "bounds_max": [
+        27.0,
+        0.0,
+        11.0
+      ],
+      "materials": [
+        "modular_urban_apartments_facade_plaster"
+      ],
+      "modifiers": [
+        {
+          "name": "Bevel",
+          "type": "BEVEL"
+        },
+        {
+          "name": "WeightedNormal",
+          "type": "WEIGHTED_NORMAL"
+        },
+        {
+          "name": "Auto Smooth",
+          "type": "NODES"
+        },
+        {
+          "name": "Subdivision",
+          "type": "SUBSURF"
+        }
+      ]
+    },
+    {
+      "name": "wall_door_window_small_06",
+      "type": "MESH",
+      "parent": null,
+      "location": [
+        27.0,
+        2.0,
+        8.0
+      ],
+      "rotation": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "hidden_render": false,
+      "vertices": 428,
+      "triangles": 672,
+      "uv_layers": [
+        "UVMap"
+      ],
+      "bounds_min": [
+        24.0,
+        2.0,
+        8.0
+      ],
+      "bounds_max": [
+        27.0,
+        2.0,
+        11.0
+      ],
+      "materials": [
+        "modular_urban_apartments_facade_plaster"
+      ],
+      "modifiers": [
+        {
+          "name": "Bevel",
+          "type": "BEVEL"
+        },
+        {
+          "name": "WeightedNormal",
+          "type": "WEIGHTED_NORMAL"
+        },
+        {
+          "name": "Auto Smooth",
+          "type": "NODES"
+        },
+        {
+          "name": "Subdivision",
+          "type": "SUBSURF"
+        }
+      ]
+    },
+    {
+      "name": "wall_door_window_small_07",
+      "type": "MESH",
+      "parent": null,
+      "location": [
+        27.0,
+        4.0,
+        8.0
+      ],
+      "rotation": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "hidden_render": false,
+      "vertices": 398,
+      "triangles": 608,
+      "uv_layers": [
+        "UVMap"
+      ],
+      "bounds_min": [
+        24.0,
+        4.0,
+        8.0
+      ],
+      "bounds_max": [
+        27.0,
+        4.0,
+        11.0
+      ],
+      "materials": [
+        "modular_urban_apartments_facade_plaster"
+      ],
+      "modifiers": [
+        {
+          "name": "Bevel",
+          "type": "BEVEL"
+        },
+        {
+          "name": "WeightedNormal",
+          "type": "WEIGHTED_NORMAL"
+        },
+        {
+          "name": "Auto Smooth",
+          "type": "NODES"
+        },
+        {
+          "name": "Subdivision",
+          "type": "SUBSURF"
+        }
+      ]
+    },
+    {
+      "name": "wall_door_window_small_08",
+      "type": "MESH",
+      "parent": null,
+      "location": [
+        27.0,
+        6.0,
+        8.0
+      ],
+      "rotation": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "hidden_render": false,
+      "vertices": 398,
+      "triangles": 608,
+      "uv_layers": [
+        "UVMap"
+      ],
+      "bounds_min": [
+        24.0,
+        6.0,
+        8.0
+      ],
+      "bounds_max": [
+        27.0,
+        6.0,
+        11.0
+      ],
+      "materials": [
+        "modular_urban_apartments_facade_plaster"
+      ],
+      "modifiers": [
+        {
+          "name": "Bevel",
+          "type": "BEVEL"
+        },
+        {
+          "name": "WeightedNormal",
+          "type": "WEIGHTED_NORMAL"
+        },
+        {
+          "name": "Auto Smooth",
+          "type": "NODES"
+        },
+        {
+          "name": "Subdivision",
+          "type": "SUBSURF"
+        }
+      ]
+    },
+    {
+      "name": "wall_door_window_small_09",
+      "type": "MESH",
+      "parent": null,
+      "location": [
+        27.0,
+        0.0,
+        12.0
+      ],
+      "rotation": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "hidden_render": false,
+      "vertices": 486,
+      "triangles": 800,
+      "uv_layers": [
+        "UVMap"
+      ],
+      "bounds_min": [
+        24.0,
+        0.0,
+        12.0
+      ],
+      "bounds_max": [
+        27.0,
+        0.18000012636184692,
+        15.0
+      ],
+      "materials": [
+        "modular_urban_apartments_facade_plaster"
+      ],
+      "modifiers": [
+        {
+          "name": "Bevel",
+          "type": "BEVEL"
+        },
+        {
+          "name": "WeightedNormal",
+          "type": "WEIGHTED_NORMAL"
+        },
+        {
+          "name": "Auto Smooth",
+          "type": "NODES"
+        },
+        {
+          "name": "Subdivision",
+          "type": "SUBSURF"
+        }
+      ]
+    },
+    {
+      "name": "wall_pier_angled_01",
+      "type": "MESH",
+      "parent": null,
+      "location": [
+        -18.0,
+        -1.1920928955078125e-07,
+        0.0
+      ],
+      "rotation": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "hidden_render": false,
+      "vertices": 175,
+      "triangles": 288,
+      "uv_layers": [
+        "UVMap"
+      ],
+      "bounds_min": [
+        -18.17263412475586,
+        -0.050000108778476715,
+        0.0
+      ],
+      "bounds_max": [
+        -17.80000114440918,
+        0.14142094552516937,
+        3.0
+      ],
+      "materials": [
+        "modular_urban_apartments_facade_plaster"
+      ],
+      "modifiers": [
+        {
+          "name": "Bevel",
+          "type": "BEVEL"
+        },
+        {
+          "name": "Auto Smooth",
+          "type": "NODES"
+        },
+        {
+          "name": "WeightedNormal",
+          "type": "WEIGHTED_NORMAL"
+        }
+      ]
+    },
+    {
+      "name": "wall_pier_corner_01",
+      "type": "MESH",
+      "parent": null,
+      "location": [
+        -20.0,
+        0.0,
+        0.0
+      ],
+      "rotation": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "hidden_render": false,
+      "vertices": 175,
+      "triangles": 288,
+      "uv_layers": [
+        "UVMap"
+      ],
+      "bounds_min": [
+        -20.049999237060547,
+        -0.05000067502260208,
+        0.0
+      ],
+      "bounds_max": [
+        -19.799999237060547,
+        0.19999909400939941,
+        3.0
+      ],
+      "materials": [
+        "modular_urban_apartments_facade_plaster"
+      ],
+      "modifiers": [
+        {
+          "name": "Bevel",
+          "type": "BEVEL"
+        },
+        {
+          "name": "Auto Smooth",
+          "type": "NODES"
+        },
+        {
+          "name": "WeightedNormal",
+          "type": "WEIGHTED_NORMAL"
+        }
+      ]
+    },
+    {
+      "name": "wall_pier_corner_02",
+      "type": "MESH",
+      "parent": null,
+      "location": [
+        -20.0,
+        2.0,
+        0.0
+      ],
+      "rotation": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "hidden_render": false,
+      "vertices": 175,
+      "triangles": 288,
+      "uv_layers": [
+        "UVMap"
+      ],
+      "bounds_min": [
+        -20.299999237060547,
+        1.7000000476837158,
+        0.0
+      ],
+      "bounds_max": [
+        -20.0,
+        1.9999985694885254,
+        2.999999761581421
+      ],
+      "materials": [
+        "modular_urban_apartments_facade_plaster"
+      ],
+      "modifiers": [
+        {
+          "name": "Bevel",
+          "type": "BEVEL"
+        },
+        {
+          "name": "Auto Smooth",
+          "type": "NODES"
+        },
+        {
+          "name": "WeightedNormal",
+          "type": "WEIGHTED_NORMAL"
+        }
+      ]
+    },
+    {
+      "name": "wall_pier_standard_01",
+      "type": "MESH",
+      "parent": null,
+      "location": [
+        -22.0,
+        1.1920928955078125e-07,
+        0.0
+      ],
+      "rotation": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "hidden_render": false,
+      "vertices": 125,
+      "triangles": 192,
+      "uv_layers": [
+        "UVMap"
+      ],
+      "bounds_min": [
+        -22.125,
+        -0.04999983310699463,
+        0.0
+      ],
+      "bounds_max": [
+        -21.875,
+        1.1920928955078125e-07,
+        3.0
+      ],
+      "materials": [
+        "modular_urban_apartments_facade_plaster"
+      ],
+      "modifiers": [
+        {
+          "name": "Bevel",
+          "type": "BEVEL"
+        },
+        {
+          "name": "Auto Smooth",
+          "type": "NODES"
+        },
+        {
+          "name": "WeightedNormal",
+          "type": "WEIGHTED_NORMAL"
+        }
+      ]
+    },
+    {
+      "name": "wall_standard_angled_large_01",
+      "type": "MESH",
+      "parent": null,
+      "location": [
+        -8.0,
+        4.76837158203125e-07,
+        0.0
+      ],
+      "rotation": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "hidden_render": false,
+      "vertices": 1000,
+      "triangles": 1872,
+      "uv_layers": [
+        "UVMap"
+      ],
+      "bounds_min": [
+        -11.000000953674316,
+        -1.722574438645097e-07,
+        0.0
+      ],
+      "bounds_max": [
+        -8.0,
+        3.0,
+        3.0
+      ],
+      "materials": [
+        "modular_urban_apartments_facade_plaster"
+      ],
+      "modifiers": [
+        {
+          "name": "Bevel",
+          "type": "BEVEL"
+        },
+        {
+          "name": "WeightedNormal",
+          "type": "WEIGHTED_NORMAL"
+        },
+        {
+          "name": "Auto Smooth",
+          "type": "NODES"
+        },
+        {
+          "name": "Subdivision",
+          "type": "SUBSURF"
+        }
+      ]
+    },
+    {
+      "name": "wall_standard_angled_small_01",
+      "type": "MESH",
+      "parent": null,
+      "location": [
+        -15.0,
+        5.960464477539062e-07,
+        0.0
+      ],
+      "rotation": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "hidden_render": false,
+      "vertices": 725,
+      "triangles": 1344,
+      "uv_layers": [
+        "UVMap"
+      ],
+      "bounds_min": [
+        -17.0,
+        -4.911947826258256e-08,
+        0.0
+      ],
+      "bounds_max": [
+        -15.0,
+        2.0,
+        3.0
+      ],
+      "materials": [
+        "modular_urban_apartments_facade_plaster"
+      ],
+      "modifiers": [
+        {
+          "name": "Bevel",
+          "type": "BEVEL"
+        },
+        {
+          "name": "WeightedNormal",
+          "type": "WEIGHTED_NORMAL"
+        },
+        {
+          "name": "Auto Smooth",
+          "type": "NODES"
+        },
+        {
+          "name": "Subdivision",
+          "type": "SUBSURF"
+        }
+      ]
+    },
+    {
+      "name": "wall_standard_corner_large_01",
+      "type": "MESH",
+      "parent": null,
+      "location": [
+        -4.0,
+        0.0,
+        0.0
+      ],
+      "rotation": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "hidden_render": false,
+      "vertices": 1225,
+      "triangles": 2304,
+      "uv_layers": [
+        "UVMap"
+      ],
+      "bounds_min": [
+        -7.0,
+        -1.3113417196564114e-07,
+        0.0
+      ],
+      "bounds_max": [
+        -4.0,
+        3.0,
+        3.0
+      ],
+      "materials": [
+        "modular_urban_apartments_facade_plaster"
+      ],
+      "modifiers": [
+        {
+          "name": "Bevel",
+          "type": "BEVEL"
+        },
+        {
+          "name": "WeightedNormal",
+          "type": "WEIGHTED_NORMAL"
+        },
+        {
+          "name": "Auto Smooth",
+          "type": "NODES"
+        },
+        {
+          "name": "Subdivision",
+          "type": "SUBSURF"
+        }
+      ]
+    },
+    {
+      "name": "wall_standard_corner_large_02",
+      "type": "MESH",
+      "parent": null,
+      "location": [
+        -4.0,
+        1.0,
+        0.0
+      ],
+      "rotation": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "hidden_render": false,
+      "vertices": 1225,
+      "triangles": 2304,
+      "uv_layers": [
+        "UVMap"
+      ],
+      "bounds_min": [
+        -7.0,
+        1.0,
+        0.0
+      ],
+      "bounds_max": [
+        -3.9999990463256836,
+        4.0,
+        3.0
+      ],
+      "materials": [
+        "modular_urban_apartments_facade_plaster"
+      ],
+      "modifiers": [
+        {
+          "name": "Bevel",
+          "type": "BEVEL"
+        },
+        {
+          "name": "WeightedNormal",
+          "type": "WEIGHTED_NORMAL"
+        },
+        {
+          "name": "Auto Smooth",
+          "type": "NODES"
+        },
+        {
+          "name": "Subdivision",
+          "type": "SUBSURF"
+        }
+      ]
+    },
+    {
+      "name": "wall_standard_corner_small_01",
+      "type": "MESH",
+      "parent": null,
+      "location": [
+        -12.0,
+        1.4210854715202004e-14,
+        0.0
+      ],
+      "rotation": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "hidden_render": false,
+      "vertices": 825,
+      "triangles": 1536,
+      "uv_layers": [
+        "UVMap"
+      ],
+      "bounds_min": [
+        -14.0,
+        -5.76204612912079e-08,
+        5.960464477539063e-08
+      ],
+      "bounds_max": [
+        -12.0,
+        2.0,
+        3.0
+      ],
+      "materials": [
+        "modular_urban_apartments_facade_plaster"
+      ],
+      "modifiers": [
+        {
+          "name": "Bevel",
+          "type": "BEVEL"
+        },
+        {
+          "name": "WeightedNormal",
+          "type": "WEIGHTED_NORMAL"
+        },
+        {
+          "name": "Auto Smooth",
+          "type": "NODES"
+        },
+        {
+          "name": "Subdivision",
+          "type": "SUBSURF"
+        }
+      ]
+    },
+    {
+      "name": "wall_standard_corner_small_02",
+      "type": "MESH",
+      "parent": null,
+      "location": [
+        -12.0,
+        2.0,
+        0.0
+      ],
+      "rotation": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "hidden_render": false,
+      "vertices": 825,
+      "triangles": 1536,
+      "uv_layers": [
+        "UVMap"
+      ],
+      "bounds_min": [
+        -14.0,
+        2.0,
+        5.960464477539063e-08
+      ],
+      "bounds_max": [
+        -11.999999046325684,
+        4.0,
+        3.0
+      ],
+      "materials": [
+        "modular_urban_apartments_facade_plaster"
+      ],
+      "modifiers": [
+        {
+          "name": "Bevel",
+          "type": "BEVEL"
+        },
+        {
+          "name": "WeightedNormal",
+          "type": "WEIGHTED_NORMAL"
+        },
+        {
+          "name": "Auto Smooth",
+          "type": "NODES"
+        },
+        {
+          "name": "Subdivision",
+          "type": "SUBSURF"
+        }
+      ]
+    },
+    {
+      "name": "wall_standard_standard_01",
+      "type": "MESH",
+      "parent": null,
+      "location": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "rotation": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "hidden_render": false,
+      "vertices": 625,
+      "triangles": 1152,
+      "uv_layers": [
+        "UVMap"
+      ],
+      "bounds_min": [
+        -3.0,
+        0.0,
+        0.0
+      ],
+      "bounds_max": [
+        0.0,
+        0.0,
+        3.0
+      ],
+      "materials": [
+        "modular_urban_apartments_facade_plaster"
+      ],
+      "modifiers": [
+        {
+          "name": "Bevel",
+          "type": "BEVEL"
+        },
+        {
+          "name": "WeightedNormal",
+          "type": "WEIGHTED_NORMAL"
+        },
+        {
+          "name": "Auto Smooth",
+          "type": "NODES"
+        },
+        {
+          "name": "Subdivision",
+          "type": "SUBSURF"
+        }
+      ]
+    },
+    {
+      "name": "wall_window_angled_large_01",
+      "type": "MESH",
+      "parent": null,
+      "location": [
+        4.0,
+        5.960464477539062e-07,
+        4.0
+      ],
+      "rotation": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "hidden_render": false,
+      "vertices": 832,
+      "triangles": 1482,
+      "uv_layers": [
+        "UVMap"
+      ],
+      "bounds_min": [
+        0.9999995231628418,
+        -4.932286401526653e-08,
+        4.0
+      ],
+      "bounds_max": [
+        4.0,
+        3.0,
+        7.0
+      ],
+      "materials": [
+        "modular_urban_apartments_facade_plaster"
+      ],
+      "modifiers": [
+        {
+          "name": "Bevel",
+          "type": "BEVEL"
+        },
+        {
+          "name": "WeightedNormal",
+          "type": "WEIGHTED_NORMAL"
+        },
+        {
+          "name": "Auto Smooth",
+          "type": "NODES"
+        },
+        {
+          "name": "Subdivision",
+          "type": "SUBSURF"
+        }
+      ]
+    },
+    {
+      "name": "wall_window_angled_large_02",
+      "type": "MESH",
+      "parent": null,
+      "location": [
+        4.0,
+        5.960464477539062e-07,
+        8.0
+      ],
+      "rotation": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "hidden_render": false,
+      "vertices": 832,
+      "triangles": 1482,
+      "uv_layers": [
+        "UVMap"
+      ],
+      "bounds_min": [
+        0.9999995231628418,
+        -4.932286401526653e-08,
+        8.0
+      ],
+      "bounds_max": [
+        4.0,
+        3.0,
+        11.0
+      ],
+      "materials": [
+        "modular_urban_apartments_facade_plaster"
+      ],
+      "modifiers": [
+        {
+          "name": "Bevel",
+          "type": "BEVEL"
+        },
+        {
+          "name": "WeightedNormal",
+          "type": "WEIGHTED_NORMAL"
+        },
+        {
+          "name": "Auto Smooth",
+          "type": "NODES"
+        },
+        {
+          "name": "Subdivision",
+          "type": "SUBSURF"
+        }
+      ]
+    },
+    {
+      "name": "wall_window_angled_small_01",
+      "type": "MESH",
+      "parent": null,
+      "location": [
+        7.0,
+        5.960464477539062e-07,
+        4.0
+      ],
+      "rotation": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "hidden_render": false,
+      "vertices": 641,
+      "triangles": 1136,
+      "uv_layers": [
+        "UVMap"
+      ],
+      "bounds_min": [
+        4.999999046325684,
+        -4.932286401526653e-08,
+        4.0
+      ],
+      "bounds_max": [
+        7.0,
+        2.0,
+        7.0
+      ],
+      "materials": [
+        "modular_urban_apartments_facade_plaster"
+      ],
+      "modifiers": [
+        {
+          "name": "Bevel",
+          "type": "BEVEL"
+        },
+        {
+          "name": "WeightedNormal",
+          "type": "WEIGHTED_NORMAL"
+        },
+        {
+          "name": "Auto Smooth",
+          "type": "NODES"
+        },
+        {
+          "name": "Subdivision",
+          "type": "SUBSURF"
+        }
+      ]
+    },
+    {
+      "name": "wall_window_angled_small_02",
+      "type": "MESH",
+      "parent": null,
+      "location": [
+        7.0,
+        5.960464477539062e-07,
+        8.0
+      ],
+      "rotation": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "hidden_render": false,
+      "vertices": 641,
+      "triangles": 1136,
+      "uv_layers": [
+        "UVMap"
+      ],
+      "bounds_min": [
+        4.999999046325684,
+        -4.887579052592628e-08,
+        8.0
+      ],
+      "bounds_max": [
+        7.0,
+        2.0,
+        11.0
+      ],
+      "materials": [
+        "modular_urban_apartments_facade_plaster"
+      ],
+      "modifiers": [
+        {
+          "name": "Bevel",
+          "type": "BEVEL"
+        },
+        {
+          "name": "WeightedNormal",
+          "type": "WEIGHTED_NORMAL"
+        },
+        {
+          "name": "Auto Smooth",
+          "type": "NODES"
+        },
+        {
+          "name": "Subdivision",
+          "type": "SUBSURF"
+        }
+      ]
+    },
+    {
+      "name": "wall_window_centered_double_01",
+      "type": "MESH",
+      "parent": null,
+      "location": [
+        19.0,
+        0.0,
+        4.0
+      ],
+      "rotation": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "hidden_render": false,
+      "vertices": 457,
+      "triangles": 736,
+      "uv_layers": [
+        "UVMap"
+      ],
+      "bounds_min": [
+        16.0,
+        0.0,
+        4.0
+      ],
+      "bounds_max": [
+        19.0,
+        0.0,
+        7.0
+      ],
+      "materials": [
+        "modular_urban_apartments_facade_plaster"
+      ],
+      "modifiers": [
+        {
+          "name": "Bevel",
+          "type": "BEVEL"
+        },
+        {
+          "name": "WeightedNormal",
+          "type": "WEIGHTED_NORMAL"
+        },
+        {
+          "name": "Auto Smooth",
+          "type": "NODES"
+        },
+        {
+          "name": "Subdivision",
+          "type": "SUBSURF"
+        }
+      ]
+    },
+    {
+      "name": "wall_window_centered_double_02",
+      "type": "MESH",
+      "parent": null,
+      "location": [
+        19.0,
+        0.0,
+        8.0
+      ],
+      "rotation": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "hidden_render": false,
+      "vertices": 465,
+      "triangles": 736,
+      "uv_layers": [
+        "UVMap"
+      ],
+      "bounds_min": [
+        16.0,
+        0.0,
+        8.0
+      ],
+      "bounds_max": [
+        19.0,
+        0.0,
+        11.0
+      ],
+      "materials": [
+        "modular_urban_apartments_facade_plaster"
+      ],
+      "modifiers": [
+        {
+          "name": "Bevel",
+          "type": "BEVEL"
+        },
+        {
+          "name": "WeightedNormal",
+          "type": "WEIGHTED_NORMAL"
+        },
+        {
+          "name": "Auto Smooth",
+          "type": "NODES"
+        },
+        {
+          "name": "Subdivision",
+          "type": "SUBSURF"
+        }
+      ]
+    },
+    {
+      "name": "wall_window_centered_double_03",
+      "type": "MESH",
+      "parent": null,
+      "location": [
+        19.0,
+        0.0,
+        12.0
+      ],
+      "rotation": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "hidden_render": false,
+      "vertices": 581,
+      "triangles": 992,
+      "uv_layers": [
+        "UVMap"
+      ],
+      "bounds_min": [
+        16.0,
+        0.0,
+        12.0
+      ],
+      "bounds_max": [
+        19.0,
+        0.18000012636184692,
+        15.0
+      ],
+      "materials": [
+        "modular_urban_apartments_facade_plaster"
+      ],
+      "modifiers": [
+        {
+          "name": "Bevel",
+          "type": "BEVEL"
+        },
+        {
+          "name": "WeightedNormal",
+          "type": "WEIGHTED_NORMAL"
+        },
+        {
+          "name": "Auto Smooth",
+          "type": "NODES"
+        },
+        {
+          "name": "Subdivision",
+          "type": "SUBSURF"
+        }
+      ]
+    },
+    {
+      "name": "wall_window_centered_large_01",
+      "type": "MESH",
+      "parent": null,
+      "location": [
+        11.0,
+        0.0,
+        4.0
+      ],
+      "rotation": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "hidden_render": false,
+      "vertices": 445,
+      "triangles": 736,
+      "uv_layers": [
+        "UVMap"
+      ],
+      "bounds_min": [
+        8.0,
+        0.0,
+        4.0
+      ],
+      "bounds_max": [
+        11.0,
+        0.0,
+        7.0
+      ],
+      "materials": [
+        "modular_urban_apartments_facade_plaster"
+      ],
+      "modifiers": [
+        {
+          "name": "Bevel",
+          "type": "BEVEL"
+        },
+        {
+          "name": "WeightedNormal",
+          "type": "WEIGHTED_NORMAL"
+        },
+        {
+          "name": "Auto Smooth",
+          "type": "NODES"
+        },
+        {
+          "name": "Subdivision",
+          "type": "SUBSURF"
+        }
+      ]
+    },
+    {
+      "name": "wall_window_centered_large_02",
+      "type": "MESH",
+      "parent": null,
+      "location": [
+        11.0,
+        0.0,
+        8.0
+      ],
+      "rotation": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "hidden_render": false,
+      "vertices": 445,
+      "triangles": 736,
+      "uv_layers": [
+        "UVMap"
+      ],
+      "bounds_min": [
+        8.0,
+        0.0,
+        8.0
+      ],
+      "bounds_max": [
+        11.0,
+        0.0,
+        11.0
+      ],
+      "materials": [
+        "modular_urban_apartments_facade_plaster"
+      ],
+      "modifiers": [
+        {
+          "name": "Bevel",
+          "type": "BEVEL"
+        },
+        {
+          "name": "WeightedNormal",
+          "type": "WEIGHTED_NORMAL"
+        },
+        {
+          "name": "Auto Smooth",
+          "type": "NODES"
+        },
+        {
+          "name": "Subdivision",
+          "type": "SUBSURF"
+        }
+      ]
+    },
+    {
+      "name": "wall_window_centered_large_03",
+      "type": "MESH",
+      "parent": null,
+      "location": [
+        11.0,
+        0.0,
+        12.0
+      ],
+      "rotation": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "hidden_render": false,
+      "vertices": 523,
+      "triangles": 896,
+      "uv_layers": [
+        "UVMap"
+      ],
+      "bounds_min": [
+        8.0,
+        0.0,
+        12.0
+      ],
+      "bounds_max": [
+        11.0,
+        0.18000011146068573,
+        15.0
+      ],
+      "materials": [
+        "modular_urban_apartments_facade_plaster"
+      ],
+      "modifiers": [
+        {
+          "name": "Bevel",
+          "type": "BEVEL"
+        },
+        {
+          "name": "WeightedNormal",
+          "type": "WEIGHTED_NORMAL"
+        },
+        {
+          "name": "Auto Smooth",
+          "type": "NODES"
+        },
+        {
+          "name": "Subdivision",
+          "type": "SUBSURF"
+        }
+      ]
+    },
+    {
+      "name": "wall_window_centered_small_01",
+      "type": "MESH",
+      "parent": null,
+      "location": [
+        15.0,
+        0.0,
+        4.0
+      ],
+      "rotation": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "hidden_render": false,
+      "vertices": 541,
+      "triangles": 944,
+      "uv_layers": [
+        "UVMap"
+      ],
+      "bounds_min": [
+        12.0,
+        0.0,
+        4.0
+      ],
+      "bounds_max": [
+        15.0,
+        0.0,
+        7.0
+      ],
+      "materials": [
+        "modular_urban_apartments_facade_plaster"
+      ],
+      "modifiers": [
+        {
+          "name": "Bevel",
+          "type": "BEVEL"
+        },
+        {
+          "name": "WeightedNormal",
+          "type": "WEIGHTED_NORMAL"
+        },
+        {
+          "name": "Auto Smooth",
+          "type": "NODES"
+        },
+        {
+          "name": "Subdivision",
+          "type": "SUBSURF"
+        }
+      ]
+    },
+    {
+      "name": "wall_window_centered_small_02",
+      "type": "MESH",
+      "parent": null,
+      "location": [
+        15.0,
+        0.0,
+        8.0
+      ],
+      "rotation": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "hidden_render": false,
+      "vertices": 541,
+      "triangles": 944,
+      "uv_layers": [
+        "UVMap"
+      ],
+      "bounds_min": [
+        12.0,
+        0.0,
+        8.0
+      ],
+      "bounds_max": [
+        15.0,
+        0.0,
+        11.0
+      ],
+      "materials": [
+        "modular_urban_apartments_facade_plaster"
+      ],
+      "modifiers": [
+        {
+          "name": "Bevel",
+          "type": "BEVEL"
+        },
+        {
+          "name": "WeightedNormal",
+          "type": "WEIGHTED_NORMAL"
+        },
+        {
+          "name": "Auto Smooth",
+          "type": "NODES"
+        },
+        {
+          "name": "Subdivision",
+          "type": "SUBSURF"
+        }
+      ]
+    },
+    {
+      "name": "wall_window_centered_small_03",
+      "type": "MESH",
+      "parent": null,
+      "location": [
+        15.0,
+        0.0,
+        12.0
+      ],
+      "rotation": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "hidden_render": false,
+      "vertices": 603,
+      "triangles": 1072,
+      "uv_layers": [
+        "UVMap"
+      ],
+      "bounds_min": [
+        12.0,
+        0.0,
+        12.0
+      ],
+      "bounds_max": [
+        15.0,
+        0.18000011146068573,
+        15.0
+      ],
+      "materials": [
+        "modular_urban_apartments_facade_plaster"
+      ],
+      "modifiers": [
+        {
+          "name": "Bevel",
+          "type": "BEVEL"
+        },
+        {
+          "name": "WeightedNormal",
+          "type": "WEIGHTED_NORMAL"
+        },
+        {
+          "name": "Auto Smooth",
+          "type": "NODES"
+        },
+        {
+          "name": "Subdivision",
+          "type": "SUBSURF"
+        }
+      ]
+    },
+    {
+      "name": "wall_window_offset_small_01",
+      "type": "MESH",
+      "parent": null,
+      "location": [
+        23.0,
+        0.0,
+        4.0
+      ],
+      "rotation": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "hidden_render": false,
+      "vertices": 541,
+      "triangles": 944,
+      "uv_layers": [
+        "UVMap"
+      ],
+      "bounds_min": [
+        20.0,
+        0.0,
+        4.0
+      ],
+      "bounds_max": [
+        23.0,
+        0.0,
+        7.0
+      ],
+      "materials": [
+        "modular_urban_apartments_facade_plaster"
+      ],
+      "modifiers": [
+        {
+          "name": "Bevel",
+          "type": "BEVEL"
+        },
+        {
+          "name": "WeightedNormal",
+          "type": "WEIGHTED_NORMAL"
+        },
+        {
+          "name": "Auto Smooth",
+          "type": "NODES"
+        },
+        {
+          "name": "Subdivision",
+          "type": "SUBSURF"
+        }
+      ]
+    },
+    {
+      "name": "wall_window_offset_small_02",
+      "type": "MESH",
+      "parent": null,
+      "location": [
+        23.0,
+        2.0,
+        4.0
+      ],
+      "rotation": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "hidden_render": false,
+      "vertices": 541,
+      "triangles": 944,
+      "uv_layers": [
+        "UVMap"
+      ],
+      "bounds_min": [
+        20.0,
+        2.0,
+        4.0
+      ],
+      "bounds_max": [
+        23.0,
+        2.0,
+        7.0
+      ],
+      "materials": [
+        "modular_urban_apartments_facade_plaster"
+      ],
+      "modifiers": [
+        {
+          "name": "Bevel",
+          "type": "BEVEL"
+        },
+        {
+          "name": "WeightedNormal",
+          "type": "WEIGHTED_NORMAL"
+        },
+        {
+          "name": "Auto Smooth",
+          "type": "NODES"
+        },
+        {
+          "name": "Subdivision",
+          "type": "SUBSURF"
+        }
+      ]
+    },
+    {
+      "name": "wall_window_offset_small_03",
+      "type": "MESH",
+      "parent": null,
+      "location": [
+        23.0,
+        0.0,
+        8.0
+      ],
+      "rotation": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "hidden_render": false,
+      "vertices": 545,
+      "triangles": 944,
+      "uv_layers": [
+        "UVMap"
+      ],
+      "bounds_min": [
+        20.0,
+        0.0,
+        8.0
+      ],
+      "bounds_max": [
+        23.0,
+        0.0,
+        11.0
+      ],
+      "materials": [
+        "modular_urban_apartments_facade_plaster"
+      ],
+      "modifiers": [
+        {
+          "name": "Bevel",
+          "type": "BEVEL"
+        },
+        {
+          "name": "WeightedNormal",
+          "type": "WEIGHTED_NORMAL"
+        },
+        {
+          "name": "Auto Smooth",
+          "type": "NODES"
+        },
+        {
+          "name": "Subdivision",
+          "type": "SUBSURF"
+        }
+      ]
+    },
+    {
+      "name": "wall_window_offset_small_04",
+      "type": "MESH",
+      "parent": null,
+      "location": [
+        23.0,
+        2.0,
+        8.0
+      ],
+      "rotation": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "hidden_render": false,
+      "vertices": 545,
+      "triangles": 944,
+      "uv_layers": [
+        "UVMap"
+      ],
+      "bounds_min": [
+        20.0,
+        2.0,
+        8.0
+      ],
+      "bounds_max": [
+        23.0,
+        2.0,
+        11.0
+      ],
+      "materials": [
+        "modular_urban_apartments_facade_plaster"
+      ],
+      "modifiers": [
+        {
+          "name": "Bevel",
+          "type": "BEVEL"
+        },
+        {
+          "name": "WeightedNormal",
+          "type": "WEIGHTED_NORMAL"
+        },
+        {
+          "name": "Auto Smooth",
+          "type": "NODES"
+        },
+        {
+          "name": "Subdivision",
+          "type": "SUBSURF"
+        }
+      ]
+    },
+    {
+      "name": "wall_window_offset_small_05",
+      "type": "MESH",
+      "parent": null,
+      "location": [
+        23.0,
+        0.0,
+        12.0
+      ],
+      "rotation": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "hidden_render": false,
+      "vertices": 603,
+      "triangles": 1072,
+      "uv_layers": [
+        "UVMap"
+      ],
+      "bounds_min": [
+        20.0,
+        0.0,
+        12.0
+      ],
+      "bounds_max": [
+        23.0,
+        0.18000012636184692,
+        15.0
+      ],
+      "materials": [
+        "modular_urban_apartments_facade_plaster"
+      ],
+      "modifiers": [
+        {
+          "name": "Bevel",
+          "type": "BEVEL"
+        },
+        {
+          "name": "WeightedNormal",
+          "type": "WEIGHTED_NORMAL"
+        },
+        {
+          "name": "Auto Smooth",
+          "type": "NODES"
+        },
+        {
+          "name": "Subdivision",
+          "type": "SUBSURF"
+        }
+      ]
+    },
+    {
+      "name": "wall_window_offset_small_06",
+      "type": "MESH",
+      "parent": null,
+      "location": [
+        23.0,
+        2.0,
+        12.0
+      ],
+      "rotation": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "hidden_render": false,
+      "vertices": 603,
+      "triangles": 1072,
+      "uv_layers": [
+        "UVMap"
+      ],
+      "bounds_min": [
+        20.0,
+        2.0,
+        12.0
+      ],
+      "bounds_max": [
+        23.0,
+        2.180000066757202,
+        15.0
+      ],
+      "materials": [
+        "modular_urban_apartments_facade_plaster"
+      ],
+      "modifiers": [
+        {
+          "name": "Bevel",
+          "type": "BEVEL"
+        },
+        {
+          "name": "WeightedNormal",
+          "type": "WEIGHTED_NORMAL"
+        },
+        {
+          "name": "Auto Smooth",
+          "type": "NODES"
+        },
+        {
+          "name": "Subdivision",
+          "type": "SUBSURF"
+        }
+      ]
+    },
+    {
+      "name": "window_angled_large_01",
+      "type": "MESH",
+      "parent": null,
+      "location": [
+        4.0,
+        5.960464477539062e-07,
+        4.0
+      ],
+      "rotation": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "hidden_render": false,
+      "vertices": 840,
+      "triangles": 1408,
+      "uv_layers": [
+        "UVMap"
+      ],
+      "bounds_min": [
+        1.146665096282959,
+        0.14666473865509033,
+        3.999999761581421
+      ],
+      "bounds_max": [
+        2.919240713119507,
+        1.9192407131195068,
+        6.299999237060547
+      ],
+      "materials": [
+        "modular_urban_apartments_facade_objects",
+        "modular_urban_apartments_facade_glass"
+      ],
+      "modifiers": [
+        {
+          "name": "Bevel",
+          "type": "BEVEL"
+        },
+        {
+          "name": "Auto Smooth",
+          "type": "NODES"
+        },
+        {
+          "name": "WeightedNormal",
+          "type": "WEIGHTED_NORMAL"
+        }
+      ]
+    },
+    {
+      "name": "window_angled_large_02",
+      "type": "MESH",
+      "parent": null,
+      "location": [
+        4.0,
+        5.960464477539062e-07,
+        8.0
+      ],
+      "rotation": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "hidden_render": false,
+      "vertices": 777,
+      "triangles": 1264,
+      "uv_layers": [
+        "UVMap"
+      ],
+      "bounds_min": [
+        1.1820201873779297,
+        0.1113094687461853,
+        8.300000190734863
+      ],
+      "bounds_max": [
+        2.9545960426330566,
+        1.883885383605957,
+        10.299999237060547
+      ],
+      "materials": [
+        "modular_urban_apartments_facade_objects",
+        "modular_urban_apartments_facade_glass"
+      ],
+      "modifiers": [
+        {
+          "name": "Bevel",
+          "type": "BEVEL"
+        },
+        {
+          "name": "Auto Smooth",
+          "type": "NODES"
+        },
+        {
+          "name": "WeightedNormal",
+          "type": "WEIGHTED_NORMAL"
+        }
+      ]
+    },
+    {
+      "name": "window_angled_small_01",
+      "type": "MESH",
+      "parent": null,
+      "location": [
+        7.0,
+        5.960464477539062e-07,
+        4.0
+      ],
+      "rotation": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "hidden_render": false,
+      "vertices": 507,
+      "triangles": 847,
+      "uv_layers": [
+        "UVMap"
+      ],
+      "bounds_min": [
+        5.000218391418457,
+        0.00021857023239135742,
+        3.999999761581421
+      ],
+      "bounds_max": [
+        6.065687656402588,
+        1.0656875371932983,
+        6.299999237060547
+      ],
+      "materials": [
+        "modular_urban_apartments_facade_objects",
+        "modular_urban_apartments_facade_glass"
+      ],
+      "modifiers": [
+        {
+          "name": "Bevel",
+          "type": "BEVEL"
+        },
+        {
+          "name": "Auto Smooth",
+          "type": "NODES"
+        },
+        {
+          "name": "WeightedNormal",
+          "type": "WEIGHTED_NORMAL"
+        }
+      ]
+    },
+    {
+      "name": "window_angled_small_02",
+      "type": "MESH",
+      "parent": null,
+      "location": [
+        7.0,
+        5.960464477539062e-07,
+        8.0
+      ],
+      "rotation": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "hidden_render": false,
+      "vertices": 498,
+      "triangles": 807,
+      "uv_layers": [
+        "UVMap"
+      ],
+      "bounds_min": [
+        5.000218391418457,
+        0.00021857023239135742,
+        8.300000190734863
+      ],
+      "bounds_max": [
+        6.065687656402588,
+        1.0656875371932983,
+        10.299999237060547
+      ],
+      "materials": [
+        "modular_urban_apartments_facade_objects",
+        "modular_urban_apartments_facade_glass"
+      ],
+      "modifiers": [
+        {
+          "name": "Bevel",
+          "type": "BEVEL"
+        },
+        {
+          "name": "Auto Smooth",
+          "type": "NODES"
+        },
+        {
+          "name": "WeightedNormal",
+          "type": "WEIGHTED_NORMAL"
+        }
+      ]
+    },
+    {
+      "name": "window_centered_double_01",
+      "type": "MESH",
+      "parent": null,
+      "location": [
+        19.0,
+        0.0,
+        4.0
+      ],
+      "rotation": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "hidden_render": false,
+      "vertices": 1014,
+      "triangles": 1694,
+      "uv_layers": [
+        "UVMap"
+      ],
+      "bounds_min": [
+        16.189990997314453,
+        -0.1500074714422226,
+        3.999999761581421
+      ],
+      "bounds_max": [
+        18.810009002685547,
+        0.24000000953674316,
+        6.299999237060547
+      ],
+      "materials": [
+        "modular_urban_apartments_facade_objects",
+        "modular_urban_apartments_facade_glass"
+      ],
+      "modifiers": [
+        {
+          "name": "Auto Smooth",
+          "type": "NODES"
+        },
+        {
+          "name": "WeightedNormal",
+          "type": "WEIGHTED_NORMAL"
+        }
+      ]
+    },
+    {
+      "name": "window_centered_double_02",
+      "type": "MESH",
+      "parent": null,
+      "location": [
+        19.0,
+        0.0,
+        8.0
+      ],
+      "rotation": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "hidden_render": false,
+      "vertices": 996,
+      "triangles": 1614,
+      "uv_layers": [
+        "UVMap"
+      ],
+      "bounds_min": [
+        16.189990997314453,
+        -0.1500074714422226,
+        8.300000190734863
+      ],
+      "bounds_max": [
+        18.810009002685547,
+        0.24000000953674316,
+        10.299999237060547
+      ],
+      "materials": [
+        "modular_urban_apartments_facade_objects",
+        "modular_urban_apartments_facade_glass"
+      ],
+      "modifiers": [
+        {
+          "name": "Auto Smooth",
+          "type": "NODES"
+        },
+        {
+          "name": "WeightedNormal",
+          "type": "WEIGHTED_NORMAL"
+        }
+      ]
+    },
+    {
+      "name": "window_centered_double_03",
+      "type": "MESH",
+      "parent": null,
+      "location": [
+        19.0,
+        0.0,
+        12.0
+      ],
+      "rotation": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "hidden_render": false,
+      "vertices": 504,
+      "triangles": 810,
+      "uv_layers": [
+        "UVMap"
+      ],
+      "bounds_min": [
+        16.329999923706055,
+        -0.040474262088537216,
+        12.45300006866455
+      ],
+      "bounds_max": [
+        18.670000076293945,
+        0.21440011262893677,
+        14.137638092041016
+      ],
+      "materials": [
+        "modular_urban_apartments_facade_trim_01",
+        "modular_urban_apartments_facade_objects",
+        "modular_urban_apartments_facade_glass"
+      ],
+      "modifiers": [
+        {
+          "name": "WeightedNormal",
+          "type": "WEIGHTED_NORMAL"
+        },
+        {
+          "name": "Auto Smooth",
+          "type": "NODES"
+        },
+        {
+          "name": "Bevel",
+          "type": "BEVEL"
+        }
+      ]
+    },
+    {
+      "name": "window_centered_large_01",
+      "type": "MESH",
+      "parent": null,
+      "location": [
+        11.0,
+        0.0,
+        4.0
+      ],
+      "rotation": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "hidden_render": false,
+      "vertices": 840,
+      "triangles": 1408,
+      "uv_layers": [
+        "UVMap"
+      ],
+      "bounds_min": [
+        8.439990997314453,
+        -0.1500074714422226,
+        3.999999761581421
+      ],
+      "bounds_max": [
+        10.560009002685547,
+        0.24000000953674316,
+        6.299999237060547
+      ],
+      "materials": [
+        "modular_urban_apartments_facade_objects",
+        "modular_urban_apartments_facade_glass"
+      ],
+      "modifiers": [
+        {
+          "name": "Auto Smooth",
+          "type": "NODES"
+        },
+        {
+          "name": "WeightedNormal",
+          "type": "WEIGHTED_NORMAL"
+        }
+      ]
+    },
+    {
+      "name": "window_centered_large_02",
+      "type": "MESH",
+      "parent": null,
+      "location": [
+        11.0,
+        0.0,
+        8.0
+      ],
+      "rotation": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "hidden_render": false,
+      "vertices": 777,
+      "triangles": 1264,
+      "uv_layers": [
+        "UVMap"
+      ],
+      "bounds_min": [
+        8.439990997314453,
+        -0.1500074714422226,
+        8.300000190734863
+      ],
+      "bounds_max": [
+        10.560009002685547,
+        0.24000000953674316,
+        10.299999237060547
+      ],
+      "materials": [
+        "modular_urban_apartments_facade_objects",
+        "modular_urban_apartments_facade_glass"
+      ],
+      "modifiers": [
+        {
+          "name": "Auto Smooth",
+          "type": "NODES"
+        },
+        {
+          "name": "WeightedNormal",
+          "type": "WEIGHTED_NORMAL"
+        }
+      ]
+    },
+    {
+      "name": "window_centered_large_03",
+      "type": "MESH",
+      "parent": null,
+      "location": [
+        11.0,
+        0.0,
+        12.0
+      ],
+      "rotation": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "hidden_render": false,
+      "vertices": 452,
+      "triangles": 730,
+      "uv_layers": [
+        "UVMap"
+      ],
+      "bounds_min": [
+        8.630000114440918,
+        -0.040474262088537216,
+        12.45300006866455
+      ],
+      "bounds_max": [
+        10.369999885559082,
+        0.164400115609169,
+        14.137638092041016
+      ],
+      "materials": [
+        "modular_urban_apartments_facade_objects",
+        "modular_urban_apartments_facade_glass",
+        "modular_urban_apartments_facade_trim_01"
+      ],
+      "modifiers": [
+        {
+          "name": "Auto Smooth",
+          "type": "NODES"
+        },
+        {
+          "name": "WeightedNormal",
+          "type": "WEIGHTED_NORMAL"
+        }
+      ]
+    },
+    {
+      "name": "window_centered_small_01",
+      "type": "MESH",
+      "parent": null,
+      "location": [
+        15.0,
+        0.0,
+        4.0
+      ],
+      "rotation": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "hidden_render": false,
+      "vertices": 507,
+      "triangles": 847,
+      "uv_layers": [
+        "UVMap"
+      ],
+      "bounds_min": [
+        12.939990997314453,
+        -0.1500074714422226,
+        3.999999761581421
+      ],
+      "bounds_max": [
+        14.060009956359863,
+        0.24000000953674316,
+        6.299999237060547
+      ],
+      "materials": [
+        "modular_urban_apartments_facade_objects",
+        "modular_urban_apartments_facade_glass"
+      ],
+      "modifiers": [
+        {
+          "name": "Auto Smooth",
+          "type": "NODES"
+        },
+        {
+          "name": "WeightedNormal",
+          "type": "WEIGHTED_NORMAL"
+        }
+      ]
+    },
+    {
+      "name": "window_centered_small_02",
+      "type": "MESH",
+      "parent": null,
+      "location": [
+        15.0,
+        0.0,
+        8.0
+      ],
+      "rotation": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "hidden_render": false,
+      "vertices": 498,
+      "triangles": 807,
+      "uv_layers": [
+        "UVMap"
+      ],
+      "bounds_min": [
+        12.939990997314453,
+        -0.1500074714422226,
+        8.300000190734863
+      ],
+      "bounds_max": [
+        14.060009956359863,
+        0.24000000953674316,
+        10.299999237060547
+      ],
+      "materials": [
+        "modular_urban_apartments_facade_objects",
+        "modular_urban_apartments_facade_glass"
+      ],
+      "modifiers": [
+        {
+          "name": "Auto Smooth",
+          "type": "NODES"
+        },
+        {
+          "name": "WeightedNormal",
+          "type": "WEIGHTED_NORMAL"
+        }
+      ]
+    },
+    {
+      "name": "window_centered_small_03",
+      "type": "MESH",
+      "parent": null,
+      "location": [
+        15.0,
+        0.0,
+        12.0
+      ],
+      "rotation": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "hidden_render": false,
+      "vertices": 252,
+      "triangles": 405,
+      "uv_layers": [
+        "UVMap"
+      ],
+      "bounds_min": [
+        13.079999923706055,
+        -0.040474262088537216,
+        12.45300006866455
+      ],
+      "bounds_max": [
+        13.920000076293945,
+        0.21440011262893677,
+        14.137638092041016
+      ],
+      "materials": [
+        "modular_urban_apartments_facade_trim_01",
+        "modular_urban_apartments_facade_objects",
+        "modular_urban_apartments_facade_glass"
+      ],
+      "modifiers": [
+        {
+          "name": "WeightedNormal",
+          "type": "WEIGHTED_NORMAL"
+        },
+        {
+          "name": "Auto Smooth",
+          "type": "NODES"
+        },
+        {
+          "name": "Bevel",
+          "type": "BEVEL"
+        }
+      ]
+    },
+    {
+      "name": "window_offset_small_01",
+      "type": "MESH",
+      "parent": null,
+      "location": [
+        23.0,
+        0.0,
+        4.0
+      ],
+      "rotation": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "hidden_render": false,
+      "vertices": 507,
+      "triangles": 847,
+      "uv_layers": [
+        "UVMap"
+      ],
+      "bounds_min": [
+        21.689990997314453,
+        -0.1500074714422226,
+        3.999999761581421
+      ],
+      "bounds_max": [
+        22.810009002685547,
+        0.24000000953674316,
+        6.299999237060547
+      ],
+      "materials": [
+        "modular_urban_apartments_facade_objects",
+        "modular_urban_apartments_facade_glass"
+      ],
+      "modifiers": [
+        {
+          "name": "Auto Smooth",
+          "type": "NODES"
+        },
+        {
+          "name": "WeightedNormal",
+          "type": "WEIGHTED_NORMAL"
+        }
+      ]
+    },
+    {
+      "name": "window_offset_small_02",
+      "type": "MESH",
+      "parent": null,
+      "location": [
+        23.0,
+        2.0,
+        4.0
+      ],
+      "rotation": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "hidden_render": false,
+      "vertices": 507,
+      "triangles": 847,
+      "uv_layers": [
+        "UVMap"
+      ],
+      "bounds_min": [
+        20.189990997314453,
+        1.8499925136566162,
+        3.999999761581421
+      ],
+      "bounds_max": [
+        21.310009002685547,
+        2.240000009536743,
+        6.299999237060547
+      ],
+      "materials": [
+        "modular_urban_apartments_facade_objects",
+        "modular_urban_apartments_facade_glass"
+      ],
+      "modifiers": [
+        {
+          "name": "Auto Smooth",
+          "type": "NODES"
+        },
+        {
+          "name": "WeightedNormal",
+          "type": "WEIGHTED_NORMAL"
+        }
+      ]
+    },
+    {
+      "name": "window_offset_small_03",
+      "type": "MESH",
+      "parent": null,
+      "location": [
+        23.0,
+        0.0,
+        8.0
+      ],
+      "rotation": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "hidden_render": false,
+      "vertices": 498,
+      "triangles": 807,
+      "uv_layers": [
+        "UVMap"
+      ],
+      "bounds_min": [
+        21.689990997314453,
+        -0.1500074714422226,
+        8.300000190734863
+      ],
+      "bounds_max": [
+        22.810009002685547,
+        0.24000000953674316,
+        10.299999237060547
+      ],
+      "materials": [
+        "modular_urban_apartments_facade_objects",
+        "modular_urban_apartments_facade_glass"
+      ],
+      "modifiers": [
+        {
+          "name": "Auto Smooth",
+          "type": "NODES"
+        },
+        {
+          "name": "WeightedNormal",
+          "type": "WEIGHTED_NORMAL"
+        }
+      ]
+    },
+    {
+      "name": "window_offset_small_04",
+      "type": "MESH",
+      "parent": null,
+      "location": [
+        23.0,
+        2.0,
+        8.0
+      ],
+      "rotation": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "hidden_render": false,
+      "vertices": 498,
+      "triangles": 807,
+      "uv_layers": [
+        "UVMap"
+      ],
+      "bounds_min": [
+        20.189990997314453,
+        1.8499925136566162,
+        8.300000190734863
+      ],
+      "bounds_max": [
+        21.310009002685547,
+        2.240000009536743,
+        10.299999237060547
+      ],
+      "materials": [
+        "modular_urban_apartments_facade_objects",
+        "modular_urban_apartments_facade_glass"
+      ],
+      "modifiers": [
+        {
+          "name": "Auto Smooth",
+          "type": "NODES"
+        },
+        {
+          "name": "WeightedNormal",
+          "type": "WEIGHTED_NORMAL"
+        }
+      ]
+    },
+    {
+      "name": "window_offset_small_05",
+      "type": "MESH",
+      "parent": null,
+      "location": [
+        23.0,
+        0.0,
+        12.0
+      ],
+      "rotation": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "hidden_render": false,
+      "vertices": 252,
+      "triangles": 405,
+      "uv_layers": [
+        "UVMap"
+      ],
+      "bounds_min": [
+        21.829999923706055,
+        -0.040474262088537216,
+        12.45300006866455
+      ],
+      "bounds_max": [
+        22.670000076293945,
+        0.21440011262893677,
+        14.137638092041016
+      ],
+      "materials": [
+        "modular_urban_apartments_facade_trim_01",
+        "modular_urban_apartments_facade_objects",
+        "modular_urban_apartments_facade_glass"
+      ],
+      "modifiers": [
+        {
+          "name": "WeightedNormal",
+          "type": "WEIGHTED_NORMAL"
+        },
+        {
+          "name": "Auto Smooth",
+          "type": "NODES"
+        },
+        {
+          "name": "Bevel",
+          "type": "BEVEL"
+        }
+      ]
+    },
+    {
+      "name": "window_offset_small_06",
+      "type": "MESH",
+      "parent": null,
+      "location": [
+        23.0,
+        2.0,
+        12.0
+      ],
+      "rotation": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "hidden_render": false,
+      "vertices": 252,
+      "triangles": 405,
+      "uv_layers": [
+        "UVMap"
+      ],
+      "bounds_min": [
+        20.329999923706055,
+        1.95952570438385,
+        12.45300006866455
+      ],
+      "bounds_max": [
+        21.170000076293945,
+        2.214400053024292,
+        14.137638092041016
+      ],
+      "materials": [
+        "modular_urban_apartments_facade_trim_01",
+        "modular_urban_apartments_facade_objects",
+        "modular_urban_apartments_facade_glass"
+      ],
+      "modifiers": [
+        {
+          "name": "WeightedNormal",
+          "type": "WEIGHTED_NORMAL"
+        },
+        {
+          "name": "Auto Smooth",
+          "type": "NODES"
+        },
+        {
+          "name": "Bevel",
+          "type": "BEVEL"
+        }
+      ]
+    }
+  ],
+  "materials": [
+    {
+      "name": "modular_urban_apartments_facade_glass",
+      "nodes": [
+        {
+          "name": "Material Output",
+          "type": "OUTPUT_MATERIAL"
+        },
+        {
+          "name": "Principled BSDF",
+          "type": "BSDF_PRINCIPLED",
+          "inputs": {
+            "Base Color": {
+              "linked": true,
+              "value": [
+                0.05311586707830429,
+                0.05311586707830429,
+                0.05311586707830429,
+                1.0
+              ]
+            },
+            "Metallic": {
+              "linked": true,
+              "value": 0.0
+            },
+            "Roughness": {
+              "linked": true,
+              "value": 0.0
+            },
+            "IOR": {
+              "linked": false,
+              "value": 1.100000023841858
+            },
+            "Alpha": {
+              "linked": true,
+              "value": 1.0
+            },
+            "Transmission Weight": {
+              "linked": false,
+              "value": 0.0
+            }
+          }
+        },
+        {
+          "name": "Image Texture",
+          "type": "TEX_IMAGE",
+          "image": "modular_urban_apartments_facade_objects_diff.png"
+        },
+        {
+          "name": "Image Texture.001",
+          "type": "TEX_IMAGE",
+          "image": "modular_urban_apartments_facade_objects_metal.png"
+        },
+        {
+          "name": "Image Texture.002",
+          "type": "TEX_IMAGE",
+          "image": "modular_urban_apartments_facade_objects_rough.png"
+        },
+        {
+          "name": "Image Texture.003",
+          "type": "TEX_IMAGE",
+          "image": "modular_urban_apartments_facade_objects_nor_gl.png"
+        },
+        {
+          "name": "Normal Map",
+          "type": "NORMAL_MAP"
+        },
+        {
+          "name": "Image Texture.004",
+          "type": "TEX_IMAGE",
+          "image": "modular_urban_apartments_facade_objects_alpha.png"
+        },
+        {
+          "name": "Mapping",
+          "type": "MAPPING"
+        },
+        {
+          "name": "Reroute",
+          "type": "REROUTE"
+        },
+        {
+          "name": "Texture Coordinate",
+          "type": "TEX_COORD"
+        },
+        {
+          "name": "Frame",
+          "type": "FRAME"
+        },
+        {
+          "name": "Frame.001",
+          "type": "FRAME"
+        }
+      ]
+    },
+    {
+      "name": "modular_urban_apartments_facade_objects",
+      "nodes": [
+        {
+          "name": "Frame",
+          "type": "FRAME"
+        },
+        {
+          "name": "Frame.001",
+          "type": "FRAME"
+        },
+        {
+          "name": "Material Output",
+          "type": "OUTPUT_MATERIAL"
+        },
+        {
+          "name": "Image Texture",
+          "type": "TEX_IMAGE",
+          "image": "modular_urban_apartments_facade_objects_diff.png"
+        },
+        {
+          "name": "Image Texture.001",
+          "type": "TEX_IMAGE",
+          "image": "modular_urban_apartments_facade_objects_metal.png"
+        },
+        {
+          "name": "Image Texture.002",
+          "type": "TEX_IMAGE",
+          "image": "modular_urban_apartments_facade_objects_rough.png"
+        },
+        {
+          "name": "Image Texture.003",
+          "type": "TEX_IMAGE",
+          "image": "modular_urban_apartments_facade_objects_nor_gl.png"
+        },
+        {
+          "name": "Normal Map",
+          "type": "NORMAL_MAP"
+        },
+        {
+          "name": "Image Texture.004",
+          "type": "TEX_IMAGE",
+          "image": "modular_urban_apartments_facade_objects_alpha.png"
+        },
+        {
+          "name": "Mapping",
+          "type": "MAPPING"
+        },
+        {
+          "name": "Reroute",
+          "type": "REROUTE"
+        },
+        {
+          "name": "Texture Coordinate",
+          "type": "TEX_COORD"
+        },
+        {
+          "name": "Principled BSDF",
+          "type": "BSDF_PRINCIPLED",
+          "inputs": {
+            "Base Color": {
+              "linked": true,
+              "value": [
+                0.05311586707830429,
+                0.05311586707830429,
+                0.05311586707830429,
+                1.0
+              ]
+            },
+            "Metallic": {
+              "linked": true,
+              "value": 0.0
+            },
+            "Roughness": {
+              "linked": true,
+              "value": 0.5
+            },
+            "IOR": {
+              "linked": false,
+              "value": 1.4500000476837158
+            },
+            "Alpha": {
+              "linked": true,
+              "value": 1.0
+            },
+            "Transmission Weight": {
+              "linked": false,
+              "value": 0.0
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "modular_urban_apartments_facade_plaster",
+      "nodes": [
+        {
+          "name": "Frame",
+          "type": "FRAME"
+        },
+        {
+          "name": "Frame.001",
+          "type": "FRAME"
+        },
+        {
+          "name": "Material Output",
+          "type": "OUTPUT_MATERIAL"
+        },
+        {
+          "name": "Image Texture",
+          "type": "TEX_IMAGE",
+          "image": "modular_urban_apartments_facade_plaster_diff.png"
+        },
+        {
+          "name": "Image Texture.001",
+          "type": "TEX_IMAGE",
+          "image": "modular_urban_apartments_facade_plaster_rough.png"
+        },
+        {
+          "name": "Image Texture.002",
+          "type": "TEX_IMAGE",
+          "image": "modular_urban_apartments_facade_plaster_nor_gl.png"
+        },
+        {
+          "name": "Normal Map",
+          "type": "NORMAL_MAP"
+        },
+        {
+          "name": "Mapping",
+          "type": "MAPPING"
+        },
+        {
+          "name": "Reroute",
+          "type": "REROUTE"
+        },
+        {
+          "name": "Texture Coordinate",
+          "type": "TEX_COORD"
+        },
+        {
+          "name": "Principled BSDF",
+          "type": "BSDF_PRINCIPLED",
+          "inputs": {
+            "Base Color": {
+              "linked": true,
+              "value": [
+                0.800000011920929,
+                0.800000011920929,
+                0.800000011920929,
+                1.0
+              ]
+            },
+            "Metallic": {
+              "linked": false,
+              "value": 0.0
+            },
+            "Roughness": {
+              "linked": true,
+              "value": 0.5
+            },
+            "IOR": {
+              "linked": false,
+              "value": 1.4500000476837158
+            },
+            "Alpha": {
+              "linked": false,
+              "value": 1.0
+            },
+            "Transmission Weight": {
+              "linked": false,
+              "value": 0.0
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "modular_urban_apartments_facade_trim_01",
+      "nodes": [
+        {
+          "name": "Material Output",
+          "type": "OUTPUT_MATERIAL"
+        },
+        {
+          "name": "Principled BSDF",
+          "type": "BSDF_PRINCIPLED",
+          "inputs": {
+            "Base Color": {
+              "linked": true,
+              "value": [
+                0.800000011920929,
+                0.800000011920929,
+                0.800000011920929,
+                1.0
+              ]
+            },
+            "Metallic": {
+              "linked": false,
+              "value": 0.0
+            },
+            "Roughness": {
+              "linked": true,
+              "value": 0.5
+            },
+            "IOR": {
+              "linked": false,
+              "value": 1.4500000476837158
+            },
+            "Alpha": {
+              "linked": false,
+              "value": 1.0
+            },
+            "Transmission Weight": {
+              "linked": false,
+              "value": 0.0
+            }
+          }
+        },
+        {
+          "name": "Image Texture",
+          "type": "TEX_IMAGE",
+          "image": "modular_urban_apartments_facade_trim_01_diff.png"
+        },
+        {
+          "name": "Image Texture.001",
+          "type": "TEX_IMAGE",
+          "image": "modular_urban_apartments_facade_trim_01_rough.png"
+        },
+        {
+          "name": "Image Texture.002",
+          "type": "TEX_IMAGE",
+          "image": "modular_urban_apartments_facade_trim_01_nor_gl.png"
+        },
+        {
+          "name": "Normal Map",
+          "type": "NORMAL_MAP"
+        },
+        {
+          "name": "Mapping",
+          "type": "MAPPING"
+        },
+        {
+          "name": "Reroute",
+          "type": "REROUTE"
+        },
+        {
+          "name": "Texture Coordinate",
+          "type": "TEX_COORD"
+        },
+        {
+          "name": "Frame",
+          "type": "FRAME"
+        },
+        {
+          "name": "Frame.001",
+          "type": "FRAME"
+        }
+      ]
+    },
+    {
+      "name": "modular_urban_apartments_facade_trim_02",
+      "nodes": [
+        {
+          "name": "Material Output",
+          "type": "OUTPUT_MATERIAL"
+        },
+        {
+          "name": "Principled BSDF",
+          "type": "BSDF_PRINCIPLED",
+          "inputs": {
+            "Base Color": {
+              "linked": true,
+              "value": [
+                0.18214786052703857,
+                0.15475399792194366,
+                0.8000000715255737,
+                1.0
+              ]
+            },
+            "Metallic": {
+              "linked": false,
+              "value": 0.0
+            },
+            "Roughness": {
+              "linked": true,
+              "value": 0.5
+            },
+            "IOR": {
+              "linked": false,
+              "value": 1.4500000476837158
+            },
+            "Alpha": {
+              "linked": false,
+              "value": 1.0
+            },
+            "Transmission Weight": {
+              "linked": false,
+              "value": 0.0
+            }
+          }
+        },
+        {
+          "name": "Image Texture",
+          "type": "TEX_IMAGE",
+          "image": "modular_urban_apartments_facade_trim_02_diff.png"
+        },
+        {
+          "name": "Image Texture.001",
+          "type": "TEX_IMAGE",
+          "image": "modular_urban_apartments_facade_trim_02_rough.png"
+        },
+        {
+          "name": "Image Texture.002",
+          "type": "TEX_IMAGE",
+          "image": "modular_urban_apartments_facade_trim_02_nor_gl.png"
+        },
+        {
+          "name": "Normal Map",
+          "type": "NORMAL_MAP"
+        },
+        {
+          "name": "Mapping",
+          "type": "MAPPING"
+        },
+        {
+          "name": "Reroute",
+          "type": "REROUTE"
+        },
+        {
+          "name": "Texture Coordinate",
+          "type": "TEX_COORD"
+        },
+        {
+          "name": "Frame",
+          "type": "FRAME"
+        },
+        {
+          "name": "Frame.001",
+          "type": "FRAME"
+        }
+      ]
+    }
+  ],
+  "images": [
+    {
+      "name": "modular_urban_apartments_facade_objects_alpha.png",
+      "size": [
+        4096,
+        4096
+      ],
+      "packed": false,
+      "filepath": "//textures\\modular_urban_apartments_facade_objects_alpha_4k.png",
+      "colorspace": "Non-Color",
+      "exists": true
+    },
+    {
+      "name": "modular_urban_apartments_facade_objects_diff.png",
+      "size": [
+        4096,
+        4096
+      ],
+      "packed": false,
+      "filepath": "//textures\\modular_urban_apartments_facade_objects_diff_4k.png",
+      "colorspace": "sRGB",
+      "exists": true
+    },
+    {
+      "name": "modular_urban_apartments_facade_objects_metal.png",
+      "size": [
+        4096,
+        4096
+      ],
+      "packed": false,
+      "filepath": "//textures\\modular_urban_apartments_facade_objects_metal_4k.png",
+      "colorspace": "Non-Color",
+      "exists": true
+    },
+    {
+      "name": "modular_urban_apartments_facade_objects_nor_gl.png",
+      "size": [
+        4096,
+        4096
+      ],
+      "packed": false,
+      "filepath": "//textures\\modular_urban_apartments_facade_objects_nor_gl_4k.png",
+      "colorspace": "Non-Color",
+      "exists": true
+    },
+    {
+      "name": "modular_urban_apartments_facade_objects_rough.png",
+      "size": [
+        4096,
+        4096
+      ],
+      "packed": false,
+      "filepath": "//textures\\modular_urban_apartments_facade_objects_rough_4k.png",
+      "colorspace": "Non-Color",
+      "exists": true
+    },
+    {
+      "name": "modular_urban_apartments_facade_plaster_diff.png",
+      "size": [
+        4096,
+        4096
+      ],
+      "packed": false,
+      "filepath": "//textures\\modular_urban_apartments_facade_plaster_diff_4k.png",
+      "colorspace": "sRGB",
+      "exists": true
+    },
+    {
+      "name": "modular_urban_apartments_facade_plaster_nor_gl.png",
+      "size": [
+        4096,
+        4096
+      ],
+      "packed": false,
+      "filepath": "//textures\\modular_urban_apartments_facade_plaster_nor_gl_4k.png",
+      "colorspace": "Non-Color",
+      "exists": true
+    },
+    {
+      "name": "modular_urban_apartments_facade_plaster_rough.png",
+      "size": [
+        4096,
+        4096
+      ],
+      "packed": false,
+      "filepath": "//textures\\modular_urban_apartments_facade_plaster_rough_4k.png",
+      "colorspace": "Non-Color",
+      "exists": true
+    },
+    {
+      "name": "modular_urban_apartments_facade_trim_01_diff.png",
+      "size": [
+        4096,
+        4096
+      ],
+      "packed": false,
+      "filepath": "//textures\\modular_urban_apartments_facade_trim_01_diff_4k.png",
+      "colorspace": "sRGB",
+      "exists": true
+    },
+    {
+      "name": "modular_urban_apartments_facade_trim_01_nor_gl.png",
+      "size": [
+        4096,
+        4096
+      ],
+      "packed": false,
+      "filepath": "//textures\\modular_urban_apartments_facade_trim_01_nor_gl_4k.png",
+      "colorspace": "Non-Color",
+      "exists": true
+    },
+    {
+      "name": "modular_urban_apartments_facade_trim_01_rough.png",
+      "size": [
+        4096,
+        4096
+      ],
+      "packed": false,
+      "filepath": "//textures\\modular_urban_apartments_facade_trim_01_rough_4k.png",
+      "colorspace": "Non-Color",
+      "exists": true
+    },
+    {
+      "name": "modular_urban_apartments_facade_trim_02_diff.png",
+      "size": [
+        4096,
+        4096
+      ],
+      "packed": false,
+      "filepath": "//textures\\modular_urban_apartments_facade_trim_02_diff_4k.png",
+      "colorspace": "sRGB",
+      "exists": true
+    },
+    {
+      "name": "modular_urban_apartments_facade_trim_02_nor_gl.png",
+      "size": [
+        4096,
+        4096
+      ],
+      "packed": false,
+      "filepath": "//textures\\modular_urban_apartments_facade_trim_02_nor_gl_4k.png",
+      "colorspace": "Non-Color",
+      "exists": true
+    },
+    {
+      "name": "modular_urban_apartments_facade_trim_02_rough.png",
+      "size": [
+        4096,
+        4096
+      ],
+      "packed": false,
+      "filepath": "//textures\\modular_urban_apartments_facade_trim_02_rough_4k.png",
+      "colorspace": "Non-Color",
+      "exists": true
+    }
+  ],
+  "actions": []
+}

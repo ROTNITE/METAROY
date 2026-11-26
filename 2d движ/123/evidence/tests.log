@@ -1,0 +1,17 @@
+test_no_fabricated_scan (tests.test_information_search.InformationSearchTests.test_no_fabricated_scan) ... ok
+test_proposals_are_reproducible_unique_and_new (tests.test_information_search.InformationSearchTests.test_proposals_are_reproducible_unique_and_new) ... ok
+test_reject_energy_and_suite_regression (tests.test_information_search.InformationSearchTests.test_reject_energy_and_suite_regression) ... ok
+test_single_carrier_preserves_commands (tests.test_information_search.InformationSearchTests.test_single_carrier_preserves_commands) ... ok
+test_stress_fallback_and_pair (tests.test_information_search.InformationSearchTests.test_stress_fallback_and_pair) ... ok
+test_inclusive_maximum_must_also_pass_full_schema (tests.test_adaptive_survey.SurveyTests.test_inclusive_maximum_must_also_pass_full_schema) ... ok
+test_issued_observe_command_auditable (tests.test_adaptive_survey.SurveyTests.test_issued_observe_command_auditable) ... ok
+test_no_expansion_without_declaration (tests.test_adaptive_survey.SurveyTests.test_no_expansion_without_declaration) ... ok
+test_no_extra_patrol_logic_without_wider_radius (tests.test_adaptive_survey.SurveyTests.test_no_extra_patrol_logic_without_wider_radius) ... ok
+test_production_and_trial_same_outcome (tests.test_adaptive_survey.SurveyTests.test_production_and_trial_same_outcome) ... ok
+test_radius_uses_advertised_bound (tests.test_adaptive_survey.SurveyTests.test_radius_uses_advertised_bound) ... ok
+test_single_carrier_late_target_preserves_baseline (tests.test_adaptive_survey.SurveyTests.test_single_carrier_late_target_preserves_baseline) ... ok
+
+----------------------------------------------------------------------
+Ran 12 tests in 1.849s
+
+OK

@@ -1,0 +1,44 @@
+build: C:\Users\rotn1\Documents\ChatGPT\metaroy\unreal\MetaRescue\Saved\Automation\build.log
+Log file: C:\Users\rotn1\AppData\Local\UnrealBuildTool\Log.txt
+Executing up to 2 actions based on MaxProcessorCount override
+UbaServer - Listening on 0.0.0.0:1345
+Available x64 toolchains (1):
+ * C:\Program Files\Microsoft Visual Studio\18\Community\VC\Tools\MSVC\14.51.36231
+    (Family=14.51.36231, FamilyRank=2, Version=14.51.36260, HostArchitecture=x64, ReleaseChannel=Latest, Architecture=x64)
+Visual Studio compiler version 14.51.36260 is newer than latest preferred version 14.50.35717. Please use caution as this compiler has not been heavily tested
+Building MetaRescueEditor...
+===== Toolchain Information =====
+Using ISPC compiler (C:\Program Files\Epic Games\UE_5.8\Engine\Source\ThirdParty\Intel\ISPC\bin\Windows\ispc.exe)
+  Intel(r) Implicit SPMD Program Compiler (Intel(r) ISPC), 1.24.0 (build commit  @ 20250404, LLVM 18.1.2) 
+build failed: exit 6; C:\Users\rotn1\Documents\ChatGPT\metaroy\unreal\MetaRescue\Saved\Automation\build.log
+Using Visual Studio 14.51.36260 toolchain (C:\Program Files\Microsoft Visual Studio\18\Community\VC\Tools\MSVC\14.51.36231) and Windows 10.0.26100.0 SDK (C:\Program Files (x86)\Windows Kits\10).
+Warning: Visual Studio compiler 14.51.36260 is not a preferred version
+===== End Toolchain Information =====
+Using Unreal Build Accelerator local executor to run 4 action(s)
+  CPU 16 physical cores, 24 logical cores
+  Memory 31.79 GB physical, 35.89 GB/60.68 GB committed
+  UBA Storage capacity 40 GB
+[1/4] Compile [x64] MRAssetTools.cpp
+C:\Program Files\Epic Games\UE_5.8\Engine\Source\Runtime\Engine\Classes\Particles\ParticleSystem.h(433,15): warning C4996: 'UObject::GetAssetRegistryTags': Implement the version that takes FAssetRegistryTagsContext instead. - Please update your code to the new API before upgrading to the next release, otherwise your project will no longer compile.
+	virtual void GetAssetRegistryTags(TArray<FAssetRegistryTag>& OutTags) const override;
+	             ^
+C:\Program Files\Epic Games\UE_5.8\Engine\Plugins\FX\Niagara\Source\Niagara\Classes\NiagaraSystem.h(421,27): warning C4996: 'UObject::GetAssetRegistryTags': Implement the version that takes FAssetRegistryTagsContext instead. - Please update your code to the new API before upgrading to the next release, otherwise your project will no longer compile.
+	NIAGARA_API virtual void GetAssetRegistryTags(TArray<FAssetRegistryTag>& OutTags) const override;
+	                         ^
+C:\Program Files\Epic Games\UE_5.8\Engine\Plugins\FX\Niagara\Source\Niagara\Classes\NiagaraScript.h(1094,15): warning C4996: 'UObject::GetAssetRegistryTags': Implement the version that takes FAssetRegistryTagsContext instead. - Please update your code to the new API before upgrading to the next release, otherwise your project will no longer compile.
+	virtual void GetAssetRegistryTags(TArray<FAssetRegistryTag>& OutTags) const override;
+	             ^
+C:\Program Files\Epic Games\UE_5.8\Engine\Plugins\FX\Niagara\Source\Niagara\Classes\NiagaraEmitter.h(688,15): warning C4996: 'UObject::GetAssetRegistryTags': Implement the version that takes FAssetRegistryTagsContext instead. - Please update your code to the new API before upgrading to the next release, otherwise your project will no longer compile.
+	virtual void GetAssetRegistryTags(TArray<FAssetRegistryTag>& OutTags) const override;
+	             ^
+[2/4] Link [x64] UnrealEditor-MetaRescue.lib
+   ????????? ?????????? C:/Users/rotn1/Documents/ChatGPT/metaroy/unreal/MetaRescue/Intermediate/Build/Win64/x64/UnrealEditor/Development/MetaRescue/UnrealEditor-MetaRescue.lib ? ?????? C:/Users/rotn1/Documents/ChatGPT/metaroy/unreal/MetaRescue/Intermediate/Build/Win64/x64/UnrealEditor/Development/MetaRescue/UnrealEditor-MetaRescue.exp
+[3/4] Link [x64] UnrealEditor-MetaRescue.dll
+MRAssetTools.cpp.obj : error LNK2019: ?????? ?? ????????????? ??????? ?????? "void __cdecl FNiagaraEditorUtilities::RemoveEmittersFromSystemByEmitterHandleId(class UNiagaraSystem &,class TSet<struct FGuid,struct DefaultKeyFuncs<struct FGuid,0>,class FDefaultSetAllocator>)" (?RemoveEmittersFromSystemByEmitterHandleId@FNiagaraEditorUtilities@@YAXAEAVUNiagaraSystem@@V?$TSet@UFGuid@@U?$DefaultKeyFuncs@UFGuid@@$0A@@@VFDefaultSetAllocator@@@@@Z) ? ??????? "public: static class UNiagaraSystem * __cdecl UMRAssetTools::CreateEffect(class FString const &,class FString const &,class UMaterialInterface *)" (?CreateEffect@UMRAssetTools@@SAPEAVUNiagaraSystem@@AEBVFString@@0PEAVUMaterialInterface@@@Z).
+C:\Users\rotn1\Documents\ChatGPT\metaroy\unreal\MetaRescue\Binaries\Win64\UnrealEditor-MetaRescue.dll : fatal error LNK1120: ????????????? ??????? ?????????: 1
+Total time in Unreal Build Accelerator local executor: 8.33 seconds
+
+Result: Failed (OtherCompilationError)
+Total execution time: 9.49 seconds
+Trace written to file C:\Users\rotn1\AppData\Local\UnrealBuildTool\Trace.uba with size 6.6kb
+

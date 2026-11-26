@@ -1,0 +1,36 @@
+02:18:51 | INFO: Data are loaded, start creating Blender stuff
+02:18:51 | INFO: Blender create Mesh node Mesh_0
+02:18:51 | INFO: glTF import finished in 0.42s
+Info: Applied modifier was not first, result may not be as expected
+Info: Saved as "MannequinRig.blend"
+
+FBX export starting... 'C:\\Users\\rotn1\\Documents\\ChatGPT\\metaroy\\blender\\prepared\\v2\\MannequinRig\\MannequinRig.fbx'
+(bpy.data.armatures['Armature'], 'POSE')
+export finished in 0.0779 sec.
+
+FBX export starting... 'C:\\Users\\rotn1\\Documents\\ChatGPT\\metaroy\\blender\\prepared\\v2\\MannequinRig\\Running.fbx'
+(bpy.data.armatures['Armature'], 'POSE')
+export finished in 0.1047 sec.
+
+FBX export starting... 'C:\\Users\\rotn1\\Documents\\ChatGPT\\metaroy\\blender\\prepared\\v2\\MannequinRig\\Walking.fbx'
+(bpy.data.armatures['Armature'], 'POSE')
+export finished in 0.1023 sec.
+
+FBX export starting... 'C:\\Users\\rotn1\\Documents\\ChatGPT\\metaroy\\blender\\prepared\\v2\\MannequinRig\\CasualtyBreathing.fbx'
+(bpy.data.armatures['Armature'], 'POSE')
+export finished in 0.1423 sec.
+Info: Saved as "Casualty.blend"
+
+FBX export starting... 'C:\\Users\\rotn1\\Documents\\ChatGPT\\metaroy\\blender\\prepared\\v2\\Casualty\\parts\\CasualtySupine.fbx'
+export finished in 0.0380 sec.
+MR_MECHANIZED Casualty 1 parts 24000 triangles
+MR_MANNEQUIN_RIG_PREPARED {"id": "MannequinRig", "kind": "skeletal", "source": "blender/Meshy_AI_Rigged_Rescue_Mannequin_20261109_animated_mixamo_All_animation.glb", "blend": "MannequinRig.blend", "fbx": "MannequinRig.fbx", "clips": [{"name": "Running", "frames": [0.0, 15.199999809265137], "source": "supplied_glb", "fbx": "Running.fbx"}, {"name": "Walking", "frames": [0.0, 24.799999237060547], "source": "supplied_glb", "fbx": "Walking.fbx"}, {"name": "CasualtyBreathing", "frames": [1.0, 121.0], "source": "authored_subtle_rescue_idle", "fbx": "CasualtyBreathing.fbx"}], "bones": 24, "materials": [{"name": "Material_0", "glass": false, "inputs": {"Base Color": [0.800000011920929, 0.800000011920929, 0.800000011920929, 1.0], "Metallic": 0.0, "Roughness": 0.5, "Transmission Weight": 0.0, "IOR": 1.5, "Alpha": 1.0, "Emission Color": [1.0, 1.0, 1.0, 1.0], "Emission Strength": 0.0}, "links": [{"from": "Principled BSDF", "output": "BSDF", "to": "Material Output", "input": "Surface"}, {"from": "Image Texture", "output": "Color", "to": "Principled BSDF", "input": "Base Color"}, {"from": "Separate Color", "output": "Blue", "to": "Principled BSDF", "input": "Metallic"}, {"from": "Separate Color", "output": "Green", "to": "Principled BSDF", "input": "Roughness"}, {"from": "Image Texture.001", "output": "Color", "to": "Separate Color", "input": "Color"}, {"from": "Normal Map", "output": "Normal", "to": "Principled BSDF", "input": "Normal"}, {"from": "Image Texture.002", "output": "Color", "to": "Normal Map", "input": "Color"}], "images": [{"node": "Image Texture", "image": "Image_0", "file": "textures/T_0_Image_0.png", "colorspace": "sRGB"}, {"node": "Image Texture.001", "image": "Image_1", "file": "textures/T_1_Image_1.png", "colorspace": "Non-Color"}, {"node": "Image Texture.002", "image": "Image_2", "file": "textures/T_2_Image_2.png", "colorspace": "Non-Color"}]}], "source_triangles": 195252, "removed_objects": ["Icosphere"], "purpose": "Base walking demonstration and weighted rescue poses; no unsupervised walking of casualties."}
+Blender 4.5.15 LTS (hash 5afeabba6097 built 2026-10-22 01:35:27)
+Image_0
+Image_0.jpg
+Image_1
+Image_1.jpg
+Image_2
+Image_2.jpg
+
+Blender quit

@@ -1,0 +1,695 @@
+{
+  "id": "fire_hydrant",
+  "source": "blender/vendor/fire_hydrant_4k/fire_hydrant_4k.blend",
+  "sha256": "e47e0b9cdc1caad4fe647257b1233ea9036f497a52dbd9b8f2715631f7cfb12e",
+  "units": {
+    "system": "METRIC",
+    "scale_length": 1.0
+  },
+  "bounds_min": [
+    -0.4417688846588135,
+    -0.1912069022655487,
+    -8.87151836650446e-05
+  ],
+  "bounds_max": [
+    0.43285468220710754,
+    0.12653666734695435,
+    0.7993673086166382
+  ],
+  "dimensions": [
+    0.8746235370635986,
+    0.31774356961250305,
+    0.799456000328064
+  ],
+  "objects": [
+    {
+      "name": "fire_hydrant",
+      "type": "MESH",
+      "parent": null,
+      "location": [
+        -0.30000001192092896,
+        0.0,
+        0.0
+      ],
+      "rotation": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "hidden_render": false,
+      "vertices": 11452,
+      "triangles": 22888,
+      "uv_layers": [
+        "UVMap"
+      ],
+      "bounds_min": [
+        -0.4278510510921478,
+        -0.15721319615840912,
+        -8.87151836650446e-05
+      ],
+      "bounds_max": [
+        -0.17369931936264038,
+        0.12653666734695435,
+        0.7993673086166382
+      ],
+      "materials": [
+        "fire_hydrant"
+      ],
+      "modifiers": []
+    },
+    {
+      "name": "fire_hydrant_aged",
+      "type": "MESH",
+      "parent": null,
+      "location": [
+        0.30000001192092896,
+        0.0,
+        0.0
+      ],
+      "rotation": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "hidden_render": false,
+      "vertices": 11452,
+      "triangles": 22888,
+      "uv_layers": [
+        "UVMap"
+      ],
+      "bounds_min": [
+        0.17214897274971008,
+        -0.15721319615840912,
+        -8.87151836650446e-05
+      ],
+      "bounds_max": [
+        0.42630070447921753,
+        0.12653666734695435,
+        0.7993673086166382
+      ],
+      "materials": [
+        "fire_hydrant_aged"
+      ],
+      "modifiers": []
+    },
+    {
+      "name": "fire_hydrant_cap_01",
+      "type": "MESH",
+      "parent": null,
+      "location": [
+        -0.30000001192092896,
+        0.0,
+        0.0
+      ],
+      "rotation": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "hidden_render": false,
+      "vertices": 1104,
+      "triangles": 2204,
+      "uv_layers": [
+        "UVMap"
+      ],
+      "bounds_min": [
+        -0.4257318377494812,
+        -0.1912069022655487,
+        0.30560681223869324
+      ],
+      "bounds_max": [
+        -0.1743437796831131,
+        -0.106272853910923,
+        0.5548654198646545
+      ],
+      "materials": [
+        "fire_hydrant"
+      ],
+      "modifiers": []
+    },
+    {
+      "name": "fire_hydrant_cap_01_aged",
+      "type": "MESH",
+      "parent": null,
+      "location": [
+        0.30000001192092896,
+        0.0,
+        0.0
+      ],
+      "rotation": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "hidden_render": false,
+      "vertices": 1104,
+      "triangles": 2204,
+      "uv_layers": [
+        "UVMap"
+      ],
+      "bounds_min": [
+        0.1742681860923767,
+        -0.1912069022655487,
+        0.30560681223869324
+      ],
+      "bounds_max": [
+        0.425656259059906,
+        -0.106272853910923,
+        0.5548654198646545
+      ],
+      "materials": [
+        "fire_hydrant_aged"
+      ],
+      "modifiers": []
+    },
+    {
+      "name": "fire_hydrant_cap_02",
+      "type": "MESH",
+      "parent": null,
+      "location": [
+        -0.30000001192092896,
+        0.0,
+        0.0
+      ],
+      "rotation": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "hidden_render": false,
+      "vertices": 912,
+      "triangles": 1820,
+      "uv_layers": [
+        "UVMap"
+      ],
+      "bounds_min": [
+        -0.22419512271881104,
+        -0.09460797160863876,
+        0.5226336717605591
+      ],
+      "bounds_max": [
+        -0.16714534163475037,
+        -0.022913480177521706,
+        0.5974385738372803
+      ],
+      "materials": [
+        "fire_hydrant"
+      ],
+      "modifiers": []
+    },
+    {
+      "name": "fire_hydrant_cap_02_aged",
+      "type": "MESH",
+      "parent": null,
+      "location": [
+        0.30000001192092896,
+        0.0,
+        0.0
+      ],
+      "rotation": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "hidden_render": false,
+      "vertices": 912,
+      "triangles": 1820,
+      "uv_layers": [
+        "UVMap"
+      ],
+      "bounds_min": [
+        0.3758049011230469,
+        -0.09460797160863876,
+        0.5226336717605591
+      ],
+      "bounds_max": [
+        0.43285468220710754,
+        -0.022913480177521706,
+        0.5974385738372803
+      ],
+      "materials": [
+        "fire_hydrant_aged"
+      ],
+      "modifiers": []
+    },
+    {
+      "name": "fire_hydrant_cap_03",
+      "type": "MESH",
+      "parent": null,
+      "location": [
+        -0.30000001192092896,
+        0.0,
+        0.0
+      ],
+      "rotation": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "hidden_render": false,
+      "vertices": 912,
+      "triangles": 1820,
+      "uv_layers": [
+        "UVMap"
+      ],
+      "bounds_min": [
+        -0.4417688846588135,
+        -0.11020832508802414,
+        0.5081241726875305
+      ],
+      "bounds_max": [
+        -0.3749271035194397,
+        -0.015759196132421494,
+        0.6084429621696472
+      ],
+      "materials": [
+        "fire_hydrant"
+      ],
+      "modifiers": []
+    },
+    {
+      "name": "fire_hydrant_cap_03_aged",
+      "type": "MESH",
+      "parent": null,
+      "location": [
+        0.30000001192092896,
+        0.0,
+        0.0
+      ],
+      "rotation": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "hidden_render": false,
+      "vertices": 912,
+      "triangles": 1820,
+      "uv_layers": [
+        "UVMap"
+      ],
+      "bounds_min": [
+        0.15823113918304443,
+        -0.11020832508802414,
+        0.5081241726875305
+      ],
+      "bounds_max": [
+        0.2250729203224182,
+        -0.015759196132421494,
+        0.6084429621696472
+      ],
+      "materials": [
+        "fire_hydrant_aged"
+      ],
+      "modifiers": []
+    },
+    {
+      "name": "fire_hydrant_chain",
+      "type": "MESH",
+      "parent": null,
+      "location": [
+        -0.30000001192092896,
+        0.0,
+        0.0
+      ],
+      "rotation": [
+        0.0,
+        -0.0,
+        0.0
+      ],
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "hidden_render": false,
+      "vertices": 7261,
+      "triangles": 14426,
+      "uv_layers": [
+        "UVMap"
+      ],
+      "bounds_min": [
+        -0.4307935833930969,
+        -0.1688200682401657,
+        0.195121169090271
+      ],
+      "bounds_max": [
+        -0.17683717608451843,
+        -0.04612365737557411,
+        0.5796802639961243
+      ],
+      "materials": [
+        "fire_hydrant"
+      ],
+      "modifiers": []
+    },
+    {
+      "name": "fire_hydrant_chain_aged",
+      "type": "MESH",
+      "parent": null,
+      "location": [
+        0.30000001192092896,
+        0.0,
+        0.0
+      ],
+      "rotation": [
+        0.0,
+        -0.0,
+        0.0
+      ],
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "hidden_render": false,
+      "vertices": 7261,
+      "triangles": 14426,
+      "uv_layers": [
+        "UVMap"
+      ],
+      "bounds_min": [
+        0.1692064255475998,
+        -0.1688200682401657,
+        0.195121169090271
+      ],
+      "bounds_max": [
+        0.4231628477573395,
+        -0.04612365737557411,
+        0.5796802639961243
+      ],
+      "materials": [
+        "fire_hydrant_aged"
+      ],
+      "modifiers": []
+    }
+  ],
+  "materials": [
+    {
+      "name": "fire_hydrant",
+      "nodes": [
+        {
+          "name": "Material Output",
+          "type": "OUTPUT_MATERIAL"
+        },
+        {
+          "name": "Principled BSDF",
+          "type": "BSDF_PRINCIPLED",
+          "inputs": {
+            "Base Color": {
+              "linked": true,
+              "value": [
+                0.8134579658508301,
+                0.8134579658508301,
+                0.8134579658508301,
+                1.0
+              ]
+            },
+            "Metallic": {
+              "linked": true,
+              "value": 0.0
+            },
+            "Roughness": {
+              "linked": true,
+              "value": 0.5
+            },
+            "IOR": {
+              "linked": false,
+              "value": 1.4500000476837158
+            },
+            "Alpha": {
+              "linked": false,
+              "value": 1.0
+            },
+            "Transmission Weight": {
+              "linked": false,
+              "value": 0.0
+            }
+          }
+        },
+        {
+          "name": "Image Texture",
+          "type": "TEX_IMAGE",
+          "image": "fire_hydrant_diff.png"
+        },
+        {
+          "name": "Image Texture.001",
+          "type": "TEX_IMAGE",
+          "image": "fire_hydrant_metal.png"
+        },
+        {
+          "name": "Image Texture.002",
+          "type": "TEX_IMAGE",
+          "image": "fire_hydrant_rough.png"
+        },
+        {
+          "name": "Image Texture.003",
+          "type": "TEX_IMAGE",
+          "image": "fire_hydrant_nor_gl.png"
+        },
+        {
+          "name": "Normal Map",
+          "type": "NORMAL_MAP"
+        },
+        {
+          "name": "Mapping",
+          "type": "MAPPING"
+        },
+        {
+          "name": "Reroute",
+          "type": "REROUTE"
+        },
+        {
+          "name": "Texture Coordinate",
+          "type": "TEX_COORD"
+        },
+        {
+          "name": "Frame",
+          "type": "FRAME"
+        },
+        {
+          "name": "Frame.001",
+          "type": "FRAME"
+        }
+      ]
+    },
+    {
+      "name": "fire_hydrant_aged",
+      "nodes": [
+        {
+          "name": "Material Output",
+          "type": "OUTPUT_MATERIAL"
+        },
+        {
+          "name": "Principled BSDF",
+          "type": "BSDF_PRINCIPLED",
+          "inputs": {
+            "Base Color": {
+              "linked": true,
+              "value": [
+                0.8134579658508301,
+                0.8134579658508301,
+                0.8134579658508301,
+                1.0
+              ]
+            },
+            "Metallic": {
+              "linked": true,
+              "value": 0.0
+            },
+            "Roughness": {
+              "linked": true,
+              "value": 0.5
+            },
+            "IOR": {
+              "linked": false,
+              "value": 1.4500000476837158
+            },
+            "Alpha": {
+              "linked": false,
+              "value": 1.0
+            },
+            "Transmission Weight": {
+              "linked": false,
+              "value": 0.0
+            }
+          }
+        },
+        {
+          "name": "Image Texture",
+          "type": "TEX_IMAGE",
+          "image": "fire_hydrant_aged_diff.png"
+        },
+        {
+          "name": "Image Texture.001",
+          "type": "TEX_IMAGE",
+          "image": "fire_hydrant_aged_metal.png"
+        },
+        {
+          "name": "Image Texture.002",
+          "type": "TEX_IMAGE",
+          "image": "fire_hydrant_aged_rough.png"
+        },
+        {
+          "name": "Image Texture.003",
+          "type": "TEX_IMAGE",
+          "image": "fire_hydrant_aged_nor_gl.png"
+        },
+        {
+          "name": "Normal Map",
+          "type": "NORMAL_MAP"
+        },
+        {
+          "name": "Mapping",
+          "type": "MAPPING"
+        },
+        {
+          "name": "Reroute",
+          "type": "REROUTE"
+        },
+        {
+          "name": "Texture Coordinate",
+          "type": "TEX_COORD"
+        },
+        {
+          "name": "Frame",
+          "type": "FRAME"
+        },
+        {
+          "name": "Frame.001",
+          "type": "FRAME"
+        }
+      ]
+    }
+  ],
+  "images": [
+    {
+      "name": "fire_hydrant_aged_diff.png",
+      "size": [
+        4096,
+        4096
+      ],
+      "packed": false,
+      "filepath": "//textures\\fire_hydrant_aged_diff_4k.png",
+      "colorspace": "sRGB",
+      "exists": true
+    },
+    {
+      "name": "fire_hydrant_aged_metal.png",
+      "size": [
+        4096,
+        4096
+      ],
+      "packed": false,
+      "filepath": "//textures\\fire_hydrant_aged_metal_4k.png",
+      "colorspace": "Non-Color",
+      "exists": true
+    },
+    {
+      "name": "fire_hydrant_aged_nor_gl.png",
+      "size": [
+        4096,
+        4096
+      ],
+      "packed": false,
+      "filepath": "//textures\\fire_hydrant_aged_nor_gl_4k.png",
+      "colorspace": "Non-Color",
+      "exists": true
+    },
+    {
+      "name": "fire_hydrant_aged_rough.png",
+      "size": [
+        4096,
+        4096
+      ],
+      "packed": false,
+      "filepath": "//textures\\fire_hydrant_aged_rough_4k.png",
+      "colorspace": "Non-Color",
+      "exists": true
+    },
+    {
+      "name": "fire_hydrant_diff.png",
+      "size": [
+        4096,
+        4096
+      ],
+      "packed": false,
+      "filepath": "//textures\\fire_hydrant_diff_4k.jpg",
+      "colorspace": "sRGB",
+      "exists": true
+    },
+    {
+      "name": "fire_hydrant_metal.png",
+      "size": [
+        4096,
+        4096
+      ],
+      "packed": false,
+      "filepath": "//textures\\fire_hydrant_metal_4k.exr",
+      "colorspace": "Non-Color",
+      "exists": true
+    },
+    {
+      "name": "fire_hydrant_nor_gl.png",
+      "size": [
+        4096,
+        4096
+      ],
+      "packed": false,
+      "filepath": "//textures\\fire_hydrant_nor_gl_4k.exr",
+      "colorspace": "Non-Color",
+      "exists": true
+    },
+    {
+      "name": "fire_hydrant_rough.png",
+      "size": [
+        4096,
+        4096
+      ],
+      "packed": false,
+      "filepath": "//textures\\fire_hydrant_rough_4k.exr",
+      "colorspace": "Non-Color",
+      "exists": true
+    }
+  ],
+  "actions": []
+}

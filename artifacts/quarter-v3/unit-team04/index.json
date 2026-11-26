@@ -1,0 +1,104 @@
+﻿{
+	"devices": [
+		{
+			"deviceName": "ADMIN",
+			"instance": "5B10B3C044EF069219DBC1B990471F90",
+			"instanceName": "ADMIN-10336",
+			"platform": "WindowsEditor",
+			"oSVersion": "Windows 11 (26H2) [10.0.26300.9818] ",
+			"model": "Default",
+			"gPU": "GenericGPUBrand",
+			"cPUModel": "12th Gen Intel(R) Core(TM) i9-12900KF",
+			"rAMInGB": 32,
+			"renderMode": "SM6",
+			"rHI": "",
+			"appInstanceLog": ""
+		}
+	],
+	"reportCreatedOn": "2026.11.10-20.23.15",
+	"succeeded": 5,
+	"succeededWithWarnings": 0,
+	"failed": 0,
+	"notRun": 0,
+	"inProcess": 0,
+	"totalDuration": 0.040313094854354858,
+	"comparisonExported": false,
+	"comparisonExportDirectory": "",
+	"tests": [
+		{
+			"testDisplayName": "ConsequencesAndExpiry",
+			"fullTestPath": "MetaRescue.Environment.ConsequencesAndExpiry",
+			"tags": [],
+			"state": "Success",
+			"deviceInstance": [
+				"5B10B3C044EF069219DBC1B990471F90"
+			],
+			"duration": 0.0079765990376472473,
+			"dateTime": "2026.11.10-20.23.15",
+			"entries": [],
+			"warnings": 0,
+			"errors": 0,
+			"artifacts": []
+		},
+		{
+			"testDisplayName": "ProtectedBaseAndExhaustion",
+			"fullTestPath": "MetaRescue.Environment.ProtectedBaseAndExhaustion",
+			"tags": [],
+			"state": "Success",
+			"deviceInstance": [
+				"5B10B3C044EF069219DBC1B990471F90"
+			],
+			"duration": 0.0075013972818851471,
+			"dateTime": "2026.11.10-20.23.15",
+			"entries": [],
+			"warnings": 0,
+			"errors": 0,
+			"artifacts": []
+		},
+		{
+			"testDisplayName": "ReplayAndWindowBoundaries",
+			"fullTestPath": "MetaRescue.Environment.ReplayAndWindowBoundaries",
+			"tags": [],
+			"state": "Success",
+			"deviceInstance": [
+				"5B10B3C044EF069219DBC1B990471F90"
+			],
+			"duration": 0.0082809999585151672,
+			"dateTime": "2026.11.10-20.23.15",
+			"entries": [],
+			"warnings": 0,
+			"errors": 0,
+			"artifacts": []
+		},
+		{
+			"testDisplayName": "ZeroAndFullProbability",
+			"fullTestPath": "MetaRescue.Environment.ZeroAndFullProbability",
+			"tags": [],
+			"state": "Success",
+			"deviceInstance": [
+				"5B10B3C044EF069219DBC1B990471F90"
+			],
+			"duration": 0.0082738995552062988,
+			"dateTime": "2026.11.10-20.23.15",
+			"entries": [],
+			"warnings": 0,
+			"errors": 0,
+			"artifacts": []
+		},
+		{
+			"testDisplayName": "FiniteRoutePrediction",
+			"fullTestPath": "MetaRescue.Safety.FiniteRoutePrediction",
+			"tags": [],
+			"state": "Success",
+			"deviceInstance": [
+				"5B10B3C044EF069219DBC1B990471F90"
+			],
+			"duration": 0.0082801990211009979,
+			"dateTime": "2026.11.10-20.23.15",
+			"entries": [],
+			"warnings": 0,
+			"errors": 0,
+			"artifacts": []
+		}
+	]
+}

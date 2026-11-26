@@ -1,0 +1,134 @@
+{
+  "format": "metarescue.demo-preflight.v1",
+  "generator_source": "MetaEvolution-Rescue-code-docs-2026-11-12.zip",
+  "created_utc": "2026-11-12T18:54:00.894234+00:00",
+  "physically_tested": false,
+  "note": "Only Python generation/preflight/events validation; no native Unreal run or guaranteed detour",
+  "layouts": {
+    "basic": {
+      "private_sha256": "3635a5bb61c73e93bdc702e17e23328716c2a0d16d51c827d9f00d1932f5bd10",
+      "world_fingerprint": "86b52e5f48646be793c1860b680e17f294ff74dc75789d6e3b8393b4528e0b28",
+      "preflight": {
+        "passed": true,
+        "buildings": 23,
+        "solid_parcels": 127,
+        "spawns": 3,
+        "road_nodes": 90,
+        "connected_nodes": 90,
+        "parked_exit_checks": 12,
+        "physical_collision_probe": "pending_native"
+      },
+      "people": [
+        {
+          "id": 1,
+          "position": [
+            191.002,
+            236.885,
+            0.06
+          ],
+          "priority": 2,
+          "available_at": 0
+        },
+        {
+          "id": 2,
+          "position": [
+            49.819,
+            96.737,
+            0.06
+          ],
+          "priority": 3,
+          "available_at": 0
+        },
+        {
+          "id": 3,
+          "position": [
+            120.277,
+            85.051,
+            0.06
+          ],
+          "priority": 3,
+          "available_at": 0
+        }
+      ],
+      "events": []
+    },
+    "fire": {
+      "private_sha256": "6caeb9fc2f9ca380b1ec9829d4d72a1e5daf8dd9414f248730ee8bb247360ae6",
+      "world_fingerprint": "6dc9027209041449aced9361afa60330eab8a2814f5f13478d41ffe84d5fd52d",
+      "preflight": {
+        "passed": true,
+        "buildings": 23,
+        "solid_parcels": 127,
+        "spawns": 3,
+        "road_nodes": 90,
+        "connected_nodes": 90,
+        "parked_exit_checks": 12,
+        "physical_collision_probe": "pending_native"
+      },
+      "people": [
+        {
+          "id": 1,
+          "position": [
+            191.002,
+            236.885,
+            0.06
+          ],
+          "priority": 2,
+          "available_at": 0
+        },
+        {
+          "id": 2,
+          "position": [
+            49.819,
+            96.737,
+            0.06
+          ],
+          "priority": 3,
+          "available_at": 0
+        },
+        {
+          "id": 3,
+          "position": [
+            120.277,
+            85.051,
+            0.06
+          ],
+          "priority": 3,
+          "available_at": 0
+        }
+      ],
+      "events": [
+        {
+          "kind": "fire",
+          "time": 77.25,
+          "source": [
+            49.302,
+            57.884,
+            0.05
+          ],
+          "rejection": null
+        },
+        {
+          "kind": "fire",
+          "time": 163.4,
+          "source": [
+            94.509,
+            37.299,
+            0.05
+          ],
+          "rejection": null
+        },
+        {
+          "kind": "fire",
+          "time": 201.4,
+          "source": [
+            92.5,
+            57.5,
+            0.05
+          ],
+          "rejection": null
+        }
+      ]
+    }
+  }
+}

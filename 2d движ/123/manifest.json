@@ -1,0 +1,21 @@
+{
+  "dependencies": {
+    "controller/adaptive_survey.py": "5be55bf68c508455aa94fd0b2237601abe103e2acd53e03a26238fe9b8ca23c8",
+    "controller/resource_predictor.py": "1844027221212301ce4cdde0351dc2e7452f9380fa02e18f53eb3f2b3e4e99a1",
+    "controller/bottleneck.py": "c4fa39ebc3c89c2bbed01b2f15ae59391a69cd7764492d83b36c3fb332949f81",
+    "controller/portable.py": "68dab95749c8ee50d9721cb46d2e27be0f05cfc36268f07badedb060ea241016",
+    "controller/net65.py": "f314b9ba96afa0c59966e8ba2a0a2abd07f7c1486cf26972672f5b2bb9503ccf",
+    "controller/public_core.py": "255824a6a2a6cec4aa16cd8cd49dc9d19e58ee9bacb55b3c4090b18539ac9280",
+    "environment/world.py": "83ffcc600d42ba6696c94cd895d8ab78bc1db0ec88631564eb47282a1d758a03",
+    "contracts/protocol.py": "dd3624b15fb2cc22412696f455a2acf695dafe65f9c7ce069c17de42fcfa534e",
+    "experiments/mission_flow/benchmark_logistics.py": "ee1347120c4770e646eb2cbaa1de808cbeac3e60701724e3876ea6be46baf39f",
+    "experiments/mission_flow/logistics_trial.py": "00ffa23a0ad423f500e0f5349c59f921e43df3da34963a78e89f6161ff71fd00",
+    "experiments/mission_flow/bottleneck_trial.py": "cbc075231cbcf6293f0c955d5270a8705da62d60c6a585e1558dafe2630a0557"
+  },
+  "files": {
+    "controller/information_gain.py": "750fa3f902a85c8949f23a784921efc0436f5d850cf20a9565d40b6eb030465b",
+    "experiments/mission_flow/auto_information.py": "a86bd0699eb536b57018a3327e4a2e705853ec42874ca186e6b3954d8c2987a8",
+    "experiments/mission_flow/benchmark_information.py": "053d1cdeb04c6aff708c8ddaf9753d04e7f6a4822db4d1c1ecf16fe30cd2a7b7",
+    "tests/test_information_search.py": "e82930033b0c534b71f4f7a532447b4c4ff2b564aa56d8ec7b00cefd0e838cd2"
+  }
+}

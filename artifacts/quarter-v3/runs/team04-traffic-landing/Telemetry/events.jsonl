@@ -1,0 +1,5 @@
+{"type":"episode_started","time_s":0,"target_id":-1}
+{"type":"traffic_probe_initialized","time_s":0,"target_id":-1}
+{"type":"stationary_sensor_observed","time_s":0.30680569907417521,"target_id":8}
+{"type":"agent_route_completed","time_s":9.9139651981531642,"agent_id":0}
+{"type":"agent_landed","time_s":11.151482998335268,"agent_id":0}

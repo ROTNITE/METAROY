@@ -1,0 +1,1 @@
+{"started_at": 1794342423.308488, "requested_seconds": 100, "quarter": true, "environment": "static", "seed": null, "external_control": true, "traffic_probe": "landing", "time_step_mode": "real_time", "requested_fixed_fps": 0, "wall_elapsed_s": 111.7588517999975}

@@ -1,0 +1,8 @@
+{"type":"agent_takeoff_started","time_s":0,"agent_id":0}
+{"type":"agent_takeoff_started","time_s":0,"agent_id":1}
+{"type":"agent_takeoff_started","time_s":0,"agent_id":2}
+{"type":"episode_started","time_s":0,"target_id":-1}
+{"type":"agent_safe_stop","time_s":0.049720997863914818,"agent_id":0}
+{"type":"agent_safe_stop","time_s":0.049720997863914818,"agent_id":1}
+{"type":"agent_safe_stop","time_s":0.049720997863914818,"agent_id":2}
+{"type":"stationary_sensor_observed","time_s":0.30179740017047152,"target_id":8}

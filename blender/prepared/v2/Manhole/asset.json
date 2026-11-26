@@ -1,0 +1,198 @@
+{
+  "id": "Manhole",
+  "source": "blender/vendor/water_manhole_cover_4k/water_manhole_cover_4k.blend",
+  "source_sha256": "c66587143c0c18546583f602377b22147c749d1a1449f73f85a4fdb5eaa027ad",
+  "blend": "Manhole.blend",
+  "parts": [
+    {
+      "object": "water_manhole_cover_frame",
+      "role": "module",
+      "catalog_position_m": [
+        0.0,
+        0.0,
+        -0.028761375695466995
+      ],
+      "triangles": 640,
+      "location_m": [
+        0.0,
+        0.0,
+        -0.028761375695466995
+      ],
+      "rotation_deg": [
+        0.0,
+        -0.0,
+        0.0
+      ],
+      "parent": null,
+      "dimensions_m": [
+        0.6907604932785034,
+        0.6907604932785034,
+        0.06754103302955627
+      ],
+      "materials": [
+        "water_manhole_cover"
+      ],
+      "fbx": "parts/water_manhole_cover_frame.fbx"
+    },
+    {
+      "object": "water_manhole_cover",
+      "role": "module",
+      "catalog_position_m": [
+        0.0,
+        0.0,
+        0.014296040870249271
+      ],
+      "triangles": 5661,
+      "location_m": [
+        0.0,
+        0.0,
+        0.014296040870249271
+      ],
+      "rotation_deg": [
+        0.0,
+        -0.0,
+        0.0
+      ],
+      "parent": null,
+      "dimensions_m": [
+        0.6095455288887024,
+        0.5998337864875793,
+        0.024560384452342987
+      ],
+      "materials": [
+        "water_manhole_cover"
+      ],
+      "fbx": "parts/water_manhole_cover.fbx"
+    }
+  ],
+  "materials": [
+    {
+      "name": "water_manhole_cover",
+      "glass": false,
+      "inputs": {
+        "Base Color": [
+          0.800000011920929,
+          0.800000011920929,
+          0.800000011920929,
+          1.0
+        ],
+        "Metallic": 0.0,
+        "Roughness": 0.5,
+        "Transmission Weight": 0.0,
+        "IOR": 1.4500000476837158,
+        "Alpha": 1.0,
+        "Emission Color": [
+          0.0,
+          0.0,
+          0.0,
+          1.0
+        ],
+        "Emission Strength": 1.0
+      },
+      "links": [
+        {
+          "from": "Principled BSDF",
+          "output": "BSDF",
+          "to": "Material Output",
+          "input": "Surface"
+        },
+        {
+          "from": "Image Texture",
+          "output": "Color",
+          "to": "Principled BSDF",
+          "input": "Base Color"
+        },
+        {
+          "from": "Image Texture.001",
+          "output": "Color",
+          "to": "Principled BSDF",
+          "input": "Metallic"
+        },
+        {
+          "from": "Image Texture.002",
+          "output": "Color",
+          "to": "Principled BSDF",
+          "input": "Roughness"
+        },
+        {
+          "from": "Image Texture.003",
+          "output": "Color",
+          "to": "Normal Map",
+          "input": "Color"
+        },
+        {
+          "from": "Normal Map",
+          "output": "Normal",
+          "to": "Principled BSDF",
+          "input": "Normal"
+        },
+        {
+          "from": "Reroute",
+          "output": "Output",
+          "to": "Image Texture",
+          "input": "Vector"
+        },
+        {
+          "from": "Reroute",
+          "output": "Output",
+          "to": "Image Texture.001",
+          "input": "Vector"
+        },
+        {
+          "from": "Reroute",
+          "output": "Output",
+          "to": "Image Texture.002",
+          "input": "Vector"
+        },
+        {
+          "from": "Reroute",
+          "output": "Output",
+          "to": "Image Texture.003",
+          "input": "Vector"
+        },
+        {
+          "from": "Mapping",
+          "output": "Vector",
+          "to": "Reroute",
+          "input": "Input"
+        },
+        {
+          "from": "Texture Coordinate",
+          "output": "UV",
+          "to": "Mapping",
+          "input": "Vector"
+        }
+      ],
+      "images": [
+        {
+          "node": "Image Texture",
+          "image": "water_manhole_cover_diff.png",
+          "file": "textures/T_0_water_manhole_cover_diff.png",
+          "colorspace": "sRGB"
+        },
+        {
+          "node": "Image Texture.001",
+          "image": "water_manhole_cover_metal.png",
+          "file": "textures/T_1_water_manhole_cover_metal.png",
+          "colorspace": "Non-Color"
+        },
+        {
+          "node": "Image Texture.002",
+          "image": "water_manhole_cover_rough.png",
+          "file": "textures/T_2_water_manhole_cover_rough.png",
+          "colorspace": "Non-Color"
+        },
+        {
+          "node": "Image Texture.003",
+          "image": "water_manhole_cover_nor_gl.png",
+          "file": "textures/T_3_water_manhole_cover_nor_gl.png",
+          "colorspace": "Non-Color"
+        }
+      ]
+    }
+  ],
+  "repairs": [],
+  "actions": [],
+  "animation_runtime": "Rigid meshes driven from Unreal actuator state; Blender actions are inspectable demonstrations.",
+  "kind": "static_assembly"
+}

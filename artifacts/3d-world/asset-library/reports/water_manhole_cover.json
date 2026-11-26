@@ -1,0 +1,253 @@
+{
+  "id": "water_manhole_cover",
+  "source": "blender/vendor/water_manhole_cover_4k/water_manhole_cover_4k.blend",
+  "sha256": "c66587143c0c18546583f602377b22147c749d1a1449f73f85a4fdb5eaa027ad",
+  "units": {
+    "system": "METRIC",
+    "scale_length": 1.0
+  },
+  "bounds_min": [
+    -0.3453802466392517,
+    -0.3453802466392517,
+    -0.028761375695466995
+  ],
+  "bounds_max": [
+    0.3453802466392517,
+    0.3453802466392517,
+    0.038856424391269684
+  ],
+  "dimensions": [
+    0.6907604932785034,
+    0.6907604932785034,
+    0.06761780381202698
+  ],
+  "objects": [
+    {
+      "name": "water_manhole_cover",
+      "type": "MESH",
+      "parent": null,
+      "location": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "rotation": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "hidden_render": false,
+      "vertices": 2909,
+      "triangles": 5661,
+      "uv_layers": [
+        "UVMap"
+      ],
+      "bounds_min": [
+        -0.3047727644443512,
+        -0.2999168932437897,
+        0.014296040870249271
+      ],
+      "bounds_max": [
+        0.3047727644443512,
+        0.2999168932437897,
+        0.038856424391269684
+      ],
+      "materials": [
+        "water_manhole_cover"
+      ],
+      "modifiers": [
+        {
+          "name": "Auto Smooth",
+          "type": "NODES"
+        }
+      ]
+    },
+    {
+      "name": "water_manhole_cover_frame",
+      "type": "MESH",
+      "parent": null,
+      "location": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "rotation": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "hidden_render": false,
+      "vertices": 352,
+      "triangles": 640,
+      "uv_layers": [
+        "UVMap"
+      ],
+      "bounds_min": [
+        -0.3453802466392517,
+        -0.3453802466392517,
+        -0.028761375695466995
+      ],
+      "bounds_max": [
+        0.3453802466392517,
+        0.3453802466392517,
+        0.03877965733408928
+      ],
+      "materials": [
+        "water_manhole_cover"
+      ],
+      "modifiers": [
+        {
+          "name": "Auto Smooth",
+          "type": "NODES"
+        }
+      ]
+    }
+  ],
+  "materials": [
+    {
+      "name": "water_manhole_cover",
+      "nodes": [
+        {
+          "name": "Material Output",
+          "type": "OUTPUT_MATERIAL"
+        },
+        {
+          "name": "Principled BSDF",
+          "type": "BSDF_PRINCIPLED",
+          "inputs": {
+            "Base Color": {
+              "linked": true,
+              "value": [
+                0.800000011920929,
+                0.800000011920929,
+                0.800000011920929,
+                1.0
+              ]
+            },
+            "Metallic": {
+              "linked": true,
+              "value": 0.0
+            },
+            "Roughness": {
+              "linked": true,
+              "value": 0.5
+            },
+            "IOR": {
+              "linked": false,
+              "value": 1.4500000476837158
+            },
+            "Alpha": {
+              "linked": false,
+              "value": 1.0
+            },
+            "Transmission Weight": {
+              "linked": false,
+              "value": 0.0
+            }
+          }
+        },
+        {
+          "name": "Image Texture",
+          "type": "TEX_IMAGE",
+          "image": "water_manhole_cover_diff.png"
+        },
+        {
+          "name": "Image Texture.001",
+          "type": "TEX_IMAGE",
+          "image": "water_manhole_cover_metal.png"
+        },
+        {
+          "name": "Image Texture.002",
+          "type": "TEX_IMAGE",
+          "image": "water_manhole_cover_rough.png"
+        },
+        {
+          "name": "Image Texture.003",
+          "type": "TEX_IMAGE",
+          "image": "water_manhole_cover_nor_gl.png"
+        },
+        {
+          "name": "Normal Map",
+          "type": "NORMAL_MAP"
+        },
+        {
+          "name": "Mapping",
+          "type": "MAPPING"
+        },
+        {
+          "name": "Reroute",
+          "type": "REROUTE"
+        },
+        {
+          "name": "Texture Coordinate",
+          "type": "TEX_COORD"
+        },
+        {
+          "name": "Frame",
+          "type": "FRAME"
+        },
+        {
+          "name": "Frame.001",
+          "type": "FRAME"
+        }
+      ]
+    }
+  ],
+  "images": [
+    {
+      "name": "water_manhole_cover_diff.png",
+      "size": [
+        4096,
+        4096
+      ],
+      "packed": false,
+      "filepath": "//textures\\water_manhole_cover_diff_4k.jpg",
+      "colorspace": "sRGB",
+      "exists": true
+    },
+    {
+      "name": "water_manhole_cover_metal.png",
+      "size": [
+        4096,
+        4096
+      ],
+      "packed": false,
+      "filepath": "//textures\\water_manhole_cover_metal_4k.exr",
+      "colorspace": "Non-Color",
+      "exists": true
+    },
+    {
+      "name": "water_manhole_cover_nor_gl.png",
+      "size": [
+        4096,
+        4096
+      ],
+      "packed": false,
+      "filepath": "//textures\\water_manhole_cover_nor_gl_4k.exr",
+      "colorspace": "Non-Color",
+      "exists": true
+    },
+    {
+      "name": "water_manhole_cover_rough.png",
+      "size": [
+        4096,
+        4096
+      ],
+      "packed": false,
+      "filepath": "//textures\\water_manhole_cover_rough_4k.exr",
+      "colorspace": "Non-Color",
+      "exists": true
+    }
+  ],
+  "actions": []
+}

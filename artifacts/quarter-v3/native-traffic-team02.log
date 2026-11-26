@@ -1,0 +1,24 @@
+team02-traffic-following native exit 0 evidence C:\Users\rotn1\Documents\ChatGPT\metaroy\artifacts\quarter-v3\runs\team02-traffic-following
+Traceback (most recent call last):
+  File "C:\Users\rotn1\Documents\ChatGPT\metaroy\unreal\tools\run_quarter_validation.py", line 70, in run
+    result=verify(out)
+  File "C:\Users\rotn1\Documents\ChatGPT\metaroy\unreal\tools\check_quarter_v3_run.py", line 233, in verify
+    if probe:check_traffic(probe,frames,histories,final)
+             ~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\rotn1\Documents\ChatGPT\metaroy\unreal\tools\check_quarter_v3_run.py", line 98, in check_traffic
+    if probe=='following':assert g0['y_cm']>10500 and g1['y_cm']>10900,'following fixture did not finish'
+                                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: following fixture did not finish
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "C:\Users\rotn1\Documents\ChatGPT\metaroy\unreal\tools\run_quarter_validation.py", line 114, in <module>
+    if __name__=='__main__':main()
+                            ~~~~^^
+  File "C:\Users\rotn1\Documents\ChatGPT\metaroy\unreal\tools\run_quarter_validation.py", line 98, in main
+    run(args.prefix+'-traffic-'+kind,['--environment','static','--traffic-probe',kind],duration(100))
+    ~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\rotn1\Documents\ChatGPT\metaroy\unreal\tools\run_quarter_validation.py", line 75, in run
+    raise RuntimeError('Native validation failed: '+str(error)+'; evidence '+str(out)) from error
+RuntimeError: Native validation failed: following fixture did not finish; evidence C:\Users\rotn1\Documents\ChatGPT\metaroy\artifacts\quarter-v3\runs\team02-traffic-following

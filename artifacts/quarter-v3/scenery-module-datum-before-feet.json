@@ -1,0 +1,150 @@
+{
+  "passed": false,
+  "source_sha256": "7405b02de6e71ad71da57178a3617eaca665eb3c90b48d146d7a71d24bd0afd3",
+  "revision": "after matrix bake, before subsequently authored sofa/bed/bin ground supports are generated",
+  "rows": [
+    {
+      "object": "fragment_0",
+      "mesh_local_bottom_m": -0.04500000178813934,
+      "world_bottom_m": 0.0,
+      "location_m": [
+        0.0,
+        0.0,
+        0.04500000178813934
+      ],
+      "joined_module": false,
+      "identity_translation": false,
+      "datum_grounded": false
+    },
+    {
+      "object": "fragment_1",
+      "mesh_local_bottom_m": -0.03750000149011612,
+      "world_bottom_m": 0.0,
+      "location_m": [
+        0.0,
+        0.0,
+        0.03750000149011612
+      ],
+      "joined_module": false,
+      "identity_translation": false,
+      "datum_grounded": false
+    },
+    {
+      "object": "fragment_2",
+      "mesh_local_bottom_m": -0.0949999988079071,
+      "world_bottom_m": 0.0,
+      "location_m": [
+        0.0,
+        0.0,
+        0.0949999988079071
+      ],
+      "joined_module": false,
+      "identity_translation": false,
+      "datum_grounded": false
+    },
+    {
+      "object": "fragment_3",
+      "mesh_local_bottom_m": -0.125,
+      "world_bottom_m": 0.0,
+      "location_m": [
+        0.0,
+        0.0,
+        0.125
+      ],
+      "joined_module": false,
+      "identity_translation": false,
+      "datum_grounded": false
+    },
+    {
+      "object": "fragment_4",
+      "mesh_local_bottom_m": 0.0,
+      "world_bottom_m": 0.0,
+      "location_m": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "joined_module": true,
+      "identity_translation": true,
+      "datum_grounded": true
+    },
+    {
+      "object": "room_0",
+      "mesh_local_bottom_m": 0.0,
+      "world_bottom_m": 0.0,
+      "location_m": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "joined_module": true,
+      "identity_translation": true,
+      "datum_grounded": true
+    },
+    {
+      "object": "room_1",
+      "mesh_local_bottom_m": 0.0,
+      "world_bottom_m": 0.0,
+      "location_m": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "joined_module": true,
+      "identity_translation": true,
+      "datum_grounded": true
+    },
+    {
+      "object": "room_2",
+      "mesh_local_bottom_m": 0.0,
+      "world_bottom_m": 0.0,
+      "location_m": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "joined_module": true,
+      "identity_translation": true,
+      "datum_grounded": true
+    },
+    {
+      "object": "courtyard_bench",
+      "mesh_local_bottom_m": 0.0,
+      "world_bottom_m": 0.0,
+      "location_m": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "joined_module": true,
+      "identity_translation": true,
+      "datum_grounded": true
+    },
+    {
+      "object": "service_bins",
+      "mesh_local_bottom_m": 0.019999980926513672,
+      "world_bottom_m": 0.019999980926513672,
+      "location_m": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "joined_module": true,
+      "identity_translation": true,
+      "datum_grounded": false
+    },
+    {
+      "object": "roof_vent",
+      "mesh_local_bottom_m": 0.0,
+      "world_bottom_m": 0.0,
+      "location_m": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "joined_module": true,
+      "identity_translation": true,
+      "datum_grounded": true
+    }
+  ]
+}

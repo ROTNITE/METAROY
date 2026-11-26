@@ -1,0 +1,117 @@
+Blender 4.5.15 LTS (hash 5afeabba6097 built 2026-10-22 01:35:27)
+Read blend: "C:\Users\rotn1\Documents\ChatGPT\metaroy\blender\Meshy_AI_Medical_Support_Van_20261109_image-to-3d-texture.blend"
+Fra:1 Mem:834.66M (Peak 1018.35M) | Time:96:42:16.45 | Mem:0.00M, Peak:0.00M | Scene | Synchronizing object | BakeSource_High
+Fra:1 Mem:904.20M (Peak 1024.49M) | Time:96:42:16.65 | Mem:0.00M, Peak:0.00M | Scene | Initializing
+Fra:1 Mem:904.20M (Peak 1024.49M) | Time:96:42:16.65 | Mem:0.00M, Peak:0.00M | Scene | Updating Images | Loading Image_2
+Fra:1 Mem:904.20M (Peak 1024.49M) | Time:96:42:16.65 | Mem:0.00M, Peak:0.00M | Scene | Updating Images | Loading T_Van_BaseColor
+Fra:1 Mem:968.20M (Peak 1024.49M) | Time:96:42:16.65 | Mem:0.00M, Peak:0.00M | Scene | Updating Images | Loading Image_1
+Info: Baking map saved to internal image, save it externally or pack it
+MR_SURFACE_BAKED Van BaseColor 2048
+Fra:1 Mem:846.75M (Peak 1761.72M) | Time:96:42:19.26 | Mem:0.00M, Peak:0.00M | Scene | Synchronizing object | BakeSource_High
+Fra:1 Mem:904.23M (Peak 1761.72M) | Time:96:42:19.45 | Mem:0.00M, Peak:0.00M | Scene | Initializing
+Fra:1 Mem:904.22M (Peak 1761.72M) | Time:96:42:19.45 | Mem:0.00M, Peak:0.00M | Scene | Updating Images | Loading Image_2
+Fra:1 Mem:904.22M (Peak 1761.72M) | Time:96:42:19.45 | Mem:0.00M, Peak:0.00M | Scene | Updating Images | Loading T_Van_ORM
+Fra:1 Mem:984.22M (Peak 1761.72M) | Time:96:42:19.45 | Mem:0.00M, Peak:0.00M | Scene | Updating Images | Loading Image_1
+Info: Baking map saved to internal image, save it externally or pack it
+MR_SURFACE_BAKED Van ORM 2048
+Fra:1 Mem:846.77M (Peak 1761.72M) | Time:96:42:22.04 | Mem:0.00M, Peak:0.00M | Scene | Synchronizing object | BakeSource_High
+Fra:1 Mem:912.38M (Peak 1761.72M) | Time:96:42:22.23 | Mem:0.00M, Peak:0.00M | Scene | Initializing
+Fra:1 Mem:912.38M (Peak 1761.72M) | Time:96:42:22.23 | Mem:0.00M, Peak:0.00M | Scene | Updating Images | Loading Image_2
+Fra:1 Mem:912.38M (Peak 1761.72M) | Time:96:42:22.23 | Mem:0.00M, Peak:0.00M | Scene | Updating Images | Loading T_Van_Normal
+Fra:1 Mem:928.38M (Peak 1761.72M) | Time:96:42:22.23 | Mem:0.00M, Peak:0.00M | Scene | Updating Images | Loading Image_1
+Info: Baking map saved to internal image, save it externally or pack it
+MR_SURFACE_BAKED Van Normal 2048
+Info: Saved as "Van.blend"
+
+FBX export starting... 'C:\\Users\\rotn1\\Documents\\ChatGPT\\metaroy\\blender\\prepared\\v2\\Van\\parts\\Body.fbx'
+export finished in 0.0778 sec.
+
+FBX export starting... 'C:\\Users\\rotn1\\Documents\\ChatGPT\\metaroy\\blender\\prepared\\v2\\Van\\parts\\CabGlassR.fbx'
+export finished in 0.0040 sec.
+
+FBX export starting... 'C:\\Users\\rotn1\\Documents\\ChatGPT\\metaroy\\blender\\prepared\\v2\\Van\\parts\\SideGlassR.fbx'
+export finished in 0.0031 sec.
+
+FBX export starting... 'C:\\Users\\rotn1\\Documents\\ChatGPT\\metaroy\\blender\\prepared\\v2\\Van\\parts\\CabGlassL.fbx'
+export finished in 0.0040 sec.
+
+FBX export starting... 'C:\\Users\\rotn1\\Documents\\ChatGPT\\metaroy\\blender\\prepared\\v2\\Van\\parts\\SideGlassL.fbx'
+export finished in 0.0030 sec.
+
+FBX export starting... 'C:\\Users\\rotn1\\Documents\\ChatGPT\\metaroy\\blender\\prepared\\v2\\Van\\parts\\Windscreen.fbx'
+export finished in 0.0045 sec.
+
+FBX export starting... 'C:\\Users\\rotn1\\Documents\\ChatGPT\\metaroy\\blender\\prepared\\v2\\Van\\parts\\RearApertureJamb.fbx'
+export finished in 0.0030 sec.
+
+FBX export starting... 'C:\\Users\\rotn1\\Documents\\ChatGPT\\metaroy\\blender\\prepared\\v2\\Van\\parts\\RearApertureJamb.001.fbx'
+export finished in 0.0030 sec.
+
+FBX export starting... 'C:\\Users\\rotn1\\Documents\\ChatGPT\\metaroy\\blender\\prepared\\v2\\Van\\parts\\RearApertureHeader.fbx'
+export finished in 0.0020 sec.
+
+FBX export starting... 'C:\\Users\\rotn1\\Documents\\ChatGPT\\metaroy\\blender\\prepared\\v2\\Van\\parts\\RearApertureSill.fbx'
+export finished in 0.0025 sec.
+
+FBX export starting... 'C:\\Users\\rotn1\\Documents\\ChatGPT\\metaroy\\blender\\prepared\\v2\\Van\\parts\\RearDoor_-1.fbx'
+export finished in 0.0035 sec.
+
+FBX export starting... 'C:\\Users\\rotn1\\Documents\\ChatGPT\\metaroy\\blender\\prepared\\v2\\Van\\parts\\RearGlass_-1.fbx'
+export finished in 0.0030 sec.
+
+FBX export starting... 'C:\\Users\\rotn1\\Documents\\ChatGPT\\metaroy\\blender\\prepared\\v2\\Van\\parts\\RearDoor_1.fbx'
+export finished in 0.0040 sec.
+
+FBX export starting... 'C:\\Users\\rotn1\\Documents\\ChatGPT\\metaroy\\blender\\prepared\\v2\\Van\\parts\\RearGlass_1.fbx'
+export finished in 0.0030 sec.
+
+FBX export starting... 'C:\\Users\\rotn1\\Documents\\ChatGPT\\metaroy\\blender\\prepared\\v2\\Van\\parts\\VanWheel_-1_0.fbx'
+export finished in 0.0030 sec.
+
+FBX export starting... 'C:\\Users\\rotn1\\Documents\\ChatGPT\\metaroy\\blender\\prepared\\v2\\Van\\parts\\VanWheel_-1_1.fbx'
+export finished in 0.0030 sec.
+
+FBX export starting... 'C:\\Users\\rotn1\\Documents\\ChatGPT\\metaroy\\blender\\prepared\\v2\\Van\\parts\\VanWheel_1_0.fbx'
+export finished in 0.0030 sec.
+
+FBX export starting... 'C:\\Users\\rotn1\\Documents\\ChatGPT\\metaroy\\blender\\prepared\\v2\\Van\\parts\\VanWheel_1_1.fbx'
+export finished in 0.0040 sec.
+
+FBX export starting... 'C:\\Users\\rotn1\\Documents\\ChatGPT\\metaroy\\blender\\prepared\\v2\\Van\\parts\\CabFloor.fbx'
+export finished in 0.0030 sec.
+
+FBX export starting... 'C:\\Users\\rotn1\\Documents\\ChatGPT\\metaroy\\blender\\prepared\\v2\\Van\\parts\\Dashboard.fbx'
+export finished in 0.0030 sec.
+
+FBX export starting... 'C:\\Users\\rotn1\\Documents\\ChatGPT\\metaroy\\blender\\prepared\\v2\\Van\\parts\\SeatBase.fbx'
+export finished in 0.0026 sec.
+
+FBX export starting... 'C:\\Users\\rotn1\\Documents\\ChatGPT\\metaroy\\blender\\prepared\\v2\\Van\\parts\\SeatBack.fbx'
+export finished in 0.0032 sec.
+
+FBX export starting... 'C:\\Users\\rotn1\\Documents\\ChatGPT\\metaroy\\blender\\prepared\\v2\\Van\\parts\\SeatBase.001.fbx'
+export finished in 0.0032 sec.
+
+FBX export starting... 'C:\\Users\\rotn1\\Documents\\ChatGPT\\metaroy\\blender\\prepared\\v2\\Van\\parts\\SeatBack.001.fbx'
+export finished in 0.0030 sec.
+
+FBX export starting... 'C:\\Users\\rotn1\\Documents\\ChatGPT\\metaroy\\blender\\prepared\\v2\\Van\\parts\\MedicalBench.fbx'
+export finished in 0.0027 sec.
+
+FBX export starting... 'C:\\Users\\rotn1\\Documents\\ChatGPT\\metaroy\\blender\\prepared\\v2\\Van\\parts\\EquipmentCupboard.fbx'
+export finished in 0.0025 sec.
+
+FBX export starting... 'C:\\Users\\rotn1\\Documents\\ChatGPT\\metaroy\\blender\\prepared\\v2\\Van\\parts\\EmergencyBeacon_-1_-1.fbx'
+export finished in 0.0046 sec.
+
+FBX export starting... 'C:\\Users\\rotn1\\Documents\\ChatGPT\\metaroy\\blender\\prepared\\v2\\Van\\parts\\EmergencyBeacon_-1_1.fbx'
+export finished in 0.0045 sec.
+
+FBX export starting... 'C:\\Users\\rotn1\\Documents\\ChatGPT\\metaroy\\blender\\prepared\\v2\\Van\\parts\\EmergencyBeacon_1_-1.fbx'
+export finished in 0.0030 sec.
+
+FBX export starting... 'C:\\Users\\rotn1\\Documents\\ChatGPT\\metaroy\\blender\\prepared\\v2\\Van\\parts\\EmergencyBeacon_1_1.fbx'
+export finished in 0.0030 sec.
+MR_MECHANIZED Van 30 parts 54374 triangles
+
+Blender quit

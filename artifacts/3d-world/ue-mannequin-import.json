@@ -1,0 +1,21 @@
+{
+  "skin": "/Game/RescueAssets/Library/MannequinRig/SK_RescueMannequin.SK_RescueMannequin",
+  "skeleton": "/Game/RescueAssets/Library/MannequinRig/SK_RescueMannequin_Skeleton.SK_RescueMannequin_Skeleton",
+  "clips": [
+    {
+      "name": "Running",
+      "path": "/Game/RescueAssets/Library/MannequinRig/A_Running.A_Running",
+      "length_s": 0.5333333611488342
+    },
+    {
+      "name": "Walking",
+      "path": "/Game/RescueAssets/Library/MannequinRig/A_Walking.A_Walking",
+      "length_s": 0.8333333134651184
+    },
+    {
+      "name": "CasualtyBreathing",
+      "path": "/Game/RescueAssets/Library/MannequinRig/A_CasualtyBreathing.A_CasualtyBreathing",
+      "length_s": 4.0
+    }
+  ]
+}

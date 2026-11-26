@@ -1,0 +1,436 @@
+{
+  "id": "Generator",
+  "source": "blender/vendor/portable_generator_4k/portable_generator_4k.blend",
+  "source_sha256": "32b918d87004e34c7f5b2b105fbbc9b99a85fb1ee93105f51bf0af6b805437bd",
+  "blend": "Generator.blend",
+  "parts": [
+    {
+      "object": "portable_generator",
+      "role": "module",
+      "catalog_position_m": [
+        -0.005347058176994324,
+        0.0,
+        5.806691478937864e-05
+      ],
+      "triangles": 26299,
+      "location_m": [
+        -0.005347058176994324,
+        0.0,
+        5.806691478937864e-05
+      ],
+      "rotation_deg": [
+        0.0,
+        -0.0,
+        0.0
+      ],
+      "parent": null,
+      "dimensions_m": [
+        0.8183407783508301,
+        0.5640000104904175,
+        0.5769232511520386
+      ],
+      "materials": [
+        "portable_generator",
+        "portable_generator_glass"
+      ],
+      "fbx": "parts/portable_generator.fbx"
+    },
+    {
+      "object": "portable_generator_dial",
+      "role": "module",
+      "catalog_position_m": [
+        0.09421300143003464,
+        -0.23976761102676392,
+        0.41266998648643494
+      ],
+      "triangles": 38,
+      "location_m": [
+        0.09421300143003464,
+        -0.23976761102676392,
+        0.41266998648643494
+      ],
+      "rotation_deg": [
+        0.0,
+        -0.0,
+        0.0
+      ],
+      "parent": null,
+      "dimensions_m": [
+        0.01053476333618164,
+        0.008971055969595909,
+        0.0302840955555439
+      ],
+      "materials": [
+        "portable_generator"
+      ],
+      "fbx": "parts/portable_generator_dial.fbx"
+    },
+    {
+      "object": "portable_generator_switch",
+      "role": "module",
+      "catalog_position_m": [
+        -0.26018261909484863,
+        -0.2362983226776123,
+        0.4288279414176941
+      ],
+      "triangles": 32,
+      "location_m": [
+        -0.26018261909484863,
+        -0.2362983226776123,
+        0.4288279414176941
+      ],
+      "rotation_deg": [
+        0.0,
+        -0.0,
+        0.0
+      ],
+      "parent": null,
+      "dimensions_m": [
+        0.026594623923301697,
+        0.03822929412126541,
+        0.01995997130870819
+      ],
+      "materials": [
+        "portable_generator"
+      ],
+      "fbx": "parts/portable_generator_switch.fbx"
+    },
+    {
+      "object": "portable_generator_toggle",
+      "role": "module",
+      "catalog_position_m": [
+        0.012360334396362305,
+        -0.2397451102733612,
+        0.4252340793609619
+      ],
+      "triangles": 50,
+      "location_m": [
+        0.012360334396362305,
+        -0.2397451102733612,
+        0.4252340793609619
+      ],
+      "rotation_deg": [
+        0.0,
+        -0.0,
+        0.0
+      ],
+      "parent": null,
+      "dimensions_m": [
+        0.008135609328746796,
+        0.01488401833921671,
+        0.008226550184190273
+      ],
+      "materials": [
+        "portable_generator"
+      ],
+      "fbx": "parts/portable_generator_toggle.fbx"
+    }
+  ],
+  "materials": [
+    {
+      "name": "portable_generator",
+      "glass": false,
+      "inputs": {
+        "Base Color": [
+          0.800000011920929,
+          0.800000011920929,
+          0.800000011920929,
+          1.0
+        ],
+        "Metallic": 0.0,
+        "Roughness": 0.5,
+        "Transmission Weight": 0.0,
+        "IOR": 1.5,
+        "Alpha": 1.0,
+        "Emission Color": [
+          1.0,
+          1.0,
+          1.0,
+          1.0
+        ],
+        "Emission Strength": 0.0
+      },
+      "links": [
+        {
+          "from": "Image Texture.001",
+          "output": "Color",
+          "to": "Principled BSDF",
+          "input": "Metallic"
+        },
+        {
+          "from": "Image Texture.003",
+          "output": "Color",
+          "to": "Normal Map",
+          "input": "Color"
+        },
+        {
+          "from": "Normal Map",
+          "output": "Normal",
+          "to": "Principled BSDF",
+          "input": "Normal"
+        },
+        {
+          "from": "Reroute",
+          "output": "Output",
+          "to": "Image Texture",
+          "input": "Vector"
+        },
+        {
+          "from": "Reroute",
+          "output": "Output",
+          "to": "Image Texture.001",
+          "input": "Vector"
+        },
+        {
+          "from": "Reroute",
+          "output": "Output",
+          "to": "Image Texture.002",
+          "input": "Vector"
+        },
+        {
+          "from": "Reroute",
+          "output": "Output",
+          "to": "Image Texture.003",
+          "input": "Vector"
+        },
+        {
+          "from": "Mapping",
+          "output": "Vector",
+          "to": "Reroute",
+          "input": "Input"
+        },
+        {
+          "from": "Texture Coordinate",
+          "output": "UV",
+          "to": "Mapping",
+          "input": "Vector"
+        },
+        {
+          "from": "Reroute",
+          "output": "Output",
+          "to": "Image Texture.005",
+          "input": "Vector"
+        },
+        {
+          "from": "Image Texture.002",
+          "output": "Color",
+          "to": "Principled BSDF",
+          "input": "Roughness"
+        },
+        {
+          "from": "Principled BSDF",
+          "output": "BSDF",
+          "to": "Material Output",
+          "input": "Surface"
+        },
+        {
+          "from": "Image Texture",
+          "output": "Color",
+          "to": "Principled BSDF",
+          "input": "Base Color"
+        },
+        {
+          "from": "Image Texture.005",
+          "output": "Color",
+          "to": "Principled BSDF",
+          "input": "Specular IOR Level"
+        }
+      ],
+      "images": [
+        {
+          "node": "Image Texture",
+          "image": "portable_generator_diff.png",
+          "file": "textures/T_0_portable_generator_diff.png",
+          "colorspace": "sRGB"
+        },
+        {
+          "node": "Image Texture.001",
+          "image": "portable_generator_metal.png",
+          "file": "textures/T_1_portable_generator_metal.png",
+          "colorspace": "Non-Color"
+        },
+        {
+          "node": "Image Texture.002",
+          "image": "portable_generator_rough.png",
+          "file": "textures/T_2_portable_generator_rough.png",
+          "colorspace": "Non-Color"
+        },
+        {
+          "node": "Image Texture.003",
+          "image": "portable_generator_nor_gl.png",
+          "file": "textures/T_3_portable_generator_nor_gl.png",
+          "colorspace": "Non-Color"
+        },
+        {
+          "node": "Image Texture.005",
+          "image": "portable_generator_spec.png",
+          "file": "textures/T_4_portable_generator_spec.png",
+          "colorspace": "Non-Color"
+        }
+      ]
+    },
+    {
+      "name": "portable_generator_glass",
+      "glass": true,
+      "inputs": {
+        "Base Color": [
+          0.800000011920929,
+          0.800000011920929,
+          0.800000011920929,
+          1.0
+        ],
+        "Metallic": 0.0,
+        "Roughness": 0.5,
+        "Transmission Weight": 1.0,
+        "IOR": 1.5,
+        "Alpha": 1.0,
+        "Emission Color": [
+          1.0,
+          1.0,
+          1.0,
+          1.0
+        ],
+        "Emission Strength": 0.0
+      },
+      "links": [
+        {
+          "from": "Image Texture.001",
+          "output": "Color",
+          "to": "Principled BSDF",
+          "input": "Metallic"
+        },
+        {
+          "from": "Image Texture.003",
+          "output": "Color",
+          "to": "Normal Map",
+          "input": "Color"
+        },
+        {
+          "from": "Normal Map",
+          "output": "Normal",
+          "to": "Principled BSDF",
+          "input": "Normal"
+        },
+        {
+          "from": "Reroute",
+          "output": "Output",
+          "to": "Image Texture",
+          "input": "Vector"
+        },
+        {
+          "from": "Reroute",
+          "output": "Output",
+          "to": "Image Texture.001",
+          "input": "Vector"
+        },
+        {
+          "from": "Reroute",
+          "output": "Output",
+          "to": "Image Texture.002",
+          "input": "Vector"
+        },
+        {
+          "from": "Reroute",
+          "output": "Output",
+          "to": "Image Texture.003",
+          "input": "Vector"
+        },
+        {
+          "from": "Mapping",
+          "output": "Vector",
+          "to": "Reroute",
+          "input": "Input"
+        },
+        {
+          "from": "Texture Coordinate",
+          "output": "UV",
+          "to": "Mapping",
+          "input": "Vector"
+        },
+        {
+          "from": "Reroute",
+          "output": "Output",
+          "to": "Image Texture.005",
+          "input": "Vector"
+        },
+        {
+          "from": "Image Texture.002",
+          "output": "Color",
+          "to": "Principled BSDF",
+          "input": "Roughness"
+        },
+        {
+          "from": "Principled BSDF",
+          "output": "BSDF",
+          "to": "Material Output",
+          "input": "Surface"
+        },
+        {
+          "from": "Image Texture",
+          "output": "Color",
+          "to": "Principled BSDF",
+          "input": "Base Color"
+        },
+        {
+          "from": "Image Texture.005",
+          "output": "Color",
+          "to": "Principled BSDF",
+          "input": "Alpha"
+        }
+      ],
+      "images": [
+        {
+          "node": "Image Texture",
+          "image": "portable_generator_diff.png",
+          "file": "textures/T_0_portable_generator_diff.png",
+          "colorspace": "sRGB"
+        },
+        {
+          "node": "Image Texture.001",
+          "image": "portable_generator_metal.png",
+          "file": "textures/T_1_portable_generator_metal.png",
+          "colorspace": "Non-Color"
+        },
+        {
+          "node": "Image Texture.002",
+          "image": "portable_generator_rough.png",
+          "file": "textures/T_2_portable_generator_rough.png",
+          "colorspace": "Non-Color"
+        },
+        {
+          "node": "Image Texture.003",
+          "image": "portable_generator_nor_gl.png",
+          "file": "textures/T_3_portable_generator_nor_gl.png",
+          "colorspace": "Non-Color"
+        },
+        {
+          "node": "Image Texture.005",
+          "image": "portable_generator_alpha.png",
+          "file": "textures/T_5_portable_generator_alpha.png",
+          "colorspace": "Non-Color"
+        }
+      ]
+    }
+  ],
+  "repairs": [
+    "Discarded zero-duration source action; tiny engine idle action, no random movement of the station."
+  ],
+  "actions": [
+    {
+      "name": "frame.002Action.001",
+      "frames": [
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "name": "GeneratorIdle",
+      "frames": [
+        1.0,
+        7.0
+      ]
+    }
+  ],
+  "animation_runtime": "Rigid meshes driven from Unreal actuator state; Blender actions are inspectable demonstrations.",
+  "kind": "static_assembly"
+}

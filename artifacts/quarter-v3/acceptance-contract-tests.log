@@ -1,0 +1,20 @@
+test_administrative_close_does_not_claim_safe_or_successful_mission (test_protocol.ProtocolExamplesTests.test_administrative_close_does_not_claim_safe_or_successful_mission) ... ok
+test_delayed_and_unknown_results_keep_original_command_reference (test_protocol.ProtocolExamplesTests.test_delayed_and_unknown_results_keep_original_command_reference) ... ok
+test_digital_null_is_structurally_allowed (test_protocol.ProtocolExamplesTests.test_digital_null_is_structurally_allowed) ... ok
+test_full_catalog_and_all_seven_operations (test_protocol.ProtocolExamplesTests.test_full_catalog_and_all_seven_operations) ... ok
+test_invalid_json_numbers_and_duplicate_keys_are_rejected (test_protocol.ProtocolExamplesTests.test_invalid_json_numbers_and_duplicate_keys_are_rejected) ... ok
+test_keep_and_modify_preserve_their_promised_structure (test_protocol.ProtocolExamplesTests.test_keep_and_modify_preserve_their_promised_structure) ... ok
+test_missing_field_and_dangling_constraint_are_detected (test_protocol.ProtocolExamplesTests.test_missing_field_and_dangling_constraint_are_detected) ... ok
+test_observations_and_parameter_schema_references (test_protocol.ProtocolExamplesTests.test_observations_and_parameter_schema_references) ... ok
+test_parameter_descriptors_are_complete_and_scoped_in_composition (test_protocol.ProtocolExamplesTests.test_parameter_descriptors_are_complete_and_scoped_in_composition) ... ok
+test_roles_are_supported_by_scenarios_and_agent_capabilities (test_protocol.ProtocolExamplesTests.test_roles_are_supported_by_scenarios_and_agent_capabilities) ... ok
+test_select_response_is_linked_and_not_a_second_decision (test_protocol.ProtocolExamplesTests.test_select_response_is_linked_and_not_a_second_decision) ... ok
+test_spatial_null_and_invalid_resource_are_detected (test_protocol.ProtocolExamplesTests.test_spatial_null_and_invalid_resource_are_detected) ... ok
+test_synthesized_program_has_bound_roles_and_closed_transitions (test_protocol.ProtocolExamplesTests.test_synthesized_program_has_bound_roles_and_closed_transitions) ... ok
+test_undeclared_action_and_invalid_group_index_are_detected (test_protocol.ProtocolExamplesTests.test_undeclared_action_and_invalid_group_index_are_detected) ... ok
+test_unknown_optional_fields_and_absent_extensions_are_structurally_tolerated (test_protocol.ProtocolExamplesTests.test_unknown_optional_fields_and_absent_extensions_are_structurally_tolerated) ... ok
+
+----------------------------------------------------------------------
+Ran 15 tests in 0.009s
+
+OK

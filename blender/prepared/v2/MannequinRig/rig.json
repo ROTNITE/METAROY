@@ -1,0 +1,132 @@
+{
+  "id": "MannequinRig",
+  "kind": "skeletal",
+  "source": "blender/Meshy_AI_Rigged_Rescue_Mannequin_20261109_animated_mixamo_All_animation.glb",
+  "blend": "MannequinRig.blend",
+  "fbx": "MannequinRig.fbx",
+  "clips": [
+    {
+      "name": "Running",
+      "frames": [
+        0.0,
+        16.0
+      ],
+      "source": "supplied_glb",
+      "fbx": "Running.fbx"
+    },
+    {
+      "name": "Walking",
+      "frames": [
+        0.0,
+        25.0
+      ],
+      "source": "supplied_glb",
+      "fbx": "Walking.fbx"
+    },
+    {
+      "name": "CasualtyBreathing",
+      "frames": [
+        1.0,
+        121.0
+      ],
+      "source": "authored_subtle_rescue_idle",
+      "fbx": "CasualtyBreathing.fbx"
+    }
+  ],
+  "bones": 24,
+  "materials": [
+    {
+      "name": "Material_0",
+      "glass": false,
+      "inputs": {
+        "Base Color": [
+          0.800000011920929,
+          0.800000011920929,
+          0.800000011920929,
+          1.0
+        ],
+        "Metallic": 0.0,
+        "Roughness": 0.5,
+        "Transmission Weight": 0.0,
+        "IOR": 1.5,
+        "Alpha": 1.0,
+        "Emission Color": [
+          1.0,
+          1.0,
+          1.0,
+          1.0
+        ],
+        "Emission Strength": 0.0
+      },
+      "links": [
+        {
+          "from": "Principled BSDF",
+          "output": "BSDF",
+          "to": "Material Output",
+          "input": "Surface"
+        },
+        {
+          "from": "Image Texture",
+          "output": "Color",
+          "to": "Principled BSDF",
+          "input": "Base Color"
+        },
+        {
+          "from": "Separate Color",
+          "output": "Blue",
+          "to": "Principled BSDF",
+          "input": "Metallic"
+        },
+        {
+          "from": "Separate Color",
+          "output": "Green",
+          "to": "Principled BSDF",
+          "input": "Roughness"
+        },
+        {
+          "from": "Image Texture.001",
+          "output": "Color",
+          "to": "Separate Color",
+          "input": "Color"
+        },
+        {
+          "from": "Normal Map",
+          "output": "Normal",
+          "to": "Principled BSDF",
+          "input": "Normal"
+        },
+        {
+          "from": "Image Texture.002",
+          "output": "Color",
+          "to": "Normal Map",
+          "input": "Color"
+        }
+      ],
+      "images": [
+        {
+          "node": "Image Texture",
+          "image": "Image_0",
+          "file": "textures/T_0_Image_0.png",
+          "colorspace": "sRGB"
+        },
+        {
+          "node": "Image Texture.001",
+          "image": "Image_1",
+          "file": "textures/T_1_Image_1.png",
+          "colorspace": "Non-Color"
+        },
+        {
+          "node": "Image Texture.002",
+          "image": "Image_2",
+          "file": "textures/T_2_Image_2.png",
+          "colorspace": "Non-Color"
+        }
+      ]
+    }
+  ],
+  "source_triangles": 195252,
+  "removed_objects": [
+    "Icosphere"
+  ],
+  "purpose": "Base walking demonstration and weighted rescue poses; no unsupervised walking of casualties."
+}

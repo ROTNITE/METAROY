@@ -1,0 +1,887 @@
+{
+  "id": "FenceKit",
+  "source": "blender/vendor/modular_chainlink_fence_4k/modular_chainlink_fence_4k.blend",
+  "source_sha256": "a6aae561fc4ecb92bd993576c58ee836f6d52250f2399725949c30e6d6504832",
+  "blend": "FenceKit.blend",
+  "parts": [
+    {
+      "object": "modular_chainlink_fence_door_latch",
+      "role": "module",
+      "catalog_position_m": [
+        1.364888072013855,
+        7.450580596923828e-09,
+        1.1252673864364624
+      ],
+      "triangles": 680,
+      "location_m": [
+        1.364888072013855,
+        7.450580596923828e-09,
+        1.1252673864364624
+      ],
+      "rotation_deg": [
+        0.0,
+        -0.0,
+        0.0
+      ],
+      "parent": null,
+      "dimensions_m": [
+        0.2576324939727783,
+        0.07005073130130768,
+        0.029458504170179367
+      ],
+      "materials": [
+        "modular_chainlink_fence_posts"
+      ],
+      "fbx": "parts/modular_chainlink_fence_door_latch.fbx"
+    },
+    {
+      "object": "modular_chainlink_fence_door_gate",
+      "role": "module",
+      "catalog_position_m": [
+        1.0001378059387207,
+        -1.564621925354004e-07,
+        0.12999999523162842
+      ],
+      "triangles": 4554,
+      "location_m": [
+        1.0001378059387207,
+        -1.564621925354004e-07,
+        0.12999999523162842
+      ],
+      "rotation_deg": [
+        0.0,
+        -0.0,
+        0.0
+      ],
+      "parent": null,
+      "dimensions_m": [
+        0.9513475298881531,
+        0.0503988042473793,
+        1.8172502517700195
+      ],
+      "materials": [
+        "modular_chainlink_fence_posts",
+        "modular_chainlink_fence_wire"
+      ],
+      "fbx": "parts/modular_chainlink_fence_door_gate.fbx"
+    },
+    {
+      "object": "modular_chainlink_fence_corner_outer",
+      "role": "module",
+      "catalog_position_m": [
+        -3.517072916030884,
+        0.48291918635368347,
+        0.0
+      ],
+      "triangles": 14598,
+      "location_m": [
+        -3.517072916030884,
+        0.48291918635368347,
+        0.0
+      ],
+      "rotation_deg": [
+        0.0,
+        -0.0,
+        0.0
+      ],
+      "parent": null,
+      "dimensions_m": [
+        1.1141448020935059,
+        1.1141412258148193,
+        2.5229129791259766
+      ],
+      "materials": [
+        "modular_chainlink_fence_posts",
+        "modular_chainlink_fence_wire"
+      ],
+      "fbx": "parts/modular_chainlink_fence_corner_outer.fbx"
+    },
+    {
+      "object": "modular_chainlink_fence_start_01_corner_01",
+      "role": "module",
+      "catalog_position_m": [
+        2.0004239082336426,
+        1.000424861907959,
+        0.0
+      ],
+      "triangles": 5110,
+      "location_m": [
+        2.0004239082336426,
+        1.000424861907959,
+        0.0
+      ],
+      "rotation_deg": [
+        0.0,
+        -0.0,
+        0.0
+      ],
+      "parent": null,
+      "dimensions_m": [
+        0.14914676547050476,
+        0.14915277063846588,
+        2.5229129791259766
+      ],
+      "materials": [
+        "modular_chainlink_fence_posts"
+      ],
+      "fbx": "parts/modular_chainlink_fence_start_01_corner_01.fbx"
+    },
+    {
+      "object": "modular_chainlink_post_middle",
+      "role": "module",
+      "catalog_position_m": [
+        0.9999957084655762,
+        0.9999969601631165,
+        0.0
+      ],
+      "triangles": 5062,
+      "location_m": [
+        0.9999957084655762,
+        0.9999969601631165,
+        0.0
+      ],
+      "rotation_deg": [
+        0.0,
+        -0.0,
+        0.0
+      ],
+      "parent": null,
+      "dimensions_m": [
+        0.15000289678573608,
+        0.14829696714878082,
+        2.5229129791259766
+      ],
+      "materials": [
+        "modular_chainlink_fence_posts"
+      ],
+      "fbx": "parts/modular_chainlink_post_middle.fbx"
+    },
+    {
+      "object": "modular_chainlink_fence_end_01",
+      "role": "module",
+      "catalog_position_m": [
+        -0.00042918696999549866,
+        0.9999969601631165,
+        0.0
+      ],
+      "triangles": 4010,
+      "location_m": [
+        -0.00042918696999549866,
+        0.9999969601631165,
+        0.0
+      ],
+      "rotation_deg": [
+        0.0,
+        -0.0,
+        0.0
+      ],
+      "parent": null,
+      "dimensions_m": [
+        0.14915311336517334,
+        0.14829696714878082,
+        2.5229129791259766
+      ],
+      "materials": [
+        "modular_chainlink_fence_posts"
+      ],
+      "fbx": "parts/modular_chainlink_fence_end_01.fbx"
+    },
+    {
+      "object": "modular_chainlink_fence_end_02",
+      "role": "module",
+      "catalog_position_m": [
+        0.00042132288217544556,
+        1.9999969005584717,
+        0.0
+      ],
+      "triangles": 4010,
+      "location_m": [
+        0.00042132288217544556,
+        1.9999969005584717,
+        0.0
+      ],
+      "rotation_deg": [
+        0.0,
+        -0.0,
+        0.0
+      ],
+      "parent": null,
+      "dimensions_m": [
+        0.14915314316749573,
+        0.14829698204994202,
+        2.5229129791259766
+      ],
+      "materials": [
+        "modular_chainlink_fence_posts"
+      ],
+      "fbx": "parts/modular_chainlink_fence_end_02.fbx"
+    },
+    {
+      "object": "modular_chainlink_fence_door_frame",
+      "role": "module",
+      "catalog_position_m": [
+        0.9982407093048096,
+        -3.1068921089172363e-06,
+        0.0
+      ],
+      "triangles": 19940,
+      "location_m": [
+        0.9982407093048096,
+        -3.1068921089172363e-06,
+        0.0
+      ],
+      "rotation_deg": [
+        0.0,
+        -0.0,
+        0.0
+      ],
+      "parent": null,
+      "dimensions_m": [
+        1.910531759262085,
+        0.14829720556735992,
+        2.5229129791259766
+      ],
+      "materials": [
+        "modular_chainlink_fence_posts",
+        "modular_chainlink_fence_wire"
+      ],
+      "fbx": "parts/modular_chainlink_fence_door_frame.fbx"
+    },
+    {
+      "object": "modular_chainlink_fence_bar_bracket_01",
+      "role": "module",
+      "catalog_position_m": [
+        -2.0175013542175293,
+        1.999999761581421,
+        1.3899999856948853
+      ],
+      "triangles": 352,
+      "location_m": [
+        -2.0175013542175293,
+        1.999999761581421,
+        1.3899999856948853
+      ],
+      "rotation_deg": [
+        0.0,
+        -0.0,
+        0.0
+      ],
+      "parent": null,
+      "dimensions_m": [
+        0.11500036716461182,
+        0.08014965057373047,
+        0.019999990239739418
+      ],
+      "materials": [
+        "modular_chainlink_fence_posts"
+      ],
+      "fbx": "parts/modular_chainlink_fence_bar_bracket_01.fbx"
+    },
+    {
+      "object": "modular_chainlink_fence_post_bracket_02",
+      "role": "module",
+      "catalog_position_m": [
+        -2.000002861022949,
+        1.9999988079071045,
+        0.08797451853752136
+      ],
+      "triangles": 496,
+      "location_m": [
+        -2.000002861022949,
+        1.9999988079071045,
+        0.08797451853752136
+      ],
+      "rotation_deg": [
+        0.0,
+        -0.0,
+        0.0
+      ],
+      "parent": null,
+      "dimensions_m": [
+        0.1459958851337433,
+        0.08014965057373047,
+        0.024051785469055176
+      ],
+      "materials": [
+        "modular_chainlink_fence_posts"
+      ],
+      "fbx": "parts/modular_chainlink_fence_post_bracket_02.fbx"
+    },
+    {
+      "object": "modular_chainlink_fence_bar_bracket_02",
+      "role": "module",
+      "catalog_position_m": [
+        -2.0000009536743164,
+        1.999999761581421,
+        1.190000057220459
+      ],
+      "triangles": 488,
+      "location_m": [
+        -2.0000009536743164,
+        1.999999761581421,
+        1.190000057220459
+      ],
+      "rotation_deg": [
+        0.0,
+        -0.0,
+        0.0
+      ],
+      "parent": null,
+      "dimensions_m": [
+        0.15000289678573608,
+        0.08014965057373047,
+        0.019999954849481583
+      ],
+      "materials": [
+        "modular_chainlink_fence_posts"
+      ],
+      "fbx": "parts/modular_chainlink_fence_bar_bracket_02.fbx"
+    },
+    {
+      "object": "modular_chainlink_fence_post_bracket_01",
+      "role": "module",
+      "catalog_position_m": [
+        -2.0164966583251953,
+        1.9999988079071045,
+        0.28797441720962524
+      ],
+      "triangles": 372,
+      "location_m": [
+        -2.0164966583251953,
+        1.9999988079071045,
+        0.28797441720962524
+      ],
+      "rotation_deg": [
+        0.0,
+        -0.0,
+        0.0
+      ],
+      "parent": null,
+      "dimensions_m": [
+        0.11299876868724823,
+        0.08014965057373047,
+        0.024051785469055176
+      ],
+      "materials": [
+        "modular_chainlink_fence_posts"
+      ],
+      "fbx": "parts/modular_chainlink_fence_post_bracket_01.fbx"
+    },
+    {
+      "object": "modular_chainlink_fence_double",
+      "role": "module",
+      "catalog_position_m": [
+        -0.9950006008148193,
+        -0.0006201472133398056,
+        0.05999995768070221
+      ],
+      "triangles": 3054,
+      "location_m": [
+        -0.9950006008148193,
+        -0.0006201472133398056,
+        0.05999995768070221
+      ],
+      "rotation_deg": [
+        0.0,
+        -0.0,
+        0.0
+      ],
+      "parent": null,
+      "dimensions_m": [
+        1.9140522480010986,
+        0.048632051795721054,
+        2.370000123977661
+      ],
+      "materials": [
+        "modular_chainlink_fence_wire",
+        "modular_chainlink_fence_posts"
+      ],
+      "fbx": "parts/modular_chainlink_fence_double.fbx"
+    },
+    {
+      "object": "modular_chainlink_fence",
+      "role": "module",
+      "catalog_position_m": [
+        -2.4950003623962402,
+        -0.0006201695650815964,
+        0.05999995768070221
+      ],
+      "triangles": 3028,
+      "location_m": [
+        -2.4950003623962402,
+        -0.0006201695650815964,
+        0.05999995768070221
+      ],
+      "rotation_deg": [
+        0.0,
+        -0.0,
+        0.0
+      ],
+      "parent": null,
+      "dimensions_m": [
+        0.9340507984161377,
+        0.048632051795721054,
+        2.370000123977661
+      ],
+      "materials": [
+        "modular_chainlink_fence_wire",
+        "modular_chainlink_fence_posts"
+      ],
+      "fbx": "parts/modular_chainlink_fence.fbx"
+    },
+    {
+      "object": "modular_chainlink_fence_post_bracket_03",
+      "role": "module",
+      "catalog_position_m": [
+        -1.9835031032562256,
+        2.0164618492126465,
+        0.48797452449798584
+      ],
+      "triangles": 492,
+      "location_m": [
+        -1.9835031032562256,
+        2.0164618492126465,
+        0.48797452449798584
+      ],
+      "rotation_deg": [
+        0.0,
+        -0.0,
+        0.0
+      ],
+      "parent": null,
+      "dimensions_m": [
+        0.11299876123666763,
+        0.11307180672883987,
+        0.024051785469055176
+      ],
+      "materials": [
+        "modular_chainlink_fence_posts"
+      ],
+      "fbx": "parts/modular_chainlink_fence_post_bracket_03.fbx"
+    },
+    {
+      "object": "modular_chainlink_fence_bar_bracket_03",
+      "role": "module",
+      "catalog_position_m": [
+        -1.9825001955032349,
+        2.017463207244873,
+        1.590000033378601
+      ],
+      "triangles": 500,
+      "location_m": [
+        -1.9825001955032349,
+        2.017463207244873,
+        1.590000033378601
+      ],
+      "rotation_deg": [
+        0.0,
+        -0.0,
+        0.0
+      ],
+      "parent": null,
+      "dimensions_m": [
+        0.11500036716461182,
+        0.11507627367973328,
+        0.019999954849481583
+      ],
+      "materials": [
+        "modular_chainlink_fence_posts"
+      ],
+      "fbx": "parts/modular_chainlink_fence_bar_bracket_03.fbx"
+    },
+    {
+      "object": "modular_chainlink_fence_post",
+      "role": "module",
+      "catalog_position_m": [
+        -1.0000038146972656,
+        0.999995768070221,
+        0.0
+      ],
+      "triangles": 1134,
+      "location_m": [
+        -1.0000038146972656,
+        0.999995768070221,
+        0.0
+      ],
+      "rotation_deg": [
+        0.0,
+        -0.0,
+        0.0
+      ],
+      "parent": null,
+      "dimensions_m": [
+        0.14941063523292542,
+        0.14941063523292542,
+        2.5229129791259766
+      ],
+      "materials": [
+        "modular_chainlink_fence_posts"
+      ],
+      "fbx": "parts/modular_chainlink_fence_post.fbx"
+    },
+    {
+      "object": "modular_chainlink_fence_corner_support",
+      "role": "module",
+      "catalog_position_m": [
+        -1.500002384185791,
+        1.9999921321868896,
+        0.1352056860923767
+      ],
+      "triangles": 1716,
+      "location_m": [
+        -1.500002384185791,
+        1.9999921321868896,
+        0.1352056860923767
+      ],
+      "rotation_deg": [
+        0.0,
+        -0.0,
+        0.0
+      ],
+      "parent": null,
+      "dimensions_m": [
+        1.0799977779388428,
+        0.08014965057373047,
+        0.8995887041091919
+      ],
+      "materials": [
+        "modular_chainlink_fence_posts"
+      ],
+      "fbx": "parts/modular_chainlink_fence_corner_support.fbx"
+    },
+    {
+      "object": "modular_chainlink_fence_corner_inner",
+      "role": "module",
+      "catalog_position_m": [
+        -5.482928276062012,
+        0.4829223155975342,
+        0.0
+      ],
+      "triangles": 14562,
+      "location_m": [
+        -5.482928276062012,
+        0.4829223155975342,
+        0.0
+      ],
+      "rotation_deg": [
+        0.0,
+        -0.0,
+        0.0
+      ],
+      "parent": null,
+      "dimensions_m": [
+        1.114152193069458,
+        1.1141352653503418,
+        2.5229129791259766
+      ],
+      "materials": [
+        "modular_chainlink_fence_posts",
+        "modular_chainlink_fence_wire"
+      ],
+      "fbx": "parts/modular_chainlink_fence_corner_inner.fbx"
+    },
+    {
+      "object": "modular_chainlink_fence_start_01_corner_02",
+      "role": "module",
+      "catalog_position_m": [
+        1.9995689392089844,
+        2.0004281997680664,
+        0.0
+      ],
+      "triangles": 5074,
+      "location_m": [
+        1.9995689392089844,
+        2.0004281997680664,
+        0.0
+      ],
+      "rotation_deg": [
+        0.0,
+        -0.0,
+        0.0
+      ],
+      "parent": null,
+      "dimensions_m": [
+        0.14915698766708374,
+        0.14914675056934357,
+        2.5229129791259766
+      ],
+      "materials": [
+        "modular_chainlink_fence_posts",
+        "modular_chainlink_fence_wire"
+      ],
+      "fbx": "parts/modular_chainlink_fence_start_01_corner_02.fbx"
+    }
+  ],
+  "materials": [
+    {
+      "name": "modular_chainlink_fence_posts",
+      "glass": false,
+      "inputs": {
+        "Base Color": [
+          0.800000011920929,
+          0.800000011920929,
+          0.800000011920929,
+          1.0
+        ],
+        "Metallic": 0.0,
+        "Roughness": 0.5,
+        "Transmission Weight": 0.0,
+        "IOR": 1.4500000476837158,
+        "Alpha": 1.0,
+        "Emission Color": [
+          0.0,
+          0.0,
+          0.0,
+          1.0
+        ],
+        "Emission Strength": 1.0
+      },
+      "links": [
+        {
+          "from": "Principled BSDF",
+          "output": "BSDF",
+          "to": "Material Output",
+          "input": "Surface"
+        },
+        {
+          "from": "Image Texture",
+          "output": "Color",
+          "to": "Principled BSDF",
+          "input": "Base Color"
+        },
+        {
+          "from": "Image Texture.001",
+          "output": "Color",
+          "to": "Principled BSDF",
+          "input": "Metallic"
+        },
+        {
+          "from": "Image Texture.002",
+          "output": "Color",
+          "to": "Principled BSDF",
+          "input": "Roughness"
+        },
+        {
+          "from": "Image Texture.003",
+          "output": "Color",
+          "to": "Normal Map",
+          "input": "Color"
+        },
+        {
+          "from": "Normal Map",
+          "output": "Normal",
+          "to": "Principled BSDF",
+          "input": "Normal"
+        },
+        {
+          "from": "Reroute",
+          "output": "Output",
+          "to": "Image Texture",
+          "input": "Vector"
+        },
+        {
+          "from": "Reroute",
+          "output": "Output",
+          "to": "Image Texture.001",
+          "input": "Vector"
+        },
+        {
+          "from": "Reroute",
+          "output": "Output",
+          "to": "Image Texture.002",
+          "input": "Vector"
+        },
+        {
+          "from": "Reroute",
+          "output": "Output",
+          "to": "Image Texture.003",
+          "input": "Vector"
+        },
+        {
+          "from": "Mapping",
+          "output": "Vector",
+          "to": "Reroute",
+          "input": "Input"
+        },
+        {
+          "from": "Texture Coordinate",
+          "output": "UV",
+          "to": "Mapping",
+          "input": "Vector"
+        }
+      ],
+      "images": [
+        {
+          "node": "Image Texture",
+          "image": "modular_chainlink_fence_posts_diff.png",
+          "file": "textures/T_0_modular_chainlink_fence_posts_diff.png",
+          "colorspace": "sRGB"
+        },
+        {
+          "node": "Image Texture.001",
+          "image": "modular_chainlink_fence_posts_metal.png",
+          "file": "textures/T_1_modular_chainlink_fence_posts_metal.png",
+          "colorspace": "Non-Color"
+        },
+        {
+          "node": "Image Texture.002",
+          "image": "modular_chainlink_fence_posts_rough.png",
+          "file": "textures/T_2_modular_chainlink_fence_posts_rough.png",
+          "colorspace": "Non-Color"
+        },
+        {
+          "node": "Image Texture.003",
+          "image": "modular_chainlink_fence_posts_nor_gl.png",
+          "file": "textures/T_3_modular_chainlink_fence_posts_nor_gl.png",
+          "colorspace": "Non-Color"
+        }
+      ]
+    },
+    {
+      "name": "modular_chainlink_fence_wire",
+      "glass": false,
+      "inputs": {
+        "Base Color": [
+          0.800000011920929,
+          0.800000011920929,
+          0.800000011920929,
+          1.0
+        ],
+        "Metallic": 0.0,
+        "Roughness": 0.5,
+        "Transmission Weight": 0.0,
+        "IOR": 1.4500000476837158,
+        "Alpha": 1.0,
+        "Emission Color": [
+          0.0,
+          0.0,
+          0.0,
+          1.0
+        ],
+        "Emission Strength": 1.0
+      },
+      "links": [
+        {
+          "from": "Image Texture",
+          "output": "Color",
+          "to": "Principled BSDF",
+          "input": "Metallic"
+        },
+        {
+          "from": "Image Texture.001",
+          "output": "Color",
+          "to": "Principled BSDF",
+          "input": "Roughness"
+        },
+        {
+          "from": "Image Texture.002",
+          "output": "Color",
+          "to": "Normal Map",
+          "input": "Color"
+        },
+        {
+          "from": "Normal Map",
+          "output": "Normal",
+          "to": "Principled BSDF",
+          "input": "Normal"
+        },
+        {
+          "from": "Image Texture.003",
+          "output": "Color",
+          "to": "Principled BSDF",
+          "input": "Alpha"
+        },
+        {
+          "from": "Reroute",
+          "output": "Output",
+          "to": "Image Texture",
+          "input": "Vector"
+        },
+        {
+          "from": "Reroute",
+          "output": "Output",
+          "to": "Image Texture.001",
+          "input": "Vector"
+        },
+        {
+          "from": "Reroute",
+          "output": "Output",
+          "to": "Image Texture.002",
+          "input": "Vector"
+        },
+        {
+          "from": "Reroute",
+          "output": "Output",
+          "to": "Image Texture.003",
+          "input": "Vector"
+        },
+        {
+          "from": "Mapping.001",
+          "output": "Vector",
+          "to": "Reroute",
+          "input": "Input"
+        },
+        {
+          "from": "Texture Coordinate.001",
+          "output": "UV",
+          "to": "Mapping.001",
+          "input": "Vector"
+        },
+        {
+          "from": "Reroute",
+          "output": "Output",
+          "to": "Image Texture.004",
+          "input": "Vector"
+        },
+        {
+          "from": "Image Texture.004",
+          "output": "Color",
+          "to": "Principled BSDF",
+          "input": "Base Color"
+        },
+        {
+          "from": "Principled BSDF",
+          "output": "BSDF",
+          "to": "Material Output",
+          "input": "Surface"
+        }
+      ],
+      "images": [
+        {
+          "node": "Image Texture",
+          "image": "modular_chainlink_fence_wire_metal.png",
+          "file": "textures/T_4_modular_chainlink_fence_wire_metal.png",
+          "colorspace": "Non-Color"
+        },
+        {
+          "node": "Image Texture.002",
+          "image": "modular_chainlink_fence_wire_nor_gl.png",
+          "file": "textures/T_5_modular_chainlink_fence_wire_nor_gl.png",
+          "colorspace": "Non-Color"
+        },
+        {
+          "node": "Image Texture.003",
+          "image": "modular_chainlink_fence_wire_alpha.png",
+          "file": "textures/T_6_modular_chainlink_fence_wire_alpha.png",
+          "colorspace": "sRGB"
+        },
+        {
+          "node": "Image Texture.001",
+          "image": "modular_chainlink_fence_wire_rough.png",
+          "file": "textures/T_7_modular_chainlink_fence_wire_rough.png",
+          "colorspace": "sRGB"
+        },
+        {
+          "node": "Image Texture.004",
+          "image": "modular_chainlink_fence_wire_diff.png",
+          "file": "textures/T_8_modular_chainlink_fence_wire_diff.png",
+          "colorspace": "sRGB"
+        }
+      ]
+    }
+  ],
+  "repairs": [],
+  "actions": [],
+  "animation_runtime": "Rigid meshes driven from Unreal actuator state; Blender actions are inspectable demonstrations.",
+  "kind": "modular_catalog"
+}

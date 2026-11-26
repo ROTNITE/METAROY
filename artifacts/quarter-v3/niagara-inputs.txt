@@ -1,0 +1,266 @@
+ElectricalFire
+SpawnScript
+Param: Constants.Fountain.AddVelocity.Additional Yaw / Pitch / Roll(X: 0 Y: 0 Z: 0 ) Offset: 0 Type : Vector3f
+Param: Constants.Fountain.AddVelocity.Cone Angle(32 ) Offset: 12 Type : NiagaraFloat
+Param: Constants.Fountain.AddVelocity.Cone Axis(X: 0 Y: 0 Z: 1 ) Offset: 16 Type : Vector3f
+Param: Constants.Fountain.AddVelocity.Distribution Along Cone Axis(0.25 ) Offset: 28 Type : NiagaraFloat
+Param: Constants.Fountain.AddVelocity.Inner Cone Angle(0 ) Offset: 32 Type : NiagaraFloat
+Param: Constants.Fountain.AddVelocity.Random Seed(0 ) Offset: 36 Type : NiagaraInt32
+Param: Constants.Fountain.AddVelocity.Rotation Angle(0 ) Offset: 40 Type : NiagaraFloat
+Param: Constants.Fountain.AddVelocity.Rotation Axis(X: 1 Y: 0 Z: 0 ) Offset: 44 Type : Vector3f
+Param: Constants.Fountain.AddVelocity.Rotation Matrix(Row0: (X: 1 Y: 0 Z: 0 W: 0 ) Row1: (X: 0 Y: 1 Z: 0 W: 0 ) Row2: (X: 0 Y: 0 Z: 1 W: 0 ) Row3: (X: 0 Y: 0 Z: 0 W: 1 ) ) Offset: 56 Type : NiagaraMatrix
+Param: Constants.Fountain.AddVelocity.Rotation Quaternion(X: 0 Y: 0 Z: 0 W: 1 ) Offset: 120 Type : Quat4f
+Param: Constants.Fountain.AddVelocity.Speed Falloff From Cone Axis(0.5 ) Offset: 136 Type : NiagaraFloat
+Param: Constants.Fountain.AddVelocity.Velocity(X: 0 Y: 0 Z: 50 ) Offset: 140 Type : Vector3f
+Param: Constants.Fountain.AddVelocity.Velocity Speed Scale(1 ) Offset: 152 Type : NiagaraFloat
+Param: Constants.Fountain.AddVelocity.Yaw / Pitch / Roll(X: 0 Y: 0 Z: 0 ) Offset: 156 Type : Vector3f
+Param: Constants.Fountain.Drag.Drag(0.25 ) Offset: 168 Type : NiagaraFloat
+Param: Constants.Fountain.Drag.Rotational Drag(1 ) Offset: 172 Type : NiagaraFloat
+Param: Constants.Fountain.FloatFromCurve.Scale Curve(1 ) Offset: 176 Type : NiagaraFloat
+Param: Constants.Fountain.GravityForce.Gravity(X: 0 Y: 0 Z: -980 ) Offset: 180 Type : Vector3f
+Param: Constants.Fountain.InitializeParticle.Color(R: 1 G: 1 B: 1 A: 1 ) Offset: 192 Type : LinearColor
+Param: Constants.Fountain.InitializeParticle.Lifetime Max(1.75 ) Offset: 208 Type : NiagaraFloat
+Param: Constants.Fountain.InitializeParticle.Lifetime Min(1.4 ) Offset: 212 Type : NiagaraFloat
+Param: Constants.Fountain.InitializeParticle.Mass Max(1.25 ) Offset: 216 Type : NiagaraFloat
+Param: Constants.Fountain.InitializeParticle.Mass Min(0.75 ) Offset: 220 Type : NiagaraFloat
+Param: Constants.Fountain.InitializeParticle.Position(X: 0 Y: 0 Z: 0 ) Offset: 224 Type : NiagaraPosition
+Param: Constants.Fountain.InitializeParticle.Position Offset(X: 0 Y: 0 Z: 0 ) Offset: 236 Type : Vector3f
+Param: Constants.Fountain.InitializeParticle.Ribbon Width(5 ) Offset: 248 Type : NiagaraFloat
+Param: Constants.Fountain.InitializeParticle.Sprite Rotation Angle Max(360 ) Offset: 252 Type : NiagaraFloat
+Param: Constants.Fountain.InitializeParticle.Sprite Rotation Angle Min(0 ) Offset: 256 Type : NiagaraFloat
+Param: Constants.Fountain.InitializeParticle.Uniform Sprite Size Max(12 ) Offset: 260 Type : NiagaraFloat
+Param: Constants.Fountain.InitializeParticle.Uniform Sprite Size Min(6 ) Offset: 264 Type : NiagaraFloat
+Param: Constants.Fountain.RandomRangeFloat.Maximum(850 ) Offset: 268 Type : NiagaraFloat
+Param: Constants.Fountain.RandomRangeFloat.Minimum(500 ) Offset: 272 Type : NiagaraFloat
+Param: Constants.Fountain.RandomRangeFloat.Random Seed(0 ) Offset: 276 Type : NiagaraInt32
+Param: Constants.Fountain.ScaleColor.Scale RGB(X: 1 Y: 1 Z: 1 ) Offset: 280 Type : Vector3f
+Param: Constants.Fountain.ScaleColor.Scale RGBA(X: 1 Y: 1 Z: 1 W: 1 ) Offset: 292 Type : Vector4f
+Param: Constants.Fountain.ShapeLocation.Additional Yaw / Pitch / Roll(X: 0 Y: 0 Z: 0 ) Offset: 308 Type : Vector3f
+Param: Constants.Fountain.ShapeLocation.Apply Owner Scale(X: 0 Y: 0 Z: 0 ) Offset: 320 Type : Vector3f
+Param: Constants.Fountain.ShapeLocation.Hemisphere Distribution(X: 1 Y: 1 ) Offset: 332 Type : Vector2f
+Param: Constants.Fountain.ShapeLocation.Non Uniform Scale(X: 1 Y: 1 Z: 1 ) Offset: 340 Type : Vector3f
+Param: Constants.Fountain.ShapeLocation.Random Seed(0 ) Offset: 352 Type : NiagaraInt32
+Param: Constants.Fountain.ShapeLocation.Rotation Angle(0 ) Offset: 356 Type : NiagaraFloat
+Param: Constants.Fountain.ShapeLocation.Rotation Axis(X: 1 Y: 0 Z: 0 ) Offset: 360 Type : Vector3f
+Param: Constants.Fountain.ShapeLocation.Rotation Matrix(Row0: (X: 1 Y: 0 Z: 0 W: 0 ) Row1: (X: 0 Y: 1 Z: 0 W: 0 ) Row2: (X: 0 Y: 0 Z: 1 W: 0 ) Row3: (X: 0 Y: 0 Z: 0 W: 1 ) ) Offset: 372 Type : NiagaraMatrix
+Param: Constants.Fountain.ShapeLocation.Rotation Quaternion(X: 0 Y: 0 Z: 0 W: 1 ) Offset: 436 Type : Quat4f
+Param: Constants.Fountain.ShapeLocation.Spawn Group Mask(0 ) Offset: 452 Type : NiagaraInt32
+Param: Constants.Fountain.ShapeLocation.Sphere Radius(8 ) Offset: 456 Type : NiagaraFloat
+Param: Constants.Fountain.ShapeLocation.Sphere Surface Distribution(0 ) Offset: 460 Type : NiagaraFloat
+Param: Constants.Fountain.ShapeLocation.Yaw / Pitch / Roll(X: 0 Y: 0 Z: 0 ) Offset: 464 Type : Vector3f
+Param: Constants.Fountain.SolveForcesAndVelocity.Acceleration Limit(9999 ) Offset: 476 Type : NiagaraFloat
+Param: Constants.Fountain.SolveForcesAndVelocity.Manually Enable Rotational Solver(False) Offset: 480 Type : NiagaraBool
+Param: Constants.Fountain.SolveForcesAndVelocity.Mesh Orientation(X: 0 Y: 0 Z: 0 W: 1 ) Offset: 484 Type : Quat4f
+Param: Constants.Fountain.SolveForcesAndVelocity.Rotational Force(X: 0 Y: 0 Z: 0 ) Offset: 500 Type : Vector3f
+Param: Constants.Fountain.SolveForcesAndVelocity.Rotational Velocity(X: 0 Y: 0 Z: 0 ) Offset: 512 Type : Vector3f
+Param: Constants.Fountain.SolveForcesAndVelocity.Speed Limit(1000 ) Offset: 524 Type : NiagaraFloat
+
+UpdateScript
+Param: Constants.Fountain.Drag.Drag(0.25 ) Offset: 0 Type : NiagaraFloat
+Param: Constants.Fountain.Drag.Rotational Drag(1 ) Offset: 4 Type : NiagaraFloat
+Param: Constants.Fountain.FloatFromCurve.Scale Curve(1 ) Offset: 8 Type : NiagaraFloat
+Param: Constants.Fountain.GravityForce.Gravity(X: 0 Y: 0 Z: -980 ) Offset: 12 Type : Vector3f
+Param: Constants.Fountain.ScaleColor.Scale RGB(X: 1 Y: 1 Z: 1 ) Offset: 24 Type : Vector3f
+Param: Constants.Fountain.ScaleColor.Scale RGBA(X: 1 Y: 1 Z: 1 W: 1 ) Offset: 36 Type : Vector4f
+Param: Constants.Fountain.SolveForcesAndVelocity.Acceleration Limit(9999 ) Offset: 52 Type : NiagaraFloat
+Param: Constants.Fountain.SolveForcesAndVelocity.Manually Enable Rotational Solver(False) Offset: 56 Type : NiagaraBool
+Param: Constants.Fountain.SolveForcesAndVelocity.Mesh Orientation(X: 0 Y: 0 Z: 0 W: 1 ) Offset: 60 Type : Quat4f
+Param: Constants.Fountain.SolveForcesAndVelocity.Rotational Force(X: 0 Y: 0 Z: 0 ) Offset: 76 Type : Vector3f
+Param: Constants.Fountain.SolveForcesAndVelocity.Rotational Velocity(X: 0 Y: 0 Z: 0 ) Offset: 88 Type : Vector3f
+Param: Constants.Fountain.SolveForcesAndVelocity.Speed Limit(1000 ) Offset: 100 Type : NiagaraFloat
+
+EmitterSpawnScript
+
+EmitterUpdateScript
+Param: Constants.Fountain.EmitterState.Loop Delay(0 ) Offset: 0 Type : NiagaraFloat
+Param: Constants.Fountain.EmitterState.Loop Duration(2 ) Offset: 4 Type : NiagaraFloat
+Param: Constants.Fountain.EmitterState.MaxDistance(5000 ) Offset: 8 Type : NiagaraFloat
+Param: Constants.Fountain.EmitterState.MinDistance(0 ) Offset: 12 Type : NiagaraFloat
+Param: Constants.Fountain.SpawnRate.Spawn Probability(1 ) Offset: 16 Type : NiagaraFloat
+Param: Constants.Fountain.SpawnRate.SpawnGroup(0 ) Offset: 20 Type : NiagaraInt32
+Param: Constants.Fountain.SpawnRate.SpawnRate(90 ) Offset: 24 Type : NiagaraFloat
+
+
+CollapseDust
+SpawnScript
+Param: Constants.HangingParticulates.AerodynamicDrag.Aerodynamic Rotational Drag(0.2 ) Offset: 0 Type : NiagaraFloat
+Param: Constants.HangingParticulates.AerodynamicDrag.Lift Contribution(1 ) Offset: 4 Type : NiagaraFloat
+Param: Constants.HangingParticulates.AerodynamicDrag.Mass(0 ) Offset: 8 Type : NiagaraFloat
+Param: Constants.HangingParticulates.AerodynamicDrag.Mesh Orientation(X: 0 Y: 0 Z: 0 W: 1 ) Offset: 12 Type : Quat4f
+Param: Constants.HangingParticulates.AerodynamicDrag.Pivot Offset Maximum(X: 1 Y: 0.5 Z: 0.1 ) Offset: 28 Type : Vector3f
+Param: Constants.HangingParticulates.AerodynamicDrag.Pivot Offset Minimum(X: -1 Y: -0.5 Z: -0.1 ) Offset: 40 Type : Vector3f
+Param: Constants.HangingParticulates.AerodynamicDrag.Pivot Offset Minimum Length(X: 0.15 Y: 0 Z: 0 ) Offset: 52 Type : Vector3f
+Param: Constants.HangingParticulates.AerodynamicDrag.Rotation Strength(1 ) Offset: 64 Type : NiagaraFloat
+Param: Constants.HangingParticulates.AerodynamicDrag.Surface Normal Axis(X: 1 Y: 0 Z: 0 ) Offset: 68 Type : Vector3f
+Param: Constants.HangingParticulates.AerodynamicDrag.Velocity(X: 0 Y: 0 Z: 0 ) Offset: 80 Type : Vector3f
+Param: Constants.HangingParticulates.FloatFromCurve.Scale Curve(1 ) Offset: 92 Type : NiagaraFloat
+Param: Constants.HangingParticulates.FloatFromCurve001.Scale Curve(1 ) Offset: 96 Type : NiagaraFloat
+Param: Constants.HangingParticulates.InitializeParticle.Color(R: 1 G: 1 B: 1 A: 1 ) Offset: 100 Type : LinearColor
+Param: Constants.HangingParticulates.InitializeParticle.Lifetime Max(8 ) Offset: 116 Type : NiagaraFloat
+Param: Constants.HangingParticulates.InitializeParticle.Lifetime Min(5 ) Offset: 120 Type : NiagaraFloat
+Param: Constants.HangingParticulates.InitializeParticle.Position Offset(X: 0 Y: 0 Z: 0 ) Offset: 124 Type : Vector3f
+Param: Constants.HangingParticulates.InitializeParticle.Ribbon Width(5 ) Offset: 136 Type : NiagaraFloat
+Param: Constants.HangingParticulates.InitializeParticle.Sprite Rotation Angle Max(360 ) Offset: 140 Type : NiagaraFloat
+Param: Constants.HangingParticulates.InitializeParticle.Sprite Rotation Angle Min(0 ) Offset: 144 Type : NiagaraFloat
+Param: Constants.HangingParticulates.InitializeParticle.Uniform Sprite Size Max(3.5 ) Offset: 148 Type : NiagaraFloat
+Param: Constants.HangingParticulates.InitializeParticle.Uniform Sprite Size Min(2 ) Offset: 152 Type : NiagaraFloat
+Param: Constants.HangingParticulates.RandomRangeFloat001.Maximum(1 ) Offset: 156 Type : NiagaraFloat
+Param: Constants.HangingParticulates.RandomRangeFloat001.Minimum(0.6 ) Offset: 160 Type : NiagaraFloat
+Param: Constants.HangingParticulates.RandomRangeFloat001.Random Seed(0 ) Offset: 164 Type : NiagaraInt32
+Param: Constants.HangingParticulates.RandomRangeVector001.Maximum(X: 1 Y: 1 Z: 1 ) Offset: 168 Type : Vector3f
+Param: Constants.HangingParticulates.RandomRangeVector001.Minimum(X: 0 Y: 0 Z: 0 ) Offset: 180 Type : Vector3f
+Param: Constants.HangingParticulates.RandomRangeVector001.Random Seed(0 ) Offset: 192 Type : NiagaraInt32
+Param: Constants.HangingParticulates.ScaleColor.Scale RGB(X: 1 Y: 1 Z: 1 ) Offset: 196 Type : Vector3f
+Param: Constants.HangingParticulates.ScaleColor.Scale RGBA(X: 1 Y: 1 Z: 1 W: 1 ) Offset: 208 Type : Vector4f
+Param: Constants.HangingParticulates.ShapeLocation.Additional Yaw / Pitch / Roll(X: 0 Y: 0 Z: 0 ) Offset: 224 Type : Vector3f
+Param: Constants.HangingParticulates.ShapeLocation.Apply Owner Scale(X: 0 Y: 0 Z: 0 ) Offset: 236 Type : Vector3f
+Param: Constants.HangingParticulates.ShapeLocation.Box Size(X: 400 Y: 400 Z: 256 ) Offset: 248 Type : Vector3f
+Param: Constants.HangingParticulates.ShapeLocation.Non Uniform Scale(X: 1 Y: 1 Z: 1 ) Offset: 260 Type : Vector3f
+Param: Constants.HangingParticulates.ShapeLocation.Random Seed(0 ) Offset: 272 Type : NiagaraInt32
+Param: Constants.HangingParticulates.ShapeLocation.Rotation Angle(0 ) Offset: 276 Type : NiagaraFloat
+Param: Constants.HangingParticulates.ShapeLocation.Rotation Axis(X: 1 Y: 0 Z: 0 ) Offset: 280 Type : Vector3f
+Param: Constants.HangingParticulates.ShapeLocation.Rotation Matrix(Row0: (X: 1 Y: 0 Z: 0 W: 0 ) Row1: (X: 0 Y: 1 Z: 0 W: 0 ) Row2: (X: 0 Y: 0 Z: 1 W: 0 ) Row3: (X: 0 Y: 0 Z: 0 W: 1 ) ) Offset: 292 Type : NiagaraMatrix
+Param: Constants.HangingParticulates.ShapeLocation.Rotation Quaternion(X: 0 Y: 0 Z: 0 W: 1 ) Offset: 356 Type : Quat4f
+Param: Constants.HangingParticulates.ShapeLocation.Spawn Group Mask(0 ) Offset: 372 Type : NiagaraInt32
+Param: Constants.HangingParticulates.ShapeLocation.Surface Only Band Thickness(0 ) Offset: 376 Type : NiagaraFloat
+Param: Constants.HangingParticulates.ShapeLocation.Yaw / Pitch / Roll(X: 0 Y: 0 Z: 0 ) Offset: 380 Type : Vector3f
+Param: Constants.HangingParticulates.SolveForcesAndVelocity.Acceleration Limit(9999 ) Offset: 392 Type : NiagaraFloat
+Param: Constants.HangingParticulates.SolveForcesAndVelocity.Manually Enable Rotational Solver(False) Offset: 396 Type : NiagaraBool
+Param: Constants.HangingParticulates.SolveForcesAndVelocity.Mesh Orientation(X: 0 Y: 0 Z: 0 W: 1 ) Offset: 400 Type : Quat4f
+Param: Constants.HangingParticulates.SolveForcesAndVelocity.Rotational Force(X: 0 Y: 0 Z: 0 ) Offset: 416 Type : Vector3f
+Param: Constants.HangingParticulates.SolveForcesAndVelocity.Rotational Velocity(X: 0 Y: 0 Z: 0 ) Offset: 428 Type : Vector3f
+Param: Constants.HangingParticulates.SolveForcesAndVelocity.Speed Limit(1000 ) Offset: 440 Type : NiagaraFloat
+Param: Constants.HangingParticulates.WindForce.Frequency(6 ) Offset: 444 Type : NiagaraFloat
+Param: Constants.HangingParticulates.WindForce.Offset By Time(X: 0 Y: 0 Z: -50 ) Offset: 448 Type : Vector3f
+Param: Constants.HangingParticulates.WindForce.Position(X: 0 Y: 0 Z: 0 ) Offset: 460 Type : NiagaraPosition
+Param: Constants.HangingParticulates.WindForce.Scale(4 ) Offset: 472 Type : NiagaraFloat
+Param: Constants.HangingParticulates.WindForce.Turbulence Flow Loop Duration(3 ) Offset: 476 Type : NiagaraFloat
+Param: Constants.HangingParticulates.WindForce.Wind Speed(X: 1 Y: 0 Z: 0 ) Offset: 480 Type : Vector3f
+Param: Constants.HangingParticulates.WindForce.Wind Speed Scale(1 ) Offset: 492 Type : NiagaraFloat
+
+UpdateScript
+Param: Constants.HangingParticulates.AerodynamicDrag.Aerodynamic Rotational Drag(0.2 ) Offset: 0 Type : NiagaraFloat
+Param: Constants.HangingParticulates.AerodynamicDrag.Lift Contribution(1 ) Offset: 4 Type : NiagaraFloat
+Param: Constants.HangingParticulates.AerodynamicDrag.Mass(0 ) Offset: 8 Type : NiagaraFloat
+Param: Constants.HangingParticulates.AerodynamicDrag.Mesh Orientation(X: 0 Y: 0 Z: 0 W: 1 ) Offset: 12 Type : Quat4f
+Param: Constants.HangingParticulates.AerodynamicDrag.Pivot Offset Maximum(X: 1 Y: 0.5 Z: 0.1 ) Offset: 28 Type : Vector3f
+Param: Constants.HangingParticulates.AerodynamicDrag.Pivot Offset Minimum(X: -1 Y: -0.5 Z: -0.1 ) Offset: 40 Type : Vector3f
+Param: Constants.HangingParticulates.AerodynamicDrag.Pivot Offset Minimum Length(X: 0.15 Y: 0 Z: 0 ) Offset: 52 Type : Vector3f
+Param: Constants.HangingParticulates.AerodynamicDrag.Rotation Strength(1 ) Offset: 64 Type : NiagaraFloat
+Param: Constants.HangingParticulates.AerodynamicDrag.Surface Normal Axis(X: 1 Y: 0 Z: 0 ) Offset: 68 Type : Vector3f
+Param: Constants.HangingParticulates.AerodynamicDrag.Velocity(X: 0 Y: 0 Z: 0 ) Offset: 80 Type : Vector3f
+Param: Constants.HangingParticulates.FloatFromCurve.Scale Curve(1 ) Offset: 92 Type : NiagaraFloat
+Param: Constants.HangingParticulates.FloatFromCurve001.Scale Curve(1 ) Offset: 96 Type : NiagaraFloat
+Param: Constants.HangingParticulates.RandomRangeFloat001.Maximum(1 ) Offset: 100 Type : NiagaraFloat
+Param: Constants.HangingParticulates.RandomRangeFloat001.Minimum(0.6 ) Offset: 104 Type : NiagaraFloat
+Param: Constants.HangingParticulates.RandomRangeFloat001.Random Seed(0 ) Offset: 108 Type : NiagaraInt32
+Param: Constants.HangingParticulates.ScaleColor.Scale RGB(X: 1 Y: 1 Z: 1 ) Offset: 112 Type : Vector3f
+Param: Constants.HangingParticulates.ScaleColor.Scale RGBA(X: 1 Y: 1 Z: 1 W: 1 ) Offset: 124 Type : Vector4f
+Param: Constants.HangingParticulates.SolveForcesAndVelocity.Acceleration Limit(9999 ) Offset: 140 Type : NiagaraFloat
+Param: Constants.HangingParticulates.SolveForcesAndVelocity.Manually Enable Rotational Solver(False) Offset: 144 Type : NiagaraBool
+Param: Constants.HangingParticulates.SolveForcesAndVelocity.Mesh Orientation(X: 0 Y: 0 Z: 0 W: 1 ) Offset: 148 Type : Quat4f
+Param: Constants.HangingParticulates.SolveForcesAndVelocity.Rotational Force(X: 0 Y: 0 Z: 0 ) Offset: 164 Type : Vector3f
+Param: Constants.HangingParticulates.SolveForcesAndVelocity.Rotational Velocity(X: 0 Y: 0 Z: 0 ) Offset: 176 Type : Vector3f
+Param: Constants.HangingParticulates.SolveForcesAndVelocity.Speed Limit(1000 ) Offset: 188 Type : NiagaraFloat
+Param: Constants.HangingParticulates.WindForce.Frequency(6 ) Offset: 192 Type : NiagaraFloat
+Param: Constants.HangingParticulates.WindForce.Offset By Time(X: 0 Y: 0 Z: -50 ) Offset: 196 Type : Vector3f
+Param: Constants.HangingParticulates.WindForce.Position(X: 0 Y: 0 Z: 0 ) Offset: 208 Type : NiagaraPosition
+Param: Constants.HangingParticulates.WindForce.Scale(4 ) Offset: 220 Type : NiagaraFloat
+Param: Constants.HangingParticulates.WindForce.Turbulence Flow Loop Duration(3 ) Offset: 224 Type : NiagaraFloat
+Param: Constants.HangingParticulates.WindForce.Wind Speed(X: 1 Y: 0 Z: 0 ) Offset: 228 Type : Vector3f
+Param: Constants.HangingParticulates.WindForce.Wind Speed Scale(1 ) Offset: 240 Type : NiagaraFloat
+
+EmitterSpawnScript
+
+EmitterUpdateScript
+Param: Constants.HangingParticulates.EmitterState.Loop Delay(0 ) Offset: 0 Type : NiagaraFloat
+Param: Constants.HangingParticulates.EmitterState.Loop Duration(2 ) Offset: 4 Type : NiagaraFloat
+Param: Constants.HangingParticulates.EmitterState.MaxDistance(5000 ) Offset: 8 Type : NiagaraFloat
+Param: Constants.HangingParticulates.EmitterState.MinDistance(0 ) Offset: 12 Type : NiagaraFloat
+Param: Constants.HangingParticulates.SpawnRate.Spawn Probability(1 ) Offset: 16 Type : NiagaraFloat
+Param: Constants.HangingParticulates.SpawnRate.SpawnGroup(0 ) Offset: 20 Type : NiagaraInt32
+Param: Constants.HangingParticulates.SpawnRate.SpawnRate(50 ) Offset: 24 Type : NiagaraFloat
+
+
+PipeLeak
+SpawnScript
+Param: Constants.Fountain.AddVelocity.Additional Yaw / Pitch / Roll(X: 0 Y: 0 Z: 0 ) Offset: 0 Type : Vector3f
+Param: Constants.Fountain.AddVelocity.Cone Angle(32 ) Offset: 12 Type : NiagaraFloat
+Param: Constants.Fountain.AddVelocity.Cone Axis(X: 0 Y: 0 Z: 1 ) Offset: 16 Type : Vector3f
+Param: Constants.Fountain.AddVelocity.Distribution Along Cone Axis(0.25 ) Offset: 28 Type : NiagaraFloat
+Param: Constants.Fountain.AddVelocity.Inner Cone Angle(0 ) Offset: 32 Type : NiagaraFloat
+Param: Constants.Fountain.AddVelocity.Random Seed(0 ) Offset: 36 Type : NiagaraInt32
+Param: Constants.Fountain.AddVelocity.Rotation Angle(0 ) Offset: 40 Type : NiagaraFloat
+Param: Constants.Fountain.AddVelocity.Rotation Axis(X: 1 Y: 0 Z: 0 ) Offset: 44 Type : Vector3f
+Param: Constants.Fountain.AddVelocity.Rotation Matrix(Row0: (X: 1 Y: 0 Z: 0 W: 0 ) Row1: (X: 0 Y: 1 Z: 0 W: 0 ) Row2: (X: 0 Y: 0 Z: 1 W: 0 ) Row3: (X: 0 Y: 0 Z: 0 W: 1 ) ) Offset: 56 Type : NiagaraMatrix
+Param: Constants.Fountain.AddVelocity.Rotation Quaternion(X: 0 Y: 0 Z: 0 W: 1 ) Offset: 120 Type : Quat4f
+Param: Constants.Fountain.AddVelocity.Speed Falloff From Cone Axis(0.5 ) Offset: 136 Type : NiagaraFloat
+Param: Constants.Fountain.AddVelocity.Velocity(X: 0 Y: 0 Z: 50 ) Offset: 140 Type : Vector3f
+Param: Constants.Fountain.AddVelocity.Velocity Speed Scale(1 ) Offset: 152 Type : NiagaraFloat
+Param: Constants.Fountain.AddVelocity.Yaw / Pitch / Roll(X: 0 Y: 0 Z: 0 ) Offset: 156 Type : Vector3f
+Param: Constants.Fountain.Drag.Drag(0.25 ) Offset: 168 Type : NiagaraFloat
+Param: Constants.Fountain.Drag.Rotational Drag(1 ) Offset: 172 Type : NiagaraFloat
+Param: Constants.Fountain.FloatFromCurve.Scale Curve(1 ) Offset: 176 Type : NiagaraFloat
+Param: Constants.Fountain.GravityForce.Gravity(X: 0 Y: 0 Z: -980 ) Offset: 180 Type : Vector3f
+Param: Constants.Fountain.InitializeParticle.Color(R: 1 G: 1 B: 1 A: 1 ) Offset: 192 Type : LinearColor
+Param: Constants.Fountain.InitializeParticle.Lifetime Max(1.75 ) Offset: 208 Type : NiagaraFloat
+Param: Constants.Fountain.InitializeParticle.Lifetime Min(1.4 ) Offset: 212 Type : NiagaraFloat
+Param: Constants.Fountain.InitializeParticle.Mass Max(1.25 ) Offset: 216 Type : NiagaraFloat
+Param: Constants.Fountain.InitializeParticle.Mass Min(0.75 ) Offset: 220 Type : NiagaraFloat
+Param: Constants.Fountain.InitializeParticle.Position(X: 0 Y: 0 Z: 0 ) Offset: 224 Type : NiagaraPosition
+Param: Constants.Fountain.InitializeParticle.Position Offset(X: 0 Y: 0 Z: 0 ) Offset: 236 Type : Vector3f
+Param: Constants.Fountain.InitializeParticle.Ribbon Width(5 ) Offset: 248 Type : NiagaraFloat
+Param: Constants.Fountain.InitializeParticle.Sprite Rotation Angle Max(360 ) Offset: 252 Type : NiagaraFloat
+Param: Constants.Fountain.InitializeParticle.Sprite Rotation Angle Min(0 ) Offset: 256 Type : NiagaraFloat
+Param: Constants.Fountain.InitializeParticle.Uniform Sprite Size Max(12 ) Offset: 260 Type : NiagaraFloat
+Param: Constants.Fountain.InitializeParticle.Uniform Sprite Size Min(6 ) Offset: 264 Type : NiagaraFloat
+Param: Constants.Fountain.RandomRangeFloat.Maximum(850 ) Offset: 268 Type : NiagaraFloat
+Param: Constants.Fountain.RandomRangeFloat.Minimum(500 ) Offset: 272 Type : NiagaraFloat
+Param: Constants.Fountain.RandomRangeFloat.Random Seed(0 ) Offset: 276 Type : NiagaraInt32
+Param: Constants.Fountain.ScaleColor.Scale RGB(X: 1 Y: 1 Z: 1 ) Offset: 280 Type : Vector3f
+Param: Constants.Fountain.ScaleColor.Scale RGBA(X: 1 Y: 1 Z: 1 W: 1 ) Offset: 292 Type : Vector4f
+Param: Constants.Fountain.ShapeLocation.Additional Yaw / Pitch / Roll(X: 0 Y: 0 Z: 0 ) Offset: 308 Type : Vector3f
+Param: Constants.Fountain.ShapeLocation.Apply Owner Scale(X: 0 Y: 0 Z: 0 ) Offset: 320 Type : Vector3f
+Param: Constants.Fountain.ShapeLocation.Hemisphere Distribution(X: 1 Y: 1 ) Offset: 332 Type : Vector2f
+Param: Constants.Fountain.ShapeLocation.Non Uniform Scale(X: 1 Y: 1 Z: 1 ) Offset: 340 Type : Vector3f
+Param: Constants.Fountain.ShapeLocation.Random Seed(0 ) Offset: 352 Type : NiagaraInt32
+Param: Constants.Fountain.ShapeLocation.Rotation Angle(0 ) Offset: 356 Type : NiagaraFloat
+Param: Constants.Fountain.ShapeLocation.Rotation Axis(X: 1 Y: 0 Z: 0 ) Offset: 360 Type : Vector3f
+Param: Constants.Fountain.ShapeLocation.Rotation Matrix(Row0: (X: 1 Y: 0 Z: 0 W: 0 ) Row1: (X: 0 Y: 1 Z: 0 W: 0 ) Row2: (X: 0 Y: 0 Z: 1 W: 0 ) Row3: (X: 0 Y: 0 Z: 0 W: 1 ) ) Offset: 372 Type : NiagaraMatrix
+Param: Constants.Fountain.ShapeLocation.Rotation Quaternion(X: 0 Y: 0 Z: 0 W: 1 ) Offset: 436 Type : Quat4f
+Param: Constants.Fountain.ShapeLocation.Spawn Group Mask(0 ) Offset: 452 Type : NiagaraInt32
+Param: Constants.Fountain.ShapeLocation.Sphere Radius(8 ) Offset: 456 Type : NiagaraFloat
+Param: Constants.Fountain.ShapeLocation.Sphere Surface Distribution(0 ) Offset: 460 Type : NiagaraFloat
+Param: Constants.Fountain.ShapeLocation.Yaw / Pitch / Roll(X: 0 Y: 0 Z: 0 ) Offset: 464 Type : Vector3f
+Param: Constants.Fountain.SolveForcesAndVelocity.Acceleration Limit(9999 ) Offset: 476 Type : NiagaraFloat
+Param: Constants.Fountain.SolveForcesAndVelocity.Manually Enable Rotational Solver(False) Offset: 480 Type : NiagaraBool
+Param: Constants.Fountain.SolveForcesAndVelocity.Mesh Orientation(X: 0 Y: 0 Z: 0 W: 1 ) Offset: 484 Type : Quat4f
+Param: Constants.Fountain.SolveForcesAndVelocity.Rotational Force(X: 0 Y: 0 Z: 0 ) Offset: 500 Type : Vector3f
+Param: Constants.Fountain.SolveForcesAndVelocity.Rotational Velocity(X: 0 Y: 0 Z: 0 ) Offset: 512 Type : Vector3f
+Param: Constants.Fountain.SolveForcesAndVelocity.Speed Limit(1000 ) Offset: 524 Type : NiagaraFloat
+
+UpdateScript
+Param: Constants.Fountain.Drag.Drag(0.25 ) Offset: 0 Type : NiagaraFloat
+Param: Constants.Fountain.Drag.Rotational Drag(1 ) Offset: 4 Type : NiagaraFloat
+Param: Constants.Fountain.FloatFromCurve.Scale Curve(1 ) Offset: 8 Type : NiagaraFloat
+Param: Constants.Fountain.GravityForce.Gravity(X: 0 Y: 0 Z: -980 ) Offset: 12 Type : Vector3f
+Param: Constants.Fountain.ScaleColor.Scale RGB(X: 1 Y: 1 Z: 1 ) Offset: 24 Type : Vector3f
+Param: Constants.Fountain.ScaleColor.Scale RGBA(X: 1 Y: 1 Z: 1 W: 1 ) Offset: 36 Type : Vector4f
+Param: Constants.Fountain.SolveForcesAndVelocity.Acceleration Limit(9999 ) Offset: 52 Type : NiagaraFloat
+Param: Constants.Fountain.SolveForcesAndVelocity.Manually Enable Rotational Solver(False) Offset: 56 Type : NiagaraBool
+Param: Constants.Fountain.SolveForcesAndVelocity.Mesh Orientation(X: 0 Y: 0 Z: 0 W: 1 ) Offset: 60 Type : Quat4f
+Param: Constants.Fountain.SolveForcesAndVelocity.Rotational Force(X: 0 Y: 0 Z: 0 ) Offset: 76 Type : Vector3f
+Param: Constants.Fountain.SolveForcesAndVelocity.Rotational Velocity(X: 0 Y: 0 Z: 0 ) Offset: 88 Type : Vector3f
+Param: Constants.Fountain.SolveForcesAndVelocity.Speed Limit(1000 ) Offset: 100 Type : NiagaraFloat
+
+EmitterSpawnScript
+
+EmitterUpdateScript
+Param: Constants.Fountain.EmitterState.Loop Delay(0 ) Offset: 0 Type : NiagaraFloat
+Param: Constants.Fountain.EmitterState.Loop Duration(2 ) Offset: 4 Type : NiagaraFloat
+Param: Constants.Fountain.EmitterState.MaxDistance(5000 ) Offset: 8 Type : NiagaraFloat
+Param: Constants.Fountain.EmitterState.MinDistance(0 ) Offset: 12 Type : NiagaraFloat
+Param: Constants.Fountain.SpawnRate.Spawn Probability(1 ) Offset: 16 Type : NiagaraFloat
+Param: Constants.Fountain.SpawnRate.SpawnGroup(0 ) Offset: 20 Type : NiagaraInt32
+Param: Constants.Fountain.SpawnRate.SpawnRate(90 ) Offset: 24 Type : NiagaraFloat
+

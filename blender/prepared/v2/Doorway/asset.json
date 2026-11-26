@@ -1,0 +1,128 @@
+{
+  "id": "Doorway",
+  "source": "blender/Meshy_AI_Wall_Module_with_Doorway_20261109_image-to-3d-texture.blend",
+  "source_sha256": "5be331415ae73ffead1ad96dc9a6aa0b92f2944ab0efaca59e6080f192a11d46",
+  "blend": "Doorway.blend",
+  "parts": [
+    {
+      "object": "Doorway",
+      "role": "static",
+      "triangles": 17999,
+      "location_m": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "rotation_deg": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "parent": null,
+      "dimensions_m": [
+        2.9803032875061035,
+        0.3690975308418274,
+        3.199342727661133
+      ],
+      "materials": [
+        "M_Doorway_Baked"
+      ],
+      "fbx": "parts/Doorway.fbx"
+    }
+  ],
+  "materials": [
+    {
+      "name": "M_Doorway_Baked",
+      "glass": false,
+      "inputs": {
+        "Base Color": [
+          0.800000011920929,
+          0.800000011920929,
+          0.800000011920929,
+          1.0
+        ],
+        "Metallic": 0.0,
+        "Roughness": 0.5,
+        "Transmission Weight": 0.0,
+        "IOR": 1.5,
+        "Alpha": 1.0,
+        "Emission Color": [
+          1.0,
+          1.0,
+          1.0,
+          1.0
+        ],
+        "Emission Strength": 0.0
+      },
+      "links": [
+        {
+          "from": "Principled BSDF",
+          "output": "BSDF",
+          "to": "Material Output",
+          "input": "Surface"
+        },
+        {
+          "from": "Image Texture",
+          "output": "Color",
+          "to": "Principled BSDF",
+          "input": "Base Color"
+        },
+        {
+          "from": "Image Texture.001",
+          "output": "Color",
+          "to": "Separate Color",
+          "input": "Color"
+        },
+        {
+          "from": "Separate Color",
+          "output": "Green",
+          "to": "Principled BSDF",
+          "input": "Roughness"
+        },
+        {
+          "from": "Separate Color",
+          "output": "Blue",
+          "to": "Principled BSDF",
+          "input": "Metallic"
+        },
+        {
+          "from": "Image Texture.002",
+          "output": "Color",
+          "to": "Normal Map",
+          "input": "Color"
+        },
+        {
+          "from": "Normal Map",
+          "output": "Normal",
+          "to": "Principled BSDF",
+          "input": "Normal"
+        }
+      ],
+      "images": [
+        {
+          "node": "Image Texture",
+          "image": "T_Doorway_BaseColor",
+          "file": "textures/T_0_T_Doorway_BaseColor.png",
+          "colorspace": "sRGB"
+        },
+        {
+          "node": "Image Texture.001",
+          "image": "T_Doorway_ORM",
+          "file": "textures/T_1_T_Doorway_ORM.png",
+          "colorspace": "Non-Color"
+        },
+        {
+          "node": "Image Texture.002",
+          "image": "T_Doorway_Normal",
+          "file": "textures/T_2_T_Doorway_Normal.png",
+          "colorspace": "Non-Color"
+        }
+      ]
+    }
+  ],
+  "repairs": [
+    "Meter scale, ground pivot, UV-preserving reduction; source untouched."
+  ],
+  "actions": [],
+  "animation_runtime": "Rigid meshes driven from Unreal actuator state; Blender actions are inspectable demonstrations."
+}

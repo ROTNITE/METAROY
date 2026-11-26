@@ -1,0 +1,66 @@
+{
+  "id": "Stretcher",
+  "mesh": "SM_Stretcher",
+  "source": "blender/Meshy_AI_Rescue_Stretcher_20261109_image-to-3d-texture.blend",
+  "source_sha256": "b8d29dc648e24bc1b8b89b804dd5b44f89d558a113f4e7c6527e41dbe9aae84f",
+  "source_triangles": 556265,
+  "triangles": 16000,
+  "dimensions_m": [
+    2.0491490364074707,
+    0.5990463495254517,
+    0.327350914478302
+  ],
+  "fbx": "Stretcher/Stretcher.fbx",
+  "blend": "Stretcher/Stretcher.blend",
+  "textures": {
+    "BaseColor": "Stretcher/textures/T_Stretcher_BaseColor.png",
+    "ORM": "Stretcher/textures/T_Stretcher_ORM.png",
+    "Normal": "Stretcher/textures/T_Stretcher_Normal.png"
+  },
+  "original_material_links": [
+    {
+      "from_node": "Principled BSDF",
+      "from_socket": "BSDF",
+      "to_node": "Material Output",
+      "to_socket": "Surface"
+    },
+    {
+      "from_node": "Image Texture",
+      "from_socket": "Color",
+      "to_node": "Principled BSDF",
+      "to_socket": "Base Color"
+    },
+    {
+      "from_node": "Separate Color",
+      "from_socket": "Blue",
+      "to_node": "Principled BSDF",
+      "to_socket": "Metallic"
+    },
+    {
+      "from_node": "Separate Color",
+      "from_socket": "Green",
+      "to_node": "Principled BSDF",
+      "to_socket": "Roughness"
+    },
+    {
+      "from_node": "Image Texture.001",
+      "from_socket": "Color",
+      "to_node": "Separate Color",
+      "to_socket": "Color"
+    },
+    {
+      "from_node": "Normal Map",
+      "from_socket": "Normal",
+      "to_node": "Principled BSDF",
+      "to_socket": "Normal"
+    },
+    {
+      "from_node": "Image Texture.002",
+      "from_socket": "Color",
+      "to_node": "Normal Map",
+      "to_socket": "Color"
+    }
+  ],
+  "parts": "single visual shell; functional geometry prepared separately",
+  "collision": "not included; runtime collision proxies are separate"
+}

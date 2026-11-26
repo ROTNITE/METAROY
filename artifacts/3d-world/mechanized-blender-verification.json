@@ -1,0 +1,223 @@
+{
+  "passed": true,
+  "assets": [
+    {
+      "id": "Barrier",
+      "parts": 1,
+      "triangles": 23822,
+      "animated_parts": 0,
+      "source_preserved": true,
+      "glass_parts": 0
+    },
+    {
+      "id": "Building",
+      "parts": 8,
+      "triangles": 115750,
+      "animated_parts": 0,
+      "source_preserved": true,
+      "glass_parts": 7
+    },
+    {
+      "id": "CableKit",
+      "parts": 49,
+      "triangles": 42078,
+      "animated_parts": 0,
+      "source_preserved": true,
+      "glass_parts": 0
+    },
+    {
+      "id": "Case",
+      "parts": 7,
+      "triangles": 18539,
+      "animated_parts": 1,
+      "source_preserved": true,
+      "glass_parts": 0
+    },
+    {
+      "id": "Casualty",
+      "parts": 1,
+      "triangles": 24000,
+      "animated_parts": 0,
+      "source_preserved": true,
+      "glass_parts": 0
+    },
+    {
+      "id": "Dock",
+      "parts": 1,
+      "triangles": 18000,
+      "animated_parts": 0,
+      "source_preserved": true,
+      "glass_parts": 0
+    },
+    {
+      "id": "Doorway",
+      "parts": 1,
+      "triangles": 17999,
+      "animated_parts": 0,
+      "source_preserved": true,
+      "glass_parts": 0
+    },
+    {
+      "id": "Drone",
+      "parts": 6,
+      "triangles": 50000,
+      "animated_parts": 5,
+      "source_preserved": true,
+      "glass_parts": 0
+    },
+    {
+      "id": "FenceKit",
+      "parts": 20,
+      "triangles": 89232,
+      "animated_parts": 0,
+      "source_preserved": true,
+      "glass_parts": 0
+    },
+    {
+      "id": "Generator",
+      "parts": 4,
+      "triangles": 26419,
+      "animated_parts": 1,
+      "source_preserved": true,
+      "glass_parts": 0
+    },
+    {
+      "id": "Hydrant",
+      "parts": 10,
+      "triangles": 86316,
+      "animated_parts": 0,
+      "source_preserved": true,
+      "glass_parts": 0
+    },
+    {
+      "id": "Manhole",
+      "parts": 2,
+      "triangles": 6301,
+      "animated_parts": 0,
+      "source_preserved": true,
+      "glass_parts": 0
+    },
+    {
+      "id": "MannequinStatic",
+      "parts": 1,
+      "triangles": 16000,
+      "animated_parts": 0,
+      "source_preserved": true,
+      "glass_parts": 0
+    },
+    {
+      "id": "Medical",
+      "parts": 18,
+      "triangles": 39499,
+      "animated_parts": 0,
+      "source_preserved": true,
+      "glass_parts": 4
+    },
+    {
+      "id": "PipeKit",
+      "parts": 8,
+      "triangles": 12340,
+      "animated_parts": 0,
+      "source_preserved": true,
+      "glass_parts": 0
+    },
+    {
+      "id": "Relay",
+      "parts": 1,
+      "triangles": 16000,
+      "animated_parts": 0,
+      "source_preserved": true,
+      "glass_parts": 0
+    },
+    {
+      "id": "Rover",
+      "parts": 18,
+      "triangles": 29219,
+      "animated_parts": 15,
+      "source_preserved": true,
+      "glass_parts": 0
+    },
+    {
+      "id": "Rubble",
+      "parts": 1,
+      "triangles": 30000,
+      "animated_parts": 0,
+      "source_preserved": true,
+      "glass_parts": 0
+    },
+    {
+      "id": "Sensor",
+      "parts": 2,
+      "triangles": 24000,
+      "animated_parts": 1,
+      "source_preserved": true,
+      "glass_parts": 0
+    },
+    {
+      "id": "Slab",
+      "parts": 1,
+      "triangles": 6999,
+      "animated_parts": 0,
+      "source_preserved": true,
+      "glass_parts": 0
+    },
+    {
+      "id": "Streetlight",
+      "parts": 1,
+      "triangles": 5620,
+      "animated_parts": 0,
+      "source_preserved": true,
+      "glass_parts": 0
+    },
+    {
+      "id": "Stretcher",
+      "parts": 1,
+      "triangles": 16000,
+      "animated_parts": 0,
+      "source_preserved": true,
+      "glass_parts": 0
+    },
+    {
+      "id": "UrbanKit",
+      "parts": 147,
+      "triangles": 138135,
+      "animated_parts": 0,
+      "source_preserved": true,
+      "glass_parts": 0
+    },
+    {
+      "id": "UtilityBox",
+      "parts": 1,
+      "triangles": 6268,
+      "animated_parts": 0,
+      "source_preserved": true,
+      "glass_parts": 0
+    },
+    {
+      "id": "Van",
+      "parts": 30,
+      "triangles": 54374,
+      "animated_parts": 6,
+      "source_preserved": true,
+      "glass_parts": 7
+    },
+    {
+      "id": "WindowWall",
+      "parts": 1,
+      "triangles": 17999,
+      "animated_parts": 0,
+      "source_preserved": true,
+      "glass_parts": 0
+    }
+  ],
+  "original_source_files_verified": 26,
+  "rig": {
+    "bones": 24,
+    "clips": [
+      "Running",
+      "Walking",
+      "CasualtyBreathing"
+    ],
+    "external_textures_verified": true
+  }
+}

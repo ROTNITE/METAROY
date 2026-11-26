@@ -1,0 +1,23 @@
+team02-windows native exit 1 evidence C:\Users\rotn1\Documents\ChatGPT\metaroy\artifacts\quarter-v3\runs\team02-windows
+Traceback (most recent call last):
+  File "C:\Users\rotn1\Documents\ChatGPT\metaroy\unreal\tools\run_quarter_validation.py", line 70, in run
+    result=verify(out)
+  File "C:\Users\rotn1\Documents\ChatGPT\metaroy\unreal\tools\check_quarter_v3_run.py", line 224, in verify
+    histories=check_trajectories(frames)
+  File "C:\Users\rotn1\Documents\ChatGPT\metaroy\unreal\tools\check_quarter_v3_run.py", line 89, in check_trajectories
+    assert position_delta<=movement+2,('pose changed without executed distance',a['key'])
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: ('pose changed without executed distance', 'aerial_2')
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "C:\Users\rotn1\Documents\ChatGPT\metaroy\unreal\tools\run_quarter_validation.py", line 114, in <module>
+    if __name__=='__main__':main()
+                            ~~~~^^
+  File "C:\Users\rotn1\Documents\ChatGPT\metaroy\unreal\tools\run_quarter_validation.py", line 106, in main
+    run(args.prefix+'-windows',['--environment','static','--visual-probe','windows'],duration(30))
+    ~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\rotn1\Documents\ChatGPT\metaroy\unreal\tools\run_quarter_validation.py", line 75, in run
+    raise RuntimeError('Native validation failed: '+str(error)+'; evidence '+str(out)) from error
+RuntimeError: Native validation failed: ('pose changed without executed distance', 'aerial_2'); evidence C:\Users\rotn1\Documents\ChatGPT\metaroy\artifacts\quarter-v3\runs\team02-windows

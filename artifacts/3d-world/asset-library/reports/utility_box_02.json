@@ -1,0 +1,203 @@
+{
+  "id": "utility_box_02",
+  "source": "blender/vendor/utility_box_02_4k/utility_box_02_4k.blend",
+  "sha256": "0d39ca7e39bdc9ebf5d62b85e42d373dd73bd214c360022d213cd296df2f055e",
+  "units": {
+    "system": "METRIC",
+    "scale_length": 1.0
+  },
+  "bounds_min": [
+    -0.46000003814697266,
+    -0.22200000286102295,
+    0.0
+  ],
+  "bounds_max": [
+    0.4600001573562622,
+    0.20999999344348907,
+    1.1203334331512451
+  ],
+  "dimensions": [
+    0.9200001955032349,
+    0.43199998140335083,
+    1.1203334331512451
+  ],
+  "objects": [
+    {
+      "name": "utility_box_02",
+      "type": "MESH",
+      "parent": null,
+      "location": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "rotation": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "hidden_render": false,
+      "vertices": 3713,
+      "triangles": 6268,
+      "uv_layers": [
+        "UVMap"
+      ],
+      "bounds_min": [
+        -0.46000003814697266,
+        -0.22200000286102295,
+        0.0
+      ],
+      "bounds_max": [
+        0.4600001573562622,
+        0.20999999344348907,
+        1.1203334331512451
+      ],
+      "materials": [
+        "utility_box_02"
+      ],
+      "modifiers": []
+    }
+  ],
+  "materials": [
+    {
+      "name": "utility_box_02",
+      "nodes": [
+        {
+          "name": "Material Output",
+          "type": "OUTPUT_MATERIAL"
+        },
+        {
+          "name": "Principled BSDF",
+          "type": "BSDF_PRINCIPLED",
+          "inputs": {
+            "Base Color": {
+              "linked": true,
+              "value": [
+                0.800000011920929,
+                0.800000011920929,
+                0.800000011920929,
+                1.0
+              ]
+            },
+            "Metallic": {
+              "linked": true,
+              "value": 0.0
+            },
+            "Roughness": {
+              "linked": true,
+              "value": 0.5
+            },
+            "IOR": {
+              "linked": false,
+              "value": 1.4500000476837158
+            },
+            "Alpha": {
+              "linked": false,
+              "value": 1.0
+            },
+            "Transmission Weight": {
+              "linked": false,
+              "value": 0.0
+            }
+          }
+        },
+        {
+          "name": "Image Texture",
+          "type": "TEX_IMAGE",
+          "image": "utility_box_02_diff.png"
+        },
+        {
+          "name": "Image Texture.001",
+          "type": "TEX_IMAGE",
+          "image": "utility_box_02_metal.png"
+        },
+        {
+          "name": "Image Texture.002",
+          "type": "TEX_IMAGE",
+          "image": "utility_box_02_rough.png"
+        },
+        {
+          "name": "Image Texture.003",
+          "type": "TEX_IMAGE",
+          "image": "utility_box_02_nor_gl.png"
+        },
+        {
+          "name": "Normal Map",
+          "type": "NORMAL_MAP"
+        },
+        {
+          "name": "Mapping",
+          "type": "MAPPING"
+        },
+        {
+          "name": "Reroute",
+          "type": "REROUTE"
+        },
+        {
+          "name": "Texture Coordinate",
+          "type": "TEX_COORD"
+        },
+        {
+          "name": "Frame",
+          "type": "FRAME"
+        },
+        {
+          "name": "Frame.001",
+          "type": "FRAME"
+        }
+      ]
+    }
+  ],
+  "images": [
+    {
+      "name": "utility_box_02_diff.png",
+      "size": [
+        4096,
+        4096
+      ],
+      "packed": false,
+      "filepath": "//textures\\utility_box_02_diff_4k.jpg",
+      "colorspace": "sRGB",
+      "exists": true
+    },
+    {
+      "name": "utility_box_02_metal.png",
+      "size": [
+        4096,
+        4096
+      ],
+      "packed": false,
+      "filepath": "//textures\\utility_box_02_metal_4k.exr",
+      "colorspace": "Non-Color",
+      "exists": true
+    },
+    {
+      "name": "utility_box_02_nor_gl.png",
+      "size": [
+        4096,
+        4096
+      ],
+      "packed": false,
+      "filepath": "//textures\\utility_box_02_nor_gl_4k.exr",
+      "colorspace": "Non-Color",
+      "exists": true
+    },
+    {
+      "name": "utility_box_02_rough.png",
+      "size": [
+        4096,
+        4096
+      ],
+      "packed": false,
+      "filepath": "//textures\\utility_box_02_rough_4k.exr",
+      "colorspace": "Non-Color",
+      "exists": true
+    }
+  ],
+  "actions": []
+}

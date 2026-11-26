@@ -1,0 +1,44 @@
+127.0.0.1 "GET /api/simulation?mode=mission&seed=123&people=6&scenario=open&map_size=35&scouts=5&rescuers=7&new_target=100&collapse=100 HTTP/1.1" 200 -
+test_custom_events_work_in_api (test_api.TestAPI.test_custom_events_work_in_api) ... ok
+127.0.0.1 "GET /mission HTTP/1.1" 200 -
+127.0.0.1 "GET /scout HTTP/1.1" 200 -
+127.0.0.1 "GET /rescue HTTP/1.1" 200 -
+127.0.0.1 "GET /style.css HTTP/1.1" 200 -
+127.0.0.1 "GET /app.js HTTP/1.1" 200 -
+test_health_and_pages (test_api.TestAPI.test_health_and_pages) ... ok
+127.0.0.1 "GET /api/simulation?mode=mission&people=999 HTTP/1.1" 400 -
+test_invalid_parameter_returns_400 (test_api.TestAPI.test_invalid_parameter_returns_400) ... C:\Users\rotn1\AppData\Local\Programs\Python\Python314\Lib\tempfile.py:484: ResourceWarning: Implicitly cleaning up <HTTPError 400: 'Bad Request'>
+  _warnings.warn(self.warn_message, ResourceWarning)
+ok
+test_dynamic_replans (test_engine.TestMission.test_dynamic_replans) ... ok
+test_energy_reserve (test_engine.TestMission.test_energy_reserve) ... ok
+test_failure_does_not_complete_trip (test_engine.TestMission.test_failure_does_not_complete_trip) ... ok
+test_failure_release_uses_current_position (test_engine.TestMission.test_failure_release_uses_current_position) ... ok
+test_five_methods (test_engine.TestMission.test_five_methods) ... ok
+test_identical_world_not_identical_results (test_engine.TestMission.test_identical_world_not_identical_results) ... ok
+test_json_all_finite (test_engine.TestMission.test_json_all_finite) ... ok
+test_maximum_fleet_simulates (test_engine.TestMission.test_maximum_fleet_simulates) ... ok
+test_new_signal_after_full_initial_coverage (test_engine.TestMission.test_new_signal_after_full_initial_coverage) ... ok
+test_new_targets_not_visible_prematurely (test_engine.TestMission.test_new_targets_not_visible_prematurely) ... ok
+test_no_rescue_before_detection (test_engine.TestMission.test_no_rescue_before_detection) ... ok
+test_replay_same_events_and_actions (test_engine.TestMission.test_replay_same_events_and_actions) ... ok
+test_scout_and_rescue_pages (test_engine.TestMission.test_scout_and_rescue_pages) ... ok
+test_unique_people (test_engine.TestMission.test_unique_people) ... ok
+test_dominance (test_engine.TestNSGAII.test_dominance) ... ok
+test_ga_real_front (test_engine.TestNSGAII.test_ga_real_front) ... ok
+test_nondominated_sort (test_engine.TestNSGAII.test_nondominated_sort) ... ok
+test_deterministic_initial_conditions (test_engine.TestWorld.test_deterministic_initial_conditions) ... ok
+test_event_metadata (test_engine.TestWorld.test_event_metadata) ... ok
+test_event_replay (test_engine.TestWorld.test_event_replay) ... ok
+test_invalid (test_engine.TestWorld.test_invalid) ... ok
+test_probability_full_generates_event (test_engine.TestWorld.test_probability_full_generates_event) ... ok
+test_probability_zero_off (test_engine.TestWorld.test_probability_zero_off) ... ok
+test_route_cache_version_changes (test_engine.TestWorld.test_route_cache_version_changes) ... ok
+test_smoke_reduces_visibility (test_engine.TestWorld.test_smoke_reduces_visibility) ... ok
+test_time_delayed_spawning (test_engine.TestWorld.test_time_delayed_spawning) ... ok
+test_world_settings (test_engine.TestWorld.test_world_settings) ... ok
+
+----------------------------------------------------------------------
+Ran 30 tests in 10.778s
+
+OK

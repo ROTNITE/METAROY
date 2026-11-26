@@ -1,0 +1,153 @@
+{
+  "id": "BuildingVariants",
+  "source": "blender/prepared/v2/Building/Building.blend",
+  "source_sha256": "ef82bc4979ab5791330b0e0779e082d26316077bcb494f8f130f311e4ebc9244",
+  "blend": "BuildingVariants.blend",
+  "parts": [
+    {
+      "object": "ruin_full",
+      "role": "module",
+      "triangles": 114994,
+      "location_m": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "rotation_deg": [
+        0.0,
+        -0.0,
+        0.0
+      ],
+      "parent": null,
+      "dimensions_m": [
+        11.950923919677734,
+        7.364544868469238,
+        9.594071388244629
+      ],
+      "materials": [
+        "M_Building_Baked"
+      ],
+      "fbx": "parts/ruin_full.fbx"
+    },
+    {
+      "object": "ruin_low",
+      "role": "module",
+      "triangles": 32736,
+      "location_m": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "rotation_deg": [
+        0.0,
+        -0.0,
+        0.0
+      ],
+      "parent": null,
+      "dimensions_m": [
+        11.931774139404297,
+        7.1645097732543945,
+        3.708733081817627
+      ],
+      "materials": [
+        "M_Building_Baked"
+      ],
+      "fbx": "parts/ruin_low.fbx"
+    }
+  ],
+  "materials": [
+    {
+      "name": "M_Building_Baked",
+      "glass": false,
+      "inputs": {
+        "Base Color": [
+          0.800000011920929,
+          0.800000011920929,
+          0.800000011920929,
+          1.0
+        ],
+        "Metallic": 0.0,
+        "Roughness": 0.5,
+        "Transmission Weight": 0.0,
+        "IOR": 1.5,
+        "Alpha": 1.0,
+        "Emission Color": [
+          1.0,
+          1.0,
+          1.0,
+          1.0
+        ],
+        "Emission Strength": 0.0
+      },
+      "links": [
+        {
+          "from": "Principled BSDF",
+          "output": "BSDF",
+          "to": "Material Output",
+          "input": "Surface"
+        },
+        {
+          "from": "Image Texture",
+          "output": "Color",
+          "to": "Principled BSDF",
+          "input": "Base Color"
+        },
+        {
+          "from": "Image Texture.001",
+          "output": "Color",
+          "to": "Separate Color",
+          "input": "Color"
+        },
+        {
+          "from": "Separate Color",
+          "output": "Green",
+          "to": "Principled BSDF",
+          "input": "Roughness"
+        },
+        {
+          "from": "Separate Color",
+          "output": "Blue",
+          "to": "Principled BSDF",
+          "input": "Metallic"
+        },
+        {
+          "from": "Image Texture.002",
+          "output": "Color",
+          "to": "Normal Map",
+          "input": "Color"
+        },
+        {
+          "from": "Normal Map",
+          "output": "Normal",
+          "to": "Principled BSDF",
+          "input": "Normal"
+        }
+      ],
+      "images": [
+        {
+          "node": "Image Texture",
+          "image": "T_Building_BaseColor",
+          "file": "textures/T_0_T_Building_BaseColor.png",
+          "colorspace": "sRGB"
+        },
+        {
+          "node": "Image Texture.001",
+          "image": "T_Building_ORM",
+          "file": "textures/T_1_T_Building_ORM.png",
+          "colorspace": "Non-Color"
+        },
+        {
+          "node": "Image Texture.002",
+          "image": "T_Building_Normal",
+          "file": "textures/T_2_T_Building_Normal.png",
+          "colorspace": "Non-Color"
+        }
+      ]
+    }
+  ],
+  "repairs": [
+    "Original textured ruin plus a genuinely cut low ruin; empty damaged window apertures, original v2 unchanged."
+  ],
+  "actions": [],
+  "animation_runtime": "Rigid meshes driven from Unreal actuator state; Blender actions are inspectable demonstrations."
+}

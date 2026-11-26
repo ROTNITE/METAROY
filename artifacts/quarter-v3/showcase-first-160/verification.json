@@ -1,0 +1,23 @@
+{
+  "passed": true,
+  "seconds": 160.00560698186746,
+  "environment": "showcase",
+  "seed": 20261109,
+  "event_types": [
+    "collapse",
+    "fire",
+    "flood",
+    "low_visibility",
+    "mud",
+    "new_target",
+    "road_damage",
+    "smoke"
+  ],
+  "applied": 11,
+  "found": 7,
+  "delivered": 0,
+  "fps": 166.66659100464284,
+  "p95_frame_ms": 7,
+  "memory_mb": 3289.8359375,
+  "traffic_probe": null
+}

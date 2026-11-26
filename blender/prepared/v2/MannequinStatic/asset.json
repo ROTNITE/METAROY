@@ -1,0 +1,128 @@
+{
+  "id": "MannequinStatic",
+  "source": "blender/Meshy_AI_Rescue_Training_Mannequin_20261109_image-to-3d-texture.blend",
+  "source_sha256": "73a87db63a913b991cc46ed4aa363e4c61db403c1ab09b2082e776d5e55d5f82",
+  "blend": "MannequinStatic.blend",
+  "parts": [
+    {
+      "object": "MannequinStatic",
+      "role": "static",
+      "triangles": 16000,
+      "location_m": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "rotation_deg": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "parent": null,
+      "dimensions_m": [
+        0.8660762310028076,
+        0.3221099376678467,
+        1.7503736019134521
+      ],
+      "materials": [
+        "M_MannequinStatic_Baked"
+      ],
+      "fbx": "parts/MannequinStatic.fbx"
+    }
+  ],
+  "materials": [
+    {
+      "name": "M_MannequinStatic_Baked",
+      "glass": false,
+      "inputs": {
+        "Base Color": [
+          0.800000011920929,
+          0.800000011920929,
+          0.800000011920929,
+          1.0
+        ],
+        "Metallic": 0.0,
+        "Roughness": 0.5,
+        "Transmission Weight": 0.0,
+        "IOR": 1.5,
+        "Alpha": 1.0,
+        "Emission Color": [
+          1.0,
+          1.0,
+          1.0,
+          1.0
+        ],
+        "Emission Strength": 0.0
+      },
+      "links": [
+        {
+          "from": "Principled BSDF",
+          "output": "BSDF",
+          "to": "Material Output",
+          "input": "Surface"
+        },
+        {
+          "from": "Image Texture",
+          "output": "Color",
+          "to": "Principled BSDF",
+          "input": "Base Color"
+        },
+        {
+          "from": "Image Texture.001",
+          "output": "Color",
+          "to": "Separate Color",
+          "input": "Color"
+        },
+        {
+          "from": "Separate Color",
+          "output": "Green",
+          "to": "Principled BSDF",
+          "input": "Roughness"
+        },
+        {
+          "from": "Separate Color",
+          "output": "Blue",
+          "to": "Principled BSDF",
+          "input": "Metallic"
+        },
+        {
+          "from": "Image Texture.002",
+          "output": "Color",
+          "to": "Normal Map",
+          "input": "Color"
+        },
+        {
+          "from": "Normal Map",
+          "output": "Normal",
+          "to": "Principled BSDF",
+          "input": "Normal"
+        }
+      ],
+      "images": [
+        {
+          "node": "Image Texture",
+          "image": "T_MannequinStatic_BaseColor",
+          "file": "textures/T_0_T_MannequinStatic_BaseColor.png",
+          "colorspace": "sRGB"
+        },
+        {
+          "node": "Image Texture.001",
+          "image": "T_MannequinStatic_ORM",
+          "file": "textures/T_1_T_MannequinStatic_ORM.png",
+          "colorspace": "Non-Color"
+        },
+        {
+          "node": "Image Texture.002",
+          "image": "T_MannequinStatic_Normal",
+          "file": "textures/T_2_T_MannequinStatic_Normal.png",
+          "colorspace": "Non-Color"
+        }
+      ]
+    }
+  ],
+  "repairs": [
+    "Meter scale, ground pivot, UV-preserving reduction; source untouched."
+  ],
+  "actions": [],
+  "animation_runtime": "Rigid meshes driven from Unreal actuator state; Blender actions are inspectable demonstrations."
+}

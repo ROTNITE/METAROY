@@ -1,0 +1,282 @@
+{
+  "config": {
+    "seed": 160000,
+    "rounds": 2,
+    "patience": 2,
+    "proposals": 2,
+    "screen": 4,
+    "validate": 4,
+    "final": 4,
+    "energy_tol": 0.0,
+    "suite_tol": 0.01
+  },
+  "source": {
+    "contracts/__init__.py": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "contracts/expressions.py": "9ef4ac33da9bb9806928cdb8a11bf9d7803ecc5dc74ea917227c650fa976fb42",
+    "contracts/protocol.py": "dd3624b15fb2cc22412696f455a2acf695dafe65f9c7ce069c17de42fcfa534e",
+    "controller/__init__.py": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "controller/accounting.py": "876929cb03928cbcafba6344bc0d3c0836d708831f5abcce43842c952c8f8f52",
+    "controller/adaptive_survey.py": "5be55bf68c508455aa94fd0b2237601abe103e2acd53e03a26238fe9b8ca23c8",
+    "controller/advisor.py": "25836cef53f2d902b40f1d550813a1d6ac678e8a3f95b9bace756d48239b4fc8",
+    "controller/ai.py": "0e44856e628bb9d797b2db536dd73e9355f1ff1499594f461bf26c7ca6cd209e",
+    "controller/ai_contracts.py": "40cedb89ba135a29c4564a46e59c79f26e9985cfeae8509e86215e2eb0e796a4",
+    "controller/ai_policy.py": "e3832fa95d32591ed01f033ab017122e065d9ede35404a556b1e7b28a8dfd290",
+    "controller/assignment.py": "acb4f2a528c400f085c92791ba282d773b4745cd0e0b514c45dd7a987633e124",
+    "controller/baselines.py": "434e5b1729b8c8f86a7374cf132971c744fb408e3d7553a8690210403cf1b811",
+    "controller/bottleneck.py": "c4fa39ebc3c89c2bbed01b2f15ae59391a69cd7764492d83b36c3fb332949f81",
+    "controller/client.py": "d9d5d2e1cdc647ca45c0ccdd67c2732906fed11ad2d07c0cc4a7bb4edb9bf5e5",
+    "controller/communication_log.py": "fc3c75a7a2c8eb23f14a787b7e15e0d27fe46f79ca1bfd5815f0233557015415",
+    "controller/decisions.py": "d7a87aa2cdf7beb89109954331908f7d3e8dcd1566ecb0822c44f1f6c3d8420d",
+    "controller/health.py": "b0dc17bf1be7420724556c36b965237cee586884c24b7788ff7937f1815c749a",
+    "controller/information_gain.py": "750fa3f902a85c8949f23a784921efc0436f5d850cf20a9565d40b6eb030465b",
+    "controller/main.py": "0e7c3044d8c7330a5b534c6a36088dd47b911fbfc3efc4facb37df9544976bad",
+    "controller/native_patrol.py": "9f5f0ff61c4c144e2cd5071b533f5460af3f52eeeea6d6c78eea6c73eb9d802a",
+    "controller/navigation.py": "4f963125e2310be1cfeda76c4231fd7b7342b37b0355bdd5de58ba54d8b554fe",
+    "controller/net65.py": "f314b9ba96afa0c59966e8ba2a0a2abd07f7c1486cf26972672f5b2bb9503ccf",
+    "controller/operational.py": "c79bf0038035676b58bb83103b2e9a3f698b1f77b3283bdbfeb79b13d403fb9f",
+    "controller/operator_directives.py": "8506ecd7371d0bb6dd2e846bdcf35476e2ad7da9454f73e7e93f81869ea72042",
+    "controller/operator_input.py": "febfbbbfa32a4358ecd8e20dfcf7b6ddbf7ee9a095c29875fb1a3308ffb792f3",
+    "controller/optimization.py": "1e5bd556e5e232cffe2c09ee98d44a33831eb24d2c2194f604e0527d4761e479",
+    "controller/policy.py": "359f23dd474fa0503c657289664a0623db8347417d3f0112c90ee1c1156ae114",
+    "controller/portable.py": "68dab95749c8ee50d9721cb46d2e27be0f05cfc36268f07badedb060ea241016",
+    "controller/problem_builder.py": "edadde90d1d78843751dd272e24d52a37e17ea1895225061120b99869986cac8",
+    "controller/public_core.py": "255824a6a2a6cec4aa16cd8cd49dc9d19e58ee9bacb55b3c4090b18539ac9280",
+    "controller/resource_predictor.py": "1844027221212301ce4cdde0351dc2e7452f9380fa02e18f53eb3f2b3e4e99a1",
+    "controller/scenario_program.py": "1a76387fc12f5d058df311216a23b0cd7dced4c23d658ba1fc9861a6f217d243",
+    "controller/scenarios.py": "6749f4bb80f182fd9d8339d6c29dd75348a01fccbfeede41745f1d89f21d2b8e",
+    "controller/strategies.py": "d79a0cfc6b20b46d36d542c40695b7e0866a438a0e71ef7abb1ee47f0764831f",
+    "controller/vendor/__init__.py": "c2f337bd7a39276403ad56a441dd2c6c833f3ab48ef3effa2ce88af1dc28c1cf",
+    "controller/vendor/nsga2_v052.py": "714da96ba5bd955809404af6476afa0bef0e59137954a973dff17dc98c7e4a12",
+    "environment/__init__.py": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "environment/competition.py": "cb8b584fe8d1e9c40bdcd1b339f6db36f048b9b53c19506c9254fe8b40b4a249",
+    "environment/config.py": "5c4e56078da49367a861029f29173e95dfa6d43fd5862fc3e54051df08717c2b",
+    "environment/disturbances.py": "21683cfcbfe45fc43f0393df9a7314d1bcaab55a41ac14074ae1786849d84a86",
+    "environment/events.py": "24933488b99ed811cadeaeef3497e58586d0a063cabaca66389b986864cdc14c",
+    "environment/geometry.py": "21adff2a7c831bdcaa53f0e2b62879e96ec398f635b7149d2e903ffc3f6e449e",
+    "environment/layout.py": "4bd59f737f84faca858ed3ca5b33ad286f64a61a3d9840dd0375b05603b297ab",
+    "environment/main.py": "0fa8fd2ec461929051d392997d67e7568a0c0791a3447bdfd1291feb4569b355",
+    "environment/neighbourhood.py": "cd5ca22d04e84979946c949b236a85b456e2536ca7326652d0ebe0a92a819e8b",
+    "environment/reset_layout.py": "7c1b71d87828dca2fbc310cebd64f66ba76344b57d3564a76f10f58a28285123",
+    "environment/server.py": "b3f9fd3cf4cf5adedaa188f38e563b182f70f332e01e868d29ae2f63bc7bee39",
+    "environment/streets.py": "aadd8a951d3c5c6f14edbb2e1fbfebcd102100344526e746429eecef3d0bdd35",
+    "environment/world.py": "83ffcc600d42ba6696c94cd895d8ab78bc1db0ec88631564eb47282a1d758a03",
+    "experiments/mission_flow/auto_information.py": "a86bd0699eb536b57018a3327e4a2e705853ec42874ca186e6b3954d8c2987a8",
+    "experiments/mission_flow/benchmark_bottleneck.py": "e31cab8140184eae58ae2f602ba2a412b02fd821dab83917c4581e6665e2ae80",
+    "experiments/mission_flow/benchmark_core_compare.py": "a797e7f699b60b301ed9a94ab2ffa86bb7920942c49aa17372b664559e6b841e",
+    "experiments/mission_flow/benchmark_information.py": "053d1cdeb04c6aff708c8ddaf9753d04e7f6a4822db4d1c1ecf16fe30cd2a7b7",
+    "experiments/mission_flow/benchmark_logistics.py": "ee1347120c4770e646eb2cbaa1de808cbeac3e60701724e3876ea6be46baf39f",
+    "experiments/mission_flow/benchmark_portable.py": "a32b4c6187b3af17cbe7f13d33cdf2c7d58db478b1b6a5656ee77792a54c5f2b",
+    "experiments/mission_flow/benchmark_resource.py": "0d7df39be0e12d95907fbf2424c9b7fbf0a7f304dc3d4b21e751c5c6dd5941a3",
+    "experiments/mission_flow/bottleneck_trial.py": "cbc075231cbcf6293f0c955d5270a8705da62d60c6a585e1558dafe2630a0557",
+    "experiments/mission_flow/logistics_trial.py": "00ffa23a0ad423f500e0f5349c59f921e43df3da34963a78e89f6161ff71fd00"
+  },
+  "round": 2,
+  "incumbent": "range-late",
+  "history": [
+    "info-center",
+    "info-split",
+    "info-cover",
+    "info-split-dense"
+  ],
+  "stale": 2,
+  "rounds": [
+    {
+      "round": 0,
+      "incumbent": "range-late",
+      "screen": {
+        "info-center": {
+          "base": {
+            "n": 16,
+            "m1": 0.6305078601953602,
+            "saved": 125,
+            "energy": 0.22809984356516505,
+            "clipped": 134.52537965506716,
+            "errors": 0,
+            "reserve": 0,
+            "rejections": 0
+          },
+          "candidate": {
+            "n": 16,
+            "m1": 0.6401232448107448,
+            "saved": 127,
+            "energy": 0.22965487445665217,
+            "clipped": 135.35370688339438,
+            "errors": 0,
+            "reserve": 0,
+            "rejections": 0
+          },
+          "delta": 0.009615384615384616,
+          "by_suite": {
+            "physical": 0.0,
+            "mixed": 0.038461538461538464,
+            "mixed_stress": 0.0,
+            "variable_stress": 0.0
+          },
+          "ci": null,
+          "checks": {
+            "m1": true,
+            "saved": true,
+            "energy": false,
+            "time": false,
+            "errors": true,
+            "reserve": true,
+            "rejections": true,
+            "suite": true,
+            "confidence": true
+          },
+          "passed": false,
+          "score": 0.00797704529551297
+        },
+        "info-split": {
+          "base": {
+            "n": 16,
+            "m1": 0.6305078601953602,
+            "saved": 125,
+            "energy": 0.22809984356516505,
+            "clipped": 134.52537965506716,
+            "errors": 0,
+            "reserve": 0,
+            "rejections": 0
+          },
+          "candidate": {
+            "n": 16,
+            "m1": 0.6401232448107448,
+            "saved": 127,
+            "energy": 0.2304407746839489,
+            "clipped": 134.86571085164834,
+            "errors": 0,
+            "reserve": 0,
+            "rejections": 0
+          },
+          "delta": 0.009615384615384616,
+          "by_suite": {
+            "physical": 0.0,
+            "mixed": 0.038461538461538464,
+            "mixed_stress": 0.0,
+            "variable_stress": 0.0
+          },
+          "ci": null,
+          "checks": {
+            "m1": true,
+            "saved": true,
+            "energy": false,
+            "time": false,
+            "errors": true,
+            "reserve": true,
+            "rejections": true,
+            "suite": true,
+            "confidence": true
+          },
+          "passed": false,
+          "score": 0.00782298586831278
+        }
+      },
+      "selected": "info-center",
+      "validation": null,
+      "promoted": false
+    },
+    {
+      "round": 1,
+      "incumbent": "range-late",
+      "screen": {
+        "info-cover": {
+          "base": {
+            "n": 16,
+            "m1": 0.6880411255411255,
+            "saved": 114,
+            "energy": 0.21984991868960058,
+            "clipped": 125.09308261183261,
+            "errors": 0,
+            "reserve": 0,
+            "rejections": 18
+          },
+          "candidate": {
+            "n": 16,
+            "m1": 0.6905212842712842,
+            "saved": 114,
+            "energy": 0.22526055780778584,
+            "clipped": 125.1788713023088,
+            "errors": 0,
+            "reserve": 0,
+            "rejections": 18
+          },
+          "delta": 0.0024801587301587283,
+          "by_suite": {
+            "physical": -0.017857142857142877,
+            "mixed": 0.02777777777777779,
+            "mixed_stress": 0.0,
+            "variable_stress": 0.0
+          },
+          "ci": null,
+          "checks": {
+            "m1": true,
+            "saved": true,
+            "energy": false,
+            "time": false,
+            "errors": true,
+            "reserve": true,
+            "rejections": true,
+            "suite": false,
+            "confidence": true
+          },
+          "passed": false,
+          "score": -0.0012800116373969008
+        },
+        "info-split-dense": {
+          "base": {
+            "n": 16,
+            "m1": 0.6880411255411255,
+            "saved": 114,
+            "energy": 0.21984991868960058,
+            "clipped": 125.09308261183261,
+            "errors": 0,
+            "reserve": 0,
+            "rejections": 18
+          },
+          "candidate": {
+            "n": 16,
+            "m1": 0.6835768398268398,
+            "saved": 113,
+            "energy": 0.22071079252712217,
+            "clipped": 125.56689213564214,
+            "errors": 0,
+            "reserve": 0,
+            "rejections": 18
+          },
+          "delta": -0.004464285714285719,
+          "by_suite": {
+            "physical": -0.017857142857142877,
+            "mixed": 0.0,
+            "mixed_stress": 0.0,
+            "variable_stress": 0.0
+          },
+          "ci": null,
+          "checks": {
+            "m1": false,
+            "saved": false,
+            "energy": false,
+            "time": false,
+            "errors": true,
+            "reserve": true,
+            "rejections": true,
+            "suite": false,
+            "confidence": true
+          },
+          "passed": false,
+          "score": -0.005430411405997269
+        }
+      },
+      "selected": "info-cover",
+      "validation": null,
+      "promoted": false
+    }
+  ],
+  "final_report": {
+    "research_candidate": "range-late",
+    "rounds": 2,
+    "stop": "patience",
+    "production_changed": false,
+    "recommended_for_3d_validation": "range-late",
+    "final": null
+  }
+}

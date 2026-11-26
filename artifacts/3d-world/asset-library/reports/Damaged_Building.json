@@ -1,0 +1,171 @@
+{
+  "id": "Damaged_Building",
+  "source": "blender/Meshy_AI_Damaged_Building_20261109_image-to-3d-texture.blend",
+  "sha256": "5708a1e3514bc143f4c7b5482521e948251002d78c352202618a7c2e0ce1452c",
+  "units": {
+    "system": "METRIC",
+    "scale_length": 1.0
+  },
+  "bounds_min": [
+    -0.9525560140609741,
+    -0.5744889974594116,
+    -0.7652819752693176
+  ],
+  "bounds_max": [
+    0.9511550068855286,
+    0.5991950035095215,
+    0.7638289928436279
+  ],
+  "dimensions": [
+    1.9037110805511475,
+    1.173684000968933,
+    1.5291109085083008
+  ],
+  "objects": [
+    {
+      "name": "Mesh_0",
+      "type": "MESH",
+      "parent": null,
+      "location": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "rotation": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "hidden_render": false,
+      "vertices": 686032,
+      "triangles": 1372354,
+      "uv_layers": [
+        "UVMap"
+      ],
+      "bounds_min": [
+        -0.9525560140609741,
+        -0.5744889974594116,
+        -0.7652819752693176
+      ],
+      "bounds_max": [
+        0.9511550068855286,
+        0.5991950035095215,
+        0.7638289928436279
+      ],
+      "materials": [
+        "Material_0"
+      ],
+      "modifiers": []
+    }
+  ],
+  "materials": [
+    {
+      "name": "Material_0",
+      "nodes": [
+        {
+          "name": "Principled BSDF",
+          "type": "BSDF_PRINCIPLED",
+          "inputs": {
+            "Base Color": {
+              "linked": true,
+              "value": [
+                0.800000011920929,
+                0.800000011920929,
+                0.800000011920929,
+                1.0
+              ]
+            },
+            "Metallic": {
+              "linked": true,
+              "value": 0.0
+            },
+            "Roughness": {
+              "linked": true,
+              "value": 0.5
+            },
+            "IOR": {
+              "linked": false,
+              "value": 1.5
+            },
+            "Alpha": {
+              "linked": false,
+              "value": 1.0
+            },
+            "Transmission Weight": {
+              "linked": false,
+              "value": 0.0
+            }
+          }
+        },
+        {
+          "name": "Material Output",
+          "type": "OUTPUT_MATERIAL"
+        },
+        {
+          "name": "Image Texture",
+          "type": "TEX_IMAGE",
+          "image": "Image_0"
+        },
+        {
+          "name": "Separate Color",
+          "type": "SEPARATE_COLOR"
+        },
+        {
+          "name": "Image Texture.001",
+          "type": "TEX_IMAGE",
+          "image": "Image_1"
+        },
+        {
+          "name": "Normal Map",
+          "type": "NORMAL_MAP"
+        },
+        {
+          "name": "Image Texture.002",
+          "type": "TEX_IMAGE",
+          "image": "Image_2"
+        }
+      ]
+    }
+  ],
+  "images": [
+    {
+      "name": "Image_0",
+      "size": [
+        4096,
+        4096
+      ],
+      "packed": true,
+      "filepath": "",
+      "colorspace": "sRGB",
+      "exists": true
+    },
+    {
+      "name": "Image_1",
+      "size": [
+        2048,
+        2048
+      ],
+      "packed": true,
+      "filepath": "",
+      "colorspace": "Non-Color",
+      "exists": true
+    },
+    {
+      "name": "Image_2",
+      "size": [
+        4096,
+        4096
+      ],
+      "packed": true,
+      "filepath": "",
+      "colorspace": "Non-Color",
+      "exists": true
+    }
+  ],
+  "actions": []
+}

@@ -1,0 +1,1965 @@
+{
+  "config": {
+    "seed": 20000000,
+    "rounds": 40,
+    "patience": 8,
+    "proposals": 3,
+    "screen": 24,
+    "validate": 64,
+    "final": 128,
+    "energy_tol": 0.0,
+    "suite_tol": 0.01
+  },
+  "source": {
+    "contracts\\__init__.py": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "contracts\\expressions.py": "9ef4ac33da9bb9806928cdb8a11bf9d7803ecc5dc74ea917227c650fa976fb42",
+    "contracts\\protocol.py": "dd3624b15fb2cc22412696f455a2acf695dafe65f9c7ce069c17de42fcfa534e",
+    "controller\\__init__.py": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "controller\\accounting.py": "876929cb03928cbcafba6344bc0d3c0836d708831f5abcce43842c952c8f8f52",
+    "controller\\adaptive_survey.py": "5be55bf68c508455aa94fd0b2237601abe103e2acd53e03a26238fe9b8ca23c8",
+    "controller\\advisor.py": "25836cef53f2d902b40f1d550813a1d6ac678e8a3f95b9bace756d48239b4fc8",
+    "controller\\ai.py": "0e44856e628bb9d797b2db536dd73e9355f1ff1499594f461bf26c7ca6cd209e",
+    "controller\\ai_contracts.py": "40cedb89ba135a29c4564a46e59c79f26e9985cfeae8509e86215e2eb0e796a4",
+    "controller\\ai_policy.py": "e3832fa95d32591ed01f033ab017122e065d9ede35404a556b1e7b28a8dfd290",
+    "controller\\assignment.py": "acb4f2a528c400f085c92791ba282d773b4745cd0e0b514c45dd7a987633e124",
+    "controller\\baselines.py": "434e5b1729b8c8f86a7374cf132971c744fb408e3d7553a8690210403cf1b811",
+    "controller\\bottleneck.py": "c4fa39ebc3c89c2bbed01b2f15ae59391a69cd7764492d83b36c3fb332949f81",
+    "controller\\client.py": "d9d5d2e1cdc647ca45c0ccdd67c2732906fed11ad2d07c0cc4a7bb4edb9bf5e5",
+    "controller\\communication_log.py": "fc3c75a7a2c8eb23f14a787b7e15e0d27fe46f79ca1bfd5815f0233557015415",
+    "controller\\decisions.py": "d7a87aa2cdf7beb89109954331908f7d3e8dcd1566ecb0822c44f1f6c3d8420d",
+    "controller\\health.py": "b0dc17bf1be7420724556c36b965237cee586884c24b7788ff7937f1815c749a",
+    "controller\\information_gain.py": "750fa3f902a85c8949f23a784921efc0436f5d850cf20a9565d40b6eb030465b",
+    "controller\\main.py": "a70ca2d19d212ff737ad7909bc29daa3fd77d39eed02a2aff3301e0db350f2f9",
+    "controller\\mission_value.py": "37994afff61f850e00d5ee533b9d50bb73cf3bd6179f532494c3ba141ec869b4",
+    "controller\\native_patrol.py": "9f5f0ff61c4c144e2cd5071b533f5460af3f52eeeea6d6c78eea6c73eb9d802a",
+    "controller\\navigation.py": "4f963125e2310be1cfeda76c4231fd7b7342b37b0355bdd5de58ba54d8b554fe",
+    "controller\\net65.py": "f314b9ba96afa0c59966e8ba2a0a2abd07f7c1486cf26972672f5b2bb9503ccf",
+    "controller\\operational.py": "c79bf0038035676b58bb83103b2e9a3f698b1f77b3283bdbfeb79b13d403fb9f",
+    "controller\\operator_directives.py": "8506ecd7371d0bb6dd2e846bdcf35476e2ad7da9454f73e7e93f81869ea72042",
+    "controller\\operator_input.py": "febfbbbfa32a4358ecd8e20dfcf7b6ddbf7ee9a095c29875fb1a3308ffb792f3",
+    "controller\\optimization.py": "1e5bd556e5e232cffe2c09ee98d44a33831eb24d2c2194f604e0527d4761e479",
+    "controller\\partial_resource.py": "0043b4b4431b0d9019ed8b28cbda0c8afdfcee8ccc0878f2ec03cd7b0490d503",
+    "controller\\policy.py": "359f23dd474fa0503c657289664a0623db8347417d3f0112c90ee1c1156ae114",
+    "controller\\portable.py": "68dab95749c8ee50d9721cb46d2e27be0f05cfc36268f07badedb060ea241016",
+    "controller\\problem_builder.py": "edadde90d1d78843751dd272e24d52a37e17ea1895225061120b99869986cac8",
+    "controller\\public_core.py": "255824a6a2a6cec4aa16cd8cd49dc9d19e58ee9bacb55b3c4090b18539ac9280",
+    "controller\\resource_predictor.py": "1844027221212301ce4cdde0351dc2e7452f9380fa02e18f53eb3f2b3e4e99a1",
+    "controller\\resource_tune.py": "6baeb4a1c38e4af16130d19f897558c2f0603427f9a1d4f39e8bd4b5eadac12f",
+    "controller\\scenario_program.py": "1a76387fc12f5d058df311216a23b0cd7dced4c23d658ba1fc9861a6f217d243",
+    "controller\\scenarios.py": "6749f4bb80f182fd9d8339d6c29dd75348a01fccbfeede41745f1d89f21d2b8e",
+    "controller\\strategies.py": "d79a0cfc6b20b46d36d542c40695b7e0866a438a0e71ef7abb1ee47f0764831f",
+    "controller\\vendor\\__init__.py": "c2f337bd7a39276403ad56a441dd2c6c833f3ab48ef3effa2ce88af1dc28c1cf",
+    "controller\\vendor\\nsga2_v052.py": "714da96ba5bd955809404af6476afa0bef0e59137954a973dff17dc98c7e4a12",
+    "environment\\__init__.py": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "environment\\competition.py": "cb8b584fe8d1e9c40bdcd1b339f6db36f048b9b53c19506c9254fe8b40b4a249",
+    "environment\\config.py": "5c4e56078da49367a861029f29173e95dfa6d43fd5862fc3e54051df08717c2b",
+    "environment\\disturbances.py": "21683cfcbfe45fc43f0393df9a7314d1bcaab55a41ac14074ae1786849d84a86",
+    "environment\\events.py": "24933488b99ed811cadeaeef3497e58586d0a063cabaca66389b986864cdc14c",
+    "environment\\geometry.py": "21adff2a7c831bdcaa53f0e2b62879e96ec398f635b7149d2e903ffc3f6e449e",
+    "environment\\layout.py": "4bd59f737f84faca858ed3ca5b33ad286f64a61a3d9840dd0375b05603b297ab",
+    "environment\\main.py": "0fa8fd2ec461929051d392997d67e7568a0c0791a3447bdfd1291feb4569b355",
+    "environment\\neighbourhood.py": "cd5ca22d04e84979946c949b236a85b456e2536ca7326652d0ebe0a92a819e8b",
+    "environment\\reset_layout.py": "7c1b71d87828dca2fbc310cebd64f66ba76344b57d3564a76f10f58a28285123",
+    "environment\\server.py": "b3f9fd3cf4cf5adedaa188f38e563b182f70f332e01e868d29ae2f63bc7bee39",
+    "environment\\streets.py": "aadd8a951d3c5c6f14edbb2e1fbfebcd102100344526e746429eecef3d0bdd35",
+    "environment\\world.py": "83ffcc600d42ba6696c94cd895d8ab78bc1db0ec88631564eb47282a1d758a03",
+    "experiments\\mission_flow\\auto_information.py": "a86bd0699eb536b57018a3327e4a2e705853ec42874ca186e6b3954d8c2987a8",
+    "experiments\\mission_flow\\benchmark_bottleneck.py": "e31cab8140184eae58ae2f602ba2a412b02fd821dab83917c4581e6665e2ae80",
+    "experiments\\mission_flow\\benchmark_information.py": "053d1cdeb04c6aff708c8ddaf9753d04e7f6a4822db4d1c1ecf16fe30cd2a7b7",
+    "experiments\\mission_flow\\benchmark_logistics.py": "ee1347120c4770e646eb2cbaa1de808cbeac3e60701724e3876ea6be46baf39f",
+    "experiments\\mission_flow\\benchmark_mission_value.py": "9b44bfebe23c92a4445af12a56a9a420e63f2958d388c516950ec15c6231c88c",
+    "experiments\\mission_flow\\benchmark_portable.py": "a32b4c6187b3af17cbe7f13d33cdf2c7d58db478b1b6a5656ee77792a54c5f2b",
+    "experiments\\mission_flow\\benchmark_resource.py": "0d7df39be0e12d95907fbf2424c9b7fbf0a7f304dc3d4b21e751c5c6dd5941a3",
+    "experiments\\mission_flow\\bottleneck_trial.py": "cbc075231cbcf6293f0c955d5270a8705da62d60c6a585e1558dafe2630a0557",
+    "experiments\\mission_flow\\logistics_trial.py": "00ffa23a0ad423f500e0f5349c59f921e43df3da34963a78e89f6161ff71fd00"
+  },
+  "round": 10,
+  "incumbent": "info-split-only",
+  "history": [
+    "info-center",
+    "info-split",
+    "info-cover",
+    "info-split-dense",
+    "info-split-only",
+    "info-repeat-age",
+    "info-repeat-gain",
+    "info-repeat-rescue",
+    "info-repeat-tune-0.75-1",
+    "info-repeat-tune-2-3",
+    "info-repeat-tune-2-0.25",
+    "info-repeat-tune-2.5-0.5",
+    "info-repeat-tune-0.25-3",
+    "info-repeat-tune-0-3",
+    "info-repeat-tune-3-1.5",
+    "info-repeat-tune-0.25-1",
+    "info-repeat-tune-1.25-0",
+    "info-repeat-tune-0.75-0.75",
+    "info-repeat-tune-1.5-1.25",
+    "info-repeat-tune-2-0.75",
+    "info-repeat-tune-1.5-1.5",
+    "info-repeat-tune-1-0.75",
+    "info-repeat-tune-1.25-2",
+    "info-repeat-tune-3-0.75",
+    "info-repeat-tune-0.25-0.5",
+    "info-repeat-tune-1.25-1.25",
+    "info-repeat-tune-0.5-1.5",
+    "info-repeat-tune-0.75-3",
+    "info-repeat-tune-0.25-2.5",
+    "info-repeat-tune-0-0"
+  ],
+  "stale": 8,
+  "rounds": [
+    {
+      "round": 0,
+      "incumbent": "range-late",
+      "screen": {
+        "info-center": {
+          "base": {
+            "n": 96,
+            "m1": 0.6370583120583121,
+            "saved": 702,
+            "energy": 0.22748007361119632,
+            "clipped": 132.18783236439486,
+            "errors": 0,
+            "reserve": 0,
+            "rejections": 25
+          },
+          "candidate": {
+            "n": 96,
+            "m1": 0.6418145511895512,
+            "saved": 708,
+            "energy": 0.23075957434395963,
+            "clipped": 132.5025064056314,
+            "errors": 0,
+            "reserve": 0,
+            "rejections": 25
+          },
+          "delta": 0.004756239131239134,
+          "by_suite": {
+            "physical": 0.00436253561253562,
+            "mixed": 0.014662420912420917,
+            "mixed_stress": 0.0,
+            "variable_stress": 0.0
+          },
+          "ci": null,
+          "checks": {
+            "m1": true,
+            "saved": true,
+            "energy": false,
+            "time": false,
+            "errors": true,
+            "reserve": true,
+            "rejections": true,
+            "suite": true,
+            "confidence": true
+          },
+          "passed": false,
+          "score": 0.002355690860212912
+        },
+        "info-split": {
+          "base": {
+            "n": 96,
+            "m1": 0.6370583120583121,
+            "saved": 702,
+            "energy": 0.22748007361119632,
+            "clipped": 132.18783236439486,
+            "errors": 0,
+            "reserve": 0,
+            "rejections": 25
+          },
+          "candidate": {
+            "n": 96,
+            "m1": 0.6561829085266585,
+            "saved": 725,
+            "energy": 0.23106122589042669,
+            "clipped": 132.0777297933548,
+            "errors": 0,
+            "reserve": 0,
+            "rejections": 25
+          },
+          "delta": 0.019124596468346473,
+          "by_suite": {
+            "physical": 0.025008903133903138,
+            "mixed": 0.05148948273948275,
+            "mixed_stress": 0.0,
+            "variable_stress": 0.0
+          },
+          "ci": null,
+          "checks": {
+            "m1": true,
+            "saved": true,
+            "energy": false,
+            "time": true,
+            "errors": true,
+            "reserve": true,
+            "rejections": true,
+            "suite": true,
+            "confidence": true
+          },
+          "passed": false,
+          "score": 0.016763190331285465
+        },
+        "info-cover": {
+          "base": {
+            "n": 96,
+            "m1": 0.6370583120583121,
+            "saved": 702,
+            "energy": 0.22748007361119632,
+            "clipped": 132.18783236439486,
+            "errors": 0,
+            "reserve": 0,
+            "rejections": 25
+          },
+          "candidate": {
+            "n": 96,
+            "m1": 0.6533859947922448,
+            "saved": 722,
+            "energy": 0.2350338720348014,
+            "clipped": 132.1131052974803,
+            "errors": 0,
+            "reserve": 0,
+            "rejections": 25
+          },
+          "delta": 0.016327682733932737,
+          "by_suite": {
+            "physical": 0.016945207570207576,
+            "mixed": 0.048365523365523376,
+            "mixed_stress": 0.0,
+            "variable_stress": 0.0
+          },
+          "ci": null,
+          "checks": {
+            "m1": true,
+            "saved": true,
+            "energy": false,
+            "time": true,
+            "errors": true,
+            "reserve": true,
+            "rejections": true,
+            "suite": true,
+            "confidence": true
+          },
+          "passed": false,
+          "score": 0.011346720025623681
+        }
+      },
+      "selected": "info-split",
+      "validation": null,
+      "promoted": false
+    },
+    {
+      "round": 1,
+      "incumbent": "range-late",
+      "screen": {
+        "info-split-dense": {
+          "base": {
+            "n": 96,
+            "m1": 0.6707400238650238,
+            "saved": 723,
+            "energy": 0.23406773566293085,
+            "clipped": 129.75094442594443,
+            "errors": 0,
+            "reserve": 0,
+            "rejections": 0
+          },
+          "candidate": {
+            "n": 96,
+            "m1": 0.6785461066711067,
+            "saved": 732,
+            "energy": 0.23614100447877615,
+            "clipped": 129.43667452339326,
+            "errors": 0,
+            "reserve": 0,
+            "rejections": 0
+          },
+          "delta": 0.007806082806082808,
+          "by_suite": {
+            "physical": -0.008256211381211373,
+            "mixed": 0.0394805426055426,
+            "mixed_stress": 0.0,
+            "variable_stress": 0.0
+          },
+          "ci": null,
+          "checks": {
+            "m1": true,
+            "saved": true,
+            "energy": false,
+            "time": true,
+            "errors": true,
+            "reserve": true,
+            "rejections": true,
+            "suite": true,
+            "confidence": true
+          },
+          "passed": false,
+          "score": 0.006477448932234325
+        },
+        "info-split-only": {
+          "base": {
+            "n": 96,
+            "m1": 0.6707400238650238,
+            "saved": 723,
+            "energy": 0.23406773566293085,
+            "clipped": 129.75094442594443,
+            "errors": 0,
+            "reserve": 0,
+            "rejections": 0
+          },
+          "candidate": {
+            "n": 96,
+            "m1": 0.6739164770414771,
+            "saved": 728,
+            "energy": 0.2339982237712366,
+            "clipped": 129.4480206136456,
+            "errors": 0,
+            "reserve": 0,
+            "rejections": 0
+          },
+          "delta": 0.003176453176453179,
+          "by_suite": {
+            "physical": 0.0015817515817515883,
+            "mixed": 0.011124061124061127,
+            "mixed_stress": 0.0,
+            "variable_stress": 0.0
+          },
+          "ci": null,
+          "checks": {
+            "m1": true,
+            "saved": true,
+            "energy": true,
+            "time": true,
+            "errors": true,
+            "reserve": true,
+            "rejections": true,
+            "suite": true,
+            "confidence": true
+          },
+          "passed": true,
+          "score": 0.003176453176453209
+        },
+        "info-repeat-age": {
+          "base": {
+            "n": 96,
+            "m1": 0.6707400238650238,
+            "saved": 723,
+            "energy": 0.23406773566293085,
+            "clipped": 129.75094442594443,
+            "errors": 0,
+            "reserve": 0,
+            "rejections": 0
+          },
+          "candidate": {
+            "n": 96,
+            "m1": 0.6776796987734488,
+            "saved": 733,
+            "energy": 0.24599857639746006,
+            "clipped": 129.12826467513966,
+            "errors": 0,
+            "reserve": 0,
+            "rejections": 0
+          },
+          "delta": 0.006939674908424909,
+          "by_suite": {
+            "physical": 0.0042974386724386705,
+            "mixed": 0.023461260961260964,
+            "mixed_stress": 0.0,
+            "variable_stress": 0.0
+          },
+          "ci": null,
+          "checks": {
+            "m1": true,
+            "saved": true,
+            "energy": false,
+            "time": true,
+            "errors": true,
+            "reserve": true,
+            "rejections": true,
+            "suite": true,
+            "confidence": true
+          },
+          "passed": false,
+          "score": -0.0007060867131448486
+        }
+      },
+      "selected": "info-split-only",
+      "validation": {
+        "range-late": {
+          "base": {
+            "n": 256,
+            "m1": 0.6542317491536241,
+            "saved": 1892,
+            "energy": 0.22620243655668973,
+            "clipped": 129.97580729817057,
+            "errors": 0,
+            "reserve": 0,
+            "rejections": 67
+          },
+          "candidate": {
+            "n": 256,
+            "m1": 0.6582814863088301,
+            "saved": 1904,
+            "energy": 0.22562254884705818,
+            "clipped": 129.75173138493452,
+            "errors": 0,
+            "reserve": 0,
+            "rejections": 67
+          },
+          "delta": 0.004049737155205906,
+          "by_suite": {
+            "physical": 0.005344915501165504,
+            "mixed": 0.01085403311965812,
+            "mixed_stress": 0.0,
+            "variable_stress": 0.0
+          },
+          "ci": [
+            0.0007776728479853487,
+            0.008013579302641804
+          ],
+          "checks": {
+            "m1": true,
+            "saved": true,
+            "energy": true,
+            "time": true,
+            "errors": true,
+            "reserve": true,
+            "rejections": true,
+            "suite": true,
+            "confidence": true
+          },
+          "passed": true,
+          "score": 0.004049737155205957
+        }
+      },
+      "promoted": true
+    },
+    {
+      "round": 2,
+      "incumbent": "info-split-only",
+      "screen": {
+        "info-repeat-gain": {
+          "base": {
+            "n": 96,
+            "m1": 0.6841887568450068,
+            "saved": 748,
+            "energy": 0.2323682193171618,
+            "clipped": 126.8107503029378,
+            "errors": 0,
+            "reserve": 0,
+            "rejections": 0
+          },
+          "candidate": {
+            "n": 96,
+            "m1": 0.6840096246346247,
+            "saved": 747,
+            "energy": 0.23394337674731694,
+            "clipped": 126.67745217745218,
+            "errors": 0,
+            "reserve": 0,
+            "rejections": 0
+          },
+          "delta": -0.00017913221038221017,
+          "by_suite": {
+            "physical": 0.018206908831908827,
+            "mixed": -0.018923437673437668,
+            "mixed_stress": 0.0,
+            "variable_stress": 0.0
+          },
+          "ci": null,
+          "checks": {
+            "m1": false,
+            "saved": false,
+            "energy": false,
+            "time": true,
+            "errors": true,
+            "reserve": true,
+            "rejections": true,
+            "suite": false,
+            "confidence": true
+          },
+          "passed": false,
+          "score": -0.0011959391352601662
+        },
+        "info-repeat-rescue": {
+          "base": {
+            "n": 96,
+            "m1": 0.6841887568450068,
+            "saved": 748,
+            "energy": 0.2323682193171618,
+            "clipped": 126.8107503029378,
+            "errors": 0,
+            "reserve": 0,
+            "rejections": 0
+          },
+          "candidate": {
+            "n": 96,
+            "m1": 0.6905384546009546,
+            "saved": 754,
+            "energy": 0.23280308475282382,
+            "clipped": 126.08992673992674,
+            "errors": 0,
+            "reserve": 0,
+            "rejections": 0
+          },
+          "delta": 0.006349697755947751,
+          "by_suite": {
+            "physical": -0.0004233035483035598,
+            "mixed": 0.025822094572094566,
+            "mixed_stress": 0.0,
+            "variable_stress": 0.0
+          },
+          "ci": null,
+          "checks": {
+            "m1": true,
+            "saved": true,
+            "energy": false,
+            "time": true,
+            "errors": true,
+            "reserve": true,
+            "rejections": true,
+            "suite": true,
+            "confidence": true
+          },
+          "passed": false,
+          "score": 0.006068980300088408
+        },
+        "info-repeat-tune-0.75-1": {
+          "base": {
+            "n": 96,
+            "m1": 0.6841887568450068,
+            "saved": 748,
+            "energy": 0.2323682193171618,
+            "clipped": 126.8107503029378,
+            "errors": 0,
+            "reserve": 0,
+            "rejections": 0
+          },
+          "candidate": {
+            "n": 96,
+            "m1": 0.6921333874458875,
+            "saved": 756,
+            "energy": 0.23362934467069849,
+            "clipped": 126.02571161477411,
+            "errors": 0,
+            "reserve": 0,
+            "rejections": 0
+          },
+          "delta": 0.007944630600880596,
+          "by_suite": {
+            "physical": 0.0029802373552373453,
+            "mixed": 0.02879828504828504,
+            "mixed_stress": 0.0,
+            "variable_stress": 0.0
+          },
+          "ci": null,
+          "checks": {
+            "m1": true,
+            "saved": true,
+            "energy": false,
+            "time": true,
+            "errors": true,
+            "reserve": true,
+            "rejections": true,
+            "suite": true,
+            "confidence": true
+          },
+          "passed": false,
+          "score": 0.007130539915044244
+        }
+      },
+      "selected": "info-repeat-tune-0.75-1",
+      "validation": null,
+      "promoted": false
+    },
+    {
+      "round": 3,
+      "incumbent": "info-split-only",
+      "screen": {
+        "info-repeat-tune-2-3": {
+          "base": {
+            "n": 96,
+            "m1": 0.6713470846283346,
+            "saved": 737,
+            "energy": 0.22779872552168032,
+            "clipped": 129.21984757141007,
+            "errors": 0,
+            "reserve": 0,
+            "rejections": 0
+          },
+          "candidate": {
+            "n": 96,
+            "m1": 0.6732149505587005,
+            "saved": 742,
+            "energy": 0.22690177634485956,
+            "clipped": 129.11544453810077,
+            "errors": 0,
+            "reserve": 0,
+            "rejections": 0
+          },
+          "delta": 0.0018678659303659323,
+          "by_suite": {
+            "physical": 0.003172059422059434,
+            "mixed": 0.004299404299404295,
+            "mixed_stress": 0.0,
+            "variable_stress": 0.0
+          },
+          "ci": null,
+          "checks": {
+            "m1": true,
+            "saved": true,
+            "energy": true,
+            "time": true,
+            "errors": true,
+            "reserve": true,
+            "rejections": true,
+            "suite": true,
+            "confidence": true
+          },
+          "passed": true,
+          "score": 0.0018678659303659195
+        },
+        "info-repeat-tune-2-0.25": {
+          "base": {
+            "n": 96,
+            "m1": 0.6713470846283346,
+            "saved": 737,
+            "energy": 0.22779872552168032,
+            "clipped": 129.21984757141007,
+            "errors": 0,
+            "reserve": 0,
+            "rejections": 0
+          },
+          "candidate": {
+            "n": 96,
+            "m1": 0.6794802130739631,
+            "saved": 745,
+            "energy": 0.22682346741939305,
+            "clipped": 129.71424085174084,
+            "errors": 0,
+            "reserve": 0,
+            "rejections": 0
+          },
+          "delta": 0.008133128445628445,
+          "by_suite": {
+            "physical": 0.031197853072853082,
+            "mixed": 0.001334660709660702,
+            "mixed_stress": 0.0,
+            "variable_stress": 0.0
+          },
+          "ci": null,
+          "checks": {
+            "m1": true,
+            "saved": true,
+            "energy": true,
+            "time": false,
+            "errors": true,
+            "reserve": true,
+            "rejections": true,
+            "suite": true,
+            "confidence": true
+          },
+          "passed": false,
+          "score": 0.00775052988230987
+        },
+        "info-repeat-tune-2.5-0.5": {
+          "base": {
+            "n": 96,
+            "m1": 0.6713470846283346,
+            "saved": 737,
+            "energy": 0.22779872552168032,
+            "clipped": 129.21984757141007,
+            "errors": 0,
+            "reserve": 0,
+            "rejections": 0
+          },
+          "candidate": {
+            "n": 96,
+            "m1": 0.6823290135790135,
+            "saved": 748,
+            "energy": 0.22564867614437287,
+            "clipped": 129.59274995837495,
+            "errors": 0,
+            "reserve": 0,
+            "rejections": 0
+          },
+          "delta": 0.01098192895067895,
+          "by_suite": {
+            "physical": 0.03397563085063086,
+            "mixed": 0.009952084952084944,
+            "mixed_stress": 0.0,
+            "variable_stress": 0.0
+          },
+          "ci": null,
+          "checks": {
+            "m1": true,
+            "saved": true,
+            "energy": true,
+            "time": false,
+            "errors": true,
+            "reserve": true,
+            "rejections": true,
+            "suite": true,
+            "confidence": true
+          },
+          "passed": false,
+          "score": 0.010693349143495073
+        }
+      },
+      "selected": "info-repeat-tune-2-3",
+      "validation": {
+        "range-late": {
+          "base": {
+            "n": 256,
+            "m1": 0.6639024387071262,
+            "saved": 1914,
+            "energy": 0.22888622847166357,
+            "clipped": 130.11089267720126,
+            "errors": 0,
+            "reserve": 0,
+            "rejections": 52
+          },
+          "candidate": {
+            "n": 256,
+            "m1": 0.6770403207903208,
+            "saved": 1954,
+            "energy": 0.22870495304961472,
+            "clipped": 129.53318776492605,
+            "errors": 0,
+            "reserve": 0,
+            "rejections": 52
+          },
+          "delta": 0.013137882083194581,
+          "by_suite": {
+            "physical": 0.013130359224109225,
+            "mixed": 0.0394211691086691,
+            "mixed_stress": 0.0,
+            "variable_stress": 0.0
+          },
+          "ci": [
+            0.005026353854478855,
+            0.021357169306388056
+          ],
+          "checks": {
+            "m1": true,
+            "saved": true,
+            "energy": true,
+            "time": true,
+            "errors": true,
+            "reserve": true,
+            "rejections": true,
+            "suite": true,
+            "confidence": true
+          },
+          "passed": true,
+          "score": 0.013137882083194663
+        },
+        "info-split-only": {
+          "base": {
+            "n": 256,
+            "m1": 0.665865796529859,
+            "saved": 1922,
+            "energy": 0.2278893801382973,
+            "clipped": 130.16658484744423,
+            "errors": 0,
+            "reserve": 0,
+            "rejections": 52
+          },
+          "candidate": {
+            "n": 256,
+            "m1": 0.6770403207903208,
+            "saved": 1954,
+            "energy": 0.22870495304961472,
+            "clipped": 129.53318776492605,
+            "errors": 0,
+            "reserve": 0,
+            "rejections": 52
+          },
+          "delta": 0.01117452426046176,
+          "by_suite": {
+            "physical": 0.011319843351093352,
+            "mixed": 0.03337825369075369,
+            "mixed_stress": 0.0,
+            "variable_stress": 0.0
+          },
+          "ci": [
+            0.003206450667388167,
+            0.019109525457181704
+          ],
+          "checks": {
+            "m1": true,
+            "saved": true,
+            "energy": false,
+            "time": true,
+            "errors": true,
+            "reserve": true,
+            "rejections": true,
+            "suite": true,
+            "confidence": true
+          },
+          "passed": false,
+          "score": 0.010637702682276085
+        }
+      },
+      "promoted": false
+    },
+    {
+      "round": 4,
+      "incumbent": "info-split-only",
+      "screen": {
+        "info-repeat-tune-0.25-3": {
+          "base": {
+            "n": 96,
+            "m1": 0.6402457785270286,
+            "saved": 725,
+            "energy": 0.22392689252626313,
+            "clipped": 132.82118234774484,
+            "errors": 0,
+            "reserve": 0,
+            "rejections": 0
+          },
+          "candidate": {
+            "n": 96,
+            "m1": 0.6479768784456285,
+            "saved": 733,
+            "energy": 0.22726348260575024,
+            "clipped": 131.89528665778667,
+            "errors": 0,
+            "reserve": 0,
+            "rejections": 0
+          },
+          "delta": 0.0077310999185999174,
+          "by_suite": {
+            "physical": 0.03129659692159691,
+            "mixed": -0.0003721972471972442,
+            "mixed_stress": 0.0,
+            "variable_stress": 0.0
+          },
+          "ci": null,
+          "checks": {
+            "m1": true,
+            "saved": true,
+            "energy": false,
+            "time": true,
+            "errors": true,
+            "reserve": true,
+            "rejections": true,
+            "suite": true,
+            "confidence": true
+          },
+          "passed": false,
+          "score": 0.005496046744428908
+        },
+        "info-repeat-tune-0-3": {
+          "base": {
+            "n": 96,
+            "m1": 0.6402457785270286,
+            "saved": 725,
+            "energy": 0.22392689252626313,
+            "clipped": 132.82118234774484,
+            "errors": 0,
+            "reserve": 0,
+            "rejections": 0
+          },
+          "candidate": {
+            "n": 96,
+            "m1": 0.6486713228900729,
+            "saved": 734,
+            "energy": 0.22792393273935832,
+            "clipped": 131.8802568958819,
+            "errors": 0,
+            "reserve": 0,
+            "rejections": 0
+          },
+          "delta": 0.008425544363044362,
+          "by_suite": {
+            "physical": 0.03407437469937469,
+            "mixed": -0.0003721972471972442,
+            "mixed_stress": 0.0,
+            "variable_stress": 0.0
+          },
+          "ci": null,
+          "checks": {
+            "m1": true,
+            "saved": true,
+            "energy": false,
+            "time": true,
+            "errors": true,
+            "reserve": true,
+            "rejections": true,
+            "suite": true,
+            "confidence": true
+          },
+          "passed": false,
+          "score": 0.005748081083845022
+        },
+        "info-repeat-tune-3-1.5": {
+          "base": {
+            "n": 96,
+            "m1": 0.6402457785270286,
+            "saved": 725,
+            "energy": 0.22392689252626313,
+            "clipped": 132.82118234774484,
+            "errors": 0,
+            "reserve": 0,
+            "rejections": 0
+          },
+          "candidate": {
+            "n": 96,
+            "m1": 0.6446063485125986,
+            "saved": 728,
+            "energy": 0.2209469370909516,
+            "clipped": 132.60412374084248,
+            "errors": 0,
+            "reserve": 0,
+            "rejections": 0
+          },
+          "delta": 0.004360569985569986,
+          "by_suite": {
+            "physical": 0.011455327080327074,
+            "mixed": 0.00598695286195287,
+            "mixed_stress": 0.0,
+            "variable_stress": 0.0
+          },
+          "ci": null,
+          "checks": {
+            "m1": true,
+            "saved": true,
+            "energy": true,
+            "time": true,
+            "errors": true,
+            "reserve": true,
+            "rejections": true,
+            "suite": true,
+            "confidence": true
+          },
+          "passed": true,
+          "score": 0.004360569985569995
+        }
+      },
+      "selected": "info-repeat-tune-3-1.5",
+      "validation": {
+        "range-late": {
+          "base": {
+            "n": 256,
+            "m1": 0.6689244024204962,
+            "saved": 1947,
+            "energy": 0.23104858654075366,
+            "clipped": 129.61857554338022,
+            "errors": 0,
+            "reserve": 0,
+            "rejections": 37
+          },
+          "candidate": {
+            "n": 256,
+            "m1": 0.6760540999798812,
+            "saved": 1968,
+            "energy": 0.22834900874524258,
+            "clipped": 129.8582401973027,
+            "errors": 0,
+            "reserve": 0,
+            "rejections": 37
+          },
+          "delta": 0.007129697559385062,
+          "by_suite": {
+            "physical": 0.008561620670995676,
+            "mixed": 0.019957169566544572,
+            "mixed_stress": 0.0,
+            "variable_stress": 0.0
+          },
+          "ci": [
+            0.0007814451173826179,
+            0.013617881684287937
+          ],
+          "checks": {
+            "m1": true,
+            "saved": true,
+            "energy": true,
+            "time": false,
+            "errors": true,
+            "reserve": true,
+            "rejections": true,
+            "suite": true,
+            "confidence": true
+          },
+          "passed": false,
+          "score": 0.006944797630560899
+        },
+        "info-split-only": {
+          "base": {
+            "n": 256,
+            "m1": 0.6713716296724109,
+            "saved": 1956,
+            "energy": 0.2304593469911731,
+            "clipped": 129.876427272814,
+            "errors": 0,
+            "reserve": 0,
+            "rejections": 37
+          },
+          "candidate": {
+            "n": 256,
+            "m1": 0.6760540999798812,
+            "saved": 1968,
+            "energy": 0.22834900874524258,
+            "clipped": 129.8582401973027,
+            "errors": 0,
+            "reserve": 0,
+            "rejections": 37
+          },
+          "delta": 0.004682470307470308,
+          "by_suite": {
+            "physical": 0.011437650890775896,
+            "mixed": 0.007292230339105337,
+            "mixed_stress": 0.0,
+            "variable_stress": 0.0
+          },
+          "ci": [
+            -0.0006622175567488071,
+            0.010097866543179044
+          ],
+          "checks": {
+            "m1": true,
+            "saved": true,
+            "energy": true,
+            "time": true,
+            "errors": true,
+            "reserve": true,
+            "rejections": true,
+            "suite": true,
+            "confidence": false
+          },
+          "passed": false,
+          "score": 0.004682470307470266
+        }
+      },
+      "promoted": false
+    },
+    {
+      "round": 5,
+      "incumbent": "info-split-only",
+      "screen": {
+        "info-repeat-tune-0.25-1": {
+          "base": {
+            "n": 96,
+            "m1": 0.6768223674473675,
+            "saved": 727,
+            "energy": 0.2236668743046659,
+            "clipped": 128.27619082306583,
+            "errors": 0,
+            "reserve": 0,
+            "rejections": 12
+          },
+          "candidate": {
+            "n": 96,
+            "m1": 0.6832347918285419,
+            "saved": 734,
+            "energy": 0.2275473012285382,
+            "clipped": 127.93400618478744,
+            "errors": 0,
+            "reserve": 0,
+            "rejections": 12
+          },
+          "delta": 0.006412424381174379,
+          "by_suite": {
+            "physical": 0.017597448847448845,
+            "mixed": 0.008052248677248674,
+            "mixed_stress": 0.0,
+            "variable_stress": 0.0
+          },
+          "ci": null,
+          "checks": {
+            "m1": true,
+            "saved": true,
+            "energy": false,
+            "time": true,
+            "errors": true,
+            "reserve": true,
+            "rejections": true,
+            "suite": true,
+            "confidence": true
+          },
+          "passed": false,
+          "score": 0.003810054046316531
+        },
+        "info-repeat-tune-1.25-0": {
+          "base": {
+            "n": 96,
+            "m1": 0.6768223674473675,
+            "saved": 727,
+            "energy": 0.2236668743046659,
+            "clipped": 128.27619082306583,
+            "errors": 0,
+            "reserve": 0,
+            "rejections": 12
+          },
+          "candidate": {
+            "n": 96,
+            "m1": 0.6909364362489363,
+            "saved": 742,
+            "energy": 0.224545829878725,
+            "clipped": 128.52463485588487,
+            "errors": 0,
+            "reserve": 0,
+            "rejections": 12
+          },
+          "delta": 0.014114068801568801,
+          "by_suite": {
+            "physical": 0.03191773504273505,
+            "mixed": 0.024538540163540158,
+            "mixed_stress": 0.0,
+            "variable_stress": 0.0
+          },
+          "ci": null,
+          "checks": {
+            "m1": true,
+            "saved": true,
+            "energy": false,
+            "time": false,
+            "errors": true,
+            "reserve": true,
+            "rejections": true,
+            "suite": true,
+            "confidence": true
+          },
+          "passed": false,
+          "score": 0.013330926857470778
+        },
+        "info-repeat-tune-0.75-0.75": {
+          "base": {
+            "n": 96,
+            "m1": 0.6768223674473675,
+            "saved": 727,
+            "energy": 0.2236668743046659,
+            "clipped": 128.27619082306583,
+            "errors": 0,
+            "reserve": 0,
+            "rejections": 12
+          },
+          "candidate": {
+            "n": 96,
+            "m1": 0.6857659412346913,
+            "saved": 737,
+            "energy": 0.22493589469129144,
+            "clipped": 127.93435765623265,
+            "errors": 0,
+            "reserve": 0,
+            "rejections": 12
+          },
+          "delta": 0.008943573787323784,
+          "by_suite": {
+            "physical": 0.01161454286454286,
+            "mixed": 0.024159752284752277,
+            "mixed_stress": 0.0,
+            "variable_stress": 0.0
+          },
+          "ci": null,
+          "checks": {
+            "m1": true,
+            "saved": true,
+            "energy": false,
+            "time": true,
+            "errors": true,
+            "reserve": true,
+            "rejections": true,
+            "suite": true,
+            "confidence": true
+          },
+          "passed": false,
+          "score": 0.008092517686210927
+        }
+      },
+      "selected": "info-repeat-tune-1.25-0",
+      "validation": null,
+      "promoted": false
+    },
+    {
+      "round": 6,
+      "incumbent": "info-split-only",
+      "screen": {
+        "info-repeat-tune-1.5-1.25": {
+          "base": {
+            "n": 96,
+            "m1": 0.6522044795482296,
+            "saved": 730,
+            "energy": 0.23163985559840872,
+            "clipped": 130.33368497821624,
+            "errors": 0,
+            "reserve": 0,
+            "rejections": 0
+          },
+          "candidate": {
+            "n": 96,
+            "m1": 0.658512956950457,
+            "saved": 739,
+            "energy": 0.23202407489918045,
+            "clipped": 129.8675164245477,
+            "errors": 0,
+            "reserve": 0,
+            "rejections": 0
+          },
+          "delta": 0.006308477402227405,
+          "by_suite": {
+            "physical": 0.0033969502719502775,
+            "mixed": 0.021836959336959342,
+            "mixed_stress": 0.0,
+            "variable_stress": 0.0
+          },
+          "ci": null,
+          "checks": {
+            "m1": true,
+            "saved": true,
+            "energy": false,
+            "time": true,
+            "errors": true,
+            "reserve": true,
+            "rejections": true,
+            "suite": true,
+            "confidence": true
+          },
+          "passed": false,
+          "score": 0.006059673521017606
+        },
+        "info-repeat-tune-2-0.75": {
+          "base": {
+            "n": 96,
+            "m1": 0.6522044795482296,
+            "saved": 730,
+            "energy": 0.23163985559840872,
+            "clipped": 130.33368497821624,
+            "errors": 0,
+            "reserve": 0,
+            "rejections": 0
+          },
+          "candidate": {
+            "n": 96,
+            "m1": 0.658571839040589,
+            "saved": 738,
+            "energy": 0.23040369779327238,
+            "clipped": 129.846026485089,
+            "errors": 0,
+            "reserve": 0,
+            "rejections": 0
+          },
+          "delta": 0.006367359492359493,
+          "by_suite": {
+            "physical": 0.00203962703962704,
+            "mixed": 0.023429810929810932,
+            "mixed_stress": 0.0,
+            "variable_stress": 0.0
+          },
+          "ci": null,
+          "checks": {
+            "m1": true,
+            "saved": true,
+            "energy": true,
+            "time": true,
+            "errors": true,
+            "reserve": true,
+            "rejections": true,
+            "suite": true,
+            "confidence": true
+          },
+          "passed": true,
+          "score": 0.006367359492359448
+        },
+        "info-repeat-tune-1.5-1.5": {
+          "base": {
+            "n": 96,
+            "m1": 0.6522044795482296,
+            "saved": 730,
+            "energy": 0.23163985559840872,
+            "clipped": 130.33368497821624,
+            "errors": 0,
+            "reserve": 0,
+            "rejections": 0
+          },
+          "candidate": {
+            "n": 96,
+            "m1": 0.6562731828356828,
+            "saved": 736,
+            "energy": 0.2319911500893949,
+            "clipped": 129.8589992472805,
+            "errors": 0,
+            "reserve": 0,
+            "rejections": 0
+          },
+          "delta": 0.004068703287453289,
+          "by_suite": {
+            "physical": 0.0033969502719502775,
+            "mixed": 0.012877862877862878,
+            "mixed_stress": 0.0,
+            "variable_stress": 0.0
+          },
+          "ci": null,
+          "checks": {
+            "m1": true,
+            "saved": true,
+            "energy": false,
+            "time": true,
+            "errors": true,
+            "reserve": true,
+            "rejections": true,
+            "suite": true,
+            "confidence": true
+          },
+          "passed": false,
+          "score": 0.0038412200958763895
+        }
+      },
+      "selected": "info-repeat-tune-2-0.75",
+      "validation": {
+        "range-late": {
+          "base": {
+            "n": 256,
+            "m1": 0.6612340242223055,
+            "saved": 1872,
+            "energy": 0.2295192236502642,
+            "clipped": 130.04049820622086,
+            "errors": 0,
+            "reserve": 0,
+            "rejections": 62
+          },
+          "candidate": {
+            "n": 256,
+            "m1": 0.6752417395972083,
+            "saved": 1914,
+            "energy": 0.22781572792964006,
+            "clipped": 130.10614826796467,
+            "errors": 0,
+            "reserve": 0,
+            "rejections": 62
+          },
+          "delta": 0.014007715374902875,
+          "by_suite": {
+            "physical": 0.01464230214230214,
+            "mixed": 0.041388559357309354,
+            "mixed_stress": 0.0,
+            "variable_stress": 0.0
+          },
+          "ci": [
+            0.007464529827811076,
+            0.02117988348457098
+          ],
+          "checks": {
+            "m1": true,
+            "saved": true,
+            "energy": true,
+            "time": false,
+            "errors": true,
+            "reserve": true,
+            "rejections": true,
+            "suite": true,
+            "confidence": true
+          },
+          "passed": false,
+          "score": 0.01395723105451853
+        },
+        "info-split-only": {
+          "base": {
+            "n": 256,
+            "m1": 0.6631480607066544,
+            "saved": 1878,
+            "energy": 0.22914845028244507,
+            "clipped": 130.1757460421523,
+            "errors": 0,
+            "reserve": 0,
+            "rejections": 62
+          },
+          "candidate": {
+            "n": 256,
+            "m1": 0.6752417395972083,
+            "saved": 1914,
+            "energy": 0.22781572792964006,
+            "clipped": 130.10614826796467,
+            "errors": 0,
+            "reserve": 0,
+            "rejections": 62
+          },
+          "delta": 0.012093678890553891,
+          "by_suite": {
+            "physical": 0.017465000277500274,
+            "mixed": 0.030909715284715287,
+            "mixed_stress": 0.0,
+            "variable_stress": 0.0
+          },
+          "ci": [
+            0.006118978677572429,
+            0.01828024406149406
+          ],
+          "checks": {
+            "m1": true,
+            "saved": true,
+            "energy": true,
+            "time": true,
+            "errors": true,
+            "reserve": true,
+            "rejections": true,
+            "suite": true,
+            "confidence": true
+          },
+          "passed": true,
+          "score": 0.012093678890553905
+        }
+      },
+      "promoted": false
+    },
+    {
+      "round": 7,
+      "incumbent": "info-split-only",
+      "screen": {
+        "info-repeat-tune-1-0.75": {
+          "base": {
+            "n": 96,
+            "m1": 0.6709407201594701,
+            "saved": 731,
+            "energy": 0.22384820088878238,
+            "clipped": 128.81890571812446,
+            "errors": 0,
+            "reserve": 0,
+            "rejections": 14
+          },
+          "candidate": {
+            "n": 96,
+            "m1": 0.6757154014966515,
+            "saved": 735,
+            "energy": 0.2227855320769137,
+            "clipped": 128.6379190543253,
+            "errors": 0,
+            "reserve": 0,
+            "rejections": 14
+          },
+          "delta": 0.004774681337181337,
+          "by_suite": {
+            "physical": 0.005915727790727784,
+            "mixed": 0.013182997557997565,
+            "mixed_stress": 0.0,
+            "variable_stress": 0.0
+          },
+          "ci": null,
+          "checks": {
+            "m1": true,
+            "saved": true,
+            "energy": true,
+            "time": true,
+            "errors": true,
+            "reserve": true,
+            "rejections": true,
+            "suite": true,
+            "confidence": true
+          },
+          "passed": true,
+          "score": 0.004774681337181397
+        },
+        "info-repeat-tune-1.25-2": {
+          "base": {
+            "n": 96,
+            "m1": 0.6709407201594701,
+            "saved": 731,
+            "energy": 0.22384820088878238,
+            "clipped": 128.81890571812446,
+            "errors": 0,
+            "reserve": 0,
+            "rejections": 14
+          },
+          "candidate": {
+            "n": 96,
+            "m1": 0.6765166835479336,
+            "saved": 736,
+            "energy": 0.22363578610860851,
+            "clipped": 128.5845826048951,
+            "errors": 0,
+            "reserve": 0,
+            "rejections": 14
+          },
+          "delta": 0.005575963388463388,
+          "by_suite": {
+            "physical": 0.005915727790727784,
+            "mixed": 0.016388125763125767,
+            "mixed_stress": 0.0,
+            "variable_stress": 0.0
+          },
+          "ci": null,
+          "checks": {
+            "m1": true,
+            "saved": true,
+            "energy": true,
+            "time": true,
+            "errors": true,
+            "reserve": true,
+            "rejections": true,
+            "suite": true,
+            "confidence": true
+          },
+          "passed": true,
+          "score": 0.005575963388463445
+        },
+        "info-repeat-tune-3-0.75": {
+          "base": {
+            "n": 96,
+            "m1": 0.6709407201594701,
+            "saved": 731,
+            "energy": 0.22384820088878238,
+            "clipped": 128.81890571812446,
+            "errors": 0,
+            "reserve": 0,
+            "rejections": 14
+          },
+          "candidate": {
+            "n": 96,
+            "m1": 0.6764009428071928,
+            "saved": 736,
+            "energy": 0.22139613833707147,
+            "clipped": 129.0354674549987,
+            "errors": 0,
+            "reserve": 0,
+            "rejections": 14
+          },
+          "delta": 0.005460222647722645,
+          "by_suite": {
+            "physical": 0.018994431494431488,
+            "mixed": 0.0028464590964590933,
+            "mixed_stress": 0.0,
+            "variable_stress": 0.0
+          },
+          "ci": null,
+          "checks": {
+            "m1": true,
+            "saved": true,
+            "energy": true,
+            "time": false,
+            "errors": true,
+            "reserve": true,
+            "rejections": true,
+            "suite": true,
+            "confidence": true
+          },
+          "passed": false,
+          "score": 0.005292109329520616
+        }
+      },
+      "selected": "info-repeat-tune-1.25-2",
+      "validation": {
+        "range-late": {
+          "base": {
+            "n": 256,
+            "m1": 0.6713777108308359,
+            "saved": 1934,
+            "energy": 0.2278291359059993,
+            "clipped": 128.2495951747905,
+            "errors": 0,
+            "reserve": 0,
+            "rejections": 0
+          },
+          "candidate": {
+            "n": 256,
+            "m1": 0.6742759519126706,
+            "saved": 1944,
+            "energy": 0.22691332196293176,
+            "clipped": 128.3754525205697,
+            "errors": 0,
+            "reserve": 0,
+            "rejections": 0
+          },
+          "delta": 0.002898241081834831,
+          "by_suite": {
+            "physical": -0.004266653485403487,
+            "mixed": 0.01585961781274281,
+            "mixed_stress": 0.0,
+            "variable_stress": 0.0
+          },
+          "ci": [
+            -0.00478658711080586,
+            0.010899896544427794
+          ],
+          "checks": {
+            "m1": true,
+            "saved": true,
+            "energy": true,
+            "time": false,
+            "errors": true,
+            "reserve": true,
+            "rejections": true,
+            "suite": true,
+            "confidence": false
+          },
+          "passed": false,
+          "score": 0.002800106389395666
+        },
+        "info-split-only": {
+          "base": {
+            "n": 256,
+            "m1": 0.6739658128330004,
+            "saved": 1942,
+            "energy": 0.22752267871184162,
+            "clipped": 128.2814044462482,
+            "errors": 0,
+            "reserve": 0,
+            "rejections": 0
+          },
+          "candidate": {
+            "n": 256,
+            "m1": 0.6742759519126706,
+            "saved": 1944,
+            "energy": 0.22691332196293176,
+            "clipped": 128.3754525205697,
+            "errors": 0,
+            "reserve": 0,
+            "rejections": 0
+          },
+          "delta": 0.0003101390796703292,
+          "by_suite": {
+            "physical": -0.008708392302142303,
+            "mixed": 0.00994894862082362,
+            "mixed_stress": 0.0,
+            "variable_stress": 0.0
+          },
+          "ci": [
+            -0.007092321740759241,
+            0.007909093944250191
+          ],
+          "checks": {
+            "m1": true,
+            "saved": true,
+            "energy": true,
+            "time": false,
+            "errors": true,
+            "reserve": true,
+            "rejections": true,
+            "suite": true,
+            "confidence": false
+          },
+          "passed": false,
+          "score": 0.00023682520013527486
+        }
+      },
+      "promoted": false
+    },
+    {
+      "round": 8,
+      "incumbent": "info-split-only",
+      "screen": {
+        "info-repeat-tune-0.25-0.5": {
+          "base": {
+            "n": 96,
+            "m1": 0.6493793243793243,
+            "saved": 686,
+            "energy": 0.22830389181422195,
+            "clipped": 129.78798897861398,
+            "errors": 0,
+            "reserve": 0,
+            "rejections": 29
+          },
+          "candidate": {
+            "n": 96,
+            "m1": 0.6586947196322196,
+            "saved": 694,
+            "energy": 0.23497807082377883,
+            "clipped": 129.70160603285603,
+            "errors": 0,
+            "reserve": 0,
+            "rejections": 29
+          },
+          "delta": 0.00931539525289525,
+          "by_suite": {
+            "physical": 0.029964826839826843,
+            "mixed": 0.007296754171754162,
+            "mixed_stress": 0.0,
+            "variable_stress": 0.0
+          },
+          "ci": null,
+          "checks": {
+            "m1": true,
+            "saved": true,
+            "energy": false,
+            "time": true,
+            "errors": true,
+            "reserve": true,
+            "rejections": true,
+            "suite": true,
+            "confidence": true
+          },
+          "passed": false,
+          "score": 0.0049303326791561315
+        },
+        "info-repeat-tune-1.25-1.25": {
+          "base": {
+            "n": 96,
+            "m1": 0.6493793243793243,
+            "saved": 686,
+            "energy": 0.22830389181422195,
+            "clipped": 129.78798897861398,
+            "errors": 0,
+            "reserve": 0,
+            "rejections": 29
+          },
+          "candidate": {
+            "n": 96,
+            "m1": 0.6571611548174048,
+            "saved": 694,
+            "energy": 0.22818147151563997,
+            "clipped": 130.00481445637695,
+            "errors": 0,
+            "reserve": 0,
+            "rejections": 29
+          },
+          "delta": 0.007781830438080436,
+          "by_suite": {
+            "physical": 0.025880832130832133,
+            "mixed": 0.00524648962148961,
+            "mixed_stress": 0.0,
+            "variable_stress": 0.0
+          },
+          "ci": null,
+          "checks": {
+            "m1": true,
+            "saved": true,
+            "energy": true,
+            "time": false,
+            "errors": true,
+            "reserve": true,
+            "rejections": true,
+            "suite": true,
+            "confidence": true
+          },
+          "passed": false,
+          "score": 0.007614769156470875
+        },
+        "info-repeat-tune-0.5-1.5": {
+          "base": {
+            "n": 96,
+            "m1": 0.6493793243793243,
+            "saved": 686,
+            "energy": 0.22830389181422195,
+            "clipped": 129.78798897861398,
+            "errors": 0,
+            "reserve": 0,
+            "rejections": 29
+          },
+          "candidate": {
+            "n": 96,
+            "m1": 0.6570822406759906,
+            "saved": 694,
+            "energy": 0.23016830114274045,
+            "clipped": 129.73563568954194,
+            "errors": 0,
+            "reserve": 0,
+            "rejections": 29
+          },
+          "delta": 0.007702916296666294,
+          "by_suite": {
+            "physical": 0.026575276575276575,
+            "mixed": 0.0042363886113885975,
+            "mixed_stress": 0.0,
+            "variable_stress": 0.0
+          },
+          "ci": null,
+          "checks": {
+            "m1": true,
+            "saved": true,
+            "energy": false,
+            "time": true,
+            "errors": true,
+            "reserve": true,
+            "rejections": true,
+            "suite": true,
+            "confidence": true
+          },
+          "passed": false,
+          "score": 0.006477963900737181
+        }
+      },
+      "selected": "info-repeat-tune-1.25-1.25",
+      "validation": null,
+      "promoted": false
+    },
+    {
+      "round": 9,
+      "incumbent": "info-split-only",
+      "screen": {
+        "info-repeat-tune-0.75-3": {
+          "base": {
+            "n": 96,
+            "m1": 0.6485610743423244,
+            "saved": 733,
+            "energy": 0.2357332137142395,
+            "clipped": 132.62286107989232,
+            "errors": 0,
+            "reserve": 0,
+            "rejections": 13
+          },
+          "candidate": {
+            "n": 96,
+            "m1": 0.6549815635753136,
+            "saved": 741,
+            "energy": 0.2390188199547072,
+            "clipped": 131.84526353276354,
+            "errors": 0,
+            "reserve": 0,
+            "rejections": 13
+          },
+          "delta": 0.006420489232989232,
+          "by_suite": {
+            "physical": -0.0006132756132756073,
+            "mixed": 0.026295232545232534,
+            "mixed_stress": 0.0,
+            "variable_stress": 0.0
+          },
+          "ci": null,
+          "checks": {
+            "m1": true,
+            "saved": true,
+            "energy": false,
+            "time": true,
+            "errors": true,
+            "reserve": true,
+            "rejections": true,
+            "suite": true,
+            "confidence": true
+          },
+          "passed": false,
+          "score": 0.004329816780410739
+        },
+        "info-repeat-tune-0.25-2.5": {
+          "base": {
+            "n": 96,
+            "m1": 0.6485610743423244,
+            "saved": 733,
+            "energy": 0.2357332137142395,
+            "clipped": 132.62286107989232,
+            "errors": 0,
+            "reserve": 0,
+            "rejections": 13
+          },
+          "candidate": {
+            "n": 96,
+            "m1": 0.6570276945276945,
+            "saved": 743,
+            "energy": 0.24020309457208133,
+            "clipped": 131.77751799704924,
+            "errors": 0,
+            "reserve": 0,
+            "rejections": 13
+          },
+          "delta": 0.008466620185370186,
+          "by_suite": {
+            "physical": 0.002362914862914872,
+            "mixed": 0.03150356587856587,
+            "mixed_stress": 0.0,
+            "variable_stress": 0.0
+          },
+          "ci": null,
+          "checks": {
+            "m1": true,
+            "saved": true,
+            "energy": false,
+            "time": true,
+            "errors": true,
+            "reserve": true,
+            "rejections": true,
+            "suite": true,
+            "confidence": true
+          },
+          "passed": false,
+          "score": 0.005622378942856703
+        },
+        "info-repeat-tune-0-0": {
+          "base": {
+            "n": 96,
+            "m1": 0.6485610743423244,
+            "saved": 733,
+            "energy": 0.2357332137142395,
+            "clipped": 132.62286107989232,
+            "errors": 0,
+            "reserve": 0,
+            "rejections": 13
+          },
+          "candidate": {
+            "n": 96,
+            "m1": 0.6509044485606985,
+            "saved": 736,
+            "energy": 0.24695427660908406,
+            "clipped": 132.0514184889185,
+            "errors": 0,
+            "reserve": 0,
+            "rejections": 13
+          },
+          "delta": 0.0023433742183742185,
+          "by_suite": {
+            "physical": 0.0032862970362970423,
+            "mixed": 0.006087199837199832,
+            "mixed_stress": 0.0,
+            "variable_stress": 0.0
+          },
+          "ci": null,
+          "checks": {
+            "m1": true,
+            "saved": true,
+            "energy": false,
+            "time": true,
+            "errors": true,
+            "reserve": true,
+            "rejections": true,
+            "suite": true,
+            "confidence": true
+          },
+          "passed": false,
+          "score": -0.004796728814654709
+        }
+      },
+      "selected": "info-repeat-tune-0.25-2.5",
+      "validation": null,
+      "promoted": false
+    }
+  ],
+  "final_report": {
+    "research_candidate": "info-split-only",
+    "rounds": 10,
+    "stop": "patience",
+    "production_changed": false,
+    "final": {
+      "base": {
+        "n": 512,
+        "m1": 0.6443388534208847,
+        "saved": 3791,
+        "energy": 0.2254952383792643,
+        "clipped": 131.40598931233697,
+        "errors": 0,
+        "reserve": 0,
+        "rejections": 137
+      },
+      "candidate": {
+        "n": 512,
+        "m1": 0.6474139142107892,
+        "saved": 3808,
+        "energy": 0.2249101937987614,
+        "clipped": 131.48315869243604,
+        "errors": 0,
+        "reserve": 0,
+        "rejections": 137
+      },
+      "delta": 0.00307506078990454,
+      "by_suite": {
+        "physical": 0.005031231789044287,
+        "mixed": 0.0072690113705738725,
+        "mixed_stress": 0.0,
+        "variable_stress": 0.0
+      },
+      "ci": [
+        0.0005132942144660894,
+        0.005813094240828615
+      ],
+      "checks": {
+        "m1": true,
+        "saved": true,
+        "energy": true,
+        "time": false,
+        "errors": true,
+        "reserve": true,
+        "rejections": true,
+        "suite": true,
+        "confidence": true
+      },
+      "passed": false,
+      "score": 0.0030163348669059293
+    },
+    "recommended_for_3d_validation": "range-late"
+  }
+}

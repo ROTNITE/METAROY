@@ -1,0 +1,89 @@
+{
+  "assets": [
+    {
+      "id": "Rover",
+      "mesh": "/Game/RescueAssets/User/Rover/SM_Rover.SM_Rover",
+      "material": "/Game/RescueAssets/User/Rover/M_Rover.M_Rover",
+      "dimensions_cm": [
+        250.08436584472656,
+        126.62736892700195,
+        130.06608928740025
+      ],
+      "textures": {
+        "BaseColor": "/Game/RescueAssets/User/Rover/T_Rover_BaseColor.T_Rover_BaseColor",
+        "ORM": "/Game/RescueAssets/User/Rover/T_Rover_ORM.T_Rover_ORM",
+        "Normal": "/Game/RescueAssets/User/Rover/T_Rover_Normal.T_Rover_Normal"
+      },
+      "source": "blender/Meshy_AI_Rescue_Tracked_Transporter_20261109_image-to-3d-texture.blend",
+      "source_sha256": "95ed8fe82ccee666a6e6f4d575941939129f8499a072ec53d6846569bfe23aa5"
+    },
+    {
+      "id": "Drone",
+      "mesh": "/Game/RescueAssets/User/Drone/SM_Drone.SM_Drone",
+      "material": "/Game/RescueAssets/User/Drone/M_Drone.M_Drone",
+      "dimensions_cm": [
+        130.05690002441406,
+        106.23351287841797,
+        57.16608365136199
+      ],
+      "textures": {
+        "BaseColor": "/Game/RescueAssets/User/Drone/T_Drone_BaseColor.T_Drone_BaseColor",
+        "ORM": "/Game/RescueAssets/User/Drone/T_Drone_ORM.T_Drone_ORM",
+        "Normal": "/Game/RescueAssets/User/Drone/T_Drone_Normal.T_Drone_Normal"
+      },
+      "source": "blender/Meshy_AI_Rescue_Scout_Drone_20261109_image-to-3d-texture.blend",
+      "source_sha256": "c06e6b9e3dd55dde26517d83f5404152c78b986594c9b66e68ee5f864344423b"
+    },
+    {
+      "id": "Stretcher",
+      "mesh": "/Game/RescueAssets/User/Stretcher/SM_Stretcher.SM_Stretcher",
+      "material": "/Game/RescueAssets/User/Stretcher/M_Stretcher.M_Stretcher",
+      "dimensions_cm": [
+        204.91490936279297,
+        59.90463829040527,
+        32.73508954048157
+      ],
+      "textures": {
+        "BaseColor": "/Game/RescueAssets/User/Stretcher/T_Stretcher_BaseColor.T_Stretcher_BaseColor",
+        "ORM": "/Game/RescueAssets/User/Stretcher/T_Stretcher_ORM.T_Stretcher_ORM",
+        "Normal": "/Game/RescueAssets/User/Stretcher/T_Stretcher_Normal.T_Stretcher_Normal"
+      },
+      "source": "blender/Meshy_AI_Rescue_Stretcher_20261109_image-to-3d-texture.blend",
+      "source_sha256": "b8d29dc648e24bc1b8b89b804dd5b44f89d558a113f4e7c6527e41dbe9aae84f"
+    },
+    {
+      "id": "Building",
+      "mesh": "/Game/RescueAssets/User/Building/SM_Building.SM_Building",
+      "material": "/Game/RescueAssets/User/Building/M_Building.M_Building",
+      "dimensions_cm": [
+        1195.0923461914062,
+        736.4545593261719,
+        959.407158575952
+      ],
+      "textures": {
+        "BaseColor": "/Game/RescueAssets/User/Building/T_Building_BaseColor.T_Building_BaseColor",
+        "ORM": "/Game/RescueAssets/User/Building/T_Building_ORM.T_Building_ORM",
+        "Normal": "/Game/RescueAssets/User/Building/T_Building_Normal.T_Building_Normal"
+      },
+      "source": "blender/Meshy_AI_Damaged_Building_20261109_image-to-3d-texture.blend",
+      "source_sha256": "5708a1e3514bc143f4c7b5482521e948251002d78c352202618a7c2e0ce1452c"
+    },
+    {
+      "id": "WindowWall",
+      "mesh": "/Game/RescueAssets/User/WindowWall/SM_WindowWall.SM_WindowWall",
+      "material": "/Game/RescueAssets/User/WindowWall/M_WindowWall.M_WindowWall",
+      "dimensions_cm": [
+        298.9241485595703,
+        38.6264762878418,
+        319.96047346666455
+      ],
+      "textures": {
+        "BaseColor": "/Game/RescueAssets/User/WindowWall/T_WindowWall_BaseColor.T_WindowWall_BaseColor",
+        "ORM": "/Game/RescueAssets/User/WindowWall/T_WindowWall_ORM.T_WindowWall_ORM",
+        "Normal": "/Game/RescueAssets/User/WindowWall/T_WindowWall_Normal.T_WindowWall_Normal"
+      },
+      "source": "blender/Meshy_AI_Wall_Module_with_Window_20261109_image-to-3d-texture.blend",
+      "source_sha256": "ea868b0d900bbf7856e25034b030b49d89e35385cca0b7218e4d641913fbb400"
+    }
+  ]
+}

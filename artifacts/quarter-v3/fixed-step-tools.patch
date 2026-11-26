@@ -1,0 +1,171 @@
+--- a/unreal/launch.py
++++ b/unreal/launch.py
+@@ -11,6 +11,15 @@
+ PROJECT=ROOT/'MetaRescue'/'MetaRescue.uproject'
+ 
+ 
++
++def functional_time_args(fps, *, quarter, smoke, environment, traffic_probe=None, capture_frames=False, visual_probe=None):
++    """Fixed logical time is an explicit functional profile, never a performance run."""
++    if fps is None:return []
++    if fps!=30 or not quarter or not smoke or environment!='random' or traffic_probe or capture_frames or visual_probe not in {None,'events'}:
++        raise ValueError('--fixed-step-fps 30 requires --quarter --smoke --environment random without traffic/window-inspection/capture')
++    return ['-UseFixedTimeStep','-FPS=30']
++
++
+ def main():
+     parser=argparse.ArgumentParser(description='MetaRescue Unreal physics environment')
+     parser.add_argument('--engine',type=Path,default=Path(os.environ.get('MR_UNREAL_ENGINE',r'C:\Program Files\Epic Games\UE_5.8')))
+@@ -21,6 +30,7 @@
+     parser.add_argument('--smoke-seconds',type=int,default=None,help='duration of physics smoke, 30..900; default 90, or 480 for --quarter')
+     parser.add_argument('--environment',choices=['random','static','showcase'],default='random',help='quarter event mode; showcase is explicitly scripted')
+     parser.add_argument('--seed',type=int,default=None,help='quarter event seed, independent from layout')
++    parser.add_argument('--fixed-step-fps',type=int,choices=[30],help='functional random validation at 30 model ticks/s; never use for FPS acceptance')
+     parser.add_argument('--external-control',action='store_true',help='disable the built-in mission dispatcher')
+     parser.add_argument('--traffic-probe',choices=['following','crossing','meeting','reverse','flight','landing','obstacle_replace'],help='explicit controlled safety fixture; no mission dispatch')
+     parser.add_argument('--capture-frames',action='store_true',help='capture a real 5 fps engine frame sequence at 28..148 model seconds')
+@@ -35,6 +45,8 @@
+     if not 30<=args.smoke_seconds<=900:parser.error('--smoke-seconds must be 30..900')
+     event_args=['-MREnvironment='+args.environment,'-MRHorizon='+str(max(480,args.smoke_seconds))]
+     if args.seed is not None:event_args.append('-MRSeed='+str(args.seed))
++    try:event_args+=functional_time_args(args.fixed_step_fps,quarter=args.quarter,smoke=args.smoke,environment=args.environment,traffic_probe=args.traffic_probe,capture_frames=args.capture_frames,visual_probe=args.visual_probe)
++    except ValueError as error:parser.error(str(error))
+     if args.traffic_probe:
+         if not args.quarter or not args.smoke:parser.error('--traffic-probe requires --quarter --smoke')
+         args.external_control=True;event_args.append('-MRTrafficProbe='+args.traffic_probe)
+@@ -86,10 +98,14 @@
+             run([commandlet,PROJECT,'-run=pythonscript','-script='+str(ROOT/'tools'/scene_builder),
+                  '-unattended','-NoSound','-nosplash','-stdout','-FullStdOutLogOutput'],'scene',True)
+     if args.smoke:
+-        (logdir/'smoke-run.json').write_text(json.dumps({'started_at':time.time(),'requested_seconds':args.smoke_seconds,'quarter':args.quarter,'environment':args.environment,'seed':args.seed,'external_control':args.external_control,'traffic_probe':args.traffic_probe}),encoding='utf-8')
++        request={'started_at':time.time(),'requested_seconds':args.smoke_seconds,'quarter':args.quarter,'environment':args.environment,'seed':args.seed,'external_control':args.external_control,'traffic_probe':args.traffic_probe,'time_step_mode':'fixed_functional' if args.fixed_step_fps else 'real_time','requested_fixed_fps':args.fixed_step_fps or 0}
++        (logdir/'smoke-run.json').write_text(json.dumps(request),encoding='utf-8')
++        native_wall_started=time.perf_counter()
+         run([editor,PROJECT,'/Game/Maps/'+map_name,'-game',*([] if args.visible else ['-RenderOffscreen']),'-windowed',
+              '-ResX=1600','-ResY=1000','-ForceRes','-NoSound','-nosplash','-unattended','-MRSmoke','-MRQuitAfter='+str(args.smoke_seconds),
+              *(['-MRPhotoTour'] if args.quarter else []),*(['-MRMechanicsProbe'] if args.mechanics_probe else []),*(event_args if args.quarter else []),'-stdout','-FullStdOutLogOutput'],'physics-smoke',not args.visible)
++        request['wall_elapsed_s']=time.perf_counter()-native_wall_started
++        (logdir/'smoke-run.json').write_text(json.dumps(request),encoding='utf-8')
+         run([sys.executable,'-B','-X','utf8',ROOT/'tools/check_smoke.py'],'physics-check',True)
+     elif args.editor or not (args.build or args.setup or args.rebuild_scene):
+         subprocess.Popen([str(editor),str(PROJECT),'/Game/Maps/'+map_name,*(event_args if args.quarter else [])],cwd=ROOT)
+--- a/unreal/tools/run_quarter_validation.py
++++ b/unreal/tools/run_quarter_validation.py
+@@ -62,7 +62,9 @@
+     ended=time.time()
+     files={p.relative_to(out).as_posix():{'sha256':sha256(p),'mtime':p.stat().st_mtime,'size':p.stat().st_size}
+            for p in out.rglob('*') if p.is_file()}
+-    metadata={'started_at':started,'ended_at':ended,'launcher_exit':completed.returncode,
++    fixed_fps=int(extra[extra.index('--fixed-step-fps')+1]) if '--fixed-step-fps' in extra else 0
++    metadata={'started_at':started,'ended_at':ended,'launcher_exit':completed.returncode,'wall_elapsed_s':ended-started,
++              'time_step_mode':'fixed_functional' if fixed_fps else 'real_time','requested_fixed_fps':fixed_fps,
+               'source_hashes_before':snapshot,'source_hashes_after':source_snapshot(),'files':files}
+     (out/'evidence-run.json').write_text(json.dumps(metadata,indent=2),encoding='utf-8')
+     print(name,'native exit',completed.returncode,'evidence',out,flush=True)
+@@ -82,15 +84,20 @@
+     parser.add_argument('--prefix',default='v3')
+     parser.add_argument('--case',help='Run one traffic fixture, effect or numeric random seed')
+     parser.add_argument('--seconds',type=int,help='Override duration for a diagnostic run')
++    parser.add_argument('--fixed-step-fps',type=int,choices=[30],help='functional random/replay/effects/zero only; no performance verdict')
+     args=parser.parse_args()
+     if args.seconds is not None and not 30<=args.seconds<=900:parser.error('--seconds must be 30..900')
++    if args.fixed_step_fps and args.suite not in {'random','replay','effects','zero'}:parser.error('--fixed-step-fps is only for random/replay/effects/zero functional validation')
++    if args.fixed_step_fps:args.prefix+='-fixed30'
+     def duration(default):return args.seconds or default
+     if args.suite=='static':run(args.prefix+'-static',['--environment','static'],duration(270))
+     elif args.suite in {'random','replay'}:
+         for seed in [int(args.case)] if args.case else [20261109,20261110,20261111]:
+-            first=run(args.prefix+'-random-'+str(seed),['--environment','random','--seed',str(seed)],duration(480))
++            options=['--environment','random','--seed',str(seed)]
++            if args.fixed_step_fps:options+=['--fixed-step-fps',str(args.fixed_step_fps)]
++            first=run(args.prefix+'-random-'+str(seed),options,duration(480))
+             if args.suite=='replay':
+-                second=run(args.prefix+'-replay-'+str(seed),['--environment','random','--seed',str(seed)],duration(480))
++                second=run(args.prefix+'-replay-'+str(seed),options,duration(480))
+                 subprocess.run([sys.executable,'-B','-X','utf8',str(ROOT/'unreal/tools/compare_quarter_replay.py'),str(first),str(second)],cwd=ROOT,check=True)
+     elif args.suite=='traffic':
+         if args.case and args.case not in TRAFFIC:parser.error('Unknown traffic case')
+@@ -100,6 +107,7 @@
+         if args.case and args.case not in EVENTS:parser.error('Unknown effect case')
+         for kind in [args.case] if args.case else EVENTS:
+             options=['--environment','random','--visual-probe','events']
++            if args.fixed_step_fps:options+=['--fixed-step-fps',str(args.fixed_step_fps)]
+             for name in EVENTS:options+=['--probability',name+'='+str(100 if name==kind else 0)]
+             run(args.prefix+'-effect-'+kind,options,duration(180))
+     elif args.suite=='windows':
+@@ -108,6 +116,7 @@
+         run(args.prefix+'-windows',['--environment','static','--external-control','--visual-probe','windows'],duration(30))
+     elif args.suite=='zero':
+         options=['--environment','random']
++        if args.fixed_step_fps:options+=['--fixed-step-fps',str(args.fixed_step_fps)]
+         for name in EVENTS:options+=['--probability',name+'=0']
+         run(args.prefix+'-zero',options,duration(160))
+     else:run(args.prefix+'-showcase',['--environment','showcase','--visual-probe','events','--capture-frames'],duration(240))
+--- a/unreal/tools/check_quarter_v3_run.py
++++ b/unreal/tools/check_quarter_v3_run.py
+@@ -248,8 +248,21 @@
+         for name,record in snapshot['files'].items():
+             assert hashlib.sha256((folder/name).read_bytes()).hexdigest()==record['sha256'],'archived evidence changed: '+name
+     capture=(folder/'Screenshots/Capture').exists()
+-    performance={'fps':final['average_game_fps'],'p95_frame_ms':final['p95_frame_ms'],'memory_mb':final['process_memory_mb'],
+-                 'capture_overhead_included':capture,'target_60fps_met':final['average_game_fps']>=60 and final['p95_frame_ms']<=17}
++    fixed=request.get('time_step_mode','real_time')=='fixed_functional'
++    assert final['time_step_mode']==request.get('time_step_mode','real_time'),'clock profile mismatch'
++    assert final['requested_fixed_fps']==request.get('requested_fixed_fps',0),'fixed rate metadata mismatch'
++    if fixed:
++        assert request['requested_fixed_fps']==30 and request['environment']=='random' and not probe and not capture
++        assert close(final['model_delta_s_min'],1/30,.00001) and close(final['model_delta_s_max'],1/30,.00001),'actual model tick differs from requested fixed rate'
++        assert request['wall_elapsed_s']>0 and final['wall_elapsed_s']>0
++    performance={'fps':None if fixed else final['average_game_fps'],
++                 'p95_frame_ms':None if fixed else final['p95_frame_ms'],'memory_mb':final['process_memory_mb'],
++                 'time_step_mode':request.get('time_step_mode','real_time'),'requested_fixed_fps':request.get('requested_fixed_fps',0),
++                 'wall_elapsed_s':final['wall_elapsed_s'],'launcher_wall_elapsed_s':request.get('wall_elapsed_s'),
++                 'render_wall_fps':final['render_wall_fps'],'model_tick_fps':final['average_game_fps'],'model_step_p95_ms':final['p95_frame_ms'],
++                 'capture_overhead_included':capture,
++                 'performance_evaluation':'not_evaluated_fixed_functional' if fixed else 'native_real_time',
++                 'target_60fps_met':None if fixed else final['average_game_fps']>=60 and final['p95_frame_ms']<=17}
+     result={'passed':True,'scope':'native state, tape, traffic and evidence checks; visual review remains separate',
+             'seconds':final['time_s'],'environment':truth['mode'],'seed':truth['seed'],
+             'event_types':sorted({e['event_type'] for e in applied}),'applied':len(applied),
+--- a/unreal/tools/tests/test_validation_evidence.py
++++ b/unreal/tools/tests/test_validation_evidence.py
+@@ -1,5 +1,5 @@
+ """Protect acceptance boundaries against false passes; no engine results fabricated."""
+-import copy
++import importlib.util
+ from pathlib import Path
+ import sys
+ import unittest
+@@ -8,9 +8,32 @@
+ sys.path.insert(0,str(Path(__file__).resolve().parents[1]))
+ from check_quarter_v3_run import check_tape,check_trajectories,check_effects,expected_visibility
+ import run_quarter_validation
++_launch_spec=importlib.util.spec_from_file_location('quarter_launch',Path(__file__).resolve().parents[2]/'launch.py')
++quarter_launch=importlib.util.module_from_spec(_launch_spec);_launch_spec.loader.exec_module(quarter_launch)
+ 
+ 
+ class EvidenceChecks(unittest.TestCase):
++    def test_fixed_functional_profile_keeps_normal_clock_unmodified(self):
++        kwargs={'quarter':True,'smoke':True,'environment':'random'}
++        self.assertEqual(quarter_launch.functional_time_args(None,**kwargs),[])
++        self.assertEqual(quarter_launch.functional_time_args(30,**kwargs),['-UseFixedTimeStep','-FPS=30'])
++        self.assertEqual(quarter_launch.functional_time_args(30,**(kwargs|{'visual_probe':'events'})),['-UseFixedTimeStep','-FPS=30'])
++        for override in [{'environment':'static'},{'environment':'showcase'},{'quarter':False},{'smoke':False},
++                         {'traffic_probe':'crossing'},{'capture_frames':True},{'visual_probe':'windows'}]:
++            with self.assertRaises(ValueError):quarter_launch.functional_time_args(30,**(kwargs|override))
++
++    def test_fixed_random_workflow_is_explicit_and_not_performance_named(self):
++        with patch.object(sys,'argv',['run_quarter_validation.py','random','--prefix','unit','--case','20261109','--fixed-step-fps','30']),patch.object(run_quarter_validation,'run') as run:
++            run_quarter_validation.main()
++        name,options,seconds=run.call_args.args
++        self.assertEqual(name,'unit-fixed30-random-20261109')
++        self.assertEqual(options[options.index('--fixed-step-fps')+1],'30')
++        self.assertEqual(seconds,480)
++        for suite in ['traffic','static','showcase','windows']:
++            with patch.object(sys,'argv',['run_quarter_validation.py',suite,'--fixed-step-fps','30']),patch.object(run_quarter_validation,'run') as run:
++                with self.assertRaises(SystemExit):run_quarter_validation.main()
++                run.assert_not_called()
++
+     def test_late_person_requires_real_geometry_not_only_an_unhidden_actor(self):
+         truth={'event_tape':[{'id':'E1','type':'new_target','time_s':30,'cells':[],'rejected':''}]}
+         applied=[{'event_id':'E1','event_type':'new_target','time_s':30}]

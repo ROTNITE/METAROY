@@ -1,0 +1,277 @@
+Blender 4.5.15 LTS (hash 5afeabba6097 built 2026-10-22 01:35:27)
+Read blend: "C:\Users\rotn1\Documents\ChatGPT\metaroy\blender\Meshy_AI_Emergency_Radio_Relay_20261109_image-to-3d-texture.blend"
+Fra:1 Mem:643.30M (Peak 700.44M) | Time:96:23:52.71 | Mem:0.00M, Peak:0.00M | Scene | Synchronizing object | BakeSource_High
+Fra:1 Mem:677.01M (Peak 735.39M) | Time:96:23:52.81 | Mem:0.00M, Peak:0.00M | Scene | Initializing
+Fra:1 Mem:677.01M (Peak 735.39M) | Time:96:23:52.81 | Mem:0.00M, Peak:0.00M | Scene | Updating Images | Loading Image_2
+Fra:1 Mem:677.01M (Peak 735.39M) | Time:96:23:52.81 | Mem:0.00M, Peak:0.00M | Scene | Updating Images | Loading T_Relay_BaseColor
+Fra:1 Mem:741.01M (Peak 741.01M) | Time:96:23:52.81 | Mem:0.00M, Peak:0.00M | Scene | Updating Images | Loading Image_1
+Info: Baking map saved to internal image, save it externally or pack it
+MR_SURFACE_BAKED Relay BaseColor 2048
+Fra:1 Mem:649.18M (Peak 1406.27M) | Time:96:23:55.58 | Mem:0.00M, Peak:0.00M | Scene | Synchronizing object | BakeSource_High
+Fra:1 Mem:677.04M (Peak 1406.27M) | Time:96:23:55.68 | Mem:0.00M, Peak:0.00M | Scene | Initializing
+Fra:1 Mem:677.03M (Peak 1406.27M) | Time:96:23:55.68 | Mem:0.00M, Peak:0.00M | Scene | Updating Images | Loading Image_2
+Fra:1 Mem:677.03M (Peak 1406.27M) | Time:96:23:55.68 | Mem:0.00M, Peak:0.00M | Scene | Updating Images | Loading T_Relay_ORM
+Fra:1 Mem:757.03M (Peak 1406.27M) | Time:96:23:55.68 | Mem:0.00M, Peak:0.00M | Scene | Updating Images | Loading Image_1
+Info: Baking map saved to internal image, save it externally or pack it
+MR_SURFACE_BAKED Relay ORM 2048
+Fra:1 Mem:649.21M (Peak 1406.27M) | Time:96:23:58.26 | Mem:0.00M, Peak:0.00M | Scene | Synchronizing object | BakeSource_High
+Fra:1 Mem:680.97M (Peak 1406.27M) | Time:96:23:58.36 | Mem:0.00M, Peak:0.00M | Scene | Initializing
+Fra:1 Mem:680.97M (Peak 1406.27M) | Time:96:23:58.36 | Mem:0.00M, Peak:0.00M | Scene | Updating Images | Loading Image_2
+Fra:1 Mem:680.97M (Peak 1406.27M) | Time:96:23:58.36 | Mem:0.00M, Peak:0.00M | Scene | Updating Images | Loading T_Relay_Normal
+Fra:1 Mem:696.97M (Peak 1406.27M) | Time:96:23:58.36 | Mem:0.00M, Peak:0.00M | Scene | Updating Images | Loading Image_1
+Info: Baking map saved to internal image, save it externally or pack it
+MR_SURFACE_BAKED Relay Normal 2048
+Info: Saved as "Relay.blend"
+
+FBX export starting... 'C:\\Users\\rotn1\\Documents\\ChatGPT\\metaroy\\blender\\prepared\\v2\\Relay\\parts\\Relay.fbx'
+export finished in 0.0260 sec.
+MR_MECHANIZED Relay 1 parts 16000 triangles
+Read blend: "C:\Users\rotn1\Documents\ChatGPT\metaroy\blender\Meshy_AI_Rescue_Stretcher_20261109_image-to-3d-texture.blend"
+Fra:1 Mem:655.57M (Peak 1450.26M) | Time:96:24:08.36 | Mem:0.00M, Peak:0.00M | Scene | Synchronizing object | BakeSource_High
+Fra:1 Mem:692.42M (Peak 1450.26M) | Time:96:24:08.46 | Mem:0.00M, Peak:0.00M | Scene | Initializing
+Fra:1 Mem:692.42M (Peak 1450.26M) | Time:96:24:08.46 | Mem:0.00M, Peak:0.00M | Scene | Updating Images | Loading Image_2
+Fra:1 Mem:756.42M (Peak 1450.26M) | Time:96:24:08.46 | Mem:0.00M, Peak:0.00M | Scene | Updating Images | Loading Image_0
+Fra:1 Mem:756.42M (Peak 1450.26M) | Time:96:24:08.46 | Mem:0.00M, Peak:0.00M | Scene | Updating Images | Loading Image_1
+Info: Baking map saved to internal image, save it externally or pack it
+MR_SURFACE_BAKED Stretcher BaseColor 2048
+Fra:1 Mem:661.96M (Peak 1450.26M) | Time:96:24:10.70 | Mem:0.00M, Peak:0.00M | Scene | Synchronizing object | BakeSource_High
+Fra:1 Mem:692.45M (Peak 1450.26M) | Time:96:24:10.80 | Mem:0.00M, Peak:0.00M | Scene | Initializing
+Fra:1 Mem:692.44M (Peak 1450.26M) | Time:96:24:10.80 | Mem:0.00M, Peak:0.00M | Scene | Updating Images | Loading Image_2
+Fra:1 Mem:756.45M (Peak 1450.26M) | Time:96:24:10.80 | Mem:0.00M, Peak:0.00M | Scene | Updating Images | Loading T_Stretcher_ORM
+Fra:1 Mem:772.45M (Peak 1450.26M) | Time:96:24:10.80 | Mem:0.00M, Peak:0.00M | Scene | Updating Images | Loading Image_1
+Info: Baking map saved to internal image, save it externally or pack it
+MR_SURFACE_BAKED Stretcher ORM 2048
+Fra:1 Mem:661.98M (Peak 1450.26M) | Time:96:24:13.00 | Mem:0.00M, Peak:0.00M | Scene | Synchronizing object | BakeSource_High
+Fra:1 Mem:696.84M (Peak 1450.26M) | Time:96:24:13.08 | Mem:0.00M, Peak:0.00M | Scene | Initializing
+Fra:1 Mem:696.84M (Peak 1450.26M) | Time:96:24:13.08 | Mem:0.00M, Peak:0.00M | Scene | Updating Images | Loading Image_2
+Fra:1 Mem:760.84M (Peak 1450.26M) | Time:96:24:13.08 | Mem:0.00M, Peak:0.00M | Scene | Updating Images | Loading T_Stretcher_Normal
+Fra:1 Mem:776.84M (Peak 1450.26M) | Time:96:24:13.08 | Mem:0.00M, Peak:0.00M | Scene | Updating Images | Loading Image_1
+Info: Baking map saved to internal image, save it externally or pack it
+MR_SURFACE_BAKED Stretcher Normal 2048
+Info: Saved as "Stretcher.blend"
+
+FBX export starting... 'C:\\Users\\rotn1\\Documents\\ChatGPT\\metaroy\\blender\\prepared\\v2\\Stretcher\\parts\\Stretcher.fbx'
+export finished in 0.0275 sec.
+MR_MECHANIZED Stretcher 1 parts 16000 triangles
+Read blend: "C:\Users\rotn1\Documents\ChatGPT\metaroy\blender\Meshy_AI_Wall_Module_with_Window_20261109_image-to-3d-texture.blend"
+Fra:1 Mem:768.66M (Peak 1473.38M) | Time:96:24:27.23 | Mem:0.00M, Peak:0.00M | Scene | Synchronizing object | BakeSource_High
+Fra:1 Mem:825.53M (Peak 1473.38M) | Time:96:24:27.39 | Mem:0.00M, Peak:0.00M | Scene | Initializing
+Fra:1 Mem:825.52M (Peak 1473.38M) | Time:96:24:27.39 | Mem:0.00M, Peak:0.00M | Scene | Updating Images | Loading Image_2
+Fra:1 Mem:825.52M (Peak 1473.38M) | Time:96:24:27.39 | Mem:0.00M, Peak:0.00M | Scene | Updating Images | Loading Image_0
+Fra:1 Mem:953.53M (Peak 1473.38M) | Time:96:24:27.39 | Mem:0.00M, Peak:0.00M | Scene | Updating Images | Loading Image_1
+Info: Baking map saved to internal image, save it externally or pack it
+MR_SURFACE_BAKED WindowWall BaseColor 2048
+Fra:1 Mem:778.57M (Peak 1637.93M) | Time:96:24:29.91 | Mem:0.00M, Peak:0.00M | Scene | Synchronizing object | BakeSource_High
+Fra:1 Mem:825.55M (Peak 1637.93M) | Time:96:24:30.05 | Mem:0.00M, Peak:0.00M | Scene | Initializing
+Fra:1 Mem:825.55M (Peak 1637.93M) | Time:96:24:30.05 | Mem:0.00M, Peak:0.00M | Scene | Updating Images | Loading Image_2
+Fra:1 Mem:825.55M (Peak 1637.93M) | Time:96:24:30.05 | Mem:0.00M, Peak:0.00M | Scene | Updating Images | Loading T_WindowWall_ORM
+Fra:1 Mem:889.55M (Peak 1637.93M) | Time:96:24:30.05 | Mem:0.00M, Peak:0.00M | Scene | Updating Images | Loading Image_0
+Info: Baking map saved to internal image, save it externally or pack it
+MR_SURFACE_BAKED WindowWall ORM 2048
+Fra:1 Mem:778.59M (Peak 1637.93M) | Time:96:24:32.62 | Mem:0.00M, Peak:0.00M | Scene | Synchronizing object | BakeSource_High
+Fra:1 Mem:832.18M (Peak 1637.93M) | Time:96:24:32.77 | Mem:0.00M, Peak:0.00M | Scene | Initializing
+Fra:1 Mem:832.18M (Peak 1637.93M) | Time:96:24:32.77 | Mem:0.00M, Peak:0.00M | Scene | Updating Images | Loading Image_2
+Fra:1 Mem:832.18M (Peak 1637.93M) | Time:96:24:32.77 | Mem:0.00M, Peak:0.00M | Scene | Updating Images | Loading T_WindowWall_Normal
+Fra:1 Mem:832.18M (Peak 1637.93M) | Time:96:24:32.77 | Mem:0.00M, Peak:0.00M | Scene | Updating Images | Loading Image_1
+Info: Baking map saved to internal image, save it externally or pack it
+MR_SURFACE_BAKED WindowWall Normal 2048
+Info: Saved as "WindowWall.blend"
+
+FBX export starting... 'C:\\Users\\rotn1\\Documents\\ChatGPT\\metaroy\\blender\\prepared\\v2\\WindowWall\\parts\\WindowWall.fbx'
+export finished in 0.0309 sec.
+MR_MECHANIZED WindowWall 1 parts 17999 triangles
+Read blend: "C:\Users\rotn1\Documents\ChatGPT\metaroy\blender\Meshy_AI_Wall_Module_with_Doorway_20261109_image-to-3d-texture.blend"
+Fra:1 Mem:759.37M (Peak 1657.14M) | Time:96:24:46.30 | Mem:0.00M, Peak:0.00M | Scene | Synchronizing object | BakeSource_High
+Fra:1 Mem:815.14M (Peak 1657.14M) | Time:96:24:46.46 | Mem:0.00M, Peak:0.00M | Scene | Initializing
+Fra:1 Mem:815.14M (Peak 1657.14M) | Time:96:24:46.46 | Mem:0.00M, Peak:0.00M | Scene | Updating Images | Loading Image_2
+Fra:1 Mem:815.14M (Peak 1657.14M) | Time:96:24:46.46 | Mem:0.00M, Peak:0.00M | Scene | Updating Images | Loading T_Doorway_BaseColor
+Fra:1 Mem:879.14M (Peak 1657.14M) | Time:96:24:46.46 | Mem:0.00M, Peak:0.00M | Scene | Updating Images | Loading Image_1
+Info: Baking map saved to internal image, save it externally or pack it
+MR_SURFACE_BAKED Doorway BaseColor 2048
+Fra:1 Mem:769.08M (Peak 1657.14M) | Time:96:24:48.94 | Mem:0.00M, Peak:0.00M | Scene | Synchronizing object | BakeSource_High
+Fra:1 Mem:815.17M (Peak 1657.14M) | Time:96:24:49.09 | Mem:0.00M, Peak:0.00M | Scene | Initializing
+Fra:1 Mem:815.16M (Peak 1657.14M) | Time:96:24:49.09 | Mem:0.00M, Peak:0.00M | Scene | Updating Images | Loading Image_2
+Fra:1 Mem:815.16M (Peak 1657.14M) | Time:96:24:49.09 | Mem:0.00M, Peak:0.00M | Scene | Updating Images | Loading Image_0
+Fra:1 Mem:815.16M (Peak 1657.14M) | Time:96:24:49.09 | Mem:0.00M, Peak:0.00M | Scene | Updating Images | Loading T_Doorway_ORM
+Fra:1 Mem:879.16M (Peak 1657.14M) | Time:96:24:49.09 | Mem:0.00M, Peak:0.00M | Scene | Updating Images | Loading Image_1
+Info: Baking map saved to internal image, save it externally or pack it
+MR_SURFACE_BAKED Doorway ORM 2048
+Fra:1 Mem:769.10M (Peak 1657.14M) | Time:96:24:51.65 | Mem:0.00M, Peak:0.00M | Scene | Synchronizing object | BakeSource_High
+Fra:1 Mem:821.70M (Peak 1657.14M) | Time:96:24:51.80 | Mem:0.00M, Peak:0.00M | Scene | Initializing
+Fra:1 Mem:821.69M (Peak 1657.14M) | Time:96:24:51.80 | Mem:0.00M, Peak:0.00M | Scene | Updating Images | Loading Image_2
+Fra:1 Mem:821.69M (Peak 1657.14M) | Time:96:24:51.80 | Mem:0.00M, Peak:0.00M | Scene | Updating Images | Loading Image_1
+Info: Baking map saved to internal image, save it externally or pack it
+MR_SURFACE_BAKED Doorway Normal 2048
+Info: Saved as "Doorway.blend"
+
+FBX export starting... 'C:\\Users\\rotn1\\Documents\\ChatGPT\\metaroy\\blender\\prepared\\v2\\Doorway\\parts\\Doorway.fbx'
+export finished in 0.0295 sec.
+MR_MECHANIZED Doorway 1 parts 17999 triangles
+Read blend: "C:\Users\rotn1\Documents\ChatGPT\metaroy\blender\Meshy_AI_Damaged_Building_20261109_image-to-3d-texture.blend"
+Fra:1 Mem:953.12M (Peak 1657.14M) | Time:96:25:12.41 | Mem:0.00M, Peak:0.00M | Scene | Synchronizing object | BakeSource_High
+Fra:1 Mem:1043.57M (Peak 1657.14M) | Time:96:25:12.68 | Mem:0.00M, Peak:0.00M | Scene | Initializing
+Fra:1 Mem:1043.57M (Peak 1657.14M) | Time:96:25:12.68 | Mem:0.00M, Peak:0.00M | Scene | Updating Images | Loading Image_2
+Fra:1 Mem:1043.57M (Peak 1657.14M) | Time:96:25:12.68 | Mem:0.00M, Peak:0.00M | Scene | Updating Images | Loading T_Building_BaseColor
+Fra:1 Mem:1043.57M (Peak 1657.14M) | Time:96:25:12.68 | Mem:0.00M, Peak:0.00M | Scene | Updating Images | Loading Image_0
+Info: Baking map saved to internal image, save it externally or pack it
+MR_SURFACE_BAKED Building BaseColor 2048
+Fra:1 Mem:968.85M (Peak 1976.34M) | Time:96:25:15.48 | Mem:0.00M, Peak:0.00M | Scene | Synchronizing object | BakeSource_High
+Fra:1 Mem:1043.59M (Peak 1976.34M) | Time:96:25:15.71 | Mem:0.00M, Peak:0.00M | Scene | Initializing
+Fra:1 Mem:1043.59M (Peak 1976.34M) | Time:96:25:15.71 | Mem:0.00M, Peak:0.00M | Scene | Updating Images | Loading Image_2
+Fra:1 Mem:1107.59M (Peak 1976.34M) | Time:96:25:15.71 | Mem:0.00M, Peak:0.00M | Scene | Updating Images | Loading T_Building_ORM
+Fra:1 Mem:1107.59M (Peak 1976.34M) | Time:96:25:15.71 | Mem:0.00M, Peak:0.00M | Scene | Updating Images | Loading Image_1
+Info: Baking map saved to internal image, save it externally or pack it
+MR_SURFACE_BAKED Building ORM 2048
+Fra:1 Mem:968.88M (Peak 1976.34M) | Time:96:25:18.50 | Mem:0.00M, Peak:0.00M | Scene | Synchronizing object | BakeSource_High
+Fra:1 Mem:1054.16M (Peak 1976.34M) | Time:96:25:18.74 | Mem:0.00M, Peak:0.00M | Scene | Initializing
+Fra:1 Mem:1054.16M (Peak 1976.34M) | Time:96:25:18.74 | Mem:0.00M, Peak:0.00M | Scene | Updating Images | Loading Image_2
+Fra:1 Mem:1054.16M (Peak 1976.34M) | Time:96:25:18.74 | Mem:0.00M, Peak:0.00M | Scene | Updating Images | Loading T_Building_Normal
+Fra:1 Mem:1054.16M (Peak 1976.34M) | Time:96:25:18.74 | Mem:0.00M, Peak:0.00M | Scene | Updating Images | Loading Image_1
+Info: Baking map saved to internal image, save it externally or pack it
+MR_SURFACE_BAKED Building Normal 2048
+Info: Saved as "Building.blend"
+
+FBX export starting... 'C:\\Users\\rotn1\\Documents\\ChatGPT\\metaroy\\blender\\prepared\\v2\\Building\\parts\\Building.fbx'
+export finished in 0.1320 sec.
+MR_MECHANIZED Building 1 parts 90000 triangles
+Read blend: "C:\Users\rotn1\Documents\ChatGPT\metaroy\blender\Meshy_AI_Static_Rubble_Pile_20261109_image-to-3d-texture.blend"
+Fra:1 Mem:1123.94M (Peak 1976.34M) | Time:96:25:48.08 | Mem:0.00M, Peak:0.00M | Scene | Synchronizing object | BakeSource_High
+Fra:1 Mem:1250.65M (Peak 1976.34M) | Time:96:25:48.43 | Mem:0.00M, Peak:0.00M | Scene | Initializing
+Fra:1 Mem:1250.64M (Peak 1976.34M) | Time:96:25:48.43 | Mem:0.00M, Peak:0.00M | Scene | Updating Images | Loading Image_2
+Fra:1 Mem:1250.64M (Peak 1976.34M) | Time:96:25:48.43 | Mem:0.00M, Peak:0.00M | Scene | Updating Images | Loading T_Rubble_BaseColor
+Fra:1 Mem:1330.64M (Peak 1976.34M) | Time:96:25:48.43 | Mem:0.00M, Peak:0.00M | Scene | Updating Images | Loading Image_1
+Info: Baking map saved to internal image, save it externally or pack it
+MR_SURFACE_BAKED Rubble BaseColor 2048
+Fra:1 Mem:1145.94M (Peak 2313.07M) | Time:96:25:51.79 | Mem:0.00M, Peak:0.00M | Scene | Synchronizing object | BakeSource_High
+Fra:1 Mem:1250.67M (Peak 2313.07M) | Time:96:25:52.11 | Mem:0.00M, Peak:0.00M | Scene | Initializing
+Fra:1 Mem:1250.67M (Peak 2313.07M) | Time:96:25:52.11 | Mem:0.00M, Peak:0.00M | Scene | Updating Images | Loading Image_2
+Fra:1 Mem:1250.67M (Peak 2313.07M) | Time:96:25:52.11 | Mem:0.00M, Peak:0.00M | Scene | Updating Images | Loading T_Rubble_ORM
+Fra:1 Mem:1330.67M (Peak 2313.07M) | Time:96:25:52.11 | Mem:0.00M, Peak:0.00M | Scene | Updating Images | Loading Image_1
+Info: Baking map saved to internal image, save it externally or pack it
+MR_SURFACE_BAKED Rubble ORM 2048
+Fra:1 Mem:1145.97M (Peak 2313.07M) | Time:96:25:55.58 | Mem:0.00M, Peak:0.00M | Scene | Synchronizing object | BakeSource_High
+Fra:1 Mem:1265.51M (Peak 2313.07M) | Time:96:25:55.90 | Mem:0.00M, Peak:0.00M | Scene | Initializing
+Fra:1 Mem:1265.50M (Peak 2313.07M) | Time:96:25:55.90 | Mem:0.00M, Peak:0.00M | Scene | Updating Images | Loading Image_2
+Fra:1 Mem:1265.50M (Peak 2313.07M) | Time:96:25:55.90 | Mem:0.00M, Peak:0.00M | Scene | Updating Images | Loading T_Rubble_Normal
+Fra:1 Mem:1265.50M (Peak 2313.07M) | Time:96:25:55.90 | Mem:0.00M, Peak:0.00M | Scene | Updating Images | Loading Image_1
+Info: Baking map saved to internal image, save it externally or pack it
+MR_SURFACE_BAKED Rubble Normal 2048
+Info: Saved as "Rubble.blend"
+
+FBX export starting... 'C:\\Users\\rotn1\\Documents\\ChatGPT\\metaroy\\blender\\prepared\\v2\\Rubble\\parts\\Rubble.fbx'
+export finished in 0.0490 sec.
+MR_MECHANIZED Rubble 1 parts 30000 triangles
+Read blend: "C:\Users\rotn1\Documents\ChatGPT\metaroy\blender\Meshy_AI_Concrete_Slab_Fragment_20261109_image-to-3d-texture.blend"
+Fra:1 Mem:567.71M (Peak 2313.07M) | Time:96:26:03.19 | Mem:0.00M, Peak:0.00M | Scene | Synchronizing object | BakeSource_High
+Fra:1 Mem:586.86M (Peak 2313.07M) | Time:96:26:03.24 | Mem:0.00M, Peak:0.00M | Scene | Initializing
+Fra:1 Mem:586.86M (Peak 2313.07M) | Time:96:26:03.24 | Mem:0.00M, Peak:0.00M | Scene | Updating Images | Loading Image_2
+Fra:1 Mem:586.86M (Peak 2313.07M) | Time:96:26:03.24 | Mem:0.00M, Peak:0.00M | Scene | Updating Images | Loading T_Slab_BaseColor
+Fra:1 Mem:650.86M (Peak 2313.07M) | Time:96:26:03.24 | Mem:0.00M, Peak:0.00M | Scene | Updating Images | Loading Image_1
+Info: Baking map saved to internal image, save it externally or pack it
+MR_SURFACE_BAKED Slab BaseColor 2048
+Fra:1 Mem:571.07M (Peak 2313.07M) | Time:96:26:05.43 | Mem:0.00M, Peak:0.00M | Scene | Synchronizing object | BakeSource_High
+Fra:1 Mem:586.89M (Peak 2313.07M) | Time:96:26:05.49 | Mem:0.00M, Peak:0.00M | Scene | Initializing
+Fra:1 Mem:586.88M (Peak 2313.07M) | Time:96:26:05.49 | Mem:0.00M, Peak:0.00M | Scene | Updating Images | Loading Image_2
+Fra:1 Mem:586.89M (Peak 2313.07M) | Time:96:26:05.49 | Mem:0.00M, Peak:0.00M | Scene | Updating Images | Loading T_Slab_ORM
+Fra:1 Mem:666.89M (Peak 2313.07M) | Time:96:26:05.49 | Mem:0.00M, Peak:0.00M | Scene | Updating Images | Loading Image_0
+Fra:1 Mem:666.89M (Peak 2313.07M) | Time:96:26:05.49 | Mem:0.00M, Peak:0.00M | Scene | Updating Images | Loading Image_1
+Info: Baking map saved to internal image, save it externally or pack it
+MR_SURFACE_BAKED Slab ORM 2048
+Fra:1 Mem:571.09M (Peak 2313.07M) | Time:96:26:07.84 | Mem:0.00M, Peak:0.00M | Scene | Synchronizing object | BakeSource_High
+Fra:1 Mem:589.14M (Peak 2313.07M) | Time:96:26:07.89 | Mem:0.00M, Peak:0.00M | Scene | Initializing
+Fra:1 Mem:589.13M (Peak 2313.07M) | Time:96:26:07.89 | Mem:0.00M, Peak:0.00M | Scene | Updating Images | Loading Image_2
+Fra:1 Mem:589.13M (Peak 2313.07M) | Time:96:26:07.89 | Mem:0.00M, Peak:0.00M | Scene | Updating Images | Loading T_Slab_Normal
+Fra:1 Mem:589.13M (Peak 2313.07M) | Time:96:26:07.89 | Mem:0.00M, Peak:0.00M | Scene | Updating Images | Loading Image_0
+Fra:1 Mem:669.13M (Peak 2313.07M) | Time:96:26:07.89 | Mem:0.00M, Peak:0.00M | Scene | Updating Images | Loading Image_1
+Info: Baking map saved to internal image, save it externally or pack it
+MR_SURFACE_BAKED Slab Normal 2048
+Info: Saved as "Slab.blend"
+
+FBX export starting... 'C:\\Users\\rotn1\\Documents\\ChatGPT\\metaroy\\blender\\prepared\\v2\\Slab\\parts\\Slab.fbx'
+export finished in 0.0130 sec.
+MR_MECHANIZED Slab 1 parts 6999 triangles
+Read blend: "C:\Users\rotn1\Documents\ChatGPT\metaroy\blender\Meshy_AI_Rescue_Training_Mannequin_20261109_image-to-3d-texture.blend"
+Fra:1 Mem:527.72M (Peak 2313.07M) | Time:96:26:15.14 | Mem:0.00M, Peak:0.00M | Scene | Synchronizing object | BakeSource_High
+Fra:1 Mem:540.57M (Peak 2313.07M) | Time:96:26:15.18 | Mem:0.00M, Peak:0.00M | Scene | Initializing
+Fra:1 Mem:540.56M (Peak 2313.07M) | Time:96:26:15.18 | Mem:0.00M, Peak:0.00M | Scene | Updating Images | Loading Image_2
+Fra:1 Mem:540.56M (Peak 2313.07M) | Time:96:26:15.18 | Mem:0.00M, Peak:0.00M | Scene | Updating Images | Loading Image_0
+Fra:1 Mem:604.56M (Peak 2313.07M) | Time:96:26:15.18 | Mem:0.00M, Peak:0.00M | Scene | Updating Images | Loading Image_1
+Info: Baking map saved to internal image, save it externally or pack it
+MR_SURFACE_BAKED MannequinStatic BaseColor 2048
+Fra:1 Mem:529.98M (Peak 2313.07M) | Time:96:26:17.08 | Mem:0.00M, Peak:0.00M | Scene | Synchronizing object | BakeSource_High
+Fra:1 Mem:540.59M (Peak 2313.07M) | Time:96:26:17.11 | Mem:0.00M, Peak:0.00M | Scene | Initializing
+Fra:1 Mem:540.59M (Peak 2313.07M) | Time:96:26:17.11 | Mem:0.00M, Peak:0.00M | Scene | Updating Images | Loading Image_2
+Fra:1 Mem:604.59M (Peak 2313.07M) | Time:96:26:17.11 | Mem:0.00M, Peak:0.00M | Scene | Updating Images | Loading T_MannequinStatic_ORM
+Fra:1 Mem:604.59M (Peak 2313.07M) | Time:96:26:17.11 | Mem:0.00M, Peak:0.00M | Scene | Updating Images | Loading Image_1
+Info: Baking map saved to internal image, save it externally or pack it
+MR_SURFACE_BAKED MannequinStatic ORM 2048
+Fra:1 Mem:530.00M (Peak 2313.07M) | Time:96:26:18.97 | Mem:0.00M, Peak:0.00M | Scene | Synchronizing object | BakeSource_High
+Fra:1 Mem:542.11M (Peak 2313.07M) | Time:96:26:19.00 | Mem:0.00M, Peak:0.00M | Scene | Initializing
+Fra:1 Mem:542.10M (Peak 2313.07M) | Time:96:26:19.00 | Mem:0.00M, Peak:0.00M | Scene | Updating Images | Loading Image_2
+Fra:1 Mem:606.10M (Peak 2313.07M) | Time:96:26:19.00 | Mem:0.00M, Peak:0.00M | Scene | Updating Images | Loading T_MannequinStatic_Normal
+Fra:1 Mem:606.10M (Peak 2313.07M) | Time:96:26:19.00 | Mem:0.00M, Peak:0.00M | Scene | Updating Images | Loading Image_1
+Info: Baking map saved to internal image, save it externally or pack it
+MR_SURFACE_BAKED MannequinStatic Normal 2048
+Info: Saved as "MannequinStatic.blend"
+
+FBX export starting... 'C:\\Users\\rotn1\\Documents\\ChatGPT\\metaroy\\blender\\prepared\\v2\\MannequinStatic\\parts\\MannequinStatic.fbx'
+export finished in 0.0230 sec.
+MR_MECHANIZED MannequinStatic 1 parts 16000 triangles
+Read blend: "C:\Users\rotn1\Documents\ChatGPT\metaroy\blender\Meshy_AI_Rescue_Rover_Docking_Station_20261109_image-to-3d-texture.blend"
+Fra:1 Mem:561.01M (Peak 2313.07M) | Time:96:26:25.94 | Mem:0.00M, Peak:0.00M | Scene | Synchronizing object | BakeSource_High
+Fra:1 Mem:579.58M (Peak 2313.07M) | Time:96:26:25.99 | Mem:0.00M, Peak:0.00M | Scene | Initializing
+Fra:1 Mem:579.58M (Peak 2313.07M) | Time:96:26:25.99 | Mem:0.00M, Peak:0.00M | Scene | Updating Images | Loading Image_2
+Fra:1 Mem:579.58M (Peak 2313.07M) | Time:96:26:25.99 | Mem:0.00M, Peak:0.00M | Scene | Updating Images | Loading Image_0
+Fra:1 Mem:643.58M (Peak 2313.07M) | Time:96:26:25.99 | Mem:0.00M, Peak:0.00M | Scene | Updating Images | Loading Image_1
+Info: Baking map saved to internal image, save it externally or pack it
+MR_SURFACE_BAKED Dock BaseColor 2048
+Fra:1 Mem:564.23M (Peak 2313.07M) | Time:96:26:28.16 | Mem:0.00M, Peak:0.00M | Scene | Synchronizing object | BakeSource_High
+Fra:1 Mem:579.60M (Peak 2313.07M) | Time:96:26:28.21 | Mem:0.00M, Peak:0.00M | Scene | Initializing
+Fra:1 Mem:579.60M (Peak 2313.07M) | Time:96:26:28.21 | Mem:0.00M, Peak:0.00M | Scene | Updating Images | Loading Image_2
+Fra:1 Mem:579.60M (Peak 2313.07M) | Time:96:26:28.21 | Mem:0.00M, Peak:0.00M | Scene | Updating Images | Loading T_Dock_ORM
+Fra:1 Mem:643.60M (Peak 2313.07M) | Time:96:26:28.21 | Mem:0.00M, Peak:0.00M | Scene | Updating Images | Loading Image_1
+Info: Baking map saved to internal image, save it externally or pack it
+MR_SURFACE_BAKED Dock ORM 2048
+Fra:1 Mem:564.25M (Peak 2313.07M) | Time:96:26:30.34 | Mem:0.00M, Peak:0.00M | Scene | Synchronizing object | BakeSource_High
+Fra:1 Mem:581.86M (Peak 2313.07M) | Time:96:26:30.39 | Mem:0.00M, Peak:0.00M | Scene | Initializing
+Fra:1 Mem:581.85M (Peak 2313.07M) | Time:96:26:30.39 | Mem:0.00M, Peak:0.00M | Scene | Updating Images | Loading Image_2
+Fra:1 Mem:581.85M (Peak 2313.07M) | Time:96:26:30.39 | Mem:0.00M, Peak:0.00M | Scene | Updating Images | Loading T_Dock_Normal
+Fra:1 Mem:661.85M (Peak 2313.07M) | Time:96:26:30.39 | Mem:0.00M, Peak:0.00M | Scene | Updating Images | Loading Image_1
+Info: Baking map saved to internal image, save it externally or pack it
+MR_SURFACE_BAKED Dock Normal 2048
+Info: Saved as "Dock.blend"
+
+FBX export starting... 'C:\\Users\\rotn1\\Documents\\ChatGPT\\metaroy\\blender\\prepared\\v2\\Dock\\parts\\Dock.fbx'
+export finished in 0.0280 sec.
+MR_MECHANIZED Dock 1 parts 18000 triangles
+Read blend: "C:\Users\rotn1\Documents\ChatGPT\metaroy\blender\vendor\portable_generator_4k\portable_generator_4k.blend"
+Warning: region type 11 missing in space type "Action" (id: 12) - removing region
+Warning: region type 11 missing in space type "Action" (id: 12) - removing region
+Warning: region type 11 missing in space type "Action" (id: 12) - removing region
+Warning: region type 14 missing in space type "Node" (id: 16) - removing region
+Warning: region type 15 missing in space type "Node" (id: 16) - removing region
+Warning: region type 11 missing in space type "Action" (id: 12) - removing region
+Warning: region type 14 missing in space type "Node" (id: 16) - removing region
+Warning: region type 15 missing in space type "Node" (id: 16) - removing region
+Warning: region type 11 missing in space type "Action" (id: 12) - removing region
+Warning: region type 14 missing in space type "Node" (id: 16) - removing region
+Warning: region type 15 missing in space type "Node" (id: 16) - removing region
+Error: Engine 'BLENDER_EEVEE' not available for scene 'Scene' (an add-on may need to be installed or enabled)
+Warning: File written by newer Blender binary (501.30), expect loss of data!
+Info: Saved as "Generator.blend"
+
+FBX export starting... 'C:\\Users\\rotn1\\Documents\\ChatGPT\\metaroy\\blender\\prepared\\v2\\Generator\\parts\\portable_generator.fbx'
+export finished in 0.0510 sec.
+
+FBX export starting... 'C:\\Users\\rotn1\\Documents\\ChatGPT\\metaroy\\blender\\prepared\\v2\\Generator\\parts\\portable_generator_dial.fbx'
+export finished in 0.0041 sec.
+
+FBX export starting... 'C:\\Users\\rotn1\\Documents\\ChatGPT\\metaroy\\blender\\prepared\\v2\\Generator\\parts\\portable_generator_switch.fbx'
+export finished in 0.0040 sec.
+
+FBX export starting... 'C:\\Users\\rotn1\\Documents\\ChatGPT\\metaroy\\blender\\prepared\\v2\\Generator\\parts\\portable_generator_toggle.fbx'
+export finished in 0.0040 sec.
+MR_MECHANIZED Generator 4 parts 26419 triangles
+
+Blender quit
+Error: Not freed memory blocks: 22, total unfreed memory 0.001545 MB

@@ -1,0 +1,228 @@
+{
+	"kind": "3d_physics_sandbox_debug",
+	"time_s": 90.005445397400763,
+	"seed": 20261109,
+	"discovered": 9,
+	"delivered": 0,
+	"contacts": 76225,
+	"collapse_released": true,
+	"physics_bodies": [
+		{
+			"initial_z_cm": 70,
+			"z_cm": 57.066699258962153,
+			"simulating": true,
+			"speed_cm_s": 0
+		},
+		{
+			"initial_z_cm": 97,
+			"z_cm": 34.905879868470969,
+			"simulating": true,
+			"speed_cm_s": 0
+		},
+		{
+			"initial_z_cm": 124,
+			"z_cm": 67.128711556132174,
+			"simulating": true,
+			"speed_cm_s": 0
+		},
+		{
+			"initial_z_cm": 151,
+			"z_cm": 63.470301860407524,
+			"simulating": true,
+			"speed_cm_s": 0
+		},
+		{
+			"initial_z_cm": 178,
+			"z_cm": 75.470461006223942,
+			"simulating": true,
+			"speed_cm_s": 0
+		},
+		{
+			"initial_z_cm": 205,
+			"z_cm": 60.199753449135578,
+			"simulating": true,
+			"speed_cm_s": 0
+		},
+		{
+			"initial_z_cm": 232,
+			"z_cm": 78.976767386843619,
+			"simulating": true,
+			"speed_cm_s": 0
+		},
+		{
+			"initial_z_cm": 259,
+			"z_cm": 67.473601207710885,
+			"simulating": true,
+			"speed_cm_s": 0
+		},
+		{
+			"initial_z_cm": 286,
+			"z_cm": 48.748871052647814,
+			"simulating": true,
+			"speed_cm_s": 0
+		},
+		{
+			"initial_z_cm": 313,
+			"z_cm": 98.501226722042077,
+			"simulating": true,
+			"speed_cm_s": 0
+		},
+		{
+			"initial_z_cm": 340,
+			"z_cm": 70.914155081230206,
+			"simulating": true,
+			"speed_cm_s": 0
+		},
+		{
+			"initial_z_cm": 367,
+			"z_cm": 86.836209349542102,
+			"simulating": true,
+			"speed_cm_s": 0
+		},
+		{
+			"initial_z_cm": 394,
+			"z_cm": 85.330614460300808,
+			"simulating": true,
+			"speed_cm_s": 0
+		},
+		{
+			"initial_z_cm": 421,
+			"z_cm": 101.80969663375561,
+			"simulating": true,
+			"speed_cm_s": 0
+		},
+		{
+			"initial_z_cm": 448,
+			"z_cm": 87.671247875272229,
+			"simulating": true,
+			"speed_cm_s": 0
+		},
+		{
+			"initial_z_cm": 475,
+			"z_cm": 90.560587477136309,
+			"simulating": true,
+			"speed_cm_s": 0
+		},
+		{
+			"initial_z_cm": 502,
+			"z_cm": 67.355042236233999,
+			"simulating": true,
+			"speed_cm_s": 0
+		},
+		{
+			"initial_z_cm": 529,
+			"z_cm": 54.437040910835343,
+			"simulating": true,
+			"speed_cm_s": 0
+		},
+		{
+			"initial_z_cm": 850,
+			"z_cm": 126.2841561614665,
+			"simulating": true,
+			"speed_cm_s": 0
+		},
+		{
+			"initial_z_cm": 915,
+			"z_cm": 176.52599233207474,
+			"simulating": true,
+			"speed_cm_s": 0
+		},
+		{
+			"initial_z_cm": 980,
+			"z_cm": 115.37787699502313,
+			"simulating": true,
+			"speed_cm_s": 0
+		},
+		{
+			"initial_z_cm": 1045,
+			"z_cm": 194.21673237691832,
+			"simulating": true,
+			"speed_cm_s": 0
+		},
+		{
+			"initial_z_cm": 1110,
+			"z_cm": 179.67719387021506,
+			"simulating": true,
+			"speed_cm_s": 0
+		}
+	],
+	"agents": [
+		{
+			"id": 0,
+			"aerial": true,
+			"state": "idle",
+			"energy": 95.331024169921875,
+			"x_cm": 981.27467566707685,
+			"y_cm": 1000.1402246161922,
+			"z_cm": 1900,
+			"distance_cm": 35751.73828125,
+			"simulating": true
+		},
+		{
+			"id": 1,
+			"aerial": true,
+			"state": "idle",
+			"energy": 83.18280029296875,
+			"x_cm": 1181.8884540236288,
+			"y_cm": 1200.3045762908562,
+			"z_cm": 2049.9999987231627,
+			"distance_cm": 53357.796875,
+			"simulating": true
+		},
+		{
+			"id": 2,
+			"aerial": true,
+			"state": "idle",
+			"energy": 77.791213989257812,
+			"x_cm": 1184.1579023780548,
+			"y_cm": 1189.540299317996,
+			"z_cm": 2199.9999971772218,
+			"distance_cm": 61171.578125,
+			"simulating": true
+		},
+		{
+			"id": 0,
+			"aerial": false,
+			"state": "outbound",
+			"energy": 235.84288024902344,
+			"x_cm": 5384.0623355207563,
+			"y_cm": 1775.8936422161273,
+			"z_cm": 46.999634912312402,
+			"distance_cm": 5072.95947265625,
+			"simulating": true
+		},
+		{
+			"id": 1,
+			"aerial": false,
+			"state": "outbound",
+			"energy": 236.45742797851562,
+			"x_cm": 1001.0053685616867,
+			"y_cm": 4954.9986093469897,
+			"z_cm": 46.994567836590207,
+			"distance_cm": 4329.19189453125,
+			"simulating": true
+		},
+		{
+			"id": 2,
+			"aerial": false,
+			"state": "outbound",
+			"energy": 236.78074645996094,
+			"x_cm": 1266.6947001968199,
+			"y_cm": 4954.9986146029059,
+			"z_cm": 46.997240974005521,
+			"distance_cm": 3937.40576171875,
+			"simulating": true
+		},
+		{
+			"id": 3,
+			"aerial": false,
+			"state": "outbound",
+			"energy": 239.97987365722656,
+			"x_cm": 1446.5838289489941,
+			"y_cm": 1439.292334031433,
+			"z_cm": 47.824388562841889,
+			"distance_cm": 49.558029174804688,
+			"simulating": true
+		}
+	]
+}

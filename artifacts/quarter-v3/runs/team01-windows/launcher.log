@@ -1,0 +1,13 @@
+physics-smoke: C:\Users\rotn1\Documents\ChatGPT\metaroy\unreal\MetaRescue\Saved\Automation\physics-smoke.log
+physics-smoke completed
+physics-check: C:\Users\rotn1\Documents\ChatGPT\metaroy\unreal\MetaRescue\Saved\Automation\physics-check.log
+physics-check failed: exit 1; C:\Users\rotn1\Documents\ChatGPT\metaroy\unreal\MetaRescue\Saved\Automation\physics-check.log
+Traceback (most recent call last):
+  File "C:\Users\rotn1\Documents\ChatGPT\metaroy\unreal\tools\check_smoke.py", line 70, in <module>
+    verify(parser.parse_args().saved)
+    ~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\rotn1\Documents\ChatGPT\metaroy\unreal\tools\check_smoke.py", line 55, in verify
+    assert state['discovered']>0,'no actual sensor detection'
+           ^^^^^^^^^^^^^^^^^^^^^
+AssertionError: no actual sensor detection
+

@@ -1,0 +1,152 @@
+{
+  "source": "blender/Meshy_AI_Wall_Module_with_Window_20261109_image-to-3d-texture.blend",
+  "sha256": "ea868b0d900bbf7856e25034b030b49d89e35385cca0b7218e4d641913fbb400",
+  "blender_version": "4.5.15 LTS",
+  "unit_system": "METRIC",
+  "unit_scale": 1.0,
+  "objects": [
+    {
+      "name": "Mesh_0",
+      "type": "MESH",
+      "location": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "rotation": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "vertices": 431802,
+      "polygons": 863643,
+      "triangles": 863643,
+      "uv_layers": [
+        "UVMap"
+      ],
+      "dimensions": [
+        1.7794599533081055,
+        0.23116201162338257,
+        1.9032440185546875
+      ],
+      "bounds_min": [
+        -0.8986819982528687,
+        -0.11511000245809555,
+        -0.9522420167922974
+      ],
+      "bounds_max": [
+        0.8807780146598816,
+        0.11605200171470642,
+        0.9510020017623901
+      ],
+      "materials": [
+        "Material_0"
+      ]
+    }
+  ],
+  "materials": [
+    {
+      "name": "Material_0",
+      "nodes": [
+        {
+          "name": "Principled BSDF",
+          "type": "BSDF_PRINCIPLED",
+          "inputs": {
+            "Base Color": {
+              "linked": true,
+              "value": [
+                0.800000011920929,
+                0.800000011920929,
+                0.800000011920929,
+                1.0
+              ]
+            },
+            "Metallic": {
+              "linked": true,
+              "value": 0.0
+            },
+            "Roughness": {
+              "linked": true,
+              "value": 0.5
+            },
+            "Normal": {
+              "linked": true,
+              "value": [
+                0.0,
+                0.0,
+                0.0
+              ]
+            }
+          }
+        },
+        {
+          "name": "Material Output",
+          "type": "OUTPUT_MATERIAL"
+        },
+        {
+          "name": "Image Texture",
+          "type": "TEX_IMAGE",
+          "image": "Image_0",
+          "colorspace": "sRGB"
+        },
+        {
+          "name": "Separate Color",
+          "type": "SEPARATE_COLOR"
+        },
+        {
+          "name": "Image Texture.001",
+          "type": "TEX_IMAGE",
+          "image": "Image_1",
+          "colorspace": "Non-Color"
+        },
+        {
+          "name": "Normal Map",
+          "type": "NORMAL_MAP"
+        },
+        {
+          "name": "Image Texture.002",
+          "type": "TEX_IMAGE",
+          "image": "Image_2",
+          "colorspace": "Non-Color"
+        }
+      ]
+    }
+  ],
+  "images": [
+    {
+      "name": "Image_0",
+      "size": [
+        4096,
+        4096
+      ],
+      "packed": true,
+      "filepath": "",
+      "colorspace": "sRGB"
+    },
+    {
+      "name": "Image_1",
+      "size": [
+        2048,
+        2048
+      ],
+      "packed": true,
+      "filepath": "",
+      "colorspace": "Non-Color"
+    },
+    {
+      "name": "Image_2",
+      "size": [
+        4096,
+        4096
+      ],
+      "packed": true,
+      "filepath": "",
+      "colorspace": "Non-Color"
+    }
+  ]
+}

@@ -1,0 +1,7 @@
+{"type":"episode_started","time_s":0,"target_id":-1}
+{"type":"traffic_probe_initialized","time_s":0,"target_id":-1}
+{"type":"stationary_sensor_observed","time_s":0.30821930518141016,"target_id":8}
+{"type":"agent_yielding","time_s":0.84178050508489832,"agent_id":0}
+{"type":"agent_motion_resumed","time_s":3.2018585083424114,"agent_id":0}
+{"type":"agent_route_completed","time_s":9.8020387021242641,"agent_id":1}
+{"type":"agent_route_completed","time_s":11.849499399715569,"agent_id":0}

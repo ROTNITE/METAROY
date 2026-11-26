@@ -1,0 +1,32 @@
+Log file: C:\Users\rotn1\AppData\Local\UnrealBuildTool\Log.txt
+Executing up to 2 actions based on MaxProcessorCount override
+Creating makefile for MetaRescueEditor (.uproject file is newer)
+UbaServer - Listening on 0.0.0.0:1345
+Available x64 toolchains (1):
+ * C:\Program Files\Microsoft Visual Studio\18\Community\VC\Tools\MSVC\14.51.36231
+    (Family=14.51.36231, FamilyRank=2, Version=14.51.36260, HostArchitecture=x64, ReleaseChannel=Latest, Architecture=x64)
+Visual Studio compiler version 14.51.36260 is newer than latest preferred version 14.50.35717. Please use caution as this compiler has not been heavily tested
+Building MetaRescueEditor...
+===== Toolchain Information =====
+Using ISPC compiler (C:\Program Files\Epic Games\UE_5.8\Engine\Source\ThirdParty\Intel\ISPC\bin\Windows\ispc.exe)
+  Intel(r) Implicit SPMD Program Compiler (Intel(r) ISPC), 1.24.0 (build commit  @ 20250404, LLVM 18.1.2) 
+Using Visual Studio 14.51.36260 toolchain (C:\Program Files\Microsoft Visual Studio\18\Community\VC\Tools\MSVC\14.51.36231) and Windows 10.0.26100.0 SDK (C:\Program Files (x86)\Windows Kits\10).
+Warning: Visual Studio compiler 14.51.36260 is not a preferred version
+===== End Toolchain Information =====
+Using Unreal Build Accelerator local executor to run 5 action(s)
+  CPU 16 physical cores, 24 logical cores
+  Memory 31.79 GB physical, 51.08 GB/57.79 GB committed
+  UBA Storage capacity 40 GB
+[1/5] Compile [x64] MRAgent.cpp
+[2/5] Compile [x64] MRWorld.cpp
+[3/5] Link [x64] UnrealEditor-MetaRescue.dll
+[4/5] Link [x64] UnrealEditor-MetaRescue.lib
+   ????????? ?????????? C:/Users/rotn1/Documents/ChatGPT/metaroy/unreal/MetaRescue/Intermediate/Build/Win64/x64/UnrealEditor/Development/MetaRescue/UnrealEditor-MetaRescue.lib ? ?????? C:/Users/rotn1/Documents/ChatGPT/metaroy/unreal/MetaRescue/Intermediate/Build/Win64/x64/UnrealEditor/Development/MetaRescue/UnrealEditor-MetaRescue.exp
+[5/5] WriteMetadata MetaRescueEditor.target [NoUba]
+
+Total time in Unreal Build Accelerator local executor: 6.00 seconds
+Output binary: C:\Program Files\Epic Games\UE_5.8\Engine\Binaries\Win64\UnrealEditor.exe
+
+Result: Succeeded
+Total execution time: 8.03 seconds
+Trace written to file C:\Users\rotn1\AppData\Local\UnrealBuildTool\Trace.uba with size 6.0kb

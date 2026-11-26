@@ -1,5 +1,1 @@
-# Evolution World 2D MVP — Python 3.10+
-# Сторонние зависимости отсутствуют: используется только стандартная библиотека Python.
-# Для запуска: python main.py
-# Для тестов: python -m unittest discover -s tests -v
-# После подключения LLM-агентов добавьте сюда требуемые SDK/библиотеки.
+jsonschema==4.26.0

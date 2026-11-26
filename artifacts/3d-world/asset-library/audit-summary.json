@@ -1,0 +1,340 @@
+[
+  {
+    "id": "concrete_road_barrier_02",
+    "source": "blender/vendor/concrete_road_barrier_02_4k/concrete_road_barrier_02_4k.blend",
+    "triangles": 42578,
+    "mesh_objects": 5,
+    "dimensions": [
+      1.566969871520996,
+      0.44220101833343506,
+      1.1119812726974487
+    ],
+    "actions": 0,
+    "missing_images": 0
+  },
+  {
+    "id": "fire_hydrant",
+    "source": "blender/vendor/fire_hydrant_4k/fire_hydrant_4k.blend",
+    "triangles": 86316,
+    "mesh_objects": 10,
+    "dimensions": [
+      0.8746235370635986,
+      0.31774356961250305,
+      0.799456000328064
+    ],
+    "actions": 0,
+    "missing_images": 0
+  },
+  {
+    "id": "Concrete_Slab_Fragment",
+    "source": "blender/Meshy_AI_Concrete_Slab_Fragment_20261109_image-to-3d-texture.blend",
+    "triangles": 290831,
+    "mesh_objects": 1,
+    "dimensions": [
+      1.9017529487609863,
+      1.0749080181121826,
+      0.2105950117111206
+    ],
+    "actions": 0,
+    "missing_images": 0
+  },
+  {
+    "id": "Damaged_Building",
+    "source": "blender/Meshy_AI_Damaged_Building_20261109_image-to-3d-texture.blend",
+    "triangles": 1372354,
+    "mesh_objects": 1,
+    "dimensions": [
+      1.9037110805511475,
+      1.173684000968933,
+      1.5291109085083008
+    ],
+    "actions": 0,
+    "missing_images": 0
+  },
+  {
+    "id": "Emergency_Radio_Relay",
+    "source": "blender/Meshy_AI_Emergency_Radio_Relay_20261109_image-to-3d-texture.blend",
+    "triangles": 512184,
+    "mesh_objects": 1,
+    "dimensions": [
+      0.6965140104293823,
+      0.5283859968185425,
+      1.9039239883422852
+    ],
+    "actions": 0,
+    "missing_images": 0
+  },
+  {
+    "id": "Medical_Aid_Container",
+    "source": "blender/Meshy_AI_Medical_Aid_Container_20261109_image-to-3d-texture.blend",
+    "triangles": 455471,
+    "mesh_objects": 1,
+    "dimensions": [
+      1.8982229232788086,
+      0.796970009803772,
+      0.9894020557403564
+    ],
+    "actions": 0,
+    "missing_images": 0
+  },
+  {
+    "id": "Medical_Support_Van",
+    "source": "blender/Meshy_AI_Medical_Support_Van_20261109_image-to-3d-texture.blend",
+    "triangles": 1054182,
+    "mesh_objects": 1,
+    "dimensions": [
+      1.9032669067382812,
+      0.9589509963989258,
+      1.3011069297790527
+    ],
+    "actions": 0,
+    "missing_images": 0
+  },
+  {
+    "id": "Rescue_Equipment_Case",
+    "source": "blender/Meshy_AI_Rescue_Equipment_Case_20261109_image-to-3d-texture.blend",
+    "triangles": 506111,
+    "mesh_objects": 1,
+    "dimensions": [
+      1.901602029800415,
+      1.0620360374450684,
+      1.2303320169448853
+    ],
+    "actions": 0,
+    "missing_images": 0
+  },
+  {
+    "id": "Rescue_Rover_Docking_Station",
+    "source": "blender/Meshy_AI_Rescue_Rover_Docking_Station_20261109_image-to-3d-texture.blend",
+    "triangles": 279271,
+    "mesh_objects": 1,
+    "dimensions": [
+      1.9032779932022095,
+      1.049638032913208,
+      0.33210402727127075
+    ],
+    "actions": 0,
+    "missing_images": 0
+  },
+  {
+    "id": "Rescue_Scout_Drone",
+    "source": "blender/Meshy_AI_Rescue_Scout_Drone_20261109_image-to-3d-texture.blend",
+    "triangles": 762024,
+    "mesh_objects": 1,
+    "dimensions": [
+      1.9046249389648438,
+      1.5559570789337158,
+      0.8370540142059326
+    ],
+    "actions": 0,
+    "missing_images": 0
+  },
+  {
+    "id": "Rescue_Stretcher",
+    "source": "blender/Meshy_AI_Rescue_Stretcher_20261109_image-to-3d-texture.blend",
+    "triangles": 556265,
+    "mesh_objects": 1,
+    "dimensions": [
+      1.902987003326416,
+      0.5558210015296936,
+      0.3041679859161377
+    ],
+    "actions": 0,
+    "missing_images": 0
+  },
+  {
+    "id": "Rescue_Tracked_Transporter",
+    "source": "blender/Meshy_AI_Rescue_Tracked_Transporter_20261109_image-to-3d-texture.blend",
+    "triangles": 3639213,
+    "mesh_objects": 1,
+    "dimensions": [
+      1.9045259952545166,
+      0.9655460119247437,
+      0.992127001285553
+    ],
+    "actions": 0,
+    "missing_images": 0
+  },
+  {
+    "id": "Rescue_Training_Mannequin",
+    "source": "blender/Meshy_AI_Rescue_Training_Mannequin_20261109_image-to-3d-texture.blend",
+    "triangles": 195252,
+    "mesh_objects": 1,
+    "dimensions": [
+      0.941428005695343,
+      0.34991198778152466,
+      1.9028899669647217
+    ],
+    "actions": 0,
+    "missing_images": 0
+  },
+  {
+    "id": "Rigged_Rescue_Mannequin",
+    "source": "blender/Meshy_AI_Rigged_Rescue_Mannequin_20261109_animated_mixamo_All_animation.glb",
+    "triangles": 195332,
+    "mesh_objects": 2,
+    "dimensions": [
+      1.9021157026290894,
+      1.9999998807907104,
+      2.726891279220581
+    ],
+    "actions": 2,
+    "missing_images": 0
+  },
+  {
+    "id": "Static_Rubble_Pile",
+    "source": "blender/Meshy_AI_Static_Rubble_Pile_20261109_image-to-3d-texture.blend",
+    "triangles": 1920652,
+    "mesh_objects": 1,
+    "dimensions": [
+      1.9027270078659058,
+      0.9296560287475586,
+      0.6294790506362915
+    ],
+    "actions": 0,
+    "missing_images": 0
+  },
+  {
+    "id": "Stationary_Sensor_Node",
+    "source": "blender/Meshy_AI_Stationary_Sensor_Node_20261109_image-to-3d-texture.blend",
+    "triangles": 580106,
+    "mesh_objects": 1,
+    "dimensions": [
+      0.9293910264968872,
+      0.9071440100669861,
+      1.9035139083862305
+    ],
+    "actions": 0,
+    "missing_images": 0
+  },
+  {
+    "id": "Wall_Module_with_Doorway",
+    "source": "blender/Meshy_AI_Wall_Module_with_Doorway_20261109_image-to-3d-texture.blend",
+    "triangles": 846028,
+    "mesh_objects": 1,
+    "dimensions": [
+      1.771277904510498,
+      0.2174760103225708,
+      1.9031200408935547
+    ],
+    "actions": 0,
+    "missing_images": 0
+  },
+  {
+    "id": "Wall_Module_with_Window",
+    "source": "blender/Meshy_AI_Wall_Module_with_Window_20261109_image-to-3d-texture.blend",
+    "triangles": 863643,
+    "mesh_objects": 1,
+    "dimensions": [
+      1.7794599533081055,
+      0.23116201162338257,
+      1.9032440185546875
+    ],
+    "actions": 0,
+    "missing_images": 0
+  },
+  {
+    "id": "modular_chainlink_fence",
+    "source": "blender/vendor/modular_chainlink_fence_4k/modular_chainlink_fence_4k.blend",
+    "triangles": 89232,
+    "mesh_objects": 20,
+    "dimensions": [
+      8.115001678466797,
+      2.149153232574463,
+      2.5229129791259766
+    ],
+    "actions": 0,
+    "missing_images": 0
+  },
+  {
+    "id": "modular_electric_cables",
+    "source": "blender/vendor/modular_electric_cables_4k/modular_electric_cables_4k.blend",
+    "triangles": 42078,
+    "mesh_objects": 49,
+    "dimensions": [
+      2.0766327381134033,
+      0.2145041525363922,
+      0.757252037525177
+    ],
+    "actions": 0,
+    "missing_images": 0
+  },
+  {
+    "id": "modular_industrial_pipes_01",
+    "source": "blender/vendor/modular_industrial_pipes_01_4k/modular_industrial_pipes_01_4k.blend",
+    "triangles": 12340,
+    "mesh_objects": 8,
+    "dimensions": [
+      1.4028016328811646,
+      0.3075956106185913,
+      1.9546396732330322
+    ],
+    "actions": 0,
+    "missing_images": 0
+  },
+  {
+    "id": "modular_urban_apartments_facade",
+    "source": "blender/vendor/modular_urban_apartments_facade_4k/modular_urban_apartments_facade_4k.blend",
+    "triangles": 109535,
+    "mesh_objects": 147,
+    "dimensions": [
+      51.529998779296875,
+      6.664999485015869,
+      17.0
+    ],
+    "actions": 0,
+    "missing_images": 0
+  },
+  {
+    "id": "portable_generator",
+    "source": "blender/vendor/portable_generator_4k/portable_generator_4k.blend",
+    "triangles": 26419,
+    "mesh_objects": 4,
+    "dimensions": [
+      0.8183407783508301,
+      0.5640000104904175,
+      0.5769232511520386
+    ],
+    "actions": 1,
+    "missing_images": 0
+  },
+  {
+    "id": "streetlight",
+    "source": "blender/streetlight.blend",
+    "triangles": 5620,
+    "mesh_objects": 1,
+    "dimensions": [
+      0.3624838590621948,
+      4.538309097290039,
+      5.493932723999023
+    ],
+    "actions": 0,
+    "missing_images": 0
+  },
+  {
+    "id": "utility_box_02",
+    "source": "blender/vendor/utility_box_02_4k/utility_box_02_4k.blend",
+    "triangles": 6268,
+    "mesh_objects": 1,
+    "dimensions": [
+      0.9200001955032349,
+      0.43199998140335083,
+      1.1203334331512451
+    ],
+    "actions": 0,
+    "missing_images": 0
+  },
+  {
+    "id": "water_manhole_cover",
+    "source": "blender/vendor/water_manhole_cover_4k/water_manhole_cover_4k.blend",
+    "triangles": 6301,
+    "mesh_objects": 2,
+    "dimensions": [
+      0.6907604932785034,
+      0.6907604932785034,
+      0.06761780381202698
+    ],
+    "actions": 0,
+    "missing_images": 0
+  }
+]

@@ -1,0 +1,66 @@
+{
+  "id": "Building",
+  "mesh": "SM_Building",
+  "source": "blender/Meshy_AI_Damaged_Building_20261109_image-to-3d-texture.blend",
+  "source_sha256": "5708a1e3514bc143f4c7b5482521e948251002d78c352202618a7c2e0ce1452c",
+  "source_triangles": 1372354,
+  "triangles": 90000,
+  "dimensions_m": [
+    11.950923919677734,
+    7.364544868469238,
+    9.594071388244629
+  ],
+  "fbx": "Building/Building.fbx",
+  "blend": "Building/Building.blend",
+  "textures": {
+    "BaseColor": "Building/textures/T_Building_BaseColor.png",
+    "ORM": "Building/textures/T_Building_ORM.png",
+    "Normal": "Building/textures/T_Building_Normal.png"
+  },
+  "original_material_links": [
+    {
+      "from_node": "Principled BSDF",
+      "from_socket": "BSDF",
+      "to_node": "Material Output",
+      "to_socket": "Surface"
+    },
+    {
+      "from_node": "Image Texture",
+      "from_socket": "Color",
+      "to_node": "Principled BSDF",
+      "to_socket": "Base Color"
+    },
+    {
+      "from_node": "Separate Color",
+      "from_socket": "Blue",
+      "to_node": "Principled BSDF",
+      "to_socket": "Metallic"
+    },
+    {
+      "from_node": "Separate Color",
+      "from_socket": "Green",
+      "to_node": "Principled BSDF",
+      "to_socket": "Roughness"
+    },
+    {
+      "from_node": "Image Texture.001",
+      "from_socket": "Color",
+      "to_node": "Separate Color",
+      "to_socket": "Color"
+    },
+    {
+      "from_node": "Normal Map",
+      "from_socket": "Normal",
+      "to_node": "Principled BSDF",
+      "to_socket": "Normal"
+    },
+    {
+      "from_node": "Image Texture.002",
+      "from_socket": "Color",
+      "to_node": "Normal Map",
+      "to_socket": "Color"
+    }
+  ],
+  "parts": "single visual shell; functional geometry prepared separately",
+  "collision": "not included; runtime collision proxies are separate"
+}

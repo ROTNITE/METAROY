@@ -1,0 +1,27 @@
+{
+  "command": [
+    "C:/Program Files/Epic Games/UE_5.8/Engine/Binaries/Win64/UnrealEditor.exe",
+    "C:\\Users\\rotn1\\Documents\\ChatGPT\\metaroy\\unreal\\MetaRescue\\MetaRescue.uproject",
+    "/Game/Maps/RescueQuarter",
+    "-game",
+    "-RenderOffscreen",
+    "-windowed",
+    "-ResX=1600",
+    "-ResY=1000",
+    "-ForceRes",
+    "-unattended",
+    "-NoSound",
+    "-nosplash",
+    "-MRExternalControl",
+    "-MRVisualProbe=windows",
+    "-MRSmoke",
+    "-MRQuitAfter=22",
+    "-MREnvironment=static",
+    "-ExecCmds=r.Lumen.Visualize 3",
+    "-stdout",
+    "-FullStdOutLogOutput"
+  ],
+  "started_at": 1794341365.6327899,
+  "purpose": "render diagnostic only; previous compiled DLL",
+  "dll_sha256": "1c8f27e709fc67a1899f0c189fb84524e3331cd9e562e3108027cc0c31396ff6"
+}

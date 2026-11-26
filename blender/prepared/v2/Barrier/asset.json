@@ -1,0 +1,174 @@
+{
+  "id": "Barrier",
+  "source": "blender/vendor/concrete_road_barrier_02_4k/concrete_road_barrier_02_4k.blend",
+  "source_sha256": "77616677bd7acdaba857c879c35ff58d864a5f67fc6b8d93461df72ab941dbf0",
+  "blend": "Barrier.blend",
+  "parts": [
+    {
+      "object": "concrete_road_barrier_02_LOD0",
+      "role": "module",
+      "catalog_position_m": [
+        0.006527692079544067,
+        0.032977983355522156,
+        -0.0027944163884967566
+      ],
+      "triangles": 23822,
+      "location_m": [
+        0.006527692079544067,
+        0.032977983355522156,
+        -0.0027944163884967566
+      ],
+      "rotation_deg": [
+        0.0,
+        -0.0,
+        0.0
+      ],
+      "parent": null,
+      "dimensions_m": [
+        1.5654094219207764,
+        0.44214197993278503,
+        1.1119529008865356
+      ],
+      "materials": [
+        "concrete_road_barrier_02"
+      ],
+      "fbx": "parts/concrete_road_barrier_02_LOD0.fbx"
+    }
+  ],
+  "materials": [
+    {
+      "name": "concrete_road_barrier_02",
+      "glass": false,
+      "inputs": {
+        "Base Color": [
+          0.800000011920929,
+          0.800000011920929,
+          0.800000011920929,
+          1.0
+        ],
+        "Metallic": 0.0,
+        "Roughness": 0.5,
+        "Transmission Weight": 0.0,
+        "IOR": 1.4500000476837158,
+        "Alpha": 1.0,
+        "Emission Color": [
+          0.0,
+          0.0,
+          0.0,
+          1.0
+        ],
+        "Emission Strength": 1.0
+      },
+      "links": [
+        {
+          "from": "Principled BSDF",
+          "output": "BSDF",
+          "to": "Material Output",
+          "input": "Surface"
+        },
+        {
+          "from": "Image Texture.001",
+          "output": "Color",
+          "to": "Principled BSDF",
+          "input": "Base Color"
+        },
+        {
+          "from": "Image Texture.002",
+          "output": "Color",
+          "to": "Principled BSDF",
+          "input": "Roughness"
+        },
+        {
+          "from": "Image Texture.003",
+          "output": "Color",
+          "to": "Normal Map",
+          "input": "Color"
+        },
+        {
+          "from": "Normal Map",
+          "output": "Normal",
+          "to": "Principled BSDF",
+          "input": "Normal"
+        },
+        {
+          "from": "Reroute",
+          "output": "Output",
+          "to": "Image Texture.001",
+          "input": "Vector"
+        },
+        {
+          "from": "Reroute",
+          "output": "Output",
+          "to": "Image Texture.002",
+          "input": "Vector"
+        },
+        {
+          "from": "Reroute",
+          "output": "Output",
+          "to": "Image Texture.003",
+          "input": "Vector"
+        },
+        {
+          "from": "Reroute",
+          "output": "Output",
+          "to": "Image Texture",
+          "input": "Vector"
+        },
+        {
+          "from": "Mapping",
+          "output": "Vector",
+          "to": "Reroute",
+          "input": "Input"
+        },
+        {
+          "from": "Texture Coordinate",
+          "output": "UV",
+          "to": "Mapping",
+          "input": "Vector"
+        },
+        {
+          "from": "Image Texture",
+          "output": "Color",
+          "to": "Displacement",
+          "input": "Height"
+        },
+        {
+          "from": "Displacement",
+          "output": "Displacement",
+          "to": "Material Output",
+          "input": "Displacement"
+        }
+      ],
+      "images": [
+        {
+          "node": "Image Texture.001",
+          "image": "concrete_road_barrier_02_diff.png",
+          "file": "textures/T_0_concrete_road_barrier_02_diff.png",
+          "colorspace": "sRGB"
+        },
+        {
+          "node": "Image Texture.002",
+          "image": "concrete_road_barrier_02_rough.png",
+          "file": "textures/T_1_concrete_road_barrier_02_rough.png",
+          "colorspace": "Non-Color"
+        },
+        {
+          "node": "Image Texture.003",
+          "image": "concrete_road_barrier_02_nor_gl.png",
+          "file": "textures/T_2_concrete_road_barrier_02_nor_gl.png",
+          "colorspace": "Non-Color"
+        },
+        {
+          "node": "Image Texture",
+          "image": "concrete_road_barrier_02_disp.png",
+          "file": "textures/T_3_concrete_road_barrier_02_disp.png",
+          "colorspace": "Non-Color"
+        }
+      ]
+    }
+  ],
+  "repairs": [],
+  "actions": [],
+  "animation_runtime": "Rigid meshes driven from Unreal actuator state; Blender actions are inspectable demonstrations.",
+  "kind": "static_assembly"
+}

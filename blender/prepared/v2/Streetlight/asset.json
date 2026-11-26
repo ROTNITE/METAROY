@@ -1,0 +1,114 @@
+{
+  "id": "Streetlight",
+  "source": "blender/streetlight.blend",
+  "source_sha256": "f665c2f72fb6963d494b326f2ed3d39982e1da4d36ff501dd789a406f3c93725",
+  "blend": "Streetlight.blend",
+  "parts": [
+    {
+      "object": "Cube.001",
+      "role": "module",
+      "catalog_position_m": [
+        6.604194641113281e-05,
+        -0.253517746925354,
+        -4.466916561126709
+      ],
+      "triangles": 5620,
+      "location_m": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "rotation_deg": [
+        0.0,
+        -0.0,
+        0.0
+      ],
+      "parent": null,
+      "dimensions_m": [
+        0.3433801531791687,
+        2.480947732925415,
+        5.337811470031738
+      ],
+      "materials": [
+        "M_Streetlight_Metal",
+        "M_Streetlight_Lens"
+      ],
+      "fbx": "parts/Cube.001.fbx"
+    }
+  ],
+  "materials": [
+    {
+      "name": "M_Streetlight_Lens",
+      "glass": false,
+      "inputs": {
+        "Base Color": [
+          0.800000011920929,
+          0.8600000143051147,
+          0.7699999809265137,
+          1.0
+        ],
+        "Metallic": 0.05000000074505806,
+        "Roughness": 0.23999999463558197,
+        "Transmission Weight": 0.0,
+        "IOR": 1.5,
+        "Alpha": 1.0,
+        "Emission Color": [
+          0.8999999761581421,
+          1.0,
+          0.75,
+          1.0
+        ],
+        "Emission Strength": 3.0
+      },
+      "links": [
+        {
+          "from": "Principled BSDF",
+          "output": "BSDF",
+          "to": "Material Output",
+          "input": "Surface"
+        }
+      ],
+      "images": []
+    },
+    {
+      "name": "M_Streetlight_Metal",
+      "glass": false,
+      "inputs": {
+        "Base Color": [
+          0.1599999964237213,
+          0.18000000715255737,
+          0.17000000178813934,
+          1.0
+        ],
+        "Metallic": 0.7200000286102295,
+        "Roughness": 0.4000000059604645,
+        "Transmission Weight": 0.0,
+        "IOR": 1.5,
+        "Alpha": 1.0,
+        "Emission Color": [
+          1.0,
+          1.0,
+          1.0,
+          1.0
+        ],
+        "Emission Strength": 0.0
+      },
+      "links": [
+        {
+          "from": "Principled BSDF",
+          "output": "BSDF",
+          "to": "Material Output",
+          "input": "Surface"
+        }
+      ],
+      "images": []
+    }
+  ],
+  "repairs": [
+    "Removed the source catalog offset so the complete 5.34 m pole stands above ground.",
+    "Replaced white placeholder with metal pole and a separate emitting lens material."
+  ],
+  "actions": [],
+  "animation_runtime": "Rigid meshes driven from Unreal actuator state; Blender actions are inspectable demonstrations.",
+  "kind": "static_assembly"
+}

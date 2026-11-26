@@ -1,0 +1,54 @@
+build: C:\Users\rotn1\Documents\ChatGPT\metaroy\unreal\MetaRescue\Saved\Automation\build.log
+ntime\Json\Public\Serialization\JsonSerializer.h(620,14): note: ????? ???? "bool TJsonSerializer<FJsonSerializerPolicy_JsonObject>::Serialize(const TSharedRef<FJsonSerializerPolicy_JsonObject::FElement,ESPMode::ThreadSafe> &,TJsonWriter<CharType,PrintPolicy> &,bool)"
+	static bool Serialize(const TSharedRef<typename Policy::FElement>& StartingElement, TJsonWriter<CharType, PrintPolicy>& Writer, bool bCloseWriter)
+	            ^
+C:\Users\rotn1\Documents\ChatGPT\metaroy\unreal\MetaRescue\Source\MetaRescue\MRDistrictEvents.cpp(252,35): note: "bool TJsonSerializer<FJsonSerializerPolicy_JsonObject>::Serialize(const TSharedRef<FJsonSerializerPolicy_JsonObject::FElement,ESPMode::ThreadSafe> &,TJsonWriter<CharType,PrintPolicy> &,bool)": ????????? ????????? 3 - 2 ?????????????
+    FString Text;FJsonSerializer::Serialize(J.ToSharedRef(),TJsonWriterFactory<>::Create(&Text));
+                                  ^
+build failed: exit 6; C:\Users\rotn1\Documents\ChatGPT\metaroy\unreal\MetaRescue\Saved\Automation\build.log
+C:\Program Files\Epic Games\UE_5.8\Engine\Source\Runtime\Json\Public\Serialization\JsonSerializer.h(487,14): note: ???       "bool TJsonSerializer<FJsonSerializerPolicy_JsonObject>::Serialize(const FJsonSerializerPolicy_JsonObject::FMapOfValues &,TJsonWriter<CharType,PrintPolicy> &,bool)"
+	static bool Serialize(const typename Policy::FMapOfValues& Object, TJsonWriter<CharType, PrintPolicy>& Writer, bool bCloseWriter = true)
+	            ^
+C:\Program Files\Epic Games\UE_5.8\Engine\Source\Runtime\Json\Public\Serialization\JsonSerializer.h(467,14): note: ???       "bool TJsonSerializer<FJsonSerializerPolicy_JsonObject>::Serialize(const FJsonSerializerPolicy_JsonObject::FMapOfValues &,const TSharedRef<TJsonWriter<CharType,PrintPolicy>,ESPMode::ThreadSafe> &,bool)"
+	static bool Serialize(const typename Policy::FMapOfValues& Object, const TSharedRef<TJsonWriter<CharType, PrintPolicy>>& Writer, bool bCloseWriter = true )
+	            ^
+C:\Program Files\Epic Games\UE_5.8\Engine\Source\Runtime\Json\Public\Serialization\JsonSerializer.h(446,14): note: ???       "bool TJsonSerializer<FJsonSerializerPolicy_JsonObject>::Serialize(const FJsonSerializerPolicy_JsonObject::FArrayOfValues &,TJsonWriter<CharType,PrintPolicy> &,bool)"
+	static bool Serialize(const typename Policy::FArrayOfValues& Array, TJsonWriter<CharType, PrintPolicy>& Writer, bool bCloseWriter = true )
+	            ^
+C:\Program Files\Epic Games\UE_5.8\Engine\Source\Runtime\Json\Public\Serialization\JsonSerializer.h(426,14): note: ???       "bool TJsonSerializer<FJsonSerializerPolicy_JsonObject>::Serialize(const FJsonSerializerPolicy_JsonObject::FArrayOfValues &,const TSharedRef<TJsonWriter<CharType,PrintPolicy>,ESPMode::ThreadSafe> &,bool)"
+	static bool Serialize(const typename Policy::FArrayOfValues& Array, const TSharedRef<TJsonWriter<CharType, PrintPolicy>>& Writer, bool bCloseWriter = true)
+	            ^
+C:\Program Files\Epic Games\UE_5.8\Engine\Source\Runtime\Json\Public\Serialization\JsonSerializer.h(405,14): note: ???       "bool TJsonSerializer<FJsonSerializerPolicy_JsonObject>::Serialize(const FJsonSerializerPolicy_JsonObject::FValue &,const FString &,TJsonWriter<CharType,PrintPolicy> &,bool)"
+	static bool Serialize(const typename Policy::FValue& Value, const FString& Identifier, TJsonWriter<CharType, PrintPolicy>& Writer, bool bCloseWriter = true)
+	            ^
+C:\Users\rotn1\Documents\ChatGPT\metaroy\unreal\MetaRescue\Source\MetaRescue\MRDistrictEvents.cpp(252,35): note: "bool TJsonSerializer<FJsonSerializerPolicy_JsonObject>::Serialize(const FJsonSerializerPolicy_JsonObject::FValue &,const FString &,TJsonWriter<CharType,PrintPolicy> &,bool)": ????????? ????????? 4 - 2 ?????????????
+    FString Text;FJsonSerializer::Serialize(J.ToSharedRef(),TJsonWriterFactory<>::Create(&Text));
+                                  ^
+C:\Program Files\Epic Games\UE_5.8\Engine\Source\Runtime\Json\Public\Serialization\JsonSerializer.h(377,14): note: ???       "bool TJsonSerializer<FJsonSerializerPolicy_JsonObject>::Serialize(const FJsonSerializerPolicy_JsonObject::FValue &,const FString &,const TSharedRef<TJsonWriter<CharType,PrintPolicy>,ESPMode::ThreadSafe> &,bool)"
+	static bool Serialize(const typename Policy::FValue& Value, const FString& Identifier, const TSharedRef<TJsonWriter<CharType, PrintPolicy>>& Writer, bool bCloseWriter = true)
+	            ^
+C:\Users\rotn1\Documents\ChatGPT\metaroy\unreal\MetaRescue\Source\MetaRescue\MRDistrictEvents.cpp(252,35): note: "bool TJsonSerializer<FJsonSerializerPolicy_JsonObject>::Serialize(const FJsonSerializerPolicy_JsonObject::FValue &,const FString &,const TSharedRef<TJsonWriter<CharType,PrintPolicy>,ESPMode::ThreadSafe> &,bool)": ????????? ????????? 4 - 2 ?????????????
+    FString Text;FJsonSerializer::Serialize(J.ToSharedRef(),TJsonWriterFactory<>::Create(&Text));
+                                  ^
+[9/15] Compile [x64] MRGameMode.cpp
+[10/15] Compile [x64] MRHUD.cpp
+[11/15] Compile [x64] Module.MetaRescue.gen.cpp
+[12/15] Compile [x64] MRWorld.cpp
+C:\Program Files\Epic Games\UE_5.8\Engine\Source\Runtime\Engine\Classes\Particles\ParticleSystem.h(433,15): warning C4996: 'UObject::GetAssetRegistryTags': Implement the version that takes FAssetRegistryTagsContext instead. - Please update your code to the new API before upgrading to the next release, otherwise your project will no longer compile.
+	virtual void GetAssetRegistryTags(TArray<FAssetRegistryTag>& OutTags) const override;
+	             ^
+C:\Program Files\Epic Games\UE_5.8\Engine\Plugins\FX\Niagara\Source\Niagara\Classes\NiagaraSystem.h(421,27): warning C4996: 'UObject::GetAssetRegistryTags': Implement the version that takes FAssetRegistryTagsContext instead. - Please update your code to the new API before upgrading to the next release, otherwise your project will no longer compile.
+	NIAGARA_API virtual void GetAssetRegistryTags(TArray<FAssetRegistryTag>& OutTags) const override;
+	                         ^
+C:\Program Files\Epic Games\UE_5.8\Engine\Plugins\FX\Niagara\Source\Niagara\Classes\NiagaraScript.h(1094,15): warning C4996: 'UObject::GetAssetRegistryTags': Implement the version that takes FAssetRegistryTagsContext instead. - Please update your code to the new API before upgrading to the next release, otherwise your project will no longer compile.
+	virtual void GetAssetRegistryTags(TArray<FAssetRegistryTag>& OutTags) const override;
+	             ^
+C:\Program Files\Epic Games\UE_5.8\Engine\Plugins\FX\Niagara\Source\Niagara\Classes\NiagaraEmitter.h(688,15): warning C4996: 'UObject::GetAssetRegistryTags': Implement the version that takes FAssetRegistryTagsContext instead. - Please update your code to the new API before upgrading to the next release, otherwise your project will no longer compile.
+	virtual void GetAssetRegistryTags(TArray<FAssetRegistryTag>& OutTags) const override;
+	             ^
+Total time in Unreal Build Accelerator local executor: 29.72 seconds
+
+Result: Failed (OtherCompilationError)
+Total execution time: 36.62 seconds
+Trace written to file C:\Users\rotn1\AppData\Local\UnrealBuildTool\Trace.uba with size 30.7kb
+

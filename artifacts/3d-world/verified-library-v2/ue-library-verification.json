@@ -1,0 +1,231 @@
+{
+  "passed": true,
+  "assets": [
+    {
+      "id": "Barrier",
+      "parts": 1,
+      "triangles": 23822,
+      "meshes_with_four_lods": 1
+    },
+    {
+      "id": "Building",
+      "parts": 8,
+      "triangles": 115750,
+      "meshes_with_four_lods": 1
+    },
+    {
+      "id": "CableKit",
+      "parts": 49,
+      "triangles": 42078,
+      "meshes_with_four_lods": 0
+    },
+    {
+      "id": "Case",
+      "parts": 7,
+      "triangles": 18539,
+      "meshes_with_four_lods": 2
+    },
+    {
+      "id": "Casualty",
+      "parts": 1,
+      "triangles": 24000,
+      "meshes_with_four_lods": 1
+    },
+    {
+      "id": "Dock",
+      "parts": 1,
+      "triangles": 18000,
+      "meshes_with_four_lods": 1
+    },
+    {
+      "id": "Doorway",
+      "parts": 1,
+      "triangles": 17999,
+      "meshes_with_four_lods": 1
+    },
+    {
+      "id": "Drone",
+      "parts": 6,
+      "triangles": 50000,
+      "meshes_with_four_lods": 1
+    },
+    {
+      "id": "FenceKit",
+      "parts": 20,
+      "triangles": 89232,
+      "meshes_with_four_lods": 3
+    },
+    {
+      "id": "Generator",
+      "parts": 4,
+      "triangles": 26419,
+      "meshes_with_four_lods": 1
+    },
+    {
+      "id": "Hydrant",
+      "parts": 10,
+      "triangles": 86316,
+      "meshes_with_four_lods": 4
+    },
+    {
+      "id": "Manhole",
+      "parts": 2,
+      "triangles": 6301,
+      "meshes_with_four_lods": 0
+    },
+    {
+      "id": "MannequinStatic",
+      "parts": 1,
+      "triangles": 16000,
+      "meshes_with_four_lods": 1
+    },
+    {
+      "id": "Medical",
+      "parts": 18,
+      "triangles": 39499,
+      "meshes_with_four_lods": 1
+    },
+    {
+      "id": "PipeKit",
+      "parts": 8,
+      "triangles": 12340,
+      "meshes_with_four_lods": 0
+    },
+    {
+      "id": "Relay",
+      "parts": 1,
+      "triangles": 16000,
+      "meshes_with_four_lods": 1
+    },
+    {
+      "id": "Rover",
+      "parts": 18,
+      "triangles": 29219,
+      "meshes_with_four_lods": 1
+    },
+    {
+      "id": "Rubble",
+      "parts": 1,
+      "triangles": 30000,
+      "meshes_with_four_lods": 1
+    },
+    {
+      "id": "Sensor",
+      "parts": 2,
+      "triangles": 24000,
+      "meshes_with_four_lods": 2
+    },
+    {
+      "id": "Slab",
+      "parts": 1,
+      "triangles": 6999,
+      "meshes_with_four_lods": 0
+    },
+    {
+      "id": "Streetlight",
+      "parts": 1,
+      "triangles": 5456,
+      "meshes_with_four_lods": 0
+    },
+    {
+      "id": "Stretcher",
+      "parts": 1,
+      "triangles": 16000,
+      "meshes_with_four_lods": 1
+    },
+    {
+      "id": "UrbanKit",
+      "parts": 147,
+      "triangles": 384445,
+      "meshes_with_four_lods": 20
+    },
+    {
+      "id": "UtilityBox",
+      "parts": 1,
+      "triangles": 6268,
+      "meshes_with_four_lods": 0
+    },
+    {
+      "id": "Van",
+      "parts": 30,
+      "triangles": 54326,
+      "meshes_with_four_lods": 1
+    },
+    {
+      "id": "WindowWall",
+      "parts": 1,
+      "triangles": 17999,
+      "meshes_with_four_lods": 1
+    }
+  ],
+  "sampled_imported_animations": [
+    {
+      "name": "Running",
+      "length_s": 0.5333333611488342,
+      "bones": 25,
+      "moving_bones": [
+        "Hips",
+        "Spine",
+        "Spine1",
+        "Spine2",
+        "Neck",
+        "Head",
+        "LeftShoulder",
+        "LeftArm",
+        "LeftForeArm",
+        "LeftHand",
+        "RightShoulder",
+        "RightArm",
+        "RightForeArm",
+        "RightHand",
+        "LeftUpLeg",
+        "LeftLeg",
+        "LeftFoot",
+        "LeftToeBase",
+        "RightUpLeg",
+        "RightLeg",
+        "RightFoot",
+        "RightToeBase"
+      ]
+    },
+    {
+      "name": "Walking",
+      "length_s": 0.8333333134651184,
+      "bones": 25,
+      "moving_bones": [
+        "Hips",
+        "Spine",
+        "Spine1",
+        "Spine2",
+        "Neck",
+        "Head",
+        "LeftShoulder",
+        "LeftArm",
+        "LeftForeArm",
+        "LeftHand",
+        "RightShoulder",
+        "RightArm",
+        "RightForeArm",
+        "RightHand",
+        "LeftUpLeg",
+        "LeftLeg",
+        "LeftFoot",
+        "LeftToeBase",
+        "RightUpLeg",
+        "RightLeg",
+        "RightFoot",
+        "RightToeBase"
+      ]
+    },
+    {
+      "name": "CasualtyBreathing",
+      "length_s": 4.0,
+      "bones": 25,
+      "moving_bones": [
+        "Spine2",
+        "Neck"
+      ]
+    }
+  ],
+  "single_layer_water_output_count": 1
+}

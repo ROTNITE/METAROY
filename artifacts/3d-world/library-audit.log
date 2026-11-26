@@ -1,0 +1,71 @@
+MR_LIBRARY_AUDIT concrete_road_barrier_02 42578 0 actions 0 missing images
+MR_LIBRARY_AUDIT fire_hydrant 86316 0 actions 0 missing images
+MR_LIBRARY_AUDIT Concrete_Slab_Fragment 290831 0 actions 0 missing images
+MR_LIBRARY_AUDIT Damaged_Building 1372354 0 actions 0 missing images
+MR_LIBRARY_AUDIT Emergency_Radio_Relay 512184 0 actions 0 missing images
+MR_LIBRARY_AUDIT Medical_Aid_Container 455471 0 actions 0 missing images
+MR_LIBRARY_AUDIT Medical_Support_Van 1054182 0 actions 0 missing images
+MR_LIBRARY_AUDIT Rescue_Equipment_Case 506111 0 actions 0 missing images
+MR_LIBRARY_AUDIT Rescue_Rover_Docking_Station 279271 0 actions 0 missing images
+MR_LIBRARY_AUDIT Rescue_Scout_Drone 762024 0 actions 0 missing images
+MR_LIBRARY_AUDIT Rescue_Stretcher 556265 0 actions 0 missing images
+MR_LIBRARY_AUDIT Rescue_Tracked_Transporter 3639213 0 actions 0 missing images
+MR_LIBRARY_AUDIT Rescue_Training_Mannequin 195252 0 actions 0 missing images
+01:46:46 | INFO: Data are loaded, start creating Blender stuff
+01:46:46 | INFO: Blender create Mesh node Mesh_0
+01:46:46 | INFO: glTF import finished in 0.43s
+MR_LIBRARY_AUDIT Rigged_Rescue_Mannequin 195332 2 actions 0 missing images
+MR_LIBRARY_AUDIT Static_Rubble_Pile 1920652 0 actions 0 missing images
+MR_LIBRARY_AUDIT Stationary_Sensor_Node 580106 0 actions 0 missing images
+MR_LIBRARY_AUDIT Wall_Module_with_Doorway 846028 0 actions 0 missing images
+MR_LIBRARY_AUDIT Wall_Module_with_Window 863643 0 actions 0 missing images
+MR_LIBRARY_AUDIT modular_chainlink_fence 89232 0 actions 0 missing images
+MR_LIBRARY_AUDIT modular_electric_cables 42078 0 actions 0 missing images
+MR_LIBRARY_AUDIT modular_industrial_pipes_01 12340 0 actions 0 missing images
+MR_LIBRARY_AUDIT modular_urban_apartments_facade 109535 0 actions 0 missing images
+Blender 4.5.15 LTS (hash 5afeabba6097 built 2026-10-22 01:35:27)
+Read blend: "C:\Users\rotn1\Documents\ChatGPT\metaroy\blender\vendor\concrete_road_barrier_02_4k\concrete_road_barrier_02_4k.blend"
+Read blend: "C:\Users\rotn1\Documents\ChatGPT\metaroy\blender\vendor\fire_hydrant_4k\fire_hydrant_4k.blend"
+Read blend: "C:\Users\rotn1\Documents\ChatGPT\metaroy\blender\Meshy_AI_Concrete_Slab_Fragment_20261109_image-to-3d-texture.blend"
+Read blend: "C:\Users\rotn1\Documents\ChatGPT\metaroy\blender\Meshy_AI_Damaged_Building_20261109_image-to-3d-texture.blend"
+Read blend: "C:\Users\rotn1\Documents\ChatGPT\metaroy\blender\Meshy_AI_Emergency_Radio_Relay_20261109_image-to-3d-texture.blend"
+Read blend: "C:\Users\rotn1\Documents\ChatGPT\metaroy\blender\Meshy_AI_Medical_Aid_Container_20261109_image-to-3d-texture.blend"
+Read blend: "C:\Users\rotn1\Documents\ChatGPT\metaroy\blender\Meshy_AI_Medical_Support_Van_20261109_image-to-3d-texture.blend"
+Read blend: "C:\Users\rotn1\Documents\ChatGPT\metaroy\blender\Meshy_AI_Rescue_Equipment_Case_20261109_image-to-3d-texture.blend"
+Read blend: "C:\Users\rotn1\Documents\ChatGPT\metaroy\blender\Meshy_AI_Rescue_Rover_Docking_Station_20261109_image-to-3d-texture.blend"
+Read blend: "C:\Users\rotn1\Documents\ChatGPT\metaroy\blender\Meshy_AI_Rescue_Scout_Drone_20261109_image-to-3d-texture.blend"
+Read blend: "C:\Users\rotn1\Documents\ChatGPT\metaroy\blender\Meshy_AI_Rescue_Stretcher_20261109_image-to-3d-texture.blend"
+Read blend: "C:\Users\rotn1\Documents\ChatGPT\metaroy\blender\Meshy_AI_Rescue_Tracked_Transporter_20261109_image-to-3d-texture.blend"
+Read blend: "C:\Users\rotn1\Documents\ChatGPT\metaroy\blender\Meshy_AI_Rescue_Training_Mannequin_20261109_image-to-3d-texture.blend"
+Read blend: "C:\Users\rotn1\Documents\ChatGPT\metaroy\blender\Meshy_AI_Static_Rubble_Pile_20261109_image-to-3d-texture.blend"
+Read blend: "C:\Users\rotn1\Documents\ChatGPT\metaroy\blender\Meshy_AI_Stationary_Sensor_Node_20261109_image-to-3d-texture.blend"
+Read blend: "C:\Users\rotn1\Documents\ChatGPT\metaroy\blender\Meshy_AI_Wall_Module_with_Doorway_20261109_image-to-3d-texture.blend"
+Read blend: "C:\Users\rotn1\Documents\ChatGPT\metaroy\blender\Meshy_AI_Wall_Module_with_Window_20261109_image-to-3d-texture.blend"
+Read blend: "C:\Users\rotn1\Documents\ChatGPT\metaroy\blender\vendor\modular_chainlink_fence_4k\modular_chainlink_fence_4k.blend"
+Read blend: "C:\Users\rotn1\Documents\ChatGPT\metaroy\blender\vendor\modular_electric_cables_4k\modular_electric_cables_4k.blend"
+Read blend: "C:\Users\rotn1\Documents\ChatGPT\metaroy\blender\vendor\modular_industrial_pipes_01_4k\modular_industrial_pipes_01_4k.blend"
+Read blend: "C:\Users\rotn1\Documents\ChatGPT\metaroy\blender\vendor\modular_urban_apartments_facade_4k\modular_urban_apartments_facade_4k.blend"
+Read blend: "C:\Users\rotn1\Documents\ChatGPT\metaroy\blender\vendor\portable_generator_4k\portable_generator_4k.blend"
+Warning: region type 11 missing in space type "Action" (id: 12) - removing region
+Warning: region type 11 missing in space type "Action" (id: 12) - removing region
+Warning: region type 11 missing in space type "Action" (id: 12) - removing region
+Warning: region type 14 missing in space type "Node" (id: 16) - removing region
+Warning: region type 15 missing in space type "Node" (id: 16) - removing region
+Warning: region type 11 missing in space type "Action" (id: 12) - removing region
+Warning: region type 14 missing in space type "Node" (id: 16) - removing region
+Warning: region type 15 missing in space type "Node" (id: 16) - removing region
+Warning: region type 11 missing in space type "Action" (id: 12) - removing region
+Warning: region type 14 missing in space type "Node" (id: 16) - removing region
+Warning: region type 15 missing in space type "Node" (id: 16) - removing region
+Error: Engine 'BLENDER_EEVEE' not available for scene 'Scene' (an add-on may need to be installed or enabled)
+Warning: File written by newer Blender binary (501.30), expect loss of data!
+MR_LIBRARY_AUDIT portable_generator 26419 1 actions 0 missing images
+MR_LIBRARY_AUDIT streetlight 5620 0 actions 0 missing images
+MR_LIBRARY_AUDIT utility_box_02 6268 0 actions 0 missing images
+MR_LIBRARY_AUDIT water_manhole_cover 6301 0 actions 0 missing images
+Read blend: "C:\Users\rotn1\Documents\ChatGPT\metaroy\blender\streetlight.blend"
+Read blend: "C:\Users\rotn1\Documents\ChatGPT\metaroy\blender\vendor\utility_box_02_4k\utility_box_02_4k.blend"
+Read blend: "C:\Users\rotn1\Documents\ChatGPT\metaroy\blender\vendor\water_manhole_cover_4k\water_manhole_cover_4k.blend"
+
+Blender quit
+Error: Not freed memory blocks: 22, total unfreed memory 0.001545 MB

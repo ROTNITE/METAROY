@@ -1,0 +1,1172 @@
+{
+  "id": "Van",
+  "source": "blender/Meshy_AI_Medical_Support_Van_20261109_image-to-3d-texture.blend",
+  "source_sha256": "52747c69b2201d612f466e51cb674d022475a7b0012215200217156f3538b5e1",
+  "blend": "Van.blend",
+  "parts": [
+    {
+      "object": "Body",
+      "role": "body",
+      "triangles": 46484,
+      "location_m": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "rotation_deg": [
+        0.0,
+        -0.0,
+        0.0
+      ],
+      "parent": null,
+      "dimensions_m": [
+        5.798567771911621,
+        2.2408504486083984,
+        2.851280927658081
+      ],
+      "materials": [
+        "M_Van_Baked"
+      ],
+      "fbx": "parts/Body.fbx"
+    },
+    {
+      "object": "CabGlassR",
+      "role": "glass",
+      "converted_faces": 532,
+      "triangles": 532,
+      "location_m": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "rotation_deg": [
+        0.0,
+        -0.0,
+        0.0
+      ],
+      "parent": null,
+      "dimensions_m": [
+        0.9778595566749573,
+        0.26726657152175903,
+        0.3308525085449219
+      ],
+      "materials": [
+        "M_Rig_Glass"
+      ],
+      "fbx": "parts/CabGlassR.fbx"
+    },
+    {
+      "object": "SideGlassR",
+      "role": "glass",
+      "converted_faces": 103,
+      "triangles": 103,
+      "location_m": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "rotation_deg": [
+        0.0,
+        -0.0,
+        0.0
+      ],
+      "parent": null,
+      "dimensions_m": [
+        1.6025444269180298,
+        0.05910360813140869,
+        0.764671802520752
+      ],
+      "materials": [
+        "M_Rig_Glass"
+      ],
+      "fbx": "parts/SideGlassR.fbx"
+    },
+    {
+      "object": "CabGlassL",
+      "role": "glass",
+      "converted_faces": 522,
+      "triangles": 522,
+      "location_m": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "rotation_deg": [
+        0.0,
+        -0.0,
+        0.0
+      ],
+      "parent": null,
+      "dimensions_m": [
+        1.0157980918884277,
+        0.2642320990562439,
+        0.33709394931793213
+      ],
+      "materials": [
+        "M_Rig_Glass"
+      ],
+      "fbx": "parts/CabGlassL.fbx"
+    },
+    {
+      "object": "SideGlassL",
+      "role": "glass",
+      "converted_faces": 91,
+      "triangles": 91,
+      "location_m": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "rotation_deg": [
+        0.0,
+        -0.0,
+        0.0
+      ],
+      "parent": null,
+      "dimensions_m": [
+        1.6080193519592285,
+        0.050668418407440186,
+        0.683740496635437
+      ],
+      "materials": [
+        "M_Rig_Glass"
+      ],
+      "fbx": "parts/SideGlassL.fbx"
+    },
+    {
+      "object": "Windscreen",
+      "role": "glass",
+      "converted_faces": 1050,
+      "triangles": 1050,
+      "location_m": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "rotation_deg": [
+        0.0,
+        -0.0,
+        0.0
+      ],
+      "parent": null,
+      "dimensions_m": [
+        0.9425621032714844,
+        1.6595978736877441,
+        0.6976131200790405
+      ],
+      "materials": [
+        "M_Rig_Glass"
+      ],
+      "fbx": "parts/Windscreen.fbx"
+    },
+    {
+      "object": "RearApertureJamb",
+      "role": "static",
+      "triangles": 108,
+      "location_m": [
+        -2.5299999713897705,
+        -0.9200000166893005,
+        1.5199999809265137
+      ],
+      "rotation_deg": [
+        0.0,
+        -0.0,
+        0.0
+      ],
+      "parent": null,
+      "dimensions_m": [
+        0.46000000834465027,
+        0.10499999672174454,
+        1.809999942779541
+      ],
+      "materials": [
+        "M_Rig_VanPaint"
+      ],
+      "fbx": "parts/RearApertureJamb.fbx"
+    },
+    {
+      "object": "RearApertureJamb.001",
+      "role": "static",
+      "triangles": 108,
+      "location_m": [
+        -2.5299999713897705,
+        0.9200000166893005,
+        1.5199999809265137
+      ],
+      "rotation_deg": [
+        0.0,
+        -0.0,
+        0.0
+      ],
+      "parent": null,
+      "dimensions_m": [
+        0.46000000834465027,
+        0.10499999672174454,
+        1.809999942779541
+      ],
+      "materials": [
+        "M_Rig_VanPaint"
+      ],
+      "fbx": "parts/RearApertureJamb.001.fbx"
+    },
+    {
+      "object": "RearApertureHeader",
+      "role": "static",
+      "triangles": 108,
+      "location_m": [
+        -2.5299999713897705,
+        0.0,
+        2.4200000762939453
+      ],
+      "rotation_deg": [
+        0.0,
+        -0.0,
+        0.0
+      ],
+      "parent": null,
+      "dimensions_m": [
+        0.46000000834465027,
+        1.8700000047683716,
+        0.10000000149011612
+      ],
+      "materials": [
+        "M_Rig_VanPaint"
+      ],
+      "fbx": "parts/RearApertureHeader.fbx"
+    },
+    {
+      "object": "RearApertureSill",
+      "role": "static",
+      "triangles": 108,
+      "location_m": [
+        -2.5299999713897705,
+        0.0,
+        0.6600000262260437
+      ],
+      "rotation_deg": [
+        0.0,
+        -0.0,
+        0.0
+      ],
+      "parent": null,
+      "dimensions_m": [
+        0.46000000834465027,
+        1.8700000047683716,
+        0.07999999821186066
+      ],
+      "materials": [
+        "M_Rig_Rubber"
+      ],
+      "fbx": "parts/RearApertureSill.fbx"
+    },
+    {
+      "object": "RearDoor_-1",
+      "role": "van_door",
+      "axis": "Z",
+      "side": -1,
+      "open_deg": 88,
+      "removed_infill_faces": 3909,
+      "triangles": 648,
+      "location_m": [
+        -2.740000009536743,
+        -0.8899999856948853,
+        0.6499999761581421
+      ],
+      "rotation_deg": [
+        0.0,
+        -0.0,
+        0.0
+      ],
+      "parent": null,
+      "dimensions_m": [
+        0.10249995440244675,
+        0.8600000143051147,
+        1.7100001573562622
+      ],
+      "materials": [
+        "M_Rig_VanPaint",
+        "M_Rig_VanStripe",
+        "M_Rig_Rubber"
+      ],
+      "fbx": "parts/RearDoor_-1.fbx"
+    },
+    {
+      "object": "RearGlass_-1",
+      "role": "glass",
+      "triangles": 108,
+      "location_m": [
+        0.005000114440917969,
+        0.429999977350235,
+        1.0
+      ],
+      "rotation_deg": [
+        0.0,
+        -0.0,
+        0.0
+      ],
+      "parent": "RearDoor_-1",
+      "dimensions_m": [
+        0.017999999225139618,
+        0.75,
+        0.6700000166893005
+      ],
+      "materials": [
+        "M_Rig_Glass"
+      ],
+      "fbx": "parts/RearGlass_-1.fbx"
+    },
+    {
+      "object": "RearDoor_1",
+      "role": "van_door",
+      "axis": "Z",
+      "side": 1,
+      "open_deg": -88,
+      "removed_infill_faces": 3909,
+      "triangles": 648,
+      "location_m": [
+        -2.740000009536743,
+        0.8899999856948853,
+        0.6499999761581421
+      ],
+      "rotation_deg": [
+        0.0,
+        -0.0,
+        0.0
+      ],
+      "parent": null,
+      "dimensions_m": [
+        0.10249995440244675,
+        0.8600000143051147,
+        1.7100001573562622
+      ],
+      "materials": [
+        "M_Rig_VanPaint",
+        "M_Rig_VanStripe",
+        "M_Rig_Rubber"
+      ],
+      "fbx": "parts/RearDoor_1.fbx"
+    },
+    {
+      "object": "RearGlass_1",
+      "role": "glass",
+      "triangles": 108,
+      "location_m": [
+        0.005000114440917969,
+        -0.429999977350235,
+        1.0
+      ],
+      "rotation_deg": [
+        0.0,
+        -0.0,
+        0.0
+      ],
+      "parent": "RearDoor_1",
+      "dimensions_m": [
+        0.017999999225139618,
+        0.75,
+        0.6700000166893005
+      ],
+      "materials": [
+        "M_Rig_Glass"
+      ],
+      "fbx": "parts/RearGlass_1.fbx"
+    },
+    {
+      "object": "VanWheel_-1_0",
+      "role": "wheel",
+      "radius_m": 0.36,
+      "side": -1,
+      "axle": 0,
+      "axis": "Y",
+      "triangles": 664,
+      "location_m": [
+        2.059999942779541,
+        -0.9900000095367432,
+        0.36000001430511475
+      ],
+      "rotation_deg": [
+        0.0,
+        -0.0,
+        0.0
+      ],
+      "parent": null,
+      "dimensions_m": [
+        0.7200000286102295,
+        0.22500000894069672,
+        0.7200000286102295
+      ],
+      "materials": [
+        "M_Rig_Rubber",
+        "M_Rig_Metal"
+      ],
+      "fbx": "parts/VanWheel_-1_0.fbx"
+    },
+    {
+      "object": "VanWheel_-1_1",
+      "role": "wheel",
+      "radius_m": 0.36,
+      "side": -1,
+      "axle": 1,
+      "axis": "Y",
+      "triangles": 664,
+      "location_m": [
+        -1.8700000047683716,
+        -0.9900000095367432,
+        0.36000001430511475
+      ],
+      "rotation_deg": [
+        0.0,
+        -0.0,
+        0.0
+      ],
+      "parent": null,
+      "dimensions_m": [
+        0.7200000286102295,
+        0.22500000894069672,
+        0.7200000286102295
+      ],
+      "materials": [
+        "M_Rig_Rubber",
+        "M_Rig_Metal"
+      ],
+      "fbx": "parts/VanWheel_-1_1.fbx"
+    },
+    {
+      "object": "VanWheel_1_0",
+      "role": "wheel",
+      "radius_m": 0.36,
+      "side": 1,
+      "axle": 0,
+      "axis": "Y",
+      "triangles": 664,
+      "location_m": [
+        2.059999942779541,
+        0.9900000095367432,
+        0.36000001430511475
+      ],
+      "rotation_deg": [
+        0.0,
+        -0.0,
+        0.0
+      ],
+      "parent": null,
+      "dimensions_m": [
+        0.7200000286102295,
+        0.22500000894069672,
+        0.7200000286102295
+      ],
+      "materials": [
+        "M_Rig_Rubber",
+        "M_Rig_Metal"
+      ],
+      "fbx": "parts/VanWheel_1_0.fbx"
+    },
+    {
+      "object": "VanWheel_1_1",
+      "role": "wheel",
+      "radius_m": 0.36,
+      "side": 1,
+      "axle": 1,
+      "axis": "Y",
+      "triangles": 664,
+      "location_m": [
+        -1.8700000047683716,
+        0.9900000095367432,
+        0.36000001430511475
+      ],
+      "rotation_deg": [
+        0.0,
+        -0.0,
+        0.0
+      ],
+      "parent": null,
+      "dimensions_m": [
+        0.7200000286102295,
+        0.22500000894069672,
+        0.7200000286102295
+      ],
+      "materials": [
+        "M_Rig_Rubber",
+        "M_Rig_Metal"
+      ],
+      "fbx": "parts/VanWheel_1_1.fbx"
+    },
+    {
+      "object": "CabFloor",
+      "role": "static",
+      "triangles": 108,
+      "location_m": [
+        0.4000000059604645,
+        0.0,
+        0.4300000071525574
+      ],
+      "rotation_deg": [
+        0.0,
+        -0.0,
+        0.0
+      ],
+      "parent": null,
+      "dimensions_m": [
+        4.699999809265137,
+        1.8200000524520874,
+        0.07000000029802322
+      ],
+      "materials": [
+        "M_Rig_VanInterior"
+      ],
+      "fbx": "parts/CabFloor.fbx"
+    },
+    {
+      "object": "Dashboard",
+      "role": "static",
+      "triangles": 108,
+      "location_m": [
+        1.6299999952316284,
+        0.0,
+        1.1200000047683716
+      ],
+      "rotation_deg": [
+        0.0,
+        -0.0,
+        0.0
+      ],
+      "parent": null,
+      "dimensions_m": [
+        0.41999998688697815,
+        1.7000000476837158,
+        0.27000001072883606
+      ],
+      "materials": [
+        "M_Rig_VanInterior"
+      ],
+      "fbx": "parts/Dashboard.fbx"
+    },
+    {
+      "object": "SeatBase",
+      "role": "static",
+      "triangles": 108,
+      "location_m": [
+        0.8999999761581421,
+        -0.47999998927116394,
+        0.7599999904632568
+      ],
+      "rotation_deg": [
+        0.0,
+        -0.0,
+        0.0
+      ],
+      "parent": null,
+      "dimensions_m": [
+        0.5799999833106995,
+        0.47999998927116394,
+        0.15000000596046448
+      ],
+      "materials": [
+        "M_Rig_Seat"
+      ],
+      "fbx": "parts/SeatBase.fbx"
+    },
+    {
+      "object": "SeatBack",
+      "role": "static",
+      "triangles": 108,
+      "location_m": [
+        0.6399999856948853,
+        -0.47999998927116394,
+        1.090000033378601
+      ],
+      "rotation_deg": [
+        0.0,
+        -0.0,
+        0.0
+      ],
+      "parent": null,
+      "dimensions_m": [
+        0.11999999731779099,
+        0.47999998927116394,
+        0.6499999761581421
+      ],
+      "materials": [
+        "M_Rig_Seat"
+      ],
+      "fbx": "parts/SeatBack.fbx"
+    },
+    {
+      "object": "SeatBase.001",
+      "role": "static",
+      "triangles": 108,
+      "location_m": [
+        0.8999999761581421,
+        0.47999998927116394,
+        0.7599999904632568
+      ],
+      "rotation_deg": [
+        0.0,
+        -0.0,
+        0.0
+      ],
+      "parent": null,
+      "dimensions_m": [
+        0.5799999833106995,
+        0.47999998927116394,
+        0.15000000596046448
+      ],
+      "materials": [
+        "M_Rig_Seat"
+      ],
+      "fbx": "parts/SeatBase.001.fbx"
+    },
+    {
+      "object": "SeatBack.001",
+      "role": "static",
+      "triangles": 108,
+      "location_m": [
+        0.6399999856948853,
+        0.47999998927116394,
+        1.090000033378601
+      ],
+      "rotation_deg": [
+        0.0,
+        -0.0,
+        0.0
+      ],
+      "parent": null,
+      "dimensions_m": [
+        0.11999999731779099,
+        0.47999998927116394,
+        0.6499999761581421
+      ],
+      "materials": [
+        "M_Rig_Seat"
+      ],
+      "fbx": "parts/SeatBack.001.fbx"
+    },
+    {
+      "object": "MedicalBench",
+      "role": "static",
+      "triangles": 108,
+      "location_m": [
+        -1.1200000047683716,
+        0.6499999761581421,
+        0.75
+      ],
+      "rotation_deg": [
+        0.0,
+        -0.0,
+        0.0
+      ],
+      "parent": null,
+      "dimensions_m": [
+        1.7000000476837158,
+        0.47999998927116394,
+        0.15000000596046448
+      ],
+      "materials": [
+        "M_Rig_Seat"
+      ],
+      "fbx": "parts/MedicalBench.fbx"
+    },
+    {
+      "object": "EquipmentCupboard",
+      "role": "static",
+      "triangles": 108,
+      "location_m": [
+        -1.100000023841858,
+        -0.6499999761581421,
+        0.9900000095367432
+      ],
+      "rotation_deg": [
+        0.0,
+        -0.0,
+        0.0
+      ],
+      "parent": null,
+      "dimensions_m": [
+        1.5,
+        0.3799999952316284,
+        1.100000023841858
+      ],
+      "materials": [
+        "M_Rig_VanInterior"
+      ],
+      "fbx": "parts/EquipmentCupboard.fbx"
+    },
+    {
+      "object": "EmergencyBeacon_-1_-1",
+      "role": "beacon",
+      "side": -1,
+      "extracted_faces": 38,
+      "triangles": 38,
+      "location_m": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "rotation_deg": [
+        0.0,
+        -0.0,
+        0.0
+      ],
+      "parent": null,
+      "dimensions_m": [
+        0.22652053833007812,
+        0.07617378234863281,
+        0.1068887710571289
+      ],
+      "materials": [
+        "M_Van_Baked"
+      ],
+      "fbx": "parts/EmergencyBeacon_-1_-1.fbx"
+    },
+    {
+      "object": "EmergencyBeacon_-1_1",
+      "role": "beacon",
+      "side": 1,
+      "extracted_faces": 31,
+      "triangles": 31,
+      "location_m": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "rotation_deg": [
+        0.0,
+        -0.0,
+        0.0
+      ],
+      "parent": null,
+      "dimensions_m": [
+        0.2279975414276123,
+        0.08754664659500122,
+        0.11086082458496094
+      ],
+      "materials": [
+        "M_Van_Baked"
+      ],
+      "fbx": "parts/EmergencyBeacon_-1_1.fbx"
+    },
+    {
+      "object": "EmergencyBeacon_1_-1",
+      "role": "beacon",
+      "side": -1,
+      "extracted_faces": 29,
+      "triangles": 29,
+      "location_m": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "rotation_deg": [
+        0.0,
+        -0.0,
+        0.0
+      ],
+      "parent": null,
+      "dimensions_m": [
+        0.22065217792987823,
+        0.044106483459472656,
+        0.110321044921875
+      ],
+      "materials": [
+        "M_Van_Baked"
+      ],
+      "fbx": "parts/EmergencyBeacon_1_-1.fbx"
+    },
+    {
+      "object": "EmergencyBeacon_1_1",
+      "role": "beacon",
+      "side": 1,
+      "extracted_faces": 30,
+      "triangles": 30,
+      "location_m": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "rotation_deg": [
+        0.0,
+        -0.0,
+        0.0
+      ],
+      "parent": null,
+      "dimensions_m": [
+        0.22271029651165009,
+        0.03666108846664429,
+        0.10765767097473145
+      ],
+      "materials": [
+        "M_Van_Baked"
+      ],
+      "fbx": "parts/EmergencyBeacon_1_1.fbx"
+    }
+  ],
+  "materials": [
+    {
+      "name": "M_Rig_Glass",
+      "glass": true,
+      "inputs": {
+        "Base Color": [
+          0.7300000190734863,
+          0.8600000143051147,
+          0.8899999856948853,
+          1.0
+        ],
+        "Metallic": 0.0,
+        "Roughness": 0.09000000357627869,
+        "Transmission Weight": 1.0,
+        "IOR": 1.4500000476837158,
+        "Alpha": 1.0,
+        "Emission Color": [
+          1.0,
+          1.0,
+          1.0,
+          1.0
+        ],
+        "Emission Strength": 0.0
+      },
+      "links": [
+        {
+          "from": "Principled BSDF",
+          "output": "BSDF",
+          "to": "Material Output",
+          "input": "Surface"
+        }
+      ],
+      "images": []
+    },
+    {
+      "name": "M_Rig_Metal",
+      "glass": false,
+      "inputs": {
+        "Base Color": [
+          0.3700000047683716,
+          0.4000000059604645,
+          0.38999998569488525,
+          1.0
+        ],
+        "Metallic": 0.800000011920929,
+        "Roughness": 0.30000001192092896,
+        "Transmission Weight": 0.0,
+        "IOR": 1.5,
+        "Alpha": 1.0,
+        "Emission Color": [
+          1.0,
+          1.0,
+          1.0,
+          1.0
+        ],
+        "Emission Strength": 0.0
+      },
+      "links": [
+        {
+          "from": "Principled BSDF",
+          "output": "BSDF",
+          "to": "Material Output",
+          "input": "Surface"
+        }
+      ],
+      "images": []
+    },
+    {
+      "name": "M_Rig_Rubber",
+      "glass": false,
+      "inputs": {
+        "Base Color": [
+          0.02800000086426735,
+          0.032999999821186066,
+          0.029999999329447746,
+          1.0
+        ],
+        "Metallic": 0.029999999329447746,
+        "Roughness": 0.8799999952316284,
+        "Transmission Weight": 0.0,
+        "IOR": 1.5,
+        "Alpha": 1.0,
+        "Emission Color": [
+          1.0,
+          1.0,
+          1.0,
+          1.0
+        ],
+        "Emission Strength": 0.0
+      },
+      "links": [
+        {
+          "from": "Principled BSDF",
+          "output": "BSDF",
+          "to": "Material Output",
+          "input": "Surface"
+        }
+      ],
+      "images": []
+    },
+    {
+      "name": "M_Rig_Seat",
+      "glass": false,
+      "inputs": {
+        "Base Color": [
+          0.05999999865889549,
+          0.10499999672174454,
+          0.10999999940395355,
+          1.0
+        ],
+        "Metallic": 0.0,
+        "Roughness": 0.8299999833106995,
+        "Transmission Weight": 0.0,
+        "IOR": 1.5,
+        "Alpha": 1.0,
+        "Emission Color": [
+          1.0,
+          1.0,
+          1.0,
+          1.0
+        ],
+        "Emission Strength": 0.0
+      },
+      "links": [
+        {
+          "from": "Principled BSDF",
+          "output": "BSDF",
+          "to": "Material Output",
+          "input": "Surface"
+        }
+      ],
+      "images": []
+    },
+    {
+      "name": "M_Rig_VanInterior",
+      "glass": false,
+      "inputs": {
+        "Base Color": [
+          0.28999999165534973,
+          0.3400000035762787,
+          0.33000001311302185,
+          1.0
+        ],
+        "Metallic": 0.05000000074505806,
+        "Roughness": 0.6499999761581421,
+        "Transmission Weight": 0.0,
+        "IOR": 1.5,
+        "Alpha": 1.0,
+        "Emission Color": [
+          1.0,
+          1.0,
+          1.0,
+          1.0
+        ],
+        "Emission Strength": 0.0
+      },
+      "links": [
+        {
+          "from": "Principled BSDF",
+          "output": "BSDF",
+          "to": "Material Output",
+          "input": "Surface"
+        }
+      ],
+      "images": []
+    },
+    {
+      "name": "M_Rig_VanPaint",
+      "glass": false,
+      "inputs": {
+        "Base Color": [
+          0.7699999809265137,
+          0.8100000023841858,
+          0.7900000214576721,
+          1.0
+        ],
+        "Metallic": 0.2199999988079071,
+        "Roughness": 0.3199999928474426,
+        "Transmission Weight": 0.0,
+        "IOR": 1.5,
+        "Alpha": 1.0,
+        "Emission Color": [
+          1.0,
+          1.0,
+          1.0,
+          1.0
+        ],
+        "Emission Strength": 0.0
+      },
+      "links": [
+        {
+          "from": "Principled BSDF",
+          "output": "BSDF",
+          "to": "Material Output",
+          "input": "Surface"
+        }
+      ],
+      "images": []
+    },
+    {
+      "name": "M_Rig_VanStripe",
+      "glass": false,
+      "inputs": {
+        "Base Color": [
+          0.02500000037252903,
+          0.2800000011920929,
+          0.2800000011920929,
+          1.0
+        ],
+        "Metallic": 0.11999999731779099,
+        "Roughness": 0.41999998688697815,
+        "Transmission Weight": 0.0,
+        "IOR": 1.5,
+        "Alpha": 1.0,
+        "Emission Color": [
+          1.0,
+          1.0,
+          1.0,
+          1.0
+        ],
+        "Emission Strength": 0.0
+      },
+      "links": [
+        {
+          "from": "Principled BSDF",
+          "output": "BSDF",
+          "to": "Material Output",
+          "input": "Surface"
+        }
+      ],
+      "images": []
+    },
+    {
+      "name": "M_Van_Baked",
+      "glass": false,
+      "inputs": {
+        "Base Color": [
+          0.800000011920929,
+          0.800000011920929,
+          0.800000011920929,
+          1.0
+        ],
+        "Metallic": 0.0,
+        "Roughness": 0.5,
+        "Transmission Weight": 0.0,
+        "IOR": 1.5,
+        "Alpha": 1.0,
+        "Emission Color": [
+          1.0,
+          1.0,
+          1.0,
+          1.0
+        ],
+        "Emission Strength": 0.0
+      },
+      "links": [
+        {
+          "from": "Principled BSDF",
+          "output": "BSDF",
+          "to": "Material Output",
+          "input": "Surface"
+        },
+        {
+          "from": "Image Texture",
+          "output": "Color",
+          "to": "Principled BSDF",
+          "input": "Base Color"
+        },
+        {
+          "from": "Image Texture.001",
+          "output": "Color",
+          "to": "Separate Color",
+          "input": "Color"
+        },
+        {
+          "from": "Separate Color",
+          "output": "Green",
+          "to": "Principled BSDF",
+          "input": "Roughness"
+        },
+        {
+          "from": "Separate Color",
+          "output": "Blue",
+          "to": "Principled BSDF",
+          "input": "Metallic"
+        },
+        {
+          "from": "Image Texture.002",
+          "output": "Color",
+          "to": "Normal Map",
+          "input": "Color"
+        },
+        {
+          "from": "Normal Map",
+          "output": "Normal",
+          "to": "Principled BSDF",
+          "input": "Normal"
+        }
+      ],
+      "images": [
+        {
+          "node": "Image Texture",
+          "image": "T_Van_BaseColor",
+          "file": "textures/T_0_T_Van_BaseColor.png",
+          "colorspace": "sRGB"
+        },
+        {
+          "node": "Image Texture.001",
+          "image": "T_Van_ORM",
+          "file": "textures/T_1_T_Van_ORM.png",
+          "colorspace": "Non-Color"
+        },
+        {
+          "node": "Image Texture.002",
+          "image": "T_Van_Normal",
+          "file": "textures/T_2_T_Van_Normal.png",
+          "colorspace": "Non-Color"
+        }
+      ]
+    }
+  ],
+  "repairs": [
+    "Set van proportions to 5.8 x 2.28 x 2.85 m; seven curved glazing regions, cabin/cargo interior, hinged rear doors, four rebuilt wheels (12181 old wheel faces removed), emergency lenses."
+  ],
+  "actions": [
+    {
+      "name": "VanRearDoor_-1",
+      "frames": [
+        1.0,
+        181.0
+      ]
+    },
+    {
+      "name": "VanRearDoor_1",
+      "frames": [
+        1.0,
+        181.0
+      ]
+    },
+    {
+      "name": "VanWheelRoll_-1_0",
+      "frames": [
+        1.0,
+        181.0
+      ]
+    },
+    {
+      "name": "VanWheelRoll_-1_1",
+      "frames": [
+        1.0,
+        181.0
+      ]
+    },
+    {
+      "name": "VanWheelRoll_1_0",
+      "frames": [
+        1.0,
+        181.0
+      ]
+    },
+    {
+      "name": "VanWheelRoll_1_1",
+      "frames": [
+        1.0,
+        181.0
+      ]
+    }
+  ],
+  "animation_runtime": "Rigid meshes driven from Unreal actuator state; Blender actions are inspectable demonstrations."
+}

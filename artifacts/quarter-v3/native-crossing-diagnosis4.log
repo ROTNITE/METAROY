@@ -1,0 +1,12 @@
+diagnosis4-traffic-crossing native exit 1 evidence C:\Users\rotn1\Documents\ChatGPT\metaroy\artifacts\quarter-v3\runs\diagnosis4-traffic-crossing
+Traceback (most recent call last):
+  File "C:\Users\rotn1\Documents\ChatGPT\metaroy\unreal\tools\run_quarter_validation.py", line 73, in <module>
+    if __name__=='__main__':main()
+                            ~~~~^^
+  File "C:\Users\rotn1\Documents\ChatGPT\metaroy\unreal\tools\run_quarter_validation.py", line 57, in main
+    run(args.prefix+'-traffic-'+kind,['--environment','static','--traffic-probe',kind],duration(100))
+    ~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\rotn1\Documents\ChatGPT\metaroy\unreal\tools\run_quarter_validation.py", line 37, in run
+    if completed.returncode:raise RuntimeError('Native validation failed; inspect '+str(out/'launcher.log'))
+                            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+RuntimeError: Native validation failed; inspect C:\Users\rotn1\Documents\ChatGPT\metaroy\artifacts\quarter-v3\runs\diagnosis4-traffic-crossing\launcher.log

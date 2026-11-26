@@ -1,0 +1,1208 @@
+{
+  "id": "modular_chainlink_fence",
+  "source": "blender/vendor/modular_chainlink_fence_4k/modular_chainlink_fence_4k.blend",
+  "sha256": "a6aae561fc4ecb92bd993576c58ee836f6d52250f2399725949c30e6d6504832",
+  "units": {
+    "system": "METRIC",
+    "scale_length": 1.0
+  },
+  "bounds_min": [
+    -6.040004730224609,
+    -0.07415170967578888,
+    0.0
+  ],
+  "bounds_max": [
+    2.0749971866607666,
+    2.0750014781951904,
+    2.5229129791259766
+  ],
+  "dimensions": [
+    8.115001678466797,
+    2.149153232574463,
+    2.5229129791259766
+  ],
+  "objects": [
+    {
+      "name": "modular_chainlink_fence",
+      "type": "MESH",
+      "parent": null,
+      "location": [
+        -2.000004291534424,
+        -1.7881393432617188e-07,
+        0.0
+      ],
+      "rotation": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "hidden_render": false,
+      "vertices": 1660,
+      "triangles": 3028,
+      "uv_layers": [
+        "UVMap"
+      ],
+      "bounds_min": [
+        -2.9620256423950195,
+        -0.024936195462942123,
+        0.05999995768070221
+      ],
+      "bounds_max": [
+        -2.027975082397461,
+        0.02369585633277893,
+        2.430000066757202
+      ],
+      "materials": [
+        "modular_chainlink_fence_wire",
+        "modular_chainlink_fence_posts"
+      ],
+      "modifiers": []
+    },
+    {
+      "name": "modular_chainlink_fence_bar_bracket_01",
+      "type": "MESH",
+      "parent": null,
+      "location": [
+        -2.0,
+        1.999999761581421,
+        1.399999976158142
+      ],
+      "rotation": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "hidden_render": false,
+      "vertices": 180,
+      "triangles": 352,
+      "uv_layers": [
+        "UVMap"
+      ],
+      "bounds_min": [
+        -2.0750014781951904,
+        1.9599249362945557,
+        1.3899999856948853
+      ],
+      "bounds_max": [
+        -1.9600011110305786,
+        2.040074586868286,
+        1.409999966621399
+      ],
+      "materials": [
+        "modular_chainlink_fence_posts"
+      ],
+      "modifiers": [
+        {
+          "name": "Auto Smooth",
+          "type": "NODES"
+        }
+      ]
+    },
+    {
+      "name": "modular_chainlink_fence_bar_bracket_02",
+      "type": "MESH",
+      "parent": null,
+      "location": [
+        -2.0000009536743164,
+        1.999999761581421,
+        1.2000000476837158
+      ],
+      "rotation": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "hidden_render": false,
+      "vertices": 252,
+      "triangles": 488,
+      "uv_layers": [
+        "UVMap"
+      ],
+      "bounds_min": [
+        -2.075002431869507,
+        1.9599249362945557,
+        1.190000057220459
+      ],
+      "bounds_max": [
+        -1.924999475479126,
+        2.040074586868286,
+        1.2100000381469727
+      ],
+      "materials": [
+        "modular_chainlink_fence_posts"
+      ],
+      "modifiers": [
+        {
+          "name": "Auto Smooth",
+          "type": "NODES"
+        }
+      ]
+    },
+    {
+      "name": "modular_chainlink_fence_bar_bracket_03",
+      "type": "MESH",
+      "parent": null,
+      "location": [
+        -2.0000014305114746,
+        1.999999761581421,
+        1.600000023841858
+      ],
+      "rotation": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "hidden_render": false,
+      "vertices": 258,
+      "triangles": 500,
+      "uv_layers": [
+        "UVMap"
+      ],
+      "bounds_min": [
+        -2.0400004386901855,
+        1.9599249362945557,
+        1.590000033378601
+      ],
+      "bounds_max": [
+        -1.9249999523162842,
+        2.0750012397766113,
+        1.6100000143051147
+      ],
+      "materials": [
+        "modular_chainlink_fence_posts"
+      ],
+      "modifiers": [
+        {
+          "name": "Auto Smooth",
+          "type": "NODES"
+        }
+      ]
+    },
+    {
+      "name": "modular_chainlink_fence_corner_inner",
+      "type": "MESH",
+      "parent": null,
+      "location": [
+        -5.000003814697266,
+        0.0,
+        0.0
+      ],
+      "rotation": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "hidden_render": false,
+      "vertices": 7741,
+      "triangles": 14562,
+      "uv_layers": [
+        "UVMap"
+      ],
+      "bounds_min": [
+        -6.040004730224609,
+        -0.07414530962705612,
+        0.0
+      ],
+      "bounds_max": [
+        -4.925852298736572,
+        1.039989948272705,
+        2.5229129791259766
+      ],
+      "materials": [
+        "modular_chainlink_fence_posts",
+        "modular_chainlink_fence_wire"
+      ],
+      "modifiers": [
+        {
+          "name": "Auto Smooth",
+          "type": "NODES"
+        }
+      ]
+    },
+    {
+      "name": "modular_chainlink_fence_corner_outer",
+      "type": "MESH",
+      "parent": null,
+      "location": [
+        -4.0,
+        -1.564621925354004e-07,
+        0.0
+      ],
+      "rotation": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "hidden_render": false,
+      "vertices": 7771,
+      "triangles": 14598,
+      "uv_layers": [
+        "UVMap"
+      ],
+      "bounds_min": [
+        -4.074145317077637,
+        -0.07415147125720978,
+        0.0
+      ],
+      "bounds_max": [
+        -2.960000514984131,
+        1.0399898290634155,
+        2.5229129791259766
+      ],
+      "materials": [
+        "modular_chainlink_fence_posts",
+        "modular_chainlink_fence_wire"
+      ],
+      "modifiers": [
+        {
+          "name": "Auto Smooth",
+          "type": "NODES"
+        }
+      ]
+    },
+    {
+      "name": "modular_chainlink_fence_corner_support",
+      "type": "MESH",
+      "parent": null,
+      "location": [
+        -2.000002384185791,
+        1.9999921321868896,
+        1.0230001211166382
+      ],
+      "rotation": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "hidden_render": false,
+      "vertices": 904,
+      "triangles": 1716,
+      "uv_layers": [
+        "UVMap"
+      ],
+      "bounds_min": [
+        -2.040001392364502,
+        1.9599173069000244,
+        0.1352056860923767
+      ],
+      "bounds_max": [
+        -0.9600034952163696,
+        2.040066957473755,
+        1.0347943305969238
+      ],
+      "materials": [
+        "modular_chainlink_fence_posts"
+      ],
+      "modifiers": [
+        {
+          "name": "Auto Smooth",
+          "type": "NODES"
+        }
+      ]
+    },
+    {
+      "name": "modular_chainlink_fence_door_frame",
+      "type": "MESH",
+      "parent": null,
+      "location": [
+        -4.291534423828125e-06,
+        -1.564621925354004e-07,
+        0.0
+      ],
+      "rotation": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "hidden_render": false,
+      "vertices": 10496,
+      "triangles": 19940,
+      "uv_layers": [
+        "UVMap"
+      ],
+      "bounds_min": [
+        0.04297482967376709,
+        -0.07415170967578888,
+        0.0
+      ],
+      "bounds_max": [
+        1.953506588935852,
+        0.07414549589157104,
+        2.5229129791259766
+      ],
+      "materials": [
+        "modular_chainlink_fence_posts",
+        "modular_chainlink_fence_wire"
+      ],
+      "modifiers": [
+        {
+          "name": "Auto Smooth",
+          "type": "NODES"
+        }
+      ]
+    },
+    {
+      "name": "modular_chainlink_fence_door_gate",
+      "type": "MESH",
+      "parent": null,
+      "location": [
+        0.5492749214172363,
+        -1.564621925354004e-07,
+        1.0750000476837158
+      ],
+      "rotation": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "hidden_render": false,
+      "vertices": 2334,
+      "triangles": 4554,
+      "uv_layers": [
+        "UVMap"
+      ],
+      "bounds_min": [
+        0.5244640111923218,
+        -0.025199558585882187,
+        0.12999999523162842
+      ],
+      "bounds_max": [
+        1.47581148147583,
+        0.025199245661497116,
+        1.947250247001648
+      ],
+      "materials": [
+        "modular_chainlink_fence_posts",
+        "modular_chainlink_fence_wire"
+      ],
+      "modifiers": [
+        {
+          "name": "Auto Smooth",
+          "type": "NODES"
+        }
+      ]
+    },
+    {
+      "name": "modular_chainlink_fence_door_latch",
+      "type": "MESH",
+      "parent": null,
+      "location": [
+        1.2805109024047852,
+        5.587935447692871e-09,
+        1.1399966478347778
+      ],
+      "rotation": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "hidden_render": false,
+      "vertices": 350,
+      "triangles": 680,
+      "uv_layers": [
+        "UVMap"
+      ],
+      "bounds_min": [
+        1.2360718250274658,
+        -0.03502535820007324,
+        1.1252673864364624
+      ],
+      "bounds_max": [
+        1.4937043190002441,
+        0.035025373101234436,
+        1.1547259092330933
+      ],
+      "materials": [
+        "modular_chainlink_fence_posts"
+      ],
+      "modifiers": [
+        {
+          "name": "Auto Smooth",
+          "type": "NODES"
+        }
+      ]
+    },
+    {
+      "name": "modular_chainlink_fence_double",
+      "type": "MESH",
+      "parent": null,
+      "location": [
+        -4.0531158447265625e-06,
+        -1.564621925354004e-07,
+        0.0
+      ],
+      "rotation": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "hidden_render": false,
+      "vertices": 1674,
+      "triangles": 3054,
+      "uv_layers": [
+        "UVMap"
+      ],
+      "bounds_min": [
+        -1.9520267248153687,
+        -0.024936173111200333,
+        0.05999995768070221
+      ],
+      "bounds_max": [
+        -0.03797447681427002,
+        0.02369587868452072,
+        2.430000066757202
+      ],
+      "materials": [
+        "modular_chainlink_fence_wire",
+        "modular_chainlink_fence_posts"
+      ],
+      "modifiers": []
+    },
+    {
+      "name": "modular_chainlink_fence_end_01",
+      "type": "MESH",
+      "parent": null,
+      "location": [
+        -4.291534423828125e-06,
+        0.9999998211860657,
+        0.0
+      ],
+      "rotation": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "hidden_render": false,
+      "vertices": 2067,
+      "triangles": 4010,
+      "uv_layers": [
+        "UVMap"
+      ],
+      "bounds_min": [
+        -0.07500574737787247,
+        0.9258484840393066,
+        0.0
+      ],
+      "bounds_max": [
+        0.07414737343788147,
+        1.0741454362869263,
+        2.5229129791259766
+      ],
+      "materials": [
+        "modular_chainlink_fence_posts"
+      ],
+      "modifiers": [
+        {
+          "name": "Auto Smooth",
+          "type": "NODES"
+        }
+      ]
+    },
+    {
+      "name": "modular_chainlink_fence_end_02",
+      "type": "MESH",
+      "parent": null,
+      "location": [
+        -3.5762786865234375e-06,
+        1.9999996423721313,
+        0.0
+      ],
+      "rotation": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "hidden_render": false,
+      "vertices": 2067,
+      "triangles": 4010,
+      "uv_layers": [
+        "UVMap"
+      ],
+      "bounds_min": [
+        -0.07415524870157242,
+        1.925848364830017,
+        0.0
+      ],
+      "bounds_max": [
+        0.07499789446592331,
+        2.0741453170776367,
+        2.5229129791259766
+      ],
+      "materials": [
+        "modular_chainlink_fence_posts"
+      ],
+      "modifiers": [
+        {
+          "name": "Auto Smooth",
+          "type": "NODES"
+        }
+      ]
+    },
+    {
+      "name": "modular_chainlink_fence_post",
+      "type": "MESH",
+      "parent": null,
+      "location": [
+        -1.000002384185791,
+        0.9999998211860657,
+        0.0
+      ],
+      "rotation": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "hidden_render": false,
+      "vertices": 603,
+      "triangles": 1134,
+      "uv_layers": [
+        "UVMap"
+      ],
+      "bounds_min": [
+        -1.0747090578079224,
+        0.9252904653549194,
+        0.0
+      ],
+      "bounds_max": [
+        -0.9252984523773193,
+        1.0747010707855225,
+        2.5229129791259766
+      ],
+      "materials": [
+        "modular_chainlink_fence_posts"
+      ],
+      "modifiers": [
+        {
+          "name": "Auto Smooth",
+          "type": "NODES"
+        }
+      ]
+    },
+    {
+      "name": "modular_chainlink_fence_post_bracket_01",
+      "type": "MESH",
+      "parent": null,
+      "location": [
+        -1.9999980926513672,
+        1.999999761581421,
+        0.2999998927116394
+      ],
+      "rotation": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "hidden_render": false,
+      "vertices": 188,
+      "triangles": 372,
+      "uv_layers": [
+        "UVMap"
+      ],
+      "bounds_min": [
+        -2.072996139526367,
+        1.9599239826202393,
+        0.28797441720962524
+      ],
+      "bounds_max": [
+        -1.959997296333313,
+        2.0400736331939697,
+        0.3120262026786804
+      ],
+      "materials": [
+        "modular_chainlink_fence_posts"
+      ],
+      "modifiers": [
+        {
+          "name": "Auto Smooth",
+          "type": "NODES"
+        }
+      ]
+    },
+    {
+      "name": "modular_chainlink_fence_post_bracket_02",
+      "type": "MESH",
+      "parent": null,
+      "location": [
+        -2.000002861022949,
+        1.999999761581421,
+        0.09999999403953552
+      ],
+      "rotation": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "hidden_render": false,
+      "vertices": 252,
+      "triangles": 496,
+      "uv_layers": [
+        "UVMap"
+      ],
+      "bounds_min": [
+        -2.073000907897949,
+        1.9599239826202393,
+        0.08797451853752136
+      ],
+      "bounds_max": [
+        -1.9270049333572388,
+        2.0400736331939697,
+        0.11202630400657654
+      ],
+      "materials": [
+        "modular_chainlink_fence_posts"
+      ],
+      "modifiers": [
+        {
+          "name": "Auto Smooth",
+          "type": "NODES"
+        }
+      ]
+    },
+    {
+      "name": "modular_chainlink_fence_post_bracket_03",
+      "type": "MESH",
+      "parent": null,
+      "location": [
+        -2.0000016689300537,
+        1.999999761581421,
+        0.5
+      ],
+      "rotation": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "hidden_render": false,
+      "vertices": 250,
+      "triangles": 492,
+      "uv_layers": [
+        "UVMap"
+      ],
+      "bounds_min": [
+        -2.0400025844573975,
+        1.959925889968872,
+        0.48797452449798584
+      ],
+      "bounds_max": [
+        -1.9270037412643433,
+        2.072997808456421,
+        0.512026309967041
+      ],
+      "materials": [
+        "modular_chainlink_fence_posts"
+      ],
+      "modifiers": [
+        {
+          "name": "Auto Smooth",
+          "type": "NODES"
+        }
+      ]
+    },
+    {
+      "name": "modular_chainlink_fence_start_01_corner_01",
+      "type": "MESH",
+      "parent": null,
+      "location": [
+        1.9999957084655762,
+        0.9999998211860657,
+        0.0
+      ],
+      "rotation": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "hidden_render": false,
+      "vertices": 2643,
+      "triangles": 5110,
+      "uv_layers": [
+        "UVMap"
+      ],
+      "bounds_min": [
+        1.9258503913879395,
+        0.9258484840393066,
+        0.0
+      ],
+      "bounds_max": [
+        2.0749971866607666,
+        1.0750012397766113,
+        2.5229129791259766
+      ],
+      "materials": [
+        "modular_chainlink_fence_posts"
+      ],
+      "modifiers": [
+        {
+          "name": "Auto Smooth",
+          "type": "NODES"
+        }
+      ]
+    },
+    {
+      "name": "modular_chainlink_fence_start_01_corner_02",
+      "type": "MESH",
+      "parent": null,
+      "location": [
+        1.9999961853027344,
+        2.0,
+        0.0
+      ],
+      "rotation": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "hidden_render": false,
+      "vertices": 2613,
+      "triangles": 5074,
+      "uv_layers": [
+        "UVMap"
+      ],
+      "bounds_min": [
+        1.9249905347824097,
+        1.9258546829223633,
+        0.0
+      ],
+      "bounds_max": [
+        2.0741474628448486,
+        2.0750014781951904,
+        2.5229129791259766
+      ],
+      "materials": [
+        "modular_chainlink_fence_posts",
+        "modular_chainlink_fence_wire"
+      ],
+      "modifiers": [
+        {
+          "name": "Auto Smooth",
+          "type": "NODES"
+        }
+      ]
+    },
+    {
+      "name": "modular_chainlink_post_middle",
+      "type": "MESH",
+      "parent": null,
+      "location": [
+        0.9999957084655762,
+        0.9999998211860657,
+        0.0
+      ],
+      "rotation": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "hidden_render": false,
+      "vertices": 2619,
+      "triangles": 5062,
+      "uv_layers": [
+        "UVMap"
+      ],
+      "bounds_min": [
+        0.9249942302703857,
+        0.9258484840393066,
+        0.0
+      ],
+      "bounds_max": [
+        1.0749971866607666,
+        1.0741454362869263,
+        2.5229129791259766
+      ],
+      "materials": [
+        "modular_chainlink_fence_posts"
+      ],
+      "modifiers": [
+        {
+          "name": "Auto Smooth",
+          "type": "NODES"
+        }
+      ]
+    }
+  ],
+  "materials": [
+    {
+      "name": "modular_chainlink_fence_posts",
+      "nodes": [
+        {
+          "name": "Frame",
+          "type": "FRAME"
+        },
+        {
+          "name": "Frame.001",
+          "type": "FRAME"
+        },
+        {
+          "name": "Material Output",
+          "type": "OUTPUT_MATERIAL"
+        },
+        {
+          "name": "Principled BSDF",
+          "type": "BSDF_PRINCIPLED",
+          "inputs": {
+            "Base Color": {
+              "linked": true,
+              "value": [
+                0.800000011920929,
+                0.800000011920929,
+                0.800000011920929,
+                1.0
+              ]
+            },
+            "Metallic": {
+              "linked": true,
+              "value": 0.0
+            },
+            "Roughness": {
+              "linked": true,
+              "value": 0.5
+            },
+            "IOR": {
+              "linked": false,
+              "value": 1.4500000476837158
+            },
+            "Alpha": {
+              "linked": false,
+              "value": 1.0
+            },
+            "Transmission Weight": {
+              "linked": false,
+              "value": 0.0
+            }
+          }
+        },
+        {
+          "name": "Normal Map",
+          "type": "NORMAL_MAP"
+        },
+        {
+          "name": "Mapping",
+          "type": "MAPPING"
+        },
+        {
+          "name": "Texture Coordinate",
+          "type": "TEX_COORD"
+        },
+        {
+          "name": "Reroute",
+          "type": "REROUTE"
+        },
+        {
+          "name": "Image Texture",
+          "type": "TEX_IMAGE",
+          "image": "modular_chainlink_fence_posts_diff.png"
+        },
+        {
+          "name": "Image Texture.001",
+          "type": "TEX_IMAGE",
+          "image": "modular_chainlink_fence_posts_metal.png"
+        },
+        {
+          "name": "Image Texture.002",
+          "type": "TEX_IMAGE",
+          "image": "modular_chainlink_fence_posts_rough.png"
+        },
+        {
+          "name": "Image Texture.003",
+          "type": "TEX_IMAGE",
+          "image": "modular_chainlink_fence_posts_nor_gl.png"
+        }
+      ]
+    },
+    {
+      "name": "modular_chainlink_fence_wire",
+      "nodes": [
+        {
+          "name": "Frame",
+          "type": "FRAME"
+        },
+        {
+          "name": "Frame.001",
+          "type": "FRAME"
+        },
+        {
+          "name": "Mapping.001",
+          "type": "MAPPING"
+        },
+        {
+          "name": "Texture Coordinate.001",
+          "type": "TEX_COORD"
+        },
+        {
+          "name": "Normal Map",
+          "type": "NORMAL_MAP"
+        },
+        {
+          "name": "Image Texture",
+          "type": "TEX_IMAGE",
+          "image": "modular_chainlink_fence_wire_metal.png"
+        },
+        {
+          "name": "Image Texture.002",
+          "type": "TEX_IMAGE",
+          "image": "modular_chainlink_fence_wire_nor_gl.png"
+        },
+        {
+          "name": "Image Texture.003",
+          "type": "TEX_IMAGE",
+          "image": "modular_chainlink_fence_wire_alpha.png"
+        },
+        {
+          "name": "Reroute",
+          "type": "REROUTE"
+        },
+        {
+          "name": "Principled BSDF",
+          "type": "BSDF_PRINCIPLED",
+          "inputs": {
+            "Base Color": {
+              "linked": true,
+              "value": [
+                0.800000011920929,
+                0.800000011920929,
+                0.800000011920929,
+                1.0
+              ]
+            },
+            "Metallic": {
+              "linked": true,
+              "value": 0.0
+            },
+            "Roughness": {
+              "linked": true,
+              "value": 0.5
+            },
+            "IOR": {
+              "linked": false,
+              "value": 1.4500000476837158
+            },
+            "Alpha": {
+              "linked": true,
+              "value": 1.0
+            },
+            "Transmission Weight": {
+              "linked": false,
+              "value": 0.0
+            }
+          }
+        },
+        {
+          "name": "Material Output",
+          "type": "OUTPUT_MATERIAL"
+        },
+        {
+          "name": "Image Texture.001",
+          "type": "TEX_IMAGE",
+          "image": "modular_chainlink_fence_wire_rough.png"
+        },
+        {
+          "name": "Image Texture.004",
+          "type": "TEX_IMAGE",
+          "image": "modular_chainlink_fence_wire_diff.png"
+        }
+      ]
+    }
+  ],
+  "images": [
+    {
+      "name": "modular_chainlink_fence_posts_diff.png",
+      "size": [
+        4096,
+        4096
+      ],
+      "packed": false,
+      "filepath": "//textures\\modular_chainlink_fence_posts_diff_4k.png",
+      "colorspace": "sRGB",
+      "exists": true
+    },
+    {
+      "name": "modular_chainlink_fence_posts_metal.png",
+      "size": [
+        4096,
+        4096
+      ],
+      "packed": false,
+      "filepath": "//textures\\modular_chainlink_fence_posts_metal_4k.png",
+      "colorspace": "Non-Color",
+      "exists": true
+    },
+    {
+      "name": "modular_chainlink_fence_posts_nor_gl.png",
+      "size": [
+        4096,
+        4096
+      ],
+      "packed": false,
+      "filepath": "//textures\\modular_chainlink_fence_posts_nor_gl_4k.png",
+      "colorspace": "Non-Color",
+      "exists": true
+    },
+    {
+      "name": "modular_chainlink_fence_posts_rough.png",
+      "size": [
+        4096,
+        4096
+      ],
+      "packed": false,
+      "filepath": "//textures\\modular_chainlink_fence_posts_rough_4k.png",
+      "colorspace": "Non-Color",
+      "exists": true
+    },
+    {
+      "name": "modular_chainlink_fence_wire_alpha.png",
+      "size": [
+        4096,
+        4096
+      ],
+      "packed": false,
+      "filepath": "//textures\\modular_chainlink_fence_wire_alpha_4k.png",
+      "colorspace": "sRGB",
+      "exists": true
+    },
+    {
+      "name": "modular_chainlink_fence_wire_diff.png",
+      "size": [
+        4096,
+        4096
+      ],
+      "packed": false,
+      "filepath": "//textures\\modular_chainlink_fence_wire_diff_4k.png",
+      "colorspace": "sRGB",
+      "exists": true
+    },
+    {
+      "name": "modular_chainlink_fence_wire_metal.png",
+      "size": [
+        4096,
+        4096
+      ],
+      "packed": false,
+      "filepath": "//textures\\modular_chainlink_fence_wire_metal_4k.png",
+      "colorspace": "Non-Color",
+      "exists": true
+    },
+    {
+      "name": "modular_chainlink_fence_wire_nor_gl.png",
+      "size": [
+        4096,
+        4096
+      ],
+      "packed": false,
+      "filepath": "//textures\\modular_chainlink_fence_wire_nor_gl_4k.png",
+      "colorspace": "Non-Color",
+      "exists": true
+    },
+    {
+      "name": "modular_chainlink_fence_wire_rough.png",
+      "size": [
+        4096,
+        4096
+      ],
+      "packed": false,
+      "filepath": "//textures\\modular_chainlink_fence_wire_rough_4k.png",
+      "colorspace": "sRGB",
+      "exists": true
+    }
+  ],
+  "actions": []
+}

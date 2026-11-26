@@ -1,0 +1,11 @@
+{
+  "source": "C:\\Users\\rotn1\\Documents\\ChatGPT\\metaroy\\blender\\vegetation\\polyhaven\\dry_branches_medium_01\\dry_branches_medium_01_2k.blend",
+  "source_sha256": "0cb5b0623501dfbc3158db391574cf720815b40608d557922654ef19527359d2",
+  "output": "C:\\Users\\rotn1\\Documents\\ChatGPT\\metaroy\\blender\\vegetation\\prepared\\dry_branches_medium_01_2k.blend",
+  "output_sha256": "ea5cbcb80afdc1e21273e081e5efac5ebf4adbd38764db9022587237c483471e",
+  "hdr_source": "C:\\Users\\rotn1\\Documents\\ChatGPT\\metaroy\\blender\\vegetation\\extras\\abandoned_hopper_terminal_02_1k.hdr",
+  "hdr_sha256": "0aa221014ad9000f227ab4970ac291b85af7e52d6ca025e30c504088c28fda82",
+  "operation": "Relink missing World HDRI; pack all four images. No mesh/material edits.",
+  "blender": "4.5.15 LTS",
+  "source_unchanged": true
+}

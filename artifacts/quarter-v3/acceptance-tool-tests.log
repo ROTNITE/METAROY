@@ -1,0 +1,10 @@
+test_collision_is_rejected_before_unrelated_missing_fields (test_validation_evidence.EvidenceChecks.test_collision_is_rejected_before_unrelated_missing_fields) ... ok
+test_fire_smoke_uses_seventy_seconds (test_validation_evidence.EvidenceChecks.test_fire_smoke_uses_seventy_seconds) ... ok
+test_missing_or_extra_actual_events_fail (test_validation_evidence.EvidenceChecks.test_missing_or_extra_actual_events_fail) ... ok
+test_visibility_expiry_and_overlap_boundaries (test_validation_evidence.EvidenceChecks.test_visibility_expiry_and_overlap_boundaries) ... ok
+test_zero_probability_rejects_secondary_events (test_validation_evidence.EvidenceChecks.test_zero_probability_rejects_secondary_events) ... ok
+
+----------------------------------------------------------------------
+Ran 5 tests in 0.001s
+
+OK

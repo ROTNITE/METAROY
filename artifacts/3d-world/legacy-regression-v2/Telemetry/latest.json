@@ -1,0 +1,228 @@
+{
+	"kind": "3d_physics_sandbox_debug",
+	"time_s": 90.003968800359871,
+	"seed": 2026,
+	"discovered": 16,
+	"delivered": 1,
+	"contacts": 339636,
+	"collapse_released": true,
+	"physics_bodies": [
+		{
+			"initial_z_cm": 60,
+			"z_cm": 34.362124765691426,
+			"simulating": true,
+			"speed_cm_s": 0.011642439181202814
+		},
+		{
+			"initial_z_cm": 102,
+			"z_cm": 25.641329072424003,
+			"simulating": true,
+			"speed_cm_s": 26.538786742269199
+		},
+		{
+			"initial_z_cm": 144,
+			"z_cm": 359.10085719433744,
+			"simulating": true,
+			"speed_cm_s": 0
+		},
+		{
+			"initial_z_cm": 186,
+			"z_cm": 358.07860049944111,
+			"simulating": true,
+			"speed_cm_s": 0.040807676457272193
+		},
+		{
+			"initial_z_cm": 228,
+			"z_cm": 355.98799559381956,
+			"simulating": true,
+			"speed_cm_s": 0
+		},
+		{
+			"initial_z_cm": 270,
+			"z_cm": 69.853346224470343,
+			"simulating": true,
+			"speed_cm_s": 0
+		},
+		{
+			"initial_z_cm": 312,
+			"z_cm": 332.21386013136998,
+			"simulating": true,
+			"speed_cm_s": 0
+		},
+		{
+			"initial_z_cm": 354,
+			"z_cm": 26.206244867597082,
+			"simulating": true,
+			"speed_cm_s": 0.15861148625213212
+		},
+		{
+			"initial_z_cm": 396,
+			"z_cm": 332.6157415104949,
+			"simulating": true,
+			"speed_cm_s": 7.2252406906635433e-05
+		},
+		{
+			"initial_z_cm": 438,
+			"z_cm": 106.07244866556385,
+			"simulating": true,
+			"speed_cm_s": 0
+		},
+		{
+			"initial_z_cm": 480,
+			"z_cm": 44.535225036487965,
+			"simulating": true,
+			"speed_cm_s": 0.71189589793516783
+		},
+		{
+			"initial_z_cm": 522,
+			"z_cm": 37.959675638250125,
+			"simulating": true,
+			"speed_cm_s": 0.085968700065201187
+		},
+		{
+			"initial_z_cm": 564,
+			"z_cm": 341.37846576024776,
+			"simulating": true,
+			"speed_cm_s": 0
+		},
+		{
+			"initial_z_cm": 606,
+			"z_cm": 38.833368006781598,
+			"simulating": true,
+			"speed_cm_s": 0.11417916698560382
+		},
+		{
+			"initial_z_cm": 648,
+			"z_cm": 40.633565804746567,
+			"simulating": true,
+			"speed_cm_s": 0.17625652881317705
+		},
+		{
+			"initial_z_cm": 690,
+			"z_cm": 46.559289132155669,
+			"simulating": true,
+			"speed_cm_s": 0
+		},
+		{
+			"initial_z_cm": 732,
+			"z_cm": 165.96726034849127,
+			"simulating": true,
+			"speed_cm_s": 0.088566964779272575
+		},
+		{
+			"initial_z_cm": 774,
+			"z_cm": 402.56440069499274,
+			"simulating": true,
+			"speed_cm_s": 0
+		},
+		{
+			"initial_z_cm": 1050,
+			"z_cm": 432.64761238176686,
+			"simulating": true,
+			"speed_cm_s": 0
+		},
+		{
+			"initial_z_cm": 1135,
+			"z_cm": 511.10317466550543,
+			"simulating": true,
+			"speed_cm_s": 0
+		},
+		{
+			"initial_z_cm": 1220,
+			"z_cm": 180.45644649373332,
+			"simulating": true,
+			"speed_cm_s": 0.082147242410270216
+		},
+		{
+			"initial_z_cm": 1305,
+			"z_cm": 116.78931836747729,
+			"simulating": true,
+			"speed_cm_s": 0.19251178313103307
+		},
+		{
+			"initial_z_cm": 1390,
+			"z_cm": 107.96930508471971,
+			"simulating": true,
+			"speed_cm_s": 0.78671773337701789
+		}
+	],
+	"agents": [
+		{
+			"id": 0,
+			"aerial": true,
+			"state": "idle",
+			"energy": 73.895553588867188,
+			"x_cm": 12098.775341412367,
+			"y_cm": 1999.9635781097197,
+			"z_cm": 1900,
+			"distance_cm": 66818.2890625,
+			"simulating": true
+		},
+		{
+			"id": 1,
+			"aerial": true,
+			"state": "idle",
+			"energy": 75.294715881347656,
+			"x_cm": 16998.581346043407,
+			"y_cm": 1902.3639210425979,
+			"z_cm": 2050.0000000000932,
+			"distance_cm": 64789.875,
+			"simulating": true
+		},
+		{
+			"id": 2,
+			"aerial": true,
+			"state": "idle",
+			"energy": 71.883522033691406,
+			"x_cm": 2002.4986636264118,
+			"y_cm": 6902.51271000012,
+			"z_cm": 2200.0000000001055,
+			"distance_cm": 69734.5234375,
+			"simulating": true
+		},
+		{
+			"id": 0,
+			"aerial": false,
+			"state": "outbound",
+			"energy": 224.42942810058594,
+			"x_cm": 3743.6633015370858,
+			"y_cm": 2150.681960867842,
+			"z_cm": 32.999888122409303,
+			"distance_cm": 16382.29296875,
+			"simulating": true
+		},
+		{
+			"id": 1,
+			"aerial": false,
+			"state": "outbound",
+			"energy": 235.75350952148438,
+			"x_cm": 4046.7305404935892,
+			"y_cm": 2871.6700224749666,
+			"z_cm": 33.139990043702383,
+			"distance_cm": 5210.951171875,
+			"simulating": true
+		},
+		{
+			"id": 2,
+			"aerial": false,
+			"state": "outbound",
+			"energy": 235.98611450195312,
+			"x_cm": 4189.4939347063755,
+			"y_cm": 2789.336569195465,
+			"z_cm": 33.00660592470463,
+			"distance_cm": 4902.68310546875,
+			"simulating": true
+		},
+		{
+			"id": 3,
+			"aerial": false,
+			"state": "outbound",
+			"energy": 237.71257019042969,
+			"x_cm": 3067.937649004878,
+			"y_cm": 2167.5228812978862,
+			"z_cm": 33.000888141677137,
+			"distance_cm": 2817.7939453125,
+			"simulating": true
+		}
+	]
+}

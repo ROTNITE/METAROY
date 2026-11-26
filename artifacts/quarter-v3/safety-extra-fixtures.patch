@@ -1,0 +1,85 @@
+*** Begin Patch
+*** Update File: C:/Users/rotn1/Documents/ChatGPT/metaroy/unreal/MetaRescue/Source/MetaRescue/MRTrafficProbe.cpp
+@@
+-    else if(TrafficProbe==TEXT("obstacle_replace"))
++    else if(TrafficProbe==TEXT("air_obstacle"))
++    {
++        // Known first apartment facade: x1850,y1730, window centre z160.
++        // The narrow rigid body fits the aperture, the complete rotor span
++        // does not. The parallel street flight remains unobstructed.
++        Find(true,0)->MaxSpeed=250;
++        Route(true,0,FVector(1850,1000,160),90,{FVector(1850,2400,160)});
++        Route(true,1,FVector(1000,1000,160),90,{FVector(1000,4000,160)});
++    }
++    else if(TrafficProbe==TEXT("hold_resume"))
++    {
++        auto* A=Find(false,0);A->ResetTestPose(FVector(5500,7100,53),FRotator(0,90,0));
++        A->TargetIndex=0;A->State=TEXT("inbound");A->bCarrying=true;A->Body->SetMassOverrideInKg(NAME_None,320);
++        auto& T=Targets[0];T.bAssigned=T.bDiscovered=true;
++        T.Visual->AttachToActor(A,FAttachmentTransformRules::KeepWorldTransform);
++        T.Visual->SetActorRelativeLocation(FVector(0,0,15));T.Visual->SetActorRelativeRotation(FRotator::ZeroRotator);
++        A->AcceptRoute(TEXT("probe_initial"),{FVector(5500,14000,49)});
++    }
++    else if(TrafficProbe==TEXT("van_conflict"))
++    {
++        // Van starts at (-650,2750), parks at (-650,2100). This rover is
++        // physically outside its initial hull, but obstructs that parking path.
++        auto* A=Find(false,0);A->ResetTestPose(FVector(-650,2100,65),FRotator(0,-90,0));
++        A->Hold(TEXT("van_clearance_wait"));
++    }
++    else if(TrafficProbe==TEXT("obstacle_replace"))
+@@
+ void AMRWorld::TickTrafficProbe()
+ {
++    if(TrafficProbe==TEXT("hold_resume"))
++    {
++        AMRAgent* A=nullptr;for(AMRAgent* Candidate:Agents)if(Candidate->AgentKey()==TEXT("ground_0"))A=Candidate;
++        if(!A)return;
++        const float Time=GetWorld()->GetTimeSeconds();
++        if(Time>=35&&A->CommandId==TEXT("probe_hold"))
++        {
++            const FVector Before=A->GetActorLocation();
++            const bool Accepted=SubmitRouteMeters(TEXT("ground_0"),TEXT("resumed_loaded_route"),{FVector(55,140,.49)});
++            const bool OldHoldReplay=HoldAgent(TEXT("ground_0"),TEXT("probe_hold"));
++            if(!Accepted||!OldHoldReplay||A->CommandId!=TEXT("resumed_loaded_route")||A->bExternalHold||
++                !A->bCarrying||!Before.Equals(A->GetActorLocation(),.001))
++            {UE_LOG(LogTemp,Error,TEXT("MR hold resume invariant failed"));}
++            else AppendEvent(TEXT("traffic_probe_hold_resume_invariants_verified"));
++        }
++        else if(Time>=20&&A->CommandId==TEXT("probe_initial"))
++        {
++            const FVector Before=A->GetActorLocation();
++            const bool Held=HoldAgent(TEXT("ground_0"),TEXT("probe_hold"));
++            const bool Replay=HoldAgent(TEXT("ground_0"),TEXT("probe_hold"));
++            const bool Conflict=SubmitRouteMeters(TEXT("ground_0"),TEXT("probe_hold"),{FVector(1,1,.49)});
++            if(!Held||!Replay||Conflict||!A->bExternalHold||!A->bCarrying||!Before.Equals(A->GetActorLocation(),.001))
++            {UE_LOG(LogTemp,Error,TEXT("MR hold command invariant failed"));}
++            else AppendEvent(TEXT("traffic_probe_hold_started"));
++        }
++        return;
++    }
++    if(TrafficProbe==TEXT("van_conflict"))
++    {
++        for(AMRAgent* A:Agents)if(A->AgentKey()==TEXT("ground_0")&&A->CommandId==TEXT("van_clearance_wait")&&GetWorld()->GetTimeSeconds()>=20)
++        {
++            if(SubmitRouteMeters(TEXT("ground_0"),TEXT("clear_van_path"),{FVector(-6.5,15,.49),FVector(6,15,.49)}))
++                AppendEvent(TEXT("traffic_probe_van_path_clearing"));
++        }
++        return;
++    }
+     if(TrafficProbe!=TEXT("obstacle_replace")||bProbeRouteReplaced||GetWorld()->GetTimeSeconds()<40)return;
+*** Update File: C:/Users/rotn1/Documents/ChatGPT/metaroy/unreal/MetaRescue/Source/MetaRescue/MRAgentSafety.cpp
+@@
+-void AMRAgent::OnAgentHit(UPrimitiveComponent*,AActor* Other,UPrimitiveComponent*,FVector Impulse,const FHitResult&)
++void AMRAgent::OnAgentHit(UPrimitiveComponent*,AActor* Other,UPrimitiveComponent* OtherComponent,FVector Impulse,const FHitResult&)
+ {
+-    if(Cast<AMRAgent>(Other)&&((Mission&&Mission->bRescueQuarter)||Impulse.Size()>1))
++    bool Van=false;
++    if(Mission&&Mission->bRescueQuarter)
++        for(USceneComponent* C=OtherComponent;C;C=C->GetAttachParent())if(C->ComponentHasTag(TEXT("MRAsset:Van"))){Van=true;break;}
++    if((Cast<AMRAgent>(Other)||Van)&&((Mission&&Mission->bRescueQuarter)||Impulse.Size()>1))
+     {
+         AgentContacts++;
++        if(Van&&Mission){Mission->VanContacts++;Mission->AppendEvent(TEXT("agent_van_contact"),AgentId);}
+         if(Mission)Mission->AppendEvent(TEXT("agent_vehicle_contact"),AgentId);
+*** End Patch

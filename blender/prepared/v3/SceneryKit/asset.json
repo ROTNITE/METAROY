@@ -1,0 +1,497 @@
+{
+  "id": "SceneryKit",
+  "source": "blender/prepared/v2/UrbanKit/UrbanKit.blend",
+  "source_sha256": "202b11453946086b8f4365d82dfca510518a6233502f1f5a5261dcf0db739198",
+  "blend": "SceneryKit.blend",
+  "parts": [
+    {
+      "object": "fragment_0",
+      "role": "module",
+      "triangles": 24,
+      "location_m": [
+        0.0,
+        0.0,
+        0.04500000178813934
+      ],
+      "rotation_deg": [
+        0.0,
+        -0.0,
+        0.0
+      ],
+      "parent": null,
+      "dimensions_m": [
+        0.25999999046325684,
+        0.11999999731779099,
+        0.09000000357627869
+      ],
+      "materials": [
+        "M_V3_Brick"
+      ],
+      "fbx": "parts/fragment_0.fbx"
+    },
+    {
+      "object": "fragment_1",
+      "role": "module",
+      "triangles": 24,
+      "location_m": [
+        0.0,
+        0.0,
+        0.03750000149011612
+      ],
+      "rotation_deg": [
+        0.0,
+        -0.0,
+        0.0
+      ],
+      "parent": null,
+      "dimensions_m": [
+        0.20999999344348907,
+        0.10499999672174454,
+        0.07500000298023224
+      ],
+      "materials": [
+        "M_V3_Brick"
+      ],
+      "fbx": "parts/fragment_1.fbx"
+    },
+    {
+      "object": "fragment_2",
+      "role": "module",
+      "triangles": 24,
+      "location_m": [
+        0.0,
+        0.0,
+        0.0949999988079071
+      ],
+      "rotation_deg": [
+        0.0,
+        -0.0,
+        0.0
+      ],
+      "parent": null,
+      "dimensions_m": [
+        0.5799999833106995,
+        0.4000000059604645,
+        0.1899999976158142
+      ],
+      "materials": [
+        "M_V3_Concrete"
+      ],
+      "fbx": "parts/fragment_2.fbx"
+    },
+    {
+      "object": "fragment_3",
+      "role": "module",
+      "triangles": 24,
+      "location_m": [
+        0.0,
+        0.0,
+        0.125
+      ],
+      "rotation_deg": [
+        0.0,
+        -0.0,
+        0.0
+      ],
+      "parent": null,
+      "dimensions_m": [
+        0.8299999833106995,
+        0.5699999928474426,
+        0.25
+      ],
+      "materials": [
+        "M_V3_Concrete"
+      ],
+      "fbx": "parts/fragment_3.fbx"
+    },
+    {
+      "object": "fragment_4",
+      "role": "module",
+      "triangles": 108,
+      "location_m": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "rotation_deg": [
+        0.0,
+        -0.0,
+        0.0
+      ],
+      "parent": null,
+      "dimensions_m": [
+        1.7999999523162842,
+        0.2199999988079071,
+        1.3399999141693115
+      ],
+      "materials": [
+        "M_V3_Plaster",
+        "M_V3_Rust"
+      ],
+      "fbx": "parts/fragment_4.fbx"
+    },
+    {
+      "object": "room_0",
+      "role": "module",
+      "triangles": 1404,
+      "location_m": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "rotation_deg": [
+        0.0,
+        -0.0,
+        0.0
+      ],
+      "parent": null,
+      "dimensions_m": [
+        1.709999918937683,
+        1.9049999713897705,
+        1.100000023841858
+      ],
+      "materials": [
+        "M_V3_Fabric",
+        "M_V3_Wood",
+        "M_V3_Rust"
+      ],
+      "fbx": "parts/room_0.fbx"
+    },
+    {
+      "object": "room_1",
+      "role": "module",
+      "triangles": 756,
+      "location_m": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "rotation_deg": [
+        0.0,
+        -0.0,
+        0.0
+      ],
+      "parent": null,
+      "dimensions_m": [
+        2.200000047683716,
+        0.6499999761581421,
+        1.7000000476837158
+      ],
+      "materials": [
+        "M_V3_Wood",
+        "M_V3_Rust"
+      ],
+      "fbx": "parts/room_1.fbx"
+    },
+    {
+      "object": "room_2",
+      "role": "module",
+      "triangles": 864,
+      "location_m": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "rotation_deg": [
+        0.0,
+        -0.0,
+        0.0
+      ],
+      "parent": null,
+      "dimensions_m": [
+        1.7100000381469727,
+        1.9800000190734863,
+        0.800000011920929
+      ],
+      "materials": [
+        "M_V3_Fabric",
+        "M_V3_Wood",
+        "M_V3_Plaster"
+      ],
+      "fbx": "parts/room_2.fbx"
+    },
+    {
+      "object": "courtyard_bench",
+      "role": "module",
+      "triangles": 48,
+      "location_m": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "rotation_deg": [
+        0.0,
+        -0.0,
+        0.0
+      ],
+      "parent": null,
+      "dimensions_m": [
+        1.649999976158142,
+        0.39249998331069946,
+        1.0
+      ],
+      "materials": [
+        "M_V3_Wood",
+        "M_V3_Rust"
+      ],
+      "fbx": "parts/courtyard_bench.fbx"
+    },
+    {
+      "object": "service_bins",
+      "role": "module",
+      "triangles": 608,
+      "location_m": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "rotation_deg": [
+        0.0,
+        -0.0,
+        0.0
+      ],
+      "parent": null,
+      "dimensions_m": [
+        1.4700000286102295,
+        0.7099999785423279,
+        0.9850000143051147
+      ],
+      "materials": [
+        "M_V3_Fabric",
+        "M_V3_Rust"
+      ],
+      "fbx": "parts/service_bins.fbx"
+    },
+    {
+      "object": "roof_vent",
+      "role": "module",
+      "triangles": 192,
+      "location_m": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "rotation_deg": [
+        0.0,
+        -0.0,
+        0.0
+      ],
+      "parent": null,
+      "dimensions_m": [
+        1.2000000476837158,
+        0.9399999976158142,
+        0.6000000238418579
+      ],
+      "materials": [
+        "M_V3_Plaster",
+        "M_V3_Rust"
+      ],
+      "fbx": "parts/roof_vent.fbx"
+    }
+  ],
+  "materials": [
+    {
+      "name": "M_V3_Brick",
+      "glass": false,
+      "inputs": {
+        "Base Color": [
+          0.27000001072883606,
+          0.11999999731779099,
+          0.07000000029802322,
+          1.0
+        ],
+        "Metallic": 0.0,
+        "Roughness": 0.9599999785423279,
+        "Transmission Weight": 0.0,
+        "IOR": 1.5,
+        "Alpha": 1.0,
+        "Emission Color": [
+          1.0,
+          1.0,
+          1.0,
+          1.0
+        ],
+        "Emission Strength": 0.0
+      },
+      "links": [
+        {
+          "from": "Principled BSDF",
+          "output": "BSDF",
+          "to": "Material Output",
+          "input": "Surface"
+        }
+      ],
+      "images": []
+    },
+    {
+      "name": "M_V3_Concrete",
+      "glass": false,
+      "inputs": {
+        "Base Color": [
+          0.2800000011920929,
+          0.27000001072883606,
+          0.23999999463558197,
+          1.0
+        ],
+        "Metallic": 0.0,
+        "Roughness": 0.949999988079071,
+        "Transmission Weight": 0.0,
+        "IOR": 1.5,
+        "Alpha": 1.0,
+        "Emission Color": [
+          1.0,
+          1.0,
+          1.0,
+          1.0
+        ],
+        "Emission Strength": 0.0
+      },
+      "links": [
+        {
+          "from": "Principled BSDF",
+          "output": "BSDF",
+          "to": "Material Output",
+          "input": "Surface"
+        }
+      ],
+      "images": []
+    },
+    {
+      "name": "M_V3_Fabric",
+      "glass": false,
+      "inputs": {
+        "Base Color": [
+          0.10999999940395355,
+          0.14000000059604645,
+          0.11999999731779099,
+          1.0
+        ],
+        "Metallic": 0.0,
+        "Roughness": 0.9599999785423279,
+        "Transmission Weight": 0.0,
+        "IOR": 1.5,
+        "Alpha": 1.0,
+        "Emission Color": [
+          1.0,
+          1.0,
+          1.0,
+          1.0
+        ],
+        "Emission Strength": 0.0
+      },
+      "links": [
+        {
+          "from": "Principled BSDF",
+          "output": "BSDF",
+          "to": "Material Output",
+          "input": "Surface"
+        }
+      ],
+      "images": []
+    },
+    {
+      "name": "M_V3_Plaster",
+      "glass": false,
+      "inputs": {
+        "Base Color": [
+          0.4699999988079071,
+          0.4300000071525574,
+          0.3400000035762787,
+          1.0
+        ],
+        "Metallic": 0.0,
+        "Roughness": 0.9200000166893005,
+        "Transmission Weight": 0.0,
+        "IOR": 1.5,
+        "Alpha": 1.0,
+        "Emission Color": [
+          1.0,
+          1.0,
+          1.0,
+          1.0
+        ],
+        "Emission Strength": 0.0
+      },
+      "links": [
+        {
+          "from": "Principled BSDF",
+          "output": "BSDF",
+          "to": "Material Output",
+          "input": "Surface"
+        }
+      ],
+      "images": []
+    },
+    {
+      "name": "M_V3_Rust",
+      "glass": false,
+      "inputs": {
+        "Base Color": [
+          0.1599999964237213,
+          0.07500000298023224,
+          0.03500000014901161,
+          1.0
+        ],
+        "Metallic": 0.550000011920929,
+        "Roughness": 0.7599999904632568,
+        "Transmission Weight": 0.0,
+        "IOR": 1.5,
+        "Alpha": 1.0,
+        "Emission Color": [
+          1.0,
+          1.0,
+          1.0,
+          1.0
+        ],
+        "Emission Strength": 0.0
+      },
+      "links": [
+        {
+          "from": "Principled BSDF",
+          "output": "BSDF",
+          "to": "Material Output",
+          "input": "Surface"
+        }
+      ],
+      "images": []
+    },
+    {
+      "name": "M_V3_Wood",
+      "glass": false,
+      "inputs": {
+        "Base Color": [
+          0.14000000059604645,
+          0.10000000149011612,
+          0.06499999761581421,
+          1.0
+        ],
+        "Metallic": 0.0,
+        "Roughness": 0.8700000047683716,
+        "Transmission Weight": 0.0,
+        "IOR": 1.5,
+        "Alpha": 1.0,
+        "Emission Color": [
+          1.0,
+          1.0,
+          1.0,
+          1.0
+        ],
+        "Emission Strength": 0.0
+      },
+      "links": [
+        {
+          "from": "Principled BSDF",
+          "output": "BSDF",
+          "to": "Material Output",
+          "input": "Surface"
+        }
+      ],
+      "images": []
+    }
+  ],
+  "repairs": [
+    "Chipped closed debris with UVs, exposed rebar, three room modules, courtyard bench, utility bins and roof vent; original v2 unchanged."
+  ],
+  "actions": [],
+  "animation_runtime": "Rigid meshes driven from Unreal actuator state; Blender actions are inspectable demonstrations."
+}

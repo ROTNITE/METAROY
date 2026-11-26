@@ -1,0 +1,23 @@
+{
+  "python": "3.14.3",
+  "platform": "Windows-11-10.0.26300-SP0",
+  "seed_start": 2026,
+  "seeds": 3,
+  "mode": "mission",
+  "scenario": "urban",
+  "people": 16,
+  "map_size": 25,
+  "scouts": 3,
+  "rescuers": 4,
+  "probabilities": {
+    "collapse": 12,
+    "fire": 12,
+    "flood": 10,
+    "mud": 14,
+    "road_damage": 14,
+    "smoke": 15,
+    "low_visibility": 12,
+    "new_target": 20
+  },
+  "source_archive_sha256": "5b36cc61df3fda83e489fab70aa82a6d0eb695d04cc0c70a7be01c7edc2a3cdc"
+}

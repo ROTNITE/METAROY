@@ -1,0 +1,39 @@
+*** Begin Patch
+*** Update File: C:/Users/rotn1/Documents/ChatGPT/metaroy/unreal/MetaRescue/Source/MetaRescue/MRAgent.h
+@@
+     virtual void Tick(float Dt) override;
++    // Flush real movement through the same sampling instant as a pose read.
++    // Calling twice without intervening physics is deliberately a no-op.
++    void AccountExecutedMovement();
+*** Update File: C:/Users/rotn1/Documents/ChatGPT/metaroy/unreal/MetaRescue/Source/MetaRescue/MRAgent.cpp
+@@
+-void AMRAgent::Tick(float Dt)
++void AMRAgent::AccountExecutedMovement()
+ {
+-    Super::Tick(Dt);
+     if(!Mission||!Body->IsSimulatingPhysics())return;
+     const FVector Current=GetActorLocation();
+     const float Travel=FVector::Dist(Current,Previous);Previous=Current;
+     DistanceTravelled+=Travel;
+     const float SurfaceCost=Mission->bRescueQuarter&&!bAerial?Mission->QuerySurfaceMeters(Current/100.f).MovementCost:1.f;
+     Energy=FMath::Max(0.f,Energy-Travel/1000.f*(bAerial?.69f:State=="inbound"?1.18f:.82f)*SurfaceCost);
++}
++
++void AMRAgent::Tick(float Dt)
++{
++    Super::Tick(Dt);
++    if(!Mission||!Body->IsSimulatingPhysics())return;
++    AccountExecutedMovement();
++    const FVector Current=GetActorLocation();
+     if(Mission->bRescueQuarter)AnimateMechanisms(Dt);
+*** Update File: C:/Users/rotn1/Documents/ChatGPT/metaroy/unreal/MetaRescue/Source/MetaRescue/MRWorld.cpp
+@@
+     J->SetArrayField(TEXT("physics_bodies"),Bodies);TArray<TSharedPtr<FJsonValue>> Rows;
+     for(AMRAgent* A:Agents)
+     {
++        // World telemetry runs after physics, whereas the drive tick runs
++        // before it. Account that final physics step before pairing pose,
++        // distance and energy in one observation.
++        A->AccountExecutedMovement();
+         auto Row=MakeShared<FJsonObject>();const FVector P=A->GetActorLocation();
+*** End Patch

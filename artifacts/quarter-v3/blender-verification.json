@@ -1,0 +1,219 @@
+{
+  "passed": true,
+  "original_files_verified": 26,
+  "objects": [
+    {
+      "asset": "BuildingVariants",
+      "object": "ruin_full",
+      "vertices": 58016,
+      "height_m": 9.594071388244629,
+      "bottom_m": 0.0007420114707201719
+    },
+    {
+      "asset": "BuildingVariants",
+      "object": "ruin_low",
+      "vertices": 16872,
+      "height_m": 3.708733081817627,
+      "bottom_m": 0.0007420114707201719
+    },
+    {
+      "asset": "GlazingKit",
+      "object": "window_01_clean",
+      "vertices": 788,
+      "height_m": 2.299999713897705,
+      "bottom_m": -1.043081283569336e-07
+    },
+    {
+      "asset": "GlazingKit",
+      "object": "window_01_dirty",
+      "vertices": 788,
+      "height_m": 2.299999713897705,
+      "bottom_m": -1.043081283569336e-07
+    },
+    {
+      "asset": "GlazingKit",
+      "object": "window_01_cracked",
+      "vertices": 788,
+      "height_m": 2.299999713897705,
+      "bottom_m": -1.043081283569336e-07
+    },
+    {
+      "asset": "GlazingKit",
+      "object": "window_01_broken",
+      "vertices": 792,
+      "height_m": 2.299999713897705,
+      "bottom_m": -1.043081283569336e-07
+    },
+    {
+      "asset": "GlazingKit",
+      "object": "window_01_empty",
+      "vertices": 784,
+      "height_m": 2.299999713897705,
+      "bottom_m": -1.043081283569336e-07
+    },
+    {
+      "asset": "GlazingKit",
+      "object": "window_02_clean",
+      "vertices": 725,
+      "height_m": 1.9999996423721313,
+      "bottom_m": -3.8743019104003906e-07
+    },
+    {
+      "asset": "GlazingKit",
+      "object": "window_02_dirty",
+      "vertices": 725,
+      "height_m": 1.9999996423721313,
+      "bottom_m": -3.8743019104003906e-07
+    },
+    {
+      "asset": "GlazingKit",
+      "object": "window_02_cracked",
+      "vertices": 725,
+      "height_m": 1.9999996423721313,
+      "bottom_m": -3.8743019104003906e-07
+    },
+    {
+      "asset": "GlazingKit",
+      "object": "window_02_broken",
+      "vertices": 729,
+      "height_m": 1.9999996423721313,
+      "bottom_m": -3.8743019104003906e-07
+    },
+    {
+      "asset": "GlazingKit",
+      "object": "window_02_empty",
+      "vertices": 721,
+      "height_m": 1.9999996423721313,
+      "bottom_m": -3.8743019104003906e-07
+    },
+    {
+      "asset": "GlazingKit",
+      "object": "window_03_clean",
+      "vertices": 400,
+      "height_m": 1.684638261795044,
+      "bottom_m": -5.960464477539063e-08
+    },
+    {
+      "asset": "GlazingKit",
+      "object": "window_03_dirty",
+      "vertices": 400,
+      "height_m": 1.684638261795044,
+      "bottom_m": -5.960464477539063e-08
+    },
+    {
+      "asset": "GlazingKit",
+      "object": "window_03_cracked",
+      "vertices": 400,
+      "height_m": 1.684638261795044,
+      "bottom_m": -5.960464477539063e-08
+    },
+    {
+      "asset": "GlazingKit",
+      "object": "window_03_broken",
+      "vertices": 404,
+      "height_m": 1.684638261795044,
+      "bottom_m": -5.960464477539063e-08
+    },
+    {
+      "asset": "GlazingKit",
+      "object": "window_03_empty",
+      "vertices": 396,
+      "height_m": 1.684638261795044,
+      "bottom_m": -5.960464477539063e-08
+    },
+    {
+      "asset": "SceneryKit",
+      "object": "fragment_0",
+      "vertices": 14,
+      "height_m": 0.09000000357627869,
+      "bottom_m": 0.0
+    },
+    {
+      "asset": "SceneryKit",
+      "object": "fragment_1",
+      "vertices": 14,
+      "height_m": 0.07500000298023224,
+      "bottom_m": 0.0
+    },
+    {
+      "asset": "SceneryKit",
+      "object": "fragment_2",
+      "vertices": 14,
+      "height_m": 0.1899999976158142,
+      "bottom_m": 0.0
+    },
+    {
+      "asset": "SceneryKit",
+      "object": "fragment_3",
+      "vertices": 14,
+      "height_m": 0.25,
+      "bottom_m": 0.0
+    },
+    {
+      "asset": "SceneryKit",
+      "object": "fragment_4",
+      "vertices": 62,
+      "height_m": 1.3399999141693115,
+      "bottom_m": 0.0
+    },
+    {
+      "asset": "SceneryKit",
+      "object": "room_0",
+      "vertices": 504,
+      "height_m": 1.100000023841858,
+      "bottom_m": 0.0
+    },
+    {
+      "asset": "SceneryKit",
+      "object": "room_1",
+      "vertices": 392,
+      "height_m": 1.7000000476837158,
+      "bottom_m": 0.0
+    },
+    {
+      "asset": "SceneryKit",
+      "object": "room_2",
+      "vertices": 224,
+      "height_m": 0.800000011920929,
+      "bottom_m": 0.0
+    },
+    {
+      "asset": "SceneryKit",
+      "object": "courtyard_bench",
+      "vertices": 32,
+      "height_m": 1.0,
+      "bottom_m": 0.0
+    },
+    {
+      "asset": "SceneryKit",
+      "object": "service_bins",
+      "vertices": 224,
+      "height_m": 0.9650000333786011,
+      "bottom_m": 0.019999980926513672
+    },
+    {
+      "asset": "SceneryKit",
+      "object": "roof_vent",
+      "vertices": 112,
+      "height_m": 0.6000000238418579,
+      "bottom_m": 0.0
+    }
+  ],
+  "glass_surface_areas_m2": {
+    "window_01_clean": 2.3793652057647705,
+    "window_01_dirty": 2.3793652057647705,
+    "window_01_cracked": 2.3793652057647705,
+    "window_01_broken": 1.677333414554596,
+    "window_01_empty": 0,
+    "window_02_clean": 2.3793652057647705,
+    "window_02_dirty": 2.3793652057647705,
+    "window_02_cracked": 2.3793652057647705,
+    "window_02_broken": 1.677333414554596,
+    "window_02_empty": 0,
+    "window_03_clean": 2.234757423400879,
+    "window_03_dirty": 2.234757423400879,
+    "window_03_cracked": 2.234757423400879,
+    "window_03_broken": 1.5753921270370483,
+    "window_03_empty": 0
+  }
+}

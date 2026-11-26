@@ -1,0 +1,26 @@
+{
+  "source_version": "untouched user v0.3.0",
+  "scope": "direct boundary-method probes, not full benchmark outcomes",
+  "checks": [
+    {
+      "name": "service_energy_guard",
+      "passed": false,
+      "available": 0.1,
+      "charged_consumption": 2.5,
+      "remaining": 0,
+      "rescued_after_action": true
+    },
+    {
+      "name": "continuous_replan_origin",
+      "passed": false,
+      "actual_origin": [
+        1.4,
+        1.0
+      ],
+      "new_path_origin": [
+        1,
+        1
+      ]
+    }
+  ]
+}

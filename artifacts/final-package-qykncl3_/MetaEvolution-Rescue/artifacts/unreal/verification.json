@@ -1,0 +1,43 @@
+{
+  "date": "2026-11-09",
+  "engine": "5.8.4",
+  "scenario_source": "user benchmark v0.3, probabilities disabled for static 3D snapshot",
+  "build_exit": 0,
+  "physics_smoke_seconds": 90.00532291358104,
+  "physical_agents": 7,
+  "physical_debris": 23,
+  "discovered": 16,
+  "delivered": 1,
+  "manual_ui_verified": "partial",
+  "v02_import_tests_passed": 16,
+  "v03_import_tests_passed": 30,
+  "root_contract_tests_passed": 15,
+  "v03_boundary_audit": "2 known failing checks; original import unchanged",
+  "setup_preserved_scene": true,
+  "scene_sha256": "4336aceb0afd4b5bde8c77d2f55fee9342537fcbaf9de8e2e5c8d0fbc39c743a",
+  "manual_ui_verified_actions": [
+    "Tab overview",
+    "wheel zoom",
+    "W pan",
+    "Space pause/resume",
+    "F9 screenshot"
+  ],
+  "manual_ui_not_verified_actions": [
+    "RMB orbit",
+    "individual A/S/D",
+    "F early collapse"
+  ],
+  "camera_pause_limitation": "View changes while paused are displayed after resuming",
+  "manual_ui_initial_errors": [
+    "GetCursorPos failed: access denied (0x80070005)",
+    "IGraphicsCaptureItemInterop.CreateForMonitor failed (0x80070057)"
+  ],
+  "manual_ui_capture_recovered": true,
+  "extracted_project_map_verified": {
+    "passed": true,
+    "native_actor": "MRWorld",
+    "static_mesh_components": 1343,
+    "scenario_source": "0.3",
+    "map": "/Game/Maps/RescueDistrict"
+  }
+}

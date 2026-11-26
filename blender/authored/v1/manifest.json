@@ -1,0 +1,419 @@
+{
+  "assets": [
+    {
+      "id": "Medical",
+      "fbx": "Medical/Medical.fbx",
+      "blend": "Medical/Medical.blend",
+      "dimensions_m": [
+        7.2239990234375,
+        3.1500000953674316,
+        3.554999828338623
+      ],
+      "triangles": 10140,
+      "materials": [
+        {
+          "slot": 0,
+          "name": "M_A_Metal",
+          "palette": "Metal"
+        },
+        {
+          "slot": 1,
+          "name": "M_A_Teal",
+          "palette": "Teal"
+        },
+        {
+          "slot": 2,
+          "name": "M_A_White",
+          "palette": "White"
+        },
+        {
+          "slot": 3,
+          "name": "M_A_Glass",
+          "palette": "Glass"
+        },
+        {
+          "slot": 4,
+          "name": "M_A_Dark",
+          "palette": "Dark"
+        }
+      ]
+    },
+    {
+      "id": "Relay",
+      "fbx": "Relay/Relay.fbx",
+      "blend": "Relay/Relay.blend",
+      "dimensions_m": [
+        1.4198546409606934,
+        1.5658825635910034,
+        3.950000286102295
+      ],
+      "triangles": 1784,
+      "materials": [
+        {
+          "slot": 0,
+          "name": "M_A_Dark",
+          "palette": "Dark"
+        },
+        {
+          "slot": 1,
+          "name": "M_A_Teal",
+          "palette": "Teal"
+        },
+        {
+          "slot": 2,
+          "name": "M_A_Metal",
+          "palette": "Metal"
+        },
+        {
+          "slot": 3,
+          "name": "M_A_White",
+          "palette": "White"
+        }
+      ]
+    },
+    {
+      "id": "Sensor",
+      "fbx": "Sensor/Sensor.fbx",
+      "blend": "Sensor/Sensor.blend",
+      "dimensions_m": [
+        0.7821776270866394,
+        0.8930408358573914,
+        2.036372184753418
+      ],
+      "triangles": 1636,
+      "materials": [
+        {
+          "slot": 0,
+          "name": "M_A_Metal",
+          "palette": "Metal"
+        },
+        {
+          "slot": 1,
+          "name": "M_A_Teal",
+          "palette": "Teal"
+        },
+        {
+          "slot": 2,
+          "name": "M_A_Dark",
+          "palette": "Dark"
+        },
+        {
+          "slot": 3,
+          "name": "M_A_Glass",
+          "palette": "Glass"
+        }
+      ]
+    },
+    {
+      "id": "Dock",
+      "fbx": "Dock/Dock.fbx",
+      "blend": "Dock/Dock.blend",
+      "dimensions_m": [
+        3.1599998474121094,
+        1.850000023841858,
+        0.6000000238418579
+      ],
+      "triangles": 684,
+      "materials": [
+        {
+          "slot": 0,
+          "name": "M_A_Dark",
+          "palette": "Dark"
+        },
+        {
+          "slot": 1,
+          "name": "M_A_Metal",
+          "palette": "Metal"
+        },
+        {
+          "slot": 2,
+          "name": "M_A_Orange",
+          "palette": "Orange"
+        },
+        {
+          "slot": 3,
+          "name": "M_A_Teal",
+          "palette": "Teal"
+        }
+      ]
+    },
+    {
+      "id": "Barrier",
+      "fbx": "Barrier/Barrier.fbx",
+      "blend": "Barrier/Barrier.blend",
+      "dimensions_m": [
+        2.0,
+        0.6000000238418579,
+        0.8500000238418579
+      ],
+      "triangles": 1020,
+      "materials": [
+        {
+          "slot": 0,
+          "name": "M_A_Concrete",
+          "palette": "Concrete"
+        },
+        {
+          "slot": 1,
+          "name": "M_A_Orange",
+          "palette": "Orange"
+        }
+      ]
+    },
+    {
+      "id": "Lamp",
+      "fbx": "Lamp/Lamp.fbx",
+      "blend": "Lamp/Lamp.blend",
+      "dimensions_m": [
+        1.4249999523162842,
+        0.30000001192092896,
+        6.25499963760376
+      ],
+      "triangles": 788,
+      "materials": [
+        {
+          "slot": 0,
+          "name": "M_A_Metal",
+          "palette": "Metal"
+        },
+        {
+          "slot": 1,
+          "name": "M_A_Dark",
+          "palette": "Dark"
+        },
+        {
+          "slot": 2,
+          "name": "M_A_White",
+          "palette": "White"
+        }
+      ]
+    },
+    {
+      "id": "Crate",
+      "fbx": "Crate/Crate.fbx",
+      "blend": "Crate/Crate.blend",
+      "dimensions_m": [
+        0.800000011920929,
+        0.5234999656677246,
+        0.5199999809265137
+      ],
+      "triangles": 888,
+      "materials": [
+        {
+          "slot": 0,
+          "name": "M_A_Teal",
+          "palette": "Teal"
+        },
+        {
+          "slot": 1,
+          "name": "M_A_Rubber",
+          "palette": "Rubber"
+        },
+        {
+          "slot": 2,
+          "name": "M_A_Metal",
+          "palette": "Metal"
+        },
+        {
+          "slot": 3,
+          "name": "M_A_White",
+          "palette": "White"
+        }
+      ]
+    },
+    {
+      "id": "Fence",
+      "fbx": "Fence/Fence.fbx",
+      "blend": "Fence/Fence.blend",
+      "dimensions_m": [
+        3.239999771118164,
+        0.23999999463558197,
+        1.7999999523162842
+      ],
+      "triangles": 1728,
+      "materials": [
+        {
+          "slot": 0,
+          "name": "M_A_Metal",
+          "palette": "Metal"
+        },
+        {
+          "slot": 1,
+          "name": "M_A_Dark",
+          "palette": "Dark"
+        }
+      ]
+    },
+    {
+      "id": "Person",
+      "fbx": "Person/Person.fbx",
+      "blend": "Person/Person.blend",
+      "dimensions_m": [
+        1.8000000715255737,
+        0.6600000262260437,
+        0.33000001311302185
+      ],
+      "triangles": 4596,
+      "materials": [
+        {
+          "slot": 0,
+          "name": "M_A_Red",
+          "palette": "Red"
+        },
+        {
+          "slot": 1,
+          "name": "M_A_Dark",
+          "palette": "Dark"
+        },
+        {
+          "slot": 2,
+          "name": "M_A_Rubber",
+          "palette": "Rubber"
+        }
+      ]
+    },
+    {
+      "id": "Slab",
+      "fbx": "Slab/Slab.fbx",
+      "blend": "Slab/Slab.blend",
+      "dimensions_m": [
+        3.045027494430542,
+        1.5772671699523926,
+        0.2860654890537262
+      ],
+      "triangles": 244,
+      "materials": [
+        {
+          "slot": 0,
+          "name": "M_A_Concrete",
+          "palette": "Concrete"
+        },
+        {
+          "slot": 1,
+          "name": "M_A_Rust",
+          "palette": "Rust"
+        }
+      ]
+    },
+    {
+      "id": "Beam",
+      "fbx": "Beam/Beam.fbx",
+      "blend": "Beam/Beam.blend",
+      "dimensions_m": [
+        3.0,
+        0.25999999046325684,
+        0.375
+      ],
+      "triangles": 324,
+      "materials": [
+        {
+          "slot": 0,
+          "name": "M_A_Rust",
+          "palette": "Rust"
+        },
+        {
+          "slot": 1,
+          "name": "M_A_Metal",
+          "palette": "Metal"
+        }
+      ]
+    },
+    {
+      "id": "Doorway",
+      "fbx": "Doorway/Doorway.fbx",
+      "blend": "Doorway/Doorway.blend",
+      "dimensions_m": [
+        3.0,
+        0.3199999928474426,
+        3.200000047683716
+      ],
+      "triangles": 324,
+      "materials": [
+        {
+          "slot": 0,
+          "name": "M_A_Concrete",
+          "palette": "Concrete"
+        }
+      ]
+    },
+    {
+      "id": "LoadingRamp",
+      "fbx": "LoadingRamp/LoadingRamp.fbx",
+      "blend": "LoadingRamp/LoadingRamp.blend",
+      "dimensions_m": [
+        1.2999999523162842,
+        0.8449999690055847,
+        0.12999999523162842
+      ],
+      "triangles": 1620,
+      "materials": [
+        {
+          "slot": 0,
+          "name": "M_A_Metal",
+          "palette": "Metal"
+        },
+        {
+          "slot": 1,
+          "name": "M_A_Dark",
+          "palette": "Dark"
+        }
+      ]
+    },
+    {
+      "id": "Rubble",
+      "fbx": "Rubble/Rubble.fbx",
+      "blend": "Rubble/Rubble.blend",
+      "dimensions_m": [
+        2.1992897987365723,
+        1.7977192401885986,
+        0.6498650908470154
+      ],
+      "triangles": 5100,
+      "materials": [
+        {
+          "slot": 0,
+          "name": "M_A_Brick",
+          "palette": "Brick"
+        },
+        {
+          "slot": 1,
+          "name": "M_A_Concrete",
+          "palette": "Concrete"
+        }
+      ]
+    },
+    {
+      "id": "UtilityTunnel",
+      "fbx": "UtilityTunnel/UtilityTunnel.fbx",
+      "blend": "UtilityTunnel/UtilityTunnel.blend",
+      "dimensions_m": [
+        12.0,
+        14.0,
+        5.5
+      ],
+      "triangles": 8368,
+      "materials": [
+        {
+          "slot": 0,
+          "name": "M_A_Concrete",
+          "palette": "Concrete"
+        },
+        {
+          "slot": 1,
+          "name": "M_A_Ground",
+          "palette": "Ground"
+        },
+        {
+          "slot": 2,
+          "name": "M_A_Metal",
+          "palette": "Metal"
+        },
+        {
+          "slot": 3,
+          "name": "M_A_Rust",
+          "palette": "Rust"
+        }
+      ]
+    }
+  ]
+}

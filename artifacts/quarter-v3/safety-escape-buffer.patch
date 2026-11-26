@@ -1,0 +1,40 @@
+*** Begin Patch
+*** Update File: C:/Users/rotn1/Documents/ChatGPT/metaroy/unreal/MetaRescue/Source/MetaRescue/MRAgentSafety.cpp
+@@
+     return Closest;
+ }
++bool CanLeaveClearanceBuffer(FVector Offset,FVector ActualRelative,double PredictedClosestSquared,double HardSeparation,double SoftSeparation)
++{
++    const double CurrentSquared=Offset.SizeSquared();
++    // The extra clearance is a braking margin, not an impassable wall around
++    // parked neighbouring docks. Permit only a trajectory that does not reduce
++    // their existing distance, with physical envelopes already separate and
++    // actual velocity stationary, tangent, or receding.
++    return CurrentSquared<SoftSeparation*SoftSeparation&&CurrentSquared>=HardSeparation*HardSeparation&&
++        PredictedClosestSquared>=CurrentSquared-.01&&FVector::DotProduct(Offset,ActualRelative)<=1.;
++}
+ }
+@@
+             const float Separation=SafetyRadius()+Other->SafetyRadius()+(AirPair?100.f:65.f);
+             FVector OtherActual=Other->Body->GetPhysicsLinearVelocity();if(!AirPair)OtherActual.Z=0;
++            FVector OwnActual=V;if(!AirPair)OwnActual.Z=0;
++            const double PredictedClosest=FiniteClosestSquared(PredictionP,OwnPlan,OwnEnd,PredictionQ,OtherPlan,OtherEnd,3);
++            if(CanLeaveClearanceBuffer(Offset,OwnActual-OtherActual,PredictedClosest,SafetyRadius()+Other->SafetyRadius(),Separation))continue;
+@@
+-            if(FiniteClosestSquared(PredictionP,OwnPlan,OwnEnd,PredictionQ,OtherPlan,OtherEnd,3)>=Separation*Separation)continue;
++            if(PredictedClosest>=Separation*Separation)continue;
+@@
+     TestTrue(TEXT("vertical height may finish before horizontal motion"),
+         FMath::IsNearlyEqual(Distance(Zero,FVector(300,0,200),FVector(600,0,100),FVector(1000,0,100),Zero,FVector(1000,0,100)),400.,.001));
++    const double ExitClosest=FiniteClosestSquared(Zero,FVector(0,-100,0),FVector(0,-950,0),FVector(330,0,0),Zero,FVector(330,0,0),3);
++    TestTrue(TEXT("a tangent departure can leave a neighbouring dock's soft margin"),
++        CanLeaveClearanceBuffer(FVector(330,0,0),FVector(0,-100,0),ExitClosest,290,355));
++    TestFalse(TEXT("a vehicle moving toward the neighbour cannot escape the margin"),
++        CanLeaveClearanceBuffer(FVector(330,0,0),FVector(20,0,0),ExitClosest,290,355));
++    TestFalse(TEXT("a future approaching trajectory cannot escape the margin"),
++        CanLeaveClearanceBuffer(FVector(330,0,0),Zero,300.*300.,290,355));
++    TestFalse(TEXT("overlapping physical envelopes are never exempted"),
++        CanLeaveClearanceBuffer(FVector(270,0,0),Zero,270.*270.,290,355));
+     return true;
+ }
+*** End Patch

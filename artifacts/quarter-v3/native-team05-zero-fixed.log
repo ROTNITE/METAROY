@@ -1,0 +1,21 @@
+team05-fixed30-zero native exit 0 evidence C:\Users\rotn1\Documents\ChatGPT\metaroy\artifacts\quarter-v3\runs\team05-fixed30-zero
+Traceback (most recent call last):
+  File "C:\Users\rotn1\Documents\ChatGPT\metaroy\unreal\tools\run_quarter_validation.py", line 72, in run
+    result=verify(out)
+  File "C:\Users\rotn1\Documents\ChatGPT\metaroy\unreal\tools\check_quarter_v3_run.py", line 255, in verify
+    assert final['requested_fixed_fps']==request.get('requested_fixed_fps',0),'fixed rate metadata mismatch'
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: fixed rate metadata mismatch
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "C:\Users\rotn1\Documents\ChatGPT\metaroy\unreal\tools\run_quarter_validation.py", line 125, in <module>
+    if __name__=='__main__':main()
+                            ~~~~^^
+  File "C:\Users\rotn1\Documents\ChatGPT\metaroy\unreal\tools\run_quarter_validation.py", line 121, in main
+    run(args.prefix+'-zero',options,duration(160))
+    ~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\rotn1\Documents\ChatGPT\metaroy\unreal\tools\run_quarter_validation.py", line 77, in run
+    raise RuntimeError('Native validation failed: '+str(error)+'; evidence '+str(out)) from error
+RuntimeError: Native validation failed: fixed rate metadata mismatch; evidence C:\Users\rotn1\Documents\ChatGPT\metaroy\artifacts\quarter-v3\runs\team05-fixed30-zero

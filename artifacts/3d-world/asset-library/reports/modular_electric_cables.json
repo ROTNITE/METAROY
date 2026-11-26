@@ -1,0 +1,2255 @@
+{
+  "id": "modular_electric_cables",
+  "source": "blender/vendor/modular_electric_cables_4k/modular_electric_cables_4k.blend",
+  "sha256": "15ca91e7ca4fe1a8c2209c786e88c59b3de06041b2489a3b685e8282c5142878",
+  "units": {
+    "system": "METRIC",
+    "scale_length": 1.0
+  },
+  "bounds_min": [
+    -0.7286150455474854,
+    -0.10725211352109909,
+    -8.305643284245434e-09
+  ],
+  "bounds_max": [
+    1.348017692565918,
+    0.10725204646587372,
+    0.757252037525177
+  ],
+  "dimensions": [
+    2.0766327381134033,
+    0.2145041525363922,
+    0.757252037525177
+  ],
+  "objects": [
+    {
+      "name": "cable_10cm",
+      "type": "MESH",
+      "parent": null,
+      "location": [
+        0.0,
+        0.0,
+        0.1499999761581421
+      ],
+      "rotation": [
+        0.0,
+        -0.0,
+        -1.5707963705062866
+      ],
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "hidden_render": false,
+      "vertices": 18,
+      "triangles": 24,
+      "uv_layers": [
+        "UVMap"
+      ],
+      "bounds_min": [
+        -0.004855804610997438,
+        -0.015606999397277832,
+        0.1499999761581421
+      ],
+      "bounds_max": [
+        0.004855804145336151,
+        -0.004392985720187426,
+        0.2499999701976776
+      ],
+      "materials": [
+        "modular_electric_cables"
+      ],
+      "modifiers": []
+    },
+    {
+      "name": "cable_2cm",
+      "type": "MESH",
+      "parent": null,
+      "location": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "rotation": [
+        0.0,
+        -0.0,
+        -1.5707963705062866
+      ],
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "hidden_render": false,
+      "vertices": 12,
+      "triangles": 12,
+      "uv_layers": [
+        "UVMap"
+      ],
+      "bounds_min": [
+        -0.004855806939303875,
+        -0.015693778172135353,
+        -8.305643284245434e-09
+      ],
+      "bounds_max": [
+        0.004855806473642588,
+        -0.004479764495044947,
+        0.020000018179416656
+      ],
+      "materials": [
+        "modular_electric_cables"
+      ],
+      "modifiers": []
+    },
+    {
+      "name": "cable_3way_junction",
+      "type": "MESH",
+      "parent": null,
+      "location": [
+        0.6995082497596741,
+        -5.960464477539063e-08,
+        0.5499999523162842
+      ],
+      "rotation": [
+        0.0,
+        -0.0,
+        -1.5707963705062866
+      ],
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "hidden_render": false,
+      "vertices": 758,
+      "triangles": 1464,
+      "uv_layers": [
+        "UVMap"
+      ],
+      "bounds_min": [
+        0.6936115622520447,
+        -0.02824537828564644,
+        0.5485624074935913
+      ],
+      "bounds_max": [
+        0.8808144927024841,
+        0.0003012412053067237,
+        0.757252037525177
+      ],
+      "materials": [
+        "modular_electric_cables"
+      ],
+      "modifiers": []
+    },
+    {
+      "name": "cable_5cm",
+      "type": "MESH",
+      "parent": null,
+      "location": [
+        0.0,
+        0.0,
+        0.04999999329447746
+      ],
+      "rotation": [
+        0.0,
+        -0.0,
+        -1.5707963705062866
+      ],
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "hidden_render": false,
+      "vertices": 12,
+      "triangles": 12,
+      "uv_layers": [
+        "UVMap"
+      ],
+      "bounds_min": [
+        -0.004855805076658726,
+        -0.015693778172135353,
+        0.049999989569187164
+      ],
+      "bounds_max": [
+        0.004855804610997438,
+        -0.004479764495044947,
+        0.10000000894069672
+      ],
+      "materials": [
+        "modular_electric_cables"
+      ],
+      "modifiers": []
+    },
+    {
+      "name": "cable_box_3way",
+      "type": "MESH",
+      "parent": null,
+      "location": [
+        -0.19999998807907104,
+        1.4901161193847656e-08,
+        0.19999997317790985
+      ],
+      "rotation": [
+        0.0,
+        -0.0,
+        -1.5707963705062866
+      ],
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "hidden_render": false,
+      "vertices": 794,
+      "triangles": 1520,
+      "uv_layers": [
+        "UVMap"
+      ],
+      "bounds_min": [
+        -0.23229128122329712,
+        -0.03663782402873039,
+        0.19999997317790985
+      ],
+      "bounds_max": [
+        -0.09999999403953552,
+        0.0002144933823728934,
+        0.3999999761581421
+      ],
+      "materials": [
+        "modular_electric_cables_boxes"
+      ],
+      "modifiers": []
+    },
+    {
+      "name": "cable_box_4way",
+      "type": "MESH",
+      "parent": null,
+      "location": [
+        -0.19999998807907104,
+        1.4901161193847656e-08,
+        0.44999995827674866
+      ],
+      "rotation": [
+        0.0,
+        -0.0,
+        -1.5707963705062866
+      ],
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "hidden_render": false,
+      "vertices": 932,
+      "triangles": 1780,
+      "uv_layers": [
+        "UVMap"
+      ],
+      "bounds_min": [
+        -0.29999998211860657,
+        -0.03663782402873039,
+        0.44999995827674866
+      ],
+      "bounds_max": [
+        -0.09999999403953552,
+        0.00021449633641168475,
+        0.6499999761581421
+      ],
+      "materials": [
+        "modular_electric_cables_boxes"
+      ],
+      "modifiers": []
+    },
+    {
+      "name": "cable_box_double",
+      "type": "MESH",
+      "parent": null,
+      "location": [
+        -0.30000001192092896,
+        0.0,
+        0.0
+      ],
+      "rotation": [
+        0.0,
+        -0.0,
+        -1.5707963705062866
+      ],
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "hidden_render": false,
+      "vertices": 932,
+      "triangles": 1780,
+      "uv_layers": [
+        "UVMap"
+      ],
+      "bounds_min": [
+        -0.3222912847995758,
+        -0.03663783520460129,
+        -4.2450790105341696e-10
+      ],
+      "bounds_max": [
+        -0.25770869851112366,
+        0.0002144780446542427,
+        0.19999998807907104
+      ],
+      "materials": [
+        "modular_electric_cables_boxes"
+      ],
+      "modifiers": []
+    },
+    {
+      "name": "cable_box_double_to_single",
+      "type": "MESH",
+      "parent": null,
+      "location": [
+        -0.4000000059604645,
+        2.9802322387695312e-08,
+        0.0
+      ],
+      "rotation": [
+        0.0,
+        -0.0,
+        -1.5707963705062866
+      ],
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "hidden_render": false,
+      "vertices": 794,
+      "triangles": 1520,
+      "uv_layers": [
+        "UVMap"
+      ],
+      "bounds_min": [
+        -0.42229127883911133,
+        -0.0366378054022789,
+        -4.2450790105341696e-10
+      ],
+      "bounds_max": [
+        -0.3577086925506592,
+        0.0002145078469766304,
+        0.19999998807907104
+      ],
+      "materials": [
+        "modular_electric_cables_boxes"
+      ],
+      "modifiers": []
+    },
+    {
+      "name": "cable_box_double_to_single_2",
+      "type": "MESH",
+      "parent": null,
+      "location": [
+        -0.3999999761581421,
+        2.9802322387695312e-08,
+        0.3999999463558197
+      ],
+      "rotation": [
+        0.0,
+        -0.0,
+        -1.5707963705062866
+      ],
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "hidden_render": false,
+      "vertices": 794,
+      "triangles": 1520,
+      "uv_layers": [
+        "UVMap"
+      ],
+      "bounds_min": [
+        -0.42229121923446655,
+        -0.03655103221535683,
+        0.3999999463558197
+      ],
+      "bounds_max": [
+        -0.2999999523162842,
+        0.0003012866072822362,
+        0.5322912335395813
+      ],
+      "materials": [
+        "modular_electric_cables_boxes"
+      ],
+      "modifiers": []
+    },
+    {
+      "name": "cable_box_turn",
+      "type": "MESH",
+      "parent": null,
+      "location": [
+        -0.19999998807907104,
+        1.4901161193847656e-08,
+        0.0
+      ],
+      "rotation": [
+        0.0,
+        -0.0,
+        -1.5707963705062866
+      ],
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "hidden_render": false,
+      "vertices": 656,
+      "triangles": 1260,
+      "uv_layers": [
+        "UVMap"
+      ],
+      "bounds_min": [
+        -0.23229128122329712,
+        -0.03663782402873039,
+        -4.245078177866901e-10
+      ],
+      "bounds_max": [
+        -0.09999999403953552,
+        0.0002144933823728934,
+        0.1322912871837616
+      ],
+      "materials": [
+        "modular_electric_cables_boxes"
+      ],
+      "modifiers": []
+    },
+    {
+      "name": "cable_bridge_1",
+      "type": "MESH",
+      "parent": null,
+      "location": [
+        0.04999999701976776,
+        -3.725290298461914e-09,
+        0.29999998211860657
+      ],
+      "rotation": [
+        0.0,
+        -0.0,
+        -1.5707963705062866
+      ],
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "hidden_render": false,
+      "vertices": 272,
+      "triangles": 524,
+      "uv_layers": [
+        "UVMap"
+      ],
+      "bounds_min": [
+        0.029185457155108452,
+        -0.045603249222040176,
+        0.29999998211860657
+      ],
+      "bounds_max": [
+        0.07081453502178192,
+        0.00021446960454341024,
+        0.507252037525177
+      ],
+      "materials": [
+        "modular_electric_cables"
+      ],
+      "modifiers": []
+    },
+    {
+      "name": "cable_bridge_2",
+      "type": "MESH",
+      "parent": null,
+      "location": [
+        0.09999999403953552,
+        -7.450580596923828e-09,
+        0.29999998211860657
+      ],
+      "rotation": [
+        0.0,
+        -0.0,
+        -1.5707963705062866
+      ],
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "hidden_render": false,
+      "vertices": 272,
+      "triangles": 524,
+      "uv_layers": [
+        "UVMap"
+      ],
+      "bounds_min": [
+        0.07918545603752136,
+        -0.02841714583337307,
+        0.29999998211860657
+      ],
+      "bounds_max": [
+        0.12081453204154968,
+        0.00021446587925311178,
+        0.507252037525177
+      ],
+      "materials": [
+        "modular_electric_cables"
+      ],
+      "modifiers": []
+    },
+    {
+      "name": "cable_bridge_3",
+      "type": "MESH",
+      "parent": null,
+      "location": [
+        0.09999999403953552,
+        -7.450580596923828e-09,
+        0.5999999046325684
+      ],
+      "rotation": [
+        0.0,
+        -0.0,
+        -1.5707963705062866
+      ],
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "hidden_render": false,
+      "vertices": 272,
+      "triangles": 524,
+      "uv_layers": [
+        "UVMap"
+      ],
+      "bounds_min": [
+        0.07918545603752136,
+        -0.026594821363687515,
+        0.5999999046325684
+      ],
+      "bounds_max": [
+        0.12081453204154968,
+        0.00021446587925311178,
+        0.707252025604248
+      ],
+      "materials": [
+        "modular_electric_cables"
+      ],
+      "modifiers": []
+    },
+    {
+      "name": "cable_corner_away",
+      "type": "MESH",
+      "parent": null,
+      "location": [
+        0.19999510049819946,
+        -1.4901161193847656e-08,
+        0.29999998211860657
+      ],
+      "rotation": [
+        0.0,
+        -0.0,
+        -1.5707963705062866
+      ],
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "hidden_render": false,
+      "vertices": 266,
+      "triangles": 512,
+      "uv_layers": [
+        "UVMap"
+      ],
+      "bounds_min": [
+        0.1791854351758957,
+        -0.014635852538049221,
+        0.30000001192092896
+      ],
+      "bounds_max": [
+        0.2208145260810852,
+        0.10725204646587372,
+        0.42593687772750854
+      ],
+      "materials": [
+        "modular_electric_cables"
+      ],
+      "modifiers": []
+    },
+    {
+      "name": "cable_corner_towards",
+      "type": "MESH",
+      "parent": null,
+      "location": [
+        0.20000001788139343,
+        -1.4901161193847656e-08,
+        0.19999997317790985
+      ],
+      "rotation": [
+        0.0,
+        -0.0,
+        -1.5707963705062866
+      ],
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "hidden_render": false,
+      "vertices": 266,
+      "triangles": 512,
+      "uv_layers": [
+        "UVMap"
+      ],
+      "bounds_min": [
+        0.1791854202747345,
+        -0.10725211352109909,
+        0.19999997317790985
+      ],
+      "bounds_max": [
+        0.220814511179924,
+        -0.00439301785081625,
+        0.2999999523162842
+      ],
+      "materials": [
+        "modular_electric_cables"
+      ],
+      "modifiers": []
+    },
+    {
+      "name": "cable_double",
+      "type": "MESH",
+      "parent": null,
+      "location": [
+        0.4999999701976776,
+        -2.9802322387695312e-08,
+        0.0
+      ],
+      "rotation": [
+        0.0,
+        -0.0,
+        -1.5707963705062866
+      ],
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "hidden_render": false,
+      "vertices": 222,
+      "triangles": 412,
+      "uv_layers": [
+        "UVMap"
+      ],
+      "bounds_min": [
+        0.482185423374176,
+        -0.02572239190340042,
+        -4.2450790105341696e-10
+      ],
+      "bounds_max": [
+        0.5378145575523376,
+        0.00021444339654408395,
+        0.20725207030773163
+      ],
+      "materials": [
+        "modular_electric_cables"
+      ],
+      "modifiers": []
+    },
+    {
+      "name": "cable_double_10cm",
+      "type": "MESH",
+      "parent": null,
+      "location": [
+        0.7999999523162842,
+        -5.960464477539063e-08,
+        0.3999999463558197
+      ],
+      "rotation": [
+        0.0,
+        -0.0,
+        -1.5707963705062866
+      ],
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "hidden_render": false,
+      "vertices": 36,
+      "triangles": 48,
+      "uv_layers": [
+        "UVMap"
+      ],
+      "bounds_min": [
+        0.7951441407203674,
+        -0.015607059933245182,
+        0.3999999463558197
+      ],
+      "bounds_max": [
+        0.8248558044433594,
+        -0.004393045324832201,
+        0.4999999403953552
+      ],
+      "materials": [
+        "modular_electric_cables"
+      ],
+      "modifiers": []
+    },
+    {
+      "name": "cable_double_alt_long",
+      "type": "MESH",
+      "parent": null,
+      "location": [
+        1.100000023841858,
+        0.0,
+        0.0
+      ],
+      "rotation": [
+        0.0,
+        -0.0,
+        -1.5707963705062866
+      ],
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "hidden_render": false,
+      "vertices": 852,
+      "triangles": 1620,
+      "uv_layers": [
+        "UVMap"
+      ],
+      "bounds_min": [
+        1.0510326623916626,
+        -0.02212618850171566,
+        -4.2450787329784134e-10
+      ],
+      "bounds_max": [
+        1.1507654190063477,
+        4.003074316472066e-09,
+        0.6140738725662231
+      ],
+      "materials": [
+        "modular_electric_cables"
+      ],
+      "modifiers": []
+    },
+    {
+      "name": "cable_double_alt_short",
+      "type": "MESH",
+      "parent": null,
+      "location": [
+        1.2999999523162842,
+        0.0,
+        0.0
+      ],
+      "rotation": [
+        0.0,
+        -0.0,
+        -1.5707963705062866
+      ],
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "hidden_render": false,
+      "vertices": 324,
+      "triangles": 604,
+      "uv_layers": [
+        "UVMap"
+      ],
+      "bounds_min": [
+        1.2510325908660889,
+        -0.02212618850171566,
+        -4.2450790105341696e-10
+      ],
+      "bounds_max": [
+        1.348017692565918,
+        4.003074316472066e-09,
+        0.21407392621040344
+      ],
+      "materials": [
+        "modular_electric_cables"
+      ],
+      "modifiers": []
+    },
+    {
+      "name": "cable_double_alt_turn",
+      "type": "MESH",
+      "parent": null,
+      "location": [
+        1.1999999284744263,
+        0.0,
+        0.2999999523162842
+      ],
+      "rotation": [
+        0.0,
+        -0.0,
+        -1.5707963705062866
+      ],
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "hidden_render": false,
+      "vertices": 420,
+      "triangles": 796,
+      "uv_layers": [
+        "UVMap"
+      ],
+      "bounds_min": [
+        1.1951416730880737,
+        -0.02191171795129776,
+        0.2999999523162842
+      ],
+      "bounds_max": [
+        1.314073920249939,
+        0.00021447821927722543,
+        0.44896724820137024
+      ],
+      "materials": [
+        "modular_electric_cables"
+      ],
+      "modifiers": []
+    },
+    {
+      "name": "cable_double_end",
+      "type": "MESH",
+      "parent": null,
+      "location": [
+        1.0,
+        0.0,
+        0.6499999165534973
+      ],
+      "rotation": [
+        0.0,
+        -0.0,
+        -1.5707963705062866
+      ],
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "hidden_render": false,
+      "vertices": 320,
+      "triangles": 608,
+      "uv_layers": [
+        "UVMap"
+      ],
+      "bounds_min": [
+        0.9913408160209656,
+        -0.02519027702510357,
+        0.6499999165534973
+      ],
+      "bounds_max": [
+        1.0286117792129517,
+        0.0003012524975929409,
+        0.7541202306747437
+      ],
+      "materials": [
+        "modular_electric_cables"
+      ],
+      "modifiers": []
+    },
+    {
+      "name": "cable_double_junction",
+      "type": "MESH",
+      "parent": null,
+      "location": [
+        0.5999999642372131,
+        0.0,
+        0.3999999761581421
+      ],
+      "rotation": [
+        0.0,
+        -0.0,
+        -1.5707963705062866
+      ],
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "hidden_render": false,
+      "vertices": 514,
+      "triangles": 988,
+      "uv_layers": [
+        "UVMap"
+      ],
+      "bounds_min": [
+        0.579185426235199,
+        -0.02563558705151081,
+        0.3999999463558197
+      ],
+      "bounds_max": [
+        0.7272520661354065,
+        0.00030125209013931453,
+        0.6072520017623901
+      ],
+      "materials": [
+        "modular_electric_cables"
+      ],
+      "modifiers": []
+    },
+    {
+      "name": "cable_double_mount",
+      "type": "MESH",
+      "parent": null,
+      "location": [
+        0.8999999761581421,
+        -5.960464477539063e-08,
+        0.5999999046325684
+      ],
+      "rotation": [
+        0.0,
+        -0.0,
+        -1.5707963705062866
+      ],
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "hidden_render": false,
+      "vertices": 186,
+      "triangles": 364,
+      "uv_layers": [
+        "UVMap"
+      ],
+      "bounds_min": [
+        0.8821853995323181,
+        -0.025936894118785858,
+        0.5927478075027466
+      ],
+      "bounds_max": [
+        0.9378145337104797,
+        -5.656277934917853e-08,
+        0.6072519421577454
+      ],
+      "materials": [
+        "modular_electric_cables"
+      ],
+      "modifiers": []
+    },
+    {
+      "name": "cable_double_scurve",
+      "type": "MESH",
+      "parent": null,
+      "location": [
+        0.800000011920929,
+        -5.960464477539063e-08,
+        -2.3129645794903686e-17
+      ],
+      "rotation": [
+        0.0,
+        -0.0,
+        -1.5707963705062866
+      ],
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "hidden_render": false,
+      "vertices": 390,
+      "triangles": 748,
+      "uv_layers": [
+        "UVMap"
+      ],
+      "bounds_min": [
+        0.7951441407203674,
+        -0.02572244592010975,
+        -1.7898855730891228e-09
+      ],
+      "bounds_max": [
+        0.9378145337104797,
+        0.00021443165314849466,
+        0.20725208520889282
+      ],
+      "materials": [
+        "modular_electric_cables"
+      ],
+      "modifiers": []
+    },
+    {
+      "name": "cable_double_turn_long",
+      "type": "MESH",
+      "parent": null,
+      "location": [
+        0.5999999642372131,
+        0.0,
+        0.0
+      ],
+      "rotation": [
+        0.0,
+        -0.0,
+        -1.5707963705062866
+      ],
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "hidden_render": false,
+      "vertices": 648,
+      "triangles": 1256,
+      "uv_layers": [
+        "UVMap"
+      ],
+      "bounds_min": [
+        0.5951441526412964,
+        -0.02572236955165863,
+        -1.3024283873619424e-09
+      ],
+      "bounds_max": [
+        0.8071774840354919,
+        0.00021447263134177774,
+        0.21781456470489502
+      ],
+      "materials": [
+        "modular_electric_cables"
+      ],
+      "modifiers": []
+    },
+    {
+      "name": "cable_double_turn_short",
+      "type": "MESH",
+      "parent": null,
+      "location": [
+        0.699999988079071,
+        -5.960464477539063e-08,
+        0.2499999850988388
+      ],
+      "rotation": [
+        0.0,
+        -0.0,
+        -1.5707963705062866
+      ],
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "hidden_render": false,
+      "vertices": 462,
+      "triangles": 892,
+      "uv_layers": [
+        "UVMap"
+      ],
+      "bounds_min": [
+        0.6951360106468201,
+        -0.025722425431013107,
+        0.2499999850988388
+      ],
+      "bounds_max": [
+        0.8071774840354919,
+        0.00021441302669700235,
+        0.3678145408630371
+      ],
+      "materials": [
+        "modular_electric_cables"
+      ],
+      "modifiers": []
+    },
+    {
+      "name": "cable_double_uturn",
+      "type": "MESH",
+      "parent": null,
+      "location": [
+        0.4999999403953552,
+        -2.9802322387695312e-08,
+        0.5999999046325684
+      ],
+      "rotation": [
+        0.0,
+        -0.0,
+        -1.5707963705062866
+      ],
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "hidden_render": false,
+      "vertices": 138,
+      "triangles": 264,
+      "uv_layers": [
+        "UVMap"
+      ],
+      "bounds_min": [
+        0.49290236830711365,
+        -0.015607031062245369,
+        0.5999999046325684
+      ],
+      "bounds_max": [
+        0.5275497436523438,
+        -0.004393028561025858,
+        0.6464611291885376
+      ],
+      "materials": [
+        "modular_electric_cables"
+      ],
+      "modifiers": []
+    },
+    {
+      "name": "cable_end",
+      "type": "MESH",
+      "parent": null,
+      "location": [
+        0.0,
+        0.0,
+        0.3999999463558197
+      ],
+      "rotation": [
+        0.0,
+        -0.0,
+        -1.5707963705062866
+      ],
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "hidden_render": false,
+      "vertices": 160,
+      "triangles": 304,
+      "uv_layers": [
+        "UVMap"
+      ],
+      "bounds_min": [
+        -0.008659174665808678,
+        -0.02519027516245842,
+        0.3999999463558197
+      ],
+      "bounds_max": [
+        0.008659173734486103,
+        0.00021447372273541987,
+        0.5044538378715515
+      ],
+      "materials": [
+        "modular_electric_cables"
+      ],
+      "modifiers": []
+    },
+    {
+      "name": "cable_lightswitch",
+      "type": "MESH",
+      "parent": null,
+      "location": [
+        -0.30000004172325134,
+        0.0,
+        0.2999999523162842
+      ],
+      "rotation": [
+        0.0,
+        -0.0,
+        -1.5707963705062866
+      ],
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "hidden_render": false,
+      "vertices": 438,
+      "triangles": 852,
+      "uv_layers": [
+        "UVMap"
+      ],
+      "bounds_min": [
+        -0.33398687839508057,
+        -0.05451011657714844,
+        0.2999999523162842
+      ],
+      "bounds_max": [
+        -0.2660132050514221,
+        0.00021447576000355184,
+        0.43594005703926086
+      ],
+      "materials": [
+        "modular_electric_cables_boxes"
+      ],
+      "modifiers": []
+    },
+    {
+      "name": "cable_lightswitch_2",
+      "type": "MESH",
+      "parent": null,
+      "location": [
+        -0.699999988079071,
+        5.960464477539063e-08,
+        0.19999998807907104
+      ],
+      "rotation": [
+        0.0,
+        -0.0,
+        -1.5707963705062866
+      ],
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "hidden_render": false,
+      "vertices": 440,
+      "triangles": 852,
+      "uv_layers": [
+        "UVMap"
+      ],
+      "bounds_min": [
+        -0.7286150455474854,
+        -0.05243918299674988,
+        0.07619301974773407
+      ],
+      "bounds_max": [
+        -0.6713849306106567,
+        0.00021453420049510896,
+        0.20725207030773163
+      ],
+      "materials": [
+        "modular_electric_cables_boxes"
+      ],
+      "modifiers": []
+    },
+    {
+      "name": "cable_lightswitch_double",
+      "type": "MESH",
+      "parent": null,
+      "location": [
+        -0.5,
+        0.0,
+        0.2499999850988388
+      ],
+      "rotation": [
+        0.0,
+        -0.0,
+        -1.5707963705062866
+      ],
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "hidden_render": false,
+      "vertices": 650,
+      "triangles": 1256,
+      "uv_layers": [
+        "UVMap"
+      ],
+      "bounds_min": [
+        -0.5208145380020142,
+        -0.05451011657714844,
+        0.24999992549419403
+      ],
+      "bounds_max": [
+        -0.42601320147514343,
+        0.00021447519247885793,
+        0.45725205540657043
+      ],
+      "materials": [
+        "modular_electric_cables_boxes"
+      ],
+      "modifiers": []
+    },
+    {
+      "name": "cable_mount",
+      "type": "MESH",
+      "parent": null,
+      "location": [
+        0.0,
+        0.0,
+        0.2999999523162842
+      ],
+      "rotation": [
+        0.0,
+        -0.0,
+        -1.5707963705062866
+      ],
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "hidden_render": false,
+      "vertices": 170,
+      "triangles": 332,
+      "uv_layers": [
+        "UVMap"
+      ],
+      "bounds_min": [
+        -0.02081453986465931,
+        -0.025722360238432884,
+        0.2927478849887848
+      ],
+      "bounds_max": [
+        0.02081453800201416,
+        0.0002144733734894544,
+        0.30725201964378357
+      ],
+      "materials": [
+        "modular_electric_cables"
+      ],
+      "modifiers": []
+    },
+    {
+      "name": "cable_plug_4x",
+      "type": "MESH",
+      "parent": null,
+      "location": [
+        -0.5,
+        0.0,
+        0.19999998807907104
+      ],
+      "rotation": [
+        0.0,
+        -0.0,
+        -1.5707963705062866
+      ],
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "hidden_render": false,
+      "vertices": 1345,
+      "triangles": 2666,
+      "uv_layers": [
+        "UVMap"
+      ],
+      "bounds_min": [
+        -0.5469444394111633,
+        -0.04146529734134674,
+        0.053055524826049805
+      ],
+      "bounds_max": [
+        -0.4530555307865143,
+        0.00021448064944706857,
+        0.20725207030773163
+      ],
+      "materials": [
+        "modular_electric_cables_boxes"
+      ],
+      "modifiers": []
+    },
+    {
+      "name": "cable_plug_covered",
+      "type": "MESH",
+      "parent": null,
+      "location": [
+        -0.5999999642372131,
+        0.0,
+        0.19999998807907104
+      ],
+      "rotation": [
+        0.0,
+        -0.0,
+        -1.5707963705062866
+      ],
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "hidden_render": false,
+      "vertices": 666,
+      "triangles": 1312,
+      "uv_layers": [
+        "UVMap"
+      ],
+      "bounds_min": [
+        -0.6317716836929321,
+        -0.054410576820373535,
+        0.06488974392414093
+      ],
+      "bounds_max": [
+        -0.5682282447814941,
+        0.00021447472681757063,
+        0.20725207030773163
+      ],
+      "materials": [
+        "modular_electric_cables_boxes"
+      ],
+      "modifiers": []
+    },
+    {
+      "name": "cable_plug_covered_2",
+      "type": "MESH",
+      "parent": null,
+      "location": [
+        -0.5,
+        0.0,
+        0.6499999165534973
+      ],
+      "rotation": [
+        0.0,
+        -0.0,
+        -1.5707963705062866
+      ],
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "hidden_render": false,
+      "vertices": 797,
+      "triangles": 1566,
+      "uv_layers": [
+        "UVMap"
+      ],
+      "bounds_min": [
+        -0.5283682346343994,
+        -0.07098322361707687,
+        0.47471269965171814
+      ],
+      "bounds_max": [
+        -0.47163188457489014,
+        0.0002144736936315894,
+        0.6572520136833191
+      ],
+      "materials": [
+        "modular_electric_cables_boxes"
+      ],
+      "modifiers": []
+    },
+    {
+      "name": "cable_scurve_1",
+      "type": "MESH",
+      "parent": null,
+      "location": [
+        0.20000001788139343,
+        -1.4901161193847656e-08,
+        0.0
+      ],
+      "rotation": [
+        0.0,
+        -0.0,
+        -1.5707963705062866
+      ],
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "hidden_render": false,
+      "vertices": 284,
+      "triangles": 548,
+      "uv_layers": [
+        "UVMap"
+      ],
+      "bounds_min": [
+        0.19514420628547668,
+        -0.025722380727529526,
+        -2.532498932783511e-10
+      ],
+      "bounds_max": [
+        0.3208145499229431,
+        0.0002144577301805839,
+        0.10725206881761551
+      ],
+      "materials": [
+        "modular_electric_cables"
+      ],
+      "modifiers": []
+    },
+    {
+      "name": "cable_scurve_2",
+      "type": "MESH",
+      "parent": null,
+      "location": [
+        0.30000001192092896,
+        0.0,
+        0.0
+      ],
+      "rotation": [
+        0.0,
+        -0.0,
+        -1.5707963705062866
+      ],
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "hidden_render": false,
+      "vertices": 284,
+      "triangles": 548,
+      "uv_layers": [
+        "UVMap"
+      ],
+      "bounds_min": [
+        0.2951442003250122,
+        -0.025722365826368332,
+        -5.788574619636222e-10
+      ],
+      "bounds_max": [
+        0.42081454396247864,
+        0.00021447263134177774,
+        0.20725207030773163
+      ],
+      "materials": [
+        "modular_electric_cables"
+      ],
+      "modifiers": []
+    },
+    {
+      "name": "cable_scurve_3",
+      "type": "MESH",
+      "parent": null,
+      "location": [
+        0.3999999761581421,
+        -2.9802322387695312e-08,
+        0.0
+      ],
+      "rotation": [
+        0.0,
+        -0.0,
+        -1.5707963705062866
+      ],
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "hidden_render": false,
+      "vertices": 284,
+      "triangles": 548,
+      "uv_layers": [
+        "UVMap"
+      ],
+      "bounds_min": [
+        0.39514416456222534,
+        -0.02572239376604557,
+        -1.9898215020131005e-10
+      ],
+      "bounds_max": [
+        0.4708145260810852,
+        0.00021444282901939005,
+        0.20725207030773163
+      ],
+      "materials": [
+        "modular_electric_cables"
+      ],
+      "modifiers": []
+    },
+    {
+      "name": "cable_scurve_4",
+      "type": "MESH",
+      "parent": null,
+      "location": [
+        0.29999998211860657,
+        0.0,
+        0.2999999523162842
+      ],
+      "rotation": [
+        0.0,
+        -0.0,
+        -1.5707963705062866
+      ],
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "hidden_render": false,
+      "vertices": 284,
+      "triangles": 548,
+      "uv_layers": [
+        "UVMap"
+      ],
+      "bounds_min": [
+        0.2951442003250122,
+        -0.02572239376604557,
+        0.2999999225139618
+      ],
+      "bounds_max": [
+        0.3708145320415497,
+        0.00021445027959998697,
+        0.4072520434856415
+      ],
+      "materials": [
+        "modular_electric_cables"
+      ],
+      "modifiers": []
+    },
+    {
+      "name": "cable_straight_long",
+      "type": "MESH",
+      "parent": null,
+      "location": [
+        0.14999999105930328,
+        0.0,
+        0.0
+      ],
+      "rotation": [
+        0.0,
+        -0.0,
+        -1.5707963705062866
+      ],
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "hidden_render": false,
+      "vertices": 540,
+      "triangles": 1044,
+      "uv_layers": [
+        "UVMap"
+      ],
+      "bounds_min": [
+        0.12918545305728912,
+        -0.025722360238432884,
+        -4.2450787329784134e-10
+      ],
+      "bounds_max": [
+        0.17081452906131744,
+        0.0002144733298337087,
+        0.6072520613670349
+      ],
+      "materials": [
+        "modular_electric_cables"
+      ],
+      "modifiers": []
+    },
+    {
+      "name": "cable_straight_medium",
+      "type": "MESH",
+      "parent": null,
+      "location": [
+        0.09999999403953552,
+        -7.450580596923828e-09,
+        0.0
+      ],
+      "rotation": [
+        0.0,
+        -0.0,
+        -1.5707963705062866
+      ],
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "hidden_render": false,
+      "vertices": 188,
+      "triangles": 356,
+      "uv_layers": [
+        "UVMap"
+      ],
+      "bounds_min": [
+        0.07918545603752136,
+        -0.02572236768901348,
+        -4.2450790105341696e-10
+      ],
+      "bounds_max": [
+        0.12081453204154968,
+        0.00021446587925311178,
+        0.20725207030773163
+      ],
+      "materials": [
+        "modular_electric_cables"
+      ],
+      "modifiers": []
+    },
+    {
+      "name": "cable_straight_short",
+      "type": "MESH",
+      "parent": null,
+      "location": [
+        0.050000011920928955,
+        -3.725290298461914e-09,
+        0.09999998658895493
+      ],
+      "rotation": [
+        0.0,
+        -0.0,
+        -1.5707963705062866
+      ],
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "hidden_render": false,
+      "vertices": 188,
+      "triangles": 356,
+      "uv_layers": [
+        "UVMap"
+      ],
+      "bounds_min": [
+        0.029185472056269646,
+        -0.02563558518886566,
+        0.09999998658895493
+      ],
+      "bounds_max": [
+        0.07081454992294312,
+        0.00030124836484901607,
+        0.20725208520889282
+      ],
+      "materials": [
+        "modular_electric_cables"
+      ],
+      "modifiers": []
+    },
+    {
+      "name": "cable_switch",
+      "type": "MESH",
+      "parent": null,
+      "location": [
+        -0.5999999642372131,
+        0.0,
+        0.5999999642372131
+      ],
+      "rotation": [
+        0.0,
+        -0.0,
+        -1.5707963705062866
+      ],
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "hidden_render": false,
+      "vertices": 1707,
+      "triangles": 3330,
+      "uv_layers": [
+        "UVMap"
+      ],
+      "bounds_min": [
+        -0.6860877275466919,
+        -0.05197848007082939,
+        0.2284272015094757
+      ],
+      "bounds_max": [
+        -0.5391852855682373,
+        0.0002155546535504982,
+        0.6072519421577454
+      ],
+      "materials": [
+        "modular_electric_cables_boxes"
+      ],
+      "modifiers": []
+    },
+    {
+      "name": "cable_to_double_1",
+      "type": "MESH",
+      "parent": null,
+      "location": [
+        0.3999999761581421,
+        -2.9802322387695312e-08,
+        0.2499999850988388
+      ],
+      "rotation": [
+        0.0,
+        -0.0,
+        -1.5707963705062866
+      ],
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "hidden_render": false,
+      "vertices": 282,
+      "triangles": 532,
+      "uv_layers": [
+        "UVMap"
+      ],
+      "bounds_min": [
+        0.3821853995323181,
+        -0.02572239376604557,
+        0.2499999850988388
+      ],
+      "bounds_max": [
+        0.46485579013824463,
+        0.00021444339654408395,
+        0.3572520613670349
+      ],
+      "materials": [
+        "modular_electric_cables"
+      ],
+      "modifiers": []
+    },
+    {
+      "name": "cable_to_double_2",
+      "type": "MESH",
+      "parent": null,
+      "location": [
+        0.3999999761581421,
+        -2.9802322387695312e-08,
+        0.3999999463558197
+      ],
+      "rotation": [
+        0.0,
+        -0.0,
+        -1.5707963705062866
+      ],
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "hidden_render": false,
+      "vertices": 342,
+      "triangles": 652,
+      "uv_layers": [
+        "UVMap"
+      ],
+      "bounds_min": [
+        0.39497750997543335,
+        -0.025722533464431763,
+        0.4000000059604645
+      ],
+      "bounds_max": [
+        0.4578145742416382,
+        0.00021444841695483774,
+        0.5072520971298218
+      ],
+      "materials": [
+        "modular_electric_cables"
+      ],
+      "modifiers": []
+    },
+    {
+      "name": "cable_to_double_3",
+      "type": "MESH",
+      "parent": null,
+      "location": [
+        0.4999999701976776,
+        -2.9802322387695312e-08,
+        0.2499999850988388
+      ],
+      "rotation": [
+        0.0,
+        -0.0,
+        -1.5707963705062866
+      ],
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "hidden_render": false,
+      "vertices": 294,
+      "triangles": 556,
+      "uv_layers": [
+        "UVMap"
+      ],
+      "bounds_min": [
+        0.482185423374176,
+        -0.02572239562869072,
+        0.2499999850988388
+      ],
+      "bounds_max": [
+        0.6148557662963867,
+        0.00021444339654408395,
+        0.45725202560424805
+      ],
+      "materials": [
+        "modular_electric_cables"
+      ],
+      "modifiers": []
+    },
+    {
+      "name": "cable_to_double_4",
+      "type": "MESH",
+      "parent": null,
+      "location": [
+        0.8999999761581421,
+        -5.960464477539063e-08,
+        0.29999998211860657
+      ],
+      "rotation": [
+        0.0,
+        -0.0,
+        -1.5707963705062866
+      ],
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "hidden_render": false,
+      "vertices": 378,
+      "triangles": 724,
+      "uv_layers": [
+        "UVMap"
+      ],
+      "bounds_min": [
+        0.8821852207183838,
+        -0.025636127218604088,
+        0.2999999523162842
+      ],
+      "bounds_max": [
+        1.0000001192092896,
+        0.0003014196117874235,
+        0.5071774125099182
+      ],
+      "materials": [
+        "modular_electric_cables"
+      ],
+      "modifiers": []
+    },
+    {
+      "name": "cable_turn_long",
+      "type": "MESH",
+      "parent": null,
+      "location": [
+        0.20000001788139343,
+        -1.4901161193847656e-08,
+        0.49999991059303284
+      ],
+      "rotation": [
+        0.0,
+        -0.0,
+        -1.5707963705062866
+      ],
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "hidden_render": false,
+      "vertices": 308,
+      "triangles": 596,
+      "uv_layers": [
+        "UVMap"
+      ],
+      "bounds_min": [
+        0.20000001788139343,
+        -0.025722384452819824,
+        0.49381810426712036
+      ],
+      "bounds_max": [
+        0.42081451416015625,
+        0.00021445751190185547,
+        0.707252025604248
+      ],
+      "materials": [
+        "modular_electric_cables"
+      ],
+      "modifiers": []
+    },
+    {
+      "name": "cable_turn_short",
+      "type": "MESH",
+      "parent": null,
+      "location": [
+        0.20000001788139343,
+        -1.4901161193847656e-08,
+        0.09999998658895493
+      ],
+      "rotation": [
+        0.0,
+        -0.0,
+        -1.5707963705062866
+      ],
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "hidden_render": false,
+      "vertices": 266,
+      "triangles": 512,
+      "uv_layers": [
+        "UVMap"
+      ],
+      "bounds_min": [
+        0.19514420628547668,
+        -0.025722380727529526,
+        0.09999998658895493
+      ],
+      "bounds_max": [
+        0.30725207924842834,
+        0.0002144577301805839,
+        0.2208145260810852
+      ],
+      "materials": [
+        "modular_electric_cables"
+      ],
+      "modifiers": []
+    }
+  ],
+  "materials": [
+    {
+      "name": "modular_electric_cables",
+      "nodes": [
+        {
+          "name": "Principled BSDF",
+          "type": "BSDF_PRINCIPLED",
+          "inputs": {
+            "Base Color": {
+              "linked": true,
+              "value": [
+                0.800000011920929,
+                0.800000011920929,
+                0.800000011920929,
+                1.0
+              ]
+            },
+            "Metallic": {
+              "linked": true,
+              "value": 0.0
+            },
+            "Roughness": {
+              "linked": true,
+              "value": 0.5
+            },
+            "IOR": {
+              "linked": false,
+              "value": 1.5
+            },
+            "Alpha": {
+              "linked": false,
+              "value": 1.0
+            },
+            "Transmission Weight": {
+              "linked": false,
+              "value": 0.0
+            }
+          }
+        },
+        {
+          "name": "Material Output",
+          "type": "OUTPUT_MATERIAL"
+        },
+        {
+          "name": "Image Texture",
+          "type": "TEX_IMAGE",
+          "image": "modular_electric_cables_diff.png"
+        },
+        {
+          "name": "Image Texture.001",
+          "type": "TEX_IMAGE",
+          "image": "modular_electric_cables_metal.png.001"
+        },
+        {
+          "name": "Image Texture.002",
+          "type": "TEX_IMAGE",
+          "image": "modular_electric_cables_rough.png"
+        },
+        {
+          "name": "Image Texture.003",
+          "type": "TEX_IMAGE",
+          "image": "modular_electric_cables_nor_gl.png"
+        },
+        {
+          "name": "Normal Map",
+          "type": "NORMAL_MAP"
+        },
+        {
+          "name": "Mapping",
+          "type": "MAPPING"
+        },
+        {
+          "name": "Reroute",
+          "type": "REROUTE"
+        },
+        {
+          "name": "Texture Coordinate",
+          "type": "TEX_COORD"
+        },
+        {
+          "name": "Frame",
+          "type": "FRAME"
+        },
+        {
+          "name": "Frame.001",
+          "type": "FRAME"
+        }
+      ]
+    },
+    {
+      "name": "modular_electric_cables_boxes",
+      "nodes": [
+        {
+          "name": "Principled BSDF",
+          "type": "BSDF_PRINCIPLED",
+          "inputs": {
+            "Base Color": {
+              "linked": true,
+              "value": [
+                0.800000011920929,
+                0.800000011920929,
+                0.800000011920929,
+                1.0
+              ]
+            },
+            "Metallic": {
+              "linked": true,
+              "value": 0.0
+            },
+            "Roughness": {
+              "linked": true,
+              "value": 0.5
+            },
+            "IOR": {
+              "linked": false,
+              "value": 1.5
+            },
+            "Alpha": {
+              "linked": false,
+              "value": 1.0
+            },
+            "Transmission Weight": {
+              "linked": false,
+              "value": 0.0
+            }
+          }
+        },
+        {
+          "name": "Material Output",
+          "type": "OUTPUT_MATERIAL"
+        },
+        {
+          "name": "Image Texture",
+          "type": "TEX_IMAGE",
+          "image": "modular_electric_cables_boxes_diff.png"
+        },
+        {
+          "name": "Image Texture.001",
+          "type": "TEX_IMAGE",
+          "image": "modular_electric_cables_metal.png"
+        },
+        {
+          "name": "Image Texture.002",
+          "type": "TEX_IMAGE",
+          "image": "modular_electric_cables_boxes_rough.png"
+        },
+        {
+          "name": "Image Texture.003",
+          "type": "TEX_IMAGE",
+          "image": "modular_electric_cables_boxes_nor_gl.png"
+        },
+        {
+          "name": "Normal Map",
+          "type": "NORMAL_MAP"
+        },
+        {
+          "name": "Mapping",
+          "type": "MAPPING"
+        },
+        {
+          "name": "Reroute",
+          "type": "REROUTE"
+        },
+        {
+          "name": "Texture Coordinate",
+          "type": "TEX_COORD"
+        },
+        {
+          "name": "Frame",
+          "type": "FRAME"
+        },
+        {
+          "name": "Frame.001",
+          "type": "FRAME"
+        }
+      ]
+    }
+  ],
+  "images": [
+    {
+      "name": "modular_electric_cables_boxes_diff.png",
+      "size": [
+        4096,
+        4096
+      ],
+      "packed": false,
+      "filepath": "//textures\\modular_electric_cables_boxes_diff_4k.png",
+      "colorspace": "sRGB",
+      "exists": true
+    },
+    {
+      "name": "modular_electric_cables_boxes_nor_gl.png",
+      "size": [
+        4096,
+        4096
+      ],
+      "packed": false,
+      "filepath": "//textures\\modular_electric_cables_boxes_nor_gl_4k.png",
+      "colorspace": "Non-Color",
+      "exists": true
+    },
+    {
+      "name": "modular_electric_cables_boxes_rough.png",
+      "size": [
+        4096,
+        4096
+      ],
+      "packed": false,
+      "filepath": "//textures\\modular_electric_cables_boxes_rough_4k.png",
+      "colorspace": "Non-Color",
+      "exists": true
+    },
+    {
+      "name": "modular_electric_cables_diff.png",
+      "size": [
+        4096,
+        4096
+      ],
+      "packed": false,
+      "filepath": "//textures\\modular_electric_cables_diff_4k.jpg",
+      "colorspace": "sRGB",
+      "exists": true
+    },
+    {
+      "name": "modular_electric_cables_metal.png",
+      "size": [
+        4096,
+        4096
+      ],
+      "packed": false,
+      "filepath": "//textures\\modular_electric_cables_metal_4k.exr",
+      "colorspace": "Non-Color",
+      "exists": true
+    },
+    {
+      "name": "modular_electric_cables_metal.png.001",
+      "size": [
+        4096,
+        4096
+      ],
+      "packed": false,
+      "filepath": "//textures\\modular_electric_cables_metal_4k.exr",
+      "colorspace": "Non-Color",
+      "exists": true
+    },
+    {
+      "name": "modular_electric_cables_nor_gl.png",
+      "size": [
+        4096,
+        4096
+      ],
+      "packed": false,
+      "filepath": "//textures\\modular_electric_cables_nor_gl_4k.exr",
+      "colorspace": "Non-Color",
+      "exists": true
+    },
+    {
+      "name": "modular_electric_cables_rough.png",
+      "size": [
+        4096,
+        4096
+      ],
+      "packed": false,
+      "filepath": "//textures\\modular_electric_cables_rough_4k.exr",
+      "colorspace": "Non-Color",
+      "exists": true
+    }
+  ],
+  "actions": []
+}

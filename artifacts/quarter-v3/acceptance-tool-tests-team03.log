@@ -1,0 +1,12 @@
+test_collision_is_rejected_before_unrelated_missing_fields (test_validation_evidence.EvidenceChecks.test_collision_is_rejected_before_unrelated_missing_fields) ... ok
+test_fire_smoke_uses_seventy_seconds (test_validation_evidence.EvidenceChecks.test_fire_smoke_uses_seventy_seconds) ... ok
+test_late_person_requires_real_geometry_not_only_an_unhidden_actor (test_validation_evidence.EvidenceChecks.test_late_person_requires_real_geometry_not_only_an_unhidden_actor) ... ok
+test_missing_or_extra_actual_events_fail (test_validation_evidence.EvidenceChecks.test_missing_or_extra_actual_events_fail) ... ok
+test_visibility_expiry_and_overlap_boundaries (test_validation_evidence.EvidenceChecks.test_visibility_expiry_and_overlap_boundaries) ... ok
+test_window_inspection_is_explicitly_static_without_dispatcher (test_validation_evidence.EvidenceChecks.test_window_inspection_is_explicitly_static_without_dispatcher) ... ok
+test_zero_probability_rejects_secondary_events (test_validation_evidence.EvidenceChecks.test_zero_probability_rejects_secondary_events) ... ok
+
+----------------------------------------------------------------------
+Ran 7 tests in 0.002s
+
+OK

@@ -1,0 +1,949 @@
+{
+  "id": "GlazingKit",
+  "source": "blender/prepared/v2/UrbanKit/UrbanKit.blend",
+  "source_sha256": "202b11453946086b8f4365d82dfca510518a6233502f1f5a5261dcf0db739198",
+  "blend": "GlazingKit.blend",
+  "parts": [
+    {
+      "object": "window_01_clean",
+      "role": "module",
+      "triangles": 1382,
+      "location_m": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "rotation_deg": [
+        0.0,
+        -0.0,
+        0.0
+      ],
+      "parent": null,
+      "dimensions_m": [
+        2.12001895904541,
+        0.39000749588012695,
+        2.299999713897705
+      ],
+      "materials": [
+        "modular_urban_apartments_facade_objects",
+        "modular_urban_apartments_facade_glass",
+        "M_GlassV3_clean"
+      ],
+      "fbx": "parts/window_01_clean.fbx"
+    },
+    {
+      "object": "window_01_dirty",
+      "role": "module",
+      "triangles": 1382,
+      "location_m": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "rotation_deg": [
+        0.0,
+        -0.0,
+        0.0
+      ],
+      "parent": null,
+      "dimensions_m": [
+        2.12001895904541,
+        0.39000749588012695,
+        2.299999713897705
+      ],
+      "materials": [
+        "modular_urban_apartments_facade_objects",
+        "modular_urban_apartments_facade_glass",
+        "M_GlassV3_dirty"
+      ],
+      "fbx": "parts/window_01_dirty.fbx"
+    },
+    {
+      "object": "window_01_cracked",
+      "role": "module",
+      "triangles": 1382,
+      "location_m": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "rotation_deg": [
+        0.0,
+        -0.0,
+        0.0
+      ],
+      "parent": null,
+      "dimensions_m": [
+        2.12001895904541,
+        0.39000749588012695,
+        2.299999713897705
+      ],
+      "materials": [
+        "modular_urban_apartments_facade_objects",
+        "modular_urban_apartments_facade_glass",
+        "M_GlassV3_cracked"
+      ],
+      "fbx": "parts/window_01_cracked.fbx"
+    },
+    {
+      "object": "window_01_broken",
+      "role": "module",
+      "triangles": 1388,
+      "location_m": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "rotation_deg": [
+        0.0,
+        -0.0,
+        0.0
+      ],
+      "parent": null,
+      "dimensions_m": [
+        2.12001895904541,
+        0.39000749588012695,
+        2.299999713897705
+      ],
+      "materials": [
+        "modular_urban_apartments_facade_objects",
+        "modular_urban_apartments_facade_glass",
+        "M_GlassV3_broken"
+      ],
+      "fbx": "parts/window_01_broken.fbx"
+    },
+    {
+      "object": "window_01_empty",
+      "role": "module",
+      "triangles": 1380,
+      "location_m": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "rotation_deg": [
+        0.0,
+        -0.0,
+        0.0
+      ],
+      "parent": null,
+      "dimensions_m": [
+        2.12001895904541,
+        0.39000749588012695,
+        2.299999713897705
+      ],
+      "materials": [
+        "modular_urban_apartments_facade_objects",
+        "modular_urban_apartments_facade_glass"
+      ],
+      "fbx": "parts/window_01_empty.fbx"
+    },
+    {
+      "object": "window_02_clean",
+      "role": "module",
+      "triangles": 1238,
+      "location_m": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "rotation_deg": [
+        0.0,
+        -0.0,
+        0.0
+      ],
+      "parent": null,
+      "dimensions_m": [
+        2.12001895904541,
+        0.39000749588012695,
+        1.9999996423721313
+      ],
+      "materials": [
+        "modular_urban_apartments_facade_objects",
+        "modular_urban_apartments_facade_glass",
+        "M_GlassV3_clean"
+      ],
+      "fbx": "parts/window_02_clean.fbx"
+    },
+    {
+      "object": "window_02_dirty",
+      "role": "module",
+      "triangles": 1238,
+      "location_m": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "rotation_deg": [
+        0.0,
+        -0.0,
+        0.0
+      ],
+      "parent": null,
+      "dimensions_m": [
+        2.12001895904541,
+        0.39000749588012695,
+        1.9999996423721313
+      ],
+      "materials": [
+        "modular_urban_apartments_facade_objects",
+        "modular_urban_apartments_facade_glass",
+        "M_GlassV3_dirty"
+      ],
+      "fbx": "parts/window_02_dirty.fbx"
+    },
+    {
+      "object": "window_02_cracked",
+      "role": "module",
+      "triangles": 1238,
+      "location_m": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "rotation_deg": [
+        0.0,
+        -0.0,
+        0.0
+      ],
+      "parent": null,
+      "dimensions_m": [
+        2.12001895904541,
+        0.39000749588012695,
+        1.9999996423721313
+      ],
+      "materials": [
+        "modular_urban_apartments_facade_objects",
+        "modular_urban_apartments_facade_glass",
+        "M_GlassV3_cracked"
+      ],
+      "fbx": "parts/window_02_cracked.fbx"
+    },
+    {
+      "object": "window_02_broken",
+      "role": "module",
+      "triangles": 1244,
+      "location_m": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "rotation_deg": [
+        0.0,
+        -0.0,
+        0.0
+      ],
+      "parent": null,
+      "dimensions_m": [
+        2.12001895904541,
+        0.39000749588012695,
+        1.9999996423721313
+      ],
+      "materials": [
+        "modular_urban_apartments_facade_objects",
+        "modular_urban_apartments_facade_glass",
+        "M_GlassV3_broken"
+      ],
+      "fbx": "parts/window_02_broken.fbx"
+    },
+    {
+      "object": "window_02_empty",
+      "role": "module",
+      "triangles": 1236,
+      "location_m": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "rotation_deg": [
+        0.0,
+        -0.0,
+        0.0
+      ],
+      "parent": null,
+      "dimensions_m": [
+        2.12001895904541,
+        0.39000749588012695,
+        1.9999996423721313
+      ],
+      "materials": [
+        "modular_urban_apartments_facade_objects",
+        "modular_urban_apartments_facade_glass"
+      ],
+      "fbx": "parts/window_02_empty.fbx"
+    },
+    {
+      "object": "window_03_clean",
+      "role": "module",
+      "triangles": 704,
+      "location_m": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "rotation_deg": [
+        0.0,
+        -0.0,
+        0.0
+      ],
+      "parent": null,
+      "dimensions_m": [
+        1.7400000095367432,
+        0.20487436652183533,
+        1.684638261795044
+      ],
+      "materials": [
+        "modular_urban_apartments_facade_objects",
+        "modular_urban_apartments_facade_glass",
+        "modular_urban_apartments_facade_trim_01",
+        "M_GlassV3_clean"
+      ],
+      "fbx": "parts/window_03_clean.fbx"
+    },
+    {
+      "object": "window_03_dirty",
+      "role": "module",
+      "triangles": 704,
+      "location_m": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "rotation_deg": [
+        0.0,
+        -0.0,
+        0.0
+      ],
+      "parent": null,
+      "dimensions_m": [
+        1.7400000095367432,
+        0.20487436652183533,
+        1.684638261795044
+      ],
+      "materials": [
+        "modular_urban_apartments_facade_objects",
+        "modular_urban_apartments_facade_glass",
+        "modular_urban_apartments_facade_trim_01",
+        "M_GlassV3_dirty"
+      ],
+      "fbx": "parts/window_03_dirty.fbx"
+    },
+    {
+      "object": "window_03_cracked",
+      "role": "module",
+      "triangles": 704,
+      "location_m": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "rotation_deg": [
+        0.0,
+        -0.0,
+        0.0
+      ],
+      "parent": null,
+      "dimensions_m": [
+        1.7400000095367432,
+        0.20487436652183533,
+        1.684638261795044
+      ],
+      "materials": [
+        "modular_urban_apartments_facade_objects",
+        "modular_urban_apartments_facade_glass",
+        "modular_urban_apartments_facade_trim_01",
+        "M_GlassV3_cracked"
+      ],
+      "fbx": "parts/window_03_cracked.fbx"
+    },
+    {
+      "object": "window_03_broken",
+      "role": "module",
+      "triangles": 710,
+      "location_m": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "rotation_deg": [
+        0.0,
+        -0.0,
+        0.0
+      ],
+      "parent": null,
+      "dimensions_m": [
+        1.7400000095367432,
+        0.20487436652183533,
+        1.684638261795044
+      ],
+      "materials": [
+        "modular_urban_apartments_facade_objects",
+        "modular_urban_apartments_facade_glass",
+        "modular_urban_apartments_facade_trim_01",
+        "M_GlassV3_broken"
+      ],
+      "fbx": "parts/window_03_broken.fbx"
+    },
+    {
+      "object": "window_03_empty",
+      "role": "module",
+      "triangles": 702,
+      "location_m": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "rotation_deg": [
+        0.0,
+        -0.0,
+        0.0
+      ],
+      "parent": null,
+      "dimensions_m": [
+        1.7400000095367432,
+        0.20487436652183533,
+        1.684638261795044
+      ],
+      "materials": [
+        "modular_urban_apartments_facade_objects",
+        "modular_urban_apartments_facade_glass",
+        "modular_urban_apartments_facade_trim_01"
+      ],
+      "fbx": "parts/window_03_empty.fbx"
+    }
+  ],
+  "materials": [
+    {
+      "name": "M_GlassV3_broken",
+      "glass": true,
+      "inputs": {
+        "Base Color": [
+          0.8199999928474426,
+          0.8899999856948853,
+          0.8700000047683716,
+          1.0
+        ],
+        "Metallic": 0.0,
+        "Roughness": 0.20999999344348907,
+        "Transmission Weight": 1.0,
+        "IOR": 1.5,
+        "Alpha": 1.0,
+        "Emission Color": [
+          1.0,
+          1.0,
+          1.0,
+          1.0
+        ],
+        "Emission Strength": 0.0
+      },
+      "links": [
+        {
+          "from": "Principled BSDF",
+          "output": "BSDF",
+          "to": "Material Output",
+          "input": "Surface"
+        }
+      ],
+      "images": [
+        {
+          "node": "CrackDirtMask",
+          "image": "GlassV3_CrackDirt_Mask",
+          "file": "textures/T_0_GlassV3_CrackDirt_Mask.png",
+          "colorspace": "Non-Color"
+        }
+      ]
+    },
+    {
+      "name": "M_GlassV3_clean",
+      "glass": true,
+      "inputs": {
+        "Base Color": [
+          0.8199999928474426,
+          0.8899999856948853,
+          0.8700000047683716,
+          1.0
+        ],
+        "Metallic": 0.0,
+        "Roughness": 0.054999999701976776,
+        "Transmission Weight": 1.0,
+        "IOR": 1.5,
+        "Alpha": 1.0,
+        "Emission Color": [
+          1.0,
+          1.0,
+          1.0,
+          1.0
+        ],
+        "Emission Strength": 0.0
+      },
+      "links": [
+        {
+          "from": "Principled BSDF",
+          "output": "BSDF",
+          "to": "Material Output",
+          "input": "Surface"
+        }
+      ],
+      "images": [
+        {
+          "node": "CrackDirtMask",
+          "image": "GlassV3_CrackDirt_Mask",
+          "file": "textures/T_0_GlassV3_CrackDirt_Mask.png",
+          "colorspace": "Non-Color"
+        }
+      ]
+    },
+    {
+      "name": "M_GlassV3_cracked",
+      "glass": true,
+      "inputs": {
+        "Base Color": [
+          0.8199999928474426,
+          0.8899999856948853,
+          0.8700000047683716,
+          1.0
+        ],
+        "Metallic": 0.0,
+        "Roughness": 0.15000000596046448,
+        "Transmission Weight": 1.0,
+        "IOR": 1.5,
+        "Alpha": 1.0,
+        "Emission Color": [
+          1.0,
+          1.0,
+          1.0,
+          1.0
+        ],
+        "Emission Strength": 0.0
+      },
+      "links": [
+        {
+          "from": "Principled BSDF",
+          "output": "BSDF",
+          "to": "Material Output",
+          "input": "Surface"
+        }
+      ],
+      "images": [
+        {
+          "node": "CrackDirtMask",
+          "image": "GlassV3_CrackDirt_Mask",
+          "file": "textures/T_0_GlassV3_CrackDirt_Mask.png",
+          "colorspace": "Non-Color"
+        }
+      ]
+    },
+    {
+      "name": "M_GlassV3_dirty",
+      "glass": true,
+      "inputs": {
+        "Base Color": [
+          0.8199999928474426,
+          0.8899999856948853,
+          0.8700000047683716,
+          1.0
+        ],
+        "Metallic": 0.0,
+        "Roughness": 0.20000000298023224,
+        "Transmission Weight": 1.0,
+        "IOR": 1.5,
+        "Alpha": 1.0,
+        "Emission Color": [
+          1.0,
+          1.0,
+          1.0,
+          1.0
+        ],
+        "Emission Strength": 0.0
+      },
+      "links": [
+        {
+          "from": "Principled BSDF",
+          "output": "BSDF",
+          "to": "Material Output",
+          "input": "Surface"
+        }
+      ],
+      "images": [
+        {
+          "node": "CrackDirtMask",
+          "image": "GlassV3_CrackDirt_Mask",
+          "file": "textures/T_0_GlassV3_CrackDirt_Mask.png",
+          "colorspace": "Non-Color"
+        }
+      ]
+    },
+    {
+      "name": "modular_urban_apartments_facade_glass",
+      "glass": true,
+      "inputs": {
+        "Base Color": [
+          0.7200000286102295,
+          0.8399999737739563,
+          0.8799999952316284,
+          1.0
+        ],
+        "Metallic": 0.0,
+        "Roughness": 0.10999999940395355,
+        "Transmission Weight": 1.0,
+        "IOR": 1.100000023841858,
+        "Alpha": 1.0,
+        "Emission Color": [
+          0.0,
+          0.0,
+          0.0,
+          1.0
+        ],
+        "Emission Strength": 1.0
+      },
+      "links": [
+        {
+          "from": "Principled BSDF",
+          "output": "BSDF",
+          "to": "Material Output",
+          "input": "Surface"
+        },
+        {
+          "from": "Image Texture.003",
+          "output": "Color",
+          "to": "Normal Map",
+          "input": "Color"
+        },
+        {
+          "from": "Normal Map",
+          "output": "Normal",
+          "to": "Principled BSDF",
+          "input": "Normal"
+        },
+        {
+          "from": "Reroute",
+          "output": "Output",
+          "to": "Image Texture",
+          "input": "Vector"
+        },
+        {
+          "from": "Reroute",
+          "output": "Output",
+          "to": "Image Texture.001",
+          "input": "Vector"
+        },
+        {
+          "from": "Reroute",
+          "output": "Output",
+          "to": "Image Texture.002",
+          "input": "Vector"
+        },
+        {
+          "from": "Reroute",
+          "output": "Output",
+          "to": "Image Texture.003",
+          "input": "Vector"
+        },
+        {
+          "from": "Reroute",
+          "output": "Output",
+          "to": "Image Texture.004",
+          "input": "Vector"
+        },
+        {
+          "from": "Mapping",
+          "output": "Vector",
+          "to": "Reroute",
+          "input": "Input"
+        },
+        {
+          "from": "Texture Coordinate",
+          "output": "UV",
+          "to": "Mapping",
+          "input": "Vector"
+        }
+      ],
+      "images": [
+        {
+          "node": "Image Texture",
+          "image": "modular_urban_apartments_facade_objects_diff.png",
+          "file": "textures/T_1_modular_urban_apartments_facade_objects_diff.png",
+          "colorspace": "sRGB"
+        },
+        {
+          "node": "Image Texture.001",
+          "image": "modular_urban_apartments_facade_objects_metal.png",
+          "file": "textures/T_2_modular_urban_apartments_facade_objects_metal.png",
+          "colorspace": "Non-Color"
+        },
+        {
+          "node": "Image Texture.002",
+          "image": "modular_urban_apartments_facade_objects_rough.png",
+          "file": "textures/T_3_modular_urban_apartments_facade_objects_rough.png",
+          "colorspace": "Non-Color"
+        },
+        {
+          "node": "Image Texture.003",
+          "image": "modular_urban_apartments_facade_objects_nor_gl.png",
+          "file": "textures/T_4_modular_urban_apartments_facade_objects_nor_gl.png",
+          "colorspace": "Non-Color"
+        },
+        {
+          "node": "Image Texture.004",
+          "image": "modular_urban_apartments_facade_objects_alpha.png",
+          "file": "textures/T_5_modular_urban_apartments_facade_objects_alpha.png",
+          "colorspace": "Non-Color"
+        }
+      ]
+    },
+    {
+      "name": "modular_urban_apartments_facade_objects",
+      "glass": false,
+      "inputs": {
+        "Base Color": [
+          0.05311586707830429,
+          0.05311586707830429,
+          0.05311586707830429,
+          1.0
+        ],
+        "Metallic": 0.0,
+        "Roughness": 0.5,
+        "Transmission Weight": 0.0,
+        "IOR": 1.4500000476837158,
+        "Alpha": 1.0,
+        "Emission Color": [
+          0.0,
+          0.0,
+          0.0,
+          1.0
+        ],
+        "Emission Strength": 1.0
+      },
+      "links": [
+        {
+          "from": "Principled BSDF",
+          "output": "BSDF",
+          "to": "Material Output",
+          "input": "Surface"
+        },
+        {
+          "from": "Image Texture",
+          "output": "Color",
+          "to": "Principled BSDF",
+          "input": "Base Color"
+        },
+        {
+          "from": "Image Texture.001",
+          "output": "Color",
+          "to": "Principled BSDF",
+          "input": "Metallic"
+        },
+        {
+          "from": "Image Texture.002",
+          "output": "Color",
+          "to": "Principled BSDF",
+          "input": "Roughness"
+        },
+        {
+          "from": "Image Texture.003",
+          "output": "Color",
+          "to": "Normal Map",
+          "input": "Color"
+        },
+        {
+          "from": "Normal Map",
+          "output": "Normal",
+          "to": "Principled BSDF",
+          "input": "Normal"
+        },
+        {
+          "from": "Image Texture.004",
+          "output": "Color",
+          "to": "Principled BSDF",
+          "input": "Alpha"
+        },
+        {
+          "from": "Reroute",
+          "output": "Output",
+          "to": "Image Texture",
+          "input": "Vector"
+        },
+        {
+          "from": "Reroute",
+          "output": "Output",
+          "to": "Image Texture.001",
+          "input": "Vector"
+        },
+        {
+          "from": "Reroute",
+          "output": "Output",
+          "to": "Image Texture.002",
+          "input": "Vector"
+        },
+        {
+          "from": "Reroute",
+          "output": "Output",
+          "to": "Image Texture.003",
+          "input": "Vector"
+        },
+        {
+          "from": "Reroute",
+          "output": "Output",
+          "to": "Image Texture.004",
+          "input": "Vector"
+        },
+        {
+          "from": "Mapping",
+          "output": "Vector",
+          "to": "Reroute",
+          "input": "Input"
+        },
+        {
+          "from": "Texture Coordinate",
+          "output": "UV",
+          "to": "Mapping",
+          "input": "Vector"
+        }
+      ],
+      "images": [
+        {
+          "node": "Image Texture",
+          "image": "modular_urban_apartments_facade_objects_diff.png",
+          "file": "textures/T_1_modular_urban_apartments_facade_objects_diff.png",
+          "colorspace": "sRGB"
+        },
+        {
+          "node": "Image Texture.001",
+          "image": "modular_urban_apartments_facade_objects_metal.png",
+          "file": "textures/T_2_modular_urban_apartments_facade_objects_metal.png",
+          "colorspace": "Non-Color"
+        },
+        {
+          "node": "Image Texture.002",
+          "image": "modular_urban_apartments_facade_objects_rough.png",
+          "file": "textures/T_3_modular_urban_apartments_facade_objects_rough.png",
+          "colorspace": "Non-Color"
+        },
+        {
+          "node": "Image Texture.003",
+          "image": "modular_urban_apartments_facade_objects_nor_gl.png",
+          "file": "textures/T_4_modular_urban_apartments_facade_objects_nor_gl.png",
+          "colorspace": "Non-Color"
+        },
+        {
+          "node": "Image Texture.004",
+          "image": "modular_urban_apartments_facade_objects_alpha.png",
+          "file": "textures/T_5_modular_urban_apartments_facade_objects_alpha.png",
+          "colorspace": "Non-Color"
+        }
+      ]
+    },
+    {
+      "name": "modular_urban_apartments_facade_trim_01",
+      "glass": false,
+      "inputs": {
+        "Base Color": [
+          0.800000011920929,
+          0.800000011920929,
+          0.800000011920929,
+          1.0
+        ],
+        "Metallic": 0.0,
+        "Roughness": 0.5,
+        "Transmission Weight": 0.0,
+        "IOR": 1.4500000476837158,
+        "Alpha": 1.0,
+        "Emission Color": [
+          0.0,
+          0.0,
+          0.0,
+          1.0
+        ],
+        "Emission Strength": 1.0
+      },
+      "links": [
+        {
+          "from": "Principled BSDF",
+          "output": "BSDF",
+          "to": "Material Output",
+          "input": "Surface"
+        },
+        {
+          "from": "Image Texture",
+          "output": "Color",
+          "to": "Principled BSDF",
+          "input": "Base Color"
+        },
+        {
+          "from": "Image Texture.001",
+          "output": "Color",
+          "to": "Principled BSDF",
+          "input": "Roughness"
+        },
+        {
+          "from": "Image Texture.002",
+          "output": "Color",
+          "to": "Normal Map",
+          "input": "Color"
+        },
+        {
+          "from": "Normal Map",
+          "output": "Normal",
+          "to": "Principled BSDF",
+          "input": "Normal"
+        },
+        {
+          "from": "Reroute",
+          "output": "Output",
+          "to": "Image Texture",
+          "input": "Vector"
+        },
+        {
+          "from": "Reroute",
+          "output": "Output",
+          "to": "Image Texture.001",
+          "input": "Vector"
+        },
+        {
+          "from": "Reroute",
+          "output": "Output",
+          "to": "Image Texture.002",
+          "input": "Vector"
+        },
+        {
+          "from": "Mapping",
+          "output": "Vector",
+          "to": "Reroute",
+          "input": "Input"
+        },
+        {
+          "from": "Texture Coordinate",
+          "output": "UV",
+          "to": "Mapping",
+          "input": "Vector"
+        }
+      ],
+      "images": [
+        {
+          "node": "Image Texture",
+          "image": "modular_urban_apartments_facade_trim_01_diff.png",
+          "file": "textures/T_6_modular_urban_apartments_facade_trim_01_diff.png",
+          "colorspace": "sRGB"
+        },
+        {
+          "node": "Image Texture.001",
+          "image": "modular_urban_apartments_facade_trim_01_rough.png",
+          "file": "textures/T_7_modular_urban_apartments_facade_trim_01_rough.png",
+          "colorspace": "Non-Color"
+        },
+        {
+          "node": "Image Texture.002",
+          "image": "modular_urban_apartments_facade_trim_01_nor_gl.png",
+          "file": "textures/T_8_modular_urban_apartments_facade_trim_01_nor_gl.png",
+          "colorspace": "Non-Color"
+        }
+      ]
+    }
+  ],
+  "repairs": [
+    "15 separate window modules: clean, dirty, cracked, real perimeter shards and empty frame for each source size.",
+    "External deterministic crack/dirt mask; original frame textures and v2 library preserved."
+  ],
+  "actions": [],
+  "animation_runtime": "Rigid meshes driven from Unreal actuator state; Blender actions are inspectable demonstrations."
+}

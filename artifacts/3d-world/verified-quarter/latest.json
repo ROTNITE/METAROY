@@ -1,0 +1,265 @@
+{
+	"kind": "rescue_quarter_environment_demo",
+	"time_s": 150.00242670526495,
+	"seed": 20261109,
+	"discovered": 9,
+	"delivered": 2,
+	"contacts": 762429,
+	"collapse_released": true,
+	"average_game_fps": 166.2999315713696,
+	"worst_frame_ms": 173.33779907226562,
+	"physics_bodies": [
+		{
+			"initial_z_cm": 70,
+			"z_cm": 59.458260350561325,
+			"simulating": true,
+			"speed_cm_s": 0.74877401018138179
+		},
+		{
+			"initial_z_cm": 97,
+			"z_cm": 59.377157494490682,
+			"simulating": true,
+			"speed_cm_s": 0
+		},
+		{
+			"initial_z_cm": 124,
+			"z_cm": 92.632280232620161,
+			"simulating": true,
+			"speed_cm_s": 0.1146649631812437
+		},
+		{
+			"initial_z_cm": 151,
+			"z_cm": 62.590390257681051,
+			"simulating": true,
+			"speed_cm_s": 0.58344924742712356
+		},
+		{
+			"initial_z_cm": 178,
+			"z_cm": 29.195694354119102,
+			"simulating": true,
+			"speed_cm_s": 0.45665597696573068
+		},
+		{
+			"initial_z_cm": 205,
+			"z_cm": 46.232809498122712,
+			"simulating": true,
+			"speed_cm_s": 0
+		},
+		{
+			"initial_z_cm": 232,
+			"z_cm": 43.168187906027789,
+			"simulating": true,
+			"speed_cm_s": 0.08016170547397565
+		},
+		{
+			"initial_z_cm": 259,
+			"z_cm": 62.128501196527822,
+			"simulating": true,
+			"speed_cm_s": 0.21602785374583
+		},
+		{
+			"initial_z_cm": 286,
+			"z_cm": 122.04861637852997,
+			"simulating": true,
+			"speed_cm_s": 0
+		},
+		{
+			"initial_z_cm": 313,
+			"z_cm": 26.157327093876489,
+			"simulating": true,
+			"speed_cm_s": 0.24573294062543663
+		},
+		{
+			"initial_z_cm": 340,
+			"z_cm": 128.89018030138109,
+			"simulating": true,
+			"speed_cm_s": 0.55286151721690402
+		},
+		{
+			"initial_z_cm": 367,
+			"z_cm": 82.9974711289249,
+			"simulating": true,
+			"speed_cm_s": 0.63247709612525793
+		},
+		{
+			"initial_z_cm": 394,
+			"z_cm": 68.065664041853481,
+			"simulating": true,
+			"speed_cm_s": 0.78782899308469956
+		},
+		{
+			"initial_z_cm": 421,
+			"z_cm": 65.558628815839342,
+			"simulating": true,
+			"speed_cm_s": 0.32120132929032197
+		},
+		{
+			"initial_z_cm": 448,
+			"z_cm": 67.47101450028353,
+			"simulating": true,
+			"speed_cm_s": 0.66430518459424592
+		},
+		{
+			"initial_z_cm": 475,
+			"z_cm": 27.720640919910707,
+			"simulating": true,
+			"speed_cm_s": 0.76307784285048041
+		},
+		{
+			"initial_z_cm": 502,
+			"z_cm": 49.903490519454948,
+			"simulating": true,
+			"speed_cm_s": 0
+		},
+		{
+			"initial_z_cm": 529,
+			"z_cm": 70.81932878914688,
+			"simulating": true,
+			"speed_cm_s": 0
+		},
+		{
+			"initial_z_cm": 850,
+			"z_cm": 96.590532698177043,
+			"simulating": true,
+			"speed_cm_s": 0.23021825999565432
+		},
+		{
+			"initial_z_cm": 915,
+			"z_cm": 165.96538905584563,
+			"simulating": true,
+			"speed_cm_s": 0.71689712421046503
+		},
+		{
+			"initial_z_cm": 980,
+			"z_cm": 203.62004505160192,
+			"simulating": true,
+			"speed_cm_s": 1.0065112968974095
+		},
+		{
+			"initial_z_cm": 1045,
+			"z_cm": 185.18058099716424,
+			"simulating": true,
+			"speed_cm_s": 0.68792300888223523
+		},
+		{
+			"initial_z_cm": 1110,
+			"z_cm": 112.11796661493462,
+			"simulating": true,
+			"speed_cm_s": 0
+		}
+	],
+	"agents": [
+		{
+			"id": 0,
+			"aerial": true,
+			"state": "landed",
+			"energy": 89.741249084472656,
+			"x_cm": -1660.6762871320745,
+			"y_cm": 78.173584290926257,
+			"z_cm": 28.999999675736362,
+			"distance_cm": 43853.27734375,
+			"simulating": true,
+			"support_contacts": 0,
+			"mass_kg": 12,
+			"route_blocked": false,
+			"speed_cm_s": 0.00024596475787472819,
+			"yaw_deg": -161.68427007836402
+		},
+		{
+			"id": 1,
+			"aerial": true,
+			"state": "landed",
+			"energy": 77.312301635742188,
+			"x_cm": -1661.2478483086413,
+			"y_cm": 535.23292781128055,
+			"z_cm": 29.000005065799307,
+			"distance_cm": 61866.10546875,
+			"simulating": true,
+			"support_contacts": 0,
+			"mass_kg": 12,
+			"route_blocked": false,
+			"speed_cm_s": 6.8090038338258993e-05,
+			"yaw_deg": -167.52909963239136
+		},
+		{
+			"id": 2,
+			"aerial": true,
+			"state": "landed",
+			"energy": 71.895759582519531,
+			"x_cm": -1663.0823497462163,
+			"y_cm": 996.36742646194296,
+			"z_cm": 29.000000202234581,
+			"distance_cm": 69716.078125,
+			"simulating": true,
+			"support_contacts": 0,
+			"mass_kg": 12,
+			"route_blocked": false,
+			"speed_cm_s": 0.00039242855767243477,
+			"yaw_deg": -175.2584128272766
+		},
+		{
+			"id": 0,
+			"aerial": false,
+			"state": "loading",
+			"energy": 212.65118408203125,
+			"x_cm": 10005.090515605621,
+			"y_cm": 3378.0473033248118,
+			"z_cm": 48.833332895247416,
+			"distance_cm": 29941.205078125,
+			"simulating": true,
+			"support_contacts": 6,
+			"mass_kg": 240.00001525878906,
+			"route_blocked": false,
+			"speed_cm_s": 3.0153951229294762e-06,
+			"yaw_deg": 95.540542469259762
+		},
+		{
+			"id": 1,
+			"aerial": false,
+			"state": "outbound",
+			"energy": 219.14469909667969,
+			"x_cm": 755.86308730987503,
+			"y_cm": 910.39066952105611,
+			"z_cm": 48.459432944897287,
+			"distance_cm": 21768.923828125,
+			"simulating": true,
+			"support_contacts": 6,
+			"mass_kg": 240.00001525878906,
+			"route_blocked": true,
+			"speed_cm_s": 1.4750245807854983,
+			"yaw_deg": 59.387839604605162
+		},
+		{
+			"id": 2,
+			"aerial": false,
+			"state": "inbound",
+			"energy": 216.16883850097656,
+			"x_cm": 809.73302787156138,
+			"y_cm": 1134.1452525696473,
+			"z_cm": 49.113761925546903,
+			"distance_cm": 24106.65234375,
+			"simulating": true,
+			"support_contacts": 6,
+			"mass_kg": 320.00003051757812,
+			"route_blocked": true,
+			"speed_cm_s": 1.2761906286712563,
+			"yaw_deg": -120.6143054500162
+		},
+		{
+			"id": 3,
+			"aerial": false,
+			"state": "outbound",
+			"energy": 229.72441101074219,
+			"x_cm": 7393.5585051403405,
+			"y_cm": 5533.8892339468812,
+			"z_cm": 51.836029833211072,
+			"distance_cm": 12543.0419921875,
+			"simulating": true,
+			"support_contacts": 6,
+			"mass_kg": 240.00001525878906,
+			"route_blocked": true,
+			"speed_cm_s": 0.13036246540446331,
+			"yaw_deg": 32.477680598451578
+		}
+	]
+}

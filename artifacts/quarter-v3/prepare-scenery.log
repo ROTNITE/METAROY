@@ -1,0 +1,80 @@
+Warning: No mesh data to join
+Warning: No mesh data to join
+Warning: No mesh data to join
+Info: Saved as "GlazingKit.blend"
+
+FBX export starting... 'C:\\Users\\rotn1\\Documents\\ChatGPT\\metaroy\\blender\\prepared\\v3\\GlazingKit\\parts\\window_01_clean.fbx'
+export finished in 0.0070 sec.
+
+FBX export starting... 'C:\\Users\\rotn1\\Documents\\ChatGPT\\metaroy\\blender\\prepared\\v3\\GlazingKit\\parts\\window_01_dirty.fbx'
+export finished in 0.0060 sec.
+
+FBX export starting... 'C:\\Users\\rotn1\\Documents\\ChatGPT\\metaroy\\blender\\prepared\\v3\\GlazingKit\\parts\\window_01_cracked.fbx'
+export finished in 0.0060 sec.
+
+FBX export starting... 'C:\\Users\\rotn1\\Documents\\ChatGPT\\metaroy\\blender\\prepared\\v3\\GlazingKit\\parts\\window_01_broken.fbx'
+export finished in 0.0060 sec.
+
+FBX export starting... 'C:\\Users\\rotn1\\Documents\\ChatGPT\\metaroy\\blender\\prepared\\v3\\GlazingKit\\parts\\window_01_empty.fbx'
+export finished in 0.0070 sec.
+
+FBX export starting... 'C:\\Users\\rotn1\\Documents\\ChatGPT\\metaroy\\blender\\prepared\\v3\\GlazingKit\\parts\\window_02_clean.fbx'
+export finished in 0.0070 sec.
+
+FBX export starting... 'C:\\Users\\rotn1\\Documents\\ChatGPT\\metaroy\\blender\\prepared\\v3\\GlazingKit\\parts\\window_02_dirty.fbx'
+export finished in 0.0060 sec.
+
+FBX export starting... 'C:\\Users\\rotn1\\Documents\\ChatGPT\\metaroy\\blender\\prepared\\v3\\GlazingKit\\parts\\window_02_cracked.fbx'
+export finished in 0.0060 sec.
+
+FBX export starting... 'C:\\Users\\rotn1\\Documents\\ChatGPT\\metaroy\\blender\\prepared\\v3\\GlazingKit\\parts\\window_02_broken.fbx'
+export finished in 0.0060 sec.
+
+FBX export starting... 'C:\\Users\\rotn1\\Documents\\ChatGPT\\metaroy\\blender\\prepared\\v3\\GlazingKit\\parts\\window_02_empty.fbx'
+export finished in 0.0060 sec.
+
+FBX export starting... 'C:\\Users\\rotn1\\Documents\\ChatGPT\\metaroy\\blender\\prepared\\v3\\GlazingKit\\parts\\window_03_clean.fbx'
+export finished in 0.0105 sec.
+
+FBX export starting... 'C:\\Users\\rotn1\\Documents\\ChatGPT\\metaroy\\blender\\prepared\\v3\\GlazingKit\\parts\\window_03_dirty.fbx'
+export finished in 0.0090 sec.
+
+FBX export starting... 'C:\\Users\\rotn1\\Documents\\ChatGPT\\metaroy\\blender\\prepared\\v3\\GlazingKit\\parts\\window_03_cracked.fbx'
+export finished in 0.0070 sec.
+
+FBX export starting... 'C:\\Users\\rotn1\\Documents\\ChatGPT\\metaroy\\blender\\prepared\\v3\\GlazingKit\\parts\\window_03_broken.fbx'
+export finished in 0.0070 sec.
+
+FBX export starting... 'C:\\Users\\rotn1\\Documents\\ChatGPT\\metaroy\\blender\\prepared\\v3\\GlazingKit\\parts\\window_03_empty.fbx'
+export finished in 0.0070 sec.
+MR_MECHANIZED GlazingKit 15 parts 16632 triangles
+Info: Saved as "SceneryKit.blend"
+
+FBX export starting... 'C:\\Users\\rotn1\\Documents\\ChatGPT\\metaroy\\blender\\prepared\\v3\\SceneryKit\\parts\\fragment_0.fbx'
+export finished in 0.0055 sec.
+
+FBX export starting... 'C:\\Users\\rotn1\\Documents\\ChatGPT\\metaroy\\blender\\prepared\\v3\\SceneryKit\\parts\\fragment_1.fbx'
+export finished in 0.0030 sec.
+
+FBX export starting... 'C:\\Users\\rotn1\\Documents\\ChatGPT\\metaroy\\blender\\prepared\\v3\\SceneryKit\\parts\\fragment_2.fbx'
+export finished in 0.0030 sec.
+
+FBX export starting... 'C:\\Users\\rotn1\\Documents\\ChatGPT\\metaroy\\blender\\prepared\\v3\\SceneryKit\\parts\\fragment_3.fbx'
+export finished in 0.0040 sec.
+
+FBX export starting... 'C:\\Users\\rotn1\\Documents\\ChatGPT\\metaroy\\blender\\prepared\\v3\\SceneryKit\\parts\\fragment_4.fbx'
+export finished in 0.0050 sec.
+
+FBX export starting... 'C:\\Users\\rotn1\\Documents\\ChatGPT\\metaroy\\blender\\prepared\\v3\\SceneryKit\\parts\\room_0.fbx'
+export finished in 0.0060 sec.
+
+FBX export starting... 'C:\\Users\\rotn1\\Documents\\ChatGPT\\metaroy\\blender\\prepared\\v3\\SceneryKit\\parts\\room_1.fbx'
+export finished in 0.0038 sec.
+
+FBX export starting... 'C:\\Users\\rotn1\\Documents\\ChatGPT\\metaroy\\blender\\prepared\\v3\\SceneryKit\\parts\\room_2.fbx'
+export finished in 0.0040 sec.
+MR_MECHANIZED SceneryKit 8 parts 2700 triangles
+Blender 4.5.15 LTS (hash 5afeabba6097 built 2026-10-22 01:35:27)
+Read blend: "C:\Users\rotn1\Documents\ChatGPT\metaroy\blender\prepared\v2\UrbanKit\UrbanKit.blend"
+
+Blender quit

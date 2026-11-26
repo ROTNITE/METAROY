@@ -1,0 +1,89 @@
+﻿{
+	"devices": [
+		{
+			"deviceName": "ADMIN",
+			"instance": "3BF8257F4F7FD5C113E0589151DEB225",
+			"instanceName": "ADMIN-23980",
+			"platform": "WindowsEditor",
+			"oSVersion": "Windows 11 (26H2) [10.0.26300.9818] ",
+			"model": "Default",
+			"gPU": "Microsoft Remote Display Adapter",
+			"cPUModel": "12th Gen Intel(R) Core(TM) i9-12900KF",
+			"rAMInGB": 32,
+			"renderMode": "SM6",
+			"rHI": "",
+			"appInstanceLog": ""
+		}
+	],
+	"reportCreatedOn": "2026.11.10-13.56.36",
+	"succeeded": 4,
+	"succeededWithWarnings": 0,
+	"failed": 0,
+	"notRun": 0,
+	"inProcess": 0,
+	"totalDuration": 0.032312501221895218,
+	"comparisonExported": false,
+	"comparisonExportDirectory": "",
+	"tests": [
+		{
+			"testDisplayName": "ConsequencesAndExpiry",
+			"fullTestPath": "MetaRescue.Environment.ConsequencesAndExpiry",
+			"tags": [],
+			"state": "Success",
+			"deviceInstance": [
+				"3BF8257F4F7FD5C113E0589151DEB225"
+			],
+			"duration": 0.0081527978181838989,
+			"dateTime": "2026.11.10-13.56.36",
+			"entries": [],
+			"warnings": 0,
+			"errors": 0,
+			"artifacts": []
+		},
+		{
+			"testDisplayName": "ProtectedBaseAndExhaustion",
+			"fullTestPath": "MetaRescue.Environment.ProtectedBaseAndExhaustion",
+			"tags": [],
+			"state": "Success",
+			"deviceInstance": [
+				"3BF8257F4F7FD5C113E0589151DEB225"
+			],
+			"duration": 0.008127700537443161,
+			"dateTime": "2026.11.10-13.56.36",
+			"entries": [],
+			"warnings": 0,
+			"errors": 0,
+			"artifacts": []
+		},
+		{
+			"testDisplayName": "ReplayAndWindowBoundaries",
+			"fullTestPath": "MetaRescue.Environment.ReplayAndWindowBoundaries",
+			"tags": [],
+			"state": "Success",
+			"deviceInstance": [
+				"3BF8257F4F7FD5C113E0589151DEB225"
+			],
+			"duration": 0.0079523026943206787,
+			"dateTime": "2026.11.10-13.56.36",
+			"entries": [],
+			"warnings": 0,
+			"errors": 0,
+			"artifacts": []
+		},
+		{
+			"testDisplayName": "ZeroAndFullProbability",
+			"fullTestPath": "MetaRescue.Environment.ZeroAndFullProbability",
+			"tags": [],
+			"state": "Success",
+			"deviceInstance": [
+				"3BF8257F4F7FD5C113E0589151DEB225"
+			],
+			"duration": 0.0080797001719474792,
+			"dateTime": "2026.11.10-13.56.36",
+			"entries": [],
+			"warnings": 0,
+			"errors": 0,
+			"artifacts": []
+		}
+	]
+}

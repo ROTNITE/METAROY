@@ -1,0 +1,13 @@
+Traceback (most recent call last):
+  File "C:\Users\rotn1\Documents\ChatGPT\metaroy\unreal\tools\check_quarter_v3_run.py", line 270, in <module>
+    if __name__=='__main__':main()
+                            ~~~~^^
+  File "C:\Users\rotn1\Documents\ChatGPT\metaroy\unreal\tools\check_quarter_v3_run.py", line 263, in main
+    try:verify(args.folder)
+        ~~~~~~^^^^^^^^^^^^^
+  File "C:\Users\rotn1\Documents\ChatGPT\metaroy\unreal\tools\check_quarter_v3_run.py", line 224, in verify
+    histories=check_trajectories(frames)
+  File "C:\Users\rotn1\Documents\ChatGPT\metaroy\unreal\tools\check_quarter_v3_run.py", line 78, in check_trajectories
+    assert a['vehicle_contacts']==0,('vehicle collision',a['key'],a['vehicle_contacts'],frame['time_s'])
+           ^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: ('vehicle collision', 'ground_0', 165, 8.012298415356781)

@@ -1,0 +1,422 @@
+Blender 4.5.15 LTS (hash 5afeabba6097 built 2026-10-22 01:35:27)
+Read blend: "C:\Users\rotn1\Documents\ChatGPT\metaroy\blender\prepared\v2\Medical\Medical.blend"
+Fra:1 Mem:35.03M (Peak 35.03M) | Time:00:00.00 | Mem:0.00M, Peak:0.00M | Scene, ViewLayer | Synchronizing object | Body
+Fra:1 Mem:35.03M (Peak 35.03M) | Time:00:00.00 | Mem:0.00M, Peak:0.00M | Scene, ViewLayer | Synchronizing object | WindowMullion.002
+Fra:1 Mem:37.09M (Peak 37.09M) | Time:00:00.00 | Mem:0.00M, Peak:0.00M | Scene, ViewLayer | Synchronizing object | WindowSill
+Fra:1 Mem:37.10M (Peak 37.10M) | Time:00:00.00 | Mem:0.00M, Peak:0.00M | Scene, ViewLayer | Synchronizing object | Area.002
+Fra:1 Mem:37.11M (Peak 37.11M) | Time:00:00.00 | Mem:0.00M, Peak:0.00M | Scene, ViewLayer | Synchronizing object | Area.001
+Fra:1 Mem:37.11M (Peak 37.11M) | Time:00:00.00 | Mem:0.00M, Peak:0.00M | Scene, ViewLayer | Synchronizing object | Area
+Fra:1 Mem:37.11M (Peak 37.11M) | Time:00:00.00 | Mem:0.00M, Peak:0.00M | Scene, ViewLayer | Synchronizing object | MedicalCabinet
+Fra:1 Mem:37.17M (Peak 37.17M) | Time:00:00.00 | Mem:0.00M, Peak:0.00M | Scene, ViewLayer | Synchronizing object | MedicalBench
+Fra:1 Mem:37.17M (Peak 37.17M) | Time:00:00.00 | Mem:0.00M, Peak:0.00M | Scene, ViewLayer | Synchronizing object | WindowMullion.004
+Fra:1 Mem:37.18M (Peak 37.18M) | Time:00:00.00 | Mem:0.00M, Peak:0.00M | Scene, ViewLayer | Synchronizing object | WindowMullion.005
+Fra:1 Mem:37.19M (Peak 37.19M) | Time:00:00.00 | Mem:0.00M, Peak:0.00M | Scene, ViewLayer | Synchronizing object | MedicalInteriorFloor
+Fra:1 Mem:37.24M (Peak 37.24M) | Time:00:00.00 | Mem:0.00M, Peak:0.00M | Scene, ViewLayer | Synchronizing object | WindowSill.003
+Fra:1 Mem:37.28M (Peak 37.28M) | Time:00:00.00 | Mem:0.00M, Peak:0.00M | Scene, ViewLayer | Synchronizing object | WindowSill.002
+Fra:1 Mem:40.61M (Peak 44.92M) | Time:00:00.01 | Mem:0.00M, Peak:0.00M | Scene, ViewLayer | Initializing
+Fra:1 Mem:39.69M (Peak 44.92M) | Time:00:00.01 | Mem:0.00M, Peak:0.00M | Scene, ViewLayer | Waiting for render to start
+Fra:1 Mem:39.69M (Peak 44.92M) | Time:00:00.01 | Mem:0.00M, Peak:0.00M | Scene, ViewLayer | Updating Scene
+Fra:1 Mem:39.69M (Peak 44.92M) | Time:00:00.01 | Mem:0.00M, Peak:0.00M | Scene, ViewLayer | Updating Shaders
+Fra:1 Mem:39.69M (Peak 44.92M) | Time:00:00.01 | Mem:0.00M, Peak:0.00M | Scene, ViewLayer | Loading render kernels (may take a few minutes the first time)
+Fra:1 Mem:39.78M (Peak 44.92M) | Time:00:00.02 | Mem:0.00M, Peak:0.00M | Scene, ViewLayer | Updating Procedurals
+Fra:1 Mem:39.78M (Peak 44.92M) | Time:00:00.02 | Mem:0.00M, Peak:0.00M | Scene, ViewLayer | Updating Background
+Fra:1 Mem:39.78M (Peak 44.92M) | Time:00:00.02 | Mem:0.00M, Peak:0.00M | Scene, ViewLayer | Updating Camera
+Fra:1 Mem:39.78M (Peak 44.92M) | Time:00:00.02 | Mem:0.00M, Peak:0.00M | Scene, ViewLayer | Updating Meshes Flags
+Fra:1 Mem:39.78M (Peak 44.92M) | Time:00:00.02 | Mem:0.00M, Peak:0.00M | Scene, ViewLayer | Updating Objects
+Fra:1 Mem:39.78M (Peak 44.92M) | Time:00:00.02 | Mem:0.00M, Peak:0.00M | Scene, ViewLayer | Updating Objects | Copying Transformations to device
+Fra:1 Mem:39.78M (Peak 44.92M) | Time:00:00.02 | Mem:0.01M, Peak:0.01M | Scene, ViewLayer | Updating Particle Systems
+Fra:1 Mem:39.78M (Peak 44.92M) | Time:00:00.02 | Mem:0.01M, Peak:0.01M | Scene, ViewLayer | Updating Particle Systems | Copying Particles to device
+Fra:1 Mem:39.78M (Peak 44.92M) | Time:00:00.02 | Mem:0.01M, Peak:0.01M | Scene, ViewLayer | Updating Meshes
+Fra:1 Mem:41.94M (Peak 44.92M) | Time:00:00.03 | Mem:0.01M, Peak:0.01M | Scene, ViewLayer | Updating Objects | Applying Static Transformations
+Fra:1 Mem:41.94M (Peak 44.92M) | Time:00:00.03 | Mem:0.01M, Peak:0.01M | Scene, ViewLayer | Updating Mesh | Computing attributes
+Fra:1 Mem:44.77M (Peak 44.92M) | Time:00:00.03 | Mem:0.01M, Peak:0.01M | Scene, ViewLayer | Updating Mesh | Copying Attributes to device
+Fra:1 Mem:44.77M (Peak 44.92M) | Time:00:00.03 | Mem:2.84M, Peak:2.84M | Scene, ViewLayer | Updating Scene BVH | Building
+Fra:1 Mem:44.77M (Peak 44.92M) | Time:00:00.03 | Mem:2.84M, Peak:2.84M | Scene, ViewLayer | Updating Scene BVH | Building BVH
+Fra:1 Mem:44.77M (Peak 44.92M) | Time:00:00.03 | Mem:4.04M, Peak:4.04M | Scene, ViewLayer | Updating Scene BVH | Building BVH 0%
+Fra:1 Mem:44.77M (Peak 44.92M) | Time:00:00.04 | Mem:5.61M, Peak:6.81M | Scene, ViewLayer | Updating Scene BVH | Copying BVH to device
+Fra:1 Mem:44.77M (Peak 44.92M) | Time:00:00.04 | Mem:5.61M, Peak:6.81M | Scene, ViewLayer | Updating Mesh | Computing normals
+Fra:1 Mem:45.85M (Peak 45.85M) | Time:00:00.04 | Mem:5.61M, Peak:6.81M | Scene, ViewLayer | Updating Mesh | Copying Mesh to device
+Fra:1 Mem:45.85M (Peak 45.85M) | Time:00:00.04 | Mem:6.69M, Peak:6.81M | Scene, ViewLayer | Updating Objects Flags
+Fra:1 Mem:45.85M (Peak 45.85M) | Time:00:00.04 | Mem:6.69M, Peak:6.81M | Scene, ViewLayer | Updating Primitive Offsets
+Fra:1 Mem:45.85M (Peak 45.85M) | Time:00:00.04 | Mem:6.69M, Peak:6.81M | Scene, ViewLayer | Updating Images
+Fra:1 Mem:45.85M (Peak 45.85M) | Time:00:00.04 | Mem:6.69M, Peak:6.81M | Scene, ViewLayer | Updating Images | Loading T_2_T_Medical_Normal.png
+Fra:1 Mem:61.85M (Peak 61.85M) | Time:00:00.04 | Mem:6.69M, Peak:6.81M | Scene, ViewLayer | Updating Images | Loading T_0_T_Medical_BaseColor.png
+Fra:1 Mem:61.85M (Peak 61.85M) | Time:00:00.04 | Mem:6.69M, Peak:6.81M | Scene, ViewLayer | Updating Images | Loading T_1_T_Medical_ORM.png
+Fra:1 Mem:93.86M (Peak 93.86M) | Time:00:00.10 | Mem:54.69M, Peak:54.69M | Scene, ViewLayer | Updating Camera Volume
+Fra:1 Mem:93.86M (Peak 93.86M) | Time:00:00.10 | Mem:54.69M, Peak:54.69M | Scene, ViewLayer | Updating Lookup Tables
+Fra:1 Mem:93.86M (Peak 93.86M) | Time:00:00.10 | Mem:54.77M, Peak:54.77M | Scene, ViewLayer | Updating Lights
+Fra:1 Mem:93.86M (Peak 93.86M) | Time:00:00.10 | Mem:54.77M, Peak:54.77M | Scene, ViewLayer | Updating Lights | Computing tree
+Fra:1 Mem:93.86M (Peak 93.86M) | Time:00:00.10 | Mem:54.77M, Peak:54.77M | Scene, ViewLayer | Updating Integrator
+Fra:1 Mem:93.86M (Peak 93.86M) | Time:00:00.10 | Mem:54.77M, Peak:54.77M | Scene, ViewLayer | Updating Film
+Fra:1 Mem:93.87M (Peak 93.87M) | Time:00:00.10 | Mem:54.69M, Peak:54.77M | Scene, ViewLayer | Updating Lookup Tables
+Fra:1 Mem:93.87M (Peak 93.87M) | Time:00:00.10 | Mem:54.78M, Peak:54.78M | Scene, ViewLayer | Updating Baking
+Fra:1 Mem:93.87M (Peak 93.87M) | Time:00:00.10 | Mem:54.78M, Peak:54.78M | Scene, ViewLayer | Updating Device | Writing constant memory
+Fra:1 Mem:93.87M (Peak 93.87M) | Time:00:00.10 | Mem:54.78M, Peak:54.78M | Scene, ViewLayer | Loading denoising kernels (may take a few minutes the first time)
+Fra:1 Mem:93.87M (Peak 93.87M) | Time:00:00.10 | Mem:54.78M, Peak:54.78M | Scene, ViewLayer | Sample 0/8
+Fra:1 Mem:119.94M (Peak 119.94M) | Time:00:00.14 | Remaining:00:00.27 | Mem:80.76M, Peak:80.76M | Scene, ViewLayer | Sample 1/8
+Fra:1 Mem:130.88M (Peak 147.29M) | Time:00:01.22 | Mem:80.76M, Peak:80.76M | Scene, ViewLayer | Sample 8/8
+Fra:1 Mem:130.88M (Peak 147.29M) | Time:00:01.22 | Mem:80.76M, Peak:80.76M | Scene, ViewLayer | Finished
+Saved: 'C:\Users\rotn1\Documents\ChatGPT\metaroy\artifacts\3d-world\asset-library\previews\Repaired_Medical\a.png'
+Time: 00:01.32 (Saving: 00:00.09)
+
+Fra:1 Mem:38.15M (Peak 38.15M) | Time:00:00.00 | Mem:0.00M, Peak:0.00M | Scene, ViewLayer | Synchronizing object | Body
+Fra:1 Mem:38.15M (Peak 38.15M) | Time:00:00.00 | Mem:0.00M, Peak:0.00M | Scene, ViewLayer | Synchronizing object | MedicalGlass_-1_0
+Fra:1 Mem:38.44M (Peak 38.44M) | Time:00:00.00 | Mem:0.00M, Peak:0.00M | Scene, ViewLayer | Synchronizing object | Area.002
+Fra:1 Mem:38.48M (Peak 38.48M) | Time:00:00.00 | Mem:0.00M, Peak:0.00M | Scene, ViewLayer | Synchronizing object | Area.001
+Fra:1 Mem:38.50M (Peak 38.50M) | Time:00:00.00 | Mem:0.00M, Peak:0.00M | Scene, ViewLayer | Synchronizing object | Area
+Fra:1 Mem:38.49M (Peak 38.50M) | Time:00:00.00 | Mem:0.00M, Peak:0.00M | Scene, ViewLayer | Synchronizing object | MedicalCabinet
+Fra:1 Mem:38.51M (Peak 38.51M) | Time:00:00.00 | Mem:0.00M, Peak:0.00M | Scene, ViewLayer | Synchronizing object | MedicalGlass_1_0
+Fra:1 Mem:38.51M (Peak 38.52M) | Time:00:00.00 | Mem:0.00M, Peak:0.00M | Scene, ViewLayer | Synchronizing object | WindowMullion.003
+Fra:1 Mem:38.52M (Peak 38.52M) | Time:00:00.00 | Mem:0.00M, Peak:0.00M | Scene, ViewLayer | Synchronizing object | WindowMullion.005
+Fra:1 Mem:38.50M (Peak 38.52M) | Time:00:00.00 | Mem:0.00M, Peak:0.00M | Scene, ViewLayer | Synchronizing object | MedicalInteriorFloor
+Fra:1 Mem:40.61M (Peak 44.92M) | Time:00:00.00 | Mem:0.00M, Peak:0.00M | Scene, ViewLayer | Initializing
+Fra:1 Mem:39.69M (Peak 44.92M) | Time:00:00.00 | Mem:0.00M, Peak:0.00M | Scene, ViewLayer | Waiting for render to start
+Fra:1 Mem:39.69M (Peak 44.92M) | Time:00:00.00 | Mem:0.00M, Peak:0.00M | Scene, ViewLayer | Updating Scene
+Fra:1 Mem:39.69M (Peak 44.92M) | Time:00:00.00 | Mem:0.00M, Peak:0.00M | Scene, ViewLayer | Updating Shaders
+Fra:1 Mem:39.69M (Peak 44.92M) | Time:00:00.00 | Mem:0.00M, Peak:0.00M | Scene, ViewLayer | Loading render kernels (may take a few minutes the first time)
+Fra:1 Mem:39.78M (Peak 44.92M) | Time:00:00.00 | Mem:0.00M, Peak:0.00M | Scene, ViewLayer | Updating Procedurals
+Fra:1 Mem:39.78M (Peak 44.92M) | Time:00:00.00 | Mem:0.00M, Peak:0.00M | Scene, ViewLayer | Updating Background
+Fra:1 Mem:39.78M (Peak 44.92M) | Time:00:00.00 | Mem:0.00M, Peak:0.00M | Scene, ViewLayer | Updating Camera
+Fra:1 Mem:39.78M (Peak 44.92M) | Time:00:00.00 | Mem:0.00M, Peak:0.00M | Scene, ViewLayer | Updating Meshes Flags
+Fra:1 Mem:39.78M (Peak 44.92M) | Time:00:00.00 | Mem:0.00M, Peak:0.00M | Scene, ViewLayer | Updating Objects
+Fra:1 Mem:39.78M (Peak 44.92M) | Time:00:00.00 | Mem:0.00M, Peak:0.00M | Scene, ViewLayer | Updating Objects | Copying Transformations to device
+Fra:1 Mem:39.78M (Peak 44.92M) | Time:00:00.00 | Mem:0.01M, Peak:0.01M | Scene, ViewLayer | Updating Particle Systems
+Fra:1 Mem:39.78M (Peak 44.92M) | Time:00:00.00 | Mem:0.01M, Peak:0.01M | Scene, ViewLayer | Updating Particle Systems | Copying Particles to device
+Fra:1 Mem:39.78M (Peak 44.92M) | Time:00:00.00 | Mem:0.01M, Peak:0.01M | Scene, ViewLayer | Updating Meshes
+Fra:1 Mem:41.94M (Peak 44.92M) | Time:00:00.02 | Mem:0.01M, Peak:0.01M | Scene, ViewLayer | Updating Objects | Applying Static Transformations
+Fra:1 Mem:41.94M (Peak 44.92M) | Time:00:00.02 | Mem:0.01M, Peak:0.01M | Scene, ViewLayer | Updating Mesh | Computing attributes
+Fra:1 Mem:44.77M (Peak 44.92M) | Time:00:00.02 | Mem:0.01M, Peak:0.01M | Scene, ViewLayer | Updating Mesh | Copying Attributes to device
+Fra:1 Mem:44.77M (Peak 44.92M) | Time:00:00.02 | Mem:2.84M, Peak:2.84M | Scene, ViewLayer | Updating Scene BVH | Building
+Fra:1 Mem:44.77M (Peak 44.92M) | Time:00:00.02 | Mem:2.84M, Peak:2.84M | Scene, ViewLayer | Updating Scene BVH | Building BVH
+Fra:1 Mem:44.77M (Peak 44.92M) | Time:00:00.02 | Mem:4.04M, Peak:4.04M | Scene, ViewLayer | Updating Scene BVH | Building BVH 0%
+Fra:1 Mem:44.77M (Peak 44.92M) | Time:00:00.02 | Mem:5.61M, Peak:6.81M | Scene, ViewLayer | Updating Scene BVH | Copying BVH to device
+Fra:1 Mem:44.77M (Peak 44.92M) | Time:00:00.02 | Mem:5.61M, Peak:6.81M | Scene, ViewLayer | Updating Mesh | Computing normals
+Fra:1 Mem:45.85M (Peak 45.85M) | Time:00:00.02 | Mem:5.61M, Peak:6.81M | Scene, ViewLayer | Updating Mesh | Copying Mesh to device
+Fra:1 Mem:45.85M (Peak 45.85M) | Time:00:00.02 | Mem:6.69M, Peak:6.81M | Scene, ViewLayer | Updating Objects Flags
+Fra:1 Mem:45.85M (Peak 45.85M) | Time:00:00.02 | Mem:6.69M, Peak:6.81M | Scene, ViewLayer | Updating Primitive Offsets
+Fra:1 Mem:45.85M (Peak 45.85M) | Time:00:00.02 | Mem:6.69M, Peak:6.81M | Scene, ViewLayer | Updating Images
+Fra:1 Mem:45.85M (Peak 45.85M) | Time:00:00.02 | Mem:6.69M, Peak:6.81M | Scene, ViewLayer | Updating Images | Loading T_2_T_Medical_Normal.png
+Fra:1 Mem:61.85M (Peak 61.85M) | Time:00:00.02 | Mem:6.69M, Peak:6.81M | Scene, ViewLayer | Updating Images | Loading T_1_T_Medical_ORM.png
+Fra:1 Mem:93.86M (Peak 93.86M) | Time:00:00.08 | Mem:54.69M, Peak:54.69M | Scene, ViewLayer | Updating Camera Volume
+Fra:1 Mem:93.86M (Peak 93.86M) | Time:00:00.08 | Mem:54.69M, Peak:54.69M | Scene, ViewLayer | Updating Lookup Tables
+Fra:1 Mem:93.86M (Peak 93.86M) | Time:00:00.08 | Mem:54.77M, Peak:54.77M | Scene, ViewLayer | Updating Lights
+Fra:1 Mem:93.86M (Peak 93.86M) | Time:00:00.08 | Mem:54.77M, Peak:54.77M | Scene, ViewLayer | Updating Lights | Computing tree
+Fra:1 Mem:93.86M (Peak 93.86M) | Time:00:00.08 | Mem:54.77M, Peak:54.77M | Scene, ViewLayer | Updating Integrator
+Fra:1 Mem:93.86M (Peak 93.86M) | Time:00:00.08 | Mem:54.77M, Peak:54.77M | Scene, ViewLayer | Updating Film
+Fra:1 Mem:93.87M (Peak 93.87M) | Time:00:00.08 | Mem:54.69M, Peak:54.77M | Scene, ViewLayer | Updating Lookup Tables
+Fra:1 Mem:93.87M (Peak 93.87M) | Time:00:00.08 | Mem:54.78M, Peak:54.78M | Scene, ViewLayer | Updating Baking
+Fra:1 Mem:93.87M (Peak 93.87M) | Time:00:00.08 | Mem:54.78M, Peak:54.78M | Scene, ViewLayer | Updating Device | Writing constant memory
+Fra:1 Mem:93.87M (Peak 93.87M) | Time:00:00.08 | Mem:54.78M, Peak:54.78M | Scene, ViewLayer | Loading denoising kernels (may take a few minutes the first time)
+Fra:1 Mem:93.87M (Peak 93.87M) | Time:00:00.08 | Mem:54.78M, Peak:54.78M | Scene, ViewLayer | Sample 0/8
+Fra:1 Mem:119.94M (Peak 119.94M) | Time:00:00.13 | Remaining:00:00.33 | Mem:80.76M, Peak:80.76M | Scene, ViewLayer | Sample 1/8
+Fra:1 Mem:130.88M (Peak 147.29M) | Time:00:01.25 | Mem:80.76M, Peak:80.76M | Scene, ViewLayer | Sample 8/8
+Fra:1 Mem:130.88M (Peak 147.29M) | Time:00:01.25 | Mem:80.76M, Peak:80.76M | Scene, ViewLayer | Finished
+Saved: 'C:\Users\rotn1\Documents\ChatGPT\metaroy\artifacts\3d-world\asset-library\previews\Repaired_Medical\b.png'
+Time: 00:01.28 (Saving: 00:00.02)
+
+Fra:1 Mem:38.15M (Peak 38.15M) | Time:00:00.00 | Mem:0.00M, Peak:0.00M | Scene, ViewLayer | Synchronizing object | Body
+Fra:1 Mem:38.15M (Peak 38.15M) | Time:00:00.00 | Mem:0.00M, Peak:0.00M | Scene, ViewLayer | Synchronizing object | WindowMullion
+Fra:1 Mem:38.21M (Peak 38.21M) | Time:00:00.00 | Mem:0.00M, Peak:0.00M | Scene, ViewLayer | Synchronizing object | WindowMullion.002
+Fra:1 Mem:38.24M (Peak 38.24M) | Time:00:00.00 | Mem:0.00M, Peak:0.00M | Scene, ViewLayer | Synchronizing object | WindowSill
+Fra:1 Mem:38.47M (Peak 38.47M) | Time:00:00.00 | Mem:0.00M, Peak:0.00M | Scene, ViewLayer | Synchronizing object | Area.002
+Fra:1 Mem:38.46M (Peak 38.47M) | Time:00:00.00 | Mem:0.00M, Peak:0.00M | Scene, ViewLayer | Synchronizing object | WindowSill.001
+Fra:1 Mem:38.48M (Peak 38.48M) | Time:00:00.00 | Mem:0.00M, Peak:0.00M | Scene, ViewLayer | Synchronizing object | Area.001
+Fra:1 Mem:38.48M (Peak 38.48M) | Time:00:00.00 | Mem:0.00M, Peak:0.00M | Scene, ViewLayer | Synchronizing object | MedicalGlass_1_0
+Fra:1 Mem:38.48M (Peak 38.48M) | Time:00:00.00 | Mem:0.00M, Peak:0.00M | Scene, ViewLayer | Synchronizing object | Area
+Fra:1 Mem:38.49M (Peak 38.49M) | Time:00:00.00 | Mem:0.00M, Peak:0.00M | Scene, ViewLayer | Synchronizing object | MedicalGlass_1_1
+Fra:1 Mem:38.50M (Peak 38.50M) | Time:00:00.00 | Mem:0.00M, Peak:0.00M | Scene, ViewLayer | Synchronizing object | WindowMullion.003
+Fra:1 Mem:38.53M (Peak 38.54M) | Time:00:00.00 | Mem:0.00M, Peak:0.00M | Scene, ViewLayer | Synchronizing object | WindowMullion.004
+Fra:1 Mem:38.55M (Peak 38.55M) | Time:00:00.00 | Mem:0.00M, Peak:0.00M | Scene, ViewLayer | Synchronizing object | WindowMullion.005
+Fra:1 Mem:38.56M (Peak 38.56M) | Time:00:00.00 | Mem:0.00M, Peak:0.00M | Scene, ViewLayer | Synchronizing object | WindowSill.002
+Fra:1 Mem:38.54M (Peak 38.56M) | Time:00:00.00 | Mem:0.00M, Peak:0.00M | Scene, ViewLayer | Synchronizing object | WindowSill.003
+Fra:1 Mem:38.55M (Peak 38.56M) | Time:00:00.00 | Mem:0.00M, Peak:0.00M | Scene, ViewLayer | Synchronizing object | MedicalInteriorFloor
+Fra:1 Mem:40.61M (Peak 44.92M) | Time:00:00.00 | Mem:0.00M, Peak:0.00M | Scene, ViewLayer | Initializing
+Fra:1 Mem:39.69M (Peak 44.92M) | Time:00:00.00 | Mem:0.00M, Peak:0.00M | Scene, ViewLayer | Waiting for render to start
+Fra:1 Mem:39.69M (Peak 44.92M) | Time:00:00.00 | Mem:0.00M, Peak:0.00M | Scene, ViewLayer | Updating Scene
+Fra:1 Mem:39.69M (Peak 44.92M) | Time:00:00.00 | Mem:0.00M, Peak:0.00M | Scene, ViewLayer | Updating Shaders
+Fra:1 Mem:39.69M (Peak 44.92M) | Time:00:00.00 | Mem:0.00M, Peak:0.00M | Scene, ViewLayer | Loading render kernels (may take a few minutes the first time)
+Fra:1 Mem:39.78M (Peak 44.92M) | Time:00:00.01 | Mem:0.00M, Peak:0.00M | Scene, ViewLayer | Updating Procedurals
+Fra:1 Mem:39.78M (Peak 44.92M) | Time:00:00.01 | Mem:0.00M, Peak:0.00M | Scene, ViewLayer | Updating Background
+Fra:1 Mem:39.78M (Peak 44.92M) | Time:00:00.01 | Mem:0.00M, Peak:0.00M | Scene, ViewLayer | Updating Camera
+Fra:1 Mem:39.78M (Peak 44.92M) | Time:00:00.01 | Mem:0.00M, Peak:0.00M | Scene, ViewLayer | Updating Meshes Flags
+Fra:1 Mem:39.78M (Peak 44.92M) | Time:00:00.01 | Mem:0.00M, Peak:0.00M | Scene, ViewLayer | Updating Objects
+Fra:1 Mem:39.78M (Peak 44.92M) | Time:00:00.01 | Mem:0.00M, Peak:0.00M | Scene, ViewLayer | Updating Objects | Copying Transformations to device
+Fra:1 Mem:39.78M (Peak 44.92M) | Time:00:00.01 | Mem:0.01M, Peak:0.01M | Scene, ViewLayer | Updating Particle Systems
+Fra:1 Mem:39.78M (Peak 44.92M) | Time:00:00.01 | Mem:0.01M, Peak:0.01M | Scene, ViewLayer | Updating Particle Systems | Copying Particles to device
+Fra:1 Mem:39.78M (Peak 44.92M) | Time:00:00.01 | Mem:0.01M, Peak:0.01M | Scene, ViewLayer | Updating Meshes
+Fra:1 Mem:41.94M (Peak 44.92M) | Time:00:00.02 | Mem:0.01M, Peak:0.01M | Scene, ViewLayer | Updating Objects | Applying Static Transformations
+Fra:1 Mem:41.94M (Peak 44.92M) | Time:00:00.02 | Mem:0.01M, Peak:0.01M | Scene, ViewLayer | Updating Mesh | Computing attributes
+Fra:1 Mem:44.77M (Peak 44.92M) | Time:00:00.02 | Mem:0.01M, Peak:0.01M | Scene, ViewLayer | Updating Mesh | Copying Attributes to device
+Fra:1 Mem:44.77M (Peak 44.92M) | Time:00:00.02 | Mem:2.84M, Peak:2.84M | Scene, ViewLayer | Updating Scene BVH | Building
+Fra:1 Mem:44.77M (Peak 44.92M) | Time:00:00.02 | Mem:2.84M, Peak:2.84M | Scene, ViewLayer | Updating Scene BVH | Building BVH
+Fra:1 Mem:44.77M (Peak 44.92M) | Time:00:00.02 | Mem:4.04M, Peak:4.04M | Scene, ViewLayer | Updating Scene BVH | Building BVH 0%
+Fra:1 Mem:44.77M (Peak 44.92M) | Time:00:00.03 | Mem:5.61M, Peak:6.81M | Scene, ViewLayer | Updating Scene BVH | Copying BVH to device
+Fra:1 Mem:44.77M (Peak 44.92M) | Time:00:00.03 | Mem:5.61M, Peak:6.81M | Scene, ViewLayer | Updating Mesh | Computing normals
+Fra:1 Mem:45.85M (Peak 45.85M) | Time:00:00.03 | Mem:5.61M, Peak:6.81M | Scene, ViewLayer | Updating Mesh | Copying Mesh to device
+Fra:1 Mem:45.85M (Peak 45.85M) | Time:00:00.03 | Mem:6.69M, Peak:6.81M | Scene, ViewLayer | Updating Objects Flags
+Fra:1 Mem:45.85M (Peak 45.85M) | Time:00:00.03 | Mem:6.69M, Peak:6.81M | Scene, ViewLayer | Updating Primitive Offsets
+Fra:1 Mem:45.85M (Peak 45.85M) | Time:00:00.03 | Mem:6.69M, Peak:6.81M | Scene, ViewLayer | Updating Images
+Fra:1 Mem:45.85M (Peak 45.85M) | Time:00:00.03 | Mem:6.69M, Peak:6.81M | Scene, ViewLayer | Updating Images | Loading T_2_T_Medical_Normal.png
+Fra:1 Mem:45.85M (Peak 45.85M) | Time:00:00.03 | Mem:6.69M, Peak:6.81M | Scene, ViewLayer | Updating Images | Loading T_0_T_Medical_BaseColor.png
+Fra:1 Mem:77.85M (Peak 77.85M) | Time:00:00.03 | Mem:6.69M, Peak:6.81M | Scene, ViewLayer | Updating Images | Loading T_1_T_Medical_ORM.png
+Fra:1 Mem:93.86M (Peak 93.86M) | Time:00:00.08 | Mem:54.69M, Peak:54.69M | Scene, ViewLayer | Updating Camera Volume
+Fra:1 Mem:93.86M (Peak 93.86M) | Time:00:00.08 | Mem:54.69M, Peak:54.69M | Scene, ViewLayer | Updating Lookup Tables
+Fra:1 Mem:93.86M (Peak 93.86M) | Time:00:00.08 | Mem:54.77M, Peak:54.77M | Scene, ViewLayer | Updating Lights
+Fra:1 Mem:93.86M (Peak 93.86M) | Time:00:00.08 | Mem:54.77M, Peak:54.77M | Scene, ViewLayer | Updating Lights | Computing tree
+Fra:1 Mem:93.86M (Peak 93.86M) | Time:00:00.08 | Mem:54.77M, Peak:54.77M | Scene, ViewLayer | Updating Integrator
+Fra:1 Mem:93.86M (Peak 93.86M) | Time:00:00.08 | Mem:54.77M, Peak:54.77M | Scene, ViewLayer | Updating Film
+Fra:1 Mem:93.87M (Peak 93.87M) | Time:00:00.08 | Mem:54.69M, Peak:54.77M | Scene, ViewLayer | Updating Lookup Tables
+Fra:1 Mem:93.87M (Peak 93.87M) | Time:00:00.08 | Mem:54.78M, Peak:54.78M | Scene, ViewLayer | Updating Baking
+Fra:1 Mem:93.87M (Peak 93.87M) | Time:00:00.08 | Mem:54.78M, Peak:54.78M | Scene, ViewLayer | Updating Device | Writing constant memory
+Fra:1 Mem:93.87M (Peak 93.87M) | Time:00:00.08 | Mem:54.78M, Peak:54.78M | Scene, ViewLayer | Loading denoising kernels (may take a few minutes the first time)
+Fra:1 Mem:93.87M (Peak 93.87M) | Time:00:00.08 | Mem:54.78M, Peak:54.78M | Scene, ViewLayer | Sample 0/8
+Fra:1 Mem:119.94M (Peak 119.94M) | Time:00:00.10 | Remaining:00:00.13 | Mem:80.76M, Peak:80.76M | Scene, ViewLayer | Sample 1/8
+Fra:1 Mem:130.88M (Peak 147.29M) | Time:00:01.00 | Mem:80.76M, Peak:80.76M | Scene, ViewLayer | Sample 8/8
+Fra:1 Mem:130.88M (Peak 147.29M) | Time:00:01.00 | Mem:80.76M, Peak:80.76M | Scene, ViewLayer | Finished
+Saved: 'C:\Users\rotn1\Documents\ChatGPT\metaroy\artifacts\3d-world\asset-library\previews\Repaired_Medical\front.png'
+Time: 00:01.03 (Saving: 00:00.02)
+
+Fra:1 Mem:38.15M (Peak 38.15M) | Time:00:00.00 | Mem:0.00M, Peak:0.00M | Scene, ViewLayer | Synchronizing object | Body
+Fra:1 Mem:38.15M (Peak 38.15M) | Time:00:00.00 | Mem:0.00M, Peak:0.00M | Scene, ViewLayer | Synchronizing object | WindowSill
+Fra:1 Mem:38.21M (Peak 38.21M) | Time:00:00.00 | Mem:0.00M, Peak:0.00M | Scene, ViewLayer | Synchronizing object | Area.002
+Fra:1 Mem:38.23M (Peak 38.23M) | Time:00:00.00 | Mem:0.00M, Peak:0.00M | Scene, ViewLayer | Synchronizing object | Area.001
+Fra:1 Mem:38.51M (Peak 38.51M) | Time:00:00.00 | Mem:0.00M, Peak:0.00M | Scene, ViewLayer | Synchronizing object | Area
+Fra:1 Mem:38.48M (Peak 38.51M) | Time:00:00.00 | Mem:0.00M, Peak:0.00M | Scene, ViewLayer | Synchronizing object | MedicalCabinet
+Fra:1 Mem:38.48M (Peak 38.51M) | Time:00:00.00 | Mem:0.00M, Peak:0.00M | Scene, ViewLayer | Synchronizing object | MedicalGlass_1_0
+Fra:1 Mem:38.51M (Peak 38.51M) | Time:00:00.00 | Mem:0.00M, Peak:0.00M | Scene, ViewLayer | Synchronizing object | MedicalGlass_1_1
+Fra:1 Mem:38.51M (Peak 38.51M) | Time:00:00.00 | Mem:0.00M, Peak:0.00M | Scene, ViewLayer | Synchronizing object | MedicalBench
+Fra:1 Mem:38.52M (Peak 38.52M) | Time:00:00.00 | Mem:0.00M, Peak:0.00M | Scene, ViewLayer | Synchronizing object | WindowMullion.003
+Fra:1 Mem:38.51M (Peak 38.52M) | Time:00:00.00 | Mem:0.00M, Peak:0.00M | Scene, ViewLayer | Synchronizing object | WindowMullion.004
+Fra:1 Mem:39.17M (Peak 39.17M) | Time:00:00.00 | Mem:0.00M, Peak:0.00M | Scene, ViewLayer | Synchronizing object | MedicalInteriorFloor
+Fra:1 Mem:40.61M (Peak 44.92M) | Time:00:00.00 | Mem:0.00M, Peak:0.00M | Scene, ViewLayer | Initializing
+Fra:1 Mem:39.69M (Peak 44.92M) | Time:00:00.00 | Mem:0.00M, Peak:0.00M | Scene, ViewLayer | Waiting for render to start
+Fra:1 Mem:39.69M (Peak 44.92M) | Time:00:00.00 | Mem:0.00M, Peak:0.00M | Scene, ViewLayer | Updating Scene
+Fra:1 Mem:39.69M (Peak 44.92M) | Time:00:00.00 | Mem:0.00M, Peak:0.00M | Scene, ViewLayer | Updating Shaders
+Fra:1 Mem:39.69M (Peak 44.92M) | Time:00:00.00 | Mem:0.00M, Peak:0.00M | Scene, ViewLayer | Loading render kernels (may take a few minutes the first time)
+Fra:1 Mem:39.78M (Peak 44.92M) | Time:00:00.01 | Mem:0.00M, Peak:0.00M | Scene, ViewLayer | Updating Procedurals
+Fra:1 Mem:39.78M (Peak 44.92M) | Time:00:00.01 | Mem:0.00M, Peak:0.00M | Scene, ViewLayer | Updating Background
+Fra:1 Mem:39.78M (Peak 44.92M) | Time:00:00.01 | Mem:0.00M, Peak:0.00M | Scene, ViewLayer | Updating Camera
+Fra:1 Mem:39.78M (Peak 44.92M) | Time:00:00.01 | Mem:0.00M, Peak:0.00M | Scene, ViewLayer | Updating Meshes Flags
+Fra:1 Mem:39.78M (Peak 44.92M) | Time:00:00.01 | Mem:0.00M, Peak:0.00M | Scene, ViewLayer | Updating Objects
+Fra:1 Mem:39.78M (Peak 44.92M) | Time:00:00.01 | Mem:0.00M, Peak:0.00M | Scene, ViewLayer | Updating Objects | Copying Transformations to device
+Fra:1 Mem:39.78M (Peak 44.92M) | Time:00:00.01 | Mem:0.01M, Peak:0.01M | Scene, ViewLayer | Updating Particle Systems
+Fra:1 Mem:39.78M (Peak 44.92M) | Time:00:00.01 | Mem:0.01M, Peak:0.01M | Scene, ViewLayer | Updating Particle Systems | Copying Particles to device
+Fra:1 Mem:39.78M (Peak 44.92M) | Time:00:00.01 | Mem:0.01M, Peak:0.01M | Scene, ViewLayer | Updating Meshes
+Fra:1 Mem:41.94M (Peak 44.92M) | Time:00:00.02 | Mem:0.01M, Peak:0.01M | Scene, ViewLayer | Updating Objects | Applying Static Transformations
+Fra:1 Mem:41.94M (Peak 44.92M) | Time:00:00.02 | Mem:0.01M, Peak:0.01M | Scene, ViewLayer | Updating Mesh | Computing attributes
+Fra:1 Mem:44.77M (Peak 44.92M) | Time:00:00.02 | Mem:0.01M, Peak:0.01M | Scene, ViewLayer | Updating Mesh | Copying Attributes to device
+Fra:1 Mem:44.77M (Peak 44.92M) | Time:00:00.02 | Mem:2.84M, Peak:2.84M | Scene, ViewLayer | Updating Scene BVH | Building
+Fra:1 Mem:44.77M (Peak 44.92M) | Time:00:00.02 | Mem:2.84M, Peak:2.84M | Scene, ViewLayer | Updating Scene BVH | Building BVH
+Fra:1 Mem:44.77M (Peak 44.92M) | Time:00:00.02 | Mem:4.04M, Peak:4.04M | Scene, ViewLayer | Updating Scene BVH | Building BVH 0%
+Fra:1 Mem:44.77M (Peak 44.92M) | Time:00:00.02 | Mem:5.61M, Peak:6.81M | Scene, ViewLayer | Updating Scene BVH | Copying BVH to device
+Fra:1 Mem:44.77M (Peak 44.92M) | Time:00:00.02 | Mem:5.61M, Peak:6.81M | Scene, ViewLayer | Updating Mesh | Computing normals
+Fra:1 Mem:45.85M (Peak 45.85M) | Time:00:00.02 | Mem:5.61M, Peak:6.81M | Scene, ViewLayer | Updating Mesh | Copying Mesh to device
+Fra:1 Mem:45.85M (Peak 45.85M) | Time:00:00.02 | Mem:6.69M, Peak:6.81M | Scene, ViewLayer | Updating Objects Flags
+Fra:1 Mem:45.85M (Peak 45.85M) | Time:00:00.02 | Mem:6.69M, Peak:6.81M | Scene, ViewLayer | Updating Primitive Offsets
+Fra:1 Mem:45.85M (Peak 45.85M) | Time:00:00.02 | Mem:6.69M, Peak:6.81M | Scene, ViewLayer | Updating Images
+Fra:1 Mem:45.85M (Peak 45.85M) | Time:00:00.02 | Mem:6.69M, Peak:6.81M | Scene, ViewLayer | Updating Images | Loading T_2_T_Medical_Normal.png
+Fra:1 Mem:61.85M (Peak 61.85M) | Time:00:00.02 | Mem:6.69M, Peak:6.81M | Scene, ViewLayer | Updating Images | Loading T_0_T_Medical_BaseColor.png
+Fra:1 Mem:61.85M (Peak 61.85M) | Time:00:00.02 | Mem:6.69M, Peak:6.81M | Scene, ViewLayer | Updating Images | Loading T_1_T_Medical_ORM.png
+Fra:1 Mem:93.86M (Peak 93.86M) | Time:00:00.08 | Mem:54.69M, Peak:54.69M | Scene, ViewLayer | Updating Camera Volume
+Fra:1 Mem:93.86M (Peak 93.86M) | Time:00:00.08 | Mem:54.69M, Peak:54.69M | Scene, ViewLayer | Updating Lookup Tables
+Fra:1 Mem:93.86M (Peak 93.86M) | Time:00:00.08 | Mem:54.77M, Peak:54.77M | Scene, ViewLayer | Updating Lights
+Fra:1 Mem:93.86M (Peak 93.86M) | Time:00:00.08 | Mem:54.77M, Peak:54.77M | Scene, ViewLayer | Updating Lights | Computing tree
+Fra:1 Mem:93.86M (Peak 93.86M) | Time:00:00.08 | Mem:54.77M, Peak:54.77M | Scene, ViewLayer | Updating Integrator
+Fra:1 Mem:93.86M (Peak 93.86M) | Time:00:00.08 | Mem:54.77M, Peak:54.77M | Scene, ViewLayer | Updating Film
+Fra:1 Mem:93.87M (Peak 93.87M) | Time:00:00.08 | Mem:54.69M, Peak:54.77M | Scene, ViewLayer | Updating Lookup Tables
+Fra:1 Mem:93.87M (Peak 93.87M) | Time:00:00.08 | Mem:54.78M, Peak:54.78M | Scene, ViewLayer | Updating Baking
+Fra:1 Mem:93.87M (Peak 93.87M) | Time:00:00.08 | Mem:54.78M, Peak:54.78M | Scene, ViewLayer | Updating Device | Writing constant memory
+Fra:1 Mem:93.87M (Peak 93.87M) | Time:00:00.08 | Mem:54.78M, Peak:54.78M | Scene, ViewLayer | Loading denoising kernels (may take a few minutes the first time)
+Fra:1 Mem:93.87M (Peak 93.87M) | Time:00:00.08 | Mem:54.78M, Peak:54.78M | Scene, ViewLayer | Sample 0/8
+Fra:1 Mem:119.94M (Peak 119.94M) | Time:00:00.12 | Remaining:00:00.23 | Mem:80.76M, Peak:80.76M | Scene, ViewLayer | Sample 1/8
+Fra:1 Mem:130.88M (Peak 147.29M) | Time:00:01.11 | Mem:80.76M, Peak:80.76M | Scene, ViewLayer | Sample 8/8
+Fra:1 Mem:130.88M (Peak 147.29M) | Time:00:01.11 | Mem:80.76M, Peak:80.76M | Scene, ViewLayer | Finished
+Saved: 'C:\Users\rotn1\Documents\ChatGPT\metaroy\artifacts\3d-world\asset-library\previews\Repaired_Medical\side.png'
+Time: 00:01.13 (Saving: 00:00.02)
+
+Fra:1 Mem:38.15M (Peak 38.15M) | Time:00:00.00 | Mem:0.00M, Peak:0.00M | Scene, ViewLayer | Synchronizing object | Body
+Fra:1 Mem:38.15M (Peak 38.15M) | Time:00:00.00 | Mem:0.00M, Peak:0.00M | Scene, ViewLayer | Synchronizing object | WindowMullion
+Fra:1 Mem:38.21M (Peak 38.21M) | Time:00:00.00 | Mem:0.00M, Peak:0.00M | Scene, ViewLayer | Synchronizing object | WindowSill
+Fra:1 Mem:38.22M (Peak 38.22M) | Time:00:00.00 | Mem:0.00M, Peak:0.00M | Scene, ViewLayer | Synchronizing object | Area.002
+Fra:1 Mem:38.50M (Peak 38.50M) | Time:00:00.00 | Mem:0.00M, Peak:0.00M | Scene, ViewLayer | Synchronizing object | Area.001
+Fra:1 Mem:38.50M (Peak 38.50M) | Time:00:00.00 | Mem:0.00M, Peak:0.00M | Scene, ViewLayer | Synchronizing object | Area
+Fra:1 Mem:38.50M (Peak 38.50M) | Time:00:00.00 | Mem:0.00M, Peak:0.00M | Scene, ViewLayer | Synchronizing object | MedicalCabinet
+Fra:1 Mem:38.50M (Peak 38.50M) | Time:00:00.00 | Mem:0.00M, Peak:0.00M | Scene, ViewLayer | Synchronizing object | WindowSill.001
+Fra:1 Mem:38.49M (Peak 38.50M) | Time:00:00.00 | Mem:0.00M, Peak:0.00M | Scene, ViewLayer | Synchronizing object | MedicalGlass_1_0
+Fra:1 Mem:38.50M (Peak 38.50M) | Time:00:00.00 | Mem:0.00M, Peak:0.00M | Scene, ViewLayer | Synchronizing object | MedicalBench
+Fra:1 Mem:38.51M (Peak 38.51M) | Time:00:00.00 | Mem:0.00M, Peak:0.00M | Scene, ViewLayer | Synchronizing object | WindowMullion.003
+Fra:1 Mem:38.52M (Peak 38.52M) | Time:00:00.00 | Mem:0.00M, Peak:0.00M | Scene, ViewLayer | Synchronizing object | WindowMullion.004
+Fra:1 Mem:38.52M (Peak 38.52M) | Time:00:00.00 | Mem:0.00M, Peak:0.00M | Scene, ViewLayer | Synchronizing object | WindowSill.002
+Fra:1 Mem:38.53M (Peak 38.53M) | Time:00:00.00 | Mem:0.00M, Peak:0.00M | Scene, ViewLayer | Synchronizing object | WindowSill.003
+Fra:1 Mem:40.61M (Peak 44.92M) | Time:00:00.00 | Mem:0.00M, Peak:0.00M | Scene, ViewLayer | Initializing
+Fra:1 Mem:39.69M (Peak 44.92M) | Time:00:00.00 | Mem:0.00M, Peak:0.00M | Scene, ViewLayer | Waiting for render to start
+Fra:1 Mem:39.69M (Peak 44.92M) | Time:00:00.00 | Mem:0.00M, Peak:0.00M | Scene, ViewLayer | Updating Scene
+Fra:1 Mem:39.69M (Peak 44.92M) | Time:00:00.00 | Mem:0.00M, Peak:0.00M | Scene, ViewLayer | Updating Shaders
+Fra:1 Mem:39.69M (Peak 44.92M) | Time:00:00.00 | Mem:0.00M, Peak:0.00M | Scene, ViewLayer | Loading render kernels (may take a few minutes the first time)
+Fra:1 Mem:39.78M (Peak 44.92M) | Time:00:00.00 | Mem:0.00M, Peak:0.00M | Scene, ViewLayer | Updating Procedurals
+Fra:1 Mem:39.78M (Peak 44.92M) | Time:00:00.00 | Mem:0.00M, Peak:0.00M | Scene, ViewLayer | Updating Background
+Fra:1 Mem:39.78M (Peak 44.92M) | Time:00:00.00 | Mem:0.00M, Peak:0.00M | Scene, ViewLayer | Updating Camera
+Fra:1 Mem:39.78M (Peak 44.92M) | Time:00:00.00 | Mem:0.00M, Peak:0.00M | Scene, ViewLayer | Updating Meshes Flags
+Fra:1 Mem:39.78M (Peak 44.92M) | Time:00:00.00 | Mem:0.00M, Peak:0.00M | Scene, ViewLayer | Updating Objects
+Fra:1 Mem:39.78M (Peak 44.92M) | Time:00:00.00 | Mem:0.00M, Peak:0.00M | Scene, ViewLayer | Updating Objects | Copying Transformations to device
+Fra:1 Mem:39.78M (Peak 44.92M) | Time:00:00.00 | Mem:0.01M, Peak:0.01M | Scene, ViewLayer | Updating Particle Systems
+Fra:1 Mem:39.78M (Peak 44.92M) | Time:00:00.00 | Mem:0.01M, Peak:0.01M | Scene, ViewLayer | Updating Particle Systems | Copying Particles to device
+Fra:1 Mem:39.78M (Peak 44.92M) | Time:00:00.00 | Mem:0.01M, Peak:0.01M | Scene, ViewLayer | Updating Meshes
+Fra:1 Mem:41.94M (Peak 44.92M) | Time:00:00.02 | Mem:0.01M, Peak:0.01M | Scene, ViewLayer | Updating Objects | Applying Static Transformations
+Fra:1 Mem:41.94M (Peak 44.92M) | Time:00:00.02 | Mem:0.01M, Peak:0.01M | Scene, ViewLayer | Updating Mesh | Computing attributes
+Fra:1 Mem:44.77M (Peak 44.92M) | Time:00:00.02 | Mem:0.01M, Peak:0.01M | Scene, ViewLayer | Updating Mesh | Copying Attributes to device
+Fra:1 Mem:44.77M (Peak 44.92M) | Time:00:00.02 | Mem:2.84M, Peak:2.84M | Scene, ViewLayer | Updating Scene BVH | Building
+Fra:1 Mem:44.77M (Peak 44.92M) | Time:00:00.02 | Mem:2.84M, Peak:2.84M | Scene, ViewLayer | Updating Scene BVH | Building BVH
+Fra:1 Mem:44.77M (Peak 44.92M) | Time:00:00.02 | Mem:4.04M, Peak:4.04M | Scene, ViewLayer | Updating Scene BVH | Building BVH 0%
+Fra:1 Mem:44.77M (Peak 44.92M) | Time:00:00.02 | Mem:5.61M, Peak:6.81M | Scene, ViewLayer | Updating Scene BVH | Copying BVH to device
+Fra:1 Mem:44.77M (Peak 44.92M) | Time:00:00.02 | Mem:5.61M, Peak:6.81M | Scene, ViewLayer | Updating Mesh | Computing normals
+Fra:1 Mem:45.85M (Peak 45.85M) | Time:00:00.02 | Mem:5.61M, Peak:6.81M | Scene, ViewLayer | Updating Mesh | Copying Mesh to device
+Fra:1 Mem:45.85M (Peak 45.85M) | Time:00:00.02 | Mem:6.69M, Peak:6.81M | Scene, ViewLayer | Updating Objects Flags
+Fra:1 Mem:45.85M (Peak 45.85M) | Time:00:00.02 | Mem:6.69M, Peak:6.81M | Scene, ViewLayer | Updating Primitive Offsets
+Fra:1 Mem:45.85M (Peak 45.85M) | Time:00:00.02 | Mem:6.69M, Peak:6.81M | Scene, ViewLayer | Updating Images
+Fra:1 Mem:45.85M (Peak 45.85M) | Time:00:00.02 | Mem:6.69M, Peak:6.81M | Scene, ViewLayer | Updating Images | Loading T_2_T_Medical_Normal.png
+Fra:1 Mem:61.85M (Peak 61.85M) | Time:00:00.02 | Mem:6.69M, Peak:6.81M | Scene, ViewLayer | Updating Images | Loading T_0_T_Medical_BaseColor.png
+Fra:1 Mem:77.85M (Peak 77.85M) | Time:00:00.02 | Mem:6.69M, Peak:6.81M | Scene, ViewLayer | Updating Images | Loading T_1_T_Medical_ORM.png
+Fra:1 Mem:93.86M (Peak 93.86M) | Time:00:00.07 | Mem:54.69M, Peak:54.69M | Scene, ViewLayer | Updating Camera Volume
+Fra:1 Mem:93.86M (Peak 93.86M) | Time:00:00.07 | Mem:54.69M, Peak:54.69M | Scene, ViewLayer | Updating Lookup Tables
+Fra:1 Mem:93.86M (Peak 93.86M) | Time:00:00.07 | Mem:54.77M, Peak:54.77M | Scene, ViewLayer | Updating Lights
+Fra:1 Mem:93.86M (Peak 93.86M) | Time:00:00.07 | Mem:54.77M, Peak:54.77M | Scene, ViewLayer | Updating Lights | Computing tree
+Fra:1 Mem:93.86M (Peak 93.86M) | Time:00:00.07 | Mem:54.77M, Peak:54.77M | Scene, ViewLayer | Updating Integrator
+Fra:1 Mem:93.86M (Peak 93.86M) | Time:00:00.07 | Mem:54.77M, Peak:54.77M | Scene, ViewLayer | Updating Film
+Fra:1 Mem:93.87M (Peak 93.87M) | Time:00:00.07 | Mem:54.69M, Peak:54.77M | Scene, ViewLayer | Updating Lookup Tables
+Fra:1 Mem:93.87M (Peak 93.87M) | Time:00:00.07 | Mem:54.78M, Peak:54.78M | Scene, ViewLayer | Updating Baking
+Fra:1 Mem:93.87M (Peak 93.87M) | Time:00:00.07 | Mem:54.78M, Peak:54.78M | Scene, ViewLayer | Updating Device | Writing constant memory
+Fra:1 Mem:93.87M (Peak 93.87M) | Time:00:00.07 | Mem:54.78M, Peak:54.78M | Scene, ViewLayer | Loading denoising kernels (may take a few minutes the first time)
+Fra:1 Mem:93.87M (Peak 93.87M) | Time:00:00.07 | Mem:54.78M, Peak:54.78M | Scene, ViewLayer | Sample 0/8
+Fra:1 Mem:119.94M (Peak 119.94M) | Time:00:00.10 | Remaining:00:00.20 | Mem:80.76M, Peak:80.76M | Scene, ViewLayer | Sample 1/8
+Fra:1 Mem:130.88M (Peak 147.29M) | Time:00:01.09 | Mem:80.76M, Peak:80.76M | Scene, ViewLayer | Sample 8/8
+Fra:1 Mem:130.88M (Peak 147.29M) | Time:00:01.09 | Mem:80.76M, Peak:80.76M | Scene, ViewLayer | Finished
+Saved: 'C:\Users\rotn1\Documents\ChatGPT\metaroy\artifacts\3d-world\asset-library\previews\Repaired_Medical\top.png'
+Time: 00:01.11 (Saving: 00:00.02)
+
+Fra:1 Mem:38.15M (Peak 38.15M) | Time:00:00.00 | Mem:0.00M, Peak:0.00M | Scene, ViewLayer | Synchronizing object | Body
+Fra:1 Mem:38.15M (Peak 38.15M) | Time:00:00.00 | Mem:0.00M, Peak:0.00M | Scene, ViewLayer | Synchronizing object | MedicalGlass_-1_1
+Fra:1 Mem:38.21M (Peak 38.21M) | Time:00:00.00 | Mem:0.00M, Peak:0.00M | Scene, ViewLayer | Synchronizing object | WindowSill
+Fra:1 Mem:38.44M (Peak 38.44M) | Time:00:00.00 | Mem:0.00M, Peak:0.00M | Scene, ViewLayer | Synchronizing object | Area.002
+Fra:1 Mem:38.51M (Peak 38.51M) | Time:00:00.00 | Mem:0.00M, Peak:0.00M | Scene, ViewLayer | Synchronizing object | Area.001
+Fra:1 Mem:38.49M (Peak 38.51M) | Time:00:00.00 | Mem:0.00M, Peak:0.00M | Scene, ViewLayer | Synchronizing object | Area
+Fra:1 Mem:38.50M (Peak 38.51M) | Time:00:00.00 | Mem:0.00M, Peak:0.00M | Scene, ViewLayer | Synchronizing object | WindowSill.001
+Fra:1 Mem:38.48M (Peak 38.51M) | Time:00:00.00 | Mem:0.00M, Peak:0.00M | Scene, ViewLayer | Synchronizing object | MedicalGlass_1_0
+Fra:1 Mem:38.49M (Peak 38.51M) | Time:00:00.00 | Mem:0.00M, Peak:0.00M | Scene, ViewLayer | Synchronizing object | MedicalGlass_1_1
+Fra:1 Mem:38.51M (Peak 38.51M) | Time:00:00.00 | Mem:0.00M, Peak:0.00M | Scene, ViewLayer | Synchronizing object | WindowMullion.003
+Fra:1 Mem:38.51M (Peak 38.51M) | Time:00:00.00 | Mem:0.00M, Peak:0.00M | Scene, ViewLayer | Synchronizing object | WindowSill.002
+Fra:1 Mem:39.15M (Peak 39.15M) | Time:00:00.00 | Mem:0.00M, Peak:0.00M | Scene, ViewLayer | Synchronizing object | WindowSill.003
+Fra:1 Mem:39.17M (Peak 39.17M) | Time:00:00.00 | Mem:0.00M, Peak:0.00M | Scene, ViewLayer | Synchronizing object | MedicalInteriorFloor
+Fra:1 Mem:39.16M (Peak 39.17M) | Time:00:00.00 | Mem:0.00M, Peak:0.00M | Scene, ViewLayer | Synchronizing object | MedicalBench
+Fra:1 Mem:40.61M (Peak 44.92M) | Time:00:00.00 | Mem:0.00M, Peak:0.00M | Scene, ViewLayer | Initializing
+Fra:1 Mem:39.69M (Peak 44.92M) | Time:00:00.00 | Mem:0.00M, Peak:0.00M | Scene, ViewLayer | Waiting for render to start
+Fra:1 Mem:39.69M (Peak 44.92M) | Time:00:00.00 | Mem:0.00M, Peak:0.00M | Scene, ViewLayer | Updating Scene
+Fra:1 Mem:39.69M (Peak 44.92M) | Time:00:00.00 | Mem:0.00M, Peak:0.00M | Scene, ViewLayer | Updating Shaders
+Fra:1 Mem:39.69M (Peak 44.92M) | Time:00:00.00 | Mem:0.00M, Peak:0.00M | Scene, ViewLayer | Loading render kernels (may take a few minutes the first time)
+Fra:1 Mem:39.78M (Peak 44.92M) | Time:00:00.00 | Mem:0.00M, Peak:0.00M | Scene, ViewLayer | Updating Procedurals
+Fra:1 Mem:39.78M (Peak 44.92M) | Time:00:00.00 | Mem:0.00M, Peak:0.00M | Scene, ViewLayer | Updating Background
+Fra:1 Mem:39.78M (Peak 44.92M) | Time:00:00.00 | Mem:0.00M, Peak:0.00M | Scene, ViewLayer | Updating Camera
+Fra:1 Mem:39.78M (Peak 44.92M) | Time:00:00.00 | Mem:0.00M, Peak:0.00M | Scene, ViewLayer | Updating Meshes Flags
+Fra:1 Mem:39.78M (Peak 44.92M) | Time:00:00.00 | Mem:0.00M, Peak:0.00M | Scene, ViewLayer | Updating Objects
+Fra:1 Mem:39.78M (Peak 44.92M) | Time:00:00.00 | Mem:0.00M, Peak:0.00M | Scene, ViewLayer | Updating Objects | Copying Transformations to device
+Fra:1 Mem:39.78M (Peak 44.92M) | Time:00:00.00 | Mem:0.01M, Peak:0.01M | Scene, ViewLayer | Updating Particle Systems
+Fra:1 Mem:39.78M (Peak 44.92M) | Time:00:00.00 | Mem:0.01M, Peak:0.01M | Scene, ViewLayer | Updating Particle Systems | Copying Particles to device
+Fra:1 Mem:39.78M (Peak 44.92M) | Time:00:00.00 | Mem:0.01M, Peak:0.01M | Scene, ViewLayer | Updating Meshes
+Fra:1 Mem:41.94M (Peak 44.92M) | Time:00:00.02 | Mem:0.01M, Peak:0.01M | Scene, ViewLayer | Updating Objects | Applying Static Transformations
+Fra:1 Mem:41.94M (Peak 44.92M) | Time:00:00.02 | Mem:0.01M, Peak:0.01M | Scene, ViewLayer | Updating Mesh | Computing attributes
+Fra:1 Mem:44.77M (Peak 44.92M) | Time:00:00.02 | Mem:0.01M, Peak:0.01M | Scene, ViewLayer | Updating Mesh | Copying Attributes to device
+Fra:1 Mem:44.77M (Peak 44.92M) | Time:00:00.02 | Mem:2.84M, Peak:2.84M | Scene, ViewLayer | Updating Scene BVH | Building
+Fra:1 Mem:44.77M (Peak 44.92M) | Time:00:00.02 | Mem:2.84M, Peak:2.84M | Scene, ViewLayer | Updating Scene BVH | Building BVH
+Fra:1 Mem:44.77M (Peak 44.92M) | Time:00:00.02 | Mem:4.04M, Peak:4.04M | Scene, ViewLayer | Updating Scene BVH | Building BVH 0%
+Fra:1 Mem:44.77M (Peak 44.92M) | Time:00:00.02 | Mem:5.61M, Peak:6.81M | Scene, ViewLayer | Updating Scene BVH | Copying BVH to device
+Fra:1 Mem:44.77M (Peak 44.92M) | Time:00:00.02 | Mem:5.61M, Peak:6.81M | Scene, ViewLayer | Updating Mesh | Computing normals
+Fra:1 Mem:45.85M (Peak 45.85M) | Time:00:00.02 | Mem:5.61M, Peak:6.81M | Scene, ViewLayer | Updating Mesh | Copying Mesh to device
+Fra:1 Mem:45.85M (Peak 45.85M) | Time:00:00.02 | Mem:6.69M, Peak:6.81M | Scene, ViewLayer | Updating Objects Flags
+Fra:1 Mem:45.85M (Peak 45.85M) | Time:00:00.02 | Mem:6.69M, Peak:6.81M | Scene, ViewLayer | Updating Primitive Offsets
+Fra:1 Mem:45.85M (Peak 45.85M) | Time:00:00.02 | Mem:6.69M, Peak:6.81M | Scene, ViewLayer | Updating Images
+Fra:1 Mem:45.85M (Peak 45.85M) | Time:00:00.02 | Mem:6.69M, Peak:6.81M | Scene, ViewLayer | Updating Images | Loading T_2_T_Medical_Normal.png
+Fra:1 Mem:61.85M (Peak 61.85M) | Time:00:00.02 | Mem:6.69M, Peak:6.81M | Scene, ViewLayer | Updating Images | Loading T_0_T_Medical_BaseColor.png
+Fra:1 Mem:77.85M (Peak 77.85M) | Time:00:00.02 | Mem:6.69M, Peak:6.81M | Scene, ViewLayer | Updating Images | Loading T_1_T_Medical_ORM.png
+Fra:1 Mem:93.86M (Peak 93.86M) | Time:00:00.07 | Mem:54.69M, Peak:54.69M | Scene, ViewLayer | Updating Camera Volume
+Fra:1 Mem:93.86M (Peak 93.86M) | Time:00:00.07 | Mem:54.69M, Peak:54.69M | Scene, ViewLayer | Updating Lookup Tables
+Fra:1 Mem:93.86M (Peak 93.86M) | Time:00:00.07 | Mem:54.77M, Peak:54.77M | Scene, ViewLayer | Updating Lights
+Fra:1 Mem:93.86M (Peak 93.86M) | Time:00:00.07 | Mem:54.77M, Peak:54.77M | Scene, ViewLayer | Updating Lights | Computing tree
+Fra:1 Mem:93.86M (Peak 93.86M) | Time:00:00.07 | Mem:54.77M, Peak:54.77M | Scene, ViewLayer | Updating Integrator
+Fra:1 Mem:93.86M (Peak 93.86M) | Time:00:00.07 | Mem:54.77M, Peak:54.77M | Scene, ViewLayer | Updating Film
+Fra:1 Mem:93.87M (Peak 93.87M) | Time:00:00.07 | Mem:54.69M, Peak:54.77M | Scene, ViewLayer | Updating Lookup Tables
+Fra:1 Mem:93.87M (Peak 93.87M) | Time:00:00.07 | Mem:54.78M, Peak:54.78M | Scene, ViewLayer | Updating Baking
+Fra:1 Mem:93.87M (Peak 93.87M) | Time:00:00.07 | Mem:54.78M, Peak:54.78M | Scene, ViewLayer | Updating Device | Writing constant memory
+Fra:1 Mem:93.87M (Peak 93.87M) | Time:00:00.07 | Mem:54.78M, Peak:54.78M | Scene, ViewLayer | Loading denoising kernels (may take a few minutes the first time)
+Fra:1 Mem:93.87M (Peak 93.87M) | Time:00:00.07 | Mem:54.78M, Peak:54.78M | Scene, ViewLayer | Sample 0/8
+Fra:1 Mem:119.94M (Peak 119.94M) | Time:00:00.10 | Remaining:00:00.18 | Mem:80.76M, Peak:80.76M | Scene, ViewLayer | Sample 1/8
+Fra:1 Mem:130.88M (Peak 147.29M) | Time:00:01.04 | Mem:80.76M, Peak:80.76M | Scene, ViewLayer | Sample 8/8
+Fra:1 Mem:130.88M (Peak 147.29M) | Time:00:01.04 | Mem:80.76M, Peak:80.76M | Scene, ViewLayer | Finished
+Saved: 'C:\Users\rotn1\Documents\ChatGPT\metaroy\artifacts\3d-world\asset-library\previews\Repaired_Medical\rear.png'
+Time: 00:01.06 (Saving: 00:00.02)
+
+MR_LIBRARY_PREVIEW Repaired_Medical
+Fra:100 Mem:38.15M (Peak 38.15M) | Time:00:00.00 | Mem:0.00M, Peak:0.00M | Scene, ViewLayer | Synchronizing object | Body
+Fra:100 Mem:38.15M (Peak 38.15M) | Time:00:00.00 | Mem:0.00M, Peak:0.00M | Scene, ViewLayer | Synchronizing object | WindowMullion
+Fra:100 Mem:38.15M (Peak 38.15M) | Time:00:00.00 | Mem:0.00M, Peak:0.00M | Scene, ViewLayer | Synchronizing object | WindowMullion.002
+Fra:100 Mem:38.21M (Peak 38.22M) | Time:00:00.00 | Mem:0.00M, Peak:0.00M | Scene, ViewLayer | Synchronizing object | WindowSill
+Fra:100 Mem:38.23M (Peak 38.23M) | Time:00:00.00 | Mem:0.00M, Peak:0.00M | Scene, ViewLayer | Synchronizing object | Area.002
+Fra:100 Mem:38.47M (Peak 38.47M) | Time:00:00.00 | Mem:0.00M, Peak:0.00M | Scene, ViewLayer | Synchronizing object | WindowSill.001
+Fra:100 Mem:38.51M (Peak 38.51M) | Time:00:00.00 | Mem:0.00M, Peak:0.00M | Scene, ViewLayer | Synchronizing object | Area.001
+Fra:100 Mem:38.51M (Peak 38.51M) | Time:00:00.00 | Mem:0.00M, Peak:0.00M | Scene, ViewLayer | Synchronizing object | Area
+Fra:100 Mem:38.51M (Peak 38.51M) | Time:00:00.00 | Mem:0.00M, Peak:0.00M | Scene, ViewLayer | Synchronizing object | MedicalCabinet
+Fra:100 Mem:38.51M (Peak 38.51M) | Time:00:00.00 | Mem:0.00M, Peak:0.00M | Scene, ViewLayer | Synchronizing object | MedicalGlass_1_0
+Fra:100 Mem:38.49M (Peak 38.51M) | Time:00:00.00 | Mem:0.00M, Peak:0.00M | Scene, ViewLayer | Synchronizing object | MedicalGlass_1_1
+Fra:100 Mem:38.51M (Peak 38.51M) | Time:00:00.00 | Mem:0.00M, Peak:0.00M | Scene, ViewLayer | Synchronizing object | WindowMullion.003
+Fra:100 Mem:38.52M (Peak 38.52M) | Time:00:00.00 | Mem:0.00M, Peak:0.00M | Scene, ViewLayer | Synchronizing object | WindowMullion.004
+Fra:100 Mem:38.53M (Peak 38.53M) | Time:00:00.00 | Mem:0.00M, Peak:0.00M | Scene, ViewLayer | Synchronizing object | MedicalBench
+Fra:100 Mem:38.55M (Peak 38.55M) | Time:00:00.00 | Mem:0.00M, Peak:0.00M | Scene, ViewLayer | Synchronizing object | WindowMullion.005
+Fra:100 Mem:38.55M (Peak 38.55M) | Time:00:00.00 | Mem:0.00M, Peak:0.00M | Scene, ViewLayer | Synchronizing object | WindowSill.002
+Fra:100 Mem:38.55M (Peak 38.55M) | Time:00:00.00 | Mem:0.00M, Peak:0.00M | Scene, ViewLayer | Synchronizing object | MedicalInteriorFloor
+Fra:100 Mem:40.61M (Peak 44.92M) | Time:00:00.00 | Mem:0.00M, Peak:0.00M | Scene, ViewLayer | Initializing
+Fra:100 Mem:39.69M (Peak 44.92M) | Time:00:00.00 | Mem:0.00M, Peak:0.00M | Scene, ViewLayer | Waiting for render to start
+Fra:100 Mem:39.69M (Peak 44.92M) | Time:00:00.00 | Mem:0.00M, Peak:0.00M | Scene, ViewLayer | Updating Scene
+Fra:100 Mem:39.69M (Peak 44.92M) | Time:00:00.00 | Mem:0.00M, Peak:0.00M | Scene, ViewLayer | Updating Shaders
+Fra:100 Mem:39.69M (Peak 44.92M) | Time:00:00.00 | Mem:0.00M, Peak:0.00M | Scene, ViewLayer | Loading render kernels (may take a few minutes the first time)
+Fra:100 Mem:39.78M (Peak 44.92M) | Time:00:00.01 | Mem:0.00M, Peak:0.00M | Scene, ViewLayer | Updating Procedurals
+Fra:100 Mem:39.78M (Peak 44.92M) | Time:00:00.01 | Mem:0.00M, Peak:0.00M | Scene, ViewLayer | Updating Background
+Fra:100 Mem:39.78M (Peak 44.92M) | Time:00:00.01 | Mem:0.00M, Peak:0.00M | Scene, ViewLayer | Updating Camera
+Fra:100 Mem:39.78M (Peak 44.92M) | Time:00:00.01 | Mem:0.00M, Peak:0.00M | Scene, ViewLayer | Updating Meshes Flags
+Fra:100 Mem:39.78M (Peak 44.92M) | Time:00:00.01 | Mem:0.00M, Peak:0.00M | Scene, ViewLayer | Updating Objects
+Fra:100 Mem:39.78M (Peak 44.92M) | Time:00:00.01 | Mem:0.00M, Peak:0.00M | Scene, ViewLayer | Updating Objects | Copying Transformations to device
+Fra:100 Mem:39.78M (Peak 44.92M) | Time:00:00.01 | Mem:0.01M, Peak:0.01M | Scene, ViewLayer | Updating Particle Systems
+Fra:100 Mem:39.78M (Peak 44.92M) | Time:00:00.01 | Mem:0.01M, Peak:0.01M | Scene, ViewLayer | Updating Particle Systems | Copying Particles to device
+Fra:100 Mem:39.78M (Peak 44.92M) | Time:00:00.01 | Mem:0.01M, Peak:0.01M | Scene, ViewLayer | Updating Meshes
+Fra:100 Mem:41.94M (Peak 44.92M) | Time:00:00.02 | Mem:0.01M, Peak:0.01M | Scene, ViewLayer | Updating Objects | Applying Static Transformations
+Fra:100 Mem:41.94M (Peak 44.92M) | Time:00:00.02 | Mem:0.01M, Peak:0.01M | Scene, ViewLayer | Updating Mesh | Computing attributes
+Fra:100 Mem:44.77M (Peak 44.92M) | Time:00:00.02 | Mem:0.01M, Peak:0.01M | Scene, ViewLayer | Updating Mesh | Copying Attributes to device
+Fra:100 Mem:44.77M (Peak 44.92M) | Time:00:00.02 | Mem:2.84M, Peak:2.84M | Scene, ViewLayer | Updating Scene BVH | Building
+Fra:100 Mem:44.77M (Peak 44.92M) | Time:00:00.02 | Mem:2.84M, Peak:2.84M | Scene, ViewLayer | Updating Scene BVH | Building BVH
+Fra:100 Mem:44.77M (Peak 44.92M) | Time:00:00.02 | Mem:4.04M, Peak:4.04M | Scene, ViewLayer | Updating Scene BVH | Building BVH 0%
+Fra:100 Mem:44.77M (Peak 44.92M) | Time:00:00.02 | Mem:5.61M, Peak:6.81M | Scene, ViewLayer | Updating Scene BVH | Copying BVH to device
+Fra:100 Mem:44.77M (Peak 44.92M) | Time:00:00.02 | Mem:5.61M, Peak:6.81M | Scene, ViewLayer | Updating Mesh | Computing normals
+Fra:100 Mem:45.85M (Peak 45.85M) | Time:00:00.02 | Mem:5.61M, Peak:6.81M | Scene, ViewLayer | Updating Mesh | Copying Mesh to device
+Fra:100 Mem:45.85M (Peak 45.85M) | Time:00:00.02 | Mem:6.69M, Peak:6.81M | Scene, ViewLayer | Updating Objects Flags
+Fra:100 Mem:45.85M (Peak 45.85M) | Time:00:00.02 | Mem:6.69M, Peak:6.81M | Scene, ViewLayer | Updating Primitive Offsets
+Fra:100 Mem:45.85M (Peak 45.85M) | Time:00:00.02 | Mem:6.69M, Peak:6.81M | Scene, ViewLayer | Updating Images
+Fra:100 Mem:45.85M (Peak 45.85M) | Time:00:00.02 | Mem:6.69M, Peak:6.81M | Scene, ViewLayer | Updating Images | Loading T_2_T_Medical_Normal.png
+Fra:100 Mem:61.85M (Peak 61.85M) | Time:00:00.02 | Mem:6.69M, Peak:6.81M | Scene, ViewLayer | Updating Images | Loading T_0_T_Medical_BaseColor.png
+Fra:100 Mem:77.85M (Peak 77.85M) | Time:00:00.02 | Mem:6.69M, Peak:6.81M | Scene, ViewLayer | Updating Images | Loading T_1_T_Medical_ORM.png
+Fra:100 Mem:93.86M (Peak 93.86M) | Time:00:00.08 | Mem:54.69M, Peak:54.69M | Scene, ViewLayer | Updating Camera Volume
+Fra:100 Mem:93.86M (Peak 93.86M) | Time:00:00.08 | Mem:54.69M, Peak:54.69M | Scene, ViewLayer | Updating Lookup Tables
+Fra:100 Mem:93.86M (Peak 93.86M) | Time:00:00.08 | Mem:54.77M, Peak:54.77M | Scene, ViewLayer | Updating Lights
+Fra:100 Mem:93.86M (Peak 93.86M) | Time:00:00.08 | Mem:54.77M, Peak:54.77M | Scene, ViewLayer | Updating Lights | Computing tree
+Fra:100 Mem:93.86M (Peak 93.86M) | Time:00:00.08 | Mem:54.77M, Peak:54.77M | Scene, ViewLayer | Updating Integrator
+Fra:100 Mem:93.86M (Peak 93.86M) | Time:00:00.08 | Mem:54.77M, Peak:54.77M | Scene, ViewLayer | Updating Film
+Fra:100 Mem:93.87M (Peak 93.87M) | Time:00:00.08 | Mem:54.69M, Peak:54.77M | Scene, ViewLayer | Updating Lookup Tables
+Fra:100 Mem:93.87M (Peak 93.87M) | Time:00:00.08 | Mem:54.78M, Peak:54.78M | Scene, ViewLayer | Updating Baking
+Fra:100 Mem:93.87M (Peak 93.87M) | Time:00:00.08 | Mem:54.78M, Peak:54.78M | Scene, ViewLayer | Updating Device | Writing constant memory
+Fra:100 Mem:93.87M (Peak 93.87M) | Time:00:00.08 | Mem:54.78M, Peak:54.78M | Scene, ViewLayer | Loading denoising kernels (may take a few minutes the first time)
+Fra:100 Mem:93.87M (Peak 93.87M) | Time:00:00.08 | Mem:54.78M, Peak:54.78M | Scene, ViewLayer | Sample 0/8
+Fra:100 Mem:119.94M (Peak 119.94M) | Time:00:00.11 | Remaining:00:00.25 | Mem:80.76M, Peak:80.76M | Scene, ViewLayer | Sample 1/8
+Fra:100 Mem:130.88M (Peak 147.29M) | Time:00:01.12 | Mem:80.76M, Peak:80.76M | Scene, ViewLayer | Sample 8/8
+Fra:100 Mem:130.88M (Peak 147.29M) | Time:00:01.12 | Mem:80.76M, Peak:80.76M | Scene, ViewLayer | Finished
+Saved: 'C:\Users\rotn1\Documents\ChatGPT\metaroy\artifacts\3d-world\asset-library\previews\Repaired_Medical\operating.png'
+Time: 00:01.14 (Saving: 00:00.02)
+
+
+Blender quit

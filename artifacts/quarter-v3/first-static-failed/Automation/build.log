@@ -1,0 +1,53 @@
+Log file: C:\Users\rotn1\AppData\Local\UnrealBuildTool\Log.txt
+Executing up to 2 actions based on MaxProcessorCount override
+UbaServer - Listening on 0.0.0.0:1345
+Available x64 toolchains (1):
+ * C:\Program Files\Microsoft Visual Studio\18\Community\VC\Tools\MSVC\14.51.36231
+    (Family=14.51.36231, FamilyRank=2, Version=14.51.36260, HostArchitecture=x64, ReleaseChannel=Latest, Architecture=x64)
+Visual Studio compiler version 14.51.36260 is newer than latest preferred version 14.50.35717. Please use caution as this compiler has not been heavily tested
+UHT compiled-in object format Default
+Building MetaRescueEditor...
+===== Toolchain Information =====
+Using ISPC compiler (C:\Program Files\Epic Games\UE_5.8\Engine\Source\ThirdParty\Intel\ISPC\bin\Windows\ispc.exe)
+  Intel(r) Implicit SPMD Program Compiler (Intel(r) ISPC), 1.24.0 (build commit  @ 20250404, LLVM 18.1.2) 
+Using Visual Studio 14.51.36260 toolchain (C:\Program Files\Microsoft Visual Studio\18\Community\VC\Tools\MSVC\14.51.36231) and Windows 10.0.26100.0 SDK (C:\Program Files (x86)\Windows Kits\10).
+Warning: Visual Studio compiler 14.51.36260 is not a preferred version
+===== End Toolchain Information =====
+Using Unreal Build Accelerator local executor to run 8 action(s)
+  CPU 16 physical cores, 24 logical cores
+  Memory 31.79 GB physical, 47.85 GB/60.45 GB committed
+  UBA Storage capacity 40 GB
+[1/8] Compile [x64] MRAgent.cpp
+[2/8] Compile [x64] MRAgentSafety.cpp
+[3/8] Compile [x64] MRCameraPawn.cpp
+[4/8] Compile [x64] MRDistrict.cpp
+C:\Users\rotn1\Documents\ChatGPT\metaroy\unreal\MetaRescue\Source\MetaRescue\MRDistrict.cpp(315,102): warning C4305: ????????: ???????? ?? "double" ? "float"
+        Lamp->SetInnerConeAngle(35);Lamp->SetOuterConeAngle(65);Lamp->SetLightColor(FLinearColor(.88,.94,1));
+                                                                                                     ^
+C:\Users\rotn1\Documents\ChatGPT\metaroy\unreal\MetaRescue\Source\MetaRescue\MRDistrict.cpp(315,98): warning C4305: ????????: ???????? ?? "double" ? "float"
+        Lamp->SetInnerConeAngle(35);Lamp->SetOuterConeAngle(65);Lamp->SetLightColor(FLinearColor(.88,.94,1));
+                                                                                                 ^
+[5/8] Compile [x64] MRDistrictState.cpp
+C:\Users\rotn1\Documents\ChatGPT\metaroy\unreal\MetaRescue\Source\MetaRescue\MRDistrictState.cpp(84,61): warning C4305: ????????: ???????? ?? "double" ? "float"
+        Lamp->SetLightColor(bRelayOnline?FLinearColor(.12,1,.3):FLinearColor(1,.18,.02));
+                                                            ^
+C:\Users\rotn1\Documents\ChatGPT\metaroy\unreal\MetaRescue\Source\MetaRescue\MRDistrictState.cpp(84,55): warning C4305: ????????: ???????? ?? "double" ? "float"
+        Lamp->SetLightColor(bRelayOnline?FLinearColor(.12,1,.3):FLinearColor(1,.18,.02));
+                                                      ^
+C:\Users\rotn1\Documents\ChatGPT\metaroy\unreal\MetaRescue\Source\MetaRescue\MRDistrictState.cpp(84,84): warning C4305: ????????: ???????? ?? "double" ? "float"
+        Lamp->SetLightColor(bRelayOnline?FLinearColor(.12,1,.3):FLinearColor(1,.18,.02));
+                                                                                   ^
+C:\Users\rotn1\Documents\ChatGPT\metaroy\unreal\MetaRescue\Source\MetaRescue\MRDistrictState.cpp(84,80): warning C4305: ????????: ???????? ?? "double" ? "float"
+        Lamp->SetLightColor(bRelayOnline?FLinearColor(.12,1,.3):FLinearColor(1,.18,.02));
+                                                                               ^
+[6/8] Link [x64] UnrealEditor-MetaRescue.lib
+   ????????? ?????????? C:/Users/rotn1/Documents/ChatGPT/metaroy/unreal/MetaRescue/Intermediate/Build/Win64/x64/UnrealEditor/Development/MetaRescue/UnrealEditor-MetaRescue.lib ? ?????? C:/Users/rotn1/Documents/ChatGPT/metaroy/unreal/MetaRescue/Intermediate/Build/Win64/x64/UnrealEditor/Development/MetaRescue/UnrealEditor-MetaRescue.exp
+[7/8] Link [x64] UnrealEditor-MetaRescue.dll
+[8/8] WriteMetadata MetaRescueEditor.target [NoUba]
+
+Total time in Unreal Build Accelerator local executor: 37.98 seconds
+Output binary: C:\Program Files\Epic Games\UE_5.8\Engine\Binaries\Win64\UnrealEditor.exe
+
+Result: Succeeded
+Total execution time: 40.95 seconds
+Trace written to file C:\Users\rotn1\AppData\Local\UnrealBuildTool\Trace.uba with size 9.4kb

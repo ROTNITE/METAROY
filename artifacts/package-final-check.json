@@ -1,0 +1,27 @@
+{
+  "project": "C:\\Users\\rotn1\\Documents\\ChatGPT\\metaroy\\artifacts\\final-package-qykncl3_\\MetaEvolution-Rescue",
+  "imports": [
+    {
+      "version": "0.2",
+      "files": 19
+    },
+    {
+      "version": "0.3",
+      "files": 16
+    }
+  ],
+  "verified_native_files_unchanged": 45,
+  "zip_crc": "passed",
+  "unresolved_project_links": [],
+  "excluded_lecture_source_links": 23,
+  "extracted_root_contract_tests": {
+    "passed": 15,
+    "failed": 0
+  },
+  "extracted_v03_tests": {
+    "passed": 30,
+    "failed": 0
+  },
+  "archive_sha256": "f75c27887b5142c1e958f542adbeaa8d9c9845348cae6bc0ed6ba6e3ce1a0d54",
+  "archive_bytes": 13397895
+}

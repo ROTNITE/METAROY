@@ -1,0 +1,9 @@
+{"type":"episode_started","time_s":0,"target_id":-1}
+{"type":"traffic_probe_initialized","time_s":0,"target_id":-1}
+{"type":"stationary_sensor_observed","time_s":0.30309060489526019,"target_id":8}
+{"type":"agent_safe_stop","time_s":3.6652151112793945,"agent_id":0}
+{"type":"agent_route_blocked","time_s":8.3004981157719158,"agent_id":0}
+{"type":"traffic_probe_command_invariants_verified","time_s":40.003498411679175,"target_id":-1}
+{"type":"traffic_probe_route_replaced","time_s":40.003498411679175,"target_id":-1}
+{"type":"agent_route_resumed","time_s":42.766414808982518,"agent_id":0}
+{"type":"agent_route_completed","time_s":63.123830909782555,"agent_id":0}

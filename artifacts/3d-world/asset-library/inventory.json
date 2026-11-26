@@ -1,0 +1,305 @@
+{
+  "source_count": 26,
+  "models": 26,
+  "sources": [
+    {
+      "source": "blender/concrete_road_barrier_02_4k.blend.zip",
+      "bytes": 63643710,
+      "sha256": "b6600ba074ec9a2d6cfce07cc0caa31557d8230e12cf475743ac1f8e97dd3071",
+      "assets": [
+        "blender/vendor/concrete_road_barrier_02_4k/concrete_road_barrier_02_4k.blend"
+      ],
+      "archive_files": [
+        "concrete_road_barrier_02_4k.blend",
+        "textures/concrete_road_barrier_02_nor_gl_4k.exr",
+        "textures/concrete_road_barrier_02_disp_4k.png",
+        "textures/concrete_road_barrier_02_diff_4k.jpg",
+        "textures/concrete_road_barrier_02_rough_4k.exr"
+      ]
+    },
+    {
+      "source": "blender/fire_hydrant_4k.blend.zip",
+      "bytes": 313555598,
+      "sha256": "782180a907be32927f4210be9a8edf27421f4e258ba5d564b10e927fc33007ae",
+      "assets": [
+        "blender/vendor/fire_hydrant_4k/fire_hydrant_4k.blend"
+      ],
+      "archive_files": [
+        "fire_hydrant_4k.blend",
+        "textures/fire_hydrant_aged_rough_4k.png",
+        "textures/fire_hydrant_metal_4k.exr",
+        "textures/fire_hydrant_rough_4k.exr",
+        "textures/fire_hydrant_aged_diff_4k.png",
+        "textures/fire_hydrant_diff_4k.jpg",
+        "textures/fire_hydrant_nor_gl_4k.exr",
+        "textures/fire_hydrant_aged_nor_gl_4k.png",
+        "textures/fire_hydrant_aged_metal_4k.png"
+      ]
+    },
+    {
+      "source": "blender/Meshy_AI_Concrete_Slab_Fragment_20261109_image-to-3d-texture.blend",
+      "bytes": 51637411,
+      "sha256": "750af13faf24d23b6ceebf176d82cf451d560ab915cc177b1c160136253f861d",
+      "assets": [
+        "blender/Meshy_AI_Concrete_Slab_Fragment_20261109_image-to-3d-texture.blend"
+      ]
+    },
+    {
+      "source": "blender/Meshy_AI_Damaged_Building_20261109_image-to-3d-texture.blend",
+      "bytes": 143923155,
+      "sha256": "5708a1e3514bc143f4c7b5482521e948251002d78c352202618a7c2e0ce1452c",
+      "assets": [
+        "blender/Meshy_AI_Damaged_Building_20261109_image-to-3d-texture.blend"
+      ]
+    },
+    {
+      "source": "blender/Meshy_AI_Emergency_Radio_Relay_20261109_image-to-3d-texture.blend",
+      "bytes": 69132074,
+      "sha256": "617e73e75fbb21e7d73489dd1434716d33cd94e6ef423d06f36305076b11c93d",
+      "assets": [
+        "blender/Meshy_AI_Emergency_Radio_Relay_20261109_image-to-3d-texture.blend"
+      ]
+    },
+    {
+      "source": "blender/Meshy_AI_Medical_Aid_Container_20261109_image-to-3d-texture.blend",
+      "bytes": 62264997,
+      "sha256": "0a08433dfa59877139fc19a84a144ad3df8ba08a23b48538a437ee4ccc19e81e",
+      "assets": [
+        "blender/Meshy_AI_Medical_Aid_Container_20261109_image-to-3d-texture.blend"
+      ]
+    },
+    {
+      "source": "blender/Meshy_AI_Medical_Support_Van_20261109_image-to-3d-texture.blend",
+      "bytes": 111522081,
+      "sha256": "52747c69b2201d612f466e51cb674d022475a7b0012215200217156f3538b5e1",
+      "assets": [
+        "blender/Meshy_AI_Medical_Support_Van_20261109_image-to-3d-texture.blend"
+      ]
+    },
+    {
+      "source": "blender/Meshy_AI_Rescue_Equipment_Case_20261109_image-to-3d-texture.blend",
+      "bytes": 64474328,
+      "sha256": "f2eb81307c3be243a1a2734a323d8257fc0a4618d276193a9d3f4f434d0b5c73",
+      "assets": [
+        "blender/Meshy_AI_Rescue_Equipment_Case_20261109_image-to-3d-texture.blend"
+      ]
+    },
+    {
+      "source": "blender/Meshy_AI_Rescue_Rover_Docking_Station_20261109_image-to-3d-texture.blend",
+      "bytes": 44836637,
+      "sha256": "794b8f589f8f922dd528461e86eef24067af710f4246dc282cefd2b132dcb170",
+      "assets": [
+        "blender/Meshy_AI_Rescue_Rover_Docking_Station_20261109_image-to-3d-texture.blend"
+      ]
+    },
+    {
+      "source": "blender/Meshy_AI_Rescue_Scout_Drone_20261109_image-to-3d-texture.blend",
+      "bytes": 88493652,
+      "sha256": "c06e6b9e3dd55dde26517d83f5404152c78b986594c9b66e68ee5f864344423b",
+      "assets": [
+        "blender/Meshy_AI_Rescue_Scout_Drone_20261109_image-to-3d-texture.blend"
+      ]
+    },
+    {
+      "source": "blender/Meshy_AI_Rescue_Stretcher_20261109_image-to-3d-texture.blend",
+      "bytes": 70131197,
+      "sha256": "b8d29dc648e24bc1b8b89b804dd5b44f89d558a113f4e7c6527e41dbe9aae84f",
+      "assets": [
+        "blender/Meshy_AI_Rescue_Stretcher_20261109_image-to-3d-texture.blend"
+      ]
+    },
+    {
+      "source": "blender/Meshy_AI_Rescue_Tracked_Transporter_20261109_image-to-3d-texture.blend",
+      "bytes": 334554271,
+      "sha256": "95ed8fe82ccee666a6e6f4d575941939129f8499a072ec53d6846569bfe23aa5",
+      "assets": [
+        "blender/Meshy_AI_Rescue_Tracked_Transporter_20261109_image-to-3d-texture.blend"
+      ]
+    },
+    {
+      "source": "blender/Meshy_AI_Rescue_Training_Mannequin_20261109_image-to-3d-texture.blend",
+      "bytes": 32848075,
+      "sha256": "73a87db63a913b991cc46ed4aa363e4c61db403c1ab09b2082e776d5e55d5f82",
+      "assets": [
+        "blender/Meshy_AI_Rescue_Training_Mannequin_20261109_image-to-3d-texture.blend"
+      ]
+    },
+    {
+      "source": "blender/Meshy_AI_Rigged_Rescue_Mannequin_20261109_animated_mixamo_All_animation.glb",
+      "bytes": 25787416,
+      "sha256": "7345979bbc81e97b7a847bc876c8cfa3192d5c984650c4f3943e109eebfbc4cb",
+      "assets": [
+        "blender/Meshy_AI_Rigged_Rescue_Mannequin_20261109_animated_mixamo_All_animation.glb"
+      ]
+    },
+    {
+      "source": "blender/Meshy_AI_Static_Rubble_Pile_20261109_image-to-3d-texture.blend",
+      "bytes": 191147383,
+      "sha256": "606bcb66a51964d1dadf0e0fc24fa0f539d972782e100f617d9944ae1ea5dd6b",
+      "assets": [
+        "blender/Meshy_AI_Static_Rubble_Pile_20261109_image-to-3d-texture.blend"
+      ]
+    },
+    {
+      "source": "blender/Meshy_AI_Stationary_Sensor_Node_20261109_image-to-3d-texture.blend",
+      "bytes": 70676412,
+      "sha256": "a899a5c9f5424acfb62875b46d64e6da6e1bcf82938473e2d235cd82d4ea5a4b",
+      "assets": [
+        "blender/Meshy_AI_Stationary_Sensor_Node_20261109_image-to-3d-texture.blend"
+      ]
+    },
+    {
+      "source": "blender/Meshy_AI_Wall_Module_with_Doorway_20261109_image-to-3d-texture.blend",
+      "bytes": 100682278,
+      "sha256": "5be331415ae73ffead1ad96dc9a6aa0b92f2944ab0efaca59e6080f192a11d46",
+      "assets": [
+        "blender/Meshy_AI_Wall_Module_with_Doorway_20261109_image-to-3d-texture.blend"
+      ]
+    },
+    {
+      "source": "blender/Meshy_AI_Wall_Module_with_Window_20261109_image-to-3d-texture.blend",
+      "bytes": 105721874,
+      "sha256": "ea868b0d900bbf7856e25034b030b49d89e35385cca0b7218e4d641913fbb400",
+      "assets": [
+        "blender/Meshy_AI_Wall_Module_with_Window_20261109_image-to-3d-texture.blend"
+      ]
+    },
+    {
+      "source": "blender/modular_chainlink_fence_4k.blend.zip",
+      "bytes": 163361042,
+      "sha256": "5cc5f03b973b0a9eea8d7d56393a2d0802eb3f91a685902c42c74604aea01fab",
+      "assets": [
+        "blender/vendor/modular_chainlink_fence_4k/modular_chainlink_fence_4k.blend"
+      ],
+      "archive_files": [
+        "modular_chainlink_fence_4k.blend",
+        "textures/modular_chainlink_fence_wire_metal_4k.png",
+        "textures/modular_chainlink_fence_posts_diff_4k.png",
+        "textures/modular_chainlink_fence_wire_nor_gl_4k.png",
+        "textures/modular_chainlink_fence_posts_metal_4k.png",
+        "textures/modular_chainlink_fence_posts_rough_4k.png",
+        "textures/modular_chainlink_fence_posts_nor_gl_4k.png",
+        "textures/modular_chainlink_fence_wire_rough_4k.png",
+        "textures/modular_chainlink_fence_wire_diff_4k.png",
+        "textures/modular_chainlink_fence_wire_alpha_4k.png"
+      ]
+    },
+    {
+      "source": "blender/modular_electric_cables_4k.blend.zip",
+      "bytes": 161661238,
+      "sha256": "8ab6bffdacce65e714cad06ef64d7b57f91c52d6d7f3e02bd83f73a9d37ef09b",
+      "assets": [
+        "blender/vendor/modular_electric_cables_4k/modular_electric_cables_4k.blend"
+      ],
+      "archive_files": [
+        "modular_electric_cables_4k.blend",
+        "textures/modular_electric_cables_boxes_diff_4k.png",
+        "textures/modular_electric_cables_boxes_nor_gl_4k.png",
+        "textures/modular_electric_cables_boxes_rough_4k.png",
+        "textures/modular_electric_cables_diff_4k.jpg",
+        "textures/modular_electric_cables_metal_4k.exr",
+        "textures/modular_electric_cables_nor_gl_4k.exr",
+        "textures/modular_electric_cables_rough_4k.exr"
+      ]
+    },
+    {
+      "source": "blender/modular_industrial_pipes_01_4k.blend.zip",
+      "bytes": 103134094,
+      "sha256": "be132d10b09a017dd995d4fb3602242293a897ec00c60beae2afeeca09216873",
+      "assets": [
+        "blender/vendor/modular_industrial_pipes_01_4k/modular_industrial_pipes_01_4k.blend"
+      ],
+      "archive_files": [
+        "modular_industrial_pipes_01_4k.blend",
+        "textures/modular_industrial_pipes_01_group02_metal_4k.png",
+        "textures/modular_industrial_pipes_01_group02_nor_gl_4k.png",
+        "textures/modular_industrial_pipes_01_group01_metal_4k.png",
+        "textures/modular_industrial_pipes_01_group02_rough_4k.png",
+        "textures/modular_industrial_pipes_01_group02_diff_4k.png",
+        "textures/modular_industrial_pipes_01_group01_nor_gl_4k.png",
+        "textures/modular_industrial_pipes_01_group01_rough_4k.png",
+        "textures/modular_industrial_pipes_01_group01_diff_4k.png"
+      ]
+    },
+    {
+      "source": "blender/modular_urban_apartments_facade_4k.blend.zip",
+      "bytes": 663380286,
+      "sha256": "a9f116a376e722163acd12cbe57bae61e47ca0bcc95415845f3c1800ce0ec9be",
+      "assets": [
+        "blender/vendor/modular_urban_apartments_facade_4k/modular_urban_apartments_facade_4k.blend"
+      ],
+      "archive_files": [
+        "modular_urban_apartments_facade_4k.blend",
+        "textures/modular_urban_apartments_facade_plaster_diff_4k.png",
+        "textures/modular_urban_apartments_facade_trim_02_diff_4k.png",
+        "textures/modular_urban_apartments_facade_trim_01_diff_4k.png",
+        "textures/modular_urban_apartments_facade_trim_02_rough_4k.png",
+        "textures/modular_urban_apartments_facade_objects_rough_4k.png",
+        "textures/modular_urban_apartments_facade_trim_01_nor_gl_4k.png",
+        "textures/modular_urban_apartments_facade_objects_diff_4k.png",
+        "textures/modular_urban_apartments_facade_objects_nor_gl_4k.png",
+        "textures/modular_urban_apartments_facade_objects_alpha_4k.png",
+        "textures/modular_urban_apartments_facade_plaster_rough_4k.png",
+        "textures/modular_urban_apartments_facade_trim_01_rough_4k.png",
+        "textures/modular_urban_apartments_facade_objects_metal_4k.png",
+        "textures/modular_urban_apartments_facade_trim_02_nor_gl_4k.png",
+        "textures/modular_urban_apartments_facade_plaster_nor_gl_4k.png"
+      ]
+    },
+    {
+      "source": "blender/portable_generator_4k.blend.zip",
+      "bytes": 53370726,
+      "sha256": "899f3c0af85ec1850751782e674d2e962e0105460ec355c491079772216904f2",
+      "assets": [
+        "blender/vendor/portable_generator_4k/portable_generator_4k.blend"
+      ],
+      "archive_files": [
+        "portable_generator_4k.blend",
+        "textures/portable_generator_alpha_4k.png",
+        "textures/portable_generator_diff_4k.jpg",
+        "textures/portable_generator_metal_4k.exr",
+        "textures/portable_generator_nor_gl_4k.exr",
+        "textures/portable_generator_rough_4k.exr",
+        "textures/portable_generator_spec_4k.png"
+      ]
+    },
+    {
+      "source": "blender/streetlight.blend",
+      "bytes": 993224,
+      "sha256": "f665c2f72fb6963d494b326f2ed3d39982e1da4d36ff501dd789a406f3c93725",
+      "assets": [
+        "blender/streetlight.blend"
+      ]
+    },
+    {
+      "source": "blender/utility_box_02_4k.blend.zip",
+      "bytes": 51019909,
+      "sha256": "217fd54c6b49f95065cf6233e30296d4f5d45055dfe46b9e0370b8ecaf51a8a2",
+      "assets": [
+        "blender/vendor/utility_box_02_4k/utility_box_02_4k.blend"
+      ],
+      "archive_files": [
+        "utility_box_02_4k.blend",
+        "textures/utility_box_02_diff_4k.jpg",
+        "textures/utility_box_02_metal_4k.exr",
+        "textures/utility_box_02_nor_gl_4k.exr",
+        "textures/utility_box_02_rough_4k.exr"
+      ]
+    },
+    {
+      "source": "blender/water_manhole_cover_4k.blend.zip",
+      "bytes": 57486223,
+      "sha256": "32355da448ddf8e2f3eb868dc99f057aefa48dcaa91be8571ba7faed967c2bd5",
+      "assets": [
+        "blender/vendor/water_manhole_cover_4k/water_manhole_cover_4k.blend"
+      ],
+      "archive_files": [
+        "water_manhole_cover_4k.blend",
+        "textures/water_manhole_cover_metal_4k.exr",
+        "textures/water_manhole_cover_diff_4k.jpg",
+        "textures/water_manhole_cover_nor_gl_4k.exr",
+        "textures/water_manhole_cover_rough_4k.exr"
+      ]
+    }
+  ]
+}

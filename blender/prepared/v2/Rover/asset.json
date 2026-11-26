@@ -1,0 +1,871 @@
+{
+  "id": "Rover",
+  "source": "blender/Meshy_AI_Rescue_Tracked_Transporter_20261109_image-to-3d-texture.blend",
+  "source_sha256": "95ed8fe82ccee666a6e6f4d575941939129f8499a072ec53d6846569bfe23aa5",
+  "blend": "Rover.blend",
+  "parts": [
+    {
+      "object": "Body",
+      "role": "body",
+      "triangles": 23087,
+      "location_m": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "rotation_deg": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "parent": null,
+      "dimensions_m": [
+        2.387761354446411,
+        1.2260470390319824,
+        1.3006609678268433
+      ],
+      "materials": [
+        "M_Rover_Baked"
+      ],
+      "fbx": "parts/Body.fbx"
+    },
+    {
+      "object": "Track_R",
+      "role": "track",
+      "side": -1,
+      "perimeter_m": 5.052707591371092,
+      "triangles": 400,
+      "location_m": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "rotation_deg": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "parent": null,
+      "dimensions_m": [
+        2.2699999809265137,
+        0.20999997854232788,
+        0.45000001788139343
+      ],
+      "materials": [
+        "M_Rig_Track"
+      ],
+      "fbx": "parts/Track_R.fbx"
+    },
+    {
+      "object": "Wheel_-1_0",
+      "role": "wheel",
+      "side": -1,
+      "radius_m": 0.178,
+      "axis": "Y",
+      "triangles": 416,
+      "location_m": [
+        -0.8999999761581421,
+        -0.5299999713897705,
+        0.23999999463558197
+      ],
+      "rotation_deg": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "parent": null,
+      "dimensions_m": [
+        0.35600000619888306,
+        0.20850001275539398,
+        0.35600000619888306
+      ],
+      "materials": [
+        "M_Rig_Rubber",
+        "M_Rig_Metal"
+      ],
+      "fbx": "parts/Wheel_-1_0.fbx"
+    },
+    {
+      "object": "Wheel_-1_1",
+      "role": "wheel",
+      "side": -1,
+      "radius_m": 0.178,
+      "axis": "Y",
+      "triangles": 416,
+      "location_m": [
+        -0.5400000214576721,
+        -0.5299999713897705,
+        0.23999999463558197
+      ],
+      "rotation_deg": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "parent": null,
+      "dimensions_m": [
+        0.35600000619888306,
+        0.20850001275539398,
+        0.35600000619888306
+      ],
+      "materials": [
+        "M_Rig_Rubber",
+        "M_Rig_Metal"
+      ],
+      "fbx": "parts/Wheel_-1_1.fbx"
+    },
+    {
+      "object": "Wheel_-1_2",
+      "role": "wheel",
+      "side": -1,
+      "radius_m": 0.178,
+      "axis": "Y",
+      "triangles": 416,
+      "location_m": [
+        -0.18000000715255737,
+        -0.5299999713897705,
+        0.23999999463558197
+      ],
+      "rotation_deg": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "parent": null,
+      "dimensions_m": [
+        0.35600000619888306,
+        0.20850001275539398,
+        0.35600000619888306
+      ],
+      "materials": [
+        "M_Rig_Rubber",
+        "M_Rig_Metal"
+      ],
+      "fbx": "parts/Wheel_-1_2.fbx"
+    },
+    {
+      "object": "Wheel_-1_3",
+      "role": "wheel",
+      "side": -1,
+      "radius_m": 0.178,
+      "axis": "Y",
+      "triangles": 416,
+      "location_m": [
+        0.18000000715255737,
+        -0.5299999713897705,
+        0.23999999463558197
+      ],
+      "rotation_deg": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "parent": null,
+      "dimensions_m": [
+        0.35600000619888306,
+        0.20850001275539398,
+        0.35600000619888306
+      ],
+      "materials": [
+        "M_Rig_Rubber",
+        "M_Rig_Metal"
+      ],
+      "fbx": "parts/Wheel_-1_3.fbx"
+    },
+    {
+      "object": "Wheel_-1_4",
+      "role": "wheel",
+      "side": -1,
+      "radius_m": 0.178,
+      "axis": "Y",
+      "triangles": 416,
+      "location_m": [
+        0.5400000214576721,
+        -0.5299999713897705,
+        0.23999999463558197
+      ],
+      "rotation_deg": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "parent": null,
+      "dimensions_m": [
+        0.35600000619888306,
+        0.20850001275539398,
+        0.35600000619888306
+      ],
+      "materials": [
+        "M_Rig_Rubber",
+        "M_Rig_Metal"
+      ],
+      "fbx": "parts/Wheel_-1_4.fbx"
+    },
+    {
+      "object": "Wheel_-1_5",
+      "role": "wheel",
+      "side": -1,
+      "radius_m": 0.178,
+      "axis": "Y",
+      "triangles": 416,
+      "location_m": [
+        0.8999999761581421,
+        -0.5299999713897705,
+        0.23999999463558197
+      ],
+      "rotation_deg": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "parent": null,
+      "dimensions_m": [
+        0.35600000619888306,
+        0.20850001275539398,
+        0.35600000619888306
+      ],
+      "materials": [
+        "M_Rig_Rubber",
+        "M_Rig_Metal"
+      ],
+      "fbx": "parts/Wheel_-1_5.fbx"
+    },
+    {
+      "object": "Track_L",
+      "role": "track",
+      "side": 1,
+      "perimeter_m": 5.052707591371092,
+      "triangles": 400,
+      "location_m": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "rotation_deg": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "parent": null,
+      "dimensions_m": [
+        2.2699999809265137,
+        0.20999997854232788,
+        0.45000001788139343
+      ],
+      "materials": [
+        "M_Rig_Track"
+      ],
+      "fbx": "parts/Track_L.fbx"
+    },
+    {
+      "object": "Wheel_1_0",
+      "role": "wheel",
+      "side": 1,
+      "radius_m": 0.178,
+      "axis": "Y",
+      "triangles": 416,
+      "location_m": [
+        -0.8999999761581421,
+        0.5299999713897705,
+        0.23999999463558197
+      ],
+      "rotation_deg": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "parent": null,
+      "dimensions_m": [
+        0.35600000619888306,
+        0.20850001275539398,
+        0.35600000619888306
+      ],
+      "materials": [
+        "M_Rig_Rubber",
+        "M_Rig_Metal"
+      ],
+      "fbx": "parts/Wheel_1_0.fbx"
+    },
+    {
+      "object": "Wheel_1_1",
+      "role": "wheel",
+      "side": 1,
+      "radius_m": 0.178,
+      "axis": "Y",
+      "triangles": 416,
+      "location_m": [
+        -0.5400000214576721,
+        0.5299999713897705,
+        0.23999999463558197
+      ],
+      "rotation_deg": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "parent": null,
+      "dimensions_m": [
+        0.35600000619888306,
+        0.20850001275539398,
+        0.35600000619888306
+      ],
+      "materials": [
+        "M_Rig_Rubber",
+        "M_Rig_Metal"
+      ],
+      "fbx": "parts/Wheel_1_1.fbx"
+    },
+    {
+      "object": "Wheel_1_2",
+      "role": "wheel",
+      "side": 1,
+      "radius_m": 0.178,
+      "axis": "Y",
+      "triangles": 416,
+      "location_m": [
+        -0.18000000715255737,
+        0.5299999713897705,
+        0.23999999463558197
+      ],
+      "rotation_deg": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "parent": null,
+      "dimensions_m": [
+        0.35600000619888306,
+        0.20850001275539398,
+        0.35600000619888306
+      ],
+      "materials": [
+        "M_Rig_Rubber",
+        "M_Rig_Metal"
+      ],
+      "fbx": "parts/Wheel_1_2.fbx"
+    },
+    {
+      "object": "Wheel_1_3",
+      "role": "wheel",
+      "side": 1,
+      "radius_m": 0.178,
+      "axis": "Y",
+      "triangles": 416,
+      "location_m": [
+        0.18000000715255737,
+        0.5299999713897705,
+        0.23999999463558197
+      ],
+      "rotation_deg": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "parent": null,
+      "dimensions_m": [
+        0.35600000619888306,
+        0.20850001275539398,
+        0.35600000619888306
+      ],
+      "materials": [
+        "M_Rig_Rubber",
+        "M_Rig_Metal"
+      ],
+      "fbx": "parts/Wheel_1_3.fbx"
+    },
+    {
+      "object": "Wheel_1_4",
+      "role": "wheel",
+      "side": 1,
+      "radius_m": 0.178,
+      "axis": "Y",
+      "triangles": 416,
+      "location_m": [
+        0.5400000214576721,
+        0.5299999713897705,
+        0.23999999463558197
+      ],
+      "rotation_deg": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "parent": null,
+      "dimensions_m": [
+        0.35600000619888306,
+        0.20850001275539398,
+        0.35600000619888306
+      ],
+      "materials": [
+        "M_Rig_Rubber",
+        "M_Rig_Metal"
+      ],
+      "fbx": "parts/Wheel_1_4.fbx"
+    },
+    {
+      "object": "Wheel_1_5",
+      "role": "wheel",
+      "side": 1,
+      "radius_m": 0.178,
+      "axis": "Y",
+      "triangles": 416,
+      "location_m": [
+        0.8999999761581421,
+        0.5299999713897705,
+        0.23999999463558197
+      ],
+      "rotation_deg": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "parent": null,
+      "dimensions_m": [
+        0.35600000619888306,
+        0.20850001275539398,
+        0.35600000619888306
+      ],
+      "materials": [
+        "M_Rig_Rubber",
+        "M_Rig_Metal"
+      ],
+      "fbx": "parts/Wheel_1_5.fbx"
+    },
+    {
+      "object": "RearRamp",
+      "role": "ramp",
+      "axis": "Y",
+      "stowed_deg": 80,
+      "deployed_deg": -27,
+      "triangles": 108,
+      "location_m": [
+        -1.0800000429153442,
+        0.0,
+        0.5699999928474426
+      ],
+      "rotation_deg": [
+        0.0,
+        79.99999767274336,
+        0.0
+      ],
+      "parent": null,
+      "dimensions_m": [
+        0.6399999260902405,
+        0.7599999904632568,
+        0.034999996423721313
+      ],
+      "materials": [
+        "M_Rig_Metal"
+      ],
+      "fbx": "parts/RearRamp.fbx"
+    },
+    {
+      "object": "RampExtension",
+      "role": "ramp_extension",
+      "travel_m": 0.52,
+      "triangles": 108,
+      "location_m": [
+        0.0,
+        0.0,
+        -0.02199999988079071
+      ],
+      "rotation_deg": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "parent": "RearRamp",
+      "dimensions_m": [
+        0.5999999642372131,
+        0.699999988079071,
+        0.02499999850988388
+      ],
+      "materials": [
+        "M_Rig_Metal"
+      ],
+      "fbx": "parts/RampExtension.fbx"
+    },
+    {
+      "object": "WinchDrum",
+      "role": "winch",
+      "axis": "Y",
+      "radius_m": 0.055,
+      "triangles": 124,
+      "location_m": [
+        -0.9100000262260437,
+        0.0,
+        0.6800000071525574
+      ],
+      "rotation_deg": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "parent": null,
+      "dimensions_m": [
+        0.10999999940395355,
+        0.23999999463558197,
+        0.11000000685453415
+      ],
+      "materials": [
+        "M_Rig_Metal"
+      ],
+      "fbx": "parts/WinchDrum.fbx"
+    }
+  ],
+  "materials": [
+    {
+      "name": "M_Rig_Metal",
+      "glass": false,
+      "inputs": {
+        "Base Color": [
+          0.27000001072883606,
+          0.30000001192092896,
+          0.28999999165534973,
+          1.0
+        ],
+        "Metallic": 0.75,
+        "Roughness": 0.3499999940395355,
+        "Transmission Weight": 0.0,
+        "IOR": 1.5,
+        "Alpha": 1.0,
+        "Emission Color": [
+          1.0,
+          1.0,
+          1.0,
+          1.0
+        ],
+        "Emission Strength": 0.0
+      },
+      "links": [
+        {
+          "from": "Principled BSDF",
+          "output": "BSDF",
+          "to": "Material Output",
+          "input": "Surface"
+        }
+      ],
+      "images": []
+    },
+    {
+      "name": "M_Rig_Rubber",
+      "glass": false,
+      "inputs": {
+        "Base Color": [
+          0.03500000014901161,
+          0.041999999433755875,
+          0.03799999877810478,
+          1.0
+        ],
+        "Metallic": 0.05000000074505806,
+        "Roughness": 0.8799999952316284,
+        "Transmission Weight": 0.0,
+        "IOR": 1.5,
+        "Alpha": 1.0,
+        "Emission Color": [
+          1.0,
+          1.0,
+          1.0,
+          1.0
+        ],
+        "Emission Strength": 0.0
+      },
+      "links": [
+        {
+          "from": "Principled BSDF",
+          "output": "BSDF",
+          "to": "Material Output",
+          "input": "Surface"
+        }
+      ],
+      "images": []
+    },
+    {
+      "name": "M_Rig_Track",
+      "glass": false,
+      "inputs": {
+        "Base Color": [
+          0.03500000014901161,
+          0.041999999433755875,
+          0.03799999877810478,
+          1.0
+        ],
+        "Metallic": 0.05000000074505806,
+        "Roughness": 0.8799999952316284,
+        "Transmission Weight": 0.0,
+        "IOR": 1.5,
+        "Alpha": 1.0,
+        "Emission Color": [
+          1.0,
+          1.0,
+          1.0,
+          1.0
+        ],
+        "Emission Strength": 0.0
+      },
+      "links": [
+        {
+          "from": "Principled BSDF",
+          "output": "BSDF",
+          "to": "Material Output",
+          "input": "Surface"
+        },
+        {
+          "from": "Texture Coordinate",
+          "output": "UV",
+          "to": "Separate XYZ",
+          "input": "Vector"
+        },
+        {
+          "from": "Separate XYZ",
+          "output": "X",
+          "to": "Math",
+          "input": "Value"
+        },
+        {
+          "from": "TrackOffset",
+          "output": "Value",
+          "to": "Math",
+          "input": "Value"
+        },
+        {
+          "from": "Math",
+          "output": "Value",
+          "to": "Math.001",
+          "input": "Value"
+        },
+        {
+          "from": "Math.001",
+          "output": "Value",
+          "to": "Math.002",
+          "input": "Value"
+        },
+        {
+          "from": "Math.002",
+          "output": "Value",
+          "to": "Math.003",
+          "input": "Value"
+        },
+        {
+          "from": "Math.003",
+          "output": "Value",
+          "to": "Bump",
+          "input": "Height"
+        },
+        {
+          "from": "Bump",
+          "output": "Normal",
+          "to": "Principled BSDF",
+          "input": "Normal"
+        }
+      ],
+      "images": []
+    },
+    {
+      "name": "M_Rover_Baked",
+      "glass": false,
+      "inputs": {
+        "Base Color": [
+          0.800000011920929,
+          0.800000011920929,
+          0.800000011920929,
+          1.0
+        ],
+        "Metallic": 0.0,
+        "Roughness": 0.5,
+        "Transmission Weight": 0.0,
+        "IOR": 1.5,
+        "Alpha": 1.0,
+        "Emission Color": [
+          1.0,
+          1.0,
+          1.0,
+          1.0
+        ],
+        "Emission Strength": 0.0
+      },
+      "links": [
+        {
+          "from": "Principled BSDF",
+          "output": "BSDF",
+          "to": "Material Output",
+          "input": "Surface"
+        },
+        {
+          "from": "Image Texture",
+          "output": "Color",
+          "to": "Principled BSDF",
+          "input": "Base Color"
+        },
+        {
+          "from": "Image Texture.001",
+          "output": "Color",
+          "to": "Separate Color",
+          "input": "Color"
+        },
+        {
+          "from": "Separate Color",
+          "output": "Green",
+          "to": "Principled BSDF",
+          "input": "Roughness"
+        },
+        {
+          "from": "Separate Color",
+          "output": "Blue",
+          "to": "Principled BSDF",
+          "input": "Metallic"
+        },
+        {
+          "from": "Image Texture.002",
+          "output": "Color",
+          "to": "Normal Map",
+          "input": "Color"
+        },
+        {
+          "from": "Normal Map",
+          "output": "Normal",
+          "to": "Principled BSDF",
+          "input": "Normal"
+        }
+      ],
+      "images": [
+        {
+          "node": "Image Texture",
+          "image": "T_Rover_BaseColor",
+          "file": "textures/T_0_T_Rover_BaseColor.png",
+          "colorspace": "sRGB"
+        },
+        {
+          "node": "Image Texture.001",
+          "image": "T_Rover_ORM",
+          "file": "textures/T_1_T_Rover_ORM.png",
+          "colorspace": "Non-Color"
+        },
+        {
+          "node": "Image Texture.002",
+          "image": "T_Rover_Normal",
+          "file": "textures/T_2_T_Rover_Normal.png",
+          "colorspace": "Non-Color"
+        }
+      ]
+    }
+  ],
+  "repairs": [
+    "Removed fused track shells (35896 faces) and rear infill (1017); rebuilt 12 wheels and two closed UV belts; authored telescopic ramp and winch."
+  ],
+  "actions": [
+    {
+      "name": "M_Rig_TrackAction",
+      "frames": [
+        1.0,
+        121.0
+      ]
+    },
+    {
+      "name": "RampDeploy",
+      "frames": [
+        1.0,
+        186.0
+      ]
+    },
+    {
+      "name": "RampExtensionDeploy",
+      "frames": [
+        1.0,
+        160.0
+      ]
+    },
+    {
+      "name": "WheelRoll_-1_0",
+      "frames": [
+        1.0,
+        121.0
+      ]
+    },
+    {
+      "name": "WheelRoll_-1_1",
+      "frames": [
+        1.0,
+        121.0
+      ]
+    },
+    {
+      "name": "WheelRoll_-1_2",
+      "frames": [
+        1.0,
+        121.0
+      ]
+    },
+    {
+      "name": "WheelRoll_-1_3",
+      "frames": [
+        1.0,
+        121.0
+      ]
+    },
+    {
+      "name": "WheelRoll_-1_4",
+      "frames": [
+        1.0,
+        121.0
+      ]
+    },
+    {
+      "name": "WheelRoll_-1_5",
+      "frames": [
+        1.0,
+        121.0
+      ]
+    },
+    {
+      "name": "WheelRoll_1_0",
+      "frames": [
+        1.0,
+        121.0
+      ]
+    },
+    {
+      "name": "WheelRoll_1_1",
+      "frames": [
+        1.0,
+        121.0
+      ]
+    },
+    {
+      "name": "WheelRoll_1_2",
+      "frames": [
+        1.0,
+        121.0
+      ]
+    },
+    {
+      "name": "WheelRoll_1_3",
+      "frames": [
+        1.0,
+        121.0
+      ]
+    },
+    {
+      "name": "WheelRoll_1_4",
+      "frames": [
+        1.0,
+        121.0
+      ]
+    },
+    {
+      "name": "WheelRoll_1_5",
+      "frames": [
+        1.0,
+        121.0
+      ]
+    },
+    {
+      "name": "WinchPull",
+      "frames": [
+        1.0,
+        91.0
+      ]
+    }
+  ],
+  "animation_runtime": "Rigid meshes driven from Unreal actuator state; Blender actions are inspectable demonstrations."
+}

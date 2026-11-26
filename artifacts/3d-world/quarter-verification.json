@@ -1,0 +1,22 @@
+{
+  "passed": true,
+  "time_s": 270.00340749969473,
+  "observed_frames": 135,
+  "found": 9,
+  "delivered": 3,
+  "first_delivery_s": 150.6575317037641,
+  "takeoffs": 3,
+  "landings": 3,
+  "average_game_fps": 159.65796932328388,
+  "worst_frame_ms": 220.13710021972656,
+  "repeat_departure_agents": [
+    0,
+    1,
+    3
+  ],
+  "all_four_rovers_loaded": true,
+  "runtime_effects_observed": true,
+  "blocked_agents": [
+    100
+  ]
+}

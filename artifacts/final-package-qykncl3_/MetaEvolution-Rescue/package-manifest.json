@@ -1,0 +1,880 @@
+{
+  "created_on": "2026-11-09",
+  "baseline": "user MetaRescue v0.3 unchanged",
+  "engine": "Unreal 5.8.4",
+  "entrypoint": "README.md",
+  "excluded": [
+    "engine/SDK",
+    "PDB",
+    "venv runtime",
+    "temporary builds",
+    "lectures"
+  ],
+  "files": [
+    {
+      "path": "AGENTS.md",
+      "bytes": 647,
+      "sha256": "83819caf542350f273f38e4a1263649bb17ee5ad04a94e949c06c9e3c657bed6"
+    },
+    {
+      "path": "PROJECT-README.md",
+      "bytes": 4893,
+      "sha256": "489c2674a614572a2eb7c8498980edad8488fcc8531a119589d54fd98fb720fd"
+    },
+    {
+      "path": "README.md",
+      "bytes": 4358,
+      "sha256": "ec8e104c8f33f808874ce9f1278a2a0aeba92a296bc64c850817980bbfb028fe"
+    },
+    {
+      "path": "agent.md",
+      "bytes": 3973,
+      "sha256": "bdec6ffb9356c0e2cf82f3508a68982b8ad1f71c6dbc090b6b16e30065b0f467"
+    },
+    {
+      "path": "artifacts/benchmark/desktop.png",
+      "bytes": 248082,
+      "sha256": "667f23402e0ff1b7b7f6616c0338e61e5908d2cc41c3022ae07639e8b6a1c4cb"
+    },
+    {
+      "path": "artifacts/benchmark/mobile-scout.png",
+      "bytes": 83886,
+      "sha256": "7b4766898afa24ea6446840fdc9058b3bb8144451b3e5368be44e2c39aaaadc8"
+    },
+    {
+      "path": "artifacts/benchmark/mobile.png",
+      "bytes": 312438,
+      "sha256": "fda52ef2e74209dcec34cfa32011f37d8173875dfddc560e8e6429362c04e190"
+    },
+    {
+      "path": "artifacts/metarescue-v03/boundary-audit.json",
+      "bytes": 545,
+      "sha256": "597b4c03d2d889bcca4f12c7d74706d5f42de6326432f198e2bcfba43ddabf64"
+    },
+    {
+      "path": "artifacts/metarescue-v03/desktop.png",
+      "bytes": 646038,
+      "sha256": "3e4d57c94f29289a40cd682180998b54146e18180da54cc9085681ad8d3dedc7"
+    },
+    {
+      "path": "artifacts/metarescue-v03/mobile.png",
+      "bytes": 432541,
+      "sha256": "567044d73c4eca9c7dd7569ea3e139cb1c82c32c1bd94a3bcb44e6d029c559e6"
+    },
+    {
+      "path": "artifacts/metarescue-v03/results-3-seeds.csv",
+      "bytes": 1764,
+      "sha256": "e514878eb81f6c3d1a5e4f5ba1da2ddbaf39a5201472ab482cc1863241f9d4ac"
+    },
+    {
+      "path": "artifacts/metarescue-v03/series-config.json",
+      "bytes": 511,
+      "sha256": "ad87fcd521b606986affc3c585f036200e3cff6b18a887dfcf40499d7e64d146"
+    },
+    {
+      "path": "artifacts/unreal/controls-check.json",
+      "bytes": 565,
+      "sha256": "f138787ceab865f58dc05c53003c671115173e9ab215e8dd5356b652201ed157"
+    },
+    {
+      "path": "artifacts/unreal/controls-manual.png",
+      "bytes": 2129365,
+      "sha256": "49e14c46486be31ebdeaecb6a7c8b26f369f1f3d73c034417a9dc50b5f835f64"
+    },
+    {
+      "path": "artifacts/unreal/events.jsonl",
+      "bytes": 1750,
+      "sha256": "85272659d1d590b6477df9e58d4da40e74275765e4e64767b4a54e03cec5182d"
+    },
+    {
+      "path": "artifacts/unreal/package-scene-check.json",
+      "bytes": 155,
+      "sha256": "b3c5778c4cb56b1ed9b49693179d2d08f72aa9d990394618421eb6944acc749a"
+    },
+    {
+      "path": "artifacts/unreal/physics-smoke.png",
+      "bytes": 2498817,
+      "sha256": "42e2f01d9333dcabfa063c6f3cc82cbbae96cdbbf1f778255c735f9c1c1189d2"
+    },
+    {
+      "path": "artifacts/unreal/physics-telemetry.json",
+      "bytes": 4922,
+      "sha256": "b418ddf9ddc25269add8f06a4186d246cd1f7cb82fe4f2a3f6f28b092cfca4d3"
+    },
+    {
+      "path": "artifacts/unreal/scene-start.png",
+      "bytes": 2514583,
+      "sha256": "0869e4a026fc5c5ded619288a5d13a97da98d8e88117ff1488154e0d00909daf"
+    },
+    {
+      "path": "artifacts/unreal/smoke-run.json",
+      "bytes": 34,
+      "sha256": "5130982ba4d67c553aa83f9ca5f5e31b46a1aa30d60315359b3cede745bd839b"
+    },
+    {
+      "path": "artifacts/unreal/verification.json",
+      "bytes": 1398,
+      "sha256": "6bb4524fdc57f27c2135fe61a4a2c6755954bdadf3184a0cfae12f0ac5e4c125"
+    },
+    {
+      "path": "benchmark/QA.md",
+      "bytes": 5357,
+      "sha256": "e88c2d3a3024777b8af51104bf18680cd164cb004a66e800f23171ae5123a847"
+    },
+    {
+      "path": "benchmark/README.md",
+      "bytes": 18797,
+      "sha256": "ebda0a605d519ea5f2e6e148a6fef6b42e5c5e8995620c4233d3ef32854de77e"
+    },
+    {
+      "path": "benchmark/main part/rescuebench/__init__.py",
+      "bytes": 85,
+      "sha256": "3964ec56b39f3d31e8c8bc5bac4c8f79ae321b1e9fa6dbc64f7206f2bd13aa96"
+    },
+    {
+      "path": "benchmark/main part/rescuebench/batch.py",
+      "bytes": 4116,
+      "sha256": "668540b887ffa5be2955ba0dbb5dbdfeae398010cf2b728c42cd037a71956bea"
+    },
+    {
+      "path": "benchmark/main part/rescuebench/cli.py",
+      "bytes": 2256,
+      "sha256": "fc7ad2c0779b611eb2397c4d4da221606d97d59f36063ea98e72063c458be34c"
+    },
+    {
+      "path": "benchmark/main part/rescuebench/domain.py",
+      "bytes": 7691,
+      "sha256": "8069994023c9d5c6d2f0ef8d64fe9c64cdefc2f0c4a7baa64f86a9f81db19d5f"
+    },
+    {
+      "path": "benchmark/main part/rescuebench/nsga2.py",
+      "bytes": 5765,
+      "sha256": "a508cc094aa23a93d41fa8ad7431a9a63f4193dcaa0820ff83f06787c6c16d1a"
+    },
+    {
+      "path": "benchmark/main part/rescuebench/planning.py",
+      "bytes": 11409,
+      "sha256": "a531694c57c11860566afaec4a6e39bbcc1d2e57809df153b24e96b2aa6f2750"
+    },
+    {
+      "path": "benchmark/main part/rescuebench/server.py",
+      "bytes": 9696,
+      "sha256": "b2ffb65292c369fb9ac3e7d734f9c8c575b514f6f0a203bda00aa508845bfd10"
+    },
+    {
+      "path": "benchmark/main part/rescuebench/simulation.py",
+      "bytes": 19053,
+      "sha256": "874b1e904c329987a689f468fe3d21220a94293dadf0833d432f8fa56584d624"
+    },
+    {
+      "path": "benchmark/main part/tests/test_core.py",
+      "bytes": 7909,
+      "sha256": "cb74c39ad005b727b6f0c03394541fe9de0c45d7218ab7001701bb7807852a06"
+    },
+    {
+      "path": "benchmark/main part/tests/test_server.py",
+      "bytes": 3249,
+      "sha256": "fd3c1c258e8a76596633ab65f7b740f5562373cd075d7998a980983291f4ad1b"
+    },
+    {
+      "path": "benchmark/main part/web/app.js",
+      "bytes": 25244,
+      "sha256": "61dc3d66f8072b6ba7e7d0ce43c4e203709f56f8ebe5103790917102944b0092"
+    },
+    {
+      "path": "benchmark/main part/web/favicon.svg",
+      "bytes": 187,
+      "sha256": "808bd6133b8fa6221b9842848dd373a291d02f279e0b40e6afac53863da3f3bc"
+    },
+    {
+      "path": "benchmark/main part/web/index.html",
+      "bytes": 12546,
+      "sha256": "c7533f87a56f04776dd1a23bc1d6f596fe256162be162a5842b4dda5f13a723a"
+    },
+    {
+      "path": "benchmark/main part/web/styles.css",
+      "bytes": 16690,
+      "sha256": "1cccde1c8eb9c085ae9ee127376ca7cb2483f57f5f4e6f0a698c3713ce237567"
+    },
+    {
+      "path": "benchmark/main.cmd",
+      "bytes": 330,
+      "sha256": "0c23fb684c95b66a3918a8091bc3ba6bd84697ff65fdda210a1c031b6a9879f1"
+    },
+    {
+      "path": "benchmark/main.py",
+      "bytes": 2813,
+      "sha256": "1ccdbbe5eb5b1052ca363833efbeb8990541b2987a41a97644a1f633469b1cb2"
+    },
+    {
+      "path": "benchmark/requirements.txt",
+      "bytes": 130,
+      "sha256": "4cfdf8d0aa6b6d2c644ab4bb73c8546534b1883ddc92766867d4ee85d7884a3d"
+    },
+    {
+      "path": "benchmark/results/rescue.csv",
+      "bytes": 6164,
+      "sha256": "7f61639bd82804e448b4117aab100d77af6604b2e7024f499a9f4aef50296a82"
+    },
+    {
+      "path": "benchmark/results/rescue.json",
+      "bytes": 23239,
+      "sha256": "5ddbdbe017c697517dad7b71d48c02b8760795a988f15204c42f1ee84070434b"
+    },
+    {
+      "path": "benchmark/results/scout.csv",
+      "bytes": 5559,
+      "sha256": "14fa1f53251d9fddd9dd59de0537975dee5a69c8102c38786906a3882db678a8"
+    },
+    {
+      "path": "benchmark/results/scout.json",
+      "bytes": 22377,
+      "sha256": "486a63b8e9cc11252fbaba56dc764840f027938a560a5d14fdeb6491c3a7841d"
+    },
+    {
+      "path": "benchmark/venv/README.txt",
+      "bytes": 448,
+      "sha256": "0490b2c63af90a4fdd7f7be7e98c0515f27c1223ca900688ace558827a1a3d40"
+    },
+    {
+      "path": "benchmarks/metarescue-v0.2/README.md",
+      "bytes": 18632,
+      "sha256": "de4fa1d596e682e6666ef0ffb944d1e48c494dd6ccff65ca3be4a9a62ae39a50"
+    },
+    {
+      "path": "benchmarks/metarescue-v0.2/main part/benchmark_batch.py",
+      "bytes": 3594,
+      "sha256": "428c159e54ad3182d7e05c7535fa4b103a2c92f8bfd2f4a1d89c128133da5bbf"
+    },
+    {
+      "path": "benchmarks/metarescue-v0.2/main part/mission.py",
+      "bytes": 7065,
+      "sha256": "a8c79f457ff0b2fecca06a665cad9c99e86cab34758713ac39f29ae33ab9da7b"
+    },
+    {
+      "path": "benchmarks/metarescue-v0.2/main part/nsga2.py",
+      "bytes": 4261,
+      "sha256": "714da96ba5bd955809404af6476afa0bef0e59137954a973dff17dc98c7e4a12"
+    },
+    {
+      "path": "benchmarks/metarescue-v0.2/main part/rescue.py",
+      "bytes": 13149,
+      "sha256": "718b39adf1c4d9b26f457068e1895a5124b47397d20417187b2eb463b78a041f"
+    },
+    {
+      "path": "benchmarks/metarescue-v0.2/main part/scout.py",
+      "bytes": 8542,
+      "sha256": "f55e5d409325f9934d17629a59c883735df48598c760609ca756e9a1f4b1f4f4"
+    },
+    {
+      "path": "benchmarks/metarescue-v0.2/main part/server.py",
+      "bytes": 6027,
+      "sha256": "6f8b19323c86e1874f9567ff3812a2d8589a319f7ff97a122de674b26bdad37a"
+    },
+    {
+      "path": "benchmarks/metarescue-v0.2/main part/static/app.js",
+      "bytes": 28178,
+      "sha256": "f226d80f6e23495b3087edd816e2a997b946b705439749ed7f5a8b68240d92a0"
+    },
+    {
+      "path": "benchmarks/metarescue-v0.2/main part/static/index.html",
+      "bytes": 10651,
+      "sha256": "39bbe21dff6866e9bfba80a50f0c0852d5736acf4500b59c08e2bc9d33c1783b"
+    },
+    {
+      "path": "benchmarks/metarescue-v0.2/main part/static/style.css",
+      "bytes": 13808,
+      "sha256": "053b06745139222cf253ddfd88a7538f77d1685ac5b9ea5f61edc8398dc64129"
+    },
+    {
+      "path": "benchmarks/metarescue-v0.2/main part/tests/test_configurations.py",
+      "bytes": 2531,
+      "sha256": "8f2ecb4d494f384a9ade0b0d3817105c20cb20f27d13fc4a63360021a9d9cfa6"
+    },
+    {
+      "path": "benchmarks/metarescue-v0.2/main part/tests/test_engine.py",
+      "bytes": 4613,
+      "sha256": "16a323ef063568bd596f62750d7f7e05890f1df0def2c5176e90a3f8e3b45187"
+    },
+    {
+      "path": "benchmarks/metarescue-v0.2/main part/world.py",
+      "bytes": 7679,
+      "sha256": "f3bb6316d12acf786a054b02c1d52d009977205645d90838c7861d229bc6546a"
+    },
+    {
+      "path": "benchmarks/metarescue-v0.2/main.bat",
+      "bytes": 282,
+      "sha256": "33f1b1c55c51acb514ee5440f5bd78ca7d5935dfa14ffe38f3d82b135d020834"
+    },
+    {
+      "path": "benchmarks/metarescue-v0.2/main.command",
+      "bytes": 49,
+      "sha256": "2368640df32faa46a34668c22b580c7a24eb8c43e1c6cdb7d994d9c50ec04c04"
+    },
+    {
+      "path": "benchmarks/metarescue-v0.2/main.py",
+      "bytes": 1590,
+      "sha256": "8396ebf5e7b309e861255ecfa1a87a6d7b45e8f765624a783ea65242037ff4de"
+    },
+    {
+      "path": "benchmarks/metarescue-v0.2/requirements-optional.txt",
+      "bytes": 75,
+      "sha256": "a9ee0dfb3c38fd4747197d61f337079e7cc86c9bb5aa4112601939f70a62def5"
+    },
+    {
+      "path": "benchmarks/metarescue-v0.2/requirements.txt",
+      "bytes": 196,
+      "sha256": "0177b1453d748df3e2084f03f6cf6436b229fa0bbb16adc92975a486613bac23"
+    },
+    {
+      "path": "benchmarks/metarescue-v0.2/venv/README.txt",
+      "bytes": 229,
+      "sha256": "10019f75f15e6753ab6b72255b7c005562c05b87bd11e5087b9993ede2e982e8"
+    },
+    {
+      "path": "benchmarks/metarescue-v0.3/README.md",
+      "bytes": 15403,
+      "sha256": "8d25492aa8195406366ce9ae05360174818ec734ea7e2c41afc7ce43f5f3371e"
+    },
+    {
+      "path": "benchmarks/metarescue-v0.3/main part/benchmark_batch.py",
+      "bytes": 2771,
+      "sha256": "13bddefee4ea252d6326abdbd6b81f0502adb6643075e92201d5c89d3efdc43b"
+    },
+    {
+      "path": "benchmarks/metarescue-v0.3/main part/optimizer.py",
+      "bytes": 10382,
+      "sha256": "d3014397180a0430670a6e8c3e15c4a523ac8835f77ba041ee3ccd597d47de6f"
+    },
+    {
+      "path": "benchmarks/metarescue-v0.3/main part/server.py",
+      "bytes": 3943,
+      "sha256": "6f3811a110ba53e01b474529960724dd7aebb6b51a943ffff8c5aef78d997b7a"
+    },
+    {
+      "path": "benchmarks/metarescue-v0.3/main part/simulation.py",
+      "bytes": 20670,
+      "sha256": "cccfedc05fa7ff770988bef3629104e62f325b86c55607693f3c581c8e3182dc"
+    },
+    {
+      "path": "benchmarks/metarescue-v0.3/main part/static/app.js",
+      "bytes": 24228,
+      "sha256": "709de43ac3aa9483cc3bb201862accc2d30ded991aec6a1e4905cc27805d0e33"
+    },
+    {
+      "path": "benchmarks/metarescue-v0.3/main part/static/index.html",
+      "bytes": 10280,
+      "sha256": "f7233220d96adc8af9db49005ce87f23744e726db3889a78f7167a668e80ec01"
+    },
+    {
+      "path": "benchmarks/metarescue-v0.3/main part/static/style.css",
+      "bytes": 9847,
+      "sha256": "5ba0733925cd6a372f7bf3c3cddd7975bc2f7dcb8abfe9577be5cea39775ace9"
+    },
+    {
+      "path": "benchmarks/metarescue-v0.3/main part/tests/test_api.py",
+      "bytes": 2423,
+      "sha256": "33eb3972a76dab06a60dc5dc5d5baf1f16af5409b95a8e11d8c12e6f68e687bc"
+    },
+    {
+      "path": "benchmarks/metarescue-v0.3/main part/tests/test_engine.py",
+      "bytes": 9163,
+      "sha256": "632812788c2f88fa8c213b84c0adc8ba34e675af24c9fbc3c0a21e1b6bd4fbd2"
+    },
+    {
+      "path": "benchmarks/metarescue-v0.3/main part/world.py",
+      "bytes": 15234,
+      "sha256": "ec7055025d4b2a36c83c59676c6debfd2a97380613c11acc5604144a11b6eae1"
+    },
+    {
+      "path": "benchmarks/metarescue-v0.3/main.bat",
+      "bytes": 159,
+      "sha256": "8ff6e338af08d4232419a26c16a6af27b633695fdcd1bbd3d01eb39a0b17cf12"
+    },
+    {
+      "path": "benchmarks/metarescue-v0.3/main.command",
+      "bytes": 47,
+      "sha256": "0febcf2b83a86f0dc2d04f44498d806b8b3eb2bf46d0b3637ed81ac942d55881"
+    },
+    {
+      "path": "benchmarks/metarescue-v0.3/main.py",
+      "bytes": 707,
+      "sha256": "888bfd10f4285617e89e27553eaa1e9999aeb0fddbc4312b1a63dff47becd036"
+    },
+    {
+      "path": "benchmarks/metarescue-v0.3/requirements.txt",
+      "bytes": 56,
+      "sha256": "91a5a323ec851ee7660fe7e1d6e0c8464ace430d4bc402a2a76884824b517a39"
+    },
+    {
+      "path": "benchmarks/metarescue-v0.3/venv/README.txt",
+      "bytes": 122,
+      "sha256": "d30d42f93914126c974d54a287f73d1405327fa04736e52b580a99d938f95a4f"
+    },
+    {
+      "path": "contracts/__init__.py",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "contracts/examples/interaction-v1.json",
+      "bytes": 117087,
+      "sha256": "d20c5d2b029f3dce1b69e051f61e891fcf6f3f4ca987fb5e1459700b82485003"
+    },
+    {
+      "path": "contracts/protocol.py",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "controller/__init__.py",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "controller/main.py",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "controller/policy.py",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "docs/3d-visual-direction.md",
+      "bytes": 3937,
+      "sha256": "961fa6088c41c52f27bd028ae350c8e21fbd28a2903727123b49325948fb642e"
+    },
+    {
+      "path": "docs/assets/rescue-world-concept.png",
+      "bytes": 3135473,
+      "sha256": "7b7e19ded0cc6fd3d667de4cc5d995b92bec841bcc5c32f0d5f358689fd73db7"
+    },
+    {
+      "path": "docs/benchmark-research-plan.md",
+      "bytes": 17140,
+      "sha256": "8740dd23b7e33cafb56f9134fbe5ca3325dd3001dc4cacbcb0b82cdd9c8ef49e"
+    },
+    {
+      "path": "docs/benchmark-v0.2-review.md",
+      "bytes": 14479,
+      "sha256": "28899021b7c275c5302fa4b559ced2f2e89148f25b8c7726c5891d7c90115f53"
+    },
+    {
+      "path": "docs/benchmark-v0.3-review.md",
+      "bytes": 14759,
+      "sha256": "ccb0e2203a643f3f8444faeeff58a19463b9e87a284dc2d598e9347ef99d08fe"
+    },
+    {
+      "path": "docs/benchmark-v0.3-spec.md",
+      "bytes": 26580,
+      "sha256": "d98dfcd7f8ec06d4510a18e8bf0bb0d70b36b861cd23c4e4214bae7b94edca17"
+    },
+    {
+      "path": "docs/current-concept.md",
+      "bytes": 20164,
+      "sha256": "07f1c0e3274ad10d1aa99c5f3525dcb3f560dbf7c5a7c00721dfe105aa8418a7"
+    },
+    {
+      "path": "docs/distribution-readme.md",
+      "bytes": 4358,
+      "sha256": "ec8e104c8f33f808874ce9f1278a2a0aeba92a296bc64c850817980bbfb028fe"
+    },
+    {
+      "path": "docs/sources/MetaRescue_Benchmark_v0_2.zip",
+      "bytes": 48161,
+      "sha256": "ccf4c8dd5311fe8944fcc720524cd7a74376a2ec054711ee719a23578035250e"
+    },
+    {
+      "path": "docs/sources/MetaRescue_Benchmark_v0_3.zip",
+      "bytes": 44867,
+      "sha256": "5b36cc61df3fda83e489fab70aa82a6d0eb695d04cc0c70a7be01c7edc2a3cdc"
+    },
+    {
+      "path": "docs/sources/README.md",
+      "bytes": 7845,
+      "sha256": "b6daad1d3f704f27e58c3c784a6f51f42b18914893824d408ceab8295f176a5d"
+    },
+    {
+      "path": "docs/sources/metarescue-v0.2-manifest.json",
+      "bytes": 3361,
+      "sha256": "67de443335f152d4b8fe2f630012f76875ed481903d2a7d270b544f36472c663"
+    },
+    {
+      "path": "docs/sources/metarescue-v0.3-manifest.json",
+      "bytes": 2787,
+      "sha256": "aca7dca7d0c1476be3075a283b4e83674282396dd3e21b15e020c27783c6afd7"
+    },
+    {
+      "path": "docs/sources/nsga-benchmark-context-2026-11-09.txt",
+      "bytes": 27261,
+      "sha256": "397004320260020159da1f1f53b626d6f1dd8019e391cc8ecc88f9b3802b5a29"
+    },
+    {
+      "path": "docs/sources/nsga-planner-thread-2026-11-09.json",
+      "bytes": 26646,
+      "sha256": "a49b86eff833b8c1e0cd47a1a51e876bbac342ee3383db9abeb187a85f5fd3b4"
+    },
+    {
+      "path": "docs/stage-1-interaction.md",
+      "bytes": 89423,
+      "sha256": "d3f1f4eced6af2e41cd0f9599ab085c2fd025e8b4b28e9eb7d73a1f8dc21cd19"
+    },
+    {
+      "path": "docs/stage-1-review.md",
+      "bytes": 19105,
+      "sha256": "aaf40461d983bd554ba2cb33f02d6b99b02f8f5b702fab1b0a4710ac0d5c1296"
+    },
+    {
+      "path": "docs/work-report-2026-11-09.md",
+      "bytes": 9031,
+      "sha256": "8c53a0b89c9f7a77483f09e56824beb7db5428d62b8077ef4a83efa3f0af6e0e"
+    },
+    {
+      "path": "environment/__init__.py",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "environment/main.py",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "environment/server.py",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "environment/world.py",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "requirements.txt",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "tests/test_episode.py",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "tests/test_protocol.py",
+      "bytes": 20218,
+      "sha256": "657b9c67897050fb52f761fd26ab0e48ec703f36ec8979dd9f859867ed0ca7e0"
+    },
+    {
+      "path": "tools/audit_metarescue_v03.py",
+      "bytes": 1670,
+      "sha256": "51ae91e9125ce9c81b73aaf3b445f9589c0826d27b575e77b4004ce2c10d24e4"
+    },
+    {
+      "path": "unreal/MetaRescue/.gitignore",
+      "bytes": 71,
+      "sha256": "68f3808b42365cf7b647505c49d12c923e16f73677a5f5ed7cac77362046dc6a"
+    },
+    {
+      "path": "unreal/MetaRescue/Binaries/Win64/MetaRescueEditor.target",
+      "bytes": 945990,
+      "sha256": "d8e8482ff678f6ae6c220a79aafbcc54bb02c3a6dbc11af39181a745f7ae2766"
+    },
+    {
+      "path": "unreal/MetaRescue/Binaries/Win64/UnrealEditor-MetaRescue.dll",
+      "bytes": 384000,
+      "sha256": "7468f6fb557ce10ef586356288f201afdd8fc57c9be09538d0ff7dee7f89dfab"
+    },
+    {
+      "path": "unreal/MetaRescue/Binaries/Win64/UnrealEditor.modules",
+      "bytes": 98,
+      "sha256": "ea0c0f711da7e7643c2e09e247a7c7b188dd10c10954537744600771cc72da1f"
+    },
+    {
+      "path": "unreal/MetaRescue/Config/DefaultEngine.ini",
+      "bytes": 1285,
+      "sha256": "448f07cbc1db5420d9fde5aff6f2657f91278154dc5021e57f7a1f043634158e"
+    },
+    {
+      "path": "unreal/MetaRescue/Config/DefaultGame.ini",
+      "bytes": 219,
+      "sha256": "d78d67f765773d50764687359cfa5ea7166ba53accf5d4a59ca9a3de17bf9643"
+    },
+    {
+      "path": "unreal/MetaRescue/Content/Maps/RescueDistrict.umap",
+      "bytes": 7968366,
+      "sha256": "4336aceb0afd4b5bde8c77d2f55fee9342537fcbaf9de8e2e5c8d0fbc39c743a"
+    },
+    {
+      "path": "unreal/MetaRescue/Content/Materials/MI_Asphalt.uasset",
+      "bytes": 5659,
+      "sha256": "ce084f6ca9e0295f04fc91569bc3cf6b0a0db65329f00e8d515792fc75226241"
+    },
+    {
+      "path": "unreal/MetaRescue/Content/Materials/MI_Blue.uasset",
+      "bytes": 5644,
+      "sha256": "9b9622166e89c54ec893f7051450dad98eda3dbb26272f16f897a3df3eafa54a"
+    },
+    {
+      "path": "unreal/MetaRescue/Content/Materials/MI_Concrete.uasset",
+      "bytes": 5664,
+      "sha256": "5dd4d0c463ce62682bcbe5e1675abf1d4da1a173ab58b79656bba50dd84eb686"
+    },
+    {
+      "path": "unreal/MetaRescue/Content/Materials/MI_CyanGlow.uasset",
+      "bytes": 5664,
+      "sha256": "42f8539a2456faf1fa9cdda4475093a3d346505c4319277f544b704788da84d3"
+    },
+    {
+      "path": "unreal/MetaRescue/Content/Materials/MI_Dark.uasset",
+      "bytes": 5644,
+      "sha256": "7b71ef43c26b4d23f08730f7b91c5bfb6d6fa6f650fb8538bc8907b991521ac5"
+    },
+    {
+      "path": "unreal/MetaRescue/Content/Materials/MI_Equipment.uasset",
+      "bytes": 5669,
+      "sha256": "656ecfd6a10fe843f60c523831b3e4d010179760e2673b8f1b877c28e0a57710"
+    },
+    {
+      "path": "unreal/MetaRescue/Content/Materials/MI_Glass.uasset",
+      "bytes": 5649,
+      "sha256": "b61b72542e4575e1c131d2d2522c71acb76d1c860c29662b90deddd9ab83ca27"
+    },
+    {
+      "path": "unreal/MetaRescue/Content/Materials/MI_Ground.uasset",
+      "bytes": 5654,
+      "sha256": "303cdd87b1627ca9b35b9e6a0d4ff55c53299cce25fcb8d160281ae1e27f0fba"
+    },
+    {
+      "path": "unreal/MetaRescue/Content/Materials/MI_Metal.uasset",
+      "bytes": 5649,
+      "sha256": "36817092f3b459d761d24205c376ada736fafc8c6410fe1032f047958cfb0170"
+    },
+    {
+      "path": "unreal/MetaRescue/Content/Materials/MI_Mud.uasset",
+      "bytes": 5639,
+      "sha256": "073585837fe3db99ce6fba9615b481424bb90f53e2f14719412206369de5ec97"
+    },
+    {
+      "path": "unreal/MetaRescue/Content/Materials/MI_Orange.uasset",
+      "bytes": 5654,
+      "sha256": "02ce93c482fbeaffbc4043d1bd636673da134d68e3c92068e377177e867f289d"
+    },
+    {
+      "path": "unreal/MetaRescue/Content/Materials/MI_Paint.uasset",
+      "bytes": 5649,
+      "sha256": "ed3c99b70dcfb83263e833d8f0f3e578cd5971a6e471cc3872ad64d92b3eb209"
+    },
+    {
+      "path": "unreal/MetaRescue/Content/Materials/MI_Plaster.uasset",
+      "bytes": 5659,
+      "sha256": "4c9355f3801c0db649f07284ec56ace657c8639b5c277e2f807c5263f7a17520"
+    },
+    {
+      "path": "unreal/MetaRescue/Content/Materials/MI_Red.uasset",
+      "bytes": 5639,
+      "sha256": "48097b2b08f88e6f1b8b06afca390f1ac217e4d9b396b11ff4978c88db446950"
+    },
+    {
+      "path": "unreal/MetaRescue/Content/Materials/MI_Rotor.uasset",
+      "bytes": 5649,
+      "sha256": "2497bf1360aad0ab44948f02b838c05f73e9a052751d96cd89c1a5ad7aadff08"
+    },
+    {
+      "path": "unreal/MetaRescue/Content/Materials/MI_Rubber.uasset",
+      "bytes": 5654,
+      "sha256": "319cbe5db683e328dbfd2e49ce5625b8ba9957e0024b994d1334ec414128e70f"
+    },
+    {
+      "path": "unreal/MetaRescue/Content/Materials/MI_Rust.uasset",
+      "bytes": 5644,
+      "sha256": "df15777deb3f72c4d977dde1a860f303c971eeb8b0fa97f79fe074f49ef73fd0"
+    },
+    {
+      "path": "unreal/MetaRescue/Content/Materials/MI_Teal.uasset",
+      "bytes": 5644,
+      "sha256": "78c4a26daa0a18c21c487b2a117f8f7fd855c037f94440a4f1af509c61290414"
+    },
+    {
+      "path": "unreal/MetaRescue/Content/Materials/MI_Water.uasset",
+      "bytes": 5649,
+      "sha256": "96355db7ffb20501ac610973cf83efbecfccf1e0d13cbfddf06c3b02a492eca5"
+    },
+    {
+      "path": "unreal/MetaRescue/Content/Materials/MI_White.uasset",
+      "bytes": 5649,
+      "sha256": "e59f2f4c4352e105865ec4676d7b12cc630be3ab87dfd559cfe0774264d9beac"
+    },
+    {
+      "path": "unreal/MetaRescue/Content/Materials/MI_WhiteGlow.uasset",
+      "bytes": 5669,
+      "sha256": "231aaadf63777aa32c2c2d2a430dcfc25126bd948aa50d7e44ae4868607eb4c6"
+    },
+    {
+      "path": "unreal/MetaRescue/Content/Materials/MI_Zone.uasset",
+      "bytes": 5644,
+      "sha256": "b9a5f34d39b20d6b8c36676ae1592b07b1022c65a7dfc742cc48741fb699155c"
+    },
+    {
+      "path": "unreal/MetaRescue/Content/Materials/M_RescueSurface.uasset",
+      "bytes": 10933,
+      "sha256": "3ba528073be077dc10776c8737f4e1f252a47172b4b2f30143538820993241ab"
+    },
+    {
+      "path": "unreal/MetaRescue/Content/Scenario/scenario.json",
+      "bytes": 32836,
+      "sha256": "bcb7df4fa7caf4d33540a6c89c78ca8076498fc0210b6aa51aee134bee1c7f1f"
+    },
+    {
+      "path": "unreal/MetaRescue/Content/Scenario/scene-build.json",
+      "bytes": 68,
+      "sha256": "bb96d4b2391321250c809b47abb754598750454db0bbc3f2a5f0adcf49b35032"
+    },
+    {
+      "path": "unreal/MetaRescue/MetaRescue.uproject",
+      "bytes": 515,
+      "sha256": "c46567a30852977bad211c356a4781cc869cc001e5244e227834856773ae8364"
+    },
+    {
+      "path": "unreal/MetaRescue/Source/MetaRescue.Target.cs",
+      "bytes": 344,
+      "sha256": "72b6596724a7ce053741fd1780545bec77124452843b3ef86a4b19e52416ed7f"
+    },
+    {
+      "path": "unreal/MetaRescue/Source/MetaRescue/MRAgent.cpp",
+      "bytes": 6807,
+      "sha256": "ce2bbce0adbb8bf022b4066dfce8d9892a8fd512d285838c6162e804f62c1073"
+    },
+    {
+      "path": "unreal/MetaRescue/Source/MetaRescue/MRAgent.h",
+      "bytes": 1307,
+      "sha256": "ab2dde85e7370955646082542459573c4166d109f4dde43840586a09efcaef96"
+    },
+    {
+      "path": "unreal/MetaRescue/Source/MetaRescue/MRCameraPawn.cpp",
+      "bytes": 3482,
+      "sha256": "30e7bb44011542c6591ea0fc07cf313223c6068e8b87a9867ebd4d4811047612"
+    },
+    {
+      "path": "unreal/MetaRescue/Source/MetaRescue/MRCameraPawn.h",
+      "bytes": 768,
+      "sha256": "139807bd613c2b381e860db21547a886199a77ea0c8248ed1c715ee55c1cf556"
+    },
+    {
+      "path": "unreal/MetaRescue/Source/MetaRescue/MRGameMode.cpp",
+      "bytes": 409,
+      "sha256": "f41bf6f7e83dd6bf1f60d70f811934ac24a3bc6aeb2e1fe86729b2feebba4ddd"
+    },
+    {
+      "path": "unreal/MetaRescue/Source/MetaRescue/MRGameMode.h",
+      "bytes": 269,
+      "sha256": "df8c9af6fa77d0e22af3fd1ac355259771469509389bf317dfb3f8c54ff7968f"
+    },
+    {
+      "path": "unreal/MetaRescue/Source/MetaRescue/MRHUD.cpp",
+      "bytes": 1720,
+      "sha256": "566128247701570d71fd007f4b62938bb55de17cb2fc9e7eeb1345f2800d2cd9"
+    },
+    {
+      "path": "unreal/MetaRescue/Source/MetaRescue/MRHUD.h",
+      "bytes": 216,
+      "sha256": "7f710c0f1c190458d31e3bf6d286dc0fa512124c18f8d4b624024dc9a1905441"
+    },
+    {
+      "path": "unreal/MetaRescue/Source/MetaRescue/MRWorld.cpp",
+      "bytes": 20802,
+      "sha256": "49a33424d7fb6d6302d730e563d0a7eac22dc81194f18a0ef0ab5d13c596050a"
+    },
+    {
+      "path": "unreal/MetaRescue/Source/MetaRescue/MRWorld.h",
+      "bytes": 2503,
+      "sha256": "57fffa6608822118f08c2b322ae52d2a7f90b071abeddc0d9d6a7fdea2148cdd"
+    },
+    {
+      "path": "unreal/MetaRescue/Source/MetaRescue/MetaRescue.Build.cs",
+      "bytes": 407,
+      "sha256": "67daeea64edc357dc57b56f4aa8a5bfe5417127ae7fde1347de1fa545887c931"
+    },
+    {
+      "path": "unreal/MetaRescue/Source/MetaRescue/MetaRescue.cpp",
+      "bytes": 116,
+      "sha256": "5fa0c6373bb1ff3c8337fb8c9ca901f7a9bc7d27b7dc1027432f65fdafa168df"
+    },
+    {
+      "path": "unreal/MetaRescue/Source/MetaRescueEditor.Target.cs",
+      "bytes": 358,
+      "sha256": "4f86491609fa8ca31a2543cb145565e7fb761e4e257d00674b3c8dee9064601e"
+    },
+    {
+      "path": "unreal/QA.md",
+      "bytes": 7461,
+      "sha256": "3dc3a40a0733656231043cc95bd85060d60ddc395da93e1d55e23e67a663f10d"
+    },
+    {
+      "path": "unreal/README.md",
+      "bytes": 14315,
+      "sha256": "212fe226aed82ab625e2fc76e145ceef10901b0b7166f2cc7c3d15f812381f8b"
+    },
+    {
+      "path": "unreal/launch.cmd",
+      "bytes": 198,
+      "sha256": "2e7472fde1836e861ded1ed667440c06b92d65b8489686d3510645d4649cd209"
+    },
+    {
+      "path": "unreal/launch.py",
+      "bytes": 4340,
+      "sha256": "ff31b3b2faa2fea62af5e540c30a5899a7510d905ee1ad7d317ed83c34c7af25"
+    },
+    {
+      "path": "unreal/tools/build_scene.py",
+      "bytes": 8216,
+      "sha256": "fb2eb6a61ee89312abe524881a9b84be049c60b8ede172fb7ff213c65b7604f5"
+    },
+    {
+      "path": "unreal/tools/check_smoke.py",
+      "bytes": 2283,
+      "sha256": "fc686a585b20adea9672a9ba2cd7b0b249f4e5baefed9a6465a476b9ed2816a7"
+    },
+    {
+      "path": "unreal/tools/export_scenario.py",
+      "bytes": 2733,
+      "sha256": "229f86e8e250ff1dc177b973dc2093187db5e64640092f2ada198de65314cd81"
+    },
+    {
+      "path": "unreal/tools/verify_scene.py",
+      "bytes": 1439,
+      "sha256": "8ea5882f1d12d0a28ce9d123aba4cb4cd3325c9632010b8624017acaee14574b"
+    },
+    {
+      "path": "web/app.js",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "web/index.html",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "web/styles.css",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "ТЗ/Приложение А.pdf",
+      "bytes": 161787,
+      "sha256": "cd94792d62494bef2aec2e5198fc66ab5149c3790dc78489f79c9a70bdee8793"
+    },
+    {
+      "path": "ТЗ/Хакатон_Метарой_1_0_постановка_задачи (1).pdf",
+      "bytes": 295518,
+      "sha256": "801127b8d6106dc0e57e0a137a30b33d1a7ac09013e2e1ea32e300eb381a6a56"
+    },
+    {
+      "path": "концепция/КОНЦЕПЦИЯ_MetaEvolution_Rescue_v1.0.md",
+      "bytes": 146307,
+      "sha256": "d7d3f40e85de1f83982d7cf204f4f81ecb4468afcfc1969cad9950a97a3f9be2"
+    }
+  ]
+}

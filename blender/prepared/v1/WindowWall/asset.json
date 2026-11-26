@@ -1,0 +1,66 @@
+{
+  "id": "WindowWall",
+  "mesh": "SM_WindowWall",
+  "source": "blender/Meshy_AI_Wall_Module_with_Window_20261109_image-to-3d-texture.blend",
+  "source_sha256": "ea868b0d900bbf7856e25034b030b49d89e35385cca0b7218e4d641913fbb400",
+  "source_triangles": 863643,
+  "triangles": 17999,
+  "dimensions_m": [
+    2.989241600036621,
+    0.38626474142074585,
+    3.1996047496795654
+  ],
+  "fbx": "WindowWall/WindowWall.fbx",
+  "blend": "WindowWall/WindowWall.blend",
+  "textures": {
+    "BaseColor": "WindowWall/textures/T_WindowWall_BaseColor.png",
+    "ORM": "WindowWall/textures/T_WindowWall_ORM.png",
+    "Normal": "WindowWall/textures/T_WindowWall_Normal.png"
+  },
+  "original_material_links": [
+    {
+      "from_node": "Principled BSDF",
+      "from_socket": "BSDF",
+      "to_node": "Material Output",
+      "to_socket": "Surface"
+    },
+    {
+      "from_node": "Image Texture",
+      "from_socket": "Color",
+      "to_node": "Principled BSDF",
+      "to_socket": "Base Color"
+    },
+    {
+      "from_node": "Separate Color",
+      "from_socket": "Blue",
+      "to_node": "Principled BSDF",
+      "to_socket": "Metallic"
+    },
+    {
+      "from_node": "Separate Color",
+      "from_socket": "Green",
+      "to_node": "Principled BSDF",
+      "to_socket": "Roughness"
+    },
+    {
+      "from_node": "Image Texture.001",
+      "from_socket": "Color",
+      "to_node": "Separate Color",
+      "to_socket": "Color"
+    },
+    {
+      "from_node": "Normal Map",
+      "from_socket": "Normal",
+      "to_node": "Principled BSDF",
+      "to_socket": "Normal"
+    },
+    {
+      "from_node": "Image Texture.002",
+      "from_socket": "Color",
+      "to_node": "Normal Map",
+      "to_socket": "Color"
+    }
+  ],
+  "parts": "single visual shell; functional geometry prepared separately",
+  "collision": "not included; runtime collision proxies are separate"
+}

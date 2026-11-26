@@ -1,0 +1,53 @@
+{
+  "research_candidate": "info-split-only",
+  "rounds": 10,
+  "stop": "patience",
+  "production_changed": false,
+  "final": {
+    "base": {
+      "n": 512,
+      "m1": 0.6443388534208847,
+      "saved": 3791,
+      "energy": 0.2254952383792643,
+      "clipped": 131.40598931233697,
+      "errors": 0,
+      "reserve": 0,
+      "rejections": 137
+    },
+    "candidate": {
+      "n": 512,
+      "m1": 0.6474139142107892,
+      "saved": 3808,
+      "energy": 0.2249101937987614,
+      "clipped": 131.48315869243604,
+      "errors": 0,
+      "reserve": 0,
+      "rejections": 137
+    },
+    "delta": 0.00307506078990454,
+    "by_suite": {
+      "physical": 0.005031231789044287,
+      "mixed": 0.0072690113705738725,
+      "mixed_stress": 0.0,
+      "variable_stress": 0.0
+    },
+    "ci": [
+      0.0005132942144660894,
+      0.005813094240828615
+    ],
+    "checks": {
+      "m1": true,
+      "saved": true,
+      "energy": true,
+      "time": false,
+      "errors": true,
+      "reserve": true,
+      "rejections": true,
+      "suite": true,
+      "confidence": true
+    },
+    "passed": false,
+    "score": 0.0030163348669059293
+  },
+  "recommended_for_3d_validation": "range-late"
+}

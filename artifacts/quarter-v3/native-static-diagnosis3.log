@@ -1,0 +1,2 @@
+diagnosis3-static native exit 0 evidence C:\Users\rotn1\Documents\ChatGPT\metaroy\artifacts\quarter-v3\runs\diagnosis3-static
+{"passed": true, "seconds": 130.0001264353632, "environment": "static", "seed": 20261109, "event_types": [], "applied": 0, "found": 7, "delivered": 0, "fps": 156.6320590535733, "p95_frame_ms": 7, "memory_mb": 3269.99609375, "traffic_probe": null}
