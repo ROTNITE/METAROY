@@ -9,6 +9,7 @@ from __future__ import annotations
 import argparse
 from copy import deepcopy
 import csv
+import hashlib
 from datetime import datetime,timezone
 from http.server import BaseHTTPRequestHandler,ThreadingHTTPServer
 import io
@@ -20,13 +21,15 @@ import secrets
 import signal
 import subprocess
 import sys
+import tempfile
+import zipfile
 import threading
 import time
 from urllib.parse import urlsplit
 import uuid
 
 from contracts.protocol import strict_json
-from controller.ai import atomic_json
+from controller.ai import atomic_json,file_lock
 from controller.client import EnvironmentClient
 from tools.run_interop import controller_call,ROOT
 from environment.main import DEFAULT_OUTPUT
@@ -34,6 +37,8 @@ from environment.main import DEFAULT_OUTPUT
 WEB=ROOT/'web'/'m5'
 MAX_REQUEST=16384
 MAX_REPORT=16*1024*1024
+MAX_ARCHIVE=256*1024*1024
+MAX_ARCHIVE_FILES=2000
 ID=re.compile(r'[a-zA-Z0-9_-]{1,48}\Z')
 RUN_ID=re.compile(r'[0-9a-f]{32}\Z')
 ACTIVE={'queued','running','stopping'}
@@ -154,12 +159,80 @@ def read_report(path):
 
 
 def summarize(report):
-    result={k:report[k] for k in ('exchange','status','goal_status','evacuated','located','aid_delivered',
-                                 'correlated_public_target_count','planning_p95_ms','step_http_p95_ms',
-                                 'inputs_preserved','error','first_protocol_error','independent_truth')
-            if k in report}
-    result['evidence_basis']='independent_model_truth' if isinstance(report.get('independent_truth'),dict) else 'public_only'
+    result={}
+    for k in ('exchange','status','goal_status','evacuated','located','aid_delivered',
+              'correlated_public_target_count','planning_p95_ms','step_http_p95_ms','inputs_preserved','error'):
+        value=report.get(k)
+        if isinstance(value,str):
+            result[k]=value[:1000]
+        elif type(value) in (int,float,bool):
+            result[k]=value
+    error=report.get('first_protocol_error')
+    if isinstance(error,dict):
+        result['first_protocol_error']={k:str(error[k])[:500] for k in ('kind','code','stage','message') if k in error}
+    truth=report.get('independent_truth')
+    if isinstance(truth,dict):
+        result['independent_truth']={k:truth[k] for k in ('profile','target_count','physical_handovers','all_evacuated','closed')
+                                     if k in truth and (truth[k] is None or type(truth[k]) in (str,int,bool))}
+    result['evidence_basis']='independent_model_truth' if isinstance(truth,dict) else 'public_only'
     return result
+
+
+def csv_cell(value):
+    # Prevent a foreign status/error from becoming a spreadsheet formula.
+    if isinstance(value,str) and value.lstrip().startswith(('=','+','-','@')):
+        return "'"+value
+    return value
+
+
+def archive_series(root,run,stream):
+    """Export a stable, bounded evidence bundle, excluding scratch ledgers."""
+    if run['state'] in ACTIVE:
+        raise ValueError('Wait until the series reaches a terminal process state')
+    folder=(root/run['id']).resolve(strict=True)
+    if not folder.is_relative_to(root):
+        raise ValueError('Unsafe archive root')
+    candidates=[folder/'series.json']
+    for row in run['rows']:
+        stem=f"trial-{row['index']:03d}"
+        candidates.append(folder/(stem+'.log'))
+        trial=folder/stem
+        if trial.is_symlink():
+            raise ValueError('Unsafe trial directory')
+        if trial.is_dir():
+            candidates.extend(trial.rglob('*'))
+    files=[];total=0
+    for path in candidates:
+        if path.is_symlink():
+            raise ValueError('Symlink in evidence archive')
+        if not path.is_file():
+            continue
+        if not path.resolve().is_relative_to(folder):
+            raise ValueError('Unsafe evidence path')
+        if any(part.is_symlink() for part in path.parents if part!=folder and part.is_relative_to(folder)):
+            raise ValueError('Symlinked evidence parent')
+        size=path.stat().st_size
+        total+=size
+        files.append((path,size))
+        if total>MAX_ARCHIVE or len(files)>MAX_ARCHIVE_FILES:
+            raise ValueError('Evidence bundle exceeds export budget; use local files')
+    entries=[]
+    with zipfile.ZipFile(stream,'w',compression=zipfile.ZIP_DEFLATED,compresslevel=3) as archive:
+        for path,size in files:
+            name=path.relative_to(folder).as_posix()
+            hasher=hashlib.sha256();written=0
+            with path.open('rb') as source,archive.open(name,'w') as destination:
+                for block in iter(lambda:source.read(1024*1024),b''):
+                    written+=len(block)
+                    if written>size:
+                        raise ValueError('Evidence changed during export')
+                    hasher.update(block);destination.write(block)
+            if written!=size:
+                raise ValueError('Evidence changed during export')
+            entries.append({'path':name,'sha256':hasher.hexdigest(),'bytes':written})
+        archive.writestr('evidence-manifest.json',json.dumps({'format':'metarescue.m5-evidence.v1',
+                         'series_id':run['id'],'entries':entries,'official_m5':None},ensure_ascii=False,indent=2))
+    stream.seek(0)
 
 
 class Lab:
@@ -337,20 +410,30 @@ class Handler(BaseHTTPRequestHandler):
                 self.send({'token':self.server.token,'registry':lab.registry.public(),'official_m5':None});return
             if path=='/api/series':
                 self.send({'series':lab.list()});return
-            match=re.fullmatch(r'/api/series/([0-9a-f]{32})(?:/trial/(\d{1,3})|/export/(json|csv))?',path)
+            match=re.fullmatch(r'/api/series/([0-9a-f]{32})(?:/trial/(\d{1,3})|/export/(json|csv|zip))?',path)
             if match:
                 ident,index,format=match.groups()
                 if index is not None:
                     self.send(lab.report(ident,int(index)));return
                 run=lab.get(ident)
+                if format=='zip':
+                    with tempfile.TemporaryFile() as stream:
+                        archive_series(lab.root,run,stream)
+                        stream.seek(0,2);size=stream.tell();stream.seek(0)
+                        self.send_response(200);self.send_header('Content-Type','application/zip')
+                        self.send_header('Content-Length',str(size));self.send_header('Cache-Control','no-store')
+                        self.send_header('Content-Disposition',f'attachment; filename="{ident}.zip"')
+                        self.send_header('X-Content-Type-Options','nosniff');self.end_headers()
+                        for block in iter(lambda:stream.read(1024*1024),b''):self.wfile.write(block)
+                    return
                 if format=='csv':
                     stream=io.StringIO(newline='');writer=csv.writer(stream)
                     writer.writerow(['seed','mode','state','exchange','mission_status','physical_handovers','public_transitions','wall_s'])
                     for row in run['rows']:
                         result=row.get('result',{});truth=result.get('independent_truth') or {}
-                        writer.writerow([row['seed'],row['mode'],row['state'],result.get('exchange'),
+                        writer.writerow([csv_cell(v) for v in (row['seed'],row['mode'],row['state'],result.get('exchange'),
                                          result.get('status'),truth.get('physical_handovers'),
-                                         result.get('correlated_public_target_count'),row.get('wall_s')])
+                                         result.get('correlated_public_target_count'),row.get('wall_s'))])
                     self.send(stream.getvalue().encode('utf-8-sig'),mime='text/csv; charset=utf-8',name=ident+'.csv');return
                 self.send(run,name=ident+'.json' if format=='json' else None);return
             static={'/':('index.html','text/html; charset=utf-8'),'/lab.js':('lab.js','text/javascript; charset=utf-8'),
@@ -417,15 +500,16 @@ def main():
     parser.add_argument('--controller',action='append',default=[],metavar='NAME=PORT')
     args=parser.parse_args()
     registry=Registry(args.environment,args.controller)
-    lab=Lab(args.output,registry)
-    with Server(('127.0.0.1',args.port),lab) as server:
-        print(f'M5 laboratory: http://127.0.0.1:{server.server_port}',flush=True)
-        try:
-            server.serve_forever()
-        except KeyboardInterrupt:
-            pass
-        finally:
-            lab.shutdown()
+    with file_lock(args.output.resolve()/'laboratory-owner.lock'):
+        lab=Lab(args.output,registry)
+        with Server(('127.0.0.1',args.port),lab) as server:
+            print(f'M5 laboratory: http://127.0.0.1:{server.server_port}',flush=True)
+            try:
+                server.serve_forever()
+            except KeyboardInterrupt:
+                pass
+            finally:
+                lab.shutdown()
 
 
 if __name__=='__main__':

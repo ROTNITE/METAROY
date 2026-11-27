@@ -93,7 +93,7 @@ function render(){
     appendCell(tr,truth&&Number.isInteger(truth.physical_handovers)?truth.physical_handovers+'/'+truth.target_count:'—');
     const td=appendCell(tr,'');const b=button('Детали',()=>showReport(run.id,row.index));b.disabled=!row.result;td.append(b);body.append(tr);
   }
-  exportLink('export-json',run,'json');exportLink('export-csv',run,'csv');renderHistory();syncForm();
+  exportLink('export-json',run,'json');exportLink('export-csv',run,'csv');exportLink('export-zip',run&&!activeStates.has(run.state)?run:null,'zip');renderHistory();syncForm();
 }
 async function refresh(){
   if(refreshBusy)return;refreshBusy=true;

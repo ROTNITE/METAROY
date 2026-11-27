@@ -4,6 +4,9 @@ from threading import Thread
 from unittest import TestCase
 from unittest.mock import patch
 import http.client
+import hashlib
+import io
+import zipfile
 import json
 import time
 
@@ -112,3 +115,34 @@ class HTTPBoundary(TestCase):
                 self.assertTrue(json.loads(raw)['independent_truth']['all_evacuated'])
                 self.assertEqual(self.call('/api/series/'+ident+'/export/json')[0],200)
                 self.assertIn(b'physical_handovers',self.call('/api/series/'+ident+'/export/csv')[1])
+                code,raw=self.call('/api/series/'+ident+'/export/zip')
+                self.assertEqual(code,200)
+                with zipfile.ZipFile(io.BytesIO(raw)) as archive:
+                    self.assertIsNone(archive.testzip())
+                    manifest=json.loads(archive.read('evidence-manifest.json'))
+                    self.assertTrue(any(x['path'].endswith('/report.json') for x in manifest['entries']))
+                    for entry in manifest['entries']:
+                        self.assertEqual(hashlib.sha256(archive.read(entry['path'])).hexdigest(),entry['sha256'])
+                    self.assertFalse(any(name.startswith('scratch/') for name in archive.namelist()))
+
+    def test_cancel_stops_owned_process_and_preserves_series(self):
+        import sys
+        request={'controller':'metarescue','environment':'reference','profile':'K','mode':'strict',
+                 'seeds':[1,2],'timeout':30,'confirm_reset':True}
+        # Controlled long-lived owned child isolates supervisor cancellation
+        # semantics from planner runtime. Real trials are tested above.
+        with patch('tools.m5_lab.build_command',return_value=[sys.executable,'-c','import time; time.sleep(120)']):
+            code,data=self.call('/api/series',request)
+            self.assertEqual(code,202,data)
+            ident=json.loads(data)['id']
+            deadline=time.monotonic()+5
+            while time.monotonic()<deadline and self.lab.get(ident)['rows'][0]['state']!='running':
+                time.sleep(.05)
+            self.assertEqual(self.call('/api/series/'+ident+'/cancel',{})[0],202)
+            deadline=time.monotonic()+15
+            while time.monotonic()<deadline and self.lab.get(ident)['state'] in ('queued','running','stopping'):
+                time.sleep(.1)
+            run=self.lab.get(ident)
+            self.assertEqual(run['state'],'cancelled',run)
+            self.assertTrue(all(row['state']=='cancelled' for row in run['rows']))
+            self.assertEqual(json.loads((self.lab.root/ident/'series.json').read_text())['state'],'cancelled')
