@@ -2209,9 +2209,11 @@
         "https://github.com/ROTNITE/METAROY/actions/runs/46066074416",
         "https://github.com/ROTNITE/METAROY/actions/runs/46066074448",
         "https://github.com/ROTNITE/METAROY/actions/runs/46066074342",
-        "https://github.com/ROTNITE/METAROY/actions/runs/46066074360"
+        "https://github.com/ROTNITE/METAROY/actions/runs/46066074360",
+        "https://github.com/ROTNITE/METAROY/actions/runs/46066258428",
+        "https://github.com/ROTNITE/METAROY/actions/runs/46066258415"
       ],
-      "scope_note": "Реальные локальные HTTP-испытания, независимая 3D/planar, зарегистрированные loopback-сервисы, серии, фильтруемая диагностическая таблица, публичный журнал по byte cursor, отмена, JSON/CSV/ZIP и расчёт при согласованных Q. Chromium E2E: две физические передачи в модели K, матрица/журнал/reload/desktop/narrow. Синтетический каталог 450 записей, 4 000 событий и 400 GET: p95 1.60/2.58/3.09 мс, без мутации. Полная UI-спецификация, native/Windows-поставка, нагрузка реальной сцены и внешняя приёмка открыты. Официальное M5 не выводить из собственных эталонов."
+      "scope_note": "Реальные локальные HTTP-испытания, независимая 3D/planar, зарегистрированные loopback-сервисы, серии, фильтруемая диагностическая таблица, публичный журнал по byte cursor, отмена, JSON/CSV/ZIP и расчёт при согласованных Q. Chromium E2E: две физические передачи в модели K, матрица/журнал/reload/desktop/narrow. Синтетический каталог 450 записей, 4 000 событий и 400 GET: p95 1.60/2.58/3.09 мс, без мутации. Полная UI-спецификация, native/Windows-поставка, нагрузка реальной сцены и внешняя приёмка открыты. Официальное M5 не выводить из собственных эталонов. Финальная Python-регрессия 398/398 Windows, 397 + 1 skip Linux."
     }
   ],
   "external_tournament": {

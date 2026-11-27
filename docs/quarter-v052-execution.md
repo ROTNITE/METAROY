@@ -1820,3 +1820,10 @@ FPS cap и общий lease прямого запуска Unreal не меняю
 конфигурацию миссии; нативная проверка ожидается. Все 105 открытых
 пунктов матрицы, результаты и ограничения сохранены в
 [stage3-performance-and-open-audit.md](stage3-performance-and-open-audit.md).
+
+
+Финальная ревизия 8b68743: [Windows 398/398](https://github.com/ROTNITE/METAROY/actions/runs/46066258428),
+[Linux 397 + 1 skip](https://github.com/ROTNITE/METAROY/actions/runs/46066258415), [Core](https://github.com/ROTNITE/METAROY/actions/runs/46066258420),
+[партнёрский повтор](https://github.com/ROTNITE/METAROY/actions/runs/46066258492) — 24/39 обменов,
+10 публичных переходов, 0 независимых физических подтверждений, SHA
+всех исходных архивов сохранены. Нативная производительность не измерена.
