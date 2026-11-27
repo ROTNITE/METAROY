@@ -89,7 +89,7 @@ git diff --check
 
 Команда регрессии сравнивает 271 старый/исходный случай (5 редакций × 9 размеров
 × 3 seed × 2 профиля + максимальный конкурсный флот) и 55 новых v2 случаев.
-Это запланированная матрица, а не выполненные 326 прогонов. Отдельно
+Это матрица генерации/контрактов, не 326 нативных миссий. Она завершена в CI 46052509759; см. результаты ниже. Отдельно
 test_disaster_v2.py проверяет совместные типы событий, маршрутизацию после
 доставленных измерений и очищение; эти тесты прошли в полном source checkout CI.
 Для воспроизводимого сценария с событиями использовать settings JSON с
@@ -149,7 +149,7 @@ draft. VIS02/03/04/13 остаются partial в основной матриц�
 |---|---|
 | [46051265590](https://github.com/ROTNITE/METAROY/actions/runs/46051265590), f035a53f | 332 unittest (331 passed, 1 skipped Windows-only), 506 C++ optical cases, 1000 HLSL arithmetic cases; 31 исходный hash + 7 revised. [JSON-артефакт](https://github.com/ROTNITE/METAROY/actions/runs/46051265590/artifacts/15224073676). |
 | [46052152064](https://github.com/ROTNITE/METAROY/actions/runs/46052152064), c41ff7e3 | 334 unittest (333 passed, 1 skipped Windows-only), 506 C++ optical cases, 1000 HLSL arithmetic cases; повтор 31+7 passed; reset и независимые измерения debris passed. |
-| [46052509759](https://github.com/ROTNITE/METAROY/actions/runs/46052509759), 56a576ba | Шаг компиляции HLSL в SPIR-V, spirv-val и исполнения на lavapipe Vulkan CPU завершился success: 2048 сценариев live+remembered с проверкой против C++ интегратора, depth clipping, camera inside, wrong side. Полная 271+55 матрица запущена; её результат фиксировать отдельно только после завершения. |
+| [46052509759](https://github.com/ROTNITE/METAROY/actions/runs/46052509759), 56a576ba | Шаг компиляции HLSL в SPIR-V, spirv-val и исполнения на lavapipe Vulkan CPU завершился success: 2048 сценариев live+remembered с проверкой против C++ интегратора, depth clipping, camera inside, wrong side. Полная 271+55 матрица завершена success, 326/326. |
 
 CI — бесплатный стандартный runner публичного репозитория, исходники checkout
 без LFS, Python 3.12. `tools/run_smoke_spirv.py` использует фактический HLSL
@@ -191,3 +191,53 @@ samples в эталоне каждого луча. Max transmission error 3.2118
 max depth error 2.94396222511e-06, max reversal error 2.13162820728e-13,
 failures=0. Этот тест включён в последующие CI; основной алгоритм
 MRSmokeOptics.h не менялся после локального сравнения SHA.
+
+
+### Полная матрица завершена
+
+CI [46052509759](https://github.com/ROTNITE/METAROY/actions/runs/46052509759),
+job 140687083530, candidate `56a576baca410920f9834a0d8e9a77b3f705f4c5`,
+baseline `d2762555fcab94ed4651f76a96938231c8827b0b`: итог success.
+Сгенерированы 271 исходный случай с идентичными private/public hashes,
+55 новых revised cases, все passed; 326/326. Генератор, контракт, layout
+и event tape, не native physics missions. Исходники обеих копий
+проверены на неизменность в процессе. Полная матрица заняла примерно
+7 мин 51 с после окончания Vulkan step.
+
+[Артефакт 15225442439](https://github.com/ROTNITE/METAROY/actions/runs/46052509759/artifacts/15225442439),
+ZIP digest sha256:298904eacd1f24987046875109951f9cfd16c70271aac134ffccf1845bf4a06d.
+Оригинальный артефакт доступен до 2026-12-04; ссылка и digest не
+заменяют сам JSON. Логи job сохраняются в GitHub Actions.
+
+Фактический результат compute: llvmpipe LLVM 21.1.8, cases=2048,
+live_nonzero=1360, remembered_nonzero=943, inside=1498, depth_clipped=1366,
+live_error=1.03194e-06, remembered_error=7.7109e-07, dispatch_ms=125.975,
+mismatches=0. Время dispatch включает работу программного Vulkan, не
+игровой GPU кадр.
+
+### Дополнительные сценарии и authoring после полной матрицы
+
+- `tools/generate_vis23_fixtures.py` создаёт два отдельных private world JSON
+  на одном исходном layout и seed, с общей областью теплового обрушения и
+  road_damage, дымом и грязью. Это явные test tapes, а не изменения
+  нормативных вероятностей или результаты конкурсной серии.
+  Проверка трёх размеров добавлена в test_disaster_v2.py.
+- При повторном ревью обнаружен риск запроса входа графа материала через
+  API, рассчитанный на активный material editor. R6 remembered graph
+  теперь сразу создаётся через build_volume(remembered=True) в commandlet:
+  ClipMin/ClipMax и SnapshotTime добавляются до сохранения. Legacy builder
+  default не изменён. Импорт в UE остаётся обязательной проверкой.
+- Тест некорректного source_object_id у посторонних/отклонённых событий:
+  локально 6/6 test_fire_failure.py с совпадающими Git blob SHA.
+
+Пример отдельного воспроизводимого fixture:
+
+```powershell
+python -B -X utf8 tools/generate_vis23_fixtures.py --size 25 --seed 2026 --output "D:/MetaRescue-output/vis23-colocated-25-01"
+python -B -X utf8 tools/run_mission.py --layout "D:/MetaRescue-output/vis23-colocated-25-01/road-first.private.json" --controller-profile counterfactual-value --ai-mode OFF --headless --name vis23-road-first-25
+python -B -X utf8 tools/run_mission.py --layout "D:/MetaRescue-output/vis23-colocated-25-01/fire-first.private.json" --controller-profile counterfactual-value --ai-mode OFF --headless --name vis23-fire-first-25
+```
+
+Повторить последовательные видимые прогоны, 75/150, сравнить фактические
+контакты, обломки, доставленные зоны и восстановление после reset.
+Не считать пройденный Python fixture доказательством движения в Chaos.
