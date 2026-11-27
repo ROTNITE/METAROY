@@ -75,6 +75,34 @@ class MediumReassignmentTests(unittest.TestCase):
         self.assertEqual(job.phase,'search_water')
         self.assertNotIn('boat',policy.water_survey_requests)
 
+    def test_shore_coalition_keeps_intentional_waiting_claim(self):
+        state,target,rover,policy=self.fixture()
+        job=policy.jobs[rover['id']]
+        job.phase='shore_stage'
+        policy.shore_transfer={'rover_id':rover['id'],'boat_id':'carrier','target_id':target['id']}
+        self.assertFalse(policy._changed_rescue_medium(state,rover,job,{target['id']:target}))
+        policy.shore_transfer=None
+        self.assertTrue(policy._changed_rescue_medium(state,rover,job,{target['id']:target}))
+
+    def test_lost_handover_ack_requires_the_matching_receipt(self):
+        state,target,rover,policy=self.fixture()
+        rover['physical'].update(state='idle',carrying=False)
+        target['evacuation_state']='evacuated'
+        for receipt,expected in (('medical:0','observed_complete'),
+                                 ('other:0','target_resolved_without_matching_receipt'),
+                                 (None,'target_resolved_without_matching_receipt')):
+            target['medical_handover_command_id']=receipt
+            job=Job('handover',target['id'],pending='medical',next_phase='park',
+                    action='handover',acknowledgement_unknown_at=9.)
+            evidence=policy._reconcile(rover,job,{target['id']:target},revised=True)
+            self.assertEqual(evidence['outcome'],expected)
+            self.assertEqual(job.phase,'park')
+            self.assertIsNone(job.target)
+        rover['physical']['carrying']=True
+        job=Job('handover',target['id'],pending='medical',action='handover',acknowledgement_unknown_at=9.)
+        self.assertIsNone(policy._reconcile(rover,job,{target['id']:target},revised=True))
+        self.assertEqual(job.target,target['id'])
+
     def test_failed_cancel_retains_claim_and_retries(self):
         state,target,rover,policy=self.fixture()
         aid=rover['id'];job=policy.jobs[aid]

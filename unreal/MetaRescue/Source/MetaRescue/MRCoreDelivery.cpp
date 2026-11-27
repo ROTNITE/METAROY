@@ -345,6 +345,8 @@ void FMRCoreRuntime::UpdateCommands()
                 {TEXT("priority"),Num(T.Priority)},{TEXT("evacuation_state"),Str(T.bRescued?TEXT("evacuated"):Loaded?TEXT("loaded"):TEXT("waiting"))},
                 {TEXT("aid_received"),Num(ReceivedKits.FindRef(C.TargetIndex))},{TEXT("aid_required"),Num(3)}});
             TargetSupport(World,T,C.TargetReport);
+            if(World->Environment.bRevisedDisasters&&T.bRescued&&!T.MedicalHandoverCommand.IsEmpty())
+                C.TargetReport->SetStringField(TEXT("medical_handover_command_id"),T.MedicalHandoverCommand);
             if(ExplorationScene)C.TargetVisual=ExplorationScene->CaptureTarget(C.TargetIndex,Time());
         }
         if(C.AckDeadline>=0&&Time()+1.e-9>=C.AckDeadline)
