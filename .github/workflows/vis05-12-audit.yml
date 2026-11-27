@@ -29,6 +29,14 @@ jobs:
           python -B -X utf8 -m unittest discover -s tests -p 'test_water_navigation_v2.py' -v
           python -B -X utf8 -m unittest discover -s tests -p 'test_water_survey.py' -v
           python -B -X utf8 -m unittest discover -s tests -p 'test_vis_evidence.py' -v
+          python -B -X utf8 -m unittest discover -s tests -p 'test_road_support_recovery.py' -v
+          python -B -X utf8 -m unittest discover -s tests -p 'test_medium_reassignment.py' -v
+      - name: Production corridor and roof stress (ASan and UBSan)
+        run: |
+          g++ -std=c++17 -O2 -Wall -Wextra -Werror tools/vis05_12_corridor_stress.cpp -o /tmp/vis05_12_stress
+          /tmp/vis05_12_stress
+          clang++ -std=c++17 -O1 -g -Wall -Wextra -Werror -fsanitize=address,undefined -fno-sanitize-recover=all tools/vis05_12_corridor_stress.cpp -o /tmp/vis05_12_stress_sanitized
+          /tmp/vis05_12_stress_sanitized
       - name: Runtime Python dependency advisory scan
         run: |
           python -m pip install pip-audit
