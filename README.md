@@ -76,6 +76,21 @@ python -B -X utf8 tools/run_mission.py --build --policy nsga2_nsga2 --ai-mode MO
 обе линии AI без сетевых запросов. В `OFF` работает алгоритмический контроллер.
 Пояснения о LIVE, replay и учёте вызовов находятся в [документации AI](docs/ai-runtime.md).
 
+## Локальная лаборатория M5 (этап 3.2)
+
+```powershell
+python -m pip install -r requirements.txt
+python -B -X utf8 -m tools.m5_lab --output ./m5-results
+```
+
+Откройте http://127.0.0.1:8766/. Выберите контроллер, модель среды,
+режим Strict/Declared и seed; подтвердите запуск. Для начальной проверки
+подходят независимая 3D-модель A/K и планарная модель без Unreal.
+Внешние уже запущенные доверенные loopback-сервисы регистрируются
+аргументами `--environment NAME=PORT` и `--controller NAME=PORT`.
+Автозапуск чужих архивов из браузера и нативная приёмка пока не входят
+в подтверждённый объём UI. Подробности и ограничения: [лаборатория M5](docs/m5-interface.md).
+
 ## Документы
 
 - [Net65, демонстрация и двусторонняя проверка](docs/net65-runtime.md).
