@@ -105,9 +105,20 @@ def main():
                         headless=args.headless, visible=args.visible, fps_cap=args.fps_cap)
     except ValueError as error:
         parser.error(str(error))
+    # Use the same lease as run_product and run_mission.  The process scan
+    # alone leaves a race between two simultaneous launcher invocations.
+    from controller.ai import file_lock
+    with file_lock(DEFAULT_OUTPUT/'locks/unreal-owner.lock'):
+        return launch_owned(args)
+
+
+def launch_owned(args):
+    """The CLI caller must hold the shared native owner lease."""
+    from controller.health import require_port_available
     running = existing_unreal()
     if running:
-        parser.error('Another Unreal is running; finish it before this launch: '+json.dumps(running))
+        raise RuntimeError('Another Unreal is running; finish it before this launch: '+json.dumps(running))
+    require_port_available(args.port)
     stamp = datetime.now(timezone.utc).strftime('%Y%m%dT%H%M%S%fZ')
     output = (args.output or DEFAULT_OUTPUT/'environment-launches'/stamp).resolve()
     output.mkdir(parents=True, exist_ok=False)
@@ -130,9 +141,16 @@ def main():
         try:
             code = process.wait()
         except KeyboardInterrupt:
-            process.terminate()
-            code = process.wait(timeout=30)
             manifest['stopped_by_owner'] = True
+            if process.poll() is None:
+                process.terminate()
+            try:
+                code = process.wait(timeout=30)
+            except subprocess.TimeoutExpired:
+                # Only the process created above belongs to this launcher.
+                process.kill()
+                code = process.wait(timeout=10)
+                manifest['forced_owned_cleanup'] = True
     manifest['exit_code'] = code
     (output/'launch.json').write_text(json.dumps(manifest, indent=2), encoding='utf-8')
     return code

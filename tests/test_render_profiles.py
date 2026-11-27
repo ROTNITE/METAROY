@@ -38,3 +38,40 @@ class RenderProfileTests(unittest.TestCase):
         for kwargs in cases:
             with self.subTest(kwargs=kwargs), self.assertRaises(ValueError):
                 render_commands(**kwargs)
+
+
+class NativeLauncherLeaseTests(unittest.TestCase):
+    def test_direct_cli_uses_same_lease_before_launch(self):
+        from contextlib import contextmanager
+        from unittest.mock import patch
+        from environment import main
+        events=[]
+        @contextmanager
+        def lease(path):
+            self.assertEqual(path,main.DEFAULT_OUTPUT/'locks/unreal-owner.lock')
+            events.append('acquire')
+            try:
+                yield
+            finally:
+                events.append('release')
+        def launch(args):
+            self.assertEqual(events,['acquire'])
+            self.assertEqual(args.render_profile,'economy')
+            events.append('launch')
+            return 0
+        with patch('sys.argv',['environment.main','--visible','--render-profile','economy']), \
+             patch('controller.ai.file_lock',lease),patch.object(main,'launch_owned',side_effect=launch):
+            self.assertEqual(main.main(),0)
+        self.assertEqual(events,['acquire','launch','release'])
+
+    def test_existing_unreal_rejected_before_launch_or_port_check(self):
+        from types import SimpleNamespace
+        from unittest.mock import patch
+        from environment import main
+        with patch.object(main,'existing_unreal',return_value=[{'name':'MetaRescue.exe','pid':'123'}]), \
+             patch('controller.health.require_port_available') as port, \
+             patch.object(main.subprocess,'Popen') as spawn:
+            with self.assertRaises(RuntimeError):
+                main.launch_owned(SimpleNamespace(port=8130))
+            port.assert_not_called()
+            spawn.assert_not_called()
