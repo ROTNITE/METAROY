@@ -8,6 +8,7 @@ on:
       - controller/**
       - tests/test_zone_index.py
       - tools/profile_public_geometry.py
+      - tools/profile_m5_lab.py
       - tools/m5_*.py
   workflow_dispatch:
 permissions:
@@ -41,10 +42,14 @@ jobs:
         run: .venv/bin/python -B -X utf8 -m unittest discover -s tests -p test_zone_index.py -v
       - name: Benchmark equal routes with 300, 1000, 3700 zones
         run: .venv/bin/python -B -X utf8 -m tools.profile_public_geometry --output "$RUNNER_TEMP/geometry-performance.json"
+      - name: Benchmark read-only M5 HTTP over 450 catalog entries
+        run: .venv/bin/python -B -X utf8 -m tools.profile_m5_lab --output "$RUNNER_TEMP/m5-http-performance.json"
       - name: Archive measurements
         if: always()
         uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
         with:
           name: stage3-geometry-performance
-          path: ${{ runner.temp }}/geometry-performance.json
+          path: |
+            ${{ runner.temp }}/geometry-performance.json
+            ${{ runner.temp }}/m5-http-performance.json
           if-no-files-found: warn
