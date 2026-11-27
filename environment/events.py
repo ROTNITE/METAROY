@@ -195,6 +195,13 @@ def generate_tape(world):
                 row['expires_at']=row['time']+180.
                 row['visibility_expires_at']=row['expires_at']+45.
     if settings.disaster_revision:
+        # A perimeter expansion cannot keep an extinguished parent burning.
+        by_id = {row['id']: row for row in tape['events']}
+        for row in tape['events']:
+            if row['kind']=='fire' and row['spread']:
+                parent=by_id[row['parent_id']]
+                row['expires_at']=parent['expires_at']
+                row['visibility_expires_at']=parent['visibility_expires_at']
         append_fire_failures(tape, world, horizon)
     validate_tape(tape,world)
     return tape
@@ -268,6 +275,15 @@ def validate_tape(tape,world):
             if not isinstance(cell,list) or len(cell)!=2 or any(type(v) is not int for v in cell) or not placement.cell_eligible(cell,kind):invalid('unsafe cell')
         if len({tuple(c) for c in cells})!=len(cells):invalid('duplicate cells')
         if hydraulic and cells:invalid('hydraulic water cannot be teleported into event cells')
+        if settings.disaster_revision and kind in ('fire','collapse'):
+            site=row.get('source_object_id')
+            if not isinstance(site,str) or site not in buildings:invalid('event has no source structure')
+            if kind=='fire' and row['spread']:
+                origin=seen[parent]
+                if (origin['spread'] or origin['source_object_id']!=site or
+                        row.get('expires_at')!=origin.get('expires_at') or
+                        row.get('visibility_expires_at')!=origin.get('visibility_expires_at')):
+                    invalid('fire perimeter outlives or changes its source')
         if kind=='new_target':
             target_id=row.get('target_id')
             if type(target_id) is not int:invalid('invalid target reference')
