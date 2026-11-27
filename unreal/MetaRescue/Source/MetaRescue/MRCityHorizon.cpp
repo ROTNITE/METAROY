@@ -2,6 +2,7 @@
 #include "MRCityAssets.h"
 #include "Components/PrimitiveComponent.h"
 #include "Components/StaticMeshComponent.h"
+#include "Components/HierarchicalInstancedStaticMeshComponent.h"
 #include "Dom/JsonObject.h"
 #include "Engine/StaticMesh.h"
 #include "Materials/MaterialInterface.h"
@@ -65,6 +66,53 @@ void AMRWorld::BuildCityHorizon()
     const auto Graph=CityLayout->GetObjectField(TEXT("road_graph"));TMap<FString,FVector> Nodes;
     for(const auto& Entry:Graph->GetArrayField(TEXT("nodes")))
         Nodes.Add(Entry->AsObject()->GetStringField(TEXT("id")),Point(Entry->AsObject()->GetArrayField(TEXT("position"))));
+    // Facade details are decorative and already outside mission bounds.
+    // Allocate their final batches directly, rather than thousands of
+    // transient components followed by repeated global city optimization.
+    struct FDetailShape { UStaticMesh* Mesh=nullptr; FVector Scale=FVector::OneVector; };
+    TMap<FString,FDetailShape> DetailShapes;
+    TMap<FString,UMaterialInterface*> DetailMaterials;
+    TMap<FString,UHierarchicalInstancedStaticMeshComponent*> DetailBatches;
+    int32 FacadeInstances=0;
+    const auto AddFacadeDetail=[&](FVector Position,FRotator Rotation,FVector Dimensions,const TCHAR* Mat)
+    {
+        const FString ShapeKey=FString::Printf(TEXT("%.3f,%.3f,%.3f"),Dimensions.X,Dimensions.Y,Dimensions.Z);
+        auto* Cached=DetailShapes.Find(ShapeKey);
+        if(!Cached)
+        {
+            FDetailShape Shape;
+            Shape.Mesh=MRCityBakedBox(Dimensions);
+            if(!Shape.Mesh)
+            {
+                auto* Cube=LoadObject<UStaticMesh>(nullptr,TEXT("/Engine/BasicShapes/Cube.Cube"));
+                const auto Parts=MRCityMeshParts(Cube);
+                if(!Parts.IsEmpty())Shape.Mesh=Parts[0].Mesh;
+                Shape.Scale=Dimensions/100.;
+            }
+            Cached=&DetailShapes.Add(ShapeKey,Shape);
+        }
+        if(!Cached->Mesh)return;
+        const FString MaterialKey(Mat);
+        if(!DetailMaterials.Contains(MaterialKey))
+        {
+            const FString Path=TEXT("/Game/Materials/")+MaterialKey+TEXT(".")+MaterialKey;
+            DetailMaterials.Add(MaterialKey,MRCityMaterial(MRSceneMaterial(LoadObject<UMaterialInterface>(nullptr,*Path))));
+        }
+        auto* Material=DetailMaterials.FindRef(MaterialKey);
+        const FString BatchKey=Cached->Mesh->GetPathName()+TEXT("|")+GetPathNameSafe(Material);
+        auto*& Batch=DetailBatches.FindOrAdd(BatchKey);
+        if(!Batch)
+        {
+            Batch=NewObject<UHierarchicalInstancedStaticMeshComponent>(this);
+            AddInstanceComponent(Batch);Batch->SetupAttachment(GetRootComponent());
+            Batch->SetMobility(EComponentMobility::Static);Batch->SetStaticMesh(Cached->Mesh);
+            Batch->SetMaterial(0,Material);Batch->SetCastShadow(false);Decorative(Batch);
+            Batch->bAutoRebuildTreeOnInstanceChanges=false;
+            Generated.Add(Batch);
+        }
+        Batch->AddInstance(FTransform(Rotation.Quaternion(),Position,Cached->Scale));
+        ++FacadeInstances;
+    };
     int32 Houses=0,GreenLots=0,ServiceLots=0;
     for(const auto& Entry:Graph->GetArrayField(TEXT("entrances")))
     {
@@ -148,9 +196,7 @@ void AMRWorld::BuildCityHorizon()
                         const double Facade=Side%2?D:W,Depth=Side%2?W:D;
                         auto Detail=[&](FVector Local,FVector Extent,const TCHAR* Mat)
                         {
-                            auto* C=Shape(TEXT("Cube"),P+Turn.RotateVector(Face.RotateVector(Local)),
-                                Extent,Mat,WorldTurn,false);
-                            Decorative(C);C->SetCastShadow(false);
+                            AddFacadeDetail(P+Turn.RotateVector(Face.RotateVector(Local)),WorldTurn,Extent,Mat);
                         };
                         const double Wall=Depth*.5;
                         for(int32 Floor=0;Floor<Floors;++Floor)
@@ -182,7 +228,6 @@ void AMRWorld::BuildCityHorizon()
                     Piece(FVector(W*.24,-D*.2,H+65),FVector(55,55,120),TEXT("MI_Concrete"));
                 }
                 Houses++;
-                if(Environment.bRevisedDisasters&&Houses%48==0)OptimizeDistrictInstances();
             }
             else if(Kind==TEXT("green"))
             {
@@ -223,6 +268,7 @@ void AMRWorld::BuildCityHorizon()
             }
         }
     }
+    if(Environment.bRevisedDisasters)UE_LOG(LogTemp,Display,TEXT("MR_HORIZON_FACADES instances=%d batches=%d"),FacadeInstances,DetailBatches.Num());
     UE_LOG(LogTemp,Display,TEXT("MR_CITY_HORIZON extent_m=20000 houses=%d green=%d service=%d triangles=%d collision=none basin_open=%d"),
         Houses,GreenLots,ServiceLots,Triangles.Num()/3,Basin.IsValid?1:0);
 }
