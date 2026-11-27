@@ -40,26 +40,24 @@ def main():
     for name,color,pin in (('Scattering',(.008,.0062,.0035),'ScatteringCoefficients'),
                            ('Absorption',(.018,.022,.033),'AbsorptionCoefficients')):
         art.connect(art.vector(live,name,color,1000),'RGB',volume,pin)
-    art.save(live)
     remembered=art.material(names[1],luminous=True)
     remembered.set_editor_property('two_sided',True)
     world=art.node(remembered,unreal.MaterialExpressionWorldPosition,-1200,0)
     field=art.node(remembered,unreal.MaterialExpressionVertexColor,-1200,190)
     camera=art.node(remembered,unreal.MaterialExpressionCameraPositionWS,-1200,380)
     uv=art.node(remembered,unreal.MaterialExpressionTextureCoordinate,-1200,560,coordinate_index=3)
-    stamp=art.node(remembered,unreal.MaterialExpressionComponentMask,-900,560,r=True,g=False,b=False,a=False)
-    art.connect(uv,'',stamp,'Input')
-    shade=art.custom(remembered,source+'\n'+OUTPUTS['remembered'],unreal.CustomMaterialOutputType.CMOT_FLOAT3,
-        [('World',world,''),('Field',field,''),('Stamp',stamp,''),('Camera',camera,'')],-400,0)
+    shade=art.custom(remembered,'float Stamp=ObservationUV.x;\n'+source+'\n'+OUTPUTS['remembered'],
+        unreal.CustomMaterialOutputType.CMOT_FLOAT3,
+        [('World',world,''),('Field',field,''),('ObservationUV',uv,''),('Camera',camera,'')],-400,0)
     exposure_independent_emissive(remembered,shade)
-    art.save(remembered)
     fringe=art.material(names[2],translucent=True,luminous=True)
     field=art.node(fringe,unreal.MaterialExpressionVertexColor,-1200,0)
     opacity=art.custom(fringe,'return .48*saturate(Field.a);',unreal.CustomMaterialOutputType.CMOT_FLOAT1,
                        [('Field',field,'')],-400,0)
     art.property_input(opacity,'',fringe,unreal.MaterialProperty.MP_OPACITY)
     art.property_input(art.vector(fringe,'WetTint',(0.,0.,0.),260),'RGB',fringe,unreal.MaterialProperty.MP_EMISSIVE_COLOR)
-    art.save(fringe)
+    for material in (live,remembered,fringe):
+        art.save(material)
     unreal.MRAssetTools.finish_asset_compilation()
     with report.open('x',encoding='utf-8') as stream:
         json.dump({'format':'metarescue.water-r6.import.v1','materials':[live.get_path_name(),remembered.get_path_name(),fringe.get_path_name()],
