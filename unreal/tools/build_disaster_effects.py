@@ -150,7 +150,7 @@ def build_billow(textures):
     return value
 
 
-def build_volume(textures):
+def build_volume(textures, shader='disaster_smoke.hlsl'):
     value = material('M_PhysicalSmoke', translucent=True)
     # When the eye is inside a plume, its back surface lies behind most opaque
     # landmarks. Hardware depth testing would discard the entire integration.
@@ -169,7 +169,7 @@ def build_volume(textures):
         ('PixelZ', node(value, unreal.MaterialExpressionPixelDepth, -1100, 1260), ''),
         ('Side', node(value, unreal.MaterialExpressionTwoSidedSign, -1100, 1400), ''),
     ]
-    code = (Path(__file__).resolve().parent / 'shaders/disaster_smoke.hlsl').read_text(encoding='utf-8')
+    code = (Path(__file__).resolve().parent / 'shaders' / shader).read_text(encoding='utf-8')
     opacity = custom(value, code, unreal.CustomMaterialOutputType.CMOT_FLOAT1, inputs, -350, 0)
     property_input(opacity, '', value, unreal.MaterialProperty.MP_OPACITY)
     shade = vector(value, 'SmokeAlbedo', (.045, .048, .05), 1550)
