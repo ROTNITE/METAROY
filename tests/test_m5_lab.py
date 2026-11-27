@@ -1,9 +1,10 @@
 from pathlib import Path
 from tempfile import TemporaryDirectory
-from threading import Thread
+from threading import Event,Thread
 from unittest import TestCase
 from unittest.mock import patch
 import http.client
+from http.server import BaseHTTPRequestHandler,ThreadingHTTPServer
 import hashlib
 import io
 import zipfile
@@ -155,6 +156,78 @@ class HTTPBoundary(TestCase):
                     for entry in manifest['entries']:
                         self.assertEqual(hashlib.sha256(archive.read(entry['path'])).hexdigest(),entry['sha256'])
                     self.assertFalse(any(name.startswith('scratch/') for name in archive.namelist()))
+
+    def test_slow_rpc_peer_does_not_block_read_only_ui_or_advance_model(self):
+        entered=Event();release=Event()
+        calls=[]
+        class SlowController(BaseHTTPRequestHandler):
+            def log_message(self,*args):pass
+            def reply(self,value,status=200):
+                raw=json.dumps(value).encode()
+                self.send_response(status);self.send_header('Content-Type','application/json')
+                self.send_header('Content-Length',str(len(raw)));self.end_headers()
+                self.wfile.write(raw)
+            def do_GET(self):
+                if self.path!='/v1/controller/health':
+                    self.send_error(404);return
+                self.reply({'protocol_version':'1.0','component':'controller','status':'ready',
+                            'controller_id':'deliberately-slow','supported_operations':['keep']})
+            def do_POST(self):
+                if self.path!='/v1/controller/decide':
+                    self.send_error(404);return
+                request=json.loads(self.rfile.read(int(self.headers['Content-Length'])))
+                calls.append(request['observation']['time'])
+                entered.set()
+                release.wait(timeout=25)
+                try:
+                    self.reply({'protocol_version':'1.0','error':{'code':'TIMEOUT','message':'test peer released'}},408)
+                except (ConnectionError,OSError):
+                    pass
+        with ThreadingHTTPServer(('127.0.0.1',0),SlowController) as peer:
+            worker=Thread(target=peer.serve_forever,daemon=True);worker.start()
+            self.lab.registry=Registry(controllers=[f'slow={peer.server_port}'])
+            try:
+                request={'controller':'slow','environment':'reference','profile':'K','mode':'strict',
+                         'seeds':[89725161],'timeout':8,'confirm_reset':True}
+                code,data=self.call('/api/series',request)
+                self.assertEqual(code,202,data)
+                ident=json.loads(data)['id']
+                self.assertTrue(entered.wait(timeout=20),'real RPC request did not reach test peer')
+                progress='/api/series/'+ident+'/trial/0/progress'
+                code,raw=self.call(progress)
+                self.assertEqual(code,200)
+                before=json.loads(raw)
+                self.assertEqual([r['kind'] for r in before['rows']],['reset_response'])
+                self.assertEqual(before['rows'][0]['time'],0)
+                for _ in range(8):
+                    for endpoint in ('/api/series','/api/matrix',progress):
+                        code,raw=self.call(endpoint)
+                        self.assertEqual(code,200)
+                        if endpoint==progress:
+                            self.assertEqual(json.loads(raw),before)
+                self.assertEqual(calls,[0])
+                self.assertEqual(self.call('/api/series',request)[0],409)
+                deadline=time.monotonic()+25
+                while time.monotonic()<deadline and self.lab.get(ident)['state'] in ('queued','running','stopping'):
+                    time.sleep(.1)
+                run=self.lab.get(ident)
+                self.assertEqual(run['state'],'failed',run)
+                code,raw=self.call('/api/series/'+ident+'/trial/0')
+                self.assertEqual(code,200)
+                report=json.loads(raw)
+                self.assertEqual(report['exchange'],'failed')
+                self.assertTrue(report['inputs_preserved'])
+                self.assertEqual(report['first_protocol_error']['stage'],'decide')
+                self.assertIn('exceeded',report['first_protocol_error']['message'])
+                self.assertEqual(report['independent_truth']['physical_handovers'],0)
+                code,raw=self.call(progress)
+                self.assertEqual(code,200)
+                rows=json.loads(raw)['rows']
+                self.assertIn('controller_failure',[r['kind'] for r in rows])
+                self.assertNotIn('step_response',[r['kind'] for r in rows])
+                self.assertEqual(calls,[0])
+            finally:
+                release.set();peer.shutdown();worker.join(timeout=5)
 
     def test_cancel_stops_owned_process_and_preserves_series(self):
         import sys
