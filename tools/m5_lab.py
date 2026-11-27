@@ -33,6 +33,7 @@ from controller.ai import atomic_json,file_lock
 from controller.client import EnvironmentClient
 from tools.run_interop import controller_call,ROOT
 from tools.m5_score import aggregate_m5
+from tools.m5_matrix import build_matrix
 from environment.main import DEFAULT_OUTPUT
 
 WEB=ROOT/'web'/'m5'
@@ -256,6 +257,8 @@ class Lab:
         self.root=Path(root).resolve();self.root.mkdir(parents=True,exist_ok=True)
         self.registry=registry;self.lock=threading.RLock();self.runs={}
         self.cancelled=set();self.active=None;self.worker=None
+        self._session_revision=uuid.uuid4().hex;self._revision=0
+        self._ordered_cache=None;self._matrix_cache=None
         for path in self.root.iterdir():
             if path.is_symlink() or not path.is_dir() or not RUN_ID.fullmatch(path.name):
                 continue
@@ -271,7 +274,18 @@ class Lab:
             self.runs[path.name]=saved
 
     def persist(self,run):
-        atomic_json(self.root/run['id']/'series.json',run)
+        with self.lock:
+            atomic_json(self.root/run['id']/'series.json',run)
+            self._revision+=1;self._ordered_cache=None;self._matrix_cache=None
+
+    def _ordered(self):
+        # Called under the same lock as all run mutations.
+        if self._ordered_cache is None:
+            self._ordered_cache=sorted(self.runs.values(),key=lambda r:(str(r.get('created','')),r['id']),reverse=True)
+        return self._ordered_cache
+
+    def revision(self):
+        return f'{self._session_revision}:{self._revision}'
 
     def start(self,raw):
         spec=self.registry.spec(raw)
@@ -361,13 +375,13 @@ class Lab:
 
     def list(self):
         with self.lock:
-            return deepcopy(sorted(self.runs.values(),key=lambda r:r.get('created',''),reverse=True)[:100])
+            return deepcopy(self._ordered()[:100])
 
     def catalog(self,offset=0,limit=30):
         if not 0<=offset<=1000000 or not 1<=limit<=100:
             raise ValueError('Invalid catalog page')
         with self.lock:
-            ordered=sorted(self.runs.values(),key=lambda r:r.get('created',''),reverse=True)
+            ordered=self._ordered()
             rows=[]
             for run in ordered[offset:offset+limit]:
                 spec=run.get('spec',{})
@@ -376,7 +390,20 @@ class Lab:
                              'spec':{k:spec.get(k) for k in ('controller','environment','mode')},
                              'trial_count':len(results),
                              'passed_count':sum(r.get('result',{}).get('exchange')=='passed' for r in results)})
-            return {'series':rows,'total':len(ordered),'offset':offset,'limit':limit,'active_id':self.active}
+            return {'series':rows,'total':len(ordered),'offset':offset,'limit':limit,'active_id':self.active,'revision':self.revision()}
+
+    def matrix(self,offset=0,limit=30,mode='all',profile='all'):
+        if not 0<=offset<=1000000 or not 1<=limit<=100 or mode not in ('all','strict','declared') or profile not in ('all','A','K','none'):
+            raise ValueError('Invalid matrix query')
+        with self.lock:
+            if self._matrix_cache is None:
+                self._matrix_cache=build_matrix(self._ordered())
+            cells,excluded=self._matrix_cache
+            selected=[c for c in cells if (mode=='all' or c['mode']==mode) and
+                      (profile=='all' or (c['profile'] or 'none')==profile)]
+            return {'cells':deepcopy(selected[offset:offset+limit]),'total':len(selected),
+                    'offset':offset,'limit':limit,'excluded_trials':excluded,'revision':self.revision(),
+                    'official_m5':None}
 
     def get(self,ident):
         if not RUN_ID.fullmatch(ident):
@@ -442,6 +469,12 @@ class Handler(BaseHTTPRequestHandler):
             parsed=urlsplit(self.path);path=parsed.path;lab=self.server.lab
             if path=='/api/session':
                 self.send({'token':self.server.token,'registry':lab.registry.public(),'official_m5':None,'assessed_m5':self.server.assessment});return
+            if path=='/api/matrix':
+                query=parse_qs(parsed.query,keep_blank_values=True)
+                if set(query)-{'offset','limit','mode','profile'} or any(len(v)!=1 for v in query.values()):
+                    raise ValueError('Invalid matrix query')
+                self.send(lab.matrix(int(query.get('offset',['0'])[0]),int(query.get('limit',['30'])[0]),
+                                     query.get('mode',['all'])[0],query.get('profile',['all'])[0]));return
             if path=='/api/series':
                 query=parse_qs(parsed.query,keep_blank_values=True)
                 if set(query)-{'offset','limit'} or any(len(v)!=1 for v in query.values()):

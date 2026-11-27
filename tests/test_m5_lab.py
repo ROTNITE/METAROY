@@ -11,6 +11,7 @@ import json
 import time
 
 from tools.m5_lab import Registry,Lab,Server,build_command,endpoint,load_assessments,csv_cell
+from tools.m5_matrix import build_matrix
 
 
 class RegistryTests(TestCase):
@@ -87,6 +88,11 @@ class HTTPBoundary(TestCase):
         self.assertEqual(self.call('/../../requirements.txt')[0],404)
         self.assertEqual(self.call('/api/series',{'confirm_reset':False})[0],400)
         self.assertEqual(self.call('/')[0],200)
+        self.assertEqual(self.call('/api/matrix?mode=bad')[0],400)
+        self.assertEqual(self.call('/api/matrix?limit=101')[0],400)
+        self.assertEqual(self.call('/api/matrix',headers={'Host':'evil.invalid'})[0],403)
+        self.assertEqual(json.loads(self.call('/api/matrix')[1])['cells'],[])
+        self.assertEqual(self.lab.list(),[])
 
     def test_real_bidirectional_series_and_exports(self):
         for controller,environment in (('metarescue','reference'),('independent','planar')):
@@ -110,6 +116,10 @@ class HTTPBoundary(TestCase):
                 self.assertTrue(row['result']['independent_truth']['all_evacuated'])
                 self.assertGreater(row['result']['independent_truth']['physical_handovers'],0)
                 self.assertIsNone(run['official_m5'])
+                matrix=json.loads(self.call('/api/matrix?mode=strict')[1])
+                cell=next(c for c in matrix['cells'] if c['controller']==controller and c['environment']==environment)
+                self.assertEqual((cell['attempts'],cell['exchange_passed'],cell['truth_trials'],cell['all_evacuated']),(1,1,1,1))
+                self.assertIsNone(matrix['official_m5'])
                 code,raw=self.call('/api/series/'+ident+'/trial/0')
                 self.assertEqual(code,200)
                 self.assertTrue(json.loads(raw)['independent_truth']['all_evacuated'])
@@ -181,3 +191,49 @@ class CatalogPerformance(TestCase):
             self.assertLess(len(json.dumps(page)),12000)
             self.assertEqual(len(lab.catalog(440,30)['series']),10)
             with self.assertRaises(ValueError):lab.catalog(0,1000)
+
+
+    def test_matrix_cached_paginated_and_invalidated(self):
+        with TemporaryDirectory() as temp:
+            root=Path(temp)
+            for i in range(450):
+                ident=f'{i:032x}';folder=root/ident;folder.mkdir()
+                (folder/'series.json').write_text(json.dumps({'id':ident,'created':f'{i:04d}',
+                    'state':'completed','spec':{'controller':'metarescue','environment':'reference','profile':'K','timeout':90},
+                    'rows':[{'index':0,'seed':i,'mode':'strict','state':'completed','result':{'exchange':'passed'}}]}))
+            lab=Lab(root,Registry())
+            with patch('tools.m5_lab.build_matrix',wraps=build_matrix) as builder:
+                first=lab.matrix(0,30)
+                for i in range(100):
+                    page=lab.matrix(i,30)
+                    self.assertLess(len(json.dumps(page)),22000)
+                    self.assertEqual(len(page['cells']),30)
+                self.assertEqual(builder.call_count,1)
+                self.assertEqual(first['total'],450)
+                self.assertEqual(lab.matrix(mode='declared')['total'],0)
+                self.assertEqual(lab.matrix(profile='A')['total'],0)
+                ident='0'*32
+                run=lab.runs[ident]
+                run['rows'][0]['result']['status']='success';lab.persist(run)
+                page=lab.matrix(0,30)
+                self.assertEqual(builder.call_count,2)
+                self.assertNotEqual(first['revision'],page['revision'])
+                self.assertEqual(page['cells'][0]['mission_success'],1)
+
+    def test_matrix_does_not_merge_different_profiles_modes_or_seeds(self):
+        spec={'controller':'metarescue','environment':'reference','profile':'K','timeout':90}
+        runs=[]
+        for i,(profile,mode,seed,timeout) in enumerate((('K','strict',1,90),('K','strict',1,90),
+                                                         ('K','declared',1,90),('A','strict',1,90),
+                                                         ('K','strict',2,90),('K','strict',1,30))):
+            runs.append({'id':f'{i:032x}','spec':dict(spec,profile=profile,timeout=timeout),
+                         'rows':[{'index':0,'seed':seed,'mode':mode,'state':'completed',
+                                  'result':{'exchange':'passed','status':'time_limit','inputs_preserved':True}}]})
+        rows,excluded=build_matrix(runs)
+        self.assertEqual(excluded,0)
+        self.assertEqual(len(rows),5)
+        repeated=next(c for c in rows if c['attempts']==2)
+        self.assertEqual(repeated['exchange_passed'],2)
+        self.assertEqual(repeated['mission_success'],0)
+        self.assertEqual(repeated['truth_trials'],0)
+        self.assertEqual(repeated['inputs_preserved'],2)

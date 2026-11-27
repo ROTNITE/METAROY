@@ -3,6 +3,7 @@ const byId=id=>document.getElementById(id);
 const activeStates=new Set(['queued','running','stopping']);
 const labels={queued:'В очереди',running:'Выполняется',stopping:'Прерывание',completed:'Завершена',failed:'Ошибка',cancelled:'Прервана',timed_out:'Тайм-аут',interrupted:'Незавершённая',passed:'Успешный',success:'Успех',time_limit:'Лимит времени',safe_stopped:'Безопасная остановка',unverified:'Не подтверждена'};
 let token='',registry={controllers:[],environments:[]},series=[],selected=null,selectedRun=null,activeId=null,offset=0,total=0,requestBusy=false,refreshBusy=false,refreshTimer=null,lastHistory='',lastRender='';
+let matrixOffset=0,matrixRequest=0,lastRevision=null,refreshAgain=false,reportRequest=0;
 const display=value=>value===undefined||value===null?'—':(labels[value]||String(value));
 const appendCell=(tr,value,cls)=>{const td=document.createElement('td');td.textContent=display(value);if(cls)td.className=cls;tr.append(td);return td;};
 const button=(text,handler)=>{const b=document.createElement('button');b.type='button';b.textContent=text;b.addEventListener('click',handler);return b;};
@@ -104,22 +105,58 @@ function render(){
   exportLink('export-json',run,'json');exportLink('export-csv',run,'csv');exportLink('export-zip',run&&!activeStates.has(run.state)?run:null,'zip');renderHistory();syncForm();
 }
 async function refresh(){
-  if(refreshBusy)return;refreshBusy=true;
+  if(refreshBusy){refreshAgain=true;return;}refreshBusy=true;
   try{
     const page=await api('/api/series?offset='+offset+'&limit=30');
     series=page.series;total=page.total;activeId=page.active_id;
     if(!selected)selected=activeId||(series[0]&&series[0].id)||null;
-    selectedRun=selected?await api('/api/series/'+selected):null;
+    const revisionChanged=page.revision!==lastRevision;
+    const requested=selected;
+    if(!requested)selectedRun=null;
+    else if(revisionChanged||!selectedRun||selectedRun.id!==requested){
+      const run=await api('/api/series/'+requested);
+      if(selected===requested)selectedRun=run;
+    }
+    lastRevision=page.revision;
     render();
+    if(revisionChanged)void refreshMatrix();
   }
   catch(error){byId('form-message').textContent='Лаборатория недоступна: '+error.message;}
-  finally{refreshBusy=false;}
+  finally{refreshBusy=false;if(refreshAgain){refreshAgain=false;void refresh();}}
+}
+async function refreshMatrix(){
+  const request=++matrixRequest;
+  try{
+    const params=new URLSearchParams({offset:String(matrixOffset),limit:'30',mode:byId('matrix-mode').value,profile:byId('matrix-profile').value});
+    const page=await api('/api/matrix?'+params);
+    if(request!==matrixRequest)return;
+    const body=byId('matrix');body.replaceChildren();
+    byId('matrix-page').textContent=page.total?String(matrixOffset+1)+'–'+Math.min(matrixOffset+page.cells.length,page.total)+' из '+page.total:'0 конфигураций';
+    byId('matrix-prev').disabled=matrixOffset===0;
+    byId('matrix-next').disabled=matrixOffset+page.cells.length>=page.total;
+    byId('matrix-note').textContent='Диагностика, не оценка жюри. Одинаковые настройки не доказывают идентичность версий компонентов.'+(page.excluded_trials?' Неполные старые записи: '+page.excluded_trials+'.':'');
+    if(!page.cells.length){const tr=document.createElement('tr');const td=appendCell(tr,'Нет испытаний по фильтру.','empty');td.colSpan=8;body.append(tr);}
+    for(const cell of page.cells){
+      const tr=document.createElement('tr');
+      const pair=appendCell(tr,cell.controller+' → '+cell.environment);
+      pair.title=[cell.controller_origin,cell.environment_origin,cell.decide_path,cell.decide_profile].filter(Boolean).join(' · ');
+      appendCell(tr,(cell.profile||'—')+' / '+cell.mode+' / '+cell.seed+' / '+(cell.timeout??'—')+' с');
+      appendCell(tr,cell.finished+'/'+cell.attempts);
+      appendCell(tr,cell.exchange_passed+'/'+cell.finished);
+      appendCell(tr,cell.mission_success+'/'+cell.finished);
+      appendCell(tr,cell.truth_trials?cell.all_evacuated+'/'+cell.truth_trials:'—');
+      appendCell(tr,cell.inputs_preserved+'/'+cell.finished);
+      appendCell(tr,'').append(button('Серия',async()=>{selected=cell.latest_series_id;await refresh();}));body.append(tr);
+    }
+  }catch(error){if(request===matrixRequest)byId('matrix-page').textContent=error.message;}
 }
 async function showReport(id,index){
+  const request=++reportRequest;
   byId('report-title').textContent='Серия '+id.slice(0,8)+' · испытание '+(index+1);
   byId('diagnostic').textContent='Загрузка…';
   try{
     const report=await api('/api/series/'+id+'/trial/'+index);
+    if(request!==reportRequest)return;
     const first=report.first_protocol_error||{};
     const truth=report.independent_truth;
     const message=[ 'Обмен: '+display(report.exchange), 'Миссия: '+display(report.status),
@@ -129,7 +166,7 @@ async function showReport(id,index){
       'Ошибка: '+(first.message||report.error||'не зарегистрирована')];
     if(first.details)message.push('Детали: '+JSON.stringify(first.details));
     byId('diagnostic').textContent=message.join('\n');byId('report').textContent=JSON.stringify(report,null,2);
-  }catch(error){byId('diagnostic').textContent=error.message;byId('report').textContent='—';}
+  }catch(error){if(request===reportRequest){byId('diagnostic').textContent=error.message;byId('report').textContent='—';}}
 }
 byId('trial-form').addEventListener('submit',async event=>{
   event.preventDefault();requestBusy=true;syncForm();byId('form-message').textContent='';
@@ -163,6 +200,10 @@ byId('repeat').addEventListener('click',()=>{
 });
 byId('prev-page').addEventListener('click',()=>{offset=Math.max(0,offset-30);refresh();});
 byId('next-page').addEventListener('click',()=>{offset+=30;refresh();});
+byId('matrix-refresh').addEventListener('click',()=>refreshMatrix());
+byId('matrix-prev').addEventListener('click',()=>{matrixOffset=Math.max(0,matrixOffset-30);refreshMatrix();});
+byId('matrix-next').addEventListener('click',()=>{matrixOffset+=30;refreshMatrix();});
+for(const id of ['matrix-mode','matrix-profile'])byId(id).addEventListener('change',()=>{matrixOffset=0;refreshMatrix();});
 async function init(){
   try{const session=await api('/api/session');token=session.token;registry=session.registry;
     const assessment=session.assessed_m5;

@@ -1,0 +1,66 @@
+"""Read-only diagnostic matrix; configuration groups are not official Q or M5.
+
+Rows keep the seed, mode, scenario, endpoint identity and timeout separate.
+Repeated attempts are counted as attempts, not independent pair evaluations.
+Only compact series summaries are consumed; no full report or service reads.
+"""
+import re
+
+IDENTIFIER=re.compile(r'[a-zA-Z0-9_-]{1,48}\Z')
+
+
+def build_matrix(runs):
+    groups={}
+    excluded=0
+    # Caller provides newest series first, preserving the latest trial link.
+    for run in runs:
+        spec=run.get('spec')
+        if not isinstance(spec,dict):
+            excluded+=len(run['rows']);continue
+        c,e=spec.get('controller'),spec.get('environment')
+        if not all(isinstance(v,str) and IDENTIFIER.fullmatch(v) for v in (c,e)):
+            excluded+=len(run['rows']);continue
+        profile=spec.get('profile') if e=='reference' else None
+        if e=='reference' and profile not in ('A','K'):
+            excluded+=len(run['rows']);continue
+        co,eo=spec.get('controller_origin'),spec.get('environment_origin')
+        path=spec.get('decide_path') if co else None
+        rpc=spec.get('decide_profile') if co else None
+        timeout=spec.get('timeout')
+        if (any(v is not None and (not isinstance(v,str) or len(v)>128) for v in (co,eo,path,rpc))
+                or (timeout is not None and (type(timeout) is not int or not 5<=timeout<=300))):
+            excluded+=len(run['rows']);continue
+        for row in run['rows']:
+            if not isinstance(row,dict):
+                excluded+=1;continue
+            seed,mode,index=row.get('seed'),row.get('mode'),row.get('index')
+            if (type(seed) is not int or not 0<=seed<=2147483647 or mode not in ('strict','declared')
+                    or type(index) is not int or not 0<=index<=999):
+                excluded+=1;continue
+            key=(c,e,profile,mode,seed,co,eo,path,rpc,timeout)
+            if key not in groups:
+                groups[key]={'controller':c,'environment':e,'profile':profile,'mode':mode,'seed':seed,
+                             'controller_origin':co,'environment_origin':eo,'decide_path':path,'decide_profile':rpc,
+                             'timeout':timeout,'attempts':0,'finished':0,'exchange_passed':0,
+                             'mission_success':0,'truth_trials':0,'all_evacuated':0,'inputs_preserved':0,
+                             'latest_series_id':run['id'],'latest_trial_index':index,
+                             'latest_state':row.get('state')}
+            cell=groups[key];cell['attempts']+=1
+            if row.get('state') in ('queued','running','stopping'):
+                continue
+            cell['finished']+=1
+            result=row.get('result')
+            if not isinstance(result,dict):
+                continue
+            cell['exchange_passed']+=int(result.get('exchange')=='passed')
+            cell['mission_success']+=int(result.get('status')=='success')
+            cell['inputs_preserved']+=int(result.get('inputs_preserved') is True)
+            truth=result.get('independent_truth')
+            if isinstance(truth,dict) and type(truth.get('physical_handovers')) is int:
+                cell['truth_trials']+=1
+                cell['all_evacuated']+=int(truth.get('all_evacuated') is True)
+    def order(cell):
+        return (cell['controller'],cell['environment'],cell['profile'] or '',cell['mode'],cell['seed'],
+                cell['controller_origin'] or '',cell['environment_origin'] or '',cell['decide_path'] or '',
+                cell['decide_profile'] or '',cell['timeout'] or 0)
+    return sorted(groups.values(),key=order),excluded
