@@ -106,7 +106,11 @@ UMaterialInterface* FMRExplorationScene::RememberMaterial(UMaterialInterface* So
     Info.Empty();Ids.Empty();Source->GetAllTextureParameterInfo(Info,Ids);
     for(const auto& I:Info){UTexture* V=nullptr;Source->GetTextureParameterValue(I,V);Key+=TEXT("|")+I.Name.ToString()+GetPathNameSafe(V);}
     if(const auto* Old=Materials.Find(Key);Old&&Old->IsValid())return Old->Get();
-    auto* Parent=Water?LoadObject<UMaterialInterface>(nullptr,TEXT("/Game/EffectsV3/ExplorationEffectsR1/M_RememberedFlood.M_RememberedFlood")):Dynamic->Parent.Get();
+    auto* Parent=Water?LoadObject<UMaterialInterface>(nullptr,
+        TEXT("/Game/EffectsV3/ExplorationWaterR2/M_RememberedFlood.M_RememberedFlood"),nullptr,LOAD_NoWarn|LOAD_Quiet)
+        :Dynamic->Parent.Get();
+    if(Water&&!Parent)Parent=LoadObject<UMaterialInterface>(nullptr,
+        TEXT("/Game/EffectsV3/ExplorationEffectsR1/M_RememberedFlood.M_RememberedFlood"));
     if(!Parent)Parent=Dynamic->Parent.Get();
     auto* Frozen=UMaterialInstanceDynamic::Create(Parent,GetTransientPackage());
     Frozen->CopyMaterialUniformParameters(Source);

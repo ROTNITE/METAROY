@@ -2081,6 +2081,8 @@
       "requirement": "Тёмная неизведанная территория; база известна; постоянное открытие только от доставленной разведки; без теней/эффектов/меток неизвестных",
       "status": "partial",
       "evidence": [
+        "D:/MetaRescue-output/integration-20261127-01/main-remembered-water-replay-01/verification.json",
+        "D:/MetaRescue-output/integration-20261127-01/main-remembered-water-replay-01/appearance-audit.json",
         "D:/MetaRescue-output/visual-overhaul-20261115/checks/native-exploration-02/verification.json",
         "D:/MetaRescue-output/integration-20261127-01/night-optical-compare-03.json",
         "D:/MetaRescue-output/integration-20261127-01/night-blackout-flythrough.mp4",
@@ -2088,7 +2090,7 @@
         "D:/MetaRescue-output/integration-20261127-01/night-water-isolation-01/verification.json",
         "D:/MetaRescue-output/integration-20261127-01/packaged-product-04/verification.json"
       ],
-      "scope_note": "Начальная ночная застройка читается. Доставленные наблюдения обновляют поверхности, позы и эффекты. Парный прогон подтвердил совпадение оптических выборок при обвале внутри обрыва. Из распакованной Shipping переключение между режимами сохранило время 0 с, шаг продвинул модель на 1 с. В паре с водой знание стабильно во время изоляции при подъёме физического уровня с 1,186 до 1,691 м. Приёмка запомненной поверхности и масштаб остаются открыты."
+      "scope_note": "Начальная ночная застройка читается. Доставленные наблюдения обновляют поверхности, позы и эффекты. Парный прогон подтвердил совпадение оптических выборок при обвале внутри обрыва. Из распакованной Shipping переключение между режимами сохранило время 0 с, шаг продвинул модель на 1 с. В паре с водой знание стабильно во время изоляции при подъёме физического уровня с 1,186 до 1,691 м. Материал запомненной поверхности проверен парой Unreal на C. Оконные замеры масштаба и выпуск с новым материалом открыты."
     },
     {
       "id": "VIS13",
