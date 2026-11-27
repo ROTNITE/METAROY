@@ -101,6 +101,8 @@
     <details><summary>Полный машиночитаемый отчёт</summary><pre id="report">—</pre></details>
     <h3>Журнал публичного обмена</h3>
     <p class="muted small" id="timeline-status" role="status">Выберите «Журнал» у испытания. Это наблюдения обмена, не подтверждение физических целей.</p>
+    <label for="timeline-view">Вид журнала</label><select id="timeline-view" disabled><option value="progress">Сводка обмена</option><option value="trace">Команды, подтверждения и заявленные события</option></select>
+    <p class="muted small">Подробный след показывает только зарегистрированные поля. admission, delivery и execution не являются доказательством физической цели. Старые архивы могут не содержать подробного следа.</p>
     <form class="matrix-controls" id="timeline-filter">
       <label for="timeline-search">Точный ID решения, запроса или эпизода</label>
       <input id="timeline-search" maxlength="128" autocomplete="off" disabled>
@@ -108,7 +110,7 @@
     </form>
     <p class="muted small">Поиск выполняется порциями по публичному журналу; следующая порция продолжает поиск. Полная история хранится в архиве.</p>
     <div class="export"><button type="button" class="secondary" id="timeline-reset" disabled>С начала / сброс фильтра</button><button type="button" class="secondary" id="timeline-next" disabled>Следующая порция</button></div>
-    <div class="table-wrap"><table><thead><tr><th>Время процесса, с</th><th>Тип</th><th>Время модели</th><th>Статус / операция</th><th>Команды / результаты</th><th>ID решения</th><th>ID запроса</th><th>ID эпизода</th></tr></thead><tbody id="timeline"></tbody></table></div>
+    <div class="table-wrap"><table><thead><tr><th>Время процесса, с</th><th>Тип</th><th>Время модели</th><th>Статус / операция</th><th>Команды / результаты</th><th>ID решения</th><th>ID запроса</th><th>ID эпизода</th><th>Публичные детали</th></tr></thead><tbody id="timeline"></tbody></table></div>
   </section>
 </main>
 <footer>MetaEvolution Rescue · независимый испытательный контур · результаты сохраняются локально</footer>

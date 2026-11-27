@@ -6,6 +6,8 @@ from pathlib import Path
 import re
 import time
 
+from controller.m5_trace import Trace
+
 SOURCES = frozenset(('metarescue', 'reference', 'interop'))
 KINDS = frozenset(('reset_response', 'observation', 'decision', 'step_response',
                    'close_response', 'uncertain_step', 'controller_failure',
@@ -74,10 +76,12 @@ class Progress:
         value = path if path is not None else os.environ.get('METARESCUE_M5_PROGRESS_FILE')
         self.path = Path(value) if value else None
         self.source = source
+        self.trace = Trace(source)
         self.started = time.monotonic()
         self.written = 0
 
     def record(self, kind, payload):
+        self.trace.record(kind,payload)
         if self.path is None:
             return
         try:

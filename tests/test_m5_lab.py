@@ -157,6 +157,24 @@ class HTTPBoundary(TestCase):
                 self.assertEqual(self.call(progress_path+'?limit=101')[0],400)
                 self.assertEqual(self.call(progress_path+'?cursor=1')[0],400)
                 self.assertEqual(self.call(progress_path,headers={'Host':'evil.invalid'})[0],403)
+                trace_path=progress_path.replace('/progress','/trace')
+                cursor=0;types=set()
+                for _ in range(100):
+                    code,raw=self.call(trace_path+'?cursor='+str(cursor))
+                    self.assertEqual(code,200,raw)
+                    trace=json.loads(raw)
+                    self.assertTrue(trace['available'])
+                    for group in trace['rows']:
+                        types.update(item['type'] for item in group['details'])
+                    if not trace['more']:
+                        break
+                    self.assertGreater(trace['cursor'],cursor)
+                    cursor=trace['cursor']
+                self.assertIn('command',types)
+                self.assertIn('receipt',types)
+                self.assertEqual(self.call(trace_path+'?limit=11')[0],400)
+                self.assertEqual(self.call(trace_path+'?cursor=1')[0],400)
+                self.assertEqual(self.call(trace_path,headers={'Host':'evil.invalid'})[0],403)
                 self.assertEqual(self.call('/api/series/'+ident+'/export/json')[0],200)
                 self.assertIn(b'physical_handovers',self.call('/api/series/'+ident+'/export/csv')[1])
                 code,raw=self.call('/api/series/'+ident+'/export/zip')

@@ -206,7 +206,7 @@ function selectTimeline(id,index,identifier=''){
   timelineTrial={id,index};timelineCursor=0;timelineRows=[];timelineGeneration++;timelineBusy=false;
   timelineIdentifier=identifier;timelineScanned=0;timelineMatched=0;
   byId('timeline-search').value=identifier;
-  byId('timeline-search').disabled=false;byId('timeline-find').disabled=false;
+  byId('timeline-search').disabled=false;byId('timeline-find').disabled=false;byId('timeline-view').disabled=false;
   byId('timeline').replaceChildren();byId('timeline-reset').disabled=false;byId('timeline-next').disabled=false;
   void pollTimeline();
 }
@@ -214,19 +214,30 @@ async function pollTimeline(){
   if(!timelineTrial||timelineBusy)return;
   const generation=timelineGeneration;const trial=timelineTrial;timelineBusy=true;
   try{
-    const params=new URLSearchParams({cursor:String(timelineCursor),limit:'50'});
+    const trace=byId('timeline-view').value==='trace';
+    const params=new URLSearchParams({cursor:String(timelineCursor),limit:trace?'10':'50'});
     if(timelineIdentifier)params.set('id',timelineIdentifier);
-    const page=await api('/api/series/'+trial.id+'/trial/'+trial.index+'/progress?'+params);
+    const page=await api('/api/series/'+trial.id+'/trial/'+trial.index+'/'+(trace?'trace':'progress')+'?'+params);
     if(generation!==timelineGeneration)return;
     timelineCursor=page.cursor;timelineScanned+=page.scanned;timelineMatched+=page.rows.length;
-    timelineRows=timelineRows.concat(page.rows).slice(-100);
+    timelineRows=timelineRows.concat(page.rows).slice(trace?-20:-100);
     const body=byId('timeline');body.replaceChildren();
     for(const row of timelineRows){
       const tr=document.createElement('tr');
       appendCell(tr,row.wall_s??'—');appendCell(tr,row.kind+' · '+row.source);
       appendCell(tr,row.time??row.model_time??'—');appendCell(tr,row.status??row.operation??row.code??'—');
       appendCell(tr,(row.commands??'—')+' / '+(row.command_results??'—'));
-      appendCell(tr,row.decision_id);appendCell(tr,row.request_id);appendCell(tr,row.episode_id);body.append(tr);
+      appendCell(tr,row.decision_id);appendCell(tr,row.request_id);appendCell(tr,row.episode_id);
+      const detail=appendCell(tr,'');
+      if(trace){
+        for(const item of row.details||[]){
+          const line=document.createElement('div');line.className='trace-item';
+          line.textContent=Object.entries(item).map(([key,value])=>key+': '+String(value)).join(' · ');
+          detail.append(line);
+        }
+        if(row.omitted){const line=document.createElement('div');line.textContent='Пропущено: '+row.omitted+' — полный архив';detail.append(line);}
+      }
+      body.append(tr);
     }
     const detail=timelineIdentifier?'Проверено '+timelineScanned+' записей; найдено '+timelineMatched+'; показано '+timelineRows.length:
       timelineRows.length+' последних записей; курсор '+timelineCursor;
@@ -243,6 +254,7 @@ byId('timeline-filter').addEventListener('submit',event=>{
   if(timelineTrial)selectTimeline(timelineTrial.id,timelineTrial.index,byId('timeline-search').value);
 });
 byId('timeline-next').addEventListener('click',()=>pollTimeline());
+byId('timeline-view').addEventListener('change',()=>{if(timelineTrial)selectTimeline(timelineTrial.id,timelineTrial.index,timelineIdentifier);});
 async function showReport(id,index){
   const request=++reportRequest;
   byId('report-title').textContent='Серия '+id.slice(0,8)+' · испытание '+(index+1);

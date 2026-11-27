@@ -63,6 +63,11 @@ def main():
                         assert decision_id in [cell.inner_text() for cell in row.locator('td').all()[5:]]
                     page.locator('#timeline-reset').click()
                     expect(page.locator('#timeline')).to_contain_text('decision · metarescue')
+                    page.locator('#timeline-view').select_option('trace')
+                    expect(page.locator('#timeline')).to_contain_text('type: command',timeout=10000)
+                    expect(page.locator('#timeline')).to_contain_text('type: receipt',timeout=10000)
+                    page.locator('#timeline-view').select_option('progress')
+                    expect(page.locator('#timeline')).to_contain_text('decision · metarescue',timeout=10000)
                     assert not errors,errors
                     page.locator('#repeat').click()
                     expect(page.locator('#selection-summary')).to_contain_text('точный повтор')

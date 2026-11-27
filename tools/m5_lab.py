@@ -29,6 +29,7 @@ from urllib.parse import urlsplit,parse_qs
 import uuid
 
 from contracts.protocol import strict_json
+from controller.m5_trace import read_trace
 from controller.m5_progress import read_page as read_progress_page,read_reference_page
 from controller.ai import atomic_json,file_lock
 from controller.client import EnvironmentClient
@@ -367,7 +368,8 @@ class Lab:
                 # OFF-only scratch accounting; never changes the LIVE ledger.
                 env=dict(os.environ,METARESCUE_OUTPUT=str(folder/'scratch'),
                          METARESCUE_LIVE_BUDGET=str(folder/'scratch'/'offline-budget.json'),PYTHONUTF8='1',
-                         METARESCUE_M5_PROGRESS_FILE=str(output/'progress.jsonl'))
+                         METARESCUE_M5_PROGRESS_FILE=str(output/'progress.jsonl'),
+                         METARESCUE_M5_TRACE_FILE=str(output/'trace.jsonl'))
                 (folder/'scratch').mkdir(exist_ok=True)
                 begin=time.monotonic();state='completed'
                 argv=build_command(spec,row['seed'],row['mode'],output)
@@ -485,6 +487,16 @@ class Lab:
             raise KeyError('Unsafe progress path')
         return (read_reference_page if independent else read_progress_page)(path,cursor,limit,identifier=identifier)
 
+    def trace(self,ident,index,cursor=0,limit=10,*,identifier=None):
+        run=self.get(ident)
+        if not 0<=index<len(run['rows']):
+            raise KeyError('Unknown trial')
+        independent=run.get('spec',{}).get('controller')=='independent'
+        path=self.root/ident/f'trial-{index:03d}'/('reference.jsonl' if independent else 'trace.jsonl')
+        if not path.resolve().is_relative_to(self.root/ident):
+            raise KeyError('Unsafe trace path')
+        return read_trace(path,cursor,limit,query=identifier,reference=independent)
+
     def report(self,ident,index):
         run=self.get(ident)
         if not 0<=index<len(run['rows']):
@@ -563,6 +575,14 @@ class Handler(BaseHTTPRequestHandler):
                 if set(query)-{'offset','limit'} or any(len(v)!=1 for v in query.values()):
                     raise ValueError('Invalid catalog query')
                 self.send(lab.catalog(int(query.get('offset',['0'])[0]),int(query.get('limit',['30'])[0])));return
+            trace_match=re.fullmatch(r'/api/series/([0-9a-f]{32})/trial/(\d{1,3})/trace',path)
+            if trace_match:
+                query=parse_qs(parsed.query,keep_blank_values=True)
+                if set(query)-{'cursor','limit','id'} or any(len(v)!=1 for v in query.values()):
+                    raise ValueError('Invalid trace query')
+                ident,index=trace_match.groups()
+                self.send(lab.trace(ident,int(index),int(query.get('cursor',['0'])[0]),
+                                    int(query.get('limit',['10'])[0]),identifier=query.get('id',[None])[0]));return
             progress_match=re.fullmatch(r'/api/series/([0-9a-f]{32})/trial/(\d{1,3})/progress',path)
             if progress_match:
                 query=parse_qs(parsed.query,keep_blank_values=True)
