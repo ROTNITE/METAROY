@@ -118,7 +118,8 @@ def summary(report):
         return {"exchange": "failed", "error": "invalid report"}
     selected = {}
     for key in ("exchange", "status", "goal_status", "goal_verified", "inputs_preserved",
-                "planning_p95_ms", "step_http_p95_ms", "exit_code"):
+                "planning_p95_ms", "step_http_p95_ms", "exit_code",
+                "correlated_public_target_count", "evacuated", "aid_delivered", "located"):
         value = result.get(key, report.get(key))
         if value is not None and type(value) in (str, int, float, bool):
             selected[key] = value
@@ -138,8 +139,11 @@ def summary(report):
         if isinstance(details,dict):
             selected["error_path"] = details.get("path")
             selected["error_details"] = {key:details[key] for key in
-                ("rule","entity_type","entity_id","resource_id","declared_id","minimum","value","maximum")
+                ("rule","entity_type","entity_id","resource_id","declared_id","minimum","value","maximum",
+                 "command_index","agent_id","action")
                 if key in details and type(details[key]) in (str,int,float,bool)}
+            if isinstance(details.get("missing"),list):
+                selected["error_details"]["missing"]=[v[:80] for v in details["missing"][:16] if isinstance(v,str)]
     for key in ("api_accounting_error","close_error"):
         if result.get(key):
             selected[key]=str(result[key])[:240]
@@ -162,6 +166,10 @@ def trial(peer, direction, mode, seed):
             with zipfile.ZipFile(package) as archive:
                 archive.extractall(work)
             cwd = work / base
+            if peer=='v9' and Path('/opt/peer-dependencies/node_modules').is_dir():
+                # Runtime dependencies installed from the frozen package-lock;
+                # no alteration of the partner's archived source.
+                (cwd/'node_modules').symlink_to('/opt/peer-dependencies/node_modules',target_is_directory=True)
             component = "environment" if direction == "outbound" else "controller"
             port = 18080
             ports = (port,8000,8001,8080,8081,3000,3001,9000,9001,8130,8131) if peer == "v9" else (port,)

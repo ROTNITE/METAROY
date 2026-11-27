@@ -185,8 +185,9 @@ class PortablePolicy:
         if not _path_clear(zones, agent, goal, public_media=self.public.short_actions):
             return False
         rules = (*observation['constraints'], *observation['mission']['constraints'], *agent['constraints'])
-        if any(not _allowed(zone, agent['kind']) and box and box.interval(agent['position'], goal) is not None
-               for zone, box in zones):
+        if self.public.short_actions and any(
+                not _allowed(zone,agent['kind']) and box and box.interval(agent['position'],goal) is not None
+                for zone,box in zones):
             return False
         for rule in rules:
             if rule.get('severity','hard') != 'hard':

@@ -109,7 +109,15 @@ class Evidence:
             self.first_error = {'kind': kind, **data}
 
     def summary(self):
-        return {'confirmed_command_receipts': list(self.transfers.values()), 'first_protocol_error': self.first_error,
+        # A legacy, command-correlated public state transition is stronger
+        # than a bare ACK but is not independent physical truth and cannot
+        # substitute for a declared outcome in GoalEvidence.
+        target_transitions=[item for item in self.transfers.values()
+                            if item.get('basis')=='public_target_transition']
+        return {'confirmed_command_receipts': list(self.transfers.values()),
+                'correlated_public_target_count':len({item['target_id'] for item in target_transitions}),
+                'correlated_public_target_transitions':target_transitions,
+                'first_protocol_error': self.first_error,
                 'planning_p95_ms': percentile(self.planning_ms, .95), 'step_http_p95_ms': percentile(self.step_ms, .95),
                 **self.goals.summary()}
 
