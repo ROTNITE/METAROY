@@ -29,7 +29,7 @@ def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('--inputs', type=Path, required=True)
     parser.add_argument('--output', type=Path, required=True, help='new evidence directory')
-    parser.add_argument('--kind', choices=('disasters', 'watercraft', 'urban-water', *EXPLORATION_ART), default='disasters')
+    parser.add_argument('--kind', choices=('disasters', 'watercraft', 'urban-water', 'smoke-v2', *EXPLORATION_ART), default='disasters')
     args = parser.parse_args()
     inputs = args.inputs.resolve(strict=True)
     output = args.output.resolve()
@@ -38,6 +38,7 @@ def main():
     preparation = json.loads(inputs.read_bytes())
     watercraft = args.kind == 'watercraft'
     urban_water = args.kind == 'urban-water'
+    smoke_v2 = args.kind == 'smoke-v2'
     exploration = args.kind in EXPLORATION_ART
     expected_format = 'metarescue.water-catamaran.r1' if watercraft else 'metarescue.disaster-effects.sources.v1'
     if preparation.get('format') != expected_format:
@@ -64,7 +65,7 @@ def main():
     # Both operations preserve every prior competition vehicle. The user's
     # catamaran has its own namespace and never replaces a legacy BlueBoat.
     paths.extend((ROOT / 'unreal/MetaRescue/Content/RescueAssets/Competition').rglob('*.uasset'))
-    if exploration:paths.extend((ROOT/'unreal/MetaRescue/Content/EffectsV3/Revision5').rglob('*.uasset'))
+    if exploration or smoke_v2:paths.extend((ROOT/'unreal/MetaRescue/Content/EffectsV3/Revision5').rglob('*.uasset'))
     if exploration:
         for _, folder in EXPLORATION_ART.values():
             paths.extend((ROOT / 'unreal/MetaRescue/Content' / folder).rglob('*.uasset'))
@@ -80,6 +81,8 @@ def main():
         script, folder = EXPLORATION_ART[args.kind]
     elif watercraft:
         script, folder = 'build_water_catamaran.py', 'RescueAssets/WatercraftV1'
+    elif smoke_v2:
+        script, folder = 'build_smoke_v2.py', 'EffectsV3/Revision6'
     else:
         script = 'build_urban_water.py' if urban_water else 'build_disaster_effects.py'
         folder = 'EffectsV3/Revision5'
@@ -92,7 +95,7 @@ def main():
         if existing_unreal():
             raise RuntimeError('Another Unreal is running; disaster art import did not start')
         try:
-            prefix = 'MR_EXPLORATION_ART_' if exploration else 'MR_WATERCRAFT_ART_' if watercraft else 'MR_URBAN_WATER_ART_' if urban_water else 'MR_DISASTER_ART_'
+            prefix = 'MR_EXPLORATION_ART_' if exploration else 'MR_WATERCRAFT_ART_' if watercraft else 'MR_URBAN_WATER_ART_' if urban_water else 'MR_SMOKE_V2_' if smoke_v2 else 'MR_DISASTER_ART_'
             environment = {**os.environ, prefix + 'INPUTS': str(inputs), prefix + 'REPORT': str(report)}
             with (output / 'stdout.log').open('w', encoding='utf-8') as log:
                 result = subprocess.run(command, cwd=ROOT, stdout=log, stderr=subprocess.STDOUT, env=environment,
