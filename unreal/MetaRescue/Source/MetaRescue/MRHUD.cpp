@@ -61,6 +61,29 @@ void AMRHUD::DrawHUD()
             TEXT("RESCUE QUARTER  /  SHOWCASE"):TEXT("RESCUE QUARTER");
         DrawText(FString::Printf(TEXT("%s  |  %.1f s"),Title,Mission->CoreRuntime->Time()),TextColor,39,36,GEngine->GetMediumFont(),.9f);
         DrawText(FString::Printf(TEXT("%d FOUND  /  %d AT BASE"),Mission->FoundCount(),Mission->SavedCount()),TextColor,39,69,GEngine->GetSmallFont(),.9f);
+        if(FParse::Param(FCommandLine::Get(),TEXT("MRCoreCaptureContest")))
+        {
+            using namespace MRCoreValues;
+            const auto O=Session->Observation();
+            if(O)
+            {
+                const auto& Events=O->GetArrayField(TEXT("events"));
+                const int32 Count=FMath::Min(Events.Num(),14);
+                if(Count>0)
+                {
+                    const float Width=FMath::Min(640.f,Canvas->ClipX-48.f),Y=110.f;
+                    DrawRect(FLinearColor(.018f,.035f,.03f,.95f),24,Y,Width,42+Count*27);
+                    DrawText(TEXT("DELIVERED CONTEST EVENTS"),FLinearColor(.77f,.94f,.36f),39,Y+9,GEngine->GetSmallFont(),1.f);
+                    for(int32 I=0;I<Count;++I)
+                    {
+                        const auto E=Events[I]->AsObject();
+                        DrawText(FString::Printf(TEXT("%.2f s  |  %s  |  %s"),
+                            E->GetNumberField(TEXT("received_at")),*Text(E,TEXT("type")),*Text(E,TEXT("status"))),
+                            TextColor,39,Y+34+I*27,GEngine->GetSmallFont(),.9f);
+                    }
+                }
+            }
+        }
         return;
     }
     AMRWorld* Mission=nullptr;for(TActorIterator<AMRWorld> It(GetWorld());It;++It){Mission=*It;break;}

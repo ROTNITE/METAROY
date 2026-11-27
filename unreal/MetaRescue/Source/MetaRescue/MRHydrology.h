@@ -71,13 +71,15 @@ public:
     {
         if(X<0||X>=Width-1||Y<0||Y>=Height||!FMath::IsFinite(ElevationM))return false;
         const int32 I=Y*(Width-1)+X;CrestX[I]=ElevationM;
-        if(Persistent)InitialCrestX[I]=ElevationM;return true;
+        if(Persistent)InitialCrestX[I]=ElevationM;
+        return true;
     }
     bool SetCrestY(int32 X,int32 Y,double ElevationM,bool Persistent=false)
     {
         if(X<0||X>=Width||Y<0||Y>=Height-1||!FMath::IsFinite(ElevationM))return false;
         const int32 I=Y*Width+X;CrestY[I]=ElevationM;
-        if(Persistent)InitialCrestY[I]=ElevationM;return true;
+        if(Persistent)InitialCrestY[I]=ElevationM;
+        return true;
     }
 
     FVector CurrentMPerSecond(int32 I) const

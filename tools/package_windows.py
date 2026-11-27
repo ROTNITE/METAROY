@@ -21,9 +21,9 @@ from tools.product_session import default_product_request
 PROJECT = ROOT/'unreal/MetaRescue'
 TOOLS = ('run_product.py', 'product_session.py', 'run_mission.py', 'native_archive.py',
          'native_process.py', 'analytics_service.py', 'run_native_series.py', 'series_plan.py',
-         'issue_operator.py', 'net65_demo.py')
+         'issue_operator.py', 'net65_demo.py', 'verify_distribution_zip.py')
 ENTRYPOINTS = ('run_product.py', 'product_session.py', 'run_mission.py',
-               'run_native_series.py', 'series_plan.py', 'issue_operator.py')
+               'run_native_series.py', 'series_plan.py', 'issue_operator.py', 'verify_distribution_zip.py')
 REQUIRED_SCENARIO = ('core-scenarios-v1.json', 'quarter.json', 'scenario.json',
                      'watercraft-hydrostatics-r1.json')
 DEPENDENCIES = ('jsonschema', 'jsonschema-specifications', 'attrs', 'referencing', 'rpds-py')
@@ -57,6 +57,21 @@ def verify_scenario_files(directory, *, expected=None):
         changed = sorted(name for name in files.keys() | expected.keys() if files.get(name) != expected.get(name))
         raise RuntimeError(f'Runtime scenario data changed in {directory}: '+', '.join(changed))
     return files
+
+
+REVISED_ASSETS=('EffectsV3/Revision6/M_PhysicalSmoke.uasset',
+                'EffectsV3/Revision6/M_RememberedSmoke.uasset',
+                'EffectsV3/Revision5/M_UrbanFlood.uasset',
+                'EffectsV3/ExplorationWaterR2/M_RememberedFlood.uasset')
+
+
+def verify_revised_assets(content):
+    for relative in REVISED_ASSETS:
+        asset=content/relative
+        if not asset.is_file():raise FileNotFoundError('Missing required material: '+relative)
+        with asset.open('rb') as stream:header=stream.read(64)
+        if header.startswith(b'version https://git-lfs.github.com/spec/') or len(header)<64:
+            raise ValueError('Unmaterialized or truncated material: '+relative)
 
 
 def project_inputs(project):
@@ -192,6 +207,7 @@ def stage_runtime(distribution, demo, *, scenario_files, configuration='Developm
 
 def build(output, engine, demo, *, configuration='Shipping', fab_usage_notice=None):
     scenario_files = verify_scenario_files(PROJECT/'Content/Scenario')
+    verify_revised_assets(PROJECT/'Content')
     fab_packages = PROJECT/'Content/EffectsV3/Revision3/Fab'
     if any(fab_packages.rglob('*.uasset')) and fab_usage_notice is None:
         raise ValueError('Provide --fab-usage-notice for a cooked distribution containing Fab content')

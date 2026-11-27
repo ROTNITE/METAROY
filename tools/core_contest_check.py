@@ -5,7 +5,10 @@ import math
 
 from contracts.protocol import validate_episode_response
 from controller.baselines import FixedWorkflow
-from tools.native_archive import IndexedRecords
+from tools.native_archive import IndexedRecords, file_sha256
+from pathlib import Path
+import re
+import struct
 
 
 def drive(client,world,decision):
@@ -100,3 +103,51 @@ def verify(result,world,output_root):
                                      for t in release_snapshots)
     result.update(applied_times=starts,ended_times=ends,first_restriction_brake_s=brake[0],restriction_brake_position_m=brake[1],
                   max_degraded_speed_m_s=max(speeds),released_position_m=released['target_position'],release_snapshots=len(release_snapshots))
+
+
+def event_key(event):
+    return (event['id'],event['type'],event['status'],event['received_at'])
+
+
+def frame_coverage(directory, expected_events, journal):
+    """Match actual native frame requests to delivered events.
+
+    PNG signatures/dimensions and file hashes are evidence of captured files,
+    not proof that the expected pixels were visible. Manual review remains open.
+    """
+    expected={event_key(e) for e in expected_events}
+    expected_types={key[1] for key in expected}
+    covered=set()
+    frames=[]
+    names=set()
+    for row in journal:
+        if row['record_type']!='contest_frame_requested':continue
+        data=row['payload'];name=data['file']
+        if not re.fullmatch(r'overview/overview-[0-9]+[.]png',name) or name in names:
+            raise ValueError('Invalid or duplicate contest frame path')
+        names.add(name)
+        keys={event_key(e) for e in data['events']}
+        if not keys or not keys<=expected or any(k[3]>data['observation_time'] for k in keys):
+            raise ValueError('Contest frame contains undelivered or future event')
+        path=Path(directory)/name
+        if path.is_symlink():raise ValueError('Unexpected linked contest frame')
+        with path.open('rb') as stream:header=stream.read(24)
+        if len(header)!=24 or header[:8]!=b'\x89PNG\r\n\x1a\n' or header[8:16]!=b'\x00\x00\x00\rIHDR':
+            raise ValueError('Invalid PNG header: '+name)
+        width,height=struct.unpack('>II',header[16:24])
+        if not 640<=width<=16384 or not 480<=height<=16384 or path.stat().st_size<=24:
+            raise ValueError('Invalid contest frame dimensions: '+name)
+        covered.update(keys)
+        frames.append({'file':name,'sha256':file_sha256(path),'width':width,'height':height,
+                       'observation_time':data['observation_time'],'event_types':sorted({k[1] for k in keys})})
+    missing=expected-covered
+    if missing or len(expected_types)!=14:
+        raise ValueError('Incomplete contest frame coverage: '+str(sorted(missing)))
+    return {'event_types':sorted(expected_types),'frames':frames,'frame_evidence_complete':True,
+            'visual_inspection_pending':True,'scope':'request correlation and file presence, not pixel acceptance'}
+
+
+def verify_visual(result,output_root):
+    directory=output_root/'core-runs'/result['contest_episode']
+    result['visual_evidence']=frame_coverage(directory,result['events'],IndexedRecords(directory/'truth').json_records())
+
