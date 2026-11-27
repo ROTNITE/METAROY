@@ -5,6 +5,7 @@ import tempfile
 import unittest
 import zipfile
 import struct
+import zlib
 from tools.verify_distribution_zip import verify_zip, SCENARIOS
 from tools.core_contest_check import frame_coverage
 from tools.package_windows import verify_revised_assets, REVISED_ASSETS
@@ -76,11 +77,18 @@ class ContestFrameTests(unittest.TestCase):
         with tempfile.TemporaryDirectory() as temp:
             root=Path(temp);(root/'overview').mkdir()
             name='overview/overview-00001.png'
-            (root/name).write_bytes(b'\x89PNG\r\n\x1a\n\x00\x00\x00\rIHDR'+struct.pack('>II',1600,1000)+b'fixture header only')
+            def chunk(kind,data):
+                return struct.pack('>I',len(data))+kind+data+struct.pack('>I',zlib.crc32(kind+data))
+            image=b'\x89PNG\r\n\x1a\n'+chunk(b'IHDR',struct.pack('>IIBBBBB',640,480,8,2,0,0,0))
+            image+=chunk(b'IDAT',zlib.compress((b'\x00'+b'\x22\x33\x44'*640)*480))+chunk(b'IEND',b'')
+            (root/name).write_bytes(image)
             events=[{'id':str(i),'type':str(i),'status':'active','received_at':1.} for i in range(14)]
             rows=[{'record_type':'contest_frame_requested','payload':{'file':name,'events':events,'observation_time':1.}}]
             result=frame_coverage(root,events,rows)
             self.assertTrue(result['visual_inspection_pending'])
+            (root/name).write_bytes(image[:-8])
+            with self.assertRaisesRegex(ValueError,'PNG'):frame_coverage(root,events,rows)
+            (root/name).write_bytes(image)
             rows[0]['payload']['events']=events[:-1]
             with self.assertRaisesRegex(ValueError,'Incomplete'):frame_coverage(root,events,rows)
             rows[0]['payload']['events']=events

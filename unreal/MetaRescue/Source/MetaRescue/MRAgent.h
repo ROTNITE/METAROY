@@ -130,6 +130,7 @@ private:
     int32 PathIndex = 0;
     float ServiceRemaining = 0;
     float WatercraftUnstableSeconds = 0;
+    float WatercraftBlockedLiftSeconds = 0;
     bool bPhysicsStoppedAtBoundary = false;
     void StopAtWorldBoundary(const FString& Reason);
     float ServiceElapsed = 0;

@@ -18,7 +18,7 @@ void AMRAgent::ResetForEpisode(const FTransform& Pose,bool UnlimitedEnergy)
     bCarrying=false;bExternalHold=false;bRouteBlocked=false;bReverseInitialLeg=false;bFaulted=false;
     FailureReason.Empty();SpeedFactor=SensorFactor=1;
     CommandId.Empty();StopReason.Empty();StopObstacle.Empty();SensedBlocker=FBox(ForceInit);IntendedVelocity=FVector::ZeroVector;
-    ServiceRemaining=0;ServiceElapsed=0;RampDeployment=0;ObstructionTime=0;DepartAt=0;
+    ServiceRemaining=0;ServiceElapsed=0;WatercraftBlockedLiftSeconds=0;RampDeployment=0;ObstructionTime=0;DepartAt=0;
     SetActorTransform(Pose,false,nullptr,ETeleportType::TeleportPhysics);
     if(bPhysicsStoppedAtBoundary)
     {

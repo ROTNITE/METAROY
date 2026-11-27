@@ -6,7 +6,10 @@ from controller.water_survey import candidate_cells, water_survey_command
 class SurveyTests(unittest.TestCase):
     def setUp(self):
         self.map={'bounds':{'kind':'box','min':[-100,0,-12],'max':[250,250,90]},
-                  'hydrology':{'basin':{'min':[-90,10,-7],'max':[-50,50,2]},'initial_stage_m':2.}}
+                  'hydrology':{'basin':{'min':[-90,10,-7],'max':[-50,50,2]},'initial_stage_m':2.},
+                  'base':{'kind':'box','min':[0.,90.,0.],'max':[20.,110.,1.]},
+                  'navigation':{'kind':'street_surface_graph.v2','ground_clearance_m':.43,
+                                'road_surface_z_m':.04,'base_surface_z_m':.11}}
         self.agent={'id':'drone','kind':'aerial','status':'active','position':[10.,100.,18.],
                     'capabilities':['sense','move'],'available_actions':[{'action':'follow_route'}],
                     'freshness':{'position':{'observed_at':10.}},
@@ -31,13 +34,14 @@ class SurveyTests(unittest.TestCase):
         self.assertIsNone(water_survey_command(self.workflow,self.obs,self.map,self.agent,self.job,{}))
 
     def test_stale_agent_low_energy_legacy_and_evacuated_target(self):
-        for altered in ('legacy','energy','stale','done'):
+        for altered in ('legacy','energy','stale','done','missing_navigation'):
             self.setUp()
             known={}
             if altered=='legacy':self.obs['metaevolution']={}
             if altered=='energy':self.agent['physical']['remaining_wh']=12.1
             if altered=='stale':self.agent['freshness']['position']['observed_at']=1.
             if altered=='done':known['patient']={'evacuation_state':'evacuated'}
+            if altered=='missing_navigation':self.map.pop('navigation')
             with self.subTest(altered=altered):
                 self.assertIsNone(water_survey_command(self.workflow,self.obs,self.map,self.agent,self.job,known))
 

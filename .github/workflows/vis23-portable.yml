@@ -49,6 +49,7 @@ jobs:
         timeout-minutes: 5
         run: python -B -X utf8 tools/run_interop.py self-test --matrix --output "$RUNNER_TEMP/vis23-interop"
       - name: Production hydrology and signal arithmetic
+        if: always()
         timeout-minutes: 8
         run: |
           g++ -std=c++17 -O2 -Wall -Wextra -Werror -Itools/portable_ue tools/vis05_12_hydro_probe.cpp -o "$RUNNER_TEMP/vis05_12_hydro"

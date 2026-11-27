@@ -68,19 +68,26 @@ def water_survey_command(workflow,observation,announced,agent,job,known):
         candidates.update(candidate_cells(route,origin,goal,announced['bounds'],workflow.water_survey_recent,now))
     if not candidates:return None
     pose=tuple(agent['position'])
-    nav=NavigationMap(announced,surfaces=workflow.known_surfaces)
+    try:nav=NavigationMap(announced,surfaces=workflow.known_surfaces)
+    except (RouteFailure,ValueError,KeyError,TypeError):return None
     speed,climb,descent=rates
     for cell,xy in sorted(candidates.items(),key=lambda item:(math.dist(pose[:2],item[1]),item[0]))[:3]:
-        z=min(announced['bounds']['max'][2]-2,max(nav.ground_z(*xy)+18.,min(28.,pose[2])))
-        if z<nav.ground_z(*xy)+12:continue
+        try:ground=nav.ground_z(*xy)
+        except (RouteFailure,ValueError,KeyError,TypeError):continue
+        z=min(announced['bounds']['max'][2]-2,max(ground+18.,min(28.,pose[2])))
+        if z<ground+12:continue
         goal=(*xy,z)
         if math.dist(pose,goal)<5:continue
         try:
-            leg=workflow._planned_route(announced,agent,observation['agents'],goal)
+            obstacles=workflow._obstacles(agent,observation['agents'])
+            obstacles.extend(workflow.local_obstacles.get(agent['id'],()))
+            outward=NavigationMap(announced,observed_obstacles=obstacles,surfaces=workflow.known_surfaces)
+            leg=outward.route(pose,goal,aerial=True,radius_m=physical.get('radius_m',1.65),
+                              half_height_m=.4,cruise_altitude_m=max(pose[2],goal[2]),max_expanded=512)
             reached=leg.points[-1]
             back=nav.route(reached,home,aerial=True,radius_m=physical.get('radius_m',1.65),
-                           half_height_m=.4,cruise_altitude_m=max(z,home[2]),max_expanded=128)
-        except (RouteFailure,IndexError):
+                           half_height_m=.4,cruise_altitude_m=max(z,home[2]),max_expanded=512)
+        except (RouteFailure,IndexError,ValueError,KeyError,TypeError):
             continue
         def estimate(path):
             seconds=sum(max(math.dist(a[:2],b[:2])/speed,

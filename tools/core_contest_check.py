@@ -9,6 +9,7 @@ from tools.native_archive import IndexedRecords, file_sha256
 from pathlib import Path
 import re
 import struct
+import zlib
 
 
 def drive(client,world,decision):
@@ -109,6 +110,33 @@ def event_key(event):
     return (event['id'],event['type'],event['status'],event['received_at'])
 
 
+def png_dimensions(path):
+    """Bounded PNG structure and chunk CRC verification (not pixel review)."""
+    if path.stat().st_size>128*1024*1024:raise ValueError('Oversized PNG')
+    with path.open('rb') as stream:
+        if stream.read(8)!=b'\x89PNG\r\n\x1a\n':raise ValueError('Invalid PNG signature')
+        width=height=None;data=False;end=False
+        while not end:
+            header=stream.read(8)
+            if len(header)!=8:raise ValueError('Truncated PNG chunk')
+            size,kind=struct.unpack('>I4s',header)
+            if size>128*1024*1024:raise ValueError('Oversized PNG chunk')
+            payload=stream.read(size);crc=stream.read(4)
+            if len(payload)!=size or len(crc)!=4 or zlib.crc32(kind+payload)!=struct.unpack('>I',crc)[0]:
+                raise ValueError('PNG chunk CRC or length mismatch')
+            if width is None:
+                if kind!=b'IHDR' or size!=13:raise ValueError('Invalid PNG IHDR')
+                width,height=struct.unpack('>II',payload[:8])
+                if not 640<=width<=16384 or not 480<=height<=16384:raise ValueError('Invalid PNG dimensions')
+            elif kind==b'IHDR':raise ValueError('Duplicate PNG IHDR')
+            if kind==b'IDAT' and size:data=True
+            if kind==b'IEND':
+                if size or not data:raise ValueError('Incomplete PNG image')
+                end=True
+        if stream.read(1):raise ValueError('Unexpected PNG trailing data')
+    return width,height
+
+
 def frame_coverage(directory, expected_events, journal):
     """Match actual native frame requests to delivered events.
 
@@ -131,12 +159,7 @@ def frame_coverage(directory, expected_events, journal):
             raise ValueError('Contest frame contains undelivered or future event')
         path=Path(directory)/name
         if path.is_symlink():raise ValueError('Unexpected linked contest frame')
-        with path.open('rb') as stream:header=stream.read(24)
-        if len(header)!=24 or header[:8]!=b'\x89PNG\r\n\x1a\n' or header[8:16]!=b'\x00\x00\x00\rIHDR':
-            raise ValueError('Invalid PNG header: '+name)
-        width,height=struct.unpack('>II',header[16:24])
-        if not 640<=width<=16384 or not 480<=height<=16384 or path.stat().st_size<=24:
-            raise ValueError('Invalid contest frame dimensions: '+name)
+        width,height=png_dimensions(path)
         covered.update(keys)
         frames.append({'file':name,'sha256':file_sha256(path),'width':width,'height':height,
                        'observation_time':data['observation_time'],'event_types':sorted({k[1] for k in keys})})
