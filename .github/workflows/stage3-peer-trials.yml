@@ -106,7 +106,7 @@ jobs:
           ENGINE: ${{ matrix.engine || 'planar' }}
         run: |
           set -euo pipefail
-          docker run --rm --network none --read-only --tmpfs /tmp:rw,nosuid,nodev,size=512m \
+          docker run --rm --network none --read-only --tmpfs /tmp:rw,exec,nosuid,nodev,size=512m \
             --cap-drop ALL --security-opt no-new-privileges --pids-limit 128 --memory 1g --cpus 2 \
             --user 65534:65534 --env HOME=/tmp --env PYTHONUTF8=1 --env PYTHONDONTWRITEBYTECODE=1 \
             --mount "type=bind,source=$RUNNER_TEMP/input,target=/repo,readonly" \
