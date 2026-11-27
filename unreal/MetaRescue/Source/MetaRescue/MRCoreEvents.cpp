@@ -420,7 +420,7 @@ void FMRCoreRuntime::AdvanceEvents()
         const auto Before=ProbeRoad?SupportAtSource():Object();
         const int32 Bodies=Event.Rejection.IsEmpty()?World->ApplyCoreDisturbance(Event):0;
         const auto* Applied=Model.FindApplied(Event.Id);
-        const auto& Effective=Applied?*Applied:Event;
+        const auto& Effective=Model.bRevisedDisasters&&Applied?*Applied:Event;
         auto EventRecord=Obj({{TEXT("event_id"),Str(Event.Id)},{TEXT("kind"),Str(MRDisturbanceName(Event.Kind))},
                 {TEXT("scheduled_at"),Num(Event.Time)},{TEXT("source_m"),Point(Event.Source/100.)},
                 {TEXT("source_object_id"),Event.SiteId.IsEmpty()?Null():Str(Event.SiteId)},
