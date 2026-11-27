@@ -1,4 +1,6 @@
 #include "../unreal/MetaRescue/Source/MetaRescue/MRWatercraftCorridor.h"
+#include "../unreal/MetaRescue/Source/MetaRescue/MRHorizonRoof.h"
+#include <limits>
 // Compile the actual production numeric solver and signal phase function,
 // using only the explicitly test-only value/container adapter.
 #ifndef MR_HYDROLOGY_HEADER
@@ -93,6 +95,26 @@ void open_field(int size,int seconds,bool repeat)
     if(repeat){g.Reset();require(g.Time()==0&&g.AddedM3()==0,"clean reset");require(run()==hash,"exact replay");}
     std::cout<<"size="<<size<<" elapsed_wall_s="<<std::chrono::duration<double>(std::chrono::steady_clock::now()-start).count()<<"\n";
 }
+void horizon_roofs()
+{
+    int pitched=0;
+    for(int floors=1;floors<=5;++floors)for(int variant=0;variant<9;++variant)
+    {
+        const double w=variant%2?740:890,d=variant<2?720:870;
+        require(!FMRHorizonRoof::Make(false,floors,variant,w,d).Enabled(),"legacy roof invariant");
+        const auto r=FMRHorizonRoof::Make(true,floors,variant,w,d);
+        if(!r.Enabled())continue;
+        ++pitched;
+        require(floors<=2&&r.RidgeZ()>r.WallTop,"positive roof rise");
+        require(std::abs(r.HeightAt(r.HalfDepth)-r.WallTop)<1.e-9,"wall-to-gable seam");
+        require(r.HeightAt(r.EaveDepth())<r.WallTop&&r.HeightAt(r.EaveDepth())>r.WallTop-20,
+            "overhang meets roof slope");
+        require(r.HeightAt(-r.HalfDepth)==r.HeightAt(r.HalfDepth),"symmetric roof");
+    }
+    require(pitched==12,"deterministic variant selection");
+    require(!FMRHorizonRoof::Make(true,1,1,0,720).Enabled(),"invalid roof dimensions");
+    std::cout<<"horizon roof profile: 45 variants, legacy isolation, slope and gable seam passed\n";
+}
 void watercraft_corridor()
 {
     auto safe=[](double,double){return true;};
@@ -135,7 +157,7 @@ void wet_fringe()
 int main(int argc,char** argv)
 {
     std::cout<<std::setprecision(12);
-    closed_and_barrier();wet_fringe();watercraft_corridor();
+    closed_and_barrier();wet_fringe();watercraft_corridor();horizon_roofs();
     for(int offset=0;offset<28;++offset)for(int t=0;t<2800;++t)
     {
         const auto a=MRStreetPhase(t*.1,offset,0,true),b=MRStreetPhase(t*.1,offset,1,true);
