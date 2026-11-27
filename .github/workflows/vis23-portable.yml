@@ -42,6 +42,10 @@ jobs:
           git worktree add --detach "$RUNNER_TEMP/vis23-baseline" FETCH_HEAD
       - name: Python tests
         run: python -B -X utf8 -m unittest discover -s tests -v
+      - name: Portable Universal Core conformance
+        if: always()
+        timeout-minutes: 5
+        run: python -B -X utf8 tools/run_interop.py self-test --matrix --output "$RUNNER_TEMP/vis23-interop"
       - name: Portable native optical arithmetic
         if: always()
         run: |
