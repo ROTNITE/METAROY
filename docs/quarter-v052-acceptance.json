@@ -2114,7 +2114,7 @@
         "D:/MetaRescue-output/visual-overhaul-20261115/python-disaster-checkpoint01.log",
         "docs/vis02-04-city23-candidate.md"
       ],
-      "scope_note": "2.3/v2 поддержаны генератором и native; 270 Python-тестов и события в двух native-эпизодах. Полная совместимость и остальные механики нового профиля ещё открыты. Внешний CI: 31 исходный мир с идентичными хэшами и 7 revised passed, включая max fleet. Полная 271+55 матрица запущена; нативные reset/replay, старый RescueDistrict, build/cook ещё открыты."
+      "scope_note": "2.3/v2 поддержаны генератором и native; 270 Python-тестов и события в двух native-эпизодах. Полная совместимость и остальные механики нового профиля ещё открыты. Внешний CI: 31 исходный мир с идентичными хэшами и 7 revised passed, включая max fleet. Полная 271+55 матрица генерации/контрактов завершена 326/326 (CI 46052509759, commit 56a576ba); нативные reset/replay, старый RescueDistrict, build/cook ещё открыты."
     },
     {
       "id": "VIS14",
