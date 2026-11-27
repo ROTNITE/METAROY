@@ -150,8 +150,8 @@ def build_billow(textures):
     return value
 
 
-def build_volume(textures, shader='disaster_smoke.hlsl'):
-    value = material('M_PhysicalSmoke', translucent=True)
+def build_volume(textures, shader='disaster_smoke.hlsl', name='M_PhysicalSmoke'):
+    value = material(name, translucent=True)
     # When the eye is inside a plume, its back surface lies behind most opaque
     # landmarks. Hardware depth testing would discard the entire integration.
     # The shader clips against the actual opaque scene depth instead.
