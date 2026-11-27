@@ -152,3 +152,21 @@ class OutcomeBoundary(TestCase):
         self.evidence.record_receipt('other', self.receipt)
         self.evidence.record_outcome('e', self.outcome)
         self.assertEqual(self.evidence.summary()['evacuated'], 0)
+
+class ReceiptBoundary(TestCase):
+    def test_mismatched_action_does_not_confirm_custody(self):
+        from controller.portable import PortablePolicy
+        caps=Trial('A').capabilities()
+        policy=PortablePolicy(caps,'nsga2_nsga2')
+        decision={'decision_id':'d','episode_id':'e','commands':[{'agent_id':'a','action':'pickup','parameters':{'target_id':'p'}}],
+                  'operation':'keep'}
+        policy.proposed=(decision,[(('casualty','p'),('a','pickup',repr({'target_id':'p'})))])
+        base={'decision_id':'d','command_index':0,'agent_id':'a','action':'handover',
+              'execution_status':'completed','validation_status':'accepted','delivery_status':'delivered'}
+        policy.observe_response({'time':1.,'command_results':[base]})
+        self.assertNotIn('a',policy.cargo)
+        self.assertIn('a',policy.pending)
+        policy.proposed=({**decision,'decision_id':'next','commands':[]},[])
+        policy.observe_response({'time':2.,'command_results':[{**base,'action':'pickup','delivery_status':'lost'}]})
+        self.assertNotIn('a',policy.cargo)
+        self.assertNotIn('a',policy.pending)

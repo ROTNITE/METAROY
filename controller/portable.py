@@ -14,6 +14,7 @@ from controller.declared_scenarios import SCENARIO_SEMANTICS, choose_declared
 from controller.navigation import Box, point
 from controller.public_geometry import geometry as parse_geometry, segments
 from controller.public_patrol import PublicPatrolEstimates
+from controller.public_route import RouteBudget, detour
 from controller.net65 import Candidate, MAX_CANDIDATES, choose_sector, due, horizon_of, scan_ages
 from controller.public_core import PATROL_ESTIMATES, PublicCore
 from controller.scenarios import COVERAGE, PRIORITY, SAFETY, configuration, risk_of
@@ -211,6 +212,17 @@ class PortablePolicy:
                         for peer in observation['agents']):
                     return False
         return True
+
+    def _move_toward(self, observation, zones, agent, goal, issue, intent):
+        if self._motion_clear(observation, zones, agent, goal):
+            return issue(agent,'move',{'target':list(goal)},intent)
+        def clear(a,b):
+            return self._motion_clear(observation,zones,{**agent,'position':a},b)
+        physical=agent.get('physical',{})
+        radius=physical.get('chassis_radius_m',0.) if isinstance(physical,dict) else 0.
+        margin=max(.5,radius+.25) if type(radius) in (int,float) and radius>=0 else .5
+        waypoint=detour(agent['position'],goal,zones,agent['kind'],clear,self.route_budget,margin=margin)
+        return waypoint is not None and issue(agent,'move',{'target':list(waypoint)},intent)
 
     def _candidate(self, observation, agents, identifier, target_id, preferred=None):
         declaration = self.scenarios.get(identifier)
@@ -489,7 +501,7 @@ class PortablePolicy:
             else:
                 if agent['kind'] == 'aerial':
                     goal = (*goal[:2],max(2.,goal[2]))
-                if self._motion_clear(observation, zones, agent, goal) and issue(agent,'move',{'target':list(goal)},intent):
+                if self._move_toward(observation,zones,agent,goal,issue,intent):
                     return True
         return False
 
@@ -565,7 +577,7 @@ class PortablePolicy:
                 if math.dist(agent['position'], goal) <= 1.:
                     if issue(agent, 'handover', {'station_id': station['id']}, intent):
                         break
-                elif _path_clear(zones, agent, goal) and issue(agent, 'move', {'target': goal}, intent):
+                elif self._move_toward(observation,zones,agent,goal,issue,intent):
                     break
             return True
 
@@ -587,7 +599,7 @@ class PortablePolicy:
             if math.dist(agent['position'], goal) <= 1.:
                 if issue(agent, 'pickup', {'target_id': target['id']}, intent):
                     return True
-            elif _path_clear(zones, agent, goal) and issue(agent, 'move', {'target': list(goal)}, intent):
+            elif self._move_toward(observation,zones,agent,goal,issue,intent):
                 return True
         return False
 
@@ -659,7 +671,7 @@ class PortablePolicy:
             self.raw_observation = observation
             self.raw_agents = {row['id']: row for row in observation['agents']}
             observation = self.public.view(observation)
-        elif self.public.semantic_ids:
+        elif self.public.semantic_ids or self.public.unsupported_semantics:
             observation = self.public.view(observation)
         if self.stopping:
             core_view = {key: observation[key] for key in ('episode_id', 'time', 'request_id')}
@@ -672,6 +684,7 @@ class PortablePolicy:
                               key=lambda a: (a['kind'], tuple(a['position'] or ()), a['id']))
         agents = [a for a in participants if a['position'] is not None]
         zones = [(z, _box(z)) for z in observation['zones']]
+        self.route_budget = RouteBudget(len(zones))
         tasks = self._delivery_tasks(observation)
         orders = FixedWorkflow.hold_orders(observation)
         suspects = [t for t in observation['targets'] if t.get('status') == 'suspected' and t.get('position')]
@@ -744,7 +757,7 @@ class PortablePolicy:
                 if math.dist(agent['position'], goal) <= 1.:
                     if issue(agent, 'deliver', params, intent):
                         break
-                elif _path_clear(zones, agent, goal) and issue(agent, 'move', {'target': list(goal)}, intent):
+                elif self._move_toward(observation,zones,agent,goal,issue,intent):
                     break
             else:
                 if 'sense' not in agent['capabilities']:
@@ -860,14 +873,16 @@ class PortablePolicy:
                 outcome = {'applied':'completed','accepted':'completed','rejected':'failed'}.get(item.get('status'))
                 if outcome is not None:
                     item = {**item,'decision_id':pending[0],'command_index':pending[1],'execution_status':outcome}
-            if pending is None or pending[:2] != (item.get('decision_id'), item.get('command_index')):
+            if (pending is None or pending[:2] != (item.get('decision_id'), item.get('command_index'))
+                    or item.get('action') != self.public.wire_action(pending[3][1])):
                 continue
             state = item.get('execution_status')
             if (state in _TERMINAL or item.get('validation_status') == 'rejected' or
                     item.get('delivery_status') in ('expired', 'lost')):
                 _, _, intent, signature = self.pending.pop(item['agent_id'])
                 aid, action, _ = signature
-                if state == 'completed':
+                if (state == 'completed' and item.get('validation_status','accepted')=='accepted'
+                        and item.get('delivery_status','delivered')=='delivered'):
                     if action in ('observe', 'inspect', 'deliver', 'confirm', 'rescue', 'hold') and intent and intent[0] != 'repeat':
                         self.completed.add(intent)
                     if intent and intent[0] in ('coverage', 'repeat') and action == 'observe':
