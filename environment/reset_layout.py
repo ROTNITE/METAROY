@@ -22,7 +22,7 @@ def prepare(request):
     # Switching back to a historical city must not inherit 2.3-only
     # options from the startup configuration. Explicit invalid overrides
     # still reach Settings.parse and are rejected rather than ignored.
-    if 'city_revision' in parameters and settings['city_revision'] != '2.3':
+    if base.get('disaster_revision') == 1 and 'city_revision' in parameters and settings['city_revision'] != '2.3':
         if 'disaster_revision' not in parameters:settings.pop('disaster_revision', None)
         if 'boats' not in parameters:settings.pop('boats', None)
     for override, default in (('event_profile', 'probabilities'), ('map_size', 'horizon'),
