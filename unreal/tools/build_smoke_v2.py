@@ -13,6 +13,7 @@ import unreal
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 import build_disaster_effects as effects
+from smoke_shader_source import remembered_source
 
 
 def main():
@@ -42,13 +43,7 @@ def main():
     opacity.set_editor_property('inputs', inputs)
     effects.connect(effects.vector(remembered, 'ClipMin', (-1e8,-1e8,-1e8), 2100), 'RGB', opacity, 'ClipMin')
     effects.connect(effects.vector(remembered, 'ClipMax', (1e8,1e8,1e8), 2250), 'RGB', opacity, 'ClipMax')
-    marker = 'float3 Delta = Surface - Camera;'
-    code = opacity.get_editor_property('code')
-    if code.count(marker) != 1:
-        raise RuntimeError('Smoke clipping marker changed')
-    opacity.set_editor_property('code', code.replace(marker,
-        'Lo=max(Lo,ClipMin-Source); Hi=min(Hi,ClipMax-Source);\n'
-        'if(any(Hi<=Lo))return 0;\n' + marker))
+    opacity.set_editor_property('code', remembered_source(opacity.get_editor_property('code')))
     stamp = effects.scalar(remembered, 'SnapshotTime', 0, 2400)
     for expression in effects.EDIT.get_material_expressions(remembered):
         if isinstance(expression, unreal.MaterialExpressionCustom):
