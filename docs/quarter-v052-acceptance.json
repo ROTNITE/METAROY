@@ -2076,9 +2076,10 @@
         "D:/MetaRescue-output/integration-20261127-01/night-optical-compare-03.json",
         "D:/MetaRescue-output/integration-20261127-01/night-blackout-flythrough.mp4",
         "D:/MetaRescue-output/integration-20261127-01/night-optical-compare-04.json",
-        "D:/MetaRescue-output/integration-20261127-01/night-water-isolation-01/verification.json"
+        "D:/MetaRescue-output/integration-20261127-01/night-water-isolation-01/verification.json",
+        "D:/MetaRescue-output/integration-20261127-01/packaged-product-04/verification.json"
       ],
-      "scope_note": "Начальная ночная застройка читается. Доставленные наблюдения обновляют материалы, поверхности, позы и эффекты. Две пары по 90 с дали точное совпадение 9 854 оптических выборок в каждой, в том числе при обвале внутри обрыва. Подтверждены пауза, повтор и сброс. Переключение в UI, изменение уровня воды во время обрыва и масштаб остаются открыты. В паре с водой знание стабильно во время изоляции, пока физический уровень поднялся с 1,186 до 1,691 м. На кадрах запомненной поверхности заметны перепады между соседними выборками. Приёмка изображения, переключение в UI и масштаб остаются открыты."
+      "scope_note": "Начальная ночная застройка читается. Доставленные наблюдения обновляют поверхности, позы и эффекты. Парный прогон подтвердил совпадение оптических выборок при обвале внутри обрыва. Из распакованной Shipping переключение между режимами сохранило время 0 с, шаг продвинул модель на 1 с. В паре с водой знание стабильно во время изоляции при подъёме физического уровня с 1,186 до 1,691 м. Приёмка запомненной поверхности и масштаб остаются открыты."
     },
     {
       "id": "VIS13",
@@ -2125,9 +2126,15 @@
         "D:/MetaRescue-output/releases/windows-integrated-verification-20261127-04/archive-verification.json",
         "D:/MetaRescue-output/integration-20261127-01/packaged-product-03/four-boats-verification.json",
         "D:/MetaRescue-output/integration-20261127-01/packaged-product-03/startup-failure.json",
-        "D:/MetaRescue-output/integration-20261127-01/packaged-product-03/windows-firewall.json"
+        "D:/MetaRescue-output/integration-20261127-01/packaged-product-03/windows-firewall.json",
+        "D:/MetaRescue-output/releases/windows-integrated-verification-20261127-05/archive-verification.json",
+        "D:/MetaRescue-output/integration-20261127-01/packaged-product-04/verification.json",
+        "D:/MetaRescue-output/integration-20261127-01/packaged-product-04/local-listener.json",
+        "D:/MetaRescue-output/integration-20261127-01/packaged-product-04/recovery-verification-confirmed.json",
+        "D:/MetaRescue-output/integration-20261127-01/packaged-product-04/startup-failure.json",
+        "D:/MetaRescue-output/integration-20261127-01/shipping-platform-root-tests.log"
       ],
-      "scope_note": "Python 316/316 и Unreal 31/31. Windows-кандидат 04 прошёл CRC и SHA всех 1225 файлов. Извлечённая сборка завершила миссию 2.3 на 480 с с четырьмя катамаранами и двумя физическими передачами. Конфликт портов отклонён перед запуском. При старте формы Development Windows запросила доступ из-за диагностического TCP-порта. Требуется повтор через интерактивный интерфейс на готовой поставке и полный визуальный цикл."
+      "scope_note": "Python 318/318, Unreal 31/31 на основной нативной ревизии. Из распакованной Shipping проверены 1207 файлов, штатный запуск двух редакций, пауза, шаг на 1 с, безопасная остановка, exit 0 и сохранение входов. Core на 127.0.0.1. В пресете отказа подтверждена одна физическая передача того же пациента вторым носителем на 280,967 с. Итоговый пакет после остальной визуальной приёмки остаётся открыт."
     },
     {
       "id": "UNIVERSAL-CORE",
@@ -2146,9 +2153,10 @@
         "D:/MetaRescue-output/integration-20261127-01/universal-review/peer-inbound/summary.json",
         "D:/MetaRescue-output/integration-20261127-01/universal-review/peer-inbound-lab-r2/summary.json",
         "D:/MetaRescue-output/integration-20261127-01/main-promotion-01/native-pair/verification.json",
-        "D:/MetaRescue-output/integration-20261127-01/main-promotion-01/detached-portable/verification.json"
+        "D:/MetaRescue-output/integration-20261127-01/main-promotion-01/detached-portable/verification.json",
+        "D:/MetaRescue-output/integration-20261127-01/universal-review/peer-outbound-declared-outcomes.json"
       ],
-      "scope_note": "25 транспортных проверок, 33 независимых проверки, 6 физических передач независимого контроллера в 2D и 6/6 в новой нативной серии на трёх геометриях. В локальном партнёрском обмене остаются тайм-аут Lab, недекларированные параметры Portable, отсутствующий id ресурса v9 и нулевой физический результат контроллеров v9 и Atlas 0.2 в RescueQuarter. Внешняя приёмка открыта. Из опубликованного main повторены две нативные миссии с одной физической передачей в каждой. Из извлечённого ZIP контроллер дал по одной передаче в независимой HTTP-среде в strict и declared."
+      "scope_note": "25 транспортных проверок, 33 независимых проверки, 6 физических передач независимого контроллера в 2D и 6/6 в новой нативной серии на трёх геометриях. В локальном партнёрском обмене остаются тайм-аут Lab, недекларированные параметры Portable, отсутствующий id ресурса v9 и нулевой физический результат контроллеров v9 и Atlas 0.2 в RescueQuarter. Внешняя приёмка открыта. Из опубликованного main повторены две нативные миссии с одной физической передачей в каждой. Из извлечённого ZIP контроллер дал по одной передаче в независимой HTTP-среде в strict и declared. Дополнительная сверка принятых команд подтвердила 8 терминальных целей Lab и 6 целей Portable в declared."
     }
   ],
   "external_tournament": {

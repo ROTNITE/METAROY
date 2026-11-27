@@ -20,6 +20,25 @@ class WindowsScenarioPackagingTests(unittest.TestCase):
                     package_windows.build(output, Path(temp)/'engine', None)
             self.assertFalse(output.exists())
 
+    def test_shipping_stage_requires_its_win64_executable(self):
+        with tempfile.TemporaryDirectory() as temp:
+            distribution = Path(temp)
+            runtime = distribution/'runtime/MetaRescue'
+            binaries = runtime/'Binaries/Win64'
+            binaries.mkdir(parents=True)
+            (binaries/'MetaRescue.exe').touch()
+            with self.assertRaisesRegex(FileNotFoundError, 'MetaRescue-Win64-Shipping.exe'):
+                package_windows.stage_runtime(distribution, None, scenario_files={}, configuration='Shipping')
+
+    def test_shipper_finds_the_platform_subdirectory_written_by_unreal(self):
+        with tempfile.TemporaryDirectory() as temp:
+            distribution = Path(temp)
+            executable = distribution/'runtime/Windows/MetaRescue/Binaries/Win64/MetaRescue-Win64-Shipping.exe'
+            executable.parent.mkdir(parents=True)
+            executable.touch()
+            self.assertEqual(package_windows.find_packaged_game(distribution), executable)
+            self.assertEqual(package_windows.find_packaged_game(distribution, 'Shipping'), executable)
+
     def test_native_stage_must_match_frozen_source_scenario_files(self):
         with tempfile.TemporaryDirectory() as temp:
             directory = Path(temp)

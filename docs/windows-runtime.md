@@ -16,7 +16,7 @@
 
 ```powershell
 $env:METARESCUE_OUTPUT = Join-Path (Get-Location) 'output'
-.\python\python.exe -B -X utf8 tools/run_mission.py --layout presets/recovery.private.json --name packaged-recovery-01 --policy nsga2_nsga2 --ai-mode MOCK --contest-coordination --capture-overview --capture-base-at 269
+.\python\python.exe -B -X utf8 tools/run_mission.py --layout presets/recovery.private.json --name packaged-recovery-01 --policy nsga2_nsga2 --controller-profile counterfactual-value --ai-mode MOCK --contest-coordination --capture-overview --capture-base-at 269
 ```
 
 Для повтора выберите другое значение `--name`. Кадры и архивы появятся под `output`.
@@ -35,10 +35,18 @@ $env:METARESCUE_OUTPUT = Join-Path (Get-Location) 'output'
 ```powershell
 $env:METARESCUE_OUTPUT = Join-Path (Get-Location) 'output'
 $auditPath = Join-Path $env:METARESCUE_OUTPUT 'offline-usage.json'
-.\python\python.exe -B -X utf8 -m controller.main --environment http://127.0.0.1:8130 --seed 2026 --health-port 8131 --policy nsga2_nsga2 --contest-coordination --ai-mode MOCK --ai-budget $auditPath
+.\python\python.exe -B -X utf8 -m controller.main --environment http://127.0.0.1:8130 --seed 2026 --health-port 8131 --policy nsga2_nsga2 --controller-profile counterfactual-value --contest-coordination --ai-mode MOCK --ai-budget $auditPath
 ```
 
 Core 1.0 описан в `Core-1.0.md`. Локальный интерфейс аналитики запускается вместе с приложением. Контрольные суммы файлов поставки указаны в `SHA256.json`. В режиме LIVE укажите общий путь журнала в `METARESCUE_LIVE_BUDGET` и настройте ключ отдельно от каталога поставки.
+
+## Сборка из исходников
+
+`tools/package_windows.py` создаёт поставку Shipping по умолчанию. Для стендовой
+сборки с инструментами Unreal Insights укажите `--configuration Development`.
+Интерактивная версия Shipping и Core проверены на локальном адресе 127.0.0.1.
+Обязательные файлы Scenario проверяются до cook, затем сравниваются с файлами
+нативного пакета.
 
 ## Восстановление предыдущей версии
 
