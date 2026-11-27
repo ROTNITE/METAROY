@@ -14,7 +14,7 @@ import random
 from contracts.protocol import ProtocolError
 from contracts.urban_terrain import Terrain
 from environment.config import Settings,EVENT_DEFAULTS
-from environment.fire_failure import CAUSE, append_fire_failures, valid_fire_failure
+from environment.fire_failure import CAUSE, append_fire_failures, expected_fire_failures, valid_fire_failure
 
 VERSION='metarescue.events-3d.1.0'
 DETAILED_VERSION='metarescue.events-3d.2.0'
@@ -298,4 +298,8 @@ def validate_tape(tape,world):
             value=row.get(key)
             if value is not None and (type(value) not in (int,float) or not math.isfinite(value) or value<=at):invalid('invalid expiry')
     if appeared!=set(targets):invalid('unreferenced late target')
+    if settings.disaster_revision:
+        expected={row['id'] for row in expected_fire_failures(tape,world,settings.horizon)}
+        actual={row['id'] for row in rows if 'cause' in row}
+        if actual!=expected:invalid('missing or noncanonical fire-induced structural failure')
     return tape
