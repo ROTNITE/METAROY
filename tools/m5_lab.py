@@ -19,6 +19,7 @@ from pathlib import Path
 import re
 import secrets
 import signal
+import socket
 import subprocess
 import sys
 import tempfile
@@ -43,6 +44,7 @@ MAX_REQUEST=16384
 MAX_REPORT=16*1024*1024
 MAX_ARCHIVE=256*1024*1024
 MAX_ARCHIVE_FILES=2000
+MAX_HTTP_WORKERS=24
 ID=re.compile(r'[a-zA-Z0-9_-]{1,48}\Z')
 RUN_ID=re.compile(r'[0-9a-f]{32}\Z')
 ACTIVE={'queued','running','stopping'}
@@ -572,9 +574,52 @@ class Lab:
 
 class Server(ThreadingHTTPServer):
     daemon_threads=True
+    allow_reuse_address=False
+    allow_reuse_port=False
+    request_queue_size=32
+
     def __init__(self,address,lab,assessment=None):
+        if address[0]!='127.0.0.1':
+            raise ValueError('M5 laboratory requires IPv4 loopback')
         self.lab=lab;self.assessment=assessment;self.token=secrets.token_urlsafe(32)
+        self.worker_slots=threading.BoundedSemaphore(MAX_HTTP_WORKERS)
+        self.export_slot=threading.BoundedSemaphore(1)
         super().__init__(address,Handler)
+
+    def server_bind(self):
+        # Windows SO_REUSEADDR can permit another listener on an occupied
+        # address. M5 must never accidentally share another service's port.
+        if hasattr(socket,'SO_EXCLUSIVEADDRUSE'):
+            self.socket.setsockopt(socket.SOL_SOCKET,socket.SO_EXCLUSIVEADDRUSE,1)
+        super().server_bind()
+
+    def process_request(self,request,client_address):
+        if not self.worker_slots.acquire(blocking=False):
+            # Reject overload without starting another worker or waiting
+            # indefinitely on a client that does not read its response.
+            try:
+                request.settimeout(.2)
+                body=b'{"error":"M5 request capacity reached; retry"}'
+                request.sendall(b'HTTP/1.0 503 Service Unavailable\r\n'
+                    b'Content-Type: application/json\r\nConnection: close\r\n'
+                    b'Cache-Control: no-store\r\nRetry-After: 1\r\nContent-Length: '+
+                    str(len(body)).encode('ascii')+b'\r\n\r\n'+body)
+            except OSError:
+                pass
+            finally:
+                self.shutdown_request(request)
+            return
+        try:
+            super().process_request(request,client_address)
+        except BaseException:
+            self.worker_slots.release()
+            raise
+
+    def process_request_thread(self,request,client_address):
+        try:
+            super().process_request_thread(request,client_address)
+        finally:
+            self.worker_slots.release()
 
 
 class Handler(BaseHTTPRequestHandler):
@@ -594,11 +639,14 @@ class Handler(BaseHTTPRequestHandler):
 
     def guard(self,post=False):
         port=self.server.server_port
-        host=self.headers.get('Host','')
+        hosts=self.headers.get_all('Host',[])
+        host=hosts[0] if len(hosts)==1 else ''
         if host not in (f'127.0.0.1:{port}',f'localhost:{port}'):
             raise PermissionError('Loopback host required')
-        if post and (self.headers.get('Origin')!='http://'+host or
-                     not secrets.compare_digest(self.headers.get('X-M5-Token',''),self.server.token)):
+        origins=self.headers.get_all('Origin',[])
+        tokens=self.headers.get_all('X-M5-Token',[])
+        if post and (origins!=['http://'+host] or len(tokens)!=1 or
+                     not tokens[0].isascii() or not secrets.compare_digest(tokens[0],self.server.token)):
             raise PermissionError('Local origin and session token required')
 
     def do_GET(self):
@@ -608,7 +656,7 @@ class Handler(BaseHTTPRequestHandler):
             if path=='/api/session':
                 self.send({'token':self.server.token,'registry':lab.registry.public(),'official_m5':None,'assessed_m5':self.server.assessment});return
             if path=='/api/matrix':
-                query=parse_qs(parsed.query,keep_blank_values=True)
+                query=parse_qs(parsed.query,keep_blank_values=True,max_num_fields=16)
                 if set(query)-{'offset','limit','mode','profile','controller','environment'} or any(len(v)!=1 for v in query.values()):
                     raise ValueError('Invalid matrix query')
                 self.send(lab.matrix(int(query.get('offset',['0'])[0]),int(query.get('limit',['30'])[0]),
@@ -616,14 +664,14 @@ class Handler(BaseHTTPRequestHandler):
                                      controller=query.get('controller',[None])[0],
                                      environment=query.get('environment',[None])[0]));return
             if path=='/api/pairs':
-                query=parse_qs(parsed.query,keep_blank_values=True)
+                query=parse_qs(parsed.query,keep_blank_values=True,max_num_fields=16)
                 if set(query)-{'row_offset','column_offset','limit','mode','profile'} or any(len(v)!=1 for v in query.values()):
                     raise ValueError('Invalid pair grid query')
                 self.send(lab.pairs(int(query.get('row_offset',['0'])[0]),int(query.get('column_offset',['0'])[0]),
                                     int(query.get('limit',['8'])[0]),query.get('mode',['all'])[0],
                                     query.get('profile',['all'])[0]));return
             if path=='/api/series':
-                query=parse_qs(parsed.query,keep_blank_values=True)
+                query=parse_qs(parsed.query,keep_blank_values=True,max_num_fields=16)
                 if set(query)-{'offset','limit'} or any(len(v)!=1 for v in query.values()):
                     raise ValueError('Invalid catalog query')
                 self.send(lab.catalog(int(query.get('offset',['0'])[0]),int(query.get('limit',['30'])[0])));return
@@ -635,7 +683,7 @@ class Handler(BaseHTTPRequestHandler):
                 self.send(lab.trial_summary(ident,int(index)));return
             trace_match=re.fullmatch(r'/api/series/([0-9a-f]{32})/trial/(\d{1,3})/trace',path)
             if trace_match:
-                query=parse_qs(parsed.query,keep_blank_values=True)
+                query=parse_qs(parsed.query,keep_blank_values=True,max_num_fields=16)
                 if set(query)-{'cursor','limit','id'} or any(len(v)!=1 for v in query.values()):
                     raise ValueError('Invalid trace query')
                 ident,index=trace_match.groups()
@@ -643,7 +691,7 @@ class Handler(BaseHTTPRequestHandler):
                                     int(query.get('limit',['10'])[0]),identifier=query.get('id',[None])[0]));return
             progress_match=re.fullmatch(r'/api/series/([0-9a-f]{32})/trial/(\d{1,3})/progress',path)
             if progress_match:
-                query=parse_qs(parsed.query,keep_blank_values=True)
+                query=parse_qs(parsed.query,keep_blank_values=True,max_num_fields=16)
                 if set(query)-{'cursor','limit','id'} or any(len(v)!=1 for v in query.values()):
                     raise ValueError('Invalid progress query')
                 ident,index=progress_match.groups()
@@ -656,14 +704,19 @@ class Handler(BaseHTTPRequestHandler):
                     self.send(lab.report(ident,int(index)));return
                 run=lab.get(ident)
                 if format=='zip':
-                    with tempfile.TemporaryFile() as stream:
-                        archive_series(lab.root,run,stream)
-                        stream.seek(0,2);size=stream.tell();stream.seek(0)
-                        self.send_response(200);self.send_header('Content-Type','application/zip')
-                        self.send_header('Content-Length',str(size));self.send_header('Cache-Control','no-store')
-                        self.send_header('Content-Disposition',f'attachment; filename="{ident}.zip"')
-                        self.send_header('X-Content-Type-Options','nosniff');self.end_headers()
-                        for block in iter(lambda:stream.read(1024*1024),b''):self.wfile.write(block)
+                    if not self.server.export_slot.acquire(blocking=False):
+                        self.send({'error':'Another evidence export is running; retry'},503);return
+                    try:
+                        with tempfile.TemporaryFile() as stream:
+                            archive_series(lab.root,run,stream)
+                            stream.seek(0,2);size=stream.tell();stream.seek(0)
+                            self.send_response(200);self.send_header('Content-Type','application/zip')
+                            self.send_header('Content-Length',str(size));self.send_header('Cache-Control','no-store')
+                            self.send_header('Content-Disposition',f'attachment; filename="{ident}.zip"')
+                            self.send_header('X-Content-Type-Options','nosniff');self.end_headers()
+                            for block in iter(lambda:stream.read(1024*1024),b''):self.wfile.write(block)
+                    finally:
+                        self.server.export_slot.release()
                     return
                 if format=='csv':
                     stream=io.StringIO(newline='');writer=csv.writer(stream)
@@ -680,6 +733,7 @@ class Handler(BaseHTTPRequestHandler):
             if path not in static:
                 raise KeyError('Unknown route')
             filename,mime=static[path];self.send((WEB/filename).read_bytes(),mime=mime)
+        except (ConnectionError,TimeoutError):self.close_connection=True
         except PermissionError as error:self.send({'error':str(error)},403)
         except (KeyError,FileNotFoundError):self.send({'error':'Not found'},404)
         except (OSError,ValueError,TypeError) as error:self.send({'error':str(error)},400)
@@ -689,7 +743,11 @@ class Handler(BaseHTTPRequestHandler):
             self.guard(post=True)
             if self.headers.get_content_type()!='application/json':
                 raise ValueError('Expected application/json')
-            length=int(self.headers.get('Content-Length','0'))
+            lengths=self.headers.get_all('Content-Length',[])
+            if (self.headers.get_all('Transfer-Encoding',[]) or len(lengths)!=1 or
+                    not lengths[0].isascii() or not lengths[0].isdecimal()):
+                raise ValueError('Expected exactly one Content-Length and no Transfer-Encoding')
+            length=int(lengths[0])
             if not 0<length<=MAX_REQUEST:
                 raise ValueError('Invalid body length')
             data=self.rfile.read(length)
@@ -725,6 +783,7 @@ class Handler(BaseHTTPRequestHandler):
             if match and not body:
                 self.send(lab.cancel(match.group(1)),202);return
             raise KeyError('Unknown route')
+        except (ConnectionError,TimeoutError):self.close_connection=True
         except PermissionError as error:self.send({'error':str(error)},403)
         except KeyError:self.send({'error':'Not found'},404)
         except RuntimeError as error:self.send({'error':str(error)},409)

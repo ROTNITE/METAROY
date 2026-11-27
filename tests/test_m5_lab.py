@@ -1,6 +1,6 @@
 from pathlib import Path
 from tempfile import TemporaryDirectory
-from threading import Event,Thread
+from threading import Event,Lock,Thread
 from unittest import TestCase
 from unittest.mock import patch
 import http.client
@@ -10,8 +10,9 @@ import io
 import zipfile
 import json
 import time
+import socket
 
-from tools.m5_lab import Registry,Lab,Server,build_command,endpoint,load_assessments,csv_cell,read_report
+from tools.m5_lab import Registry,Lab,Server,Handler,archive_series,build_command,endpoint,load_assessments,csv_cell,read_report
 from tools.m5_matrix import build_matrix,pair_grid
 
 
@@ -74,6 +75,105 @@ class HTTPBoundary(TestCase):
             return response.status,data
         finally:
             conn.close()
+
+    def test_duplicate_listener_and_ambiguous_http_headers_are_rejected(self):
+        with self.assertRaises(OSError):
+            Server(('127.0.0.1',self.server.server_port),self.lab)
+        with self.assertRaises(ValueError):
+            Server(('0.0.0.0',0),self.lab)
+        def raw(headers):
+            conn=http.client.HTTPConnection('127.0.0.1',self.server.server_port,timeout=5)
+            try:
+                conn.putrequest('POST','/api/probe',skip_host=True)
+                for key,value in headers:
+                    conn.putheader(key,value)
+                conn.endheaders(b'{}')
+                response=conn.getresponse();response.read();return response.status
+            finally:conn.close()
+        base=[('Host',self.host),('Origin','http://'+self.host),
+              ('X-M5-Token',self.server.token),('Content-Type','application/json')]
+        self.assertEqual(raw(base+[('Content-Length','2'),('Content-Length','2')]),400)
+        self.assertEqual(raw(base+[('Content-Length','2'),('Transfer-Encoding','chunked')]),400)
+        self.assertEqual(raw(base+[('Content-Length','2'),('Host',self.host)]),403)
+        self.assertEqual(raw(base+[('Content-Length','2'),('X-M5-Token',self.server.token)]),403)
+        self.assertEqual(self.call('/api/series?'+'&'.join('x=1' for _ in range(17)))[0],400)
+        self.assertEqual(self.lab.list(),[])
+
+    def test_zip_export_limit_preserves_lightweight_gets_and_releases(self):
+        ident='b'*32
+        run={'id':ident,'created':'2026-01-01','state':'completed','rows':[],'spec':{}}
+        folder=self.lab.root/ident;folder.mkdir()
+        self.lab.runs[ident]=run;self.lab.persist(run)
+        entered=Event();release=Event();results=[]
+        def delayed(root,value,stream):
+            entered.set()
+            if not release.wait(5):
+                raise RuntimeError('Test export did not receive release')
+            archive_series(root,value,stream)
+        route='/api/series/'+ident+'/export/zip'
+        with patch('tools.m5_lab.archive_series',side_effect=delayed):
+            thread=Thread(target=lambda:results.append(self.call(route)),daemon=True)
+            thread.start()
+            try:
+                self.assertTrue(entered.wait(5))
+                self.assertEqual(self.call(route)[0],503)
+                self.assertEqual(self.call('/api/series')[0],200)
+                self.assertEqual(self.call('/api/matrix')[0],200)
+            finally:
+                release.set();thread.join(10)
+        self.assertFalse(thread.is_alive())
+        self.assertEqual(results[0][0],200)
+        self.assertEqual(self.call(route)[0],200)
+        with patch('tools.m5_lab.archive_series',side_effect=ValueError('bad archive')):
+            self.assertEqual(self.call(route)[0],400)
+        self.assertEqual(self.call(route)[0],200)
+
+    def test_worker_limit_rejects_excess_and_recovers(self):
+        entered=Event();release=Event();lock=Lock();count=0;results=[]
+        original=Handler.do_GET
+        def delayed(handler):
+            nonlocal count
+            if handler.path=='/blocked':
+                with lock:
+                    count+=1
+                    if count==2:entered.set()
+                if not release.wait(5):
+                    handler.send({'error':'test timeout'},500);return
+                handler.send({'ok':True});return
+            original(handler)
+        with patch('tools.m5_lab.MAX_HTTP_WORKERS',2),patch.object(Handler,'do_GET',delayed):
+            with Server(('127.0.0.1',0),self.lab) as limited:
+                server_thread=Thread(target=limited.serve_forever,daemon=True);server_thread.start()
+                def call(path):
+                    conn=http.client.HTTPConnection('127.0.0.1',limited.server_port,timeout=5)
+                    try:
+                        conn.request('GET',path)
+                        response=conn.getresponse();response.read();return response.status
+                    finally:conn.close()
+                workers=[Thread(target=lambda:results.append(call('/blocked')),daemon=True) for _ in range(2)]
+                for worker in workers:worker.start()
+                try:
+                    self.assertTrue(entered.wait(5))
+                    # TCP overload can close before the whole request arrives.
+                    # Either explicit 503 or a closed socket is fail-closed.
+                    try:status=call('/api/session')
+                    except (OSError,http.client.HTTPException):status=503
+                    self.assertEqual(status,503)
+                    self.assertEqual(count,2)
+                    release.set()
+                    for worker in workers:worker.join(5)
+                    self.assertEqual(results,[200,200])
+                    deadline=time.monotonic()+3
+                    while time.monotonic()<deadline:
+                        try:
+                            if call('/api/session')==200:break
+                        except (OSError,http.client.HTTPException):pass
+                        time.sleep(.02)
+                    else:self.fail('HTTP capacity did not recover')
+                finally:
+                    release.set()
+                    for worker in workers:worker.join(5)
+                    limited.shutdown();server_thread.join(5)
 
     def test_security_and_probe_is_read_only(self):
         self.assertEqual(self.call('/api/session',headers={'Host':'evil.invalid'})[0],403)
