@@ -25,7 +25,8 @@ FMRSceneMesh SmokeMesh(const FMRSmokeVolume& Volume,FBox Box,FLinearColor Albedo
     FMRSceneMesh Mesh;const auto Bounds=Volume.Bounds();
     Box=FBox(Box.Min.ComponentMax(Bounds.Min),Box.Max.ComponentMin(Bounds.Max));
     if(Box.GetSize().GetMin()<=.01)return Mesh;
-    auto* Material=LoadObject<UMaterialInterface>(nullptr,TEXT("/Game/EffectsV3/ExplorationEffectsR1/M_PhysicalSmoke.M_PhysicalSmoke"));
+    auto* Material=LoadObject<UMaterialInterface>(nullptr,Volume.bClippedQuadrature?TEXT("/Game/EffectsV3/Revision6/M_RememberedSmoke.M_RememberedSmoke"):
+        TEXT("/Game/EffectsV3/ExplorationEffectsR1/M_PhysicalSmoke.M_PhysicalSmoke"));
     auto* Cube=LoadObject<UStaticMesh>(nullptr,TEXT("/Engine/BasicShapes/Cube.Cube"));if(!Material||!Cube)return Mesh;
     auto* Frozen=UMaterialInstanceDynamic::Create(Material,GetTransientPackage());
     Frozen->SetVectorParameterValue(TEXT("SmokeSource"),FLinearColor(Volume.Source));
