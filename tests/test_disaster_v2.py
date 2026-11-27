@@ -7,6 +7,7 @@ from controller.navigation import NavigationMap, observed_surfaces
 from environment.config import Settings, EVENT_DEFAULTS
 from environment.events import DETAILED_PHYSICS, REVISED_PHYSICS, generate_tape, validate_tape
 from environment.layout import generate, fingerprint, public_map
+from environment.reset_layout import prepare as prepare_reset
 
 
 class RevisedDisasterTests(unittest.TestCase):
@@ -92,3 +93,41 @@ class RevisedDisasterTests(unittest.TestCase):
         for row in cleared:row['surface']['active']=False
         reset=NavigationMap(static,surfaces=observed_surfaces({'time':9.,'zones':cleared}))
         self.assertAlmostEqual(reset.route(start,goal).distance_m,30.)
+
+    def test_reset_between_physics_profiles(self):
+        startup=Settings.parse({'city_revision':'2.3','disaster_revision':1,'boats':2,
+                                'probabilities':dict.fromkeys(EVENT_DEFAULTS['v052'],0)}).json()
+        def reset(parameters):
+            return prepare_reset({'base':startup,'parameters':parameters,'seed':2027,'generate_events':True})
+        same=reset({})
+        self.assertEqual(same['settings']['disaster_revision'],1)
+        self.assertEqual(same['event_model']['physics_profile'],REVISED_PHYSICS)
+        old23=reset({'disaster_revision':0})
+        self.assertNotIn('disaster_revision',old23['settings'])
+        self.assertEqual(old23['event_model']['physics_profile'],DETAILED_PHYSICS)
+        old22=reset({'city_revision':'2.2'})
+        self.assertNotIn('disaster_revision',old22['settings'])
+        self.assertEqual(old22['settings']['boats'],0)
+        self.assertNotIn('physics_profile',old22['event_model'])
+        with self.assertRaises(ProtocolError):reset({'city_revision':'2.2','disaster_revision':1})
+
+    def test_independent_debris_reading_does_not_invent_water_or_clear_fire(self):
+        static={'bounds':{'kind':'box','min':[0,0,0],'max':[100,100,60]}}
+        start,goal=(10.,12.5,.73),(40.,12.5,.73)
+        bounds={'type':'box','min':[20,10,0],'max':[25,15,2.2]}
+        debris={'id':'debris-4-2','type':'obstacle','received_at':8.,'geometry':bounds,
+                'surface':{'active':True,'ground_blocked':True,'surface_multiplier':1.,
+                           'visibility':.9,'kinds':[],'physical_debris':True,'debris_only':True}}
+        fire={'id':'surface-5-2','type':'hazard','received_at':7.,
+              'geometry':{'type':'box','min':[25,10,0],'max':[30,15,2]},
+              'surface':{'active':True,'ground_blocked':True,'surface_multiplier':1.,'visibility':.5,
+                         'depth_m':0.,'kinds':['fire']}}
+        self.assertNotIn('depth_m',debris['surface'])
+        nav=NavigationMap(static,surfaces=observed_surfaces({'time':8.,'zones':[debris,fire]}))
+        self.assertFalse(nav.clear(start,goal,1.45,1.1))
+        self.assertGreater(nav.route(start,goal).distance_m,30.)
+        cleared={**debris,'received_at':9.,'surface':{**debris['surface'],'active':False}}
+        nav=NavigationMap(static,surfaces=observed_surfaces({'time':9.,'zones':[cleared,fire]}))
+        self.assertFalse(nav.clear(start,goal,1.45,1.1))
+        nav=NavigationMap(static,surfaces=observed_surfaces({'time':9.,'zones':[cleared]}))
+        self.assertAlmostEqual(nav.route(start,goal).distance_m,30.)
