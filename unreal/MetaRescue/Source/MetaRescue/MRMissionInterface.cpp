@@ -166,7 +166,22 @@ private:
         Add(World,TEXT("Версия города"),Combo(TEXT("settings"),TEXT("city_revision"),
             {{TEXT("2.3"),TEXT("2.3 · Рельеф и вода")},{TEXT("2.2"),TEXT("2.2")},{TEXT("2.1"),TEXT("2.1")},
              {TEXT("2.0"),TEXT("2.0")},{TEXT("1.1"),TEXT("1.1")}},
-            [this](const FString& Value){Group(TEXT("settings"))->SetNumberField(TEXT("boats"),Value==TEXT("2.3")?2:0);}));
+            [this](const FString& Value)
+            {
+                auto Settings=Group(TEXT("settings"));Settings->SetNumberField(TEXT("boats"),Value==TEXT("2.3")?2:0);
+                if(Value!=TEXT("2.3"))Settings->RemoveField(TEXT("disaster_revision"));
+            }));
+        World->AddSlot().AutoHeight().Padding(0,6)
+            [SNew(SBox).Visibility_Lambda([this]{return Text(Group(TEXT("settings")),TEXT("city_revision"))==TEXT("2.3")?
+                EVisibility::Visible:EVisibility::Collapsed;})
+                [SNew(SCheckBox).IsChecked_Lambda([this]
+                    {double Revision=0;Group(TEXT("settings"))->TryGetNumberField(TEXT("disaster_revision"),Revision);
+                     return Revision==1?ECheckBoxState::Checked:ECheckBoxState::Unchecked;})
+                    .OnCheckStateChanged_Lambda([this](ECheckBoxState Value)
+                    {auto Settings=Group(TEXT("settings"));
+                     if(Value==ECheckBoxState::Checked)Settings->SetNumberField(TEXT("disaster_revision"),1);
+                     else Settings->RemoveField(TEXT("disaster_revision"));})
+                    [Label(TEXT("Новая физика катастроф и улиц (кандидат v2)"),12)]]];
         Add(World,TEXT("Дроны разведки"),Number(TEXT("settings"),TEXT("scouts"),1,48,true));
         Add(World,TEXT("Эвакуаторы"),Number(TEXT("settings"),TEXT("rescuers"),1,40,true));
         World->AddSlot().AutoHeight().Padding(0,6)
