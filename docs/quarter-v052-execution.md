@@ -76,9 +76,11 @@
   [Проверка входов](<D:/MetaRescue-output/integration-20261127-01/series-preflight-main-hydrostatics-01.json>) ·
   [Шесть нативных исходов](<D:/MetaRescue-output/integration-20261127-01/series-pilot-01/mirrored-evidence.json>).
 - На исходной среде повторён исторический `S3-02-O3-reactive` с 12 находками,
-  3 передачами и штатным выходом Unreal. Сравнение читает 181 из 450
-  завершённых эпизодов прежнего плана, 269 ожидают запуска.
-  [Проверенное сравнение](<D:/MetaRescue-output/integration-20261127-01/historical-series-comparison-02/comparison.json>).
+  3 передачами и штатным выходом Unreal. Три эпизода следующей группы
+  S3-03/O1 завершились при неизменных плане и сборке. Global+Local дал
+  три передачи, фиксированный режим — ноль, реактивный — четыре.
+  Проверены 184 из 450 завершённых эпизодов прежнего плана.
+  [Проверенное сравнение](<D:/MetaRescue-output/integration-20261127-01/historical-series-comparison-03/comparison.json>).
 - На `172cd69` нативная лента подтвердила 14 конкурсных типов событий,
   девять времён начала и пять окончаний. Ограниченная зона вызвала
   торможение, отказ носителя освободил груз, замеры выполнены в Unreal.
@@ -96,6 +98,16 @@
   После подъёма счётчик контактов оставался 433. Отказы у пирса и на
   открытой воде и выход из затопленной улицы требуют продолжения.
   [Нативная сверка](<D:/MetaRescue-output/integration-20261127-01/water-loss-before-departure-main-01-480-audit.json>).
+
+- Win64 Shipping 06 из `c1899d4` прошла свежий BuildCookRun. После
+  распаковки сверены 1207 файлов. Штатный Core-запуск с Python из поставки
+  завершил 480 с с одной физической передачей `person-1` в 339,02 с.
+  Времена переходов владения совпали с Development. На подходе резервного
+  судна зарегистрировано 434 контакта. Счётчик после подъёма не рос.
+  Шесть движущихся камер сняли 231 нативный кадр 1600×1000. Это спокойный
+  бассейн, приёмка выхода из затопленной городской улицы открыта.
+  [Пакет](<D:/MetaRescue-output/releases/windows-integrated-verification-20261127-06/archive-verification.json>) · [Нативный повтор](<D:/MetaRescue-output/releases/windows-integrated-verification-20261127-06/native-recovery-verification.json>) ·
+  [Съёмка](<D:/MetaRescue-output/integration-20261127-01/water-recovery-film-01/shipping-06/film-verification.json>).
 
 ## 27 ноября — порядок продолжения и финальный этап спасения
 

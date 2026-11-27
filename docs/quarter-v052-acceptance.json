@@ -1029,6 +1029,7 @@
       "requirement": "450 последовательных native runs",
       "status": "partial",
       "evidence": [
+        "D:/MetaRescue-output/integration-20261127-01/historical-series-comparison-03/comparison.json",
         "D:/MetaRescue-output/integration-20261127-01/series-pilot-01/mirrored-evidence.json",
         "D:/MetaRescue-output/integration-20261127-01/historical-series-comparison-02/comparison.json",
         "D:/MetaRescue-output/series/competition-design-02-r3/plan.json",
@@ -1039,7 +1040,7 @@
         "D:\\MetaRescue-output\\checks\\series-checkpoint-20261113T092617Z\\verification.json",
         "D:/MetaRescue-output/integration-20261127-01/historical-series-comparison-01/comparison.json"
       ],
-      "scope_note": "Прежний план 02-r3 содержит 181 из 450 проверенных завершённых эпизодов. Новый план 2.3 содержит 30 карт и 450 строк. Отдельный пилот завершил шесть нативных эпизодов."
+      "scope_note": "Прежний план 02-r3 содержит 184 из 450 проверенных завершённых эпизодов. Новый план 2.3 содержит 30 карт и 450 строк. Отдельный пилот завершил шесть нативных эпизодов."
     },
     {
       "id": "V09",
@@ -1080,11 +1081,12 @@
       "requirement": "Реальные кадры/видео",
       "status": "partial",
       "evidence": [
+        "D:/MetaRescue-output/integration-20261127-01/water-recovery-film-01/shipping-06/film-verification.json",
         "D:/MetaRescue-output/deliverables/MetaEvolution-Rescue-review-2026-11-13.zip",
         "D:/MetaRescue-output/missions/standalone-24-defense-overview/native-archive-verification.json",
         "D:/MetaRescue-output/checks/visual-grids/defense-six-building-variants-01.jpg"
       ],
-      "scope_note": "Приняты реальные обзорные кадры, крупный план передачи и ознакомительное видео. Итоговый скринкаст дополнит приёмку."
+      "scope_note": "Приняты реальные обзорные кадры, крупный план передачи и ознакомительное видео. Итоговый скринкаст дополнит приёмку. В Shipping 06 записаны шесть движущихся планов действительной миссии, 231 PNG 1600×1000 и MP4."
     },
     {
       "id": "D01",
@@ -1104,6 +1106,8 @@
       "requirement": "Windows-сборка и проверка пакета",
       "status": "verified",
       "evidence": [
+        "D:/MetaRescue-output/releases/windows-integrated-verification-20261127-06/archive-verification.json",
+        "D:/MetaRescue-output/releases/windows-integrated-verification-20261127-06/native-recovery-verification.json",
         "D:/MetaRescue-output/releases/windows-candidate-06/build-manifest.json",
         "D:/MetaRescue-output/releases/windows-verification-06/verification.json",
         "D:/MetaRescue-output/releases/windows-verification-06/MetaEvolution-Rescue-Win64.zip",
@@ -1117,7 +1121,7 @@
         "D:/MetaRescue-output/releases/windows-verification-09-p0-add09-20261113/verification.json",
         "D:\\MetaRescue-output\\releases\\windows-verification-10-p0-ports-20261113\\verification.json"
       ],
-      "scope_note": "Candidate10: 1183 файла SHA до/после запуска. Два независимых GPU-процесса завершили восстановление 1/1 на280,9667с с0контактов и кодами0. Native65 файлов совпадают с полным BuildCookRun09; restage меняет только два Python-файла владения портом."
+      "scope_note": "Candidate10: 1183 файла SHA до/после запуска. Два независимых GPU-процесса завершили восстановление 1/1 на280,9667с с0контактов и кодами0. Native65 файлов совпадают с полным BuildCookRun09; restage меняет только два Python-файла владения портом. Shipping 06 из c1899d4 содержит 1207 проверенных файлов. Распакованный Core завершил сценарий отказа катамарана с одной физической передачей."
     },
     {
       "id": "D03",
@@ -2070,6 +2074,7 @@
       "requirement": "Промежуточная высадка сохраняет личность и владение грузом; спасение только в медпункте; зависимая коалиция",
       "status": "partial",
       "evidence": [
+        "D:/MetaRescue-output/releases/windows-integrated-verification-20261127-06/native-recovery-verification.json",
         "D:/MetaRescue-output/integration-20261127-01/water-loss-before-departure-main-01-480-audit.json",
         "D:/MetaRescue-output/integration-20261127-01/water-flood-street-03-audit.json",
         "D:/MetaRescue-output/visual-overhaul-20261115/checks/native-transfer-04/verification.json",
@@ -2078,13 +2083,14 @@
         "D:/MetaRescue-output/integration-20261127-01/water-automatic-06-moderate-audit.json",
         "D:/MetaRescue-output/integration-20261127-01/water-automatic-06-loss-audit.json"
       ],
-      "scope_note": "Автоматическая береговая коалиция дала одну передачу в бассейне на 198,02 с и в паводке на 195,02 с. Длительность и энергия обоих плеч оцениваются по доставленному состоянию. При отказе пациент удержан на плаву и отказ доставлен после восстановления связи. В основной копии резервное судно, пирс и ровер подтвердили одну передачу на 339,02 с. До подъёма резервным судном отмечены контакты корпусов. Отказ у пирса и на рейде требуют дополнительных проверок."
+      "scope_note": "Автоматическая береговая коалиция дала одну передачу в бассейне на 198,02 с и в паводке на 195,02 с. Длительность и энергия обоих плеч оцениваются по доставленному состоянию. При отказе пациент удержан на плаву и отказ доставлен после восстановления связи. В основной копии резервное судно, пирс и ровер подтвердили одну передачу на 339,02 с. До подъёма резервным судном отмечены контакты корпусов. Отказ у пирса и на рейде требуют дополнительных проверок. Распакованная Shipping 06 воспроизвела ту же цепочку и время передачи. В ней 434 контакта до выхода, после подъёма новых контактов нет."
     },
     {
       "id": "VIS12",
       "requirement": "Тёмная неизведанная территория; база известна; постоянное открытие только от доставленной разведки; без теней/эффектов/меток неизвестных",
       "status": "partial",
       "evidence": [
+        "D:/MetaRescue-output/integration-20261127-01/main-beacon-instancing-replay-01/verification.json",
         "D:/MetaRescue-output/integration-20261127-01/main-remembered-water-replay-01/verification.json",
         "D:/MetaRescue-output/integration-20261127-01/main-remembered-water-replay-01/appearance-audit.json",
         "D:/MetaRescue-output/visual-overhaul-20261115/checks/native-exploration-02/verification.json",
@@ -2136,6 +2142,9 @@
       "requirement": "Регрессии и отдельная распакованная Windows-сборка; реальные изображения/видео и инструкция отката",
       "status": "partial",
       "evidence": [
+        "D:/MetaRescue-output/releases/windows-integrated-verification-20261127-06/archive-verification.json",
+        "D:/MetaRescue-output/releases/windows-integrated-verification-20261127-06/native-recovery-verification.json",
+        "D:/MetaRescue-output/integration-20261127-01/water-recovery-film-01/shipping-06/film-verification.json",
         "D:/MetaRescue-output/automation/20261127T134506536623Z/verification.json",
         "D:/MetaRescue-output/integration-20261127-01/main-profile-root-tests.log",
         "D:/MetaRescue-output/releases/windows-integrated-verification-20261127-04/archive-verification.json",
@@ -2149,7 +2158,7 @@
         "D:/MetaRescue-output/integration-20261127-01/packaged-product-04/startup-failure.json",
         "D:/MetaRescue-output/integration-20261127-01/shipping-platform-root-tests.log"
       ],
-      "scope_note": "Python 318/318, Unreal 31/31 на основной нативной ревизии. Из распакованной Shipping проверены 1207 файлов, штатный запуск двух редакций, пауза, шаг на 1 с, безопасная остановка, exit 0 и сохранение входов. Core на 127.0.0.1. В пресете отказа подтверждена одна физическая передача того же пациента вторым носителем на 280,967 с. Итоговый пакет после остальной визуальной приёмки остаётся открыт."
+      "scope_note": "Python 318/318, Unreal 31/31 на основной нативной ревизии. Из распакованной Shipping проверены 1207 файлов, штатный запуск двух редакций, пауза, шаг на 1 с, безопасная остановка, exit 0 и сохранение входов. Core на 127.0.0.1. В пресете отказа подтверждена одна физическая передача того же пациента вторым носителем на 280,967 с. Итоговый пакет после остальной визуальной приёмки остаётся открыт. Собрана актуальная Shipping 06. Проверены архив, нативный отказ катамарана и кадры фактической миссии."
     },
     {
       "id": "UNIVERSAL-CORE",

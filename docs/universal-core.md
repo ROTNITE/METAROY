@@ -93,3 +93,24 @@ RPC, для Atlas штатный автономный HTTP. Atlas 0.2 содер
 [Исходящий v9](<D:/MetaRescue-output/integration-20261127-01/universal-review/peer-v9-outbound/summary.json>) ·
 [Входящий обмен](<D:/MetaRescue-output/integration-20261127-01/universal-review/peer-inbound/summary.json>) ·
 [Документированный RPC Lab](<D:/MetaRescue-output/integration-20261127-01/universal-review/peer-inbound-lab-r2/summary.json>).
+
+
+## Повтор проверки на основной копии
+
+Коммит `323d25c` дал 25 успешных транспортных проверок и 33 успешных
+независимых сценария. Из его исходников собран отдельный ZIP. В распаковке
+без проекта исполнены два эпизода на независимой HTTP-среде. В strict и
+declared подтверждено по одной передаче.
+[Транспорт](<D:/MetaRescue-output/integration-20261127-01/main-323d25c-transport-01/report.json>) · [Независимые сценарии](<D:/MetaRescue-output/integration-20261127-01/main-323d25c-independent-01/report.json>) · [Распаковка](<D:/MetaRescue-output/integration-20261127-01/main-water-recovery-01/detached-portable/verification.json>).
+
+На сохранённом первом кадре Lab с 218 зонами решение отсутствовало за
+90 секунд. В диагностической копии кадра предложенная публичная точка
+обзора сократила расчёт до 0,16 с при тех же зонах. Первое решение выбрало
+`coverage_search` с параметрами `confidence_band`, `reserve_agents` и
+`search_workers` вне объявленной схемы нашей среды. В штатном автономном
+запуске Lab на нашей 2D-среде воспроизведён `INVALID_COMMAND` для `observe`
+без объявленного `radius`, затем ошибка обработки пустого поля `error`.
+Пакет Lab во всех проверках сохранил исходный SHA-256.
+[Первый кадр](<D:/MetaRescue-output/integration-20261127-01/universal-review/lab-first-frame-completion-01/verification.json>) ·
+[Диагностика параметров](<D:/MetaRescue-output/integration-20261127-01/universal-review/lab-public-survey-hint-01/wire-validation.json>) ·
+[Автономный клиент](<D:/MetaRescue-output/integration-20261127-01/universal-review/peer-inbound-lab-planar-01/verification.json>).
