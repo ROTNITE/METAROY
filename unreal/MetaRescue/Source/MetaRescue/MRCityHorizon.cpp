@@ -129,12 +129,55 @@ void AMRWorld::BuildCityHorizon()
             };
             if(Kind==TEXT("housing"))
             {
-                const double H=300*Lot->GetIntegerField(TEXT("floors"));
+                const int32 Floors=Lot->GetIntegerField(TEXT("floors"));
+                const double H=300*Floors;
                 const double W=Variant%2?740:890, D=Variant<2?720:870;
                 Piece(FVector(0,0,H*.5),FVector(W,D,H),Variant<2?TEXT("MI_Plaster"):TEXT("MI_Concrete"));
                 Piece(FVector(0,0,H+14),FVector(W+32,D+32,28),Variant%2?TEXT("MI_Dark"):TEXT("M_QuarterAsphalt"));
                 Piece(FVector(-W*.23,D*.21,H+47),FVector(130,154,45),TEXT("MI_Dark"));
+                if(Environment.bRevisedDisasters)
+                {
+                    // Lightweight facade LOD: no rooms, no collision, no mission
+                    // objects. Repeated dimensions batch across the whole ring.
+                    for(int32 Side=0;Side<4;++Side)
+                    {
+                        const FRotator Face(0,Side*90.,0);
+                        const FRotator WorldTurn(0,Turn.Yaw+Face.Yaw,0);
+                        const double Facade=Side%2?D:W,Depth=Side%2?W:D;
+                        auto Detail=[&](FVector Local,FVector Extent,const TCHAR* Mat)
+                        {
+                            auto* C=Shape(TEXT("Cube"),P+Turn.RotateVector(Face.RotateVector(Local)),
+                                Extent,Mat,WorldTurn,false);
+                            Decorative(C);C->SetCastShadow(false);
+                        };
+                        const double Wall=Depth*.5;
+                        for(int32 Floor=0;Floor<Floors;++Floor)
+                        {
+                            const double Z=Floor*300+165;
+                            // Two recessed-looking window bays per floor, lintel
+                            // and sill. A dark pane is never a fake rescue marker.
+                            for(double X:{-Facade*.25,Facade*.25})
+                            {
+                                Detail(FVector(X,-Wall-2,Z),FVector(170,8,157),TEXT("MI_Concrete"));
+                                Detail(FVector(X,-Wall-7,Z),FVector(144,4,126),TEXT("MI_Dark"));
+                                Detail(FVector(X,-Wall-11,Z-68),FVector(180,28,12),TEXT("MI_Plaster"));
+                                Detail(FVector(X,-Wall-10,Z),FVector(7,5,126),TEXT("MI_Metal"));
+                            }
+                        }
+                        if(Side==0)
+                        {
+                            Detail(FVector(0,-Wall-8,112),FVector(115,9,224),TEXT("MI_Dark"));
+                            Detail(FVector(0,-Wall-43,245),FVector(180,100,14),TEXT("MI_Concrete"));
+                            Detail(FVector(0,-Wall-30,10),FVector(150,90,20),TEXT("MI_Concrete"));
+                        }
+                        Detail(FVector(0,-Wall-8,H+31),FVector(Facade+25,20,45),TEXT("MI_Concrete"));
+                    }
+                    // Roof vent and two different chimney positions break the
+                    // skyline without introducing new collision bodies.
+                    Piece(FVector(W*.24,-D*.2,H+65),FVector(55,55,120),TEXT("MI_Concrete"));
+                }
                 Houses++;
+                if(Environment.bRevisedDisasters&&Houses%24==0)OptimizeDistrictInstances();
             }
             else if(Kind==TEXT("green"))
             {
@@ -157,6 +200,20 @@ void AMRWorld::BuildCityHorizon()
                 Cover->SetCastShadow(false);
                 Piece(FVector(0,255,135),FVector(840,380,270),TEXT("MI_Concrete"));
                 Piece(FVector(0,255,278),FVector(865,406,18),TEXT("MI_Dark"));
+                if(Environment.bRevisedDisasters)
+                {
+                    // A small inhabited service yard: garage shutters, canopy,
+                    // and bollards are real decorative geometry, not flat boxes.
+                    for(double X:{-220.,220.})
+                    {
+                        Piece(FVector(X,60,112),FVector(310,10,224),TEXT("MI_Dark"));
+                        for(int32 Slat=1;Slat<7;++Slat)
+                            Piece(FVector(X,53,Slat*31),FVector(300,4,5),TEXT("MI_Metal"));
+                        Piece(FVector(X,5,238),FVector(355,125,16),TEXT("MI_Concrete"));
+                    }
+                    for(double X:{-465.,465.})
+                        Piece(FVector(X,-120,48),FVector(16,16,96),TEXT("MI_Metal"));
+                }
                 ServiceLots++;
             }
         }
