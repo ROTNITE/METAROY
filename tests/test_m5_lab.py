@@ -12,7 +12,7 @@ import json
 import time
 
 from tools.m5_lab import Registry,Lab,Server,build_command,endpoint,load_assessments,csv_cell,read_report
-from tools.m5_matrix import build_matrix
+from tools.m5_matrix import build_matrix,pair_grid
 
 
 class RegistryTests(TestCase):
@@ -91,6 +91,11 @@ class HTTPBoundary(TestCase):
         self.assertEqual(self.call('/')[0],200)
         self.assertEqual(self.call('/api/matrix?mode=bad')[0],400)
         self.assertEqual(self.call('/api/matrix?limit=101')[0],400)
+        self.assertEqual(self.call('/api/pairs?limit=13')[0],400)
+        self.assertEqual(self.call('/api/pairs',headers={'Host':'evil.invalid'})[0],403)
+        self.assertEqual(self.call('/api/matrix?controller=')[0],400)
+        empty=json.loads(self.call('/api/pairs')[1]);self.assertEqual(empty['pairs'],[])
+        self.assertIn('metarescue',empty['controllers']);self.assertIn('reference',empty['environments'])
         self.assertEqual(self.call('/api/matrix',headers={'Host':'evil.invalid'})[0],403)
         self.assertEqual(json.loads(self.call('/api/matrix')[1])['cells'],[])
         self.assertEqual(self.lab.list(),[])
@@ -121,6 +126,13 @@ class HTTPBoundary(TestCase):
                 cell=next(c for c in matrix['cells'] if c['controller']==controller and c['environment']==environment)
                 self.assertEqual((cell['attempts'],cell['exchange_passed'],cell['truth_trials'],cell['all_evacuated']),(1,1,1,1))
                 self.assertIsNone(matrix['official_m5'])
+                overview=json.loads(self.call('/api/pairs?mode=strict')[1])
+                pair=next(p for p in overview['pairs'] if p['controller']==controller and p['environment']==environment)
+                self.assertEqual((pair['configurations'],pair['exchange_passed'],pair['all_evacuated']),(1,1,1))
+                self.assertIsNone(overview['official_m5'])
+                filtered=json.loads(self.call('/api/matrix?controller='+controller+'&environment='+environment)[1])
+                self.assertEqual(filtered['total'],1)
+                self.assertEqual(filtered['cells'][0],cell)
                 code,raw=self.call('/api/series/'+ident+'/trial/0')
                 self.assertEqual(code,200)
                 self.assertTrue(json.loads(raw)['independent_truth']['all_evacuated'])
@@ -396,3 +408,29 @@ class ArchiveAndRepeatTests(TestCase):
             self.assertEqual(new['repeat_of'],first)
             self.assertEqual(new['spec'],spec)
             self.assertEqual(path.read_bytes(),original)
+
+
+class PairGridTests(TestCase):
+    def test_sparse_grid_paginates_both_axes_without_promoting_missing_pairs(self):
+        runs=[]
+        for i in range(25):
+            for seed in (1,2):
+                runs.append({'id':f'{i*2+seed:032x}','spec':{
+                    'controller':f'c{i:02d}','environment':f'e{i:02d}'},
+                    'rows':[{'index':0,'seed':seed,'mode':'strict','state':'completed',
+                             'result':{'exchange':'passed','status':'time_limit','inputs_preserved':True}}]})
+        cells,excluded=build_matrix(runs)
+        self.assertEqual(excluded,0)
+        first=pair_grid(cells,['registered'],['empty'],limit=8)
+        self.assertEqual(len(first['controllers']),8)
+        self.assertEqual(len(first['environments']),8)
+        self.assertEqual(first['controller_total'],26)
+        self.assertEqual(first['environment_total'],26)
+        self.assertEqual(len(first['pairs']),8)
+        self.assertTrue(all(p['configurations']==2 and p['attempts']==2 and
+                            p['exchange_passed']==2 and p['mission_success']==0 for p in first['pairs']))
+        cross=pair_grid(cells,['registered'],['empty'],row_offset=8,column_offset=0,limit=8)
+        self.assertEqual(cross['pairs'],[])
+        self.assertIsNone(first['official_m5'])
+        with self.assertRaises(ValueError):
+            pair_grid(cells,[],[],limit=13)

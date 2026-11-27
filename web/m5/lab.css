@@ -4,3 +4,5 @@
 .pager{display:flex;justify-content:space-between;align-items:center;gap:12px;margin-top:12px;font-size:12px}
 
 .matrix-controls{display:flex;align-items:end;gap:12px;flex-wrap:wrap;margin-bottom:12px}.matrix-controls label{min-width:120px}.matrix-controls select{margin-top:4px}
+
+.pair-grid td,.pair-grid th{min-width:120px}.pair-grid td{text-align:center}.pair-grid td button{white-space:nowrap}.pair-grid button[aria-pressed=true]{border-color:var(--accent);color:var(--accent)}.pair-pages{flex-wrap:wrap;margin-bottom:12px}.pair-detail{margin-top:16px;align-items:center;justify-content:space-between}

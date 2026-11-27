@@ -34,7 +34,7 @@ from controller.ai import atomic_json,file_lock
 from controller.client import EnvironmentClient
 from tools.run_interop import controller_call,ROOT
 from tools.m5_score import aggregate_m5
-from tools.m5_matrix import build_matrix
+from tools.m5_matrix import build_matrix,pair_grid
 from environment.main import DEFAULT_OUTPUT
 
 WEB=ROOT/'web'/'m5'
@@ -434,18 +434,38 @@ class Lab:
             return {'series':rows,'total':len(ordered),'offset':offset,'limit':limit,'active_id':self.active,'revision':self.revision(),
                     'invalid_archives':self.invalid_archives}
 
-    def matrix(self,offset=0,limit=30,mode='all',profile='all'):
-        if not 0<=offset<=1000000 or not 1<=limit<=100 or mode not in ('all','strict','declared') or profile not in ('all','A','K','none'):
+    def _filtered_matrix(self,mode,profile):
+        # The caller holds self.lock; all views share the same cached snapshot.
+        if mode not in ('all','strict','declared') or profile not in ('all','A','K','none'):
+            raise ValueError('Invalid matrix filters')
+        if self._matrix_cache is None:
+            self._matrix_cache=build_matrix(self._ordered())
+        cells,excluded=self._matrix_cache
+        return ([c for c in cells if (mode=='all' or c['mode']==mode) and
+                 (profile=='all' or (c['profile'] or 'none')==profile)],excluded)
+
+    def matrix(self,offset=0,limit=30,mode='all',profile='all',*,controller=None,environment=None):
+        if (not 0<=offset<=1000000 or not 1<=limit<=100 or
+                any(v is not None and (not isinstance(v,str) or not ID.fullmatch(v))
+                    for v in (controller,environment))):
             raise ValueError('Invalid matrix query')
         with self.lock:
-            if self._matrix_cache is None:
-                self._matrix_cache=build_matrix(self._ordered())
-            cells,excluded=self._matrix_cache
-            selected=[c for c in cells if (mode=='all' or c['mode']==mode) and
-                      (profile=='all' or (c['profile'] or 'none')==profile)]
+            cells,excluded=self._filtered_matrix(mode,profile)
+            selected=[c for c in cells if (controller is None or c['controller']==controller) and
+                      (environment is None or c['environment']==environment)]
             return {'cells':deepcopy(selected[offset:offset+limit]),'total':len(selected),
                     'offset':offset,'limit':limit,'excluded_trials':excluded,'revision':self.revision(),
                     'official_m5':None}
+
+    def pairs(self,row_offset=0,column_offset=0,limit=8,mode='all',profile='all'):
+        with self.lock:
+            cells,excluded=self._filtered_matrix(mode,profile)
+            public=self.registry.public()
+            result=pair_grid(cells,[r['id'] for r in public['controllers']],
+                             [r['id'] for r in public['environments']],
+                             row_offset,column_offset,limit)
+            result.update(excluded_trials=excluded,revision=self.revision())
+            return result
 
     def get(self,ident):
         if not RUN_ID.fullmatch(ident):
@@ -525,10 +545,19 @@ class Handler(BaseHTTPRequestHandler):
                 self.send({'token':self.server.token,'registry':lab.registry.public(),'official_m5':None,'assessed_m5':self.server.assessment});return
             if path=='/api/matrix':
                 query=parse_qs(parsed.query,keep_blank_values=True)
-                if set(query)-{'offset','limit','mode','profile'} or any(len(v)!=1 for v in query.values()):
+                if set(query)-{'offset','limit','mode','profile','controller','environment'} or any(len(v)!=1 for v in query.values()):
                     raise ValueError('Invalid matrix query')
                 self.send(lab.matrix(int(query.get('offset',['0'])[0]),int(query.get('limit',['30'])[0]),
-                                     query.get('mode',['all'])[0],query.get('profile',['all'])[0]));return
+                                     query.get('mode',['all'])[0],query.get('profile',['all'])[0],
+                                     controller=query.get('controller',[None])[0],
+                                     environment=query.get('environment',[None])[0]));return
+            if path=='/api/pairs':
+                query=parse_qs(parsed.query,keep_blank_values=True)
+                if set(query)-{'row_offset','column_offset','limit','mode','profile'} or any(len(v)!=1 for v in query.values()):
+                    raise ValueError('Invalid pair grid query')
+                self.send(lab.pairs(int(query.get('row_offset',['0'])[0]),int(query.get('column_offset',['0'])[0]),
+                                    int(query.get('limit',['8'])[0]),query.get('mode',['all'])[0],
+                                    query.get('profile',['all'])[0]));return
             if path=='/api/series':
                 query=parse_qs(parsed.query,keep_blank_values=True)
                 if set(query)-{'offset','limit'} or any(len(v)!=1 for v in query.values()):

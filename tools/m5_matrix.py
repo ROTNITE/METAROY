@@ -64,3 +64,34 @@ def build_matrix(runs):
                 cell['controller_origin'] or '',cell['environment_origin'] or '',cell['decide_path'] or '',
                 cell['decide_profile'] or '',cell['timeout'] or 0)
     return sorted(groups.values(),key=order),excluded
+
+
+def pair_grid(cells, controllers, environments, row_offset=0, column_offset=0, limit=8):
+    """Bounded pair overview. Empty cells mean no matching diagnostic trials."""
+    if (type(row_offset) is not int or type(column_offset) is not int or
+            not 0<=row_offset<=1000000 or not 0<=column_offset<=1000000 or
+            type(limit) is not int or not 1<=limit<=12):
+        raise ValueError('Invalid pair grid page')
+    rows=sorted(set(controllers)|{c['controller'] for c in cells})
+    columns=sorted(set(environments)|{c['environment'] for c in cells})
+    visible_rows=rows[row_offset:row_offset+limit]
+    visible_columns=columns[column_offset:column_offset+limit]
+    row_ids,column_ids=set(visible_rows),set(visible_columns)
+    pairs={}
+    for c in cells:
+        if c['controller'] not in row_ids or c['environment'] not in column_ids:
+            continue
+        key=(c['controller'],c['environment'])
+        if key not in pairs:
+            pairs[key]={'controller':key[0],'environment':key[1],'configurations':0,
+                        'attempts':0,'finished':0,'exchange_passed':0,'mission_success':0,
+                        'truth_trials':0,'all_evacuated':0,'inputs_preserved':0}
+        pair=pairs[key]
+        pair['configurations']+=1
+        for field in ('attempts','finished','exchange_passed','mission_success',
+                      'truth_trials','all_evacuated','inputs_preserved'):
+            pair[field]+=c[field]
+    return {'controllers':visible_rows,'environments':visible_columns,
+            'controller_total':len(rows),'environment_total':len(columns),
+            'row_offset':row_offset,'column_offset':column_offset,'limit':limit,
+            'pairs':list(pairs.values()),'official_m5':None}

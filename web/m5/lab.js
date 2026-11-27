@@ -5,6 +5,7 @@ const labels={queued:'В очереди',running:'Выполняется',stoppi
 let token='',registry={controllers:[],environments:[]},series=[],selected=null,selectedRun=null,activeId=null,offset=0,total=0,requestBusy=false,refreshBusy=false,refreshTimer=null,lastHistory='',lastRender='';
 let matrixOffset=0,matrixRequest=0,lastRevision=null,refreshAgain=false,reportRequest=0;
 let repeatOf=null,invalidArchives=0;
+let pairRowOffset=0,pairColOffset=0,pairRequest=0,pairController=null,pairEnvironment=null;
 const display=value=>value===undefined||value===null?'—':(labels[value]||String(value));
 const appendCell=(tr,value,cls)=>{const td=document.createElement('td');td.textContent=display(value);if(cls)td.className=cls;tr.append(td);return td;};
 const button=(text,handler)=>{const b=document.createElement('button');b.type='button';b.textContent=text;b.addEventListener('click',handler);return b;};
@@ -121,7 +122,7 @@ async function refresh(){
     }
     lastRevision=page.revision;
     render();
-    if(revisionChanged)void refreshMatrix();
+    if(revisionChanged){void refreshMatrix();void refreshPairs();}
     if(timelineTrial&&!timelineIdentifier&&(activeId===timelineTrial.id||revisionChanged))void pollTimeline();
   }
   catch(error){byId('form-message').textContent='Лаборатория недоступна: '+error.message;}
@@ -131,6 +132,8 @@ async function refreshMatrix(){
   const request=++matrixRequest;
   try{
     const params=new URLSearchParams({offset:String(matrixOffset),limit:'30',mode:byId('matrix-mode').value,profile:byId('matrix-profile').value});
+    if(pairController!==null)params.set('controller',pairController);
+    if(pairEnvironment!==null)params.set('environment',pairEnvironment);
     const page=await api('/api/matrix?'+params);
     if(request!==matrixRequest)return;
     const body=byId('matrix');body.replaceChildren();
@@ -152,6 +155,50 @@ async function refreshMatrix(){
       appendCell(tr,'').append(button('Серия',async()=>{selected=cell.latest_series_id;await refresh();}));body.append(tr);
     }
   }catch(error){if(request===matrixRequest)byId('matrix-page').textContent=error.message;}
+}
+function choosePair(controller=null,environment=null){
+  pairController=controller;pairEnvironment=environment;matrixOffset=0;
+  byId('pair-filter').textContent=controller===null?'Конфигурации всех пар':controller+' → '+environment;
+  byId('pair-clear').disabled=controller===null;
+  void refreshMatrix();void refreshPairs();
+}
+async function refreshPairs(){
+  const request=++pairRequest;
+  try{
+    const params=new URLSearchParams({row_offset:String(pairRowOffset),column_offset:String(pairColOffset),limit:'8',
+      mode:byId('matrix-mode').value,profile:byId('matrix-profile').value});
+    const page=await api('/api/pairs?'+params);
+    if(request!==pairRequest)return;
+    const head=byId('pair-head'),body=byId('pair-body');head.replaceChildren();body.replaceChildren();
+    const header=document.createElement('tr');
+    const corner=document.createElement('th');corner.scope='col';corner.textContent='Контроллер ↓ / Среда →';header.append(corner);
+    for(const environment of page.environments){
+      const th=document.createElement('th');th.scope='col';th.textContent=environment;header.append(th);
+    }
+    head.append(header);
+    const pairs=new Map(page.pairs.map(pair=>[JSON.stringify([pair.controller,pair.environment]),pair]));
+    for(const controller of page.controllers){
+      const tr=document.createElement('tr'),th=document.createElement('th');
+      th.scope='row';th.textContent=controller;tr.append(th);
+      for(const environment of page.environments){
+        const p=pairs.get(JSON.stringify([controller,environment]));
+        const td=appendCell(tr,p?'':'—');
+        if(!p)continue;
+        const b=button(p.configurations+' конф. · '+p.exchange_passed+'/'+p.finished+' обмен',()=>choosePair(controller,environment));
+        b.setAttribute('aria-label',controller+' → '+environment+': '+p.configurations+' конфигураций, '+p.exchange_passed+' успешных обменов из '+p.finished+' завершённых');
+        b.setAttribute('aria-pressed',String(pairController===controller&&pairEnvironment===environment));
+        td.append(b);
+      }
+      body.append(tr);
+    }
+    const label=(offset,n,total)=>total?String(offset+1)+'–'+Math.min(offset+n,total)+' / '+total:'0';
+    byId('pair-row-page').textContent=label(pairRowOffset,page.controllers.length,page.controller_total);
+    byId('pair-col-page').textContent=label(pairColOffset,page.environments.length,page.environment_total);
+    byId('pair-row-prev').disabled=pairRowOffset===0;
+    byId('pair-col-prev').disabled=pairColOffset===0;
+    byId('pair-row-next').disabled=pairRowOffset+page.controllers.length>=page.controller_total;
+    byId('pair-col-next').disabled=pairColOffset+page.environments.length>=page.environment_total;
+  }catch(error){if(request===pairRequest)byId('pair-row-page').textContent=error.message;}
 }
 let timelineTrial=null,timelineCursor=0,timelineRows=[],timelineGeneration=0,timelineBusy=false;
 let timelineIdentifier='',timelineScanned=0,timelineMatched=0;
@@ -257,10 +304,15 @@ byId('repeat').addEventListener('click',()=>{
 });
 byId('prev-page').addEventListener('click',()=>{offset=Math.max(0,offset-30);refresh();});
 byId('next-page').addEventListener('click',()=>{offset+=30;refresh();});
-byId('matrix-refresh').addEventListener('click',()=>refreshMatrix());
+byId('matrix-refresh').addEventListener('click',()=>{void refreshMatrix();void refreshPairs();});
+byId('pair-clear').addEventListener('click',()=>choosePair());
+byId('pair-row-prev').addEventListener('click',()=>{pairRowOffset=Math.max(0,pairRowOffset-8);void refreshPairs();});
+byId('pair-row-next').addEventListener('click',()=>{pairRowOffset+=8;void refreshPairs();});
+byId('pair-col-prev').addEventListener('click',()=>{pairColOffset=Math.max(0,pairColOffset-8);void refreshPairs();});
+byId('pair-col-next').addEventListener('click',()=>{pairColOffset+=8;void refreshPairs();});
 byId('matrix-prev').addEventListener('click',()=>{matrixOffset=Math.max(0,matrixOffset-30);refreshMatrix();});
 byId('matrix-next').addEventListener('click',()=>{matrixOffset+=30;refreshMatrix();});
-for(const id of ['matrix-mode','matrix-profile'])byId(id).addEventListener('change',()=>{matrixOffset=0;refreshMatrix();});
+for(const id of ['matrix-mode','matrix-profile'])byId(id).addEventListener('change',()=>{pairRowOffset=0;pairColOffset=0;choosePair();});
 async function init(){
   try{const session=await api('/api/session');token=session.token;registry=session.registry;
     const assessment=session.assessed_m5;

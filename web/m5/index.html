@@ -78,12 +78,19 @@
     <div class="pager"><button type="button" class="secondary" id="prev-page" disabled>← Назад</button><span id="page-label" class="muted">0 серий</span><button type="button" class="secondary" id="next-page" disabled>Далее →</button></div>
   </section>
   <section class="panel archive">
-    <div class="heading"><span class="step">04</span><div><h2>Диагностическая матрица совместимости</h2><p>Одна строка — одинаковая конфигурация и seed. Повторы не являются отдельными оценками M5.</p></div></div>
+    <div class="heading"><span class="step">04</span><div><h2>Диагностическая матрица совместимости</h2><p>Строки — контроллеры, столбцы — среды. Выберите пару для просмотра отдельных конфигураций и seed.</p></div></div>
     <div class="matrix-controls">
       <label>Режим <select id="matrix-mode"><option value="all">Все</option><option value="strict">Strict</option><option value="declared">Declared</option></select></label>
       <label>Профиль <select id="matrix-profile"><option value="all">Все</option><option value="A">A</option><option value="K">K</option><option value="none">Не 3D-эталон</option></select></label>
       <button type="button" class="secondary" id="matrix-refresh">Обновить</button>
     </div>
+    <div class="table-wrap pair-grid"><table aria-label="Матрица пар"><thead id="pair-head"></thead><tbody id="pair-body"></tbody></table></div>
+    <div class="pager pair-pages">
+      <button type="button" class="secondary" id="pair-row-prev" disabled>↑ Контроллеры</button><span id="pair-row-page" class="muted"></span><button type="button" class="secondary" id="pair-row-next" disabled>Контроллеры ↓</button>
+      <button type="button" class="secondary" id="pair-col-prev" disabled>← Среды</button><span id="pair-col-page" class="muted"></span><button type="button" class="secondary" id="pair-col-next" disabled>Среды →</button>
+    </div>
+    <p class="muted small">Ячейки — диагностические суммы попыток, не официальный Q/M5. «—» означает отсутствие испытаний по фильтру.</p>
+    <div class="matrix-controls pair-detail"><strong id="pair-filter">Конфигурации всех пар</strong><button type="button" class="secondary" id="pair-clear" disabled>Сбросить выбор пары</button></div>
     <div class="table-wrap"><table><thead><tr><th>Контроллер → среда</th><th>Профиль / режим / seed</th><th>Попытки</th><th>Обмен</th><th>Миссия</th><th>Все эвакуированы / истина</th><th>Входы сохранены</th><th></th></tr></thead><tbody id="matrix"><tr><td colspan="8" class="empty">Нет сохранённых испытаний.</td></tr></tbody></table></div>
     <div class="pager"><button type="button" class="secondary" id="matrix-prev" disabled>← Назад</button><span id="matrix-page" class="muted" role="status">0 конфигураций</span><button type="button" class="secondary" id="matrix-next" disabled>Далее →</button></div>
     <p class="muted small" id="matrix-note">Диагностика, не оценка жюри. Одинаковые настройки не доказывают идентичность версий компонентов.</p>
