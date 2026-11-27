@@ -298,6 +298,7 @@ void AMRWorld::ResetCoreEventEffects()
     for(int32 I=CoreEventComponents.Num()-1;I>=0;--I)
         if(USceneComponent* Component=CoreEventComponents[I])Component->DestroyComponent();
     CoreEventComponents.Empty();
+    DebrisCells.Empty();DebrisHistory.Empty();NextDebrisRefresh=0;
     MudTracks=nullptr;
     MudTrackPositions.Empty();
     NextMudTrackCleanup=0;
@@ -423,6 +424,7 @@ void FMRCoreRuntime::AdvanceEvents()
     }
     if(!World->TickUrbanWater(Time()))
     {Status=TEXT("failed");OutcomeReason=TEXT("hydrology_step_failed");UE_LOG(LogTemp,Error,TEXT("MR_HYDROLOGY failed at %.9f"),Time());}
+    World->RefreshDebrisCells();
     World->TickHazardVisuals(float(ExecutionDelta));
     for(const auto& Event:Model.Applied)
     {
@@ -512,7 +514,8 @@ void FMRCoreRuntime::GatherHazardReport(AMRAgent* Agent)
         for(int32 Y=FMath::Max(0,Origin.Y-Radius);Y<FMath::Min(MaxCell,Origin.Y+Radius+1);++Y)
         {
             const FIntPoint Cell(X,Y);
-            if(!Environment.HasHistoryAt(Cell)&&!(World->UrbanWater&&World->UrbanWater->HasHistory(Cell)))continue;
+            if(!Environment.HasHistoryAt(Cell)&&!(World->UrbanWater&&World->UrbanWater->HasHistory(Cell))&&
+               !(Environment.bRevisedDisasters&&World->DebrisHistory.Contains(Cell)))continue;
             FVector Position=FMRDistrictEnvironment::Center(Cell);
             if(World->UrbanWater)Position.Z=World->WaterAtCm(Position).GroundCm;
             if(FVector::DistSquared2D(Pose,Position)>FMath::Square(Range))continue;
@@ -532,6 +535,7 @@ void FMRCoreRuntime::GatherHazardReport(AMRAgent* Agent)
             const auto Measurement=Obj({{TEXT("kinds"),Arr(Types)},{TEXT("active"),Bool(Active)},
                 {TEXT("ground_blocked"),Bool(Blocked)},{TEXT("surface_multiplier"),Num(Cost)},
                 {TEXT("depth_m"),Num(FMath::FloorToDouble(WaterCm)/100.)},{TEXT("visibility"),Num(Visibility)}});
+            if(Environment.bRevisedDisasters)Measurement->SetBoolField(TEXT("physical_debris"),World->DebrisCells.Contains(Cell));
             if(World->UrbanWater)
             {
                 const auto Water=World->WaterAtCm(Position);
