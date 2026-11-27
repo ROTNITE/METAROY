@@ -8,7 +8,7 @@ permissions:
   contents: read
 concurrency:
   group: vis23-portable-${{ github.ref }}
-  cancel-in-progress: true
+  cancel-in-progress: false
 jobs:
   portable:
     if: github.event_name == 'workflow_dispatch' || (github.event.pull_request.head.repo.full_name == github.repository && github.head_ref == 'chatgpt/vis02-04-city23-regression')
