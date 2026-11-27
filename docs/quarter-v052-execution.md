@@ -1777,3 +1777,21 @@ python -B -X utf8 unreal/tools/run_quarter_validation.py zero --prefix v052-base
   23 исходных файла с лицензиями, pinned commit и SHA. Импорт и нативные
   модели ещё нужны. Продолжение переносится владельцем в новый чат через
   `quarter-v052-transfer-prompt.md`. Серия0/450, LIVE6/240.
+
+
+### 2026-11-27 — повторное ревью кандидата VIS02–04/VIS13 в отдельной ветке
+
+PR #9, `chatgpt/vis02-04-city23-regression`; main и замороженные результаты
+не изменены. Дополнительные исправления и проверяемые ссылки:
+[vis02-04-city23-candidate.md](vis02-04-city23-candidate.md).
+
+Фактически: source checkout в GitHub Actions, Python 334 tests (333 passed,
+1 Windows-only skipped), portable C++ 506 optical checks, 1000 HLSL arithmetic
+checks, 31 идентичный исходный world hash + 7 revised. Отдельно компиляция
+HLSL в SPIR-V, валидация и исполнение на программном Vulkan CPU: 2048
+сценариев live/frozen, успешное сравнение с C++. Это не нативный UE.
+Полная 326-case матрица запущена на той же ветке, статус фиксируется
+после завершения. Добавлены отдельные Windows Python/MSVC проверки.
+Без авторизованного UE runner не заявлять новую Windows-сборку, игровые
+кадры, физические контакты или FPS. VIS02/03/04/13 остаются partial.
+ADD12 не начат; основной порядок и freeze сохраняются.
