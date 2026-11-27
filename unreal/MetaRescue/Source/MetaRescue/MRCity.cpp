@@ -90,6 +90,12 @@ bool AMRWorld::ReadCityLayout(const FString& File)
        !CityLayout->HasTypedField<EJson::Object>(TEXT("preflight"))||
        !CityLayout->GetObjectField(TEXT("preflight"))->GetBoolField(TEXT("passed")))return false;
     auto Settings=CityLayout->GetObjectField(TEXT("settings"));GridSize=Settings->GetIntegerField(TEXT("map_size"));
+    double DisasterRevision=0;
+    if(Settings->HasField(TEXT("disaster_revision"))&&
+       (!Settings->HasTypedField<EJson::Number>(TEXT("disaster_revision"))||
+        !Settings->TryGetNumberField(TEXT("disaster_revision"),DisasterRevision)||
+        (DisasterRevision!=0&&DisasterRevision!=1)||(DisasterRevision==1&&!bDisasterCity)))return false;
+    Environment.bRevisedDisasters=DisasterRevision==1;
     if(GridSize<25||GridSize>150)return false;
     if(bDisasterCity&&CityLayout->HasField(TEXT("hydrology"))&&
        (!TerrainCheck.IsEnabled()||!CityLayout->HasTypedField<EJson::Object>(TEXT("hydrology"))||
@@ -908,7 +914,9 @@ void AMRWorld::BuildIrregularStreets(const FBox& BaseBox)
             Streets.Add({Start,End,Width});
             Approaches.FindOrAdd(A).Add(Direction);
             Approaches.FindOrAdd(B).Add(-Direction);
-            if(bDisasterCity&&Kind==TEXT("street")&&Width<=850)
+            // Revised streets use a single graded surface; rigid road modules
+            // on top of it introduce seams, duplicated curbs and mismatched paint.
+            if(bDisasterCity&&!Environment.bRevisedDisasters&&Kind==TEXT("street")&&Width<=850)
             {
                 const double Length=FVector::Dist2D(Start,End),Tile=999.8;
                 const double Inset=FMath::Max(450.,Width*.5+100);
