@@ -53,10 +53,13 @@ def benchmark(n,queries,seed):
         _path_clear(memory_index,agent,goal)
     _,peak=tracemalloc.get_traced_memory();tracemalloc.stop()
     candidates=[len(index.candidates(a['position'],b,ground=a['kind']=='ground')) for a,b in routes]
+    # Short Windows runs can finish within a single process clock tick.
+    cpu_speedup=(baseline['cpu_s']/indexed['cpu_s']
+                 if min(baseline['cpu_s'],indexed['cpu_s'])>0 else None)
     return {'zones':len(zones),'queries':queries,'seed':seed,'parity':True,
             'baseline':baseline,'indexed':indexed,'index_build_ms':build_ms,
             'index_peak_allocated_bytes':peak,'mean_candidates':statistics.mean(candidates),
-            'max_candidates':max(candidates),'cpu_speedup':baseline['cpu_s']/max(indexed['cpu_s'],1e-12)}
+            'max_candidates':max(candidates),'cpu_speedup':cpu_speedup}
 
 
 def main():

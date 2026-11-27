@@ -1,6 +1,7 @@
 """Regression tests for the portable public boundary and M5 evidence."""
 from copy import deepcopy
 from unittest import TestCase
+from unittest.mock import patch
 
 from conformance.reference_environment import Trial
 from contracts.protocol import ProtocolError, validate_observation
@@ -8,6 +9,16 @@ from controller.client import EnvironmentClient, PreparedRequest, TransportFailu
 from contracts.protocol import encode
 from controller.public_core import PublicCore
 from tools.goal_evidence import GoalEvidence
+
+
+class ProfilingPrecision(TestCase):
+    def test_clock_ticks_below_resolution_leave_cpu_speedup_unavailable(self):
+        from tools.profile_protocol_validation import measure
+        from tools.profile_public_geometry import benchmark
+
+        with patch('time.process_time', return_value=0.):
+            self.assertIsNone(benchmark(6, 10, 17)['cpu_speedup'])
+            self.assertIsNone(measure(6, samples=2)['cpu_speedup'])
 
 
 class PublicBoundary(TestCase):

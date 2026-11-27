@@ -51,8 +51,10 @@ def measure(zones,samples=12):
     stats={name:{'cpu_s':sum(v[0] for v in rows),
                  'median_wall_ms':statistics.median(v[1] for v in rows),
                  'max_wall_ms':max(v[1] for v in rows)} for name,rows in timings.items()}
+    previous_cpu=stats['previous']['cpu_s']
+    current_cpu=stats['current']['cpu_s']
     return {'zones':zones,'samples_per_path':samples,'input_preserved':True,**stats,
-            'cpu_speedup':stats['previous']['cpu_s']/stats['current']['cpu_s']}
+            'cpu_speedup':previous_cpu/current_cpu if min(previous_cpu,current_cpu)>0 else None}
 
 
 def main():
