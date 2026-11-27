@@ -13,7 +13,7 @@ import sys
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT))
 from controller.ai import file_lock
-from environment.main import DEFAULT_OUTPUT, existing_unreal
+from environment.main import DEFAULT_OUTPUT, WINDOWS_GAME_BINARIES, existing_unreal, find_packaged_game
 from tools.native_archive import file_sha256
 from tools.product_session import default_product_request
 
@@ -160,11 +160,11 @@ def check_python_entrypoints(distribution):
             raise RuntimeError(f'Packaged Python entry point {name} failed:\n{result.stderr.strip()}')
 
 
-def stage_runtime(distribution, demo, *, scenario_files, fab_usage_notice=None):
-    native = distribution/'runtime/MetaRescue'
-    if not (native/'Binaries/Win64/MetaRescue.exe').is_file():
-        raise FileNotFoundError('BuildCookRun did not archive the Win64 game executable')
-    native_scenario = native/'Content/Scenario'
+def stage_runtime(distribution, demo, *, scenario_files, configuration='Development', fab_usage_notice=None):
+    executable = find_packaged_game(distribution, configuration)
+    if not executable.is_file():
+        raise FileNotFoundError(f'BuildCookRun did not archive the Win64 game executable {executable.name}')
+    native_scenario = executable.parents[2]/'Content/Scenario'
     verify_scenario_files(native_scenario, expected=scenario_files)
     for part in ('controller', 'contracts', 'environment', 'analytics', 'web'):
         shutil.copytree(ROOT/part, distribution/part, ignore=shutil.ignore_patterns('__pycache__', '*.pyc'))
@@ -190,7 +190,7 @@ def stage_runtime(distribution, demo, *, scenario_files, fab_usage_notice=None):
     return details
 
 
-def build(output, engine, demo, *, fab_usage_notice=None):
+def build(output, engine, demo, *, configuration='Shipping', fab_usage_notice=None):
     scenario_files = verify_scenario_files(PROJECT/'Content/Scenario')
     fab_packages = PROJECT/'Content/EffectsV3/Revision3/Fab'
     if any(fab_packages.rglob('*.uasset')) and fab_usage_notice is None:
@@ -217,14 +217,14 @@ def build(output, engine, demo, *, fab_usage_notice=None):
         raise RuntimeError('Grounding commandlet changed unexpected inputs: '+str(sorted(grounding_changes-expected_meshes)))
     uat = engine/'Engine/Build/BatchFiles/RunUAT.bat'
     command = [str(uat), 'BuildCookRun', '-project='+str(project/'MetaRescue.uproject'),
-               '-noP4', '-unattended', '-utf8output', '-targetplatform=Win64', '-clientconfig=Development',
+               '-noP4', '-unattended', '-utf8output', '-targetplatform=Win64', '-clientconfig='+configuration,
                '-ubtargs=-NoUBA -MaxParallelActions=2',
                '-build', '-cook', '-stage', '-pak', '-iostore', '-prereqs', '-archive',
                '-map=/Game/Maps/RescueQuarter+/Game/Maps/RescueDistrict',
                '-stagingdirectory='+str(output/'stage'), '-archivedirectory='+str(distribution/'runtime'),
                '-AdditionalCookerOptions=-SkipZenStore -LocalDataCachePath='+str(cache)]
     manifest = {'state': 'building', 'command': command, 'source_files': before,
-                'scenario_sha256': scenario_files,
+                'scenario_sha256': scenario_files, 'configuration': configuration,
                 'grounding': grounding, 'grounding_changes': sorted(grounding_changes)}
     write_json(output/'build-manifest.json', manifest)
     with (output/'BuildCookRun.log').open('w', encoding='utf-8') as log:
@@ -239,7 +239,7 @@ def build(output, engine, demo, *, fab_usage_notice=None):
         raise RuntimeError('BuildCookRun or source verification failed. See '+str(output/'BuildCookRun.log'))
     try:
         manifest['python'] = stage_runtime(distribution, demo, scenario_files=scenario_files,
-                                           fab_usage_notice=fab_usage_notice)
+                                           configuration=configuration, fab_usage_notice=fab_usage_notice)
         if fab_usage_notice is not None:
             if file_sha256(distribution/'Fab-Content-Notice.txt') != notice_sha256:
                 raise RuntimeError('Fab usage notice changed during packaging')
@@ -258,6 +258,8 @@ def build(output, engine, demo, *, fab_usage_notice=None):
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('output', type=Path)
+    parser.add_argument('--configuration', choices=WINDOWS_GAME_BINARIES, default='Shipping',
+                        help='Win64 build configuration (defaults to %(default)s)')
     parser.add_argument('--demo', type=Path)
     parser.add_argument('--fab-usage-notice', type=Path, help='recipient use conditions for incorporated Fab content')
     parser.add_argument('--engine', type=Path, default=Path(os.environ.get('MR_UNREAL_ENGINE',
@@ -270,7 +272,8 @@ def main():
     with file_lock(DEFAULT_OUTPUT/'locks/unreal-owner.lock'):
         if existing_unreal():
             raise RuntimeError('Finish the current Unreal process before packaging')
-        print(build(args.output.resolve(), args.engine.resolve(), args.demo, fab_usage_notice=args.fab_usage_notice), flush=True)
+        print(build(args.output.resolve(), args.engine.resolve(), args.demo, configuration=args.configuration,
+                    fab_usage_notice=args.fab_usage_notice), flush=True)
 
 
 if __name__ == '__main__':

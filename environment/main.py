@@ -12,7 +12,18 @@ import subprocess
 import sys
 
 ROOT = Path(__file__).resolve().parents[1]
-PACKAGED_GAME = ROOT/'runtime/MetaRescue/Binaries/Win64/MetaRescue.exe'
+WINDOWS_GAME_BINARIES = {'Development': 'MetaRescue.exe', 'Shipping': 'MetaRescue-Win64-Shipping.exe'}
+
+
+def find_packaged_game(distribution, configuration=None):
+    runtime = distribution/'runtime'
+    names = tuple(WINDOWS_GAME_BINARIES.values()) if configuration is None else (WINDOWS_GAME_BINARIES[configuration],)
+    locations = (runtime, runtime/'Windows')
+    candidates = [location/'MetaRescue/Binaries/Win64'/name for location in locations for name in names]
+    return next((path for path in candidates if path.is_file()), candidates[0])
+
+
+PACKAGED_GAME = find_packaged_game(ROOT)
 DEFAULT_OUTPUT = Path(os.environ.get('METARESCUE_OUTPUT',
     str(ROOT/'output' if PACKAGED_GAME.is_file() else 'D:/MetaRescue-output'))).resolve()
 
@@ -22,7 +33,7 @@ def existing_unreal():
     if os.name != 'nt':
         return []
     result = []
-    for name in ('UnrealEditor.exe', 'UnrealEditor-Cmd.exe', 'MetaRescue.exe'):
+    for name in ('UnrealEditor.exe', 'UnrealEditor-Cmd.exe', *WINDOWS_GAME_BINARIES.values()):
         response = subprocess.run(['tasklist', '/FI', 'IMAGENAME eq '+name, '/FO', 'CSV', '/NH'],
                                   capture_output=True, text=True, creationflags=subprocess.CREATE_NO_WINDOW)
         if response.returncode:

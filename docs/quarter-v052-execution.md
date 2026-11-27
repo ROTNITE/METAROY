@@ -52,6 +52,27 @@
   [Пакет](<D:/MetaRescue-output/releases/windows-integrated-verification-20261127-04/archive-verification.json>) ·
   [Миссия](<D:/MetaRescue-output/integration-20261127-01/packaged-product-03/four-boats-verification.json>).
 
+- Исправление профиля вошло в `main` через PR #2, коммит слияния `565202b`.
+  Windows Shipping собрана из зафиксированных входов. В распакованном
+  пакете проверены 1207 файлов, запуск в обычное окно и единственный
+  TCP-слушатель 127.0.0.1 для Core. Конфликт портов отклонён до запуска.
+  В одном процессе открыты город 2.3 с четырьмя катамаранами и город 2.2
+  без катамаранов. Переключение наблюдателя сохраняло 0 с. Одиночный шаг
+  продвинул модель на 1 с. Обе миссии штатно остановлены, архивы проверены.
+  При выходе программа вернула код 0 и подтвердила freeze.
+  [Сборка](<D:/MetaRescue-output/releases/windows-integrated-verification-20261127-05/archive-verification.json>) ·
+  [Проверка интерфейса](<D:/MetaRescue-output/integration-20261127-01/packaged-product-04/verification.json>) ·
+  [Порты](<D:/MetaRescue-output/integration-20261127-01/packaged-product-04/local-listener.json>).
+- Из той же сборки запущен пресет отказа с Counterfactual Value в MOCK.
+  Первый носитель отказал с `person-1` на 45,0 с. Доставленный отчёт
+  появился на 45,2 с. Второй носитель передал того же человека медпункту
+  на 280,967 с. Итог success с одной передачей. Архив прошёл CRC и SHA-256.
+  [Проверка отказа](<D:/MetaRescue-output/integration-20261127-01/packaged-product-04/recovery-verification-confirmed.json>).
+- Сверены 30 карт и 450 комбинаций для пилотной и новой официальной серии.
+  Запускать пилот на фиксированных входах. Исторический план продолжать на
+  его исходной среде; подтверждённых эпизодов 180 из 450.
+  [Проверка входов](<D:/MetaRescue-output/integration-20261127-01/series-preflight-main-hydrostatics-01.json>).
+
 ## 27 ноября — порядок продолжения и финальный этап спасения
 
 1. Сопоставимый эксперимент по девяти архивам. Контроль — актуальный Net65
