@@ -52,17 +52,30 @@ def trial(args):
     output=args.output.resolve()
     output.mkdir(parents=True,exist_ok=False)
     parameter_file=getattr(args,'mission_parameters',None)
-    def inputs():
+    def parameter_bytes():
+        if parameter_file is None:
+            return None
+        with parameter_file.open('rb') as stream:
+            data=stream.read(16385)
+        if len(data)>16384:
+            raise ValueError('Mission parameters exceed 16384 bytes')
+        return data
+
+    def inputs(data):
         values=freeze_sources()
-        if parameter_file is not None:
-            values['mission_parameters_file']=hashlib.sha256(parameter_file.read_bytes()).hexdigest()
+        if data is not None:
+            values['mission_parameters_file']=hashlib.sha256(data).hexdigest()
         return values
-    frozen=inputs()
+
+    frozen=None
     report={'engine':args.engine,'controller':args.controller,'profile':args.profile,
-            'seed':args.seed,'core_mode':args.core_mode,'input_sha256':frozen}
+            'seed':args.seed,'core_mode':args.core_mode,'input_sha256':{}}
     try:
+        data=parameter_bytes()
+        frozen=inputs(data)
+        report['input_sha256']=frozen
         params=checked_mission_parameters(args.engine,args.controller,
-                    strict_json(parameter_file.read_bytes(),maximum_bytes=16384) if parameter_file else {})
+                    strict_json(data,maximum_bytes=16384) if data is not None else {})
         mission={'id':'search_and_rescue','parameters':params}
         report['mission']=mission
         if args.controller=='independent' and args.core_mode!='strict':
@@ -93,7 +106,11 @@ def trial(args):
     except (OSError,ValueError,RuntimeError,subprocess.SubprocessError) as error:
         report.update(exchange='failed',error=f'{type(error).__name__}: {error}')
     finally:
-        report['inputs_preserved']=frozen==inputs()
+        try:
+            report['inputs_preserved']=frozen is not None and frozen==inputs(parameter_bytes())
+        except (OSError,ValueError) as error:
+            report['inputs_preserved']=False
+            report['input_verification_error']=f'{type(error).__name__}: {error}'
         atomic_json(output/'report.json',report)
     return 0 if report.get('exchange')=='passed' and report['inputs_preserved'] else 1
 
