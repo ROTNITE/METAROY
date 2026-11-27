@@ -234,7 +234,7 @@ FVector AMRAgent::SafeVelocity(const FVector& Requested,float Dt)
                 {
                     const FVector Sensed=P+Along*(Reach*I/Count)+Side*Offset;
                     if(!Mission->IsUnsafeRoadSupport(Sensed))continue;
-                    StopReason=TEXT("hazard_on_route");Desired=FVector::ZeroVector;
+                    StopReason=TEXT("hazard_on_route");StopObstacle=TEXT("road_support");Desired=FVector::ZeroVector;
                     SensedBlocker=FBox(Sensed-FVector(100,100,100),Sensed+FVector(100,100,100));break;
                 }
         }

@@ -10,7 +10,7 @@ from copy import deepcopy
 import math
 
 from controller.decisions import decision
-from controller.navigation import Box, NavigationMap, RouteFailure, handover_xy, observed_surfaces
+from controller.navigation import Box, NavigationMap, ObservedSurface, RouteFailure, handover_xy, observed_surfaces
 from controller.water_rescue import ground_target, reserve_shore, shore_target, water_command, water_intercept_opportunity
 from controller.water_survey import water_survey_command
 
@@ -64,6 +64,7 @@ class FixedWorkflow:
         self.water_survey_requests={}
         self.water_survey_next=0.
         self.water_survey_recent={}
+        self.road_support_blockers=[]
 
     @staticmethod
     def available(agent,action):
@@ -132,10 +133,34 @@ class FixedWorkflow:
                 peers.append((other['position'][:2], physical.get('radius_m', 1.45)))
         return peers
 
+    def _remember_road_support(self, observation, agent):
+        """Permanent cavity evidence only, from this agent's delivered stop."""
+        if observation.get('metaevolution',{}).get('disaster_revision')!=1 or agent.get('kind')!='ground':
+            return
+        physical=agent.get('physical',{})
+        if physical.get('stop_reason')!='hazard_on_route' or physical.get('stop_obstacle')!='road_support':
+            return
+        stamp=agent.get('freshness',{}).get('position',{}).get('observed_at')
+        if type(stamp) not in (int,float) or not 0<=observation['time']-stamp<=5:
+            return
+        try:box=Box.parse(physical.get('route_blocker'))
+        except (ValueError,TypeError,KeyError):return
+        if not agent.get('position') or math.dist(agent['position'][:2],[(a+b)/2 for a,b in zip(box.minimum[:2],box.maximum[:2])])>12:
+            return
+        if any(not 0<b-a<=2.001 for a,b in zip(box.minimum,box.maximum)):
+            return
+        surface=ObservedSurface(box,True,1.,1.,margin_egress=True)
+        if surface not in self.road_support_blockers:
+            self.road_support_blockers.append(surface)
+            # Avoid unbounded state on a long mission. The native local
+            # safety stop remains authoritative if an old record is evicted.
+            del self.road_support_blockers[:-256]
+
     def _planned_route(self,announced,agent,agents,goal,*,precise_stop=False):
         obstacles=self._obstacles(agent,agents)
         obstacles.extend(self.local_obstacles.get(agent['id'],()))
-        nav=NavigationMap(announced,observed_obstacles=obstacles,surfaces=self.known_surfaces,
+        surfaces=(*self.known_surfaces,*self.road_support_blockers) if agent['kind']=='ground' else self.known_surfaces
+        nav=NavigationMap(announced,observed_obstacles=obstacles,surfaces=surfaces,
                           parked_ground_peers=self._parked_ground_peers(agent,agents))
         air=agent['kind']=='aerial'
         radius=agent.get('physical',{}).get('radius_m',1.65 if air else 1.45)
@@ -420,6 +445,7 @@ class FixedWorkflow:
         self.water_survey_requests={}
         self.water_survey_next=0.
         self.water_survey_recent={}
+        self.road_support_blockers=[]
 
     def _released_jobs(self, observation):
         now = observation['time']
@@ -517,6 +543,7 @@ class FixedWorkflow:
                         and active_id==f'{job.pending}:{job.pending_index}' and
                         (reason in ('obstacle_on_route','hazard_on_route') or stationary_yield or blocked_water)
                         and self.available(a,'hold')):
+                    self._remember_road_support(observation,a)
                     blocker=physical.get('route_blocker')
                     if reason=='obstacle_on_route' and blocker:
                         try:Box.parse(blocker)
