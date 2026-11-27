@@ -1,0 +1,79 @@
+name: VIS05-12 specification and focused audit
+on:
+  pull_request:
+    branches: [main]
+    paths: ['.github/workflows/vis05-12-audit.yml']
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  focused:
+    if: github.event_name == 'workflow_dispatch' || (github.event.pull_request.head.repo.full_name == github.repository && github.head_ref == 'chatgpt/vis02-04-city23-regression')
+    runs-on: ubuntu-latest
+    timeout-minutes: 8
+    env:
+      GIT_LFS_SKIP_SMUDGE: '1'
+      PYTHONDONTWRITEBYTECODE: '1'
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.sha || github.sha }}
+          lfs: false
+          persist-credentials: false
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: python -m pip install -r requirements.txt
+      - name: Focused adversarial and navigation tests
+        run: |
+          python -B -X utf8 -m unittest discover -s tests -p 'test_water_navigation_v2.py' -v
+          python -B -X utf8 -m unittest discover -s tests -p 'test_water_survey.py' -v
+          python -B -X utf8 -m unittest discover -s tests -p 'test_vis_evidence.py' -v
+      - name: Runtime Python dependency advisory scan
+        run: |
+          python -m pip install pip-audit
+          python -m pip_audit -r requirements.txt --strict
+  specification:
+    if: github.event_name == 'workflow_dispatch' || (github.event.pull_request.head.repo.full_name == github.repository && github.head_ref == 'chatgpt/vis02-04-city23-regression')
+    runs-on: ubuntu-latest
+    timeout-minutes: 6
+    env:
+      GIT_LFS_SKIP_SMUDGE: '1'
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.sha || github.sha }}
+          lfs: false
+          persist-credentials: false
+      - name: Fetch only specification and explanatory PDFs
+        run: |
+          git lfs version
+          timeout 90s git lfs pull --include='ТЗ/*.pdf,ПЗ/Пояснительная записка*.pdf' --exclude=''
+      - name: Extract page-indexed specification and relevant explanatory text
+        run: |
+          command -v pdftotext && command -v pdfinfo
+          python - <<'PY'
+          from pathlib import Path
+          import hashlib, subprocess, re
+          paths = sorted(Path('ТЗ').glob('*.pdf')) + sorted(Path('ПЗ').glob('Пояснительная записка*.pdf'))
+          if not paths:
+              raise SystemExit('No matching specification documents found')
+          for path in paths:
+              data = path.read_bytes()
+              if not data.startswith(b'%PDF-'):
+                  raise SystemExit('PDF not materialized: '+path.name)
+              print('DOCUMENT', path.name, 'SHA256', hashlib.sha256(data).hexdigest(), flush=True)
+              raw = subprocess.check_output(['pdftotext','-layout',str(path),'-'], timeout=30).decode('utf-8')
+              pages = raw.split('\f')
+              print('EXTRACTED',len(raw),'characters',len([p for p in pages if p.strip()]),'pages',flush=True)
+              if not raw.strip(): raise SystemExit('No extractable text: '+path.name)
+              for i,page in enumerate(pages,1):
+                  if path.parent.name == 'ТЗ':
+                      print(f'PAGE {i}\n{page[:6500]}',flush=True)
+                  else:
+                      lines=page.splitlines()
+                      hits=[j for j,s in enumerate(lines) if re.search(r'затоп|катамаран|передач.*груз|эвакуац.*вод|провал|гряз|туман войны|ретранслятор|светофор|14 тип',s,re.I)]
+                      selected=sorted({k for j in hits for k in range(max(0,j-2),min(len(lines),j+3))})
+                      if selected:
+                          print(f'PAGE {i}\n'+'\n'.join(lines[k] for k in selected)[:4500],flush=True)
+          PY
