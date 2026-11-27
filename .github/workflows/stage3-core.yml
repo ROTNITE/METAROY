@@ -46,3 +46,29 @@ jobs:
           if test -f "$RUNNER_TEMP/stage3-matrix/report.json"; then
             cat "$RUNNER_TEMP/stage3-matrix/report.json"
           fi
+      - name: Diagnostics for failed matrix rows
+        if: failure()
+        run: |
+          if test -f "$RUNNER_TEMP/stage3-matrix/report.json"; then
+            .venv/bin/python - "$RUNNER_TEMP/stage3-matrix" <<'PY'
+          import json, sys
+          from pathlib import Path
+          root = Path(sys.argv[1])
+          report = json.loads((root / "report.json").read_text())
+          for row in report.get("trials", []) + report.get("reverse_trials", []):
+              if row["passed"]:
+                  continue
+              folder = (f"{row['profile']}-{row['seed']}-{row['mode']}" if "profile" in row
+                        else f"reverse-{row['environment']}-{row['seed']}")
+              path = root / folder / "stdout.log"
+              print(folder, path.read_text(errors="replace")[-5000:] if path.exists() else "no stdout")
+          PY
+          fi
+      - name: Archive independent test traces
+        if: always()
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
+        with:
+          name: stage3-core-matrix
+          path: ${{ runner.temp }}/stage3-matrix/
+          if-no-files-found: warn
+          retention-days: 14

@@ -193,8 +193,8 @@ if __name__=='__main__':
     parser.add_argument('--output',type=Path,required=True)
     parser.add_argument('--profiles',default='ABCDEFGHIJ')
     parser.add_argument('--seed',type=int,action='append',default=[])
-    args=parser.parse_args()
     parser.add_argument('--reverse',action='store_true',help='Also run the independent controller against two distinct environments')
+    args=parser.parse_args()
     if not args.profiles or set(args.profiles)-set('ABCDEFGHIJK'):
         parser.error('Profiles must use A through K')
     args.output.mkdir(parents=True,exist_ok=False)
