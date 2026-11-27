@@ -44,8 +44,12 @@ def expected_fire_failures(tape, world, horizon):
     claimed = set()
     children = []
     for parent in sorted(tape['events'], key=lambda row: (row['time'], row['id'])):
+        # Only accepted primary fires can be causal parents. Other event
+        # kinds and rejected attempts need not carry a structure identifier.
+        if parent.get('kind') != 'fire' or parent.get('spread') or parent.get('rejection'):
+            continue
         site = parent.get('source_object_id')
-        if site in claimed or site not in buildings:
+        if not isinstance(site, str) or site in claimed or site not in buildings:
             continue
         child = expected_failure(parent, buildings[site], horizon)
         if child is not None:
