@@ -31,6 +31,10 @@ jobs:
           - {peer: atlas, direction: inbound, mode: strict}
           - {peer: v9, direction: outbound, mode: strict}
           - {peer: v9, direction: inbound, mode: strict}
+          - {peer: lab, direction: inbound, mode: strict, engine: reference}
+          - {peer: portable, direction: inbound, mode: strict, engine: reference}
+          - {peer: atlas, direction: inbound, mode: strict, engine: reference}
+          - {peer: v9, direction: inbound, mode: strict, engine: reference}
     env:
       GIT_LFS_SKIP_SMUDGE: "0"
       PYTHONUTF8: "1"
@@ -61,7 +65,16 @@ jobs:
           mkdir -p "$RUNNER_TEMP/build/peer-dependencies"
           cp requirements.txt "$RUNNER_TEMP/build/"
           if [ "${{ matrix.peer }}" = v9 ]; then
-            python3 -B -X utf8 -m tools.peer_dependencies --output "$RUNNER_TEMP/build/peer-dependencies"
+            python3 -B -X utf8 -m tools.peer_dependencies --output "$RUNNER_TEMP/build/peer-dependencies" | tee "$RUNNER_TEMP/peer-dependency-provenance.jsonl"
+            if [ ! -f "$RUNNER_TEMP/build/peer-dependencies/package-lock.json" ]; then
+              # No lock in the supplied archive. Resolve only the sanitized
+              # registry dependency manifest, without peer source or scripts.
+              docker run --rm --cap-drop ALL --security-opt no-new-privileges --pids-limit 128 --memory 1g --cpus 2 \
+                --user "$(id -u):$(id -g)" --env HOME=/tmp \
+                --mount "type=bind,source=$RUNNER_TEMP/build/peer-dependencies,target=/deps" \
+                --workdir /deps node:22-bookworm-slim npm install --package-lock-only --include=dev --ignore-scripts --no-audit --no-fund --registry=https://registry.npmjs.org/
+            fi
+            python3 -B -X utf8 -m tools.peer_dependencies --validate-only --output "$RUNNER_TEMP/build/peer-dependencies" | tee -a "$RUNNER_TEMP/peer-dependency-provenance.jsonl"
           fi
           cat > "$RUNNER_TEMP/build/Dockerfile" <<'DOCKER'
           FROM node:22-bookworm-slim AS node
@@ -90,21 +103,24 @@ jobs:
           PEER: ${{ matrix.peer }}
           DIRECTION: ${{ matrix.direction }}
           MODE: ${{ matrix.mode }}
+          ENGINE: ${{ matrix.engine || 'planar' }}
         run: |
           set -euo pipefail
           docker run --rm --network none --read-only --tmpfs /tmp:rw,nosuid,nodev,size=512m \
             --cap-drop ALL --security-opt no-new-privileges --pids-limit 128 --memory 1g --cpus 2 \
             --user 65534:65534 --env HOME=/tmp --env PYTHONUTF8=1 --env PYTHONDONTWRITEBYTECODE=1 \
             --mount "type=bind,source=$RUNNER_TEMP/input,target=/repo,readonly" \
-            --workdir /repo stage3-trial python -B -X utf8 tools/peer_trial.py "$PEER" "$DIRECTION" --mode "$MODE" \
+            --workdir /repo stage3-trial python -B -X utf8 tools/peer_trial.py "$PEER" "$DIRECTION" --mode "$MODE" --engine "$ENGINE" \
             | tee "$RUNNER_TEMP/peer-result.jsonl"
       - name: Archive aggregate measurements only
         if: always()
         uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
         with:
-          name: peer-${{ matrix.peer }}-${{ matrix.direction }}-${{ matrix.mode }}
+          name: peer-${{ matrix.peer }}-${{ matrix.direction }}-${{ matrix.mode }}-${{ matrix.engine || 'planar' }}
           path: |
             ${{ runner.temp }}/peer-result.jsonl
             ${{ runner.temp }}/peer-inventory.json
+            ${{ runner.temp }}/peer-dependency-provenance.jsonl
+            ${{ runner.temp }}/build/peer-dependencies/package-lock.json
           if-no-files-found: warn
           retention-days: 14

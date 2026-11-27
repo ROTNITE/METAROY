@@ -1,7 +1,7 @@
 from copy import deepcopy
 from unittest import TestCase
 
-from tools.peer_dependencies import validate_manifests
+from tools.peer_dependencies import validate_manifests, dependency_manifest
 from tools.run_interop import Evidence
 
 
@@ -11,6 +11,13 @@ class DependencyBoundary(TestCase):
         self.lock={'lockfileVersion':3,'packages':{'':self.manifest,
             'node_modules/vite':{'version':'5.4.0','resolved':'https://registry.npmjs.org/vite/-/vite-5.4.0.tgz',
                                  'integrity':'sha512-ZGVtbw=='}}}
+
+    def test_dependency_only_manifest_does_not_copy_scripts_or_config(self):
+        manifest=dependency_manifest({'name':'peer','version':'9','dependencies':{'vite':'^5.4.0'},
+                                     'scripts':{'postinstall':'dangerous'},'config':{'token':'secret'}})
+        self.assertEqual(manifest['dependencies'],{'vite':'^5.4.0'})
+        self.assertNotIn('scripts',manifest)
+        self.assertNotIn('config',manifest)
 
     def test_locked_registry_dependency(self):
         self.assertEqual(validate_manifests(self.manifest,self.lock),1)

@@ -66,30 +66,67 @@ def validate_manifests(manifest, lock):
     return len(packages)-1
 
 
+def dependency_manifest(original):
+    if not isinstance(original,dict):
+        raise ValueError('Expected package manifest object')
+    check_specs(original)
+    # Do not place application scripts, package config or arbitrary metadata
+    # in the network-enabled dependency resolution directory.
+    result={'name':'stage3-frozen-peer-runtime','version':'1.0.0','private':True}
+    for field in DEPENDENCY_FIELDS:
+        if field in original:
+            result[field]=original[field]
+    if 'peerDependenciesMeta' in original:
+        result['peerDependenciesMeta']=original['peerDependenciesMeta']
+    return result
+
+
+def validate_directory(output):
+    manifest=json.loads((output/'package.json').read_bytes())
+    lock_file=output/'package-lock.json'
+    if lock_file.stat().st_size>MAX_MANIFEST_BYTES:
+        raise ValueError('Generated dependency lock exceeds size limit')
+    lock=json.loads(lock_file.read_bytes())
+    count=validate_manifests(manifest,lock)
+    return {'locked_packages':count,'lock_sha256':hashlib.sha256(lock_file.read_bytes()).hexdigest()}
+
+
 def prepare(root, output):
     relative,expected,base=PEERS['v9']
     source=root/relative
     if hashlib.sha256(source.read_bytes()).hexdigest()!=expected:
         raise ValueError('Partner archive digest mismatch')
     with zipfile.ZipFile(source) as archive:
-        data={}
-        for name in ('package.json','package-lock.json'):
+        def read(name):
             member=archive.getinfo(base+'/'+name)
             if member.file_size>MAX_MANIFEST_BYTES:
                 raise ValueError('Dependency manifest exceeds size limit')
-            data[name]=json.loads(archive.read(member))
-    count=validate_manifests(data['package.json'],data['package-lock.json'])
+            return archive.read(member)
+        raw=read('package.json')
+        original=json.loads(raw)
+        manifest=dependency_manifest(original)
+        archived=base+'/package-lock.json' in archive.namelist()
+        lock=json.loads(read('package-lock.json')) if archived else None
     output.mkdir(parents=True,exist_ok=True)
-    for name,value in data.items():
-        (output/name).write_text(json.dumps(value,ensure_ascii=False),encoding='utf-8')
-    return {'locked_packages':count,'lock_sha256':hashlib.sha256((output/'package-lock.json').read_bytes()).hexdigest()}
+    if any(output.iterdir()):
+        raise ValueError('Expected a new dependency directory')
+    (output/'package.json').write_text(json.dumps(manifest,ensure_ascii=False),encoding='utf-8')
+    result={'archive_manifest_sha256':hashlib.sha256(raw).hexdigest(),
+            'lock_source':'archive' if archived else 'generated-required'}
+    if archived:
+        validate_manifests(manifest,lock)
+        (output/'package-lock.json').write_text(json.dumps(lock,ensure_ascii=False),encoding='utf-8')
+        result.update(validate_directory(output))
+    return result
 
 
 def main():
     parser=argparse.ArgumentParser(description=__doc__)
     parser.add_argument('--output',type=Path,required=True)
+    parser.add_argument('--validate-only',action='store_true')
     args=parser.parse_args()
-    print(json.dumps(prepare(Path(__file__).resolve().parents[1],args.output)))
+    result=validate_directory(args.output) if args.validate_only else prepare(Path(__file__).resolve().parents[1],args.output)
+    print(json.dumps(result))
 
 
 if __name__=='__main__':

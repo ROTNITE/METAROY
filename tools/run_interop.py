@@ -299,6 +299,35 @@ def planar(*, estimates=True, port=0):
 
 
 @contextmanager
+def independent_reference(profile,port):
+    """The independent simulator is a test engine, not the Unreal product."""
+    from conformance.reference_environment import serve
+    with serve(profile,port) as server:
+        worker=threading.Thread(target=server.serve_forever)
+        worker.start()
+        try:
+            yield f'http://127.0.0.1:{server.server_port}',server
+        finally:
+            server.shutdown()
+            worker.join()
+
+
+def independent_truth(server):
+    trial=server.trial
+    if not trial.episode:
+        return {'profile':trial.profile,'target_count':None,'physical_handovers':None,
+                'all_evacuated':False,'closed':False}
+    with server.lock:
+        physical=len({item['target_id'] for item in trial.private_handover
+                      if item.get('effect')=='evacuated'})
+        count=len(trial.targets)
+        return {'profile':trial.profile,'episode_id':trial.episode,'target_count':count,
+                'physical_handovers':physical,'all_evacuated':count>0 and physical==count
+                and all(target['state']=='evacuated' for target in trial.targets.values()),
+                'closed':trial.closed,'status':trial.status}
+
+
+@contextmanager
 def native(output, args):
     with file_lock(DEFAULT_OUTPUT / 'locks/unreal-owner.lock'):
         if existing_unreal():
@@ -529,7 +558,9 @@ def main():
     inbound.add_argument('--decide-path', choices=('decide', 'decision'), default='decide')
     inbound.add_argument('--decide-profile', choices=('core', 'metaroi-v9'), default='core')
     inbound.add_argument('--decision-timeout', type=float, default=10., help='Per-request RPC timeout in seconds')
-    inbound.add_argument('--engine', choices=('planar', 'unreal'), default='unreal')
+    inbound.add_argument('--engine', choices=('planar', 'unreal', 'reference'), default='unreal')
+    inbound.add_argument('--reference-profile', choices=('A','K'), default='A',
+                         help='Independent 3D test profile, never a native Unreal result')
     inbound.add_argument('--environment-port', type=int, default=18440)
     inbound.add_argument('--layout', type=Path)
     inbound.add_argument('--visible', action='store_true')
@@ -545,6 +576,9 @@ def main():
     sources += list((ROOT / 'contracts').glob('*.py')) + list((ROOT / 'controller').rglob('*.py'))
     if args.operation == 'self-test' or args.operation == 'our-environment' and args.engine == 'planar':
         sources += list((ROOT / 'environment').glob('*.py'))
+    if args.operation == 'our-environment' and args.engine == 'reference':
+        sources += list((ROOT / 'conformance').glob('*.py'))
+    sources += [ROOT/'tools/goal_evidence.py']
     packages = getattr(args, 'input_package', ())
     frozen = {str(p.resolve(strict=True)): file_sha256(p) for p in (*sources, *packages)}
     if args.operation == 'our-environment' and args.engine == 'unreal':
@@ -562,7 +596,18 @@ def main():
                 seed = SEEDS[0] if args.seed is None else args.seed
                 report.update(run_controller(args.environment,output/'run',seed,args.scout_patrol,mission,args.timeout,
                                              compatibility=args.core_mode))
+            elif args.engine == 'reference':
+                report['engine']='independent-reference'
+                with independent_reference(args.reference_profile,args.environment_port) as (url,server):
+                    client=EnvironmentClient(url,timeout_s=30,core_mode=args.core_mode)
+                    try:
+                        report.update(run_external(args,client,output,mission))
+                    finally:
+                        client.disconnect()
+                        report['independent_truth']=independent_truth(server)
+                        atomic_json(output/'independent-truth.json',report['independent_truth'])
             else:
+                report['engine']=args.engine
                 scope = planar(port=args.environment_port) if args.engine == 'planar' else native(output, args)
                 with scope as url:
                     client = EnvironmentClient(url,timeout_s=30,core_mode=args.core_mode)

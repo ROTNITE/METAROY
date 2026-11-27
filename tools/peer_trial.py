@@ -147,15 +147,20 @@ def summary(report):
     for key in ("api_accounting_error","close_error"):
         if result.get(key):
             selected[key]=str(result[key])[:240]
+    truth=result.get("independent_truth")
+    if isinstance(truth,dict):
+        selected["independent_truth"]={key:truth[key] for key in
+            ("profile","target_count","physical_handovers","all_evacuated","closed") if key in truth}
     if result.get("error"):
         selected["error"] = str(result["error"])[:240]
     return selected
 
 
-def trial(peer, direction, mode, seed):
+def trial(peer, direction, mode, seed, engine='planar'):
     rel, expected, base = PEERS[peer]
     package = ROOT / rel
-    row = {"peer":peer,"direction":direction,"mode":mode,"seed":seed,"archive_sha256":expected}
+    row = {"peer":peer,"direction":direction,"mode":mode,"seed":seed,
+           "engine":engine if direction=='inbound' else 'partner', "archive_sha256":expected}
     begin = time.monotonic()
     process = runner = None
     with tempfile.TemporaryDirectory(prefix="peer-trial-") as directory:
@@ -187,7 +192,7 @@ def trial(peer, direction, mode, seed):
                     args += ["--environment",url]
                 else:
                     endpoint = "decision" if peer in ("lab","atlas") else "decide"
-                    args += ["--controller",url,"--mode","decide","--engine","planar",
+                    args += ["--controller",url,"--mode","decide","--engine",engine,
                              "--environment-port","18440","--decide-path",endpoint,
                              "--decision-timeout","7"]
                     if peer=="v9":
@@ -218,10 +223,11 @@ def main():
     parser.add_argument("direction",choices=("outbound","inbound"))
     parser.add_argument("--seed",type=int,action="append")
     parser.add_argument("--mode",choices=("strict","declared"),default="strict")
+    parser.add_argument("--engine",choices=("planar","reference"),default="planar")
     options = parser.parse_args()
     if options.peer=="atlas" and options.direction=="outbound":
         parser.error("Atlas archive contains no standalone environment")
-    rows = [trial(options.peer,options.direction,options.mode,seed) for seed in options.seed or SEEDS]
+    rows = [trial(options.peer,options.direction,options.mode,seed,options.engine) for seed in options.seed or SEEDS]
     print(json.dumps({"completed_trials":len(rows),"passed_exchanges":sum(r.get("exchange")=="passed" for r in rows),
                       "all_inputs_preserved":all(r["archive_preserved"] for r in rows)},ensure_ascii=False),flush=True)
     # This is a measurement job, not a normative acceptance gate. Negative
