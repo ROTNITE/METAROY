@@ -33,6 +33,9 @@ class RevisedDisasterTests(unittest.TestCase):
                 rows={r['id']:r for r in tape['events']}
                 children=[r for r in tape['events'] if 'cause' in r]
                 self.assertTrue(children)
+                omitted=deepcopy(tape)
+                omitted['events']=[r for r in omitted['events'] if r['id']!=children[0]['id']]
+                with self.assertRaises(ProtocolError): validate_tape(omitted,new)
                 for child in children:
                     parent=rows[child['parent_id']]
                     self.assertEqual(child['source_object_id'],parent['source_object_id'])
