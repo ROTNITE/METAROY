@@ -305,7 +305,7 @@ void AMRWorld::ResetCoreEventEffects()
     for(int32 I=CoreEventComponents.Num()-1;I>=0;--I)
         if(USceneComponent* Component=CoreEventComponents[I])Component->DestroyComponent();
     CoreEventComponents.Empty();
-    DebrisCells.Empty();DebrisHistory.Empty();NextDebrisRefresh=0;
+    DebrisCells.Empty();DebrisHistory.Empty();StaticDebrisCells.Empty();bStaticDebrisDirty=true;NextDebrisRefresh=0;
     MudTracks=nullptr;
     MudTrackPositions.Empty();
     NextMudTrackCleanup=0;
@@ -353,6 +353,8 @@ int32 AMRWorld::ApplyCoreDisturbance(const FMRDisturbance& Event)
     PlaceDisasterWreck(VisualEvent);
     for(int32 I=FirstGenerated;I<Generated.Num();++I)CoreEventComponents.Add(Generated[I]);
     for(int32 I=FirstVisual;I<HazardVisuals.Num();++I)CoreEventComponents.AddUnique(HazardVisuals[I]);
+    if(Environment.bRevisedDisasters&&(Event.Kind==EMRDisturbance::Collapse||
+        Event.Kind==EMRDisturbance::Fire||Event.Kind==EMRDisturbance::RoadDamage))bStaticDebrisDirty=true;
     return PhysicsPieces.Num()-FirstPiece;
 }
 
