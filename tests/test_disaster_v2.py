@@ -3,6 +3,7 @@ from copy import deepcopy
 import unittest
 
 from contracts.protocol import ProtocolError
+from controller.navigation import NavigationMap, observed_surfaces
 from environment.config import Settings, EVENT_DEFAULTS
 from environment.events import DETAILED_PHYSICS, REVISED_PHYSICS, generate_tape, validate_tape
 from environment.layout import generate, fingerprint, public_map
@@ -69,3 +70,25 @@ class RevisedDisasterTests(unittest.TestCase):
                 admitted={r['kind'] for r in tape['events'] if not r['rejection']}
                 self.assertTrue({'fire','collapse','smoke','road_damage','flood','mud'} <= admitted)
                 self.assertNotIn('event_model',public_map(world))
+
+    def test_delivered_rubble_and_fire_force_detour_and_resolved_cells_clear(self):
+        static={'bounds':{'kind':'box','min':[0,0,0],'max':[100,100,60]}}
+        start,goal=(10.,12.5,.73),(40.,12.5,.73)
+        def zone(x,kind):
+            return {'id':f'surface-{x//5}-2','type':'hazard','received_at':8.,
+                    'geometry':{'type':'box','min':[x,10,0],'max':[x+5,15,2]},
+                    'surface':{'active':True,'ground_blocked':True,'surface_multiplier':1.,
+                               'visibility':.5,'kinds':[kind],'physical_debris':kind=='collapse'}}
+        zones=[zone(20,'collapse'),zone(25,'fire')]
+        # Future/undelivered measurements cannot enter the route planner.
+        before=NavigationMap(static,surfaces=observed_surfaces({'time':7.,'zones':zones}))
+        self.assertAlmostEqual(before.route(start,goal).distance_m,30.)
+        after=NavigationMap(static,surfaces=observed_surfaces({'time':8.,'zones':zones}))
+        self.assertFalse(after.clear(start,goal,1.45,1.1))
+        route=after.route(start,goal)
+        self.assertGreater(route.distance_m,30.)
+        self.assertTrue(all(after.clear(a,b,1.45,1.1) for a,b in zip(route.points,route.points[1:])))
+        cleared=deepcopy(zones)
+        for row in cleared:row['surface']['active']=False
+        reset=NavigationMap(static,surfaces=observed_surfaces({'time':9.,'zones':cleared}))
+        self.assertAlmostEqual(reset.route(start,goal).distance_m,30.)
