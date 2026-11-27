@@ -134,3 +134,26 @@ class RevisedDisasterTests(unittest.TestCase):
         self.assertFalse(nav.clear(start,goal,1.45,1.1))
         nav=NavigationMap(static,surfaces=observed_surfaces({'time':9.,'zones':[cleared]}))
         self.assertAlmostEqual(nav.route(start,goal).distance_m,30.)
+
+
+    def test_explicit_combined_native_fixtures_are_colocated_and_ordered(self):
+        from tools.generate_vis23_fixtures import fixtures
+        for size in (25,75,150):
+            with self.subTest(size=size):
+                cases,meta=fixtures(size,2026)
+                self.assertTrue(meta['shared_cells'])
+                before,after=cases['road-first'],cases['fire-first']
+                self.assertEqual(public_map(before),public_map(after))
+                self.assertEqual(before['people'],after['people'])
+                for name,world in cases.items():
+                    tape=world['event_model'];validate_tape(tape,world)
+                    fire=next(r for r in tape['events'] if r['kind']=='fire')
+                    collapse=next(r for r in tape['events'] if r.get('cause'))
+                    road=next(r for r in tape['events'] if r['kind']=='road_damage')
+                    self.assertEqual(collapse['source_object_id'],fire['source_object_id'])
+                    self.assertEqual(collapse['parent_id'],fire['id'])
+                    self.assertTrue(set(map(tuple,road['cells']))&set(map(tuple,collapse['cells'])))
+                    self.assertLess(fire['time'],collapse['time'])
+                    if name=='road-first':self.assertLess(road['time'],fire['time'])
+                    else:self.assertGreater(road['time'],collapse['time'])
+                self.assertNotEqual(fingerprint(before),fingerprint(after))
