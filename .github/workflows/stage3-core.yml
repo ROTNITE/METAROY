@@ -1,0 +1,48 @@
+name: Stage 3 Core interoperability
+on:
+  push:
+    branches:
+      - chatgpt/stage3-universal-core-hardening
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  public-core:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    env:
+      GIT_LFS_SKIP_SMUDGE: "1"
+      PYTHONUTF8: "1"
+      PYTHONHASHSEED: "0"
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+        with:
+          fetch-depth: 1
+          lfs: false
+          persist-credentials: false
+          sparse-checkout: |
+            controller
+            contracts
+            conformance
+            environment
+            tests
+            tools
+            analytics
+      - name: Install pinned dependencies
+        run: |
+          python3 -m venv .venv
+          .venv/bin/python -m pip install -r requirements.txt
+      - name: Boundary and portable policy regressions
+        run: |
+          set -eu
+          for pattern in test_stage3_hardening.py test_universal_core.py test_environment_client.py test_protocol.py test_runtime_protocol.py test_portable_operations.py test_core_interop.py; do
+            .venv/bin/python -B -X utf8 -m unittest discover -s tests -p "$pattern" -v
+          done
+      - name: Independent Core trial
+        run: .venv/bin/python -B -X utf8 -m conformance.check --output "$RUNNER_TEMP/stage3-matrix"
+      - name: Print matrix report
+        if: always()
+        run: |
+          if test -f "$RUNNER_TEMP/stage3-matrix/report.json"; then
+            cat "$RUNNER_TEMP/stage3-matrix/report.json"
+          fi
