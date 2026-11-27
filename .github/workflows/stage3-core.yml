@@ -35,11 +35,11 @@ jobs:
       - name: Boundary and portable policy regressions
         run: |
           set -eu
-          for pattern in test_stage3_hardening.py test_universal_core.py test_environment_client.py test_protocol.py test_runtime_protocol.py test_portable_operations.py test_core_interop.py; do
+          for pattern in test_stage3_hardening.py test_public_route.py test_universal_core.py test_environment_client.py test_protocol.py test_runtime_protocol.py test_portable_operations.py test_core_interop.py; do
             .venv/bin/python -B -X utf8 -m unittest discover -s tests -p "$pattern" -v
           done
       - name: Independent Core trial
-        run: .venv/bin/python -B -X utf8 -m conformance.check --output "$RUNNER_TEMP/stage3-matrix"
+        run: .venv/bin/python -B -X utf8 -m conformance.check --output "$RUNNER_TEMP/stage3-matrix" --profiles ABCDEFGHIJK --reverse
       - name: Print matrix report
         if: always()
         run: |

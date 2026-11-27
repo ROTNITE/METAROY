@@ -102,10 +102,44 @@ def run_controller(origin, work, mode, seed, *, reference=False):
     with (work/'stdout.log').open('xb') as output:
         done=subprocess.run(argv,stdout=output,stderr=subprocess.STDOUT,timeout=90,check=False)
     manifest=work/'controller/manifest.json'
+    if reference and done.returncode==0:
+        return done.returncode,json.loads((work/'stdout.log').read_text(encoding='utf-8').splitlines()[-1])
     return done.returncode, json.loads(manifest.read_bytes()) if manifest.is_file() else {}
 
 
-def matrix(output, profiles, seeds):
+def reverse_trials(output,seeds):
+    # The independent controller is launched as a separate process and sees
+    # only HTTP. The evaluator is allowed to inspect private custody.
+    from environment.server import PlanarServer
+    rows=[]
+    for seed in seeds:
+        for environment in ('independent-K','project-planar'):
+            dest=output/f'reverse-{environment}-{seed}';dest.mkdir()
+            context=serve('K',0,dest/'truth.json') if environment=='independent-K' else PlanarServer(0,estimates=False)
+            with context as server:
+                worker=Thread(target=server.serve_forever,daemon=True);worker.start()
+                try:
+                    origin=f'http://127.0.0.1:{server.server_port}'
+                    exit_code,report=run_controller(origin,dest,'strict',seed,reference=True)
+                    if environment=='independent-K':
+                        world=server.trial
+                        count=len(world.private_handover) if world.episode else 0
+                        total=len(world.targets) if world.episode else 0
+                    else:
+                        world=server.episode
+                        count=sum(person.custody==world.base for person in world.people.values()) if world else 0
+                        total=len(world.people) if world else 0
+                    passed=(exit_code==0 and report.get('status')=='success' and report.get('closed') is True
+                            and total>0 and count==total)
+                    rows.append({'environment':environment,'seed':seed,'exit':exit_code,'status':report.get('status'),
+                                 'physical_handovers':count,'target_count':total,'passed':passed})
+                    print('reverse',environment,seed,'pass' if passed else 'fail',flush=True)
+                finally:
+                    server.shutdown();worker.join()
+    return rows
+
+
+def matrix(output, profiles, seeds, reverse=False):
     with serve('G',0) as server:
         worker=Thread(target=server.serve_forever,daemon=True);worker.start()
         try:
@@ -126,15 +160,19 @@ def matrix(output, profiles, seeds):
                         status,report=run_controller(url,dest,mode,seed)
                         truth=server.trial.private_handover if server.trial.episode else []
                         expected_refusal=profile=='J' and mode=='strict'
+                        total=len(server.trial.targets) if server.trial.episode else 0
                         valid=(status!=0 and not truth) if expected_refusal else (
-                            status==0 and report['episode_status']=='success' and len(truth)==1)
+                            status==0 and report.get('episode_status')=='success' and total>0 and len(truth)==total)
                         repeats=report.get('patrol',{}).get('net65_repeats',0)
                         valid=valid and (profile not in ('D','F') or repeats>0)
                         decisions=[row['payload'] for row in getattr(server.trial,'journal',[]) if row['record_type']=='decision']
                         if decisions and not all(row['explanation']['reason_codes'] for row in decisions):
                             valid=False
                         rows.append({'profile':profile,'seed':seed,'mode':mode,'status':report.get('episode_status'),
-                                     'exit':status,'physical_handovers':len(truth),'confirmed_repeats':repeats,
+                                     'exit':status,'physical_handovers':len(truth),'target_count':total,
+                                     'confirmed_repeats':repeats,'ground_travel_m':sum(
+                                         distance for aid,distance in getattr(server.trial,'travel',{}).items()
+                                         if server.trial.agents[aid]['kind']=='ground'),
                                      'operation_counts':{kind:sum(d['operation']==kind for d in decisions)
                                                          for kind in OPERATIONS},'passed':valid})
                         if report.get('error'):
@@ -143,7 +181,9 @@ def matrix(output, profiles, seeds):
                         print(profile,seed,mode,'pass' if valid else 'fail',flush=True)
                     finally:
                         server.shutdown();worker.join()
-    data={'environment_checks':readiness,'trials':rows,'passed':all(r['passed'] for r in rows)}
+    reverse_rows=reverse_trials(output,seeds) if reverse else []
+    data={'environment_checks':readiness,'trials':rows,'reverse_trials':reverse_rows,
+          'passed':all(r['passed'] for r in rows+reverse_rows)}
     (output/'report.json').write_text(json.dumps(data,indent=2)+'\n',encoding='utf-8')
     return 0 if data['passed'] else 1
 
@@ -154,7 +194,8 @@ if __name__=='__main__':
     parser.add_argument('--profiles',default='ABCDEFGHIJ')
     parser.add_argument('--seed',type=int,action='append',default=[])
     args=parser.parse_args()
-    if not args.profiles or set(args.profiles)-set('ABCDEFGHIJ'):
-        parser.error('Profiles must use A through J')
+    parser.add_argument('--reverse',action='store_true',help='Also run the independent controller against two distinct environments')
+    if not args.profiles or set(args.profiles)-set('ABCDEFGHIJK'):
+        parser.error('Profiles must use A through K')
     args.output.mkdir(parents=True,exist_ok=False)
-    raise SystemExit(matrix(args.output,args.profiles,args.seed or SEEDS))
+    raise SystemExit(matrix(args.output,args.profiles,args.seed or SEEDS,args.reverse))
