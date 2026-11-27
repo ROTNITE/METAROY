@@ -351,7 +351,20 @@ int32 AMRWorld::ApplyCoreDisturbance(const FMRDisturbance& Event)
     const int32 FirstPiece=PhysicsPieces.Num();
     if(Event.Kind==EMRDisturbance::Collapse)
     {
-        if(bDisasterCity)CollapseCityStructure(Event);
+        if(bDisasterCity)
+        {
+            const bool Damaged=CollapseCityStructure(Event);
+            if(Environment.bRevisedDisasters&&!Damaged)
+            {
+                // A scheduled attempt can encounter a building already reduced
+                // by another event. Retain the conservative instability zone,
+                // but never emit a new dust plume or synthesize another wreck.
+                for(auto& Applied:Environment.Applied)if(Applied.Id==Event.Id)
+                {Applied.VisibilityExpiresAt=Event.Time;++Environment.Revision;break;}
+                UE_LOG(LogTemp,Display,TEXT("MR_STRUCTURE_COLLAPSE event=%s source=%s no_new_damage=1"),*Event.Id,*Event.SiteId);
+                return 0;
+            }
+        }
         else
         {
         // Bound each collapse to a few local convex bodies, released near the
@@ -374,7 +387,9 @@ int32 AMRWorld::ApplyCoreDisturbance(const FMRDisturbance& Event)
     FMRDisturbance VisualEvent=Event;
     if(const auto* Applied=Environment.FindApplied(Event.Id))VisualEvent.SmokeEmissionHeightCm=Applied->SmokeEmissionHeightCm;
     ApplyDisturbance(VisualEvent);
-    PlaceDisasterWreck(VisualEvent);
+    // A fire-derived collapse is a continuation of its parent fire, not a
+    // separate incident requiring a second independently generated vehicle.
+    if(!VisualEvent.bFireFailure)PlaceDisasterWreck(VisualEvent);
     for(int32 I=FirstGenerated;I<Generated.Num();++I)CoreEventComponents.Add(Generated[I]);
     for(int32 I=FirstVisual;I<HazardVisuals.Num();++I)CoreEventComponents.AddUnique(HazardVisuals[I]);
     if(Environment.bRevisedDisasters&&(Event.Kind==EMRDisturbance::Collapse||
@@ -404,14 +419,16 @@ void FMRCoreRuntime::AdvanceEvents()
         };
         const auto Before=ProbeRoad?SupportAtSource():Object();
         const int32 Bodies=Event.Rejection.IsEmpty()?World->ApplyCoreDisturbance(Event):0;
+        const auto* Applied=Model.FindApplied(Event.Id);
+        const auto& Effective=Applied?*Applied:Event;
         auto EventRecord=Obj({{TEXT("event_id"),Str(Event.Id)},{TEXT("kind"),Str(MRDisturbanceName(Event.Kind))},
                 {TEXT("scheduled_at"),Num(Event.Time)},{TEXT("source_m"),Point(Event.Source/100.)},
                 {TEXT("source_object_id"),Event.SiteId.IsEmpty()?Null():Str(Event.SiteId)},
                 {TEXT("parent_id"),Event.ParentId.IsEmpty()?Null():Str(Event.ParentId)},{TEXT("cells"),Arr(CellsJson(Event))},
                 {TEXT("target_id"),Event.TargetId>=0?Num(Event.TargetId):Null()},
                 {TEXT("expires_at"),Model.ActiveUntil(Event)>=0?Num(Model.ActiveUntil(Event)):Null()},
-                {TEXT("visibility_expires_at"),Model.VisibilityUntil(Event)>=0?Num(Model.VisibilityUntil(Event)):Null()},
-                {TEXT("smoke_emission_height_m"),Num(Event.SmokeEmissionHeightCm/100.)},
+                {TEXT("visibility_expires_at"),Model.VisibilityUntil(Effective)>=0?Num(Model.VisibilityUntil(Effective)):Null()},
+                {TEXT("smoke_emission_height_m"),Num(Effective.SmokeEmissionHeightCm/100.)},
                 {TEXT("reason"),Event.Rejection.IsEmpty()?Null():Str(Event.Rejection)},
                 {TEXT("released_bodies"),Num(Bodies)}});
         if(Event.bFireFailure)EventRecord->SetStringField(TEXT("cause"),TEXT("fire_structural_failure"));
