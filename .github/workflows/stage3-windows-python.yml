@@ -6,8 +6,8 @@ on:
     paths:
       - .github/workflows/stage3-windows-python.yml
       - tools/m5_*.py
-      - tests/test_m5_lab.py
-      - tests/test_product_session.py
+      - tests/**
+      - .gitattributes
       - controller/**
       - environment/**
   workflow_dispatch:
