@@ -96,6 +96,9 @@ bool AMRAgent::BeginHandover(const FString& Id)
     if(!Mission||!CanCarry()||!bCarrying||!Mission->Targets.IsValidIndex(TargetIndex)||
        State==TEXT("unloading")||IsCharging()||!IsOperational()||FVector::Dist2D(GetActorLocation(),Mission->Base)>500||
        Body->GetPhysicsLinearVelocity().Size()>30)return false;
+    const auto& Target=Mission->Targets[TargetIndex];
+    if(Mission->Environment.bRevisedDisasters&&(!Target.bAssigned||Target.bRescued||
+        Target.SupportCarrier.Get()!=this||!Target.MedicalHandoverCommand.IsEmpty()))return false;
     CommandId=Id;Path.Empty();PathIndex=0;bExternalHold=true;State=TEXT("unloading");
     ServiceRemaining=6;ServiceElapsed=0;ServiceHeading=GetActorRotation().Yaw;return true;
 }

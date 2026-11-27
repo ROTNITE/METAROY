@@ -52,6 +52,7 @@ struct FMRTarget
     void SetFlotationActive(bool Active);
     double VisualAnchorOffsetCm=0,FloatDisplacedM3=0;
     FString ShoreStation;
+    FString MedicalHandoverCommand;
     TWeakObjectPtr<AMRAgent> SupportCarrier;
     TArray<FVector> Path;
 };

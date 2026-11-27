@@ -273,6 +273,18 @@ void AMRAgent::Tick(float Dt)
             }
             else
             {
+                if(Mission->Environment.bRevisedDisasters)
+                {
+                    if(T.bRescued||!T.bAssigned||T.SupportCarrier.Get()!=this)
+                    {
+                        // Do not change another carrier's ownership or emit
+                        // another medical receipt on a contradictory state.
+                        bCarrying=false;TargetIndex=INDEX_NONE;State=TEXT("idle");
+                        if(Mission->bRescueQuarter)SetGroundPayloadKg(0);
+                        return;
+                    }
+                    T.MedicalHandoverCommand=CommandId;T.bAssigned=false;++T.ObservationEpoch;
+                }
                 T.bRescued=true;
                 T.SupportCarrier.Reset();
                 if(T.Visual)

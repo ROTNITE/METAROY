@@ -263,7 +263,7 @@ FVector AMRAgent::SafeVelocity(const FVector& Requested,float Dt)
                     Hit.ImpactPoint.Z<=Dock.Z+5;
                 const bool DepartingPad=Motion.Z>0&&P.Z<=Dock.Z+50&&FVector::Dist2D(P,Dock)<170;
                 if(OwnPadSupport&&(FlightAltitude<=Dock.Z+100||DepartingPad))continue;
-                if(StopObstacle==TEXT("restricted_volume"))break;
+                if(StopObstacle==TEXT("restricted_volume")||StopObstacle==TEXT("road_support"))break;
                 StopReason=TEXT("obstacle_on_route");Desired=FVector::ZeroVector;
                 ReportRouteObstacle(Hit);
                 break;
