@@ -3,7 +3,7 @@ from pathlib import Path
 from tempfile import TemporaryDirectory
 import unittest
 
-from controller.m5_progress import Progress, read_page, read_reference_page, MAX_LINE, MAX_FILE
+from controller.m5_progress import Progress, read_page, read_reference_page, MAX_LINE, MAX_FILE, MAX_SCAN_ROWS
 
 
 class ProgressTests(unittest.TestCase):
@@ -107,3 +107,40 @@ class ProgressTests(unittest.TestCase):
             p.record('decision',{'decision':{'decision_id':'d'}})
             self.assertEqual(path.stat().st_size,MAX_FILE-1)
             self.assertIsNone(p.path)
+
+    def test_exact_id_search_is_bounded_and_resumable(self):
+        with TemporaryDirectory() as folder:
+            path=Path(folder)/'progress.jsonl'
+            prefix={'kind':'decision','source':'interop','decision_id':'unrelated'}
+            target=dict(prefix,decision_id='цель/λ',request_id='запрос',episode_id='эпизод')
+            rows=[prefix]*(MAX_SCAN_ROWS+1)+[target,dict(target,decision_id='цель/λ-extra')]
+            original=''.join(json.dumps(row)+'\n' for row in rows).encode()
+            path.write_bytes(original)
+            first=read_page(path,identifier='цель/λ')
+            self.assertEqual(first['rows'],[])
+            self.assertEqual(first['scanned'],MAX_SCAN_ROWS)
+            self.assertTrue(first['more'])
+            second=read_page(path,first['cursor'],identifier='цель/λ')
+            self.assertEqual([row['decision_id'] for row in second['rows']],['цель/λ'])
+            self.assertFalse(second['more'])
+            for identifier in ('запрос','эпизод'):
+                page=read_page(path,first['cursor'],identifier=identifier)
+                self.assertEqual(len(page['rows']),2)
+            for identifier in ('','x'*129,'\n',1):
+                with self.subTest(identifier=identifier),self.assertRaises(ValueError):
+                    read_page(path,identifier=identifier)
+            self.assertEqual(path.read_bytes(),original)
+
+    def test_reference_search_does_not_match_uncorrelated_decisions(self):
+        with TemporaryDirectory() as folder:
+            path=Path(folder)/'reference.jsonl'
+            decision={'decision_id':'d','episode_id':'e','request_id':'r','commands':[{}]}
+            entries=[{'decision':decision,'response':{'episode_id':'e','request_id':'other'}},
+                     {'decision':decision,'response':{'episode_id':'e','request_id':'r'}}]
+            original=''.join(json.dumps(row)+'\n' for row in entries).encode()
+            path.write_bytes(original)
+            page=read_reference_page(path,identifier='d')
+            self.assertEqual(page['scanned'],2)
+            self.assertEqual(len(page['rows']),1)
+            self.assertEqual(page['rows'][0]['request_id'],'r')
+            self.assertEqual(path.read_bytes(),original)

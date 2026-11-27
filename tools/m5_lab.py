@@ -413,7 +413,7 @@ class Lab:
         with self.lock:
             return deepcopy(self.runs[ident])
 
-    def progress(self,ident,index,cursor=0,limit=50):
+    def progress(self,ident,index,cursor=0,limit=50,*,identifier=None):
         run=self.get(ident)
         if not 0<=index<len(run['rows']):
             raise KeyError('Unknown trial')
@@ -423,7 +423,7 @@ class Lab:
         resolved=path.resolve()
         if not resolved.is_relative_to(self.root/ident) or not resolved.is_relative_to(self.root):
             raise KeyError('Unsafe progress path')
-        return (read_reference_page if independent else read_progress_page)(path,cursor,limit)
+        return (read_reference_page if independent else read_progress_page)(path,cursor,limit,identifier=identifier)
 
     def report(self,ident,index):
         run=self.get(ident)
@@ -497,10 +497,11 @@ class Handler(BaseHTTPRequestHandler):
             progress_match=re.fullmatch(r'/api/series/([0-9a-f]{32})/trial/(\d{1,3})/progress',path)
             if progress_match:
                 query=parse_qs(parsed.query,keep_blank_values=True)
-                if set(query)-{'cursor','limit'} or any(len(v)!=1 for v in query.values()):
+                if set(query)-{'cursor','limit','id'} or any(len(v)!=1 for v in query.values()):
                     raise ValueError('Invalid progress query')
                 ident,index=progress_match.groups()
-                self.send(lab.progress(ident,int(index),int(query.get('cursor',['0'])[0]),int(query.get('limit',['50'])[0])));return
+                self.send(lab.progress(ident,int(index),int(query.get('cursor',['0'])[0]),
+                                       int(query.get('limit',['50'])[0]),identifier=query.get('id',[None])[0]));return
             match=re.fullmatch(r'/api/series/([0-9a-f]{32})(?:/trial/(\d{1,3})|/export/(json|csv|zip))?',path)
             if match:
                 ident,index,format=match.groups()

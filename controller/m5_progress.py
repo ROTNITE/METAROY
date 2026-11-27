@@ -15,6 +15,7 @@ MAX_LINE = 2048
 MAX_REFERENCE_FILE = 64 * 1024 * 1024
 MAX_REFERENCE_LINE = 512 * 1024
 MAX_REFERENCE_READ = 2 * 1024 * 1024
+MAX_SCAN_ROWS = 512
 TOKEN = re.compile(r'[A-Za-z0-9_.:/-]{1,128}\Z')
 
 
@@ -97,15 +98,28 @@ class Progress:
             self.path = None
 
 
-def read_page(path, cursor=0, limit=50):
-    """Bounded byte cursor; do not emit a concurrently written partial line."""
+def _search_identifier(identifier):
+    if identifier is not None and _identifier(identifier) is None:
+        raise ValueError('Expected a nonempty printable ID of at most 128 characters')
+
+
+def _matches(row, identifier):
+    return identifier is None or any(row.get(key) == identifier
+                                     for key in ('episode_id', 'request_id', 'decision_id'))
+
+
+def read_page(path, cursor=0, limit=50, *, identifier=None):
+    """Bounded byte cursor and exact ID filter; do not emit a partial line."""
+    _search_identifier(identifier)
     if type(cursor) is not int or not 0 <= cursor <= MAX_FILE or type(limit) is not int or not 1 <= limit <= 100:
         raise ValueError('Invalid progress page')
     if not path.is_file():
-        return {'available': False, 'rows': [], 'cursor': cursor, 'more': False}
+        return {'available': False, 'rows': [], 'cursor': cursor, 'more': False, 'scanned': 0, 'capped': False}
     rows = []
+    scanned = 0
     with path.open('rb') as stream:
-        size = min(path.stat().st_size, MAX_FILE)
+        actual_size = os.fstat(stream.fileno()).st_size
+        size = min(actual_size, MAX_FILE)
         if cursor > size:
             raise ValueError('Progress cursor beyond file')
         if cursor:
@@ -113,7 +127,7 @@ def read_page(path, cursor=0, limit=50):
             if stream.read(1) != b'\n':
                 raise ValueError('Progress cursor is not a record boundary')
         stream.seek(cursor)
-        while len(rows) < limit and stream.tell() < size:
+        while len(rows) < limit and scanned < MAX_SCAN_ROWS and stream.tell() < size:
             start = stream.tell()
             line = stream.readline(min(MAX_LINE + 1, size - start))
             if len(line) > MAX_LINE:
@@ -126,24 +140,31 @@ def read_page(path, cursor=0, limit=50):
                     not isinstance(row.get('source'), str) or
                     row['kind'] not in KINDS or row['source'] not in SOURCES):
                 raise ValueError('Invalid progress row')
-            rows.append({**_safe_fields(row), 'kind': row['kind'], 'source': row['source']})
+            projected = {**_safe_fields(row), 'kind': row['kind'], 'source': row['source']}
+            scanned += 1
+            if _matches(projected, identifier):
+                rows.append(projected)
         cursor = stream.tell()
-    return {'available': True, 'rows': rows, 'cursor': cursor, 'more': cursor < size}
+    return {'available': True, 'rows': rows, 'cursor': cursor, 'more': cursor < size,
+            'scanned': scanned, 'capped': actual_size > size}
 
 
-def read_reference_page(path, cursor=0, limit=50):
+def read_reference_page(path, cursor=0, limit=50, *, identifier=None):
     """Project the independent controller's existing JSONL without modifying it.
 
     Each record describes an already recorded correlated decision/response.
     No guessed process wall time; do not expose observation bodies.
     """
+    _search_identifier(identifier)
     if type(cursor) is not int or not 0 <= cursor <= MAX_REFERENCE_FILE or type(limit) is not int or not 1 <= limit <= 100:
         raise ValueError('Invalid reference progress page')
     if not path.is_file():
-        return {'available': False, 'rows': [], 'cursor': cursor, 'more': False}
+        return {'available': False, 'rows': [], 'cursor': cursor, 'more': False, 'scanned': 0, 'capped': False}
     rows = []
+    scanned = 0
     with path.open('rb') as stream:
-        size = min(path.stat().st_size, MAX_REFERENCE_FILE)
+        actual_size = os.fstat(stream.fileno()).st_size
+        size = min(actual_size, MAX_REFERENCE_FILE)
         if cursor > size:
             raise ValueError('Reference progress cursor beyond file')
         if cursor:
@@ -152,7 +173,8 @@ def read_reference_page(path, cursor=0, limit=50):
                 raise ValueError('Reference progress cursor is not a record boundary')
         stream.seek(cursor)
         initial = cursor
-        while len(rows) < limit and stream.tell() < size and stream.tell() - initial < MAX_REFERENCE_READ:
+        while (len(rows) < limit and scanned < MAX_SCAN_ROWS and stream.tell() < size and
+               stream.tell() - initial < MAX_REFERENCE_READ):
             start = stream.tell()
             line = stream.readline(min(MAX_REFERENCE_LINE + 1, size - start))
             if len(line) > MAX_REFERENCE_LINE:
@@ -177,6 +199,9 @@ def read_reference_page(path, cursor=0, limit=50):
                 row['decision_id'] = decision_id
                 if isinstance(decision.get('commands'), list):
                     row['commands'] = len(decision['commands'])
-            rows.append(row)
+            scanned += 1
+            if _matches(row, identifier):
+                rows.append(row)
         cursor = stream.tell()
-    return {'available': True, 'rows': rows, 'cursor': cursor, 'more': cursor < size}
+    return {'available': True, 'rows': rows, 'cursor': cursor, 'more': cursor < size,
+            'scanned': scanned, 'capped': actual_size > size}

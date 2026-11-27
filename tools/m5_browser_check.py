@@ -46,6 +46,16 @@ def main():
                     page.locator('#results').get_by_role('button',name='Журнал').click()
                     expect(page.locator('#timeline')).to_contain_text('decision · metarescue',timeout=10000)
                     expect(page.locator('#timeline')).to_contain_text('step_response · metarescue')
+                    decision_id=page.locator('#timeline tr').filter(has_text='decision · metarescue').first.locator('td').nth(5).inner_text()
+                    assert decision_id!='—'
+                    page.locator('#timeline-search').fill(decision_id)
+                    page.locator('#timeline-find').click()
+                    expect(page.locator('#timeline-status')).to_contain_text('найдено')
+                    expect(page.locator('#timeline')).to_contain_text(decision_id)
+                    for row in page.locator('#timeline tr').all():
+                        assert decision_id in [cell.inner_text() for cell in row.locator('td').all()[5:]]
+                    page.locator('#timeline-reset').click()
+                    expect(page.locator('#timeline')).to_contain_text('decision · metarescue')
                     assert not errors,errors
                     page.screenshot(path=str(args.output/'m5-desktop.png'),full_page=True)
                     page.reload();expect(page.locator('#exchange-stat')).to_have_text('1/1',timeout=10000)

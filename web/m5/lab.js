@@ -120,7 +120,7 @@ async function refresh(){
     lastRevision=page.revision;
     render();
     if(revisionChanged)void refreshMatrix();
-    if(timelineTrial&&(activeId===timelineTrial.id||revisionChanged))void pollTimeline();
+    if(timelineTrial&&!timelineIdentifier&&(activeId===timelineTrial.id||revisionChanged))void pollTimeline();
   }
   catch(error){byId('form-message').textContent='Лаборатория недоступна: '+error.message;}
   finally{refreshBusy=false;if(refreshAgain){refreshAgain=false;void refresh();}}
@@ -152,8 +152,12 @@ async function refreshMatrix(){
   }catch(error){if(request===matrixRequest)byId('matrix-page').textContent=error.message;}
 }
 let timelineTrial=null,timelineCursor=0,timelineRows=[],timelineGeneration=0,timelineBusy=false;
-function selectTimeline(id,index){
+let timelineIdentifier='',timelineScanned=0,timelineMatched=0;
+function selectTimeline(id,index,identifier=''){
   timelineTrial={id,index};timelineCursor=0;timelineRows=[];timelineGeneration++;timelineBusy=false;
+  timelineIdentifier=identifier;timelineScanned=0;timelineMatched=0;
+  byId('timeline-search').value=identifier;
+  byId('timeline-search').disabled=false;byId('timeline-find').disabled=false;
   byId('timeline').replaceChildren();byId('timeline-reset').disabled=false;byId('timeline-next').disabled=false;
   void pollTimeline();
 }
@@ -161,22 +165,34 @@ async function pollTimeline(){
   if(!timelineTrial||timelineBusy)return;
   const generation=timelineGeneration;const trial=timelineTrial;timelineBusy=true;
   try{
-    const page=await api('/api/series/'+trial.id+'/trial/'+trial.index+'/progress?cursor='+timelineCursor+'&limit=50');
+    const params=new URLSearchParams({cursor:String(timelineCursor),limit:'50'});
+    if(timelineIdentifier)params.set('id',timelineIdentifier);
+    const page=await api('/api/series/'+trial.id+'/trial/'+trial.index+'/progress?'+params);
     if(generation!==timelineGeneration)return;
-    timelineCursor=page.cursor;timelineRows=timelineRows.concat(page.rows).slice(-100);
+    timelineCursor=page.cursor;timelineScanned+=page.scanned;timelineMatched+=page.rows.length;
+    timelineRows=timelineRows.concat(page.rows).slice(-100);
     const body=byId('timeline');body.replaceChildren();
     for(const row of timelineRows){
       const tr=document.createElement('tr');
       appendCell(tr,row.wall_s??'—');appendCell(tr,row.kind+' · '+row.source);
       appendCell(tr,row.time??row.model_time??'—');appendCell(tr,row.status??row.operation??row.code??'—');
       appendCell(tr,(row.commands??'—')+' / '+(row.command_results??'—'));
-      appendCell(tr,row.decision_id??row.request_id??'—');body.append(tr);
+      appendCell(tr,row.decision_id);appendCell(tr,row.request_id);appendCell(tr,row.episode_id);body.append(tr);
     }
-    byId('timeline-status').textContent='Испытание '+(trial.index+1)+' · '+(page.available?(timelineRows.length+' последних записей; курсор '+timelineCursor+(page.more?' · есть следующие записи':'')):'Журнал ещё не создан или недоступен для этой архивной версии.');
+    const detail=timelineIdentifier?'Проверено '+timelineScanned+' записей; найдено '+timelineMatched+'; показано '+timelineRows.length:
+      timelineRows.length+' последних записей; курсор '+timelineCursor;
+    byId('timeline-status').textContent='Испытание '+(trial.index+1)+' · '+(page.available?
+      detail+(page.more?' · есть следующие записи':' · конец доступного фрагмента')+
+      (page.capped?' · превышен лимит просмотра, используйте архив':''):
+      'Журнал ещё не создан или недоступен для этой архивной версии.');
   }catch(error){if(generation===timelineGeneration)byId('timeline-status').textContent=error.message;}
   finally{if(generation===timelineGeneration)timelineBusy=false;}
 }
 byId('timeline-reset').addEventListener('click',()=>{if(timelineTrial)selectTimeline(timelineTrial.id,timelineTrial.index);});
+byId('timeline-filter').addEventListener('submit',event=>{
+  event.preventDefault();
+  if(timelineTrial)selectTimeline(timelineTrial.id,timelineTrial.index,byId('timeline-search').value);
+});
 byId('timeline-next').addEventListener('click',()=>pollTimeline());
 async function showReport(id,index){
   const request=++reportRequest;
