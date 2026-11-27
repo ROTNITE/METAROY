@@ -130,7 +130,7 @@ bool AMRWorld::ReadCoreEventTape()
     TMap<FString,int32> Earlier;
     TSet<int32> ReferencedPeople;
     TMap<FString,double> FireDelays;
-    TSet<FString> HeatFailedSites;
+    TMap<FString,FString> HeatFailedParents;
     if(Revised)for(const auto& Value:CityLayout->GetArrayField(TEXT("buildings")))
     {
         const auto Building=Value->AsObject();
@@ -168,7 +168,7 @@ bool AMRWorld::ReadCoreEventTape()
             const auto* Parent=Earlier.Find(Event.ParentId);
             const auto* Delay=FireDelays.Find(Event.SiteId);
             if(!Event.bFireFailure||Event.bPropagation||Event.Kind!=EMRDisturbance::Collapse||
-               !Event.Rejection.IsEmpty()||!Parent||!Delay||HeatFailedSites.Contains(Event.SiteId))
+               !Event.Rejection.IsEmpty()||!Parent||!Delay||HeatFailedParents.Contains(Event.SiteId))
                 return Fail(TEXT("invalid fire failure cause"));
             CausalFire=&Tape[*Parent];
             if(CausalFire->Kind!=EMRDisturbance::Fire||CausalFire->bPropagation||!CausalFire->Rejection.IsEmpty()||
@@ -176,7 +176,7 @@ bool AMRWorld::ReadCoreEventTape()
                !FMath::IsNearlyEqual(Event.Time,CausalFire->Time+*Delay,1.e-7)||
                Event.Id!=CausalFire->Id+TEXT("-heat-collapse"))
                 return Fail(TEXT("fire failure must follow active source fire"));
-            HeatFailedSites.Add(Event.SiteId);
+            HeatFailedParents.Add(Event.SiteId,Event.ParentId);
         }
         else if(Event.bPropagation)
         {
@@ -275,6 +275,29 @@ bool AMRWorld::ReadCoreEventTape()
         Previous=Event.Time;
         const int32 Index=Tape.Add(MoveTemp(Event));
         Earlier.Add(Tape[Index].Id,Index);
+    }
+    if(Revised)
+    {
+        // A valid individual child is not sufficient: an imported tape
+        // cannot silently delete the consequence or substitute a later fire.
+        TMap<FString,const FMRDisturbance*> FirstEligible;
+        for(const auto& Fire:Tape)
+        {
+            if(Fire.Kind!=EMRDisturbance::Fire||Fire.bPropagation||!Fire.Rejection.IsEmpty())continue;
+            const auto* Delay=FireDelays.Find(Fire.SiteId);
+            if(!Delay||Fire.Time+*Delay>=Horizon||Fire.Time+*Delay>=Fire.ExpiresAt)continue;
+            const auto Center=FMRDistrictEnvironment::Cell(Fire.Source);
+            if(!Fire.Cells.ContainsByPredicate([&](const auto& Cell)
+            {const auto D=Cell-Center;return D.X*D.X+D.Y*D.Y<=5;}))continue;
+            const auto* PreviousFire=FirstEligible.FindRef(Fire.SiteId);
+            if(!PreviousFire||Fire.Time<PreviousFire->Time||
+               (Fire.Time==PreviousFire->Time&&Fire.Id.Compare(PreviousFire->Id,ESearchCase::CaseSensitive)<0))
+                FirstEligible.Add(Fire.SiteId,&Fire);
+        }
+        if(FirstEligible.Num()!=HeatFailedParents.Num())return Fail(TEXT("missing causal fire failure"));
+        for(const auto& Pair:FirstEligible)
+            if(HeatFailedParents.FindRef(Pair.Key)!=Pair.Value->Id)
+                return Fail(TEXT("noncanonical causal fire failure"));
     }
     if(ReferencedPeople.Num()!=Late.Num())return Fail(TEXT("unreferenced late person"));
     Scenario->SetArrayField(TEXT("people"),People);
