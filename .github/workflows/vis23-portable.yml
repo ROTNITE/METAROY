@@ -47,6 +47,8 @@ jobs:
         run: |
           g++ -std=c++17 -O2 -Wall -Wextra -Werror tools/smoke_optics_probe.cpp -o "$RUNNER_TEMP/smoke_probe"
           "$RUNNER_TEMP/smoke_probe"
+          g++ -std=c++17 -O2 -Wall -Wextra -Werror tools/smoke_optics_stress.cpp -o "$RUNNER_TEMP/smoke_stress"
+          "$RUNNER_TEMP/smoke_stress"
           python -B tools/smoke_shader_probe.py
           g++ -std=c++17 -O2 -Wall -Wextra -Werror tools/smoke_optics_benchmark.cpp -o "$RUNNER_TEMP/smoke_benchmark"
           "$RUNNER_TEMP/smoke_benchmark"
