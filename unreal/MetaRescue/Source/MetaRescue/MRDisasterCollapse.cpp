@@ -1,5 +1,6 @@
 #include "MRWorld.h"
 #include "MRAgent.h"
+#include "MRUrbanTerrain.h"
 #include "Components/HierarchicalInstancedStaticMeshComponent.h"
 #include "Components/StaticMeshComponent.h"
 #include "Engine/StaticMesh.h"
@@ -139,4 +140,59 @@ bool AMRWorld::CollapseCityStructure(const FMRDisturbance& Event)
     UE_LOG(LogTemp,Display,TEXT("MR_STRUCTURE_COLLAPSE event=%s source=%s removed=%d bodies=%d detailed_fragments=%d remaining_top_cm=%.2f"),
         *Event.Id,*Event.SiteId,LostParts,Bodies,Detailed,Building->RemainingTopCm());
     return true;
+}
+
+void AMRWorld::RefreshDebrisCells()
+{
+    if(!Environment.bRevisedDisasters||Environment.Time+1.e-9<NextDebrisRefresh)return;
+    NextDebrisRefresh=Environment.Time+.5;
+    TSet<FIntPoint> Current;
+    const auto Add=[&](const FBox& Bounds)
+    {
+        if(!Bounds.IsValid||Bounds.Min.ContainsNaN()||Bounds.Max.ContainsNaN()||
+           Bounds.GetSize().Z<30||Bounds.GetSize().GetMax()<60)return;
+        // The cell is a conservative navigation observation, not an invisible
+        // collider. High roof debris must not block a street beneath it.
+        const auto Low=FMRDistrictEnvironment::Cell(Bounds.Min);
+        const auto High=FMRDistrictEnvironment::Cell(Bounds.Max);
+        const int32 Limit=2*GridSize-1;
+        for(int32 X=FMath::Max(0,Low.X);X<=FMath::Min(Limit,High.X);++X)
+            for(int32 Y=FMath::Max(0,Low.Y);Y<=FMath::Min(Limit,High.Y);++Y)
+            {
+                const FIntPoint Cell(X,Y);
+                FVector P=FMRDistrictEnvironment::Center(Cell);
+                P.X=FMath::Clamp(P.X,Bounds.Min.X,Bounds.Max.X);
+                P.Y=FMath::Clamp(P.Y,Bounds.Min.Y,Bounds.Max.Y);
+                const double Ground=UrbanTerrain?UrbanTerrain->GroundHeight(P):InitialGroundHeightCm(P);
+                if(Bounds.Min.Z<=Ground+100&&Bounds.Max.Z>=Ground+20)
+                    Current.Add(Cell);
+            }
+    };
+    for(USceneComponent* Item:CoreEventComponents)
+    {
+        auto* Primitive=Cast<UPrimitiveComponent>(Item);
+        if(!IsValid(Primitive)||Primitive->GetCollisionEnabled()==ECollisionEnabled::NoCollision||
+           (!Primitive->ComponentHasTag(TEXT("StructuralDebris"))&&!Primitive->ComponentHasTag(TEXT("DisasterVehicleWreck"))))continue;
+        if(auto* Batch=Cast<UInstancedStaticMeshComponent>(Primitive))
+        {
+            if(!Batch->GetStaticMesh())continue;
+            const auto Local=Batch->GetStaticMesh()->GetBounds();
+            for(int32 I=0;I<Batch->GetInstanceCount();++I)
+            {
+                FTransform Pose;
+                if(Batch->GetInstanceTransform(I,Pose,true))Add(Local.TransformBy(Pose).GetBox());
+            }
+        }
+        else Add(Primitive->Bounds.GetBox());
+    }
+    const bool Changed=Current.Num()!=DebrisCells.Num()||
+        Current.Array().ContainsByPredicate([&](const FIntPoint& Cell){return !DebrisCells.Contains(Cell);});
+    if(Changed)
+    {
+        for(const auto& Cell:Current)DebrisHistory.Add(Cell);
+        DebrisCells=MoveTemp(Current);
+        ++Environment.Revision;
+        UE_LOG(LogTemp,Verbose,TEXT("MR_DEBRIS_OCCUPANCY time=%.3f blocked=%d historical=%d"),
+            Environment.Time,DebrisCells.Num(),DebrisHistory.Num());
+    }
 }
