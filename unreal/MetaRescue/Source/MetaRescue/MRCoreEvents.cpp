@@ -247,13 +247,13 @@ bool AMRWorld::ReadCoreEventTape()
             {
                 const FIntPoint Center=FMRDistrictEnvironment::Cell(CausalFire->Source);
                 TArray<FIntPoint> Expected;
-                for(const auto& Cell:CausalFire->Cells)
+                for(const auto& OriginCell:CausalFire->Cells)
                 {
-                    const auto Delta=Cell-Center;
-                    if(Delta.X*Delta.X+Delta.Y*Delta.Y<=5)Expected.Add(Cell);
+                    const auto Delta=OriginCell-Center;
+                    if(Delta.X*Delta.X+Delta.Y*Delta.Y<=5)Expected.Add(OriginCell);
                 }
                 if(Expected.IsEmpty()||Expected.Num()!=Event.Cells.Num()||
-                   Event.Cells.ContainsByPredicate([&](const auto& Cell){return !Expected.Contains(Cell);})||
+                   Event.Cells.ContainsByPredicate([&](const auto& CandidateCell){return !Expected.Contains(CandidateCell);})||
                    !Event.Source.Equals(CausalFire->Source,1.e-5)||Event.ExpiresAt>=0||
                    !FMath::IsNearlyEqual(Event.VisibilityExpiresAt,Event.Time+24.,1.e-7)||
                    !FMath::IsNearlyEqual(double(Event.SmokeEmissionHeightCm),FMath::Max(0.,Event.Source.Z+15.),1.e-3))

@@ -1,3 +1,4 @@
+#include "MRStreetSignals.h"
 #include "MRWorld.h"
 #include "MRCoreRuntime.h"
 #include "MRCoreJson.h"
