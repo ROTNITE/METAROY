@@ -325,8 +325,14 @@ Object FMRCoreRuntime::Capabilities() const
         {TEXT("not_yet_supported"),Unsupported}});
     if(World->bDisasterCity&&DynamicReset)
     {
-        auto Settings=ResetParameters->GetArrayField(TEXT("mission_settings"));Settings.Add(Str(TEXT("boats")));
+        auto Settings=ResetParameters->GetArrayField(TEXT("mission_settings"));Settings.Add(Str(TEXT("boats")));Settings.Add(Str(TEXT("disaster_revision")));
         ResetParameters->SetArrayField(TEXT("mission_settings"),Settings);
+    }
+    if(World->Environment.bRevisedDisasters)
+    {
+        auto Extensions=Result->GetArrayField(TEXT("extensions"));
+        Extensions.Add(Str(TEXT("metarescue.urban-disasters.v2")));
+        Result->SetArrayField(TEXT("extensions"),Extensions);
     }
     if(HasWatercraft)
     {
