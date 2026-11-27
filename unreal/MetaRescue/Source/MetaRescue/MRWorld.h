@@ -149,7 +149,8 @@ private:
     UPROPERTY() TArray<TObjectPtr<USceneComponent>> CoreEventComponents;
     // Private physical occupancy, sampled from current event-owned colliders.
     // History allows a delivered observation to clear a moved obstacle.
-    TSet<FIntPoint> DebrisCells,DebrisHistory;
+    TSet<FIntPoint> DebrisCells,DebrisHistory,StaticDebrisCells;
+    bool bStaticDebrisDirty=true;
     double NextDebrisRefresh=0;
     void RefreshDebrisCells();
     UPROPERTY() TObjectPtr<UInstancedStaticMeshComponent> MudTracks;
