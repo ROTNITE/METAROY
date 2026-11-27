@@ -19,6 +19,12 @@ def prepare(request):
         raise ProtocolError('INVALID_REQUEST', 'Unknown mission parameters', {'fields': sorted(unknown)})
     settings = {'city_revision': '2.2', **{key: value for key, value in base.items() if key in settings_keys},
                 **parameters, 'seed': request['seed']}
+    # Switching back to a historical city must not inherit 2.3-only
+    # options from the startup configuration. Explicit invalid overrides
+    # still reach Settings.parse and are rejected rather than ignored.
+    if 'city_revision' in parameters and settings['city_revision'] != '2.3':
+        if 'disaster_revision' not in parameters:settings.pop('disaster_revision', None)
+        if 'boats' not in parameters:settings.pop('boats', None)
     for override, default in (('event_profile', 'probabilities'), ('map_size', 'horizon'),
                               ('preset', 'sensor_reliability')):
         if override in parameters and settings[override] != base.get(override) and default not in parameters:
