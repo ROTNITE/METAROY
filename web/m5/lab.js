@@ -100,7 +100,7 @@ function render(){
     appendCell(tr,r.exchange||row.state,r.exchange==='passed'?'ok':r.exchange==='failed'?'bad':'');
     appendCell(tr,r.status);
     appendCell(tr,truth&&Number.isInteger(truth.physical_handovers)?truth.physical_handovers+'/'+truth.target_count:'—');
-    const td=appendCell(tr,'');const b=button('Детали',()=>showReport(run.id,row.index));b.disabled=!row.result;td.append(b);body.append(tr);
+    const td=appendCell(tr,'');const b=button('Детали',()=>showReport(run.id,row.index));b.disabled=!row.result;td.append(b,button('Журнал',()=>selectTimeline(run.id,row.index)));body.append(tr);
   }
   exportLink('export-json',run,'json');exportLink('export-csv',run,'csv');exportLink('export-zip',run&&!activeStates.has(run.state)?run:null,'zip');renderHistory();syncForm();
 }
@@ -120,6 +120,7 @@ async function refresh(){
     lastRevision=page.revision;
     render();
     if(revisionChanged)void refreshMatrix();
+    if(timelineTrial&&activeId===timelineTrial.id)void pollTimeline();
   }
   catch(error){byId('form-message').textContent='Лаборатория недоступна: '+error.message;}
   finally{refreshBusy=false;if(refreshAgain){refreshAgain=false;void refresh();}}
@@ -150,6 +151,33 @@ async function refreshMatrix(){
     }
   }catch(error){if(request===matrixRequest)byId('matrix-page').textContent=error.message;}
 }
+let timelineTrial=null,timelineCursor=0,timelineRows=[],timelineGeneration=0,timelineBusy=false;
+function selectTimeline(id,index){
+  timelineTrial={id,index};timelineCursor=0;timelineRows=[];timelineGeneration++;timelineBusy=false;
+  byId('timeline').replaceChildren();byId('timeline-reset').disabled=false;byId('timeline-next').disabled=false;
+  void pollTimeline();
+}
+async function pollTimeline(){
+  if(!timelineTrial||timelineBusy)return;
+  const generation=timelineGeneration;const trial=timelineTrial;timelineBusy=true;
+  try{
+    const page=await api('/api/series/'+trial.id+'/trial/'+trial.index+'/progress?cursor='+timelineCursor+'&limit=50');
+    if(generation!==timelineGeneration)return;
+    timelineCursor=page.cursor;timelineRows=timelineRows.concat(page.rows).slice(-100);
+    const body=byId('timeline');body.replaceChildren();
+    for(const row of timelineRows){
+      const tr=document.createElement('tr');
+      appendCell(tr,row.wall_s??'—');appendCell(tr,row.kind+' · '+row.source);
+      appendCell(tr,row.time??row.model_time??'—');appendCell(tr,row.status??row.operation??row.code??'—');
+      appendCell(tr,(row.commands??'—')+' / '+(row.command_results??'—'));
+      appendCell(tr,row.decision_id??row.request_id??'—');body.append(tr);
+    }
+    byId('timeline-status').textContent='Испытание '+(trial.index+1)+' · '+(page.available?(timelineRows.length+' последних записей; курсор '+timelineCursor+(page.more?' · есть следующие записи':'')):'Журнал ещё не создан или недоступен для этой архивной версии.');
+  }catch(error){if(generation===timelineGeneration)byId('timeline-status').textContent=error.message;}
+  finally{if(generation===timelineGeneration)timelineBusy=false;}
+}
+byId('timeline-reset').addEventListener('click',()=>{if(timelineTrial)selectTimeline(timelineTrial.id,timelineTrial.index);});
+byId('timeline-next').addEventListener('click',()=>pollTimeline());
 async function showReport(id,index){
   const request=++reportRequest;
   byId('report-title').textContent='Серия '+id.slice(0,8)+' · испытание '+(index+1);

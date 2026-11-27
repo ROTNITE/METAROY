@@ -1,8 +1,6 @@
 """Start the authoritative Unreal environment; the controller is separate."""
 from __future__ import annotations
 
-from environment.render_profiles import RENDER_PROFILES, render_commands
-
 import argparse
 import csv
 from datetime import datetime, timezone
@@ -14,6 +12,10 @@ import subprocess
 import sys
 
 ROOT = Path(__file__).resolve().parents[1]
+# Preserve both module and historical direct-script invocation.
+if __package__ in (None, ''):
+    sys.path.insert(0, str(ROOT))
+from environment.render_profiles import RENDER_PROFILES, render_commands
 WINDOWS_GAME_BINARIES = {'Development': 'MetaRescue.exe', 'Shipping': 'MetaRescue-Win64-Shipping.exe'}
 
 

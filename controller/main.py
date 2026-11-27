@@ -31,6 +31,7 @@ from controller.net65 import PATROL_MODES
 from controller.portable import PortablePolicy
 from controller.profiles import CONTROLLER_PROFILES, COUNTERFACTUAL, STANDARD, select_patrol
 from controller.public_core import CORE_MODES, STEP_DEDUPLICATION
+from controller.m5_progress import Progress
 
 
 _MISSION_STATUS = {'active': 'running', 'completed': 'success', 'failed': 'failed', 'safe_stopped': 'safe_stopped'}
@@ -107,6 +108,7 @@ def main():
     (output/'manifest.json').write_text(json.dumps(manifest,ensure_ascii=False,indent=2),encoding='utf-8')
     record_count=0
     episode_id=None
+    progress=Progress('metarescue')
     with gzip.open(partial,'xb',compresslevel=3) as journal,HealthServer(args.health_port) as health:
         def record(kind,payload):
             nonlocal record_count
@@ -114,6 +116,7 @@ def main():
                   'payload':payload}
             journal.write((json.dumps(data,ensure_ascii=False,allow_nan=False,separators=(',',':'))+'\n').encode('utf-8'))
             journal.flush();record_count+=1
+            progress.record(kind,payload)
         def audit(item):
             # No HTTP authorization headers enter this client. Preserve invalid
             # wire bytes losslessly without guessing a replacement character.

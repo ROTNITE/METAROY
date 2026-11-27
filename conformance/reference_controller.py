@@ -237,6 +237,8 @@ class Health(BaseHTTPRequestHandler):
 
 
 def run(origin, health_port, seed, output):
+    from controller.m5_progress import Progress
+    progress=Progress('reference')
     health=ThreadingHTTPServer(('127.0.0.1',health_port),Health)
     health.status='ready'
     watcher=Thread(target=health.serve_forever,daemon=True);watcher.start()
@@ -248,10 +250,12 @@ def run(origin, health_port, seed, output):
         reverse={wire:key for key,(wire,bindings) in table.items()}
         mission={'id':'search_and_rescue','parameters':{}}
         current=public_call(origin,'reset',request(seed=seed,mission=mission))
+        progress.record('reset_response',current)
         with output.open('x',encoding='utf-8') as stream:
             while current['status']=='running':
                 obs=current['observation']
                 decision=policy(obs,caps,table,receipts,last_plan)
+                progress.record('decision',{'decision':decision})
                 current=public_call(origin,'step',decision)
                 if current['request_id']!=decision['request_id'] or current['episode_id']!=decision['episode_id']:
                     raise ValueError('Uncorrelated step response')
@@ -277,7 +281,9 @@ def run(origin, health_port, seed, output):
                     if outcome=='completed' and reverse.get(pending[2]['action'])=='handover':
                         receipts['cargo'].pop(aid,None)
                 stream.write(json.dumps({'decision':decision,'response':current})+'\n');stream.flush()
+                progress.record('step_response',current)
         close=public_call(origin,'close',request(episode_id=current['episode_id']))
+        progress.record('close_response',close)
         return {'status':current['status'],'episode':current['episode_id'],'closed':close.get('status')=='closed' or close.get('closed') is True,
                 'metrics':current.get('metrics',current['observation']['metrics'])}
     finally:

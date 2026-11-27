@@ -486,11 +486,14 @@ def run_external(args, client, output, mission):
     submitted = None
     model_time = None
     evidence = Evidence(caps)
+    from controller.m5_progress import Progress
+    progress=Progress('interop')
     with (output / 'exchange.jsonl').open('xb') as journal:
         def record(kind, body):
             journal.write(encode({'kind': kind, 'data': body}) + b'\n')
             journal.flush()
             evidence.record(kind, body)
+            progress.record(kind,body)
 
         try:
             if args.mode == 'decide':

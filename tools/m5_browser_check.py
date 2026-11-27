@@ -34,6 +34,18 @@ def main():
                     assert int(page.locator('#truth-stat').inner_text())==2
                     page.locator('#results button').first.click()
                     expect(page.locator('#diagnostic')).to_contain_text('Физический результат: 2 / 2',timeout=10000)
+                    expect(page.locator('#matrix')).to_contain_text('metarescue → reference',timeout=10000)
+                    page.locator('#matrix-mode').select_option('declared')
+                    expect(page.locator('#matrix')).to_contain_text('Нет испытаний по фильтру.')
+                    page.locator('#matrix-mode').select_option('strict')
+                    expect(page.locator('#matrix')).to_contain_text('metarescue → reference')
+                    page.locator('#matrix-profile').select_option('A')
+                    expect(page.locator('#matrix')).to_contain_text('Нет испытаний по фильтру.')
+                    page.locator('#matrix-profile').select_option('K')
+                    expect(page.locator('#matrix')).to_contain_text('metarescue → reference')
+                    page.locator('#results').get_by_role('button',name='Журнал').click()
+                    expect(page.locator('#timeline')).to_contain_text('decision · metarescue',timeout=10000)
+                    expect(page.locator('#timeline')).to_contain_text('step_response · metarescue')
                     assert not errors,errors
                     page.screenshot(path=str(args.output/'m5-desktop.png'),full_page=True)
                     page.reload();expect(page.locator('#exchange-stat')).to_have_text('1/1',timeout=10000)

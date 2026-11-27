@@ -29,6 +29,7 @@ from urllib.parse import urlsplit,parse_qs
 import uuid
 
 from contracts.protocol import strict_json
+from controller.m5_progress import read_page as read_progress_page
 from controller.ai import atomic_json,file_lock
 from controller.client import EnvironmentClient
 from tools.run_interop import controller_call,ROOT
@@ -326,7 +327,8 @@ class Lab:
                 output=folder/f"trial-{row['index']:03d}"
                 # OFF-only scratch accounting; never changes the LIVE ledger.
                 env=dict(os.environ,METARESCUE_OUTPUT=str(folder/'scratch'),
-                         METARESCUE_LIVE_BUDGET=str(folder/'scratch'/'offline-budget.json'),PYTHONUTF8='1')
+                         METARESCUE_LIVE_BUDGET=str(folder/'scratch'/'offline-budget.json'),PYTHONUTF8='1',
+                         METARESCUE_M5_PROGRESS_FILE=str(output/'progress.jsonl'))
                 (folder/'scratch').mkdir(exist_ok=True)
                 begin=time.monotonic();state='completed'
                 argv=build_command(spec,row['seed'],row['mode'],output)
@@ -411,6 +413,15 @@ class Lab:
         with self.lock:
             return deepcopy(self.runs[ident])
 
+    def progress(self,ident,index,cursor=0,limit=50):
+        run=self.get(ident)
+        if not 0<=index<len(run['rows']):
+            raise KeyError('Unknown trial')
+        path=self.root/ident/f'trial-{index:03d}'/'progress.jsonl'
+        if not path.resolve().is_relative_to((self.root/ident).resolve()) or not path.resolve().is_relative_to(self.root):
+            raise KeyError('Unsafe progress path')
+        return read_progress_page(path,cursor,limit)
+
     def report(self,ident,index):
         run=self.get(ident)
         if not 0<=index<len(run['rows']):
@@ -480,6 +491,13 @@ class Handler(BaseHTTPRequestHandler):
                 if set(query)-{'offset','limit'} or any(len(v)!=1 for v in query.values()):
                     raise ValueError('Invalid catalog query')
                 self.send(lab.catalog(int(query.get('offset',['0'])[0]),int(query.get('limit',['30'])[0])));return
+            progress_match=re.fullmatch(r'/api/series/([0-9a-f]{32})/trial/(\d{1,3})/progress',path)
+            if progress_match:
+                query=parse_qs(parsed.query,keep_blank_values=True)
+                if set(query)-{'cursor','limit'} or any(len(v)!=1 for v in query.values()):
+                    raise ValueError('Invalid progress query')
+                ident,index=progress_match.groups()
+                self.send(lab.progress(ident,int(index),int(query.get('cursor',['0'])[0]),int(query.get('limit',['50'])[0])));return
             match=re.fullmatch(r'/api/series/([0-9a-f]{32})(?:/trial/(\d{1,3})|/export/(json|csv|zip))?',path)
             if match:
                 ident,index,format=match.groups()
