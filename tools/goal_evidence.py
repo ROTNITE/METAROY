@@ -38,14 +38,19 @@ class GoalEvidence:
         self.conflicting_outcomes = set()
         self.failed_receipts = set()
         self.decisions = {}
+        self.requests = {}
 
     @staticmethod
     def key(episode, item):
+        if not isinstance(item,dict) or item.get('episode_id',episode)!=episode:
+            return None
         decision, index = item.get('decision_id'), item.get('command_index')
         return (episode, decision, index) if (isinstance(episode, str) and episode
                 and isinstance(decision, str) and decision and type(index) is int and index >= 0) else None
 
     def record_decision(self, decision):
+        if not isinstance(decision,dict):
+            return
         episode, identifier = decision.get('episode_id'), decision.get('decision_id')
         commands = decision.get('commands', ())
         if not isinstance(episode, str) or not episode or not isinstance(identifier, str) or not identifier:
@@ -66,6 +71,15 @@ class GoalEvidence:
             target = params.get(name) if name is not None else None
             signatures[index] = (cmd['agent_id'], cmd['action'], target)
         decision_key = (episode, identifier)
+        request=decision.get('request_id')
+        if isinstance(request,str) and request:
+            request_key=(episode,request)
+            prior=self.requests.setdefault(request_key,decision_key)
+            if prior!=decision_key:
+                self.requests[request_key]=None
+                self.conflicting_decisions.add(decision_key)
+                if prior is not None:
+                    self.conflicting_decisions.add(prior)
         if decision_key in self.decisions and self.decisions[decision_key] != fingerprint:
             self.conflicting_decisions.add(decision_key)
             return
@@ -88,6 +102,8 @@ class GoalEvidence:
 
     def record_outcome(self, episode, occurrence):
         key = self.key(episode, occurrence)
+        if key is None:
+            return
         effect, ident, target = (occurrence.get(field) for field in ('effect', 'outcome_id', 'target_id'))
         if (not key or occurrence.get('episode_id',episode)!=episode
                 or not isinstance(ident, str) or not ident or not isinstance(target, str) or not target

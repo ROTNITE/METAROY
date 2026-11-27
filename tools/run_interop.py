@@ -68,6 +68,11 @@ class Evidence:
         return (episode,identifier) if all(isinstance(v,str) and v for v in (episode,identifier)) else None
 
     def _observe(self,frame,episode=None,stamp=None):
+        if not isinstance(frame,dict):
+            return set()
+        targets=frame.get('targets',())
+        if not isinstance(targets,(list,tuple)):
+            return set()
         episode=frame.get('episode_id',episode)
         stamp=frame.get('time',stamp)
         if (not isinstance(episode,str) or not episode or type(stamp) not in (int,float)
@@ -75,7 +80,7 @@ class Evidence:
             return set()
         states=self.observed.setdefault(episode,{})
         transitions=set()
-        for target in frame.get('targets',()):
+        for target in targets:
             if not isinstance(target,dict):
                 continue
             ident,status=target.get('id'),target.get('status')
@@ -93,6 +98,8 @@ class Evidence:
         return transitions
 
     def _decision(self,decision):
+        if not isinstance(decision,dict):
+            return
         key=self._identity(decision.get('episode_id'),decision.get('decision_id'))
         fingerprint=decision_fingerprint(decision)
         if not key or fingerprint is None:
@@ -113,54 +120,85 @@ class Evidence:
         self.goals.record_decision(decision)
 
     def record(self,kind,data):
+        if not isinstance(data,dict):
+            return
         if kind=='decision':
-            self._decision(data['decision'])
-            if 'planning_wall_s' in data:
-                self.planning_ms.append(data['planning_wall_s']*1000)
+            self._decision(data.get('decision'))
+            elapsed=data.get('planning_wall_s')
+            if type(elapsed) in (int,float) and 0<=elapsed<=1e9:
+                self.planning_ms.append(elapsed*1000)
         elif kind in ('observation','reset_response'):
             frame=data if kind=='observation' else data.get('observation',{})
             self._observe(frame)
         elif kind=='http_exchange' and data.get('path')=='/v1/environment/step':
             self.step_ms.append(data['elapsed_s']*1000)
         elif kind=='physical_outcome':
-            self.goals.record_outcome(data.get('episode_id'),data['payload'])
+            self.goals.record_outcome(data.get('episode_id'),data.get('payload'))
         elif kind=='step_response':
             observation=data.get('observation',{})
+            if not isinstance(observation,dict):
+                return
             episode=data.get('episode_id',observation.get('episode_id'))
             request=data.get('request_id')
             current_key=self.requests.get(self._identity(episode,request))
             current=self.decisions.get(current_key,{})
-            if request is not None and (not current or current_key in self.conflicts
-                    or observation.get('episode_id',episode)!=episode
-                    or observation.get('request_id',request)!=request
-                    or data.get('time',-1)<current.get('time',0)):
+            if request is not None:
+                stamp=data.get('time')
+                prior=current.get('time',0)
+                if (not current or current_key in self.conflicts
+                        or observation.get('episode_id',episode)!=episode
+                        or observation.get('request_id',request)!=request
+                        or type(stamp) not in (int,float) or type(prior) not in (int,float)
+                        or not 0<=prior<=stamp<=1e15):
+                    return
+            events=data.get('events',())
+            receipts=data.get('command_results',())
+            if not isinstance(events,(list,tuple)) or not isinstance(receipts,(list,tuple)):
                 return
-            for event in data.get('events',()):
+            for event in events:
+                if not isinstance(event,dict) or event.get('episode_id',episode)!=episode:
+                    continue
                 p=event.get('parameters',{})
-                if event.get('type')=='target_state_changed' and p.get('evacuation_state')=='evacuated' and len(event.get('targets',()))==1:
-                    self.goals.record_outcome(episode,{**p,'target_id':event['targets'][0],
-                        'agent_id':event.get('source'),'effect':'evacuated','outcome_id':event['id']})
+                targets=event.get('targets')
+                if (event.get('type')=='target_state_changed' and isinstance(p,dict)
+                        and p.get('evacuation_state')=='evacuated'
+                        and isinstance(targets,list) and len(targets)==1):
+                    self.goals.record_outcome(episode,{**p,'target_id':targets[0],
+                        'agent_id':event.get('source'),'effect':'evacuated','outcome_id':event.get('id')})
             new_targets=self._observe(observation,episode,data.get('time')) if current else set()
-            for receipt in data.get('command_results',()):
+            for receipt in receipts:
+                if not isinstance(receipt,dict) or receipt.get('episode_id',episode)!=episode:
+                    continue
                 self.goals.record_receipt(episode,receipt)
                 key=GoalEvidence.key(episode,receipt)
                 submitted=self.decisions.get(key[:2],{}) if key else {}
                 commands=submitted.get('commands',())
-                if (key and key[2]<len(commands)
-                        and all(commands[key[2]].get(field)==receipt.get(field) for field in ('agent_id','action'))):
+                if (key and isinstance(commands,(list,tuple)) and key[2]<len(commands)
+                        and isinstance(commands[key[2]],dict)
+                        and all(isinstance(receipt.get(field),str) and receipt[field]
+                                and commands[key[2]].get(field)==receipt[field] for field in ('agent_id','action'))):
                     if terminal_failure(receipt):
                         self.failed_receipts.add(key)
                     if (receipt.get('validation_status')=='accepted' and receipt.get('delivery_status')=='delivered'
                             and receipt.get('execution_status')=='completed'
                             and receipt.get('action') in ('handover','deliver','rescue')):
                         self.transfers[key]=receipt
+                current_commands=current.get('commands',())
                 if (current and request is not None and receipt.get('status') in ('applied','accepted')
-                        and receipt.get('action') in ('rescue','deliver')):
-                    indices=[(index,cmd.get('parameters',{}).get('target_id'))
-                             for index,cmd in enumerate(current.get('commands',()))
-                             if cmd.get('agent_id')==receipt.get('agent_id') and cmd.get('action')==receipt['action']]
+                        and receipt.get('action') in ('rescue','deliver') and not terminal_failure(receipt)
+                        and receipt.get('decision_id',current_key[1])==current_key[1]
+                        and receipt.get('request_id',request)==request
+                        and isinstance(current_commands,(list,tuple))):
+                    indices=[(index,cmd['parameters'].get('target_id'))
+                             for index,cmd in enumerate(current_commands)
+                             if isinstance(cmd,dict) and isinstance(cmd.get('parameters'),dict)
+                             and isinstance(cmd.get('agent_id'),str) and cmd['agent_id']
+                             and cmd['agent_id']==receipt.get('agent_id') and cmd.get('action')==receipt['action']]
                     expected='rescued' if receipt['action']=='rescue' else 'delivered'
-                    if len(indices)==1 and (indices[0][1],expected) in new_targets:
+                    if (len(indices)==1 and isinstance(indices[0][1],str)
+                            and (indices[0][1],expected) in new_targets
+                            and ('command_index' not in receipt or
+                                 type(receipt['command_index']) is int and receipt['command_index']==indices[0][0])):
                         index,target_id=indices[0]
                         key=(*current_key,index)
                         self.legacy_transitions[key]={'episode_id':episode,'decision_id':current_key[1],
