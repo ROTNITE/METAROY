@@ -1,0 +1,48 @@
+name: Stage 3 M5 laboratory browser
+on:
+  push:
+    branches:
+      - chatgpt/stage3-universal-core-hardening
+    paths:
+      - .github/workflows/stage3-m5-browser.yml
+      - tools/m5_*.py
+      - web/m5/**
+      - tests/test_m5_lab.py
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  browser:
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          lfs: false
+          persist-credentials: false
+          sparse-checkout: |
+            controller
+            contracts
+            conformance
+            environment
+            tools
+            analytics
+            tests
+            web
+      - name: Install browser test dependencies
+        run: |
+          python3 -m venv .venv
+          .venv/bin/python -m pip install -r requirements.txt playwright==1.51.0
+          .venv/bin/python -m playwright install --with-deps chromium
+      - name: Verify real browser workflow
+        run: |
+          .venv/bin/python -B -X utf8 -m unittest discover -s tests -p test_m5_lab.py -v
+          .venv/bin/python -B -X utf8 -m tools.m5_browser_check --output "$RUNNER_TEMP/m5-browser"
+      - name: Archive browser evidence
+        if: always()
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with:
+          name: stage3-m5-browser
+          path: ${{ runner.temp }}/m5-browser/
+          if-no-files-found: warn
+          retention-days: 14

@@ -11,6 +11,7 @@ import json
 import os
 import re
 import signal
+import shutil
 import subprocess
 import sys
 import tempfile
@@ -178,7 +179,10 @@ def trial(peer, direction, mode, seed, engine='planar'):
             if peer=='v9' and Path('/opt/peer-dependencies/node_modules').is_dir():
                 # Runtime dependencies installed from the frozen package-lock;
                 # no alteration of the partner's archived source.
-                (cwd/'node_modules').symlink_to('/opt/peer-dependencies/node_modules',target_is_directory=True)
+                # Vite may generate a temporary config bundle under node_modules.
+                # Give each sandbox its own writable copy, leaving the frozen
+                # installed dependency tree and partner ZIP untouched.
+                shutil.copytree('/opt/peer-dependencies/node_modules',cwd/'node_modules',symlinks=True)
             component = "environment" if direction == "outbound" else "controller"
             port = 18080
             ports = (port,8000,8001,8080,8081,3000,3001,9000,9001,8130,8131) if peer == "v9" else (port,)

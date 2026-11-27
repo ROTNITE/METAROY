@@ -282,6 +282,8 @@ class Lab:
         if not 0<=index<len(run['rows']):
             raise KeyError('Unknown trial')
         path=self.root/ident/f'trial-{index:03d}'/'report.json'
+        if not path.resolve().is_relative_to(self.root/ident):
+            raise KeyError('Unsafe report path')
         result=read_report(path)
         if not result:
             raise KeyError('Trial report is unavailable')
@@ -304,6 +306,7 @@ class Server(ThreadingHTTPServer):
 
 
 class Handler(BaseHTTPRequestHandler):
+    timeout=15
     def log_message(self,*args):
         pass
 
@@ -367,7 +370,10 @@ class Handler(BaseHTTPRequestHandler):
             length=int(self.headers.get('Content-Length','0'))
             if not 0<length<=MAX_REQUEST:
                 raise ValueError('Invalid body length')
-            body=strict_json(self.rfile.read(length),maximum_bytes=MAX_REQUEST)
+            data=self.rfile.read(length)
+            if len(data)!=length:
+                raise ValueError('Incomplete body')
+            body=strict_json(data,maximum_bytes=MAX_REQUEST)
             if not isinstance(body,dict):
                 raise ValueError('Expected JSON object')
             path=urlsplit(self.path).path;lab=self.server.lab
