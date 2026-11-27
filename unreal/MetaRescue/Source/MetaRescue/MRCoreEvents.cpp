@@ -543,7 +543,8 @@ bool FMRCoreRuntime::SensorAccepts(AMRAgent* Agent,int32 Target,double Quality,i
 void FMRCoreRuntime::GatherHazardReport(AMRAgent* Agent)
 {
     const auto& Environment=World->Environment;
-    if(World->CoreEventProfile.IsEmpty()||Environment.Applied.IsEmpty())return;
+    if((World->CoreEventProfile.IsEmpty()||Environment.Applied.IsEmpty())&&
+       !(Environment.bRevisedDisasters&&World->UrbanWater))return;
     const FString Id=Agent->AgentKey();
     const FVector Pose=Agent->GetActorLocation();
     const double Range=100*SensorRadius.FindRef(Id);
@@ -685,7 +686,12 @@ void FMRCoreRuntime::DeliverHazardReport(const FReport& Packet)
         SurfaceObservedAt.Add(Id,ObservedAt);
         const auto& Cell=Reading->GetArrayField(TEXT("cell"));
         const double X=Cell[0]->AsNumber()*5,Y=Cell[1]->AsNumber()*5;
-        if(Active)
+        // Keep a delivered dry result for a formerly wet cell. Removing it
+        // would let a marine planner incorrectly fall back to initial depth.
+        const bool RetainDry=World->Environment.bRevisedDisasters&&World->UrbanWater&&Previous&&
+            Is(Measured,TEXT("depth_m"),EJson::Number)&&
+            Text(*Previous,TEXT("type"))==TEXT("water");
+        if(Active||RetainDry)
         {
             const bool DebrisOnly=Is(Measured,TEXT("debris_only"),EJson::Boolean)&&Measured->GetBoolField(TEXT("debris_only"));
             const bool Wet=Is(Measured,TEXT("depth_m"),EJson::Number)&&Measured->GetNumberField(TEXT("depth_m"))>0;
@@ -709,7 +715,7 @@ void FMRCoreRuntime::DeliverHazardReport(const FReport& Packet)
             Allowed.Add(Str(TEXT("aerial")));
             if(Wet&&Measured->GetNumberField(TEXT("depth_m"))>=.55)Allowed.Add(Str(TEXT("surface_water")));
             KnownZones.Add(Id,Obj({{TEXT("id"),Str(Id)},{TEXT("geometry"),Json(Geometry)},
-                {TEXT("type"),Str(DebrisOnly?TEXT("obstacle"):Wet?TEXT("water"):TEXT("hazard"))},
+                {TEXT("type"),Str(DebrisOnly?TEXT("obstacle"):(Wet||RetainDry)?TEXT("water"):TEXT("hazard"))},
                 {TEXT("access"),Json(Obj({{TEXT("allowed_kinds"),Arr(Allowed)}}))},
                 {TEXT("risk"),Num(Blocked?1:1-Measured->GetNumberField(TEXT("visibility")))},
                 {TEXT("cost"),Json(Obj({{TEXT("energy_multiplier"),Field(Measured,TEXT("surface_multiplier"))}}))},

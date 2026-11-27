@@ -512,6 +512,8 @@ void FMRCoreRuntime::Snapshot(const FString& RequestId)
         {TEXT("metaevolution"),Json(Obj({{TEXT("plan"),Json(Plan)},{TEXT("contradictions"),Arr(Contradictions)}}))}});
     if(KnownOrbital)CachedObservation->GetObjectField(TEXT("metaevolution"))->SetObjectField(TEXT("orbital_observation"),KnownOrbital);
     if(World->bDisasterCity)CachedObservation->GetObjectField(TEXT("metaevolution"))->SetObjectField(TEXT("exploration"),ExplorationSnapshot());
+    if(World->Environment.bRevisedDisasters)
+        CachedObservation->GetObjectField(TEXT("metaevolution"))->SetNumberField(TEXT("disaster_revision"),1);
     if(World->bCityLayout)
     {
         auto Map=Obj();for(const FString& Key:{TEXT("format"),TEXT("base_layout_revision"),TEXT("cell_m"),TEXT("size_m"),TEXT("bounds"),TEXT("base"),TEXT("base_position"),
