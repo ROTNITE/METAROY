@@ -209,6 +209,11 @@ def validate_observation(observation, *, allow_space=False):
     if isinstance(observation, dict) and observation.get('protocol_version', VERSION) != VERSION:
         raise ProtocolError('UNSUPPORTED_PROTOCOL_VERSION', 'Unsupported protocol version')
     validate(observation, observation_schema(allow_space))
+    return _validate_observation_semantics(observation)
+
+
+def _validate_observation_semantics(observation):
+    """Check cross-field invariants after structural and JSON-value validation."""
     for field in ('agents', 'targets', 'zones', 'infrastructure', 'events'):
         ids = [item.get('id') for item in observation[field]]
         if any(not isinstance(value, str) or not value for value in ids) or len(ids) != len(set(ids)):
@@ -248,7 +253,10 @@ def validate_episode_response(response, *, step=False, allow_space=False):
     if allow_space:
         schema = {**schema, 'properties': {**schema['properties'], 'observation': observation_schema(True)}}
     validate(response, schema)
-    observation = validate_observation(response['observation'], allow_space=allow_space)
+    # The envelope schema already validates all nested observation fields and
+    # finite JSON values (including the selected space ontology). Repeat only
+    # the semantic checks, not the expensive schema walk over every zone/agent.
+    observation = _validate_observation_semantics(response['observation'])
     for key in ('episode_id', 'request_id'):
         if response[key] != observation[key]:
             raise ProtocolError('INVALID_REQUEST', f'Response and observation disagree on {key}')
@@ -285,10 +293,18 @@ def validate_decision(decision, observation, capabilities):
                                 {**details, 'path': ['commands',index,'parameters',*details.get('path',[])],
                                  'command_index':index,'agent_id':command['agent_id'],'action':action}) from error
     grouped = set()
-    for group in decision.get('metaevolution', {}).get('command_groups', []):
+    extension = decision.get('metaevolution', {})
+    if not isinstance(extension, dict):
+        raise ProtocolError('INVALID_REQUEST', 'Invalid metaevolution declaration')
+    groups = extension.get('command_groups', [])
+    if not isinstance(groups, list):
+        raise ProtocolError('INVALID_REQUEST', 'Expected command_groups array')
+    for group in groups:
+        if not isinstance(group, dict):
+            raise ProtocolError('INVALID_REQUEST', 'Invalid command group')
         indices = group.get('command_indices', [])
-        if not indices:
-            raise ProtocolError('INVALID_REQUEST', 'Empty command group')
+        if not isinstance(indices, list) or not indices:
+            raise ProtocolError('INVALID_REQUEST', 'Expected nonempty command_indices array')
         for index in indices:
             if type(index) is not int or not 0 <= index < len(decision['commands']) or index in grouped:
                 raise ProtocolError('INVALID_REQUEST', 'Invalid or repeated command group index')
