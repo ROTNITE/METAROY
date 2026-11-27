@@ -211,18 +211,24 @@ def validate_observation(observation, *, allow_space=False):
         ids = [item.get('id') for item in observation[field]]
         if any(not isinstance(value, str) or not value for value in ids) or len(ids) != len(set(ids)):
             raise ProtocolError('INVALID_REQUEST', f'Invalid or duplicate {field} IDs')
+    for field in ('agents', 'infrastructure'):
+        for entity in observation[field]:
+            for key, resource in entity['resources'].items():
+                if key != resource['id'] or not resource['minimum'] <= resource['value'] <= resource['maximum']:
+                    raise ProtocolError('INVALID_REQUEST', 'Invalid resource bounds',
+                                        {'entity_id': entity['id'], 'resource_id': key})
     for agent in observation['agents']:
         if agent['position'] is None and agent['kind'] not in ('digital', 'operator'):
             raise ProtocolError('INVALID_REQUEST', 'Spatial agent requires position', {'agent_id': agent['id']})
-        for key, resource in agent['resources'].items():
-            if key != resource['id'] or not resource['minimum'] <= resource['value'] <= resource['maximum']:
-                raise ProtocolError('INVALID_REQUEST', 'Invalid resource bounds', {'agent_id': agent['id'], 'resource_id': key})
-        for data in agent.get('freshness', {}).values():
+        freshness = agent.get('freshness', {})
+        if not isinstance(freshness, dict) or any(not isinstance(data, dict) for data in freshness.values()):
+            raise ProtocolError('INVALID_REQUEST', 'Invalid freshness declaration')
+        for data in freshness.values():
             observed, received = data.get('observed_at'), data.get('received_at')
             for stamp in (observed, received):
-                if stamp is not None and (type(stamp) not in (int, float) or stamp < 0):
+                if stamp is not None and (type(stamp) not in (int, float) or not 0 <= stamp <= observation['time']):
                     raise ProtocolError('INVALID_REQUEST', 'Invalid freshness timestamp')
-            if observed is not None and received is not None and not 0 <= observed <= received <= observation['time']:
+            if observed is not None and received is not None and observed > received:
                 raise ProtocolError('INVALID_REQUEST', 'Freshness timestamps are not causal')
     return observation
 

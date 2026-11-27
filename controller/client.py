@@ -109,7 +109,7 @@ class EnvironmentClient:
             result={**result,'observation':self.public.wire_observation(result['observation'])}
         try:return validate_episode_response(result,step=step,allow_space=bool(self.public and self.public.allow_space))
         except ProtocolError as error:
-            location=error.details.get('path')
+            location=(error.details or {}).get('path')
             suffix=' at /'+'/'.join(map(str,location)) if location else ''
             raise TransportFailure('Inconsistent episode response: '+str(error)+suffix,state_may_have_changed=True) from error
 
