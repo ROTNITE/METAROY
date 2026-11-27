@@ -49,6 +49,8 @@ jobs:
         run: |
           git lfs version
           timeout 90s git lfs pull --include='ТЗ/*.pdf,ПЗ/Пояснительная записка*.pdf' --exclude=''
+      - name: Install PDF tools
+        run: sudo apt-get update -qq && sudo apt-get install -y --no-install-recommends poppler-utils
       - name: Extract page-indexed specification and relevant explanatory text
         run: |
           command -v pdftotext && command -v pdfinfo
@@ -77,3 +79,12 @@ jobs:
                       if selected:
                           print(f'PAGE {i}\n'+'\n'.join(lines[k] for k in selected)[:4500],flush=True)
           PY
+      - name: Upload source PDFs for local visual and text review
+        uses: actions/upload-artifact@v4
+        with:
+          name: vis05-12-source-pdfs
+          path: |
+            ТЗ/*.pdf
+            ПЗ/Пояснительная записка*.pdf
+          if-no-files-found: error
+          retention-days: 7
