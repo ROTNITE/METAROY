@@ -1,0 +1,50 @@
+name: Stage 3 measured performance
+on:
+  push:
+    branches:
+      - chatgpt/stage3-universal-core-hardening
+    paths:
+      - .github/workflows/stage3-performance.yml
+      - controller/**
+      - tests/test_zone_index.py
+      - tools/profile_public_geometry.py
+      - tools/m5_*.py
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  geometry:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    env:
+      GIT_LFS_SKIP_SMUDGE: "1"
+      PYTHONUTF8: "1"
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          lfs: false
+          persist-credentials: false
+          sparse-checkout: |
+            controller
+            contracts
+            conformance
+            environment
+            tools
+            analytics
+            tests
+            web
+      - name: Install dependencies
+        run: |
+          python3 -m venv .venv
+          .venv/bin/python -m pip install -r requirements.txt
+      - name: Compare exact path semantics
+        run: .venv/bin/python -B -X utf8 -m unittest discover -s tests -p test_zone_index.py -v
+      - name: Benchmark equal routes with 300, 1000, 3700 zones
+        run: .venv/bin/python -B -X utf8 -m tools.profile_public_geometry --output "$RUNNER_TEMP/geometry-performance.json"
+      - name: Archive measurements
+        if: always()
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with:
+          name: stage3-geometry-performance
+          path: ${{ runner.temp }}/geometry-performance.json
+          if-no-files-found: warn

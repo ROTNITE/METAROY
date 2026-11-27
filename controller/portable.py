@@ -13,6 +13,7 @@ from controller.decisions import decision
 from controller.declared_scenarios import SCENARIO_SEMANTICS, choose_declared
 from controller.navigation import Box, point
 from controller.public_geometry import geometry as parse_geometry, segments
+from controller.zone_index import ZoneIndex, candidate_zones
 from controller.public_patrol import PublicPatrolEstimates
 from controller.public_route import RouteBudget, detour
 from controller.net65 import Candidate, MAX_CANDIDATES, choose_sector, due, horizon_of, scan_ages
@@ -51,7 +52,7 @@ def _path_clear(zones, agent, goal, *, public_media=False):
     kind = agent['kind']
     start = agent['position']
     intervals = []
-    for zone, box in zones:
+    for zone, box in candidate_zones(zones,start,goal,kind):
         if zone['type'] in ('obstacle', 'restricted', 'hazard'):
             explicit = zone['access'].get('allowed_kinds', zone['access'].get('allowed_agent_kinds'))
             if zone['type'] != 'obstacle' and isinstance(explicit, list) and kind in explicit:
@@ -185,9 +186,10 @@ class PortablePolicy:
         if not _path_clear(zones, agent, goal, public_media=self.public.short_actions):
             return False
         rules = (*observation['constraints'], *observation['mission']['constraints'], *agent['constraints'])
+        nearby=candidate_zones(zones,agent['position'],goal,agent['kind']) if self.public.short_actions else ()
         if self.public.short_actions and any(
                 not _allowed(zone,agent['kind']) and box and box.interval(agent['position'],goal) is not None
-                for zone,box in zones):
+                for zone,box in nearby):
             return False
         for rule in rules:
             if rule.get('severity','hard') != 'hard':
@@ -208,7 +210,7 @@ class PortablePolicy:
             if kind == 'risk_limit':
                 ceiling = rule.get('maximum_risk')
                 if type(ceiling) not in (int, float) or any(zone['risk'] > ceiling and (
-                        not box or box.interval(agent['position'], goal) is not None) for zone, box in zones):
+                        not box or box.interval(agent['position'], goal) is not None) for zone, box in nearby):
                     return False
             if kind in ('minimum_separation', 'collision'):
                 margin = rule.get('distance', 1.5)
@@ -689,7 +691,7 @@ class PortablePolicy:
                                a['communication'].get('reachable', a['communication'].get('connected', True)) is not False),
                               key=lambda a: (a['kind'], tuple(a['position'] or ()), a['id']))
         agents = [a for a in participants if a['position'] is not None]
-        zones = [(z, _box(z)) for z in observation['zones']]
+        zones = ZoneIndex((z, _box(z)) for z in observation['zones'])
         self.route_budget = RouteBudget(len(zones))
         tasks = self._delivery_tasks(observation)
         orders = FixedWorkflow.hold_orders(observation)
