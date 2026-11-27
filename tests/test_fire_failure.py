@@ -51,3 +51,13 @@ class FireFailureTests(unittest.TestCase):
         intact={**self.house,'variant':0}
         self.assertEqual(expected_failure(self.fire,intact,480.)['time'],140.)
         self.assertEqual(expected_failure(self.fire,self.house,480.), expected_failure(deepcopy(self.fire),deepcopy(self.house),480.))
+
+
+    def test_unrelated_or_rejected_events_do_not_enter_structure_index(self):
+        unrelated={**self.fire,'id':'road-1','kind':'road_damage','time':10.,
+                   'source_object_id':['not','a','building']}
+        rejected={**self.fire,'id':'fire-rejected','time':20.,
+                  'source_object_id':{'not':'a structure'},'rejection':'no_surface'}
+        tape={'events':[unrelated,rejected,self.fire]}
+        append_fire_failures(tape,{'buildings':[self.house]},480.)
+        self.assertEqual([x['parent_id'] for x in tape['events'] if x.get('cause')],['fire-1'])
