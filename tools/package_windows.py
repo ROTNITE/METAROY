@@ -24,6 +24,8 @@ TOOLS = ('run_product.py', 'product_session.py', 'run_mission.py', 'native_archi
          'issue_operator.py', 'net65_demo.py')
 ENTRYPOINTS = ('run_product.py', 'product_session.py', 'run_mission.py',
                'run_native_series.py', 'series_plan.py', 'issue_operator.py')
+REQUIRED_SCENARIO = ('core-scenarios-v1.json', 'quarter.json', 'scenario.json',
+                     'watercraft-hydrostatics-r1.json')
 DEPENDENCIES = ('jsonschema', 'jsonschema-specifications', 'attrs', 'referencing', 'rpds-py')
 STARTUP = r"""@echo off
 setlocal
@@ -44,6 +46,17 @@ def write_json(path, value):
 
 def freeze_files(root):
     return {p.relative_to(root).as_posix(): file_sha256(p) for p in sorted(root.rglob('*')) if p.is_file()}
+
+
+def verify_scenario_files(directory, *, expected=None):
+    files = freeze_files(directory)
+    missing = [name for name in REQUIRED_SCENARIO if name not in files]
+    if missing:
+        raise FileNotFoundError(f'Missing runtime scenario data in {directory}: '+', '.join(missing))
+    if expected is not None and files != expected:
+        changed = sorted(name for name in files.keys() | expected.keys() if files.get(name) != expected.get(name))
+        raise RuntimeError(f'Runtime scenario data changed in {directory}: '+', '.join(changed))
+    return files
 
 
 def project_inputs(project):
@@ -147,18 +160,18 @@ def check_python_entrypoints(distribution):
             raise RuntimeError(f'Packaged Python entry point {name} failed:\n{result.stderr.strip()}')
 
 
-def stage_runtime(distribution, demo, *, fab_usage_notice=None):
+def stage_runtime(distribution, demo, *, scenario_files, fab_usage_notice=None):
+    native = distribution/'runtime/MetaRescue'
+    if not (native/'Binaries/Win64/MetaRescue.exe').is_file():
+        raise FileNotFoundError('BuildCookRun did not archive the Win64 game executable')
+    native_scenario = native/'Content/Scenario'
+    verify_scenario_files(native_scenario, expected=scenario_files)
     for part in ('controller', 'contracts', 'environment', 'analytics', 'web'):
         shutil.copytree(ROOT/part, distribution/part, ignore=shutil.ignore_patterns('__pycache__', '*.pyc'))
     (distribution/'tools').mkdir()
     for name in TOOLS:
         shutil.copy2(ROOT/'tools'/name, distribution/'tools'/name)
-    native = distribution/'runtime/MetaRescue'
-    if not (native/'Binaries/Win64/MetaRescue.exe').is_file():
-        raise FileNotFoundError('BuildCookRun did not archive the Win64 game executable')
-    if not (native/'Content/Scenario/core-scenarios-v1.json').is_file():
-        raise FileNotFoundError('BuildCookRun did not stage the Scenario directory')
-    shutil.copytree(native/'Content/Scenario', distribution/'unreal/MetaRescue/Content/Scenario')
+    shutil.copytree(native_scenario, distribution/'unreal/MetaRescue/Content/Scenario')
     details = bundle_python(distribution/'python')
     write_json(distribution/'python/dependencies.json', details)
     (distribution/'presets').mkdir()
@@ -178,6 +191,7 @@ def stage_runtime(distribution, demo, *, fab_usage_notice=None):
 
 
 def build(output, engine, demo, *, fab_usage_notice=None):
+    scenario_files = verify_scenario_files(PROJECT/'Content/Scenario')
     fab_packages = PROJECT/'Content/EffectsV3/Revision3/Fab'
     if any(fab_packages.rglob('*.uasset')) and fab_usage_notice is None:
         raise ValueError('Provide --fab-usage-notice for a cooked distribution containing Fab content')
@@ -190,6 +204,7 @@ def build(output, engine, demo, *, fab_usage_notice=None):
     project = output/'build-source/MetaRescue'
     distribution = output/'MetaEvolution-Rescue'
     copy_project(project)
+    verify_scenario_files(project/'Content/Scenario', expected=scenario_files)
     distribution.mkdir()
     cache = DEFAULT_OUTPUT/'cache/ddc'
     cache.mkdir(parents=True, exist_ok=True)
@@ -209,6 +224,7 @@ def build(output, engine, demo, *, fab_usage_notice=None):
                '-stagingdirectory='+str(output/'stage'), '-archivedirectory='+str(distribution/'runtime'),
                '-AdditionalCookerOptions=-SkipZenStore -LocalDataCachePath='+str(cache)]
     manifest = {'state': 'building', 'command': command, 'source_files': before,
+                'scenario_sha256': scenario_files,
                 'grounding': grounding, 'grounding_changes': sorted(grounding_changes)}
     write_json(output/'build-manifest.json', manifest)
     with (output/'BuildCookRun.log').open('w', encoding='utf-8') as log:
@@ -222,7 +238,8 @@ def build(output, engine, demo, *, fab_usage_notice=None):
     if manifest['state'] == 'failed':
         raise RuntimeError('BuildCookRun or source verification failed. See '+str(output/'BuildCookRun.log'))
     try:
-        manifest['python'] = stage_runtime(distribution, demo, fab_usage_notice=fab_usage_notice)
+        manifest['python'] = stage_runtime(distribution, demo, scenario_files=scenario_files,
+                                           fab_usage_notice=fab_usage_notice)
         if fab_usage_notice is not None:
             if file_sha256(distribution/'Fab-Content-Notice.txt') != notice_sha256:
                 raise RuntimeError('Fab usage notice changed during packaging')

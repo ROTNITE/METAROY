@@ -12,8 +12,10 @@ Goal: «Реализовать план», активна. Этот докуме
 - Среда владеет истиной. Контроллер использует только доставленные публичные данные.
 - Сохранить NSGA-II ×2, Global/Local, Core Protocol 1.0, ресурсы и связь.
 - Последовательно, без субагентов; один Unreal и общий D:/MetaRescue-output/locks/unreal-owner.lock.
-- Исходный C:/Users/rotn1/Documents/ChatGPT/metaroy и прежние Windows-релизы не менять.
-- Изолированная копия: D:/MetaRescue-output/visual-overhaul-20261115/workspace.
+- Исторические Windows-релизы и исходный снимок этапа хранятся на D.
+- Историческая визуальная копия лежит в D:/MetaRescue-output/visual-overhaul-20261115/workspace.
+  С 27 ноября проверенная интеграция применяется в C:/Users/rotn1/Documents/ChatGPT/metaroy
+  и публикуется в ROTNITE/METAROY.
 - Публичный Git: https://github.com/ROTNITE/hakaton, ветка codex/disaster-visuals;
   не перезаписывать main, не публиковать секреты или материалы без права распространения.
 
