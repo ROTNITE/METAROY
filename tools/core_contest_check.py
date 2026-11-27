@@ -173,4 +173,3 @@ def frame_coverage(directory, expected_events, journal):
 def verify_visual(result,output_root):
     directory=output_root/'core-runs'/result['contest_episode']
     result['visual_evidence']=frame_coverage(directory,result['events'],IndexedRecords(directory/'truth').json_records())
-
