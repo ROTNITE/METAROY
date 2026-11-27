@@ -5,6 +5,7 @@ import tempfile
 import unittest
 import zipfile
 import struct
+import stat
 import zlib
 from tools.verify_distribution_zip import verify_zip, SCENARIOS
 from tools.core_contest_check import frame_coverage
@@ -50,6 +51,31 @@ class DistributionIntegrityTests(unittest.TestCase):
                     self.zip(path,files,extra=(name,b'extra'))
                     with self.assertRaises(ValueError):verify_zip(path)
 
+    def test_special_paths_and_decompression_budget_fail(self):
+        with tempfile.TemporaryDirectory() as temp:
+            path=Path(temp)/'build.zip';files=self.make_files()
+            for name in ('runtime/CON .txt','runtime/CONIN$.txt','runtime/CONOUT$','runtime/COM¹.txt','runtime//'):
+                with self.subTest(name=name):
+                    self.zip(path,files,extra=(name,b''))
+                    with self.assertRaises(ValueError):verify_zip(path)
+            for mode in (stat.S_IFLNK,stat.S_IFIFO,stat.S_IFCHR,stat.S_IFDIR):
+                with self.subTest(mode=mode):
+                    special=zipfile.ZipInfo('runtime/special')
+                    special.create_system=3;special.external_attr=(mode|0o600)<<16
+                    self.zip(path,files,extra=(special,b''))
+                    with self.assertRaisesRegex(ValueError,'special'):verify_zip(path)
+            reparse=zipfile.ZipInfo('runtime/reparse')
+            reparse.create_system=0;reparse.external_attr=0x400
+            self.zip(path,files,extra=(reparse,b''))
+            with self.assertRaisesRegex(ValueError,'special'):verify_zip(path)
+            self.zip(path,files,extra=('runtime/nul-marker',b''))
+            raw=path.read_bytes().replace(b'runtime/nul-marker',b'runtime/nul\x00marker')
+            path.write_bytes(raw)
+            with self.assertRaisesRegex(ValueError,'Truncated'):verify_zip(path)
+            self.zip(path,files)
+            with self.assertRaisesRegex(ValueError,'decompression limit'):verify_zip(path,max_bytes=50)
+            self.assertTrue(verify_zip(path,max_bytes=1024**2)['integrity_verified'])
+
     def test_missing_and_divergent_scenarios_fail(self):
         with tempfile.TemporaryDirectory() as temp:
             path=Path(temp)/'build.zip';files=self.make_files()
@@ -66,8 +92,10 @@ class DistributionIntegrityTests(unittest.TestCase):
             root=Path(temp)
             with self.assertRaises(FileNotFoundError):verify_revised_assets(root)
             for relative in REVISED_ASSETS:
-                p=root/relative;p.parent.mkdir(parents=True,exist_ok=True);p.write_bytes(b'v'*80)
+                p=root/relative;p.parent.mkdir(parents=True,exist_ok=True);p.write_bytes(bytes.fromhex('c1832a9e')+b'v'*80)
             verify_revised_assets(root)
+            (root/REVISED_ASSETS[0]).write_bytes(b'v'*80)
+            with self.assertRaisesRegex(ValueError,'Not a little-endian'):verify_revised_assets(root)
             (root/REVISED_ASSETS[0]).write_bytes(b'version https://git-lfs.github.com/spec/v1\n'+b'x'*64)
             with self.assertRaisesRegex(ValueError,'Unmaterialized'):verify_revised_assets(root)
 

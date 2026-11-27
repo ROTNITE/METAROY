@@ -17,14 +17,15 @@ from pathlib import Path
 SCENARIOS=('core-scenarios-v1.json','quarter.json','scenario.json','watercraft-hydrostatics-r1.json')
 MAX_MANIFEST=16*1024*1024
 MAX_MEMBERS=100000
-RESERVED=re.compile(r'^(CON|PRN|AUX|NUL|COM[1-9¹²³]|LPT[1-9¹²³])$',re.I)
+MAX_UNCOMPRESSED=64*1024**3
+RESERVED=re.compile(r'^(CON|PRN|AUX|NUL|CONIN\$|CONOUT\$|COM[1-9¹²³]|LPT[1-9¹²³])$',re.I)
 
 
 def member_name(name):
     parts=name.split('/')
     if not name or any(not part or part in ('.','..') or part.endswith((' ','.'))
         or any(ord(c)<32 or c in '\\:<>"|?*' for c in part)
-        or RESERVED.fullmatch(part.split('.')[0]) for part in parts):
+        or RESERVED.fullmatch(part.split('.')[0].rstrip(' ')) for part in parts):
         raise ValueError('Unsafe Windows ZIP path: '+repr(name))
     return unicodedata.normalize('NFC',name).casefold()
 
@@ -37,21 +38,30 @@ def unique_object(items):
     return result
 
 
-def verify_zip(path):
+def verify_zip(path,*,max_bytes=MAX_UNCOMPRESSED):
+    if type(max_bytes) is not int or max_bytes<=0:raise ValueError('Invalid decompression limit')
     with zipfile.ZipFile(path) as archive:
-        files={};seen=set();dirs=set()
+        files={};seen=set();declared=0
         members=archive.infolist()
         if len(members)>MAX_MEMBERS:raise ValueError('Too many ZIP members')
         for info in members:
-            name=info.filename.rstrip('/') if info.is_dir() else info.filename
+            if info.orig_filename!=info.filename:raise ValueError('Truncated or normalized ZIP member name')
+            name=info.filename[:-1] if info.is_dir() else info.filename
             folded=member_name(name)
             if folded in seen:raise ValueError('Duplicate/case-colliding ZIP member: '+name)
             seen.add(folded)
             mode=(info.external_attr>>16)&0xffff
-            if stat.S_ISLNK(mode) or info.flag_bits&1:
-                raise ValueError('Link or encrypted ZIP member: '+name)
-            if info.is_dir():dirs.add(folded)
-            else:files[name]=info
+            kind=stat.S_IFMT(mode)
+            if (kind not in (0,stat.S_IFDIR,stat.S_IFREG) or info.flag_bits&1 or
+                (info.create_system==0 and info.external_attr&0x400) or
+                (info.is_dir() and (kind==stat.S_IFREG or info.file_size)) or
+                (not info.is_dir() and kind==stat.S_IFDIR)):
+                raise ValueError('Link, special, encrypted or inconsistent ZIP member: '+name)
+            if info.compress_type not in (zipfile.ZIP_STORED,zipfile.ZIP_DEFLATED):
+                raise ValueError('Unsupported Windows ZIP compression: '+name)
+            declared+=info.file_size
+            if declared>max_bytes:raise ValueError('ZIP exceeds decompression limit')
+            if not info.is_dir():files[name]=info
         folded_files={member_name(name) for name in files}
         for name in seen:
             pieces=name.split('/')
@@ -83,10 +93,12 @@ def verify_zip(path):
                 raise ValueError('Missing or divergent scenario copy: '+filename)
         total=0
         for name,digest in manifest.items():
-            checksum=hashlib.sha256()
-            with archive.open(files[prefix+name]) as stream:
+            checksum=hashlib.sha256();size=0;entry=files[prefix+name]
+            with archive.open(entry) as stream:
                 for block in iter(lambda:stream.read(1024*1024),b''):
-                    checksum.update(block);total+=len(block)
+                    checksum.update(block);total+=len(block);size+=len(block)
+                    if total>max_bytes or size>entry.file_size:raise ValueError('ZIP exceeds decompression limit')
+            if size!=entry.file_size:raise ValueError('ZIP member size mismatch: '+name)
             if checksum.hexdigest()!=digest:raise ValueError('SHA-256 mismatch: '+name)
         return {'files':len(manifest),'uncompressed_bytes':total,'integrity_verified':True,
                 'native_execution_verified':False,'scope':'membership, CRC, SHA-256, runtime and scenario paths'}
@@ -95,8 +107,11 @@ def verify_zip(path):
 def main():
     parser=argparse.ArgumentParser(description=__doc__)
     parser.add_argument('zip',type=Path)
+    parser.add_argument('--max-uncompressed-gib',type=int,default=64,
+                        help='Maximum declared and read payload size in GiB (default 64)')
     args=parser.parse_args()
-    print(json.dumps(verify_zip(args.zip),indent=2))
+    if not 1<=args.max_uncompressed_gib<=512:parser.error('decompression limit must be 1..512 GiB')
+    print(json.dumps(verify_zip(args.zip,max_bytes=args.max_uncompressed_gib*1024**3),indent=2))
 
 
 if __name__=='__main__':main()

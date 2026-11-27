@@ -74,6 +74,11 @@ def verify_revised_assets(content):
         with asset.open('rb') as stream:header=stream.read(64)
         if header.startswith(b'version https://git-lfs.github.com/spec/') or len(header)<64:
             raise ValueError('Unmaterialized or truncated material: '+relative)
+        # Loose editor packages begin with the UE PACKAGE_FILE_TAG, not
+        # arbitrary bytes or an HTML/download error. Full validation still
+        # belongs to the engine load/cook, not this lightweight preflight.
+        if header[:4]!=bytes.fromhex('c1832a9e'):
+            raise ValueError('Not a little-endian Unreal package: '+relative)
 
 
 def project_inputs(project):
