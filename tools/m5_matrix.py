@@ -5,6 +5,7 @@ Repeated attempts are counted as attempts, not independent pair evaluations.
 Only compact series summaries are consumed; no full report or service reads.
 """
 import re
+import json
 
 IDENTIFIER=re.compile(r'[a-zA-Z0-9_-]{1,48}\Z')
 
@@ -27,8 +28,20 @@ def build_matrix(runs):
         path=spec.get('decide_path') if co else None
         rpc=spec.get('decide_profile') if co else None
         timeout=spec.get('timeout')
+        decision_timeout=spec.get('decision_timeout',10) if co else None
+        mission_id=spec.get('mission_id','search_and_rescue')
+        params=spec.get('mission_parameters',{})
+        if not isinstance(mission_id,str) or not mission_id or len(mission_id)>128 or not isinstance(params,dict):
+            excluded+=len(run['rows']);continue
+        try:
+            parameter_key=json.dumps(params,sort_keys=True,ensure_ascii=True,allow_nan=False,separators=(',',':'))
+        except (ValueError,TypeError,RecursionError):
+            excluded+=len(run['rows']);continue
+        if len(parameter_key)>1024:
+            excluded+=len(run['rows']);continue
         if (any(v is not None and (not isinstance(v,str) or len(v)>128) for v in (co,eo,path,rpc))
-                or (timeout is not None and (type(timeout) is not int or not 5<=timeout<=300))):
+                or (timeout is not None and (type(timeout) is not int or not 5<=timeout<=300))
+                or (decision_timeout is not None and (type(decision_timeout) is not int or not 1<=decision_timeout<=60))):
             excluded+=len(run['rows']);continue
         for row in run['rows']:
             if not isinstance(row,dict):
@@ -37,11 +50,12 @@ def build_matrix(runs):
             if (type(seed) is not int or not 0<=seed<=2147483647 or mode not in ('strict','declared')
                     or type(index) is not int or not 0<=index<=999):
                 excluded+=1;continue
-            key=(c,e,profile,mode,seed,co,eo,path,rpc,timeout)
+            key=(c,e,profile,mode,seed,co,eo,path,rpc,timeout,decision_timeout,mission_id,parameter_key)
             if key not in groups:
                 groups[key]={'controller':c,'environment':e,'profile':profile,'mode':mode,'seed':seed,
                              'controller_origin':co,'environment_origin':eo,'decide_path':path,'decide_profile':rpc,
-                             'timeout':timeout,'attempts':0,'finished':0,'exchange_passed':0,
+                             'timeout':timeout,'decision_timeout':decision_timeout,'mission_id':mission_id,
+                             'mission_parameters':json.loads(parameter_key),'attempts':0,'finished':0,'exchange_passed':0,
                              'mission_success':0,'truth_trials':0,'all_evacuated':0,'inputs_preserved':0,
                              'latest_series_id':run['id'],'latest_trial_index':index,
                              'latest_state':row.get('state')}
@@ -62,7 +76,8 @@ def build_matrix(runs):
     def order(cell):
         return (cell['controller'],cell['environment'],cell['profile'] or '',cell['mode'],cell['seed'],
                 cell['controller_origin'] or '',cell['environment_origin'] or '',cell['decide_path'] or '',
-                cell['decide_profile'] or '',cell['timeout'] or 0)
+                cell['decide_profile'] or '',cell['timeout'] or 0,cell['decision_timeout'] or 0,
+                cell['mission_id'],json.dumps(cell['mission_parameters'],sort_keys=True,ensure_ascii=True))
     return sorted(groups.values(),key=order),excluded
 
 

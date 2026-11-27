@@ -24,10 +24,18 @@ function seeds(){
   if(new Set(result).size!==result.length||result.some(x=>!Number.isSafeInteger(x)||x>2147483647))throw new Error('Seed должны быть уникальными и от 0 до 2147483647.');
   return result;
 }
+function missionParameters(){
+  if(byId('environment').value!=='planar'||byId('controller').value==='independent')return {};
+  const result={};
+  if(byId('planar-case').value!=='normal')result.case=byId('planar-case').value;
+  if(byId('planar-opaque').checked)result.opaque=true;
+  return result;
+}
 function spec(){
   return {controller:byId('controller').value,environment:byId('environment').value,profile:byId('profile').value,
     mode:byId('mode').value,seeds:seeds(),timeout:Number(byId('timeout').value),
     decide_path:byId('decide-path').value,decide_profile:byId('decide-profile').value,confirm_reset:byId('confirm').checked,
+    mission_parameters:missionParameters(),decision_timeout:item('controller')?.kind==='external'?Number(byId('decision-timeout').value):10,
     ...(repeatOf?{repeat_of:repeatOf}:{})};
 }
 function syncForm(){
@@ -41,12 +49,14 @@ function syncForm(){
   if(independent)byId('mode').value='strict';
   byId('decide-path').disabled=!(c&&c.kind==='external');
   byId('decide-profile').disabled=!(c&&c.kind==='external');
+  byId('decision-timeout').disabled=!(c&&c.kind==='external');
+  byId('planar-case').disabled=byId('planar-opaque').disabled=!e||e.id!=='planar'||independent;
   let valid=!!c&&!!e;
   let message='';
   try{
     const n=seeds().length*(byId('mode').value==='both'?2:1);
     if(e&&e.kind==='external'&&c&&c.id!=='metarescue'){valid=false;message='Для внешней среды выберите MetaRescue.';}
-    else message=n+' испытаний · search_and_rescue · AI OFF · последовательный запуск'+(repeatOf?' · точный повтор '+repeatOf.slice(0,8):'');
+    else message=n+' испытаний · search_and_rescue · AI OFF · последовательный запуск'+(Object.keys(missionParameters()).length?' · '+JSON.stringify(missionParameters()):'')+(repeatOf?' · точный повтор '+repeatOf.slice(0,8):'');
   }catch(error){valid=false;message=error.message;}
   byId('selection-summary').textContent=message;
   byId('start').disabled=!valid||!byId('confirm').checked||requestBusy||!!activeId;
@@ -147,6 +157,7 @@ async function refreshMatrix(){
       const pair=appendCell(tr,cell.controller+' → '+cell.environment);
       pair.title=[cell.controller_origin,cell.environment_origin,cell.decide_path,cell.decide_profile].filter(Boolean).join(' · ');
       appendCell(tr,(cell.profile||'—')+' / '+cell.mode+' / '+cell.seed+' / '+(cell.timeout??'—')+' с');
+      tr.lastElementChild.title='Mission: '+cell.mission_id+' '+JSON.stringify(cell.mission_parameters||{})+(cell.decision_timeout?' · RPC '+cell.decision_timeout+' s':'');
       appendCell(tr,cell.finished+'/'+cell.attempts);
       appendCell(tr,cell.exchange_passed+'/'+cell.finished);
       appendCell(tr,cell.mission_success+'/'+cell.finished);
@@ -284,7 +295,7 @@ byId('trial-form').addEventListener('submit',async event=>{
   catch(error){byId('form-message').textContent=error.message;}
   finally{requestBusy=false;syncForm();}
 });
-for(const id of ['controller','environment','profile','mode','seeds','timeout','decide-path','decide-profile','confirm'])byId(id).addEventListener('input',()=>{
+for(const id of ['controller','environment','profile','mode','seeds','timeout','decide-path','decide-profile','decision-timeout','planar-case','planar-opaque','confirm'])byId(id).addEventListener('input',()=>{
   if(id!=='confirm')repeatOf=null;
   if(id==='controller'||id==='environment')byId(id+'-probe').hidden=true;
   syncForm();
@@ -316,7 +327,9 @@ byId('repeat').addEventListener('click',()=>{
     syncForm();return;
   }
   for(const [id,key] of [['controller','controller'],['environment','environment'],['profile','profile'],['mode','mode'],['timeout','timeout'],['decide-path','decide_path'],['decide-profile','decide_profile']])byId(id).value=s[key];
-  byId('seeds').value=s.seeds.join(', ');repeatOf=run.id;byId('form-message').textContent='';
+  byId('seeds').value=s.seeds.join(', ');byId('decision-timeout').value=s.decision_timeout??10;
+  byId('planar-case').value=s.mission_parameters?.case||'normal';byId('planar-opaque').checked=s.mission_parameters?.opaque===true;
+  repeatOf=run.id;byId('form-message').textContent='';
   syncForm();byId('controller').focus();
 });
 byId('prev-page').addEventListener('click',()=>{offset=Math.max(0,offset-30);refresh();});

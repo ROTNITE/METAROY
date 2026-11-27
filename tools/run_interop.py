@@ -718,6 +718,8 @@ def main():
     if args.operation == 'our-environment' and args.engine == 'reference':
         sources += list((ROOT / 'conformance').glob('*.py'))
     sources += [ROOT/'tools/goal_evidence.py']
+    if getattr(args,'mission_parameters',None) is not None:
+        sources.append(args.mission_parameters)
     packages = getattr(args, 'input_package', ())
     frozen = {str(p.resolve(strict=True)): file_sha256(p) for p in (*sources, *packages)}
     if args.operation == 'our-environment' and args.engine == 'unreal':
@@ -731,6 +733,9 @@ def main():
             if not isinstance(params, dict):
                 raise ValueError('Mission parameters must be an object')
             mission = {'id': args.mission_id, 'parameters': params}
+            report['mission']=mission
+            if args.operation=='our-environment':
+                report['decision_timeout']=args.decision_timeout
             if args.operation == 'our-controller':
                 seed = SEEDS[0] if args.seed is None else args.seed
                 report.update(run_controller(args.environment,output/'run',seed,args.scout_patrol,mission,args.timeout,

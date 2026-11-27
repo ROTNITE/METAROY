@@ -47,6 +47,10 @@
           <div class="settings"><div><label for="timeout">Лимит одного испытания, с</label><input id="timeout" type="number" min="5" max="300" step="1" value="90" required></div>
           <div><label for="decide-path">RPC контроллера</label><select id="decide-path"><option value="decide">/decide</option><option value="decision">/decision</option></select></div>
           <div><label for="decide-profile">RPC-профиль</label><select id="decide-profile"><option value="core">Core</option><option value="metaroi-v9">Metaroi v9</option></select></div></div>
+          <div class="settings"><div><label for="decision-timeout">Тайм-аут RPC, с</label><input id="decision-timeout" type="number" min="1" max="60" step="1" value="10" required></div>
+          <div><label for="planar-case">Сценарий 2D</label><select id="planar-case"><option value="normal">Обычный</option><option value="late_target">Поздняя цель</option><option value="link_loss">Потеря связи</option><option value="blocked_route">Перекрытый маршрут</option></select></div></div>
+          <label class="confirmation"><input type="checkbox" id="planar-opaque"> Непрозрачные ID в 2D-среде</label>
+          <p class="muted small">Параметры 2D доступны для planar и контроллера, владеющего reset. Независимый контроллер и чужие среды используют только базовую миссию без недекларированных параметров.</p>
           <p class="muted small">RPC-параметры используются только для зарегистрированного внешнего контроллера. Нативный Unreal в этой версии лаборатории не запускается.</p>
         </details>
         <p class="summary" id="selection-summary">Выберите компоненты.</p>

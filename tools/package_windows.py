@@ -22,7 +22,7 @@ PROJECT = ROOT/'unreal/MetaRescue'
 TOOLS = ('run_product.py', 'product_session.py', 'run_mission.py', 'native_archive.py',
          'native_process.py', 'analytics_service.py', 'run_native_series.py', 'series_plan.py',
          'issue_operator.py', 'net65_demo.py', 'm5_lab.py', 'm5_trial.py',
-         'm5_matrix.py', 'm5_score.py', 'run_interop.py', 'goal_evidence.py')
+         'm5_matrix.py', 'm5_score.py', 'm5_spec.py', 'run_interop.py', 'goal_evidence.py')
 ENTRYPOINTS = ('run_product.py', 'product_session.py', 'run_mission.py',
                'run_native_series.py', 'series_plan.py', 'issue_operator.py')
 MODULE_ENTRYPOINTS = ('tools.m5_lab', 'tools.m5_trial', 'tools.run_interop',

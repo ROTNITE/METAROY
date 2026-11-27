@@ -37,6 +37,7 @@ from controller.client import EnvironmentClient
 from tools.run_interop import controller_call,ROOT
 from tools.m5_score import aggregate_m5
 from tools.m5_matrix import build_matrix,pair_grid
+from tools.m5_spec import checked_mission_parameters
 from environment.main import DEFAULT_OUTPUT
 
 WEB=ROOT/'web'/'m5'
@@ -83,7 +84,8 @@ class Registry:
                                [{'id':k,'name':k,'kind':'external','origin':v} for k,v in self.environments.items()]}
 
     def spec(self,raw):
-        allowed={'controller','environment','profile','mode','seeds','timeout','decide_path','decide_profile','confirm_reset'}
+        allowed={'controller','environment','profile','mode','seeds','timeout','decide_path','decide_profile',
+                 'mission_parameters','decision_timeout','confirm_reset'}
         if not isinstance(raw,dict) or set(raw)-allowed or raw.get('confirm_reset') is not True:
             raise ValueError('Confirm episode creation/reset and use recognized fields')
         controller,environment=raw.get('controller'),raw.get('environment')
@@ -110,22 +112,29 @@ class Registry:
         path=raw.get('decide_path','decide');rpc=raw.get('decide_profile','core')
         if path not in ('decide','decision') or rpc not in ('core','metaroi-v9'):
             raise ValueError('Invalid RPC profile')
+        params=checked_mission_parameters(environment,controller,raw.get('mission_parameters',{}))
+        decision_timeout=raw.get('decision_timeout',10)
+        if (type(decision_timeout) is not int or not 1<=decision_timeout<=60 or
+                (controller not in self.controllers and decision_timeout!=10)):
+            raise ValueError('Decision timeout must be 1..60 seconds for an external RPC controller')
         return {'controller':controller,'environment':environment,'profile':profile,'mode':mode,
                 'seeds':seeds[:],'timeout':timeout,'decide_path':path,'decide_profile':rpc,
                 'controller_origin':self.controllers.get(controller),'environment_origin':self.environments.get(environment),
-                'mission_id':'search_and_rescue','ai_mode':'OFF'}
+                'mission_id':'search_and_rescue','mission_parameters':params,'decision_timeout':decision_timeout,'ai_mode':'OFF'}
 
 
 def build_command(spec,seed,mode,output):
     prefix=[sys.executable,'-B','-X','utf8','-m']
     common=['--seed',str(seed),'--core-mode',mode,'--timeout',str(spec['timeout']),'--output',str(output)]
+    if spec.get('mission_parameters'):
+        common+=['--mission-parameters',str(output.parent/'mission-parameters.json')]
     if spec['environment_origin']:
         return prefix+['tools.run_interop','our-controller','--environment',spec['environment_origin']]+common
     if spec['controller_origin']:
         return prefix+['tools.run_interop','our-environment','--controller',spec['controller_origin'],
                        '--engine',spec['environment'],'--mode','decide','--decide-path',spec['decide_path'],
                        '--decide-profile',spec['decide_profile'],'--reference-profile',spec['profile'],
-                       '--environment-port','0','--decision-timeout','10']+common
+                       '--environment-port','0','--decision-timeout',str(spec.get('decision_timeout',10))]+common
     return prefix+['tools.m5_trial','--controller',spec['controller'],'--engine',spec['environment'],
                    '--profile',spec['profile']]+common
 
@@ -250,7 +259,7 @@ def archive_series(root,run,stream):
     folder=(root/run['id']).resolve(strict=True)
     if not folder.is_relative_to(root):
         raise ValueError('Unsafe archive root')
-    candidates=[folder/'series.json']
+    candidates=[folder/'series.json',folder/'mission-parameters.json']
     for row in run['rows']:
         stem=f"trial-{row['index']:03d}"
         candidates.append(folder/(stem+'.log'))
@@ -358,9 +367,14 @@ class Lab:
                 original=self.runs.get(repeat_of)
                 if original is None or original['state'] not in TERMINAL:
                     raise ValueError('Repeat source must be a saved terminal series')
-                if original.get('spec')!=spec:
+                previous=dict(original.get('spec',{}))
+                previous.setdefault('mission_parameters',{})
+                previous.setdefault('decision_timeout',10)
+                if previous!=spec:
                     raise ValueError('Repeat configuration or registered endpoint changed; create a new trial explicitly')
             ident=uuid.uuid4().hex;folder=self.root/ident;folder.mkdir()
+            if spec['mission_parameters']:
+                atomic_json(folder/'mission-parameters.json',spec['mission_parameters'])
             modes=('strict','declared') if spec['mode']=='both' else (spec['mode'],)
             rows=[{'index':i,'seed':seed,'mode':mode,'state':'queued'}
                   for i,(seed,mode) in enumerate((s,m) for s in spec['seeds'] for m in modes)]

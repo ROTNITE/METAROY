@@ -39,6 +39,26 @@ class RegistryTests(TestCase):
             with self.assertRaises(ValueError):
                 endpoint(value)
 
+    def test_checked_planar_parameters_and_rpc_timeout(self):
+        registry=Registry(controllers=['rpc=8146'])
+        raw=self.spec(environment='planar',mission_parameters={'case':'late_target','opaque':True})
+        spec=registry.spec(raw)
+        self.assertEqual(spec['mission_parameters'],{'case':'late_target','opaque':True})
+        argv=build_command(spec,7,'strict',Path('series/trial-000'))
+        self.assertEqual(argv[argv.index('--mission-parameters')+1],str(Path('series/mission-parameters.json')))
+        default=registry.spec(self.spec(environment='planar',mission_parameters={'case':'normal','opaque':False}))
+        self.assertEqual(default['mission_parameters'],{})
+        inbound=registry.spec(self.spec(environment='planar',controller='rpc',decision_timeout=3,
+                           mission_parameters={'case':'link_loss'}))
+        argv=build_command(inbound,7,'strict',Path('series/trial-000'))
+        self.assertEqual(argv[argv.index('--decision-timeout')+1],'3')
+        for change in ({'mission_parameters':{'case':'bad'}},{'mission_parameters':{'opaque':1}},
+                       {'mission_parameters':{'unknown':True}},{'mission_parameters':[]},
+                       {'controller':'independent'},{'environment':'reference'},
+                       {'decision_timeout':1}):
+            with self.subTest(change=change),self.assertRaises(ValueError):
+                registry.spec(dict(raw,**change))
+
     def test_historical_interruption_does_not_restart(self):
         with TemporaryDirectory() as temp:
             root=Path(temp);ident='a'*32;folder=root/ident;folder.mkdir()
@@ -199,6 +219,34 @@ class HTTPBoundary(TestCase):
         self.assertEqual(self.call('/api/matrix',headers={'Host':'evil.invalid'})[0],403)
         self.assertEqual(json.loads(self.call('/api/matrix')[1])['cells'],[])
         self.assertEqual(self.lab.list(),[])
+
+    def test_real_planar_parameterized_mission_is_frozen_and_reported(self):
+        request={'controller':'metarescue','environment':'planar','profile':'K','mode':'strict',
+                 'seeds':[17333],'timeout':40,'confirm_reset':True,
+                 'mission_parameters':{'case':'late_target','opaque':True}}
+        code,raw=self.call('/api/series',request)
+        self.assertEqual(code,202,raw)
+        ident=json.loads(raw)['id']
+        deadline=time.monotonic()+70
+        while time.monotonic()<deadline and self.lab.get(ident)['state'] in ('queued','running','stopping'):
+            time.sleep(.1)
+        run=self.lab.get(ident)
+        self.assertEqual(run['state'],'completed',run)
+        path=self.lab.root/ident/'mission-parameters.json'
+        self.assertEqual(json.loads(path.read_text(encoding='utf-8')),request['mission_parameters'])
+        code,raw=self.call('/api/series/'+ident+'/trial/0')
+        self.assertEqual(code,200)
+        report=json.loads(raw)
+        self.assertEqual(report['mission']['parameters'],request['mission_parameters'])
+        self.assertTrue(report['inputs_preserved'])
+        self.assertEqual(report['independent_truth']['target_count'],2)
+        self.assertEqual(report['independent_truth']['physical_handovers'],2)
+        code,raw=self.call('/api/series/'+ident+'/export/zip')
+        self.assertEqual(code,200)
+        with zipfile.ZipFile(io.BytesIO(raw)) as archive:
+            self.assertEqual(json.loads(archive.read('mission-parameters.json')),request['mission_parameters'])
+        cells=json.loads(self.call('/api/matrix')[1])['cells']
+        self.assertEqual(cells[0]['mission_parameters'],request['mission_parameters'])
 
     def test_trial_summary_does_not_read_full_large_report(self):
         ident='a'*32
@@ -581,3 +629,18 @@ class PairGridTests(TestCase):
         self.assertIsNone(first['official_m5'])
         with self.assertRaises(ValueError):
             pair_grid(cells,[],[],limit=13)
+
+
+class MissionMatrixTests(TestCase):
+    def test_parameters_and_rpc_deadlines_never_merge(self):
+        base={'controller':'rpc','environment':'planar','controller_origin':'http://127.0.0.1:8146',
+              'timeout':30,'decide_path':'decide','decide_profile':'core'}
+        variants=[{}, {'mission_parameters':{'case':'late_target'}},
+                  {'mission_parameters':{'opaque':True}}, {'decision_timeout':3}]
+        runs=[{'id':f'{i:032x}','spec':dict(base,**extra),
+               'rows':[{'index':0,'seed':7,'mode':'strict','state':'completed'}]}
+              for i,extra in enumerate(variants)]
+        cells,excluded=build_matrix(runs)
+        self.assertEqual(excluded,0)
+        self.assertEqual(len(cells),4)
+        self.assertTrue(all(cell['attempts']==1 for cell in cells))
