@@ -12,6 +12,7 @@ import math
 from controller.decisions import decision
 from controller.navigation import Box, NavigationMap, RouteFailure, handover_xy, observed_surfaces
 from controller.water_rescue import ground_target, reserve_shore, shore_target, water_command, water_intercept_opportunity
+from controller.water_survey import water_survey_command
 
 
 BASELINES=('fixed_workflow','local_reactive')
@@ -60,6 +61,9 @@ class FixedWorkflow:
         self.reconfirm_after={}
         self.failed_inspections={}
         self.shore_transfer=None
+        self.water_survey_requests={}
+        self.water_survey_next=0.
+        self.water_survey_recent={}
 
     @staticmethod
     def available(agent,action):
@@ -413,6 +417,9 @@ class FixedWorkflow:
         self.reconfirm_after={}
         self.failed_inspections={}
         self.shore_transfer=None
+        self.water_survey_requests={}
+        self.water_survey_next=0.
+        self.water_survey_recent={}
 
     def _released_jobs(self, observation):
         now = observation['time']
@@ -544,6 +551,8 @@ class FixedWorkflow:
                 command,next_phase=water_command(self,observation,announced,a,job,known)
             elif a['kind']=='aerial':
                 command=self._aerial_inspection(announced,a,agents,job,known,disputes)
+                if command is None:
+                    command=water_survey_command(self,observation,announced,a,job,known)
                 if command is None and self.available(a,'follow_route'):
                     goal=self._scan_goal(a,announced)
                     if goal is None:continue

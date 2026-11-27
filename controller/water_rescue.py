@@ -15,6 +15,7 @@ class WaterRoute:
         self.revised = observation.get('metaevolution', {}).get('disaster_revision') == 1
         self.now = observation['time']
         self.edges = {}
+        self.exhausted = {}
         restrictions = []
         for zone in observation.get('zones', ()):
             access = zone.get('access', {}).get('allowed_kinds')
@@ -125,6 +126,9 @@ class WaterRoute:
             return [list(goal)]
         source, target = self.cell(start), self.cell(goal)
         z = start[2]
+        if self.revised and (visited := self.exhausted.get(tuple(start))) is not None:
+            if not any((target[0]+x,target[1]+y) in visited for x in (-1,0,1) for y in (-1,0,1)):
+                return None
         def center(cell):
             return (cell[0]*5 + 2.5, cell[1]*5 + 2.5, z)
 
@@ -158,6 +162,9 @@ class WaterRoute:
                 cost[peer] = distance
                 parent[peer] = cell
                 heapq.heappush(queue, (distance + math.dist(there, goal), distance, peer))
+        if self.revised and not queue:
+            if len(self.exhausted)>=8:self.exhausted.clear()
+            self.exhausted[tuple(start)] = frozenset(cost)
         return None
 
 
@@ -180,7 +187,12 @@ def reserve_shore(workflow, observation, announced, known, directives):
         boat = agents.get(previous['boat_id'])
         rover = agents.get(previous['rover_id'])
         target = known.get(previous['target_id'], {})
-        if (boat is not None and rover is not None and target.get('evacuation_state') != 'evacuated' and rover['status'] != 'failed'
+        valid_owner = (not observation.get('metaevolution', {}).get('disaster_revision') == 1 or
+                       (boat is not None and boat.get('physical', {}).get('carrying') is True and
+                        boat.get('physical', {}).get('cargo_target_id') == previous['target_id']) or
+                       shore_target(target, announced) or
+                       (rover is not None and rover.get('physical', {}).get('cargo_target_id') == previous['target_id']))
+        if (valid_owner and boat is not None and rover is not None and target.get('evacuation_state') != 'evacuated' and rover['status'] != 'failed'
                 and rover['id'] not in directives and (boat['status'] != 'failed' or shore_target(target, announced))):
             return previous
 
@@ -195,7 +207,7 @@ def reserve_shore(workflow, observation, announced, known, directives):
         if not hull or not target_id or not boat.get('position') or boat['status'] != 'busy':
             continue
         observer = boat.get('freshness', {}).get('position', {}).get('observed_at')
-        if type(observer) not in (float,int) or now-observer>5:
+        if type(observer) not in (float,int) or now-observer>5 or (observation.get('metaevolution', {}).get('disaster_revision') == 1 and observer>now):
             continue
         travel = math.dist(boat['position'][:2],dock)
         current = math.hypot(*hull.get('current_m_s',(0,0,0))[:2])
@@ -305,9 +317,16 @@ def water_command(workflow, observation, announced, boat, job, known, *, reroute
     actions = {action.get('action') for action in boat['available_actions']}
     nav = None
 
+    revised = observation.get('metaevolution', {}).get('disaster_revision') == 1
+
+    def need_survey(goal, target_id):
+        if revised:
+            workflow.water_survey_requests[boat_id] = (observation['time'], pose[:2], tuple(goal[:2]), target_id)
+
     def request(action, parameters, phase):
         if action not in actions:
             return None, None
+        if revised:workflow.water_survey_requests.pop(boat_id,None)
         job.water_intercept = None
         job.water_approach = None
         return {'agent_id': boat_id, 'action': action, 'parameters': parameters}, phase
@@ -364,6 +383,7 @@ def water_command(workflow, observation, announced, boat, job, known, *, reroute
         if waypoints and nav.clear((*approach, pose[2]), (*dock, pose[2])):
             waypoints.append([*dock, pose[2]])
             return request('follow_route', {'waypoints': waypoints, 'precise_stop': True}, 'shore')
+        need_survey(dock,job.target)
         return None, None
 
     reserved = {other.target for key, other in workflow.jobs.items() if key != boat_id and other.target}
@@ -488,6 +508,7 @@ def water_command(workflow, observation, announced, boat, job, known, *, reroute
                 job.water_intercept = (observed if math.isfinite(age) else now, now, position)
                 job.water_approach = approach_key
                 return command
+    need_survey(position,target['id'])
     if not reroute:
         job.target = None
     return None, None
