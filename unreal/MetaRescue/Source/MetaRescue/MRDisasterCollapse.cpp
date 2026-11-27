@@ -150,7 +150,7 @@ void AMRWorld::RefreshDebrisCells()
 {
     if(!Environment.bRevisedDisasters||(!bStaticDebrisDirty&&Environment.Time+1.e-9<NextDebrisRefresh))return;
     NextDebrisRefresh=Environment.Time+.5;
-    const auto Add=[&](TSet<FIntPoint>& Into,const FBox& Bounds)
+    const auto Add=[&](TSet<FIntPoint>& Into,TMap<FIntPoint,FVector>& Samples,const FBox& Bounds)
     {
         if(!Bounds.IsValid||Bounds.Min.ContainsNaN()||Bounds.Max.ContainsNaN()||
            Bounds.GetSize().Z<30||FMath::Max(Bounds.GetSize().X,Bounds.GetSize().Y)<60)return;
@@ -167,7 +167,15 @@ void AMRWorld::RefreshDebrisCells()
                 P.X=FMath::Clamp(P.X,Bounds.Min.X,Bounds.Max.X);
                 P.Y=FMath::Clamp(P.Y,Bounds.Min.Y,Bounds.Max.Y);
                 const double Ground=UrbanTerrain?UrbanTerrain->GroundHeight(P):InitialGroundHeightCm(P);
-                if(Bounds.Min.Z<=Ground+100&&Bounds.Max.Z>=Ground+20)Into.Add(Cell);
+                if(Bounds.Min.Z<=Ground+100&&Bounds.Max.Z>=Ground+20)
+                {
+                    Into.Add(Cell);
+                    // A proposed ray endpoint is not an observation. It is
+                    // accepted only when the sensor ray actually hits debris.
+                    P.Z=FMath::Clamp(Ground+60.,Bounds.Min.Z+1.,Bounds.Max.Z-1.);
+                    const FVector* Previous=Samples.Find(Cell);
+                    if(!Previous||P.Z>Previous->Z)Samples.Add(Cell,P);
+                }
             }
     };
     const auto IsDebris=[](const UPrimitiveComponent* C)
@@ -189,7 +197,7 @@ void AMRWorld::RefreshDebrisCells()
     };
     if(bStaticDebrisDirty)
     {
-        StaticDebrisCells.Reset();bStaticDebrisDirty=false;
+        StaticDebrisCells.Reset();StaticDebrisSamplePoints.Reset();bStaticDebrisDirty=false;
         for(USceneComponent* Item:CoreEventComponents)
         {
             auto* Primitive=Cast<UPrimitiveComponent>(Item);
@@ -204,18 +212,20 @@ void AMRWorld::RefreshDebrisCells()
                     FTransform Pose;if(!Batch->GetInstanceTransform(I,Pose,true))continue;
                     const FBox Bounds=Setup&&Setup->AggGeom.GetElementCount()>0?
                         Setup->AggGeom.CalcAABB(Pose):Local.TransformBy(Pose).GetBox();
-                    Add(StaticDebrisCells,Bounds);
+                    Add(StaticDebrisCells,StaticDebrisSamplePoints,Bounds);
                 }
             }
-            else Add(StaticDebrisCells,PhysicalBounds(Primitive));
+            else Add(StaticDebrisCells,StaticDebrisSamplePoints,PhysicalBounds(Primitive));
         }
     }
     TSet<FIntPoint> Current=StaticDebrisCells;
+    auto Samples=StaticDebrisSamplePoints;
     // The dynamic body list is bounded by the existing per-event Chaos
     // budget. Do not iterate every decal, emitter and static instance at 2Hz.
     for(UProceduralMeshComponent* Piece:PhysicsPieces)
         if(IsDebris(Piece)&&Piece->Mobility!=EComponentMobility::Static)
-            Add(Current,PhysicalBounds(Piece));
+            Add(Current,Samples,PhysicalBounds(Piece));
+    DebrisSamplePoints=MoveTemp(Samples);
     bool Changed=Current.Num()!=DebrisCells.Num();
     if(!Changed)for(const auto& Cell:Current)if(!DebrisCells.Contains(Cell)){Changed=true;break;}
     if(Changed)
