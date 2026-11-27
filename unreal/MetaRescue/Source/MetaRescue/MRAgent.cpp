@@ -187,11 +187,23 @@ void AMRAgent::AccountExecutedMovement()
 {
     if(!Mission||!Body->IsSimulatingPhysics())return;
     const FVector Current=GetActorLocation();
-    const float Travel=FVector::Dist(Current,Previous);Previous=Current;
+    const FVector Start=Previous;
+    const float Travel=FVector::Dist(Current,Start);Previous=Current;
     DistanceTravelled+=Travel;
     if(bRescueWatercraft)return; // Its actual jet electrical work is metered instead.
-    const float SurfaceCost=MediumLimits.IsValid?(Category==TEXT("underground")?1.2f:1.3f):
+    float SurfaceCost=MediumLimits.IsValid?(Category==TEXT("underground")?1.2f:1.3f):
         Mission->bRescueQuarter&&!bAerial?Mission->QuerySurfaceMeters(Current/100.f).MovementCost:1.f;
+    if(Mission->Environment.bRevisedDisasters&&Mission->bDisasterCity&&!bAerial&&Category.IsEmpty()&&Travel>0)
+    {
+        // Integrate over executed motion, not requested waypoints or only
+        // the destination surface. Midpoint samples remain bounded even
+        // after a long physics frame; normal steps need only one sample.
+        const int32 Count=FMath::Clamp(FMath::CeilToInt(Travel/100.f),1,16);
+        double Sum=0;
+        for(int32 I=0;I<Count;++I)
+            Sum+=Mission->MovementCost(FMath::Lerp(Start,Current,(I+.5)/Count));
+        SurfaceCost=float(Sum/Count);
+    }
     const double Wh=Travel/1000.f*(bAerial?.69f:bCarrying?1.18f:.82f)*SurfaceCost;
     Spend(Wh,MotionWh);
 }
@@ -380,7 +392,8 @@ void AMRAgent::AnimateMechanisms(float Dt)
     {
         const FVector Position=GetActorLocation();
         const bool WetSurface=Mission->bDisasterCity
-            ?GroundContacts>0&&(Mission->Environment.HasEffect(EMRDisturbance::Mud,Position)||Mission->WaterDepth(Position)>2.)
+            ?(Mission->Environment.bRevisedDisasters?GroundWetContacts>0:
+                GroundContacts>0&&(Mission->Environment.HasEffect(EMRDisturbance::Mud,Position)||Mission->WaterDepth(Position)>2.))
             :Mission->GroundSpeedFactor(Position)<.8f;
         const bool Wet=WetSurface&&FMath::Abs(ForwardSpeed)>60;
         if(Wet&&!SurfaceSpray)
@@ -435,9 +448,11 @@ void AMRAgent::DriveDistrictGround(const FVector& Desired)
         if(State!="overturned"){State="overturned";Mission->AppendEvent(TEXT("agent_overturned"),AgentId);}
         return;
     }
-    const float Mass=Body->GetMass();float Support=0;GroundContacts=0;
+    const float Mass=Body->GetMass();float Support=0;GroundContacts=GroundWetContacts=0;
+    int32 MudContacts=0;
+    const bool Revised=Mission->Environment.bRevisedDisasters;
     const bool Mud=Mission->bDisasterCity&&Mission->Environment.HasEffect(EMRDisturbance::Mud,GetActorLocation());
-    const bool DrawTracks=Mud&&FApp::CanEverRender();
+    const bool DrawTracks=(Mud||Revised)&&FApp::CanEverRender();
     if(!DrawTracks)for(auto& Contact:RearTrackContacts)Contact.Reset();
     FCollisionQueryParams Params;Params.AddIgnoredActor(this);
     for(AMRAgent* Other:Mission->Agents)if(Other!=this)Params.AddIgnoredActor(Other);
@@ -447,10 +462,14 @@ void AMRAgent::DriveDistrictGround(const FVector& Desired)
         FHitResult Hit;
         const bool Ground=GetWorld()->LineTraceSingleByChannel(Hit,Point+FVector(0,0,30),Point-FVector(0,0,90),ECC_Visibility,Params)
             &&Hit.ImpactNormal.Z>.35;
+        const bool MudContact=Ground&&(Revised?
+            Mission->Environment.HasEffect(EMRDisturbance::Mud,Hit.ImpactPoint):Mud);
+        if(MudContact)++MudContacts;
+        if(Revised&&Ground&&(MudContact||Mission->WaterDepth(Hit.ImpactPoint)>2.))++GroundWetContacts;
         if(DrawTracks&&X<0)
         {
             auto& PreviousContact=RearTrackContacts[Y>0?1:0];
-            if(!Ground||Hit.ImpactNormal.Z<.8)PreviousContact.Reset();
+            if(!Ground||Hit.ImpactNormal.Z<.8||(Revised&&!MudContact))PreviousContact.Reset();
             else if(!PreviousContact.IsSet())PreviousContact=Hit.ImpactPoint;
             else
             {
@@ -491,7 +510,8 @@ void AMRAgent::DriveDistrictGround(const FVector& Desired)
     // A frame with unloaded springs can still have tyre/track contact with the
     // ground. Keep bounded braking at that contact instead of coasting through
     // a safety stop until the next spring compression.
-    const float Traction=FMath::Max(Support/Mass,490.f)*(Mud?.48f:.72f);
+    const float Grip=Revised?FMath::Lerp(.72f,.48f,float(MudContacts)/GroundContacts):(Mud?.48f:.72f);
+    const float Traction=FMath::Max(Support/Mass,490.f)*Grip;
     Acceleration=Acceleration.GetClampedToMaxSize(Traction);
     Body->AddForce(Acceleration*Mass);
     float Yaw=0;

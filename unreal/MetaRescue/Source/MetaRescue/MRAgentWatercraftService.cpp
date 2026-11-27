@@ -41,7 +41,11 @@ bool AMRAgent::BeginWatercraftPickup(int32 Index,const FString& Id)
     {
         const FVector CarrierSpeed=Source->Body->GetPhysicsLinearVelocityAtPoint(Target.Position);
         if(Source->IsOperational()||(CarrierSpeed-HullVelocity).Size2D()>30)return false;
-        if(Source->bRescueWatercraft)Source->SetWatercraftPayloadKg(0);
+        if(Source->bRescueWatercraft&&!Source->SetWatercraftPayloadKg(0)&&Mission->Environment.bRevisedDisasters)
+        {
+            Source->SetWatercraftPayloadKg(Source->WatercraftProfile->PayloadKg);
+            return false;
+        }
     }
     else if(Target.FloatBody&&(Target.FloatBody->GetPhysicsLinearVelocity()-HullVelocity).Size2D()>30)return false;
     if(Target.FloatBody)Target.FloatBody->SetSimulatePhysics(false);
@@ -71,7 +75,10 @@ bool AMRAgent::BeginDisembark(const FString& StationId,const FString& Id)
         const auto& Other=Mission->Targets[I];
         if(!Other.bRescued&&FVector::Dist2D(Other.Position,Landing)<250&&FMath::Abs(Other.Position.Z-Landing.Z)<150)return false;
     }
-    auto& Target=Mission->Targets[TargetIndex];PickupStart=Target.Visual->GetActorLocation();PickupRotation=Target.Visual->GetActorQuat();
+    auto& Target=Mission->Targets[TargetIndex];
+    if(!Target.Visual||(Mission->Environment.bRevisedDisasters&&
+        (!Target.bAssigned||Target.bRescued||Target.SupportCarrier.Get()!=this)))return false;
+    PickupStart=Target.Visual->GetActorLocation();PickupRotation=Target.Visual->GetActorQuat();
     ServiceHeading=Station->GetNumberField(TEXT("boat_yaw_degrees"));
     CommandId=Id;Path.Empty();PathIndex=0;bExternalHold=true;WatercraftHoldPosition=GetActorLocation();
     ServiceShoreStation=StationId;ServiceRemaining=12;ServiceElapsed=WatercraftUnstableSeconds=0;State=TEXT("unloading");return true;

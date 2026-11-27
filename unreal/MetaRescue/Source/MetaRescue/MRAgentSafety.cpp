@@ -233,12 +233,12 @@ FVector AMRAgent::SafeVelocity(const FVector& Requested,float Dt)
                 for(double Offset:{0.,-70.,70.})
                 {
                     const FVector Sensed=P+Along*(Reach*I/Count)+Side*Offset;
-                    if(!Mission->IsUnsafeGround(Sensed))continue;
+                    if(!Mission->IsUnsafeRoadSupport(Sensed))continue;
                     StopReason=TEXT("hazard_on_route");Desired=FVector::ZeroVector;
                     SensedBlocker=FBox(Sensed-FVector(100,100,100),Sensed+FVector(100,100,100));break;
                 }
         }
-        else if(!bAerial&&StopReason.IsEmpty())for(float Fraction:{0.f,.35f,.7f,1.f})
+        if(!bAerial&&StopReason.IsEmpty())for(float Fraction:{0.f,.35f,.7f,1.f})
             if(Mission->IsUnsafeGround(P+Direction*LookAhead*Fraction))
             {
                 StopReason=TEXT("hazard_on_route");Desired=FVector::ZeroVector;

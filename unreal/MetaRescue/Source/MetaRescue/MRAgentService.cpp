@@ -34,7 +34,7 @@ void AMRAgent::ResetForEpisode(const FTransform& Pose,bool UnlimitedEnergy)
     Previous=Pose.GetLocation();Dock=Pose.GetLocation();FlightAltitude=Dock.Z;
     State=bAerial?TEXT("landed"):TEXT("idle");Energy=BatteryCapacityWh;
     ConsumedWh=MotionWh=StandbyWh=SensorWh=ServiceWh=ChargedWh=0;DistanceTravelled=0;
-    GroundContacts=0;AgentContacts=0;bUnlimitedEnergy=UnlimitedEnergy;WaitingSince=-1;
+    GroundContacts=GroundWetContacts=0;AgentContacts=0;bUnlimitedEnergy=UnlimitedEnergy;WaitingSince=-1;
     for(auto& Contact:RearTrackContacts)Contact.Reset();
     if(bRescueWatercraft)ResetWatercraft();
 }
@@ -71,7 +71,14 @@ bool AMRAgent::BeginPickup(int32 Index,const FString& Id)
     {
         if(T.ShoreStation.IsEmpty()&&Mission->WaterDepth(T.Position)>35)return false;
         if(auto* Source=T.SupportCarrier.Get())
-        {if(Source->IsOperational())return false;if(Source->bRescueWatercraft)Source->SetWatercraftPayloadKg(0);}
+        {
+            if(Source->IsOperational())return false;
+            if(Source->bRescueWatercraft&&!Source->SetWatercraftPayloadKg(0)&&Mission->Environment.bRevisedDisasters)
+            {
+                Source->SetWatercraftPayloadKg(98.);
+                return false;
+            }
+        }
         T.Visual->DetachFromActor(FDetachmentTransformRules::KeepWorldTransform);T.SupportCarrier.Reset();
         T.FloatBody->SetSimulatePhysics(false);T.Visual->SetActorEnableCollision(false);T.FloatDisplacedM3=0;++T.ObservationEpoch;
     }

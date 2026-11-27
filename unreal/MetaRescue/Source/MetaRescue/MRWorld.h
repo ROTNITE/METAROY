@@ -117,6 +117,7 @@ public:
     void WriteTelemetry();
     float GroundSpeedFactor(const FVector& Position) const;
     bool IsUnsafeGround(const FVector& Position,bool IncludeDebris=true) const;
+    bool IsUnsafeRoadSupport(const FVector& Position) const;
     bool HasRadio(const FVector& Position) const;
     float WaterDepth(const FVector& Position) const;
     FMRWaterSample WaterAtCm(FVector Position) const;

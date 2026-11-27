@@ -145,6 +145,10 @@ private:
         const double SurfaceA=Bed[A]+Depth[A],SurfaceB=Bed[B]+Depth[B];
         const double FlowDepth=FMath::Max(SurfaceA,SurfaceB)-FMath::Max3(Bed[A],Bed[B],Crest);
         if(FlowDepth<=1.e-5)return 0;
+        // Exactly still edges have no flux or friction work. Avoid pow on
+        // the large stationary reservoir; the remaining expression is
+        // mathematically identical for nonzero previous discharge.
+        if(Previous==0)return -9.81*FlowDepth*Dt*(SurfaceB-SurfaceA)/CellM;
         const double N=(Roughness[A]+Roughness[B])*.5;
         const double Friction=1+9.81*Dt*N*N*FMath::Abs(Previous)/FMath::Pow(FlowDepth,7./3.);
         return (Previous-9.81*FlowDepth*Dt*(SurfaceB-SurfaceA)/CellM)/Friction;

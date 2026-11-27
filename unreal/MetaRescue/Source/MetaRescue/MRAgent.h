@@ -61,6 +61,7 @@ public:
     float MaxSpeed = 620;
     FVector Dock;
     int32 GroundContacts = 0;
+    int32 GroundWetContacts = 0;
     bool bRouteBlocked = false;
     float RotorRPM = 0;
     float RampDeployment = 0;
