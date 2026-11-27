@@ -148,7 +148,7 @@ private:
         // Exactly still edges have no flux or friction work. Avoid pow on
         // the large stationary reservoir; the remaining expression is
         // mathematically identical for nonzero previous discharge.
-        if(Previous==0)return -9.81*FlowDepth*Dt*(SurfaceB-SurfaceA)/CellM;
+        if(Previous==0)return Previous-9.81*FlowDepth*Dt*(SurfaceB-SurfaceA)/CellM;
         const double N=(Roughness[A]+Roughness[B])*.5;
         const double Friction=1+9.81*Dt*N*N*FMath::Abs(Previous)/FMath::Pow(FlowDepth,7./3.);
         return (Previous-9.81*FlowDepth*Dt*(SurfaceB-SurfaceA)/CellM)/Friction;

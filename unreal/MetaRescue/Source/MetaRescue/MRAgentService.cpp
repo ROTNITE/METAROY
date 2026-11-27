@@ -1,5 +1,6 @@
 #include "MRAgent.h"
 #include "MRWorld.h"
+#include "MRWatercraftHydro.h"
 #include "Components/BoxComponent.h"
 #include "Components/StaticMeshComponent.h"
 #include "Engine/World.h"
@@ -75,7 +76,7 @@ bool AMRAgent::BeginPickup(int32 Index,const FString& Id)
             if(Source->IsOperational())return false;
             if(Source->bRescueWatercraft&&!Source->SetWatercraftPayloadKg(0)&&Mission->Environment.bRevisedDisasters)
             {
-                Source->SetWatercraftPayloadKg(98.);
+                Source->SetWatercraftPayloadKg(Source->WatercraftProfile->PayloadKg);
                 return false;
             }
         }
