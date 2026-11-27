@@ -15,6 +15,7 @@ sys.path.insert(0,str(ROOT))
 from controller.ai import atomic_json,file_lock
 from controller.health import require_port_available
 from environment.main import DEFAULT_OUTPUT,PACKAGED_GAME,existing_unreal,native_command
+from environment.render_profiles import RENDER_PROFILES,render_commands
 from tools.product_session import SESSION_FORMAT,default_product_request,parse_request
 from tools.run_mission import hashes
 from tools.native_archive import file_sha256
@@ -26,11 +27,18 @@ def main():
     parser.add_argument('--build',action='store_true')
     parser.add_argument('--offscreen',action='store_true',help='Rendered acceptance only; UI remains native')
     parser.add_argument('--demo-render',action='store_true',help='Use the lighter RescueQuarter rendering settings')
+    parser.add_argument('--render-profile',choices=tuple(RENDER_PROFILES),help='Opt-in visual quality preset')
+    parser.add_argument('--fps-cap',type=int,help='Limit interactive rendering FPS (15..120)')
     parser.add_argument('--configuration',type=Path,help='Optional complete initial UI preset')
     parser.add_argument('--port',type=int,default=8130)
     parser.add_argument('--health-port',type=int,default=8131)
     parser.add_argument('--analytics-port',type=int)
     args=parser.parse_args()
+    try:
+        render_commands(profile=args.render_profile, demo_render=args.demo_render,
+                        visible=not args.offscreen, fps_cap=args.fps_cap)
+    except ValueError as error:
+        parser.error(str(error))
     ports=[p for p in (args.port,args.health_port,args.analytics_port) if p is not None]
     if len(set(ports))!=len(ports) or any(not 1024<=port<=65535 for port in ports):
         parser.error('Invalid/conflicting ports')
@@ -54,7 +62,8 @@ def main():
                                   if args.configuration else default_product_request())
         path=directory/'session.json';atomic_json(path,session)
         session['analytics']=ensure_analytics(directory,DEFAULT_OUTPUT,port=args.analytics_port)
-        command=native_command(output=directory,port=args.port,visible=not args.offscreen,demo_render=args.demo_render)
+        command=native_command(output=directory,port=args.port,visible=not args.offscreen,demo_render=args.demo_render,
+                               render_profile=args.render_profile,fps_cap=args.fps_cap)
         command+=['-MRProductSession='+str(path)]
         session['command']=command
         marker=directory/'initial-configuration.json';atomic_json(marker,session.get('configuration',{}))

@@ -1,6 +1,8 @@
 """Start the authoritative Unreal environment; the controller is separate."""
 from __future__ import annotations
 
+from environment.render_profiles import RENDER_PROFILES, render_commands
+
 import argparse
 import csv
 from datetime import datetime, timezone
@@ -45,7 +47,9 @@ def existing_unreal():
 
 
 def native_command(*, layout=None, port=8130, output, visible=False, headless=False, exit_on_close=False,
-                   realtime=False, demo_render=False):
+                   realtime=False, demo_render=False, render_profile=None, fps_cap=None):
+    render_option = render_commands(profile=render_profile, demo_render=demo_render,
+                                    headless=headless, visible=visible, fps_cap=fps_cap)
     if type(port) is not int or not 1024 <= port <= 65535:
         raise ValueError('port must be 1024..65535')
     if PACKAGED_GAME.is_file():
@@ -69,8 +73,8 @@ def native_command(*, layout=None, port=8130, output, visible=False, headless=Fa
         command.append('-nullrhi')
     elif not visible:
         command.append('-RenderOffscreen')
-    if demo_render and not headless:
-        command.append('-ExecCmds=sg.GlobalIlluminationQuality 2,sg.ReflectionQuality 1,sg.ShadowQuality 2,r.ScreenPercentage 75,r.VSync 0')
+    if render_option:
+        command.append(render_option)
     if layout is not None:
         layout = Path(layout).resolve(strict=True)
         command.append('-MRLayoutFile='+str(layout))
@@ -90,8 +94,15 @@ def main():
     rendering.add_argument('--headless', action='store_true', help='Run native physics without rendering')
     parser.add_argument('--realtime',action='store_true',help='Wall-paced fixed 60 Hz execution, required for LIVE AI')
     parser.add_argument('--demo-render',action='store_true',help='Use the lighter RescueQuarter rendering settings')
+    parser.add_argument('--render-profile',choices=tuple(RENDER_PROFILES),help='Opt-in visual quality preset')
+    parser.add_argument('--fps-cap',type=int,help='Limit interactive rendering FPS (15..120)')
     parser.add_argument('--exit-on-close',action='store_true')
     args = parser.parse_args()
+    try:
+        render_commands(profile=args.render_profile, demo_render=args.demo_render,
+                        headless=args.headless, visible=args.visible, fps_cap=args.fps_cap)
+    except ValueError as error:
+        parser.error(str(error))
     running = existing_unreal()
     if running:
         parser.error('Another Unreal is running; finish it before this launch: '+json.dumps(running))
@@ -99,7 +110,8 @@ def main():
     output = (args.output or DEFAULT_OUTPUT/'environment-launches'/stamp).resolve()
     output.mkdir(parents=True, exist_ok=False)
     command = native_command(layout=args.layout, port=args.port, output=output, visible=args.visible,headless=args.headless,
-                             realtime=args.realtime,exit_on_close=args.exit_on_close,demo_render=args.demo_render)
+                             realtime=args.realtime,exit_on_close=args.exit_on_close,demo_render=args.demo_render,
+                             render_profile=args.render_profile,fps_cap=args.fps_cap)
     manifest = {'command': command, 'port': args.port,
                 'layout_sha256': hashlib.sha256(args.layout.read_bytes()).hexdigest() if args.layout else None}
     (output/'launch.json').write_text(json.dumps(manifest, indent=2), encoding='utf-8')
