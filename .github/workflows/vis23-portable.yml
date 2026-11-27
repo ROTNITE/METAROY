@@ -13,7 +13,7 @@ on:
 permissions:
   contents: read
 concurrency:
-  group: vis23-portable-${{ github.ref }}
+  group: vis23-portable-reviewed-${{ github.ref }}
   cancel-in-progress: false
 jobs:
   portable:
