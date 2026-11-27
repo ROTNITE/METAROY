@@ -186,7 +186,25 @@ def valid_saved_series(saved,ident):
                 for row in rows))
 
 
-def summarize(report):
+def compact_error_details(value):
+    if not isinstance(value,dict):
+        return {}
+    result={}
+    for key in ('rule','agent_id','entity_id','resource_id','declared_id','action',
+                'command_index','minimum','maximum','value','status','schema_error'):
+        item=value.get(key)
+        if isinstance(item,str):
+            result[key]=item[:128]
+        elif type(item) in (int,float,bool):
+            result[key]=item
+    path=value.get('path')
+    if isinstance(path,list):
+        result['path']=[part[:128] if isinstance(part,str) else part
+                        for part in path[:16] if isinstance(part,str) or type(part) is int]
+    return result
+
+
+def summarize(report,*,stored=False):
     result={}
     for k in ('exchange','status','goal_status','evacuated','located','aid_delivered',
               'correlated_public_target_count','planning_p95_ms','step_http_p95_ms','inputs_preserved','error'):
@@ -197,13 +215,22 @@ def summarize(report):
             result[k]=value
     error=report.get('first_protocol_error')
     if isinstance(error,dict):
-        result['first_protocol_error']={k:str(error[k])[:500] for k in ('kind','code','stage','message') if k in error}
+        result['first_protocol_error']={k:error[k][:500] for k in ('kind','code','stage','message')
+                                        if isinstance(error.get(k),str)}
+        details=compact_error_details(error.get('details'))
+        if details:
+            result['first_protocol_error']['details']=details
     truth=report.get('independent_truth')
     if isinstance(truth,dict):
-        result['independent_truth']={k:truth[k] for k in ('profile','target_count','physical_handovers','all_evacuated','closed')
+        result['independent_truth']={k:truth[k][:128] if isinstance(truth[k],str) else truth[k]
+                                     for k in ('profile','target_count','physical_handovers','all_evacuated','closed')
                                      if k in truth and (truth[k] is None or type(truth[k]) in (str,int,bool))}
-    result['evidence_basis']=('independent_model_truth' if report.get('engine') in ('reference','independent-reference')
-                              else 'project_model_truth') if isinstance(truth,dict) else 'public_only'
+    if stored:
+        basis=report.get('evidence_basis')
+        result['evidence_basis']=basis if basis in ('independent_model_truth','project_model_truth','public_only') else 'public_only'
+    else:
+        result['evidence_basis']=('independent_model_truth' if report.get('engine') in ('reference','independent-reference')
+                                  else 'project_model_truth') if isinstance(truth,dict) else 'public_only'
     return result
 
 
@@ -497,13 +524,38 @@ class Lab:
             raise KeyError('Unsafe trace path')
         return read_trace(path,cursor,limit,query=identifier,reference=independent)
 
-    def report(self,ident,index):
-        run=self.get(ident)
-        if not 0<=index<len(run['rows']):
-            raise KeyError('Unknown trial')
+    def _trial_report_path(self,ident,index):
+        if not RUN_ID.fullmatch(ident):
+            raise KeyError('Unknown series')
+        with self.lock:
+            if not 0<=index<len(self.runs[ident]['rows']):
+                raise KeyError('Unknown trial')
         path=self.root/ident/f'trial-{index:03d}'/'report.json'
         if not path.resolve().is_relative_to(self.root/ident):
             raise KeyError('Unsafe report path')
+        return path
+
+    def trial_summary(self,ident,index):
+        # The runner has already saved a compact summary. Do not parse a
+        # multi-megabyte report, duplicate all rows or send it to the browser.
+        path=self._trial_report_path(ident,index)
+        with self.lock:
+            row=self.runs[ident]['rows'][index]
+            result=summarize(row.get('result',{}),stored=True)
+            result.update(trial_state=row['state'],official_m5=None)
+            if type(row.get('exit_code')) is int:
+                result['exit_code']=row['exit_code']
+            if isinstance(row.get('note'),str):
+                result['note']=row['note'][:500]
+        try:
+            result['full_report_available']=(not path.is_symlink() and path.is_file()
+                                             and path.stat().st_size<=MAX_REPORT)
+        except OSError:
+            result['full_report_available']=False
+        return result
+
+    def report(self,ident,index):
+        path=self._trial_report_path(ident,index)
         result=read_report(path)
         if not result:
             raise KeyError('Trial report is unavailable')
@@ -575,6 +627,12 @@ class Handler(BaseHTTPRequestHandler):
                 if set(query)-{'offset','limit'} or any(len(v)!=1 for v in query.values()):
                     raise ValueError('Invalid catalog query')
                 self.send(lab.catalog(int(query.get('offset',['0'])[0]),int(query.get('limit',['30'])[0])));return
+            summary_match=re.fullmatch(r'/api/series/([0-9a-f]{32})/trial/(\d{1,3})/summary',path)
+            if summary_match:
+                if parsed.query:
+                    raise ValueError('Unexpected trial summary query')
+                ident,index=summary_match.groups()
+                self.send(lab.trial_summary(ident,int(index)));return
             trace_match=re.fullmatch(r'/api/series/([0-9a-f]{32})/trial/(\d{1,3})/trace',path)
             if trace_match:
                 query=parse_qs(parsed.query,keep_blank_values=True)

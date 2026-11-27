@@ -100,6 +100,35 @@ class HTTPBoundary(TestCase):
         self.assertEqual(json.loads(self.call('/api/matrix')[1])['cells'],[])
         self.assertEqual(self.lab.list(),[])
 
+    def test_trial_summary_does_not_read_full_large_report(self):
+        ident='a'*32
+        folder=self.lab.root/ident
+        (folder/'trial-000').mkdir(parents=True)
+        summary={'exchange':'passed','status':'success','inputs_preserved':True,
+                 'evidence_basis':'independent_model_truth',
+                 'independent_truth':{'physical_handovers':2,'target_count':2},
+                 'first_protocol_error':{'code':'EXAMPLE','details':{'rule':'resource_id','private':'do not copy'}}}
+        run={'id':ident,'created':'2026-01-01','state':'completed','rows':[{'index':0,'state':'completed',
+             'seed':1,'mode':'strict','result':summary}],'spec':{}}
+        self.lab.runs[ident]=run;self.lab.persist(run)
+        path=folder/'trial-000'/'report.json'
+        path.write_text(json.dumps({'extra':'x'*(6*1024*1024)}),encoding='utf-8')
+        route='/api/series/'+ident+'/trial/0'
+        with patch('tools.m5_lab.read_report',side_effect=AssertionError('summary read full report')):
+            code,raw=self.call(route+'/summary')
+            self.assertEqual(code,200,raw)
+            self.assertLess(len(raw),4096)
+            result=json.loads(raw)
+            self.assertTrue(result['full_report_available'])
+            self.assertEqual(result['evidence_basis'],'independent_model_truth')
+            self.assertEqual(result['independent_truth']['physical_handovers'],2)
+            self.assertEqual(result['first_protocol_error']['details'],{'rule':'resource_id'})
+            self.assertIsNone(result['official_m5'])
+            self.assertEqual(self.call(route+'/summary?unexpected=1')[0],400)
+            self.assertEqual(self.call(route+'/summary',headers={'Host':'evil.invalid'})[0],403)
+        path.unlink()
+        self.assertFalse(json.loads(self.call(route+'/summary')[1])['full_report_available'])
+
     def test_real_bidirectional_series_and_exports(self):
         for controller,environment in (('metarescue','reference'),('independent','planar')):
             with self.subTest(controller=controller,environment=environment):

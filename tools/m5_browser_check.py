@@ -32,8 +32,13 @@ def main():
                     expect(page.locator('#series-state')).to_have_text('Завершена',timeout=90000)
                     assert page.locator('#exchange-stat').inner_text()=='1/1'
                     assert int(page.locator('#truth-stat').inner_text())==2
+                    report_requests=[]
+                    page.on('request',lambda request:report_requests.append(request.url) if '/trial/0' in request.url else None)
                     page.locator('#results button').first.click()
                     expect(page.locator('#diagnostic')).to_contain_text('Физический результат: 2 / 2',timeout=10000)
+                    expect(page.locator('#report-download')).to_have_attribute('aria-disabled','false')
+                    assert any(url.endswith('/trial/0/summary') for url in report_requests)
+                    assert not any(url.endswith('/trial/0') for url in report_requests)
                     expect(page.locator('#matrix')).to_contain_text('metarescue → reference',timeout=10000)
                     pair=page.locator('#pair-body').get_by_role('button',name='metarescue → reference:',exact=False)
                     expect(pair).to_have_count(1)

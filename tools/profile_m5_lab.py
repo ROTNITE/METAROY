@@ -32,6 +32,7 @@ def fixture(root, count=450):
         }),encoding='utf-8')
     path=root/('0'*32)/'trial-000'
     path.mkdir()
+    (path/'report.json').write_text(json.dumps({'synthetic_large_report':'x'*(6*1024*1024)}),encoding='utf-8')
     with (path/'progress.jsonl').open('wb') as stream:
         for i in range(4000):
             stream.write(json.dumps({'kind':'step_response','source':'metarescue','time':i,
@@ -54,6 +55,8 @@ def measure(server, paths):
             payload=json.loads(raw)
             if path.startswith('/api/matrix') and len(payload['cells'])>30:
                 raise RuntimeError('Matrix page exceeded its bound')
+            if path.endswith('/summary') and (len(raw)>4096 or not payload['full_report_available']):
+                raise RuntimeError('Trial summary exceeded its bound')
             if 'id=absent' in path and (payload['rows'] or payload['scanned']!=512 or not payload['more']):
                 raise RuntimeError('Search did not respect its scan budget')
         finally:
@@ -87,6 +90,7 @@ def run():
                 matrix=measure(server,[f'/api/matrix?offset={(i%15)*30}&limit=30&mode=strict' for i in range(150)])
                 timeline=measure(server,[f"/api/series/{'0'*32}/trial/0/progress?limit=50" for _ in range(100)])
                 search=measure(server,[f"/api/series/{'0'*32}/trial/0/progress?id=absent&limit=50" for _ in range(50)])
+                summary=measure(server,[f"/api/series/{'0'*32}/trial/0/summary" for _ in range(100)])
                 cpu_s=time.process_time()-cpu_before
                 current,request_peak=tracemalloc.get_traced_memory()
             finally:
@@ -100,7 +104,8 @@ def run():
                 'startup_ms':startup_ms,'python_allocated_at_start_bytes':baseline,
                 'python_startup_peak_bytes':peak,'python_request_peak_bytes':request_peak,
                 'python_request_current_bytes':current,'process_cpu_s':cpu_s,
-                'catalog':catalog,'matrix':matrix,'timeline':timeline,'id_search_no_match':search,'read_only_verified':True}
+                'catalog':catalog,'matrix':matrix,'timeline':timeline,'id_search_no_match':search,
+                'large_report_summary':summary,'read_only_verified':True}
 
 
 if __name__=='__main__':

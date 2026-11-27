@@ -259,17 +259,22 @@ async function showReport(id,index){
   const request=++reportRequest;
   byId('report-title').textContent='Серия '+id.slice(0,8)+' · испытание '+(index+1);
   byId('diagnostic').textContent='Загрузка…';
+  const link=byId('report-download');link.removeAttribute('href');link.classList.add('disabled');link.setAttribute('aria-disabled','true');
   try{
-    const report=await api('/api/series/'+id+'/trial/'+index);
+    const path='/api/series/'+id+'/trial/'+index;
+    const report=await api(path+'/summary');
     if(request!==reportRequest)return;
     const first=report.first_protocol_error||{};
     const truth=report.independent_truth;
     const message=[ 'Обмен: '+display(report.exchange), 'Миссия: '+display(report.status),
       'Входы сохранены: '+(report.inputs_preserved===true?'да':report.inputs_preserved===false?'нет':'не проверено'),
       'Физический результат: '+(truth?display(truth.physical_handovers)+' / '+display(truth.target_count)+' (истина модели)':'нет независимой истины'),
+      'Источник: '+display(report.evidence_basis),
       'Публичные переходы: '+display(report.correlated_public_target_count),
       'Ошибка: '+(first.message||report.error||'не зарегистрирована')];
     if(first.details)message.push('Детали: '+JSON.stringify(first.details));
+    if(report.note)message.push(report.note);
+    if(report.full_report_available){link.href=path;link.download='trial-'+index+'-report.json';link.classList.remove('disabled');link.setAttribute('aria-disabled','false');}
     byId('diagnostic').textContent=message.join('\n');byId('report').textContent=JSON.stringify(report,null,2);
   }catch(error){if(request===reportRequest){byId('diagnostic').textContent=error.message;byId('report').textContent='—';}}
 }
