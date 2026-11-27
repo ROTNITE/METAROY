@@ -114,3 +114,43 @@ declared подтверждено по одной передаче.
 [Первый кадр](<D:/MetaRescue-output/integration-20261127-01/universal-review/lab-first-frame-completion-01/verification.json>) ·
 [Диагностика параметров](<D:/MetaRescue-output/integration-20261127-01/universal-review/lab-public-survey-hint-01/wire-validation.json>) ·
 [Автономный клиент](<D:/MetaRescue-output/integration-20261127-01/universal-review/peer-inbound-lab-planar-01/verification.json>).
+
+
+## Отдельная ветка Stage 3: удалённая проверка 27 ноября
+
+Ветка `chatgpt/stage3-universal-core-hardening`, main не изменён.
+Ревизия `03e3c819`: [успешный CI](https://github.com/ROTNITE/METAROY/actions/runs/46059406485),
+[481 файл свидетельств](https://github.com/ROTNITE/METAROY/actions/runs/46059406485/artifacts/15227279774).
+69/69 целевых регрессий, 36 исходящих независимых испытаний (33 успешные
+миссии и три ожидаемых строгих отказа), 6/6 обратных миссий, 45 физических
+передач в моделях. В профиле K два случайно размещённых скрытых пострадавших,
+3D-препятствие и обход, оба спасены на каждом из трёх seed. Ограничения
+планировщика: не более 72 узлов, 12 препятствий и 384 дополнительных
+проверок рёбер за решение; нет гарантии полноты или глобального оптимума.
+Нативная проверка Unreal на этой ветке не выполнена.
+
+[Инвентарь партнёров](https://github.com/ROTNITE/METAROY/actions/runs/46059530514):
+четыре оригинальных LFS ZIP скачаны, SHA-256 и CRC совпали.
+[Изолированный прогон](https://github.com/ROTNITE/METAROY/actions/runs/46059885989)
+ревизии `9085227`: 27 попыток на трёх seed, исходные архивы сохранены.
+Jobs успешны как измерительная процедура, а не как M5 acceptance.
+
+| Пара | Новый факт |
+| --- | --- |
+| Lab outbound strict | 3 safe_stopped, exit1 |
+| Lab outbound declared | 2/3, 3/3, 1/3 полученных квитанций deliver; один success и два time_limit, но exit1. Физические цели не верифицированы |
+| Lab inbound planar | 3 INVALID_COMMAND на первом шаге |
+| Portable outbound strict | 3 ошибки схемы mission.constraints[0] |
+| Portable outbound declared | 3 ошибки resource bounds |
+| Portable inbound planar | 3 CONSTRAINT_VIOLATION, маршрут покидает плоскость либо пересекает препятствие |
+| Atlas 0.2 inbound planar | 3 корректных обмена, time_limit, 0 эвакуаций |
+| v9 inbound planar | 3 корректных обмена, safe_stopped, 0 эвакуаций |
+| v9 outbound | 3 отказа запуска процесса, health недоступен |
+
+Итого 6/27 корректных обменов, 0 подтверждённых физических целей.
+Следующие действия: диагностировать выход Lab (включая ledger/close),
+выделить точную причину resource bounds и v9 startup, не ослаблять
+нормативные ограничения; повторить те же seed после исправлений.
+Сохранить отличие старых локальных прогонов, новых планарных и Unreal.
+После архитектуры и фактической межкомандной проверки — обязательный
+[ADD-13 / интерфейс M5](m5-interface.md), затем комплексный аудит.
