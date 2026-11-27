@@ -21,8 +21,14 @@ MOVE_COST = .00035
 MINIMUM = .08
 TRANSFER_RADIUS = 1.
 ACTIONS = {
-    'move': ('move', object_schema({'target': POINT})),
-    'observe': ('sense', object_schema({'radius': {'type': 'number', 'exclusiveMinimum': 0, 'maximum': 15}})),
+    'move': ('move', object_schema({'target': {'type':'array','minItems':3,'maxItems':3,
+                         'prefixItems':[{'type':'number','minimum':0,'maximum':50},
+                                        {'type':'number','minimum':0,'maximum':50},{'const':0}],
+                         'items':False}})),
+    # An empty observe already has a defined radius in _advance_agent.
+    # Publish that fact instead of requiring a redundant argument.
+    'observe': ('sense', object_schema({'radius': {'type': 'number', 'exclusiveMinimum': 0, 'maximum': 15,
+                                                   'default': 15.}}, required=[])),
     'inspect': ('sense', object_schema({'target_id': ID})),
     'pickup': ('carry', object_schema({'target_id': ID})),
     'handover': ('carry', object_schema({'station_id': ID})),
@@ -129,7 +135,12 @@ class World:
                            'resources': {'energy': {'id': 'energy', 'value': self.energy[identifier],
                                                     'minimum': MINIMUM, 'maximum': 1., 'unit': 'normalized'}},
                            'communication': {'reachable': connected}, 'role': self.configuration['role_assignments'].get(identifier),
-                           'scenario_ids': self.configuration['scenario_ids'], 'constraints': [],
+                           'scenario_ids': self.configuration['scenario_ids'], 'constraints': [
+                               {'id':'planar_domain/'+identifier,'type':'position_bounds','severity':'hard',
+                                'scope':{'kind':'agent','agent_id':identifier},'min':[0,0,0],'max':[50,50,0],
+                                'predicate':{'op':'and','args':[
+                                    {'op':op,'left':{'path':'position.'+str(axis)},'right':{'value':bound}}
+                                    for axis in range(3) for op,bound in (('ge',0),('le',0 if axis==2 else 50))]}}],
                            'available_actions': [{'action': action} for action in actions]})
         zones = [{'id': f'zone-{i}' if not self.opaque else f'ζ/{3-i}', 'type': kind,
                   'geometry': {'type': 'box', 'min': list(bounds[0]), 'max': list(bounds[1])},
@@ -186,7 +197,9 @@ class World:
         if action == 'move':
             goal = parameters['target']
             if not self._clear(agent.position, goal):
-                raise ProtocolError('CONSTRAINT_VIOLATION', 'Route leaves the plane or crosses an obstacle')
+                raise ProtocolError('CONSTRAINT_VIOLATION', 'Route leaves the plane or crosses an obstacle',
+                                    {'agent_id':identifier,'action':action,'rule':'motion_domain',
+                                     'start':list(agent.position),'target':goal})
             if agent.energy - math.dist(agent.position, goal) * MOVE_COST < MINIMUM:
                 raise ProtocolError('RESOURCE_EXHAUSTED', 'Route would spend the energy reserve')
         elif action in ('pickup', 'inspect'):

@@ -78,6 +78,11 @@ class PublicCore:
             if declarations:self._report('short_action_schemas', actions=sorted(declarations))
         self.actions, self.bindings = action_bindings(capabilities, self.extensions, declarations)
         self.semantic_ids = {value.wire: key for key,value in self.bindings.items()}
+        self.wire_actions = frozenset(declarations)
+        # An explicitly unknown intent must not masquerade as a canonical
+        # action merely because its opaque wire ID happens to be the same.
+        self.unsupported_semantics = (frozenset(capabilities['action_semantics']) - self.semantic_ids.keys()
+                                      if 'metaroy.action_semantics.v1' in self.extensions else frozenset())
 
         coordinates = capabilities.get('coordinates', {})
         declared_frame = capabilities.get('coordinate_system', {})
@@ -152,7 +157,7 @@ class PublicCore:
                 actions = entry.get('available_actions')
                 if 'short_available_actions' in self.compatibility and isinstance(actions,list):
                     converted = [{'action': action} if isinstance(action,str) and
-                                 (action in self.actions or action in self.semantic_ids) else action for action in actions]
+                                 action in self.wire_actions else action for action in actions]
                     if converted != actions:
                         self._report('short_available_actions',observation=observation,entity_id=entry.get('id'))
                         updated['available_actions'] = converted
@@ -161,13 +166,18 @@ class PublicCore:
         return {**observation, **prepared}
 
     def view(self, observation):
-        if self.identity and not self.semantic_ids:
+        if self.identity and not self.semantic_ids and not self.unsupported_semantics:
             return observation
         view = deepcopy(observation)
-        if self.semantic_ids:
+        if self.semantic_ids or self.unsupported_semantics:
             for agent in view['agents']:
+                actions = []
                 for action in agent['available_actions']:
-                    action['action'] = self.semantic_ids.get(action['action'], action['action'])
+                    wire = action['action']
+                    if wire in self.unsupported_semantics or (wire in self.bindings and wire not in self.wire_actions):
+                        continue
+                    actions.append({**action, 'action': self.semantic_ids.get(wire, wire)})
+                agent['available_actions'] = actions
         if self.identity:
             return view
         self._report('coordinate_view', observation=observation, scale=self.scale, indices=self.indices)

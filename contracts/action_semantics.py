@@ -39,11 +39,13 @@ def action_bindings(capabilities, extensions, declarations):
         names = description.get('bindings', {})
         schema = declarations[wire].get('parameters_schema', {})
         properties = schema.get('properties', {}) if isinstance(schema, dict) else {}
-        if (not isinstance(names, dict) or not all(isinstance(value, str) and value in properties for value in names.values())
+        if (not isinstance(names, dict) or not isinstance(properties, dict)
+                or not all(isinstance(key, str) and key and isinstance(value, str) and value in properties
+                           for key, value in names.items())
                 or len(names) != len(set(names.values())) or name in occupied):
             raise ProtocolError('INVALID_REQUEST', 'Ambiguous action semantic binding')
         occupied.add(name)
-        aliases[name] = ActionBinding(wire, names)
+        aliases[name] = ActionBinding(wire, dict(names))
     mapped = {wire: item for wire, item in declarations.items() if wire not in semantics}
     mapped.update({name: declarations[binding.wire] for name, binding in aliases.items()})
     return mapped, aliases

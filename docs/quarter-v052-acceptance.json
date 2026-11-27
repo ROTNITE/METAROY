@@ -2182,9 +2182,51 @@
         "D:/MetaRescue-output/integration-20261127-01/universal-review/peer-inbound-lab-r2/summary.json",
         "D:/MetaRescue-output/integration-20261127-01/main-promotion-01/native-pair/verification.json",
         "D:/MetaRescue-output/integration-20261127-01/main-promotion-01/detached-portable/verification.json",
-        "D:/MetaRescue-output/integration-20261127-01/universal-review/peer-outbound-declared-outcomes.json"
+        "D:/MetaRescue-output/integration-20261127-01/universal-review/peer-outbound-declared-outcomes.json",
+        "https://github.com/ROTNITE/METAROY/actions/runs/46059406485",
+        "https://github.com/ROTNITE/METAROY/actions/runs/46059530514",
+        "https://github.com/ROTNITE/METAROY/actions/runs/46059885989",
+        "https://github.com/ROTNITE/METAROY/actions/runs/46063039566",
+        "https://github.com/ROTNITE/METAROY/actions/runs/46063039550",
+        "https://github.com/ROTNITE/METAROY/actions/runs/46063039570",
+        "https://github.com/ROTNITE/METAROY/actions/runs/46063039531",
+        "https://github.com/ROTNITE/METAROY/actions/runs/46063259863",
+        "https://github.com/ROTNITE/METAROY/actions/runs/46063259865",
+        "https://github.com/ROTNITE/METAROY/actions/runs/46068506314",
+        "https://github.com/ROTNITE/METAROY/actions/runs/46068911256",
+        "https://github.com/ROTNITE/METAROY/actions/runs/46068911286",
+        "https://github.com/ROTNITE/METAROY/actions/runs/46068911200"
       ],
-      "scope_note": "25 транспортных проверок, 33 независимых проверки, 6 физических передач независимого контроллера в 2D и 6/6 в новой нативной серии на трёх геометриях. В локальном партнёрском обмене остаются тайм-аут Lab, недекларированные параметры Portable, отсутствующий id ресурса v9 и нулевой физический результат контроллеров v9 и Atlas 0.2 в RescueQuarter. Внешняя приёмка открыта. Из опубликованного main повторены две нативные миссии с одной физической передачей в каждой. Из извлечённого ZIP контроллер дал по одной передаче в независимой HTTP-среде в strict и declared. Дополнительная сверка принятых команд подтвердила 8 терминальных целей Lab и 6 целей Portable в declared."
+      "scope_note": "25 транспортных проверок, 33 независимых проверки, 6 физических передач независимого контроллера в 2D и 6/6 в новой нативной серии на трёх геометриях. В локальном партнёрском обмене остаются тайм-аут Lab, недекларированные параметры Portable, отсутствующий id ресурса v9 и нулевой физический результат контроллеров v9 и Atlas 0.2 в RescueQuarter. Внешняя приёмка открыта. Из опубликованного main повторены две нативные миссии с одной физической передачей в каждой. Из извлечённого ZIP контроллер дал по одной передаче в независимой HTTP-среде в strict и declared. Дополнительная сверка принятых команд подтвердила 8 терминальных целей Lab и 6 целей Portable в declared. Дополнение отдельной ветки Stage 3: 69/69 регрессионных тестов и 42/42 независимых испытаний, в том числе три ожидаемых строгих отказа; 45 физических передач в эталонных/планарных моделях. CRC/SHA четырёх исходных пакетов проверены. Первая изолированная серия 27 партнёрских попыток: 6 успешных обменов без эвакуаций, 21 неуспешный обмен/старт, 0 верифицированных целей. Внешняя приёмка остаётся partial; см. docs/universal-core.md. Повторная CI-серия bd26f6c: 377 успешных Python-тестов + 1 Windows-only skip; 42/42 исходов и 45 передач в моделях; 24/39 успешных внешних обменов, 10 коррелированных публичных переходов, 0 независимых подтверждений внешней физической цели. V9 startup и строгие несовместимости открыты. Windows 378/378. V9 startup исправлен: 3/3 health, strict отклоняет обязательный отсутствующий id ресурса агента; исходные архивы не изменены. Stage 3 0057a36: 39 неизменённых партнёрских проб, 24 успешных обмена, 15 диагностических отказов, 10 публичных переходов, 0 верифицированных внешних физических целей; 39/39 архивов сохранены. b5b5ddc: 42/42 исходов Core, 45 физических передач в независимых моделях. Внешняя приёмка остаётся partial."
+    },
+    {
+      "id": "ADD-13",
+      "requirement": "Полноценная локальная лаборатория M5: подключение, реальный двусторонний запуск, диагностика, матрица, воспроизводимость, доказательства цели, безопасность, UX и экспорт",
+      "status": "partial",
+      "evidence": [
+        "docs/m5-interface.md",
+        "tools/m5_lab.py",
+        "tools/m5_trial.py",
+        "tools/m5_score.py",
+        "web/m5/index.html",
+        "https://github.com/ROTNITE/METAROY/actions/runs/46062851724",
+        "https://github.com/ROTNITE/METAROY/actions/runs/46062851724/artifacts/15229039664",
+        "https://github.com/ROTNITE/METAROY/actions/runs/46063039566",
+        "https://github.com/ROTNITE/METAROY/actions/runs/46063039531",
+        "docs/stage3-performance-and-open-audit.md",
+        "https://github.com/ROTNITE/METAROY/actions/runs/46066074416",
+        "https://github.com/ROTNITE/METAROY/actions/runs/46066074448",
+        "https://github.com/ROTNITE/METAROY/actions/runs/46066074342",
+        "https://github.com/ROTNITE/METAROY/actions/runs/46066074360",
+        "https://github.com/ROTNITE/METAROY/actions/runs/46066258428",
+        "https://github.com/ROTNITE/METAROY/actions/runs/46066258415",
+        "https://github.com/ROTNITE/METAROY/actions/runs/46068911286",
+        "https://github.com/ROTNITE/METAROY/actions/runs/46068911297",
+        "https://github.com/ROTNITE/METAROY/actions/runs/46068911200",
+        "https://github.com/ROTNITE/METAROY/actions/runs/46068645500",
+        "https://github.com/ROTNITE/METAROY/actions/runs/46068911288"
+      ],
+      "scope_note": "Реальные локальные HTTP-испытания, независимая 3D/planar, зарегистрированные loopback-сервисы, серии, фильтруемая диагностическая таблица, публичный журнал по byte cursor, отмена, JSON/CSV/ZIP и расчёт при согласованных Q. Chromium E2E: две физические передачи в модели K, матрица/журнал/reload/desktop/narrow. Синтетический каталог 450 записей, 4 000 событий и 400 GET: p95 1.60/2.58/3.09 мс, без мутации. Полная UI-спецификация, native/Windows-поставка, нагрузка реальной сцены и внешняя приёмка открыты. Официальное M5 не выводить из собственных эталонов. Финальная Python-регрессия 398/398 Windows, 397 + 1 skip Linux. Stage 3 b5b5ddc: точный поиск по ID, разреженная матрица пар с раскрытием, точный повтор, изоляция битого архива, тест медленного RPC без продвижения модельного времени. Linux 414 + 1 skip. Windows на b5b5ddc: 415/415 без пропусков. 450 синтетических GET, поиск p95 17.529 мс, startup peak 1 029 944 байт. Полная причинная трасса, native, Windows-поставка и внешняя приёмка открыты."
     }
   ],
   "external_tournament": {

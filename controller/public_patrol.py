@@ -67,7 +67,7 @@ class PublicPatrolEstimates:
         for receipt in response.get('command_results',()):
             key=(obs['episode_id'],receipt.get('decision_id'),receipt.get('command_index'))
             intent=self.pending.get(key)
-            if not intent:
+            if not intent or receipt.get('action')!=self.public.wire_action(intent[1]) or receipt.get('agent_id')!=intent[0]:
                 continue
             state=receipt.get('execution_status')
             if state not in ('completed','cancelled','failed') and receipt.get('delivery_status') not in ('expired','lost'):

@@ -165,16 +165,16 @@ class AcceptanceEvidenceTests(unittest.TestCase):
 
     def test_confirmed_transfer_requires_the_submitted_agent_action_and_ack(self):
         evidence = Evidence()
-        evidence.record('decision', {'decision': {'decision_id': 'mission-command',
+        evidence.record('decision', {'decision': {'episode_id':'episode','decision_id': 'mission-command',
                                                   'commands': [{'agent_id': 'carrier', 'action': 'handover'}]}})
         receipt = {'decision_id': 'mission-command', 'command_index': 0, 'agent_id': 'carrier',
                    'action': 'handover', 'validation_status': 'accepted', 'delivery_status': 'delivered',
                    'execution_status': 'completed'}
         for changes in ({'decision_id': 'unknown'}, {'command_index': -1}, {'agent_id': 'different'},
                         {'action': 'deliver'}, {'delivery_status': 'pending'}):
-            evidence.record('step_response', {'command_results': [{**receipt, **changes}]})
+            evidence.record('step_response', {'episode_id':'episode','command_results': [{**receipt, **changes}]})
         self.assertEqual(evidence.summary()['confirmed_command_receipts'], [])
-        evidence.record('step_response', {'command_results': [receipt, receipt]})
+        evidence.record('step_response', {'episode_id':'episode','command_results': [receipt, receipt]})
         self.assertEqual(evidence.summary()['confirmed_command_receipts'], [receipt])
 
     def test_external_report_attributes_rejected_parameters_to_environment_step(self):

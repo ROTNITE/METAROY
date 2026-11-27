@@ -1,0 +1,126 @@
+name: Stage 3 immutable partner trials
+on:
+  push:
+    branches:
+      - chatgpt/stage3-universal-core-hardening
+    paths:
+      - .github/workflows/stage3-peer-trials.yml
+      - tools/peer_trial.py
+      - tools/peer_dependencies.py
+      - tools/run_interop.py
+      - controller/**
+      - contracts/**
+      - environment/**
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  partner:
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - {peer: lab, direction: outbound, mode: strict}
+          - {peer: lab, direction: outbound, mode: declared}
+          - {peer: lab, direction: inbound, mode: strict}
+          - {peer: portable, direction: outbound, mode: strict}
+          - {peer: portable, direction: outbound, mode: declared}
+          - {peer: portable, direction: inbound, mode: strict}
+          - {peer: atlas, direction: inbound, mode: strict}
+          - {peer: v9, direction: outbound, mode: strict}
+          - {peer: v9, direction: inbound, mode: strict}
+          - {peer: lab, direction: inbound, mode: strict, engine: reference}
+          - {peer: portable, direction: inbound, mode: strict, engine: reference}
+          - {peer: atlas, direction: inbound, mode: strict, engine: reference}
+          - {peer: v9, direction: inbound, mode: strict, engine: reference}
+    env:
+      GIT_LFS_SKIP_SMUDGE: "0"
+      PYTHONUTF8: "1"
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          fetch-depth: 1
+          lfs: true
+          persist-credentials: false
+          sparse-checkout-cone-mode: false
+          sparse-checkout: |
+            /requirements.txt
+            /controller/
+            /contracts/
+            /environment/
+            /conformance/
+            /analytics/
+            /tools/
+            /независимые пары/metaroy_lab.zip
+            /независимые пары/metaroy_portable_v0_1.zip
+            /независимые пары/Atlas_Probe_0.2.zip
+            /controller_team2/metaroi-controller-portable-v9.zip
+      - name: Verify frozen packages before execution
+        run: python3 -B -X utf8 tools/peer_inventory.py > "$RUNNER_TEMP/peer-inventory.json"
+      - name: Build isolated runtime
+        run: |
+          set -eu
+          mkdir -p "$RUNNER_TEMP/build/peer-dependencies"
+          cp requirements.txt "$RUNNER_TEMP/build/"
+          if [ "${{ matrix.peer }}" = v9 ]; then
+            python3 -B -X utf8 -m tools.peer_dependencies --output "$RUNNER_TEMP/build/peer-dependencies" | tee "$RUNNER_TEMP/peer-dependency-provenance.jsonl"
+            if [ ! -f "$RUNNER_TEMP/build/peer-dependencies/package-lock.json" ]; then
+              # No lock in the supplied archive. Resolve only the sanitized
+              # registry dependency manifest, without peer source or scripts.
+              docker run --rm --cap-drop ALL --security-opt no-new-privileges --pids-limit 128 --memory 1g --cpus 2 \
+                --user "$(id -u):$(id -g)" --env HOME=/tmp \
+                --mount "type=bind,source=$RUNNER_TEMP/build/peer-dependencies,target=/deps" \
+                --workdir /deps node:22-bookworm-slim npm install --package-lock-only --include=dev --ignore-scripts --no-audit --no-fund --registry=https://registry.npmjs.org/
+            fi
+            python3 -B -X utf8 -m tools.peer_dependencies --validate-only --output "$RUNNER_TEMP/build/peer-dependencies" | tee -a "$RUNNER_TEMP/peer-dependency-provenance.jsonl"
+          fi
+          cat > "$RUNNER_TEMP/build/Dockerfile" <<'DOCKER'
+          FROM node:22-bookworm-slim AS node
+          WORKDIR /opt/peer-dependencies
+          COPY peer-dependencies/ ./
+          RUN if [ -f package-lock.json ]; then npm ci --include=dev --ignore-scripts --no-audit --no-fund --registry=https://registry.npmjs.org/; fi
+          FROM python:3.12-bookworm
+          COPY --from=node /opt/peer-dependencies /opt/peer-dependencies
+          COPY --from=node /usr/local/bin/node /usr/local/bin/node
+          COPY --from=node /usr/local/lib/node_modules/npm /usr/local/lib/node_modules/npm
+          RUN ln -s /usr/local/lib/node_modules/npm/bin/npm-cli.js /usr/local/bin/npm
+          COPY requirements.txt /tmp/project-requirements.txt
+          RUN python -m pip install --no-cache-dir -r /tmp/project-requirements.txt
+          DOCKER
+          docker build --quiet -t stage3-trial "$RUNNER_TEMP/build"
+      - name: Stage read-only input without Git metadata
+        run: |
+          set -eu
+          mkdir -p "$RUNNER_TEMP/input/независимые пары" "$RUNNER_TEMP/input/controller_team2"
+          cp -a controller contracts environment conformance analytics tools requirements.txt "$RUNNER_TEMP/input/"
+          cp "независимые пары/metaroy_lab.zip" "независимые пары/metaroy_portable_v0_1.zip" "независимые пары/Atlas_Probe_0.2.zip" "$RUNNER_TEMP/input/независимые пары/"
+          cp "controller_team2/metaroi-controller-portable-v9.zip" "$RUNNER_TEMP/input/controller_team2/"
+          chmod -R a+rX "$RUNNER_TEMP/input"
+      - name: Execute partner trial matrix without external network
+        env:
+          PEER: ${{ matrix.peer }}
+          DIRECTION: ${{ matrix.direction }}
+          MODE: ${{ matrix.mode }}
+          ENGINE: ${{ matrix.engine || 'planar' }}
+        run: |
+          set -euo pipefail
+          docker run --rm --network none --read-only --tmpfs /tmp:rw,exec,nosuid,nodev,size=512m \
+            --cap-drop ALL --security-opt no-new-privileges --pids-limit 128 --memory 1g --cpus 2 \
+            --user 65534:65534 --env HOME=/tmp --env PYTHONUTF8=1 --env PYTHONDONTWRITEBYTECODE=1 \
+            --mount "type=bind,source=$RUNNER_TEMP/input,target=/repo,readonly" \
+            --workdir /repo stage3-trial python -B -X utf8 tools/peer_trial.py "$PEER" "$DIRECTION" --mode "$MODE" --engine "$ENGINE" \
+            | tee "$RUNNER_TEMP/peer-result.jsonl"
+      - name: Archive aggregate measurements only
+        if: always()
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with:
+          name: peer-${{ matrix.peer }}-${{ matrix.direction }}-${{ matrix.mode }}-${{ matrix.engine || 'planar' }}
+          path: |
+            ${{ runner.temp }}/peer-result.jsonl
+            ${{ runner.temp }}/peer-inventory.json
+            ${{ runner.temp }}/peer-dependency-provenance.jsonl
+            ${{ runner.temp }}/build/peer-dependencies/package-lock.json
+          if-no-files-found: warn
+          retention-days: 14

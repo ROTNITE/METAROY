@@ -3,8 +3,10 @@ from __future__ import annotations
 
 import argparse
 from contextlib import contextmanager
+from copy import deepcopy
 from datetime import datetime, timezone
 import gzip
+import hashlib
 import http.client
 import math
 from pathlib import Path
@@ -16,13 +18,13 @@ import time
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT))
 
-from contracts.protocol import DECISION, MAX_RESPONSE_BYTES, ProtocolError, encode, strict_json, validate
+from contracts.protocol import DECISION, MAX_BODY_BYTES, MAX_RESPONSE_BYTES, ProtocolError, encode, strict_json, validate
 from controller.ai import atomic_json, file_lock
 from controller.client import EnvironmentClient, TransportFailure
 from controller.health import require_port_available
 from controller.net65 import PATROL_MODES
 from controller.public_core import CORE_MODES, PublicCore
-from tools.goal_evidence import GoalEvidence
+from tools.goal_evidence import GoalEvidence, decision_fingerprint, terminal_failure
 from environment.main import DEFAULT_OUTPUT, existing_unreal, native_command
 from environment.server import PlanarServer
 from environment.world import CASES
@@ -33,6 +35,21 @@ from tools.run_mission import hashes as native_hashes
 SEEDS = (17331, 17332, 17333)
 
 
+def read_parameter_bytes(path, *, maximum_bytes=MAX_BODY_BYTES):
+    if path is None:
+        return None
+    with path.open('rb') as stream:
+        raw=stream.read(maximum_bytes+1)
+    if len(raw)>maximum_bytes:
+        raise ValueError(f'Mission parameters exceed {maximum_bytes} bytes')
+    return raw
+
+
+def verify_parameter_digest(raw, expected):
+    if expected is not None and (raw is None or hashlib.sha256(raw).hexdigest()!=expected):
+        raise ValueError('Mission parameters do not match the approved SHA-256')
+
+
 def percentile(samples, fraction):
     if not samples:
         return None
@@ -40,77 +57,187 @@ def percentile(samples, fraction):
 
 
 class Evidence:
+    """Collect command receipts and goal evidence without conflating their trust levels.
+
+    Decision IDs are scoped to episodes. Legacy state transitions require a
+    prior nonterminal observation, a matching command and the same request.
+    Re-reading earlier journal pages cannot manufacture another transition.
+    """
     def __init__(self, capabilities=None):
         self.goals=GoalEvidence(capabilities or {})
-        self.transfers = {}
-        self.step_ms = []
-        self.planning_ms = []
-        self.first_error = None
-        self.decisions = {}
-        self.last_decision_id = None
-        self.completed_targets = set()
+        self.transfers={}
+        self.legacy_transitions={}
+        self.step_ms=[]
+        self.planning_ms=[]
+        self.first_error=None
+        self.decisions={}
+        self.requests={}
+        self.fingerprints={}
+        self.conflicts=set()
+        self.failed_receipts=set()
+        self.observed={}
+        self.last_time={}
+        self.journal_unscoped_metadata=0
 
-    def record(self, kind, data):
-        if kind == 'decision':
-            decision = data['decision']
-            identifier = decision.get('decision_id')
-            if isinstance(identifier, str):
-                self.decisions[identifier] = {'commands':decision.get('commands',()),'episode_id':decision.get('episode_id'),
-                    'request_id':decision.get('request_id'),'decision_id':identifier,'time':decision.get('time',0)}
-                self.last_decision_id = identifier
-                self.goals.record_decision(decision)
-            if 'planning_wall_s' in data:
-                self.planning_ms.append(data['planning_wall_s'] * 1000)
-        if kind == 'http_exchange' and data.get('path') == '/v1/environment/step':
-            self.step_ms.append(data['elapsed_s'] * 1000)
-        if kind=='physical_outcome':
-            self.goals.record_outcome(data.get('episode_id'),data['payload'])
-        if kind == 'step_response':
-            observation = data.get('observation', {})
-            current=self.decisions.get(self.last_decision_id,{})
-            episode=data.get('episode_id',observation.get('episode_id'))
-            if 'request_id' in data and (not current or
-                    data['request_id']!=current['request_id'] or episode!=current['episode_id'] or
-                    data.get('time',current['time'])<current['time']):
+    @staticmethod
+    def _identity(episode,identifier):
+        return (episode,identifier) if all(isinstance(v,str) and v for v in (episode,identifier)) else None
+
+    def _observe(self,frame,episode=None,stamp=None):
+        if not isinstance(frame,dict):
+            return set()
+        targets=frame.get('targets',())
+        if not isinstance(targets,(list,tuple)):
+            return set()
+        episode=frame.get('episode_id',episode)
+        stamp=frame.get('time',stamp)
+        if (not isinstance(episode,str) or not episode or type(stamp) not in (int,float)
+                or not math.isfinite(stamp) or stamp<0 or stamp<=self.last_time.get(episode,-1)):
+            return set()
+        states=self.observed.setdefault(episode,{})
+        transitions=set()
+        for target in targets:
+            if not isinstance(target,dict):
+                continue
+            ident,status=target.get('id'),target.get('status')
+            if not isinstance(ident,str) or not ident or not isinstance(status,str):
+                continue
+            prior=states.get(ident)
+            if (prior is not None and prior not in ('rescued','delivered','evacuated')
+                    and status in ('rescued','delivered')):
+                transitions.add((ident,status))
+            # Terminal targets cannot become "new" again by replay, staleness
+            # or inconsistent state. This is a conservative public diagnostic.
+            if prior not in ('rescued','delivered','evacuated'):
+                states[ident]=status
+        self.last_time[episode]=stamp
+        return transitions
+
+    def _decision(self,decision):
+        if not isinstance(decision,dict):
+            return
+        key=self._identity(decision.get('episode_id'),decision.get('decision_id'))
+        fingerprint=decision_fingerprint(decision)
+        if not key or fingerprint is None:
+            return
+        if key in self.fingerprints and self.fingerprints[key]!=fingerprint:
+            self.conflicts.add(key)
+        else:
+            self.fingerprints[key]=fingerprint
+            self.decisions.setdefault(key,deepcopy(decision))
+        request=self._identity(key[0],decision.get('request_id'))
+        if request:
+            existing=self.requests.setdefault(request,key)
+            if existing!=key:
+                self.requests[request]=None
+                self.conflicts.add(key)
+                if existing:
+                    self.conflicts.add(existing)
+        self.goals.record_decision(decision)
+
+    def record(self,kind,data):
+        if not isinstance(data,dict):
+            return
+        if kind=='decision':
+            self._decision(data.get('decision'))
+            elapsed=data.get('planning_wall_s')
+            if type(elapsed) in (int,float) and 0<=elapsed<=1e9:
+                self.planning_ms.append(elapsed*1000)
+        elif kind in ('observation','reset_response'):
+            frame=data if kind=='observation' else data.get('observation',{})
+            self._observe(frame)
+        elif kind=='http_exchange' and data.get('path')=='/v1/environment/step':
+            self.step_ms.append(data['elapsed_s']*1000)
+        elif kind=='physical_outcome':
+            self.goals.record_outcome(data.get('episode_id'),data.get('payload'))
+        elif kind=='step_response':
+            observation=data.get('observation',{})
+            if not isinstance(observation,dict):
                 return
-            for event in data.get('events',()):
+            episode=data.get('episode_id',observation.get('episode_id'))
+            request=data.get('request_id')
+            current_key=self.requests.get(self._identity(episode,request))
+            current=self.decisions.get(current_key,{})
+            if request is not None:
+                stamp=data.get('time')
+                prior=current.get('time',0)
+                if (not current or current_key in self.conflicts
+                        or observation.get('episode_id',episode)!=episode
+                        or observation.get('request_id',request)!=request
+                        or type(stamp) not in (int,float) or type(prior) not in (int,float)
+                        or not 0<=prior<=stamp<=1e15):
+                    return
+            events=data.get('events',())
+            receipts=data.get('command_results',())
+            if not isinstance(events,(list,tuple)) or not isinstance(receipts,(list,tuple)):
+                return
+            for event in events:
+                if not isinstance(event,dict) or event.get('episode_id',episode)!=episode:
+                    continue
                 p=event.get('parameters',{})
-                if event.get('type')=='target_state_changed' and p.get('evacuation_state')=='evacuated' and len(event.get('targets',()))==1:
-                    self.goals.record_outcome(episode,{**p,'target_id':event['targets'][0],
-                        'agent_id':event.get('source'),'effect':'evacuated','outcome_id':event['id']})
-            finished = {(target['id'], target['status']) for target in observation.get('targets', ())
-                        if target.get('id') and target.get('status') in ('rescued', 'delivered')}
-            new_targets = finished - self.completed_targets
-            self.completed_targets.update(finished)
-            current = self.decisions.get(self.last_decision_id, {})
-            for receipt in data['command_results']:
+                targets=event.get('targets')
+                if (event.get('type')=='target_state_changed' and isinstance(p,dict)
+                        and p.get('evacuation_state')=='evacuated'
+                        and isinstance(targets,list) and len(targets)==1):
+                    self.goals.record_outcome(episode,{**p,'target_id':targets[0],
+                        'agent_id':event.get('source'),'effect':'evacuated','outcome_id':event.get('id')})
+            new_targets=self._observe(observation,episode,data.get('time')) if current else set()
+            for receipt in receipts:
+                if not isinstance(receipt,dict) or receipt.get('episode_id',episode)!=episode:
+                    continue
                 self.goals.record_receipt(episode,receipt)
-                identifier, index = receipt.get('decision_id'), receipt.get('command_index')
-                submitted = self.decisions.get(identifier, {}) if isinstance(identifier, str) else {}
-                commands = submitted.get('commands', ())
-                if (receipt.get('validation_status') == 'accepted' and receipt.get('delivery_status') == 'delivered'
-                        and receipt.get('execution_status') == 'completed' and receipt.get('action') in ('handover', 'deliver', 'rescue')
-                        and type(index) is int and 0 <= index < len(commands)
-                        and all(commands[index][key] == receipt.get(key) for key in ('agent_id', 'action'))):
-                    self.transfers[(identifier, index)] = receipt
-                if (receipt.get('status') in ('applied', 'accepted') and receipt.get('action') in ('rescue', 'deliver') and
-                        data.get('request_id') == current.get('request_id') and current):
-                    indices = [(index, cmd['parameters'].get('target_id'))
-                               for index, cmd in enumerate(current.get('commands', ()))
-                               if cmd['agent_id'] == receipt.get('agent_id') and cmd['action'] == receipt['action']]
-                    if len(indices) == 1 and (indices[0][1], 'rescued' if receipt['action'] == 'rescue' else 'delivered') in new_targets:
-                        index, target_id = indices[0]
-                        key = (current['decision_id'], index)
-                        self.transfers[key] = {'decision_id': key[0], 'command_index': index, 'target_id': target_id,
-                                               'basis': 'public_target_transition', 'receipt': receipt,
-                                               'observation_request_id': observation.get('request_id')}
-        if self.first_error is None and kind in ('controller_failure', 'environment_failure',
-                                                 'environment_rejection', 'uncertain_step'):
-            self.first_error = {'kind': kind, **data}
+                key=GoalEvidence.key(episode,receipt)
+                submitted=self.decisions.get(key[:2],{}) if key else {}
+                commands=submitted.get('commands',())
+                if (key and isinstance(commands,(list,tuple)) and key[2]<len(commands)
+                        and isinstance(commands[key[2]],dict)
+                        and all(isinstance(receipt.get(field),str) and receipt[field]
+                                and commands[key[2]].get(field)==receipt[field] for field in ('agent_id','action'))):
+                    if terminal_failure(receipt):
+                        self.failed_receipts.add(key)
+                    if (receipt.get('validation_status')=='accepted' and receipt.get('delivery_status')=='delivered'
+                            and receipt.get('execution_status')=='completed'
+                            and receipt.get('action') in ('handover','deliver','rescue')):
+                        self.transfers[key]=receipt
+                current_commands=current.get('commands',())
+                if (current and request is not None and receipt.get('status') in ('applied','accepted')
+                        and receipt.get('action') in ('rescue','deliver') and not terminal_failure(receipt)
+                        and receipt.get('decision_id',current_key[1])==current_key[1]
+                        and receipt.get('request_id',request)==request
+                        and isinstance(current_commands,(list,tuple))):
+                    indices=[(index,cmd['parameters'].get('target_id'))
+                             for index,cmd in enumerate(current_commands)
+                             if isinstance(cmd,dict) and isinstance(cmd.get('parameters'),dict)
+                             and isinstance(cmd.get('agent_id'),str) and cmd['agent_id']
+                             and cmd['agent_id']==receipt.get('agent_id') and cmd.get('action')==receipt['action']]
+                    expected='rescued' if receipt['action']=='rescue' else 'delivered'
+                    if (len(indices)==1 and isinstance(indices[0][1],str)
+                            and (indices[0][1],expected) in new_targets
+                            and ('command_index' not in receipt or
+                                 type(receipt['command_index']) is int and receipt['command_index']==indices[0][0])):
+                        index,target_id=indices[0]
+                        key=(*current_key,index)
+                        self.legacy_transitions[key]={'episode_id':episode,'decision_id':current_key[1],
+                            'command_index':index,'target_id':target_id,'basis':'public_target_transition',
+                            'receipt':receipt,'observation_request_id':observation.get('request_id',request)}
+        if self.first_error is None and kind in ('controller_failure','environment_failure',
+                                                 'environment_rejection','uncertain_step'):
+            self.first_error={'kind':kind,**data}
 
     def summary(self):
-        return {'confirmed_command_receipts': list(self.transfers.values()), 'first_protocol_error': self.first_error,
-                'planning_p95_ms': percentile(self.planning_ms, .95), 'step_http_p95_ms': percentile(self.step_ms, .95),
+        def admissible(key):
+            return key[:2] not in self.conflicts and key not in self.failed_receipts
+        transitions={key:item for key,item in self.legacy_transitions.items() if admissible(key)}
+        receipts={key:item for key,item in self.transfers.items() if admissible(key)}
+        # Keep the existing report field compatible; count transitions
+        # separately and never promote them to declared physical outcomes.
+        combined={**receipts,**transitions}
+        return {'confirmed_command_receipts':list(combined.values()),
+                'correlated_public_target_count':len({(item['episode_id'],item['target_id']) for item in transitions.values()}),
+                'correlated_public_target_transitions':list(transitions.values()),
+                'first_protocol_error':self.first_error,
+                'journal_unscoped_metadata':self.journal_unscoped_metadata,
+                'planning_p95_ms':percentile(self.planning_ms,.95),'step_http_p95_ms':percentile(self.step_ms,.95),
                 **self.goals.summary()}
 
 
@@ -125,16 +252,45 @@ def public_logs(client, episode, destination, evidence=None):
             target.write(encode(page) + b'\n')
             if evidence is not None:
                 for record in page['records']:
+                    if not isinstance(record,dict):
+                        raise ProtocolError('INVALID_REQUEST','Journal record is not an object',
+                                            {'rule':'journal_record_type'})
+                    kind=record.get('record_type')
+                    scope=record.get('episode_id',episode)
+                    relevant=kind in ('decision','command_result','physical_outcome') or record.get('type')=='step'
+                    if scope is None and not relevant:
+                        # E.g. service startup/reset metadata preceding allocation
+                        # of an episode. Retain verbatim, but never use as evidence.
+                        evidence.journal_unscoped_metadata+=1
+                        continue
+                    if scope!=episode:
+                        raise ProtocolError('INVALID_REQUEST','Journal record belongs to another episode',
+                                            {'rule':'journal_scope','scope':'null' if scope is None else 'foreign',
+                                             'evidence_record':relevant})
                     if record.get('type') == 'step' and 'response' in record:
-                        if 'decision' in record:
-                            evidence.record('decision', {'decision': record['decision']})
-                        evidence.record('step_response', record['response'])
-                    if record.get('record_type') == 'decision':
-                        evidence.record('decision', {'decision': record['payload']})
-                    if record.get('record_type') == 'command_result':
-                        evidence.record('step_response', {'command_results':[record['payload']],'episode_id':episode})
-                    if record.get('record_type')=='physical_outcome':
-                        evidence.record('physical_outcome',{'episode_id':episode,'payload':record['payload']})
+                        response=record['response']
+                        decision=record.get('decision')
+                        if (not isinstance(response,dict) or response.get('episode_id')!=episode or
+                                ('decision' in record and (not isinstance(decision,dict) or decision.get('episode_id')!=episode))):
+                            raise ProtocolError('INVALID_REQUEST','Journal step belongs to another episode',
+                                                {'rule':'journal_step_scope'})
+                        if decision is not None:
+                            evidence.record('decision', {'decision':decision})
+                        evidence.record('step_response',response)
+                    if kind in ('decision','command_result','physical_outcome'):
+                        payload=record.get('payload')
+                        if not isinstance(payload,dict) or payload.get('episode_id',episode)!=episode:
+                            raise ProtocolError('INVALID_REQUEST','Journal payload belongs to another episode',
+                                                {'rule':'journal_payload_scope'})
+                        if kind=='decision':
+                            if payload.get('episode_id')!=episode:
+                                raise ProtocolError('INVALID_REQUEST','Journal decision has no matching episode',
+                                                    {'rule':'journal_decision_scope'})
+                            evidence.record('decision',{'decision':payload})
+                        elif kind=='command_result':
+                            evidence.record('step_response',{'command_results':[payload],'episode_id':episode})
+                        else:
+                            evidence.record('physical_outcome',{'episode_id':episode,'payload':payload})
             cursor = page.get('next_cursor')
             if cursor is None or not page['records']:
                 break
@@ -214,8 +370,16 @@ def run_controller(url, output, seed, mode, mission, timeout, *, compatibility='
                     evidence.record(row['record_type'], row['payload'])
         report.update(evidence.summary(), status=manifest.get('episode_status'), metrics=manifest.get('metrics'),
                       patrol=manifest.get('patrol'), episode_id=manifest.get('episode_id'))
+        for name in ('api_accounting_error','close_error'):
+            if manifest.get(name):
+                report[name]=manifest[name]
         if result.returncode != 0:
-            raise RuntimeError(manifest.get('error', 'Controller failed. See controller.log.'))
+            if manifest.get('failure') and not report.get('first_protocol_error'):
+                report['first_protocol_error']=manifest['failure']
+            if manifest.get('api_accounting_error') and not report.get('first_protocol_error'):
+                report['first_protocol_error']={'stage':'accounting','message':manifest['api_accounting_error']}
+            raise RuntimeError(manifest.get('error') or manifest.get('api_accounting_error') or
+                               manifest.get('close_error') or 'Controller failed. See controller.log.')
         if manifest.get('close_error'):
             raise RuntimeError(manifest['close_error'])
         public_logs(client, manifest['episode_id'], output / 'environment-logs.jsonl', evidence)
@@ -240,12 +404,16 @@ def controller_call(origin, endpoint, body=None, *, timeout=10):
                            body=encode(body) if body is not None else None,
                            headers={'Content-Type': 'application/json', 'Connection': 'close'})
         reply = connection.getresponse()
+        if reply.status < 200 or 300 <= reply.status < 400:
+            raise ProtocolError('INVALID_REQUEST','Unexpected controller HTTP status; redirects are not followed',{'status':reply.status})
         data = strict_json(reply.read(MAX_RESPONSE_BYTES + 1), maximum_bytes=MAX_RESPONSE_BYTES)
         if not isinstance(data, dict):
             raise ProtocolError('INVALID_REQUEST', 'Controller reply must be an object')
         if reply.status >= 400:
             error = data.get('error', {})
-            if not isinstance(error, dict):
+            if (not isinstance(error, dict) or
+                    not isinstance(error.get('code','INTERNAL_ERROR'),str) or
+                    (error.get('details') is not None and not isinstance(error['details'],dict))):
                 raise ProtocolError('INVALID_REQUEST', 'Malformed controller error')
             raise ProtocolError(error.get('code', 'INTERNAL_ERROR'), error.get('message', f'HTTP {reply.status}'),
                                 error.get('details'))
@@ -280,6 +448,35 @@ def planar(*, estimates=True, port=0):
         finally:
             server.shutdown()
             worker.join()
+
+
+@contextmanager
+def independent_reference(profile,port):
+    """The independent simulator is a test engine, not the Unreal product."""
+    from conformance.reference_environment import serve
+    with serve(profile,port) as server:
+        worker=threading.Thread(target=server.serve_forever)
+        worker.start()
+        try:
+            yield f'http://127.0.0.1:{server.server_port}',server
+        finally:
+            server.shutdown()
+            worker.join()
+
+
+def independent_truth(server):
+    trial=server.trial
+    if not trial.episode:
+        return {'profile':trial.profile,'target_count':None,'physical_handovers':None,
+                'all_evacuated':False,'closed':False}
+    with server.lock:
+        physical=len({item['target_id'] for item in trial.private_handover
+                      if item.get('effect')=='evacuated'})
+        count=len(trial.targets)
+        return {'profile':trial.profile,'episode_id':trial.episode,'target_count':count,
+                'physical_handovers':physical,'all_evacuated':count>0 and physical==count
+                and all(target['state']=='evacuated' for target in trial.targets.values()),
+                'closed':trial.closed,'status':trial.status}
 
 
 @contextmanager
@@ -347,11 +544,14 @@ def run_external(args, client, output, mission):
     submitted = None
     model_time = None
     evidence = Evidence(caps)
+    from controller.m5_progress import Progress
+    progress=Progress('interop')
     with (output / 'exchange.jsonl').open('xb') as journal:
         def record(kind, body):
             journal.write(encode({'kind': kind, 'data': body}) + b'\n')
             journal.flush()
             evidence.record(kind, body)
+            progress.record(kind,body)
 
         try:
             if args.mode == 'decide':
@@ -498,6 +698,7 @@ def main():
     trial.add_argument('--seed', type=int)
     trial.add_argument('--mission-id', default='search_and_rescue')
     trial.add_argument('--mission-parameters', type=Path)
+    trial.add_argument('--mission-parameters-sha256',help='Expected digest of the approved mission parameter file')
     trial.add_argument('--input-package', type=Path, action='append', default=[])
     trial.add_argument('--require-goal', action='store_true')
     trial.add_argument('--core-mode',choices=CORE_MODES,default='strict')
@@ -513,7 +714,9 @@ def main():
     inbound.add_argument('--decide-path', choices=('decide', 'decision'), default='decide')
     inbound.add_argument('--decide-profile', choices=('core', 'metaroi-v9'), default='core')
     inbound.add_argument('--decision-timeout', type=float, default=10., help='Per-request RPC timeout in seconds')
-    inbound.add_argument('--engine', choices=('planar', 'unreal'), default='unreal')
+    inbound.add_argument('--engine', choices=('planar', 'unreal', 'reference'), default='unreal')
+    inbound.add_argument('--reference-profile', choices=('A','K'), default='A',
+                         help='Independent 3D test profile, never a native Unreal result')
     inbound.add_argument('--environment-port', type=int, default=18440)
     inbound.add_argument('--layout', type=Path)
     inbound.add_argument('--visible', action='store_true')
@@ -529,24 +732,49 @@ def main():
     sources += list((ROOT / 'contracts').glob('*.py')) + list((ROOT / 'controller').rglob('*.py'))
     if args.operation == 'self-test' or args.operation == 'our-environment' and args.engine == 'planar':
         sources += list((ROOT / 'environment').glob('*.py'))
+    if args.operation == 'our-environment' and args.engine == 'reference':
+        sources += list((ROOT / 'conformance').glob('*.py'))
+    sources += [ROOT/'tools/goal_evidence.py']
     packages = getattr(args, 'input_package', ())
-    frozen = {str(p.resolve(strict=True)): file_sha256(p) for p in (*sources, *packages)}
-    if args.operation == 'our-environment' and args.engine == 'unreal':
-        frozen.update(native_hashes(args.layout or ROOT / 'unreal/MetaRescue/MetaRescue.uproject'))
-    report = {'operation': args.operation, 'input_sha256': frozen}
+    parameter_file=getattr(args,'mission_parameters',None)
+    expected=getattr(args,'mission_parameters_sha256',None)
+    frozen=None
+    report = {'operation': args.operation, 'input_sha256': {}}
     try:
+        raw=read_parameter_bytes(parameter_file,maximum_bytes=16384 if expected is not None else MAX_BODY_BYTES)
+        verify_parameter_digest(raw,expected)
+        frozen = {str(p.resolve(strict=True)): file_sha256(p) for p in (*sources, *packages)}
+        if raw is not None:
+            frozen[str(parameter_file.resolve(strict=True))]=hashlib.sha256(raw).hexdigest()
+        if args.operation == 'our-environment' and args.engine == 'unreal':
+            frozen.update(native_hashes(args.layout or ROOT / 'unreal/MetaRescue/MetaRescue.uproject'))
+        report['input_sha256']=frozen
         if args.operation == 'self-test':
             report.update(self_test(output, args.matrix, args.timeout))
         else:
-            params = strict_json(args.mission_parameters.read_bytes()) if args.mission_parameters else {}
+            params = strict_json(raw) if raw is not None else {}
             if not isinstance(params, dict):
                 raise ValueError('Mission parameters must be an object')
             mission = {'id': args.mission_id, 'parameters': params}
+            report['mission']=mission
+            if args.operation=='our-environment':
+                report['decision_timeout']=args.decision_timeout
             if args.operation == 'our-controller':
                 seed = SEEDS[0] if args.seed is None else args.seed
                 report.update(run_controller(args.environment,output/'run',seed,args.scout_patrol,mission,args.timeout,
                                              compatibility=args.core_mode))
+            elif args.engine == 'reference':
+                report['engine']='independent-reference'
+                with independent_reference(args.reference_profile,args.environment_port) as (url,server):
+                    client=EnvironmentClient(url,timeout_s=30,core_mode=args.core_mode)
+                    try:
+                        report.update(run_external(args,client,output,mission))
+                    finally:
+                        client.disconnect()
+                        report['independent_truth']=independent_truth(server)
+                        atomic_json(output/'independent-truth.json',report['independent_truth'])
             else:
+                report['engine']=args.engine
                 scope = planar(port=args.environment_port) if args.engine == 'planar' else native(output, args)
                 with scope as url:
                     client = EnvironmentClient(url,timeout_s=30,core_mode=args.core_mode)
@@ -560,7 +788,12 @@ def main():
         report.update(exchange='failed', error=f'{type(error).__name__}: {error}',
                       first_protocol_error={'message': str(error), 'details': getattr(error, 'details', {})})
     finally:
-        report['inputs_preserved'] = all(Path(name).is_file() and file_sha256(Path(name)) == digest for name, digest in frozen.items())
+        try:
+            report['inputs_preserved'] = frozen is not None and all(
+                Path(name).is_file() and file_sha256(Path(name)) == digest for name, digest in frozen.items())
+        except OSError as error:
+            report['inputs_preserved']=False
+            report['input_verification_error']=f'{type(error).__name__}: {error}'
         atomic_json(output / 'report.json', report)
         print(str(output / 'report.json'), flush=True)
     return 0 if report['exchange'] == 'passed' and report['inputs_preserved'] and report.get('goal_verified', True) else 1

@@ -7,7 +7,7 @@ import time
 from urllib.parse import urlencode,urlsplit
 import uuid
 
-from contracts.protocol import (VERSION, MAX_RESPONSE_BYTES, ProtocolError,
+from contracts.protocol import (VERSION, MAX_RESPONSE_BYTES, TIME_EPSILON, ProtocolError,
                                 encode, strict_json, validate_episode_response,
                                 validate_observation)
 from controller.public_core import RESET_DEDUPLICATION, STEP_DEDUPLICATION, PublicCore
@@ -22,9 +22,11 @@ class PreparedRequest:
 
 class TransportFailure(RuntimeError):
     """No valid response; the caller must not assume a state-changing rollback."""
-    def __init__(self,message,*,state_may_have_changed):
+    def __init__(self,message,*,state_may_have_changed,code=None,details=None):
         super().__init__(message)
         self.state_may_have_changed=state_may_have_changed
+        self.code=code
+        self.details=details or {}
 
 
 class EnvironmentClient:
@@ -81,37 +83,74 @@ class EnvironmentClient:
             if self.audit:self.audit({'kind':'http_exchange','method':request.method,'path':request.path,
                 'body':request.body,'response':raw,'status':status,'attempt':attempt,'elapsed_s':time.perf_counter()-started})
             try:
+                if status < 200 or 300 <= status < 400:
+                    raise ProtocolError('INVALID_REQUEST','Unexpected HTTP status; redirects are not followed',{'status':status})
                 result=strict_json(raw,maximum_bytes=MAX_RESPONSE_BYTES)
                 if not isinstance(result,dict):raise ProtocolError('INVALID_REQUEST','Response must be an object')
                 if result.get('protocol_version')!=VERSION:
                     raise ProtocolError('UNSUPPORTED_PROTOCOL_VERSION','Environment response version is unsupported')
-                if 'error' in result and (not isinstance(result['error'],dict) or not isinstance(result['error'].get('code'),str)):
-                    raise ProtocolError('INVALID_REQUEST','Malformed environment error')
+                if 'error' in result:
+                    failure=result['error']
+                    if (not isinstance(failure,dict) or not isinstance(failure.get('code'),str)
+                            or (failure.get('details') is not None and not isinstance(failure['details'],dict))):
+                        raise ProtocolError('INVALID_REQUEST','Malformed environment error')
+                    if request.method=='POST' and request.body:
+                        sent=strict_json(request.body)
+                        if isinstance(sent,dict):
+                            for key in ('request_id','episode_id'):
+                                if (sent.get(key) is not None and result.get(key) is not None
+                                        and result[key]!=sent[key]):
+                                    raise ProtocolError('INVALID_REQUEST','Error belongs to another request or episode')
                 if 'error' not in result and status>=400:
                     raise ProtocolError('INTERNAL_ERROR','HTTP failure without normative error',{'status':status})
             except ProtocolError as error:
                 self.disconnect()
-                raise TransportFailure('Invalid environment response: '+str(error),state_may_have_changed=request.method!='GET') from error
+                raise TransportFailure('Invalid environment response: '+str(error),
+                                       state_may_have_changed=request.method!='GET',
+                                       code=error.code,details=error.details) from error
             if 'error' in result:
                 error=result['error']
                 # A foreign Core error may omit episode_id. Distinguish an
                 # explicit rejection from a malformed/ambiguous wire response.
-                raise ProtocolError(error['code'],str(error.get('message','Environment rejected request')),error.get('details',{}))
+                raise ProtocolError(error['code'],str(error.get('message','Environment rejected request')),error.get('details') or {})
             return result
 
     def _episode(self,request,*,step=False):
         declares = STEP_DEDUPLICATION if step else RESET_DEDUPLICATION
         result=self.submit(request,network_retries=int(declares in self.extensions))
-        return self.episode_response(result,step=step)
+        return self.episode_response(result,step=step,request=request)
 
-    def episode_response(self,result,*,step=False):
-        if self.public and 'observation' in result:
-            result={**result,'observation':self.public.wire_observation(result['observation'])}
-        try:return validate_episode_response(result,step=step,allow_space=bool(self.public and self.public.allow_space))
+    def episode_response(self,result,*,step=False,request=None):
+        """Check the wire envelope and the exact operation that caused it.
+
+        A self-consistent response for another request is not an explicit
+        rejection and cannot advance controller memory or custody.
+        """
+        try:
+            if self.public and isinstance(result,dict) and 'observation' in result:
+                result={**result,'observation':self.public.wire_observation(result['observation'])}
+            response=validate_episode_response(result,step=step,allow_space=bool(self.public and self.public.allow_space))
+            if request is not None:
+                sent=strict_json(request.body)
+                if response['request_id']!=sent.get('request_id'):
+                    raise ProtocolError('INVALID_REQUEST','Response belongs to another request')
+                if step:
+                    if response['episode_id']!=sent.get('episode_id'):
+                        raise ProtocolError('UNKNOWN_EPISODE','Response belongs to another episode')
+                    # A terminal transition may occur immediately. A running
+                    # step must advance time; no response may rewind it.
+                    if (response['time']+TIME_EPSILON<sent['time'] or
+                            response['status']=='running' and response['time']<=sent['time']):
+                        raise ProtocolError('INVALID_REQUEST','Step response does not advance model time')
+                elif abs(response['time'])>TIME_EPSILON:
+                    raise ProtocolError('INVALID_REQUEST','Reset must start at model time zero')
+            return response
         except ProtocolError as error:
-            location=error.details.get('path')
+            self.disconnect()
+            location=(error.details or {}).get('path')
             suffix=' at /'+'/'.join(map(str,location)) if location else ''
-            raise TransportFailure('Inconsistent episode response: '+str(error)+suffix,state_may_have_changed=True) from error
+            raise TransportFailure('Inconsistent episode response: '+str(error)+suffix,
+                                   state_may_have_changed=True,code=error.code,details=error.details) from error
 
     def _get(self,name,**parameters):
         suffix='?'+urlencode(parameters) if parameters else ''
@@ -120,9 +159,12 @@ class EnvironmentClient:
     def health(self):return self._get('health')
     def capabilities(self):
         result=self._get('capabilities')
-        declared=result.get('extensions')
-        self.extensions={name for name in declared if isinstance(name,str)} if isinstance(declared,list) else set()
-        self.public=PublicCore(result,mode=self.core_mode,audit=self.compatibility_audit)
+        # No retry or compatibility state may be installed from an invalid
+        # capabilities response. Commit both only after the new public profile
+        # validates, leaving no mixed old/new state after a failed refresh.
+        public=PublicCore(result,mode=self.core_mode,audit=self.compatibility_audit)
+        self.public=public
+        self.extensions=set(public.extensions)
         return result
 
     def observation(self,request_id=None):

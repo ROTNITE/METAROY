@@ -154,7 +154,7 @@ class CoreInteropAcceptanceTests(unittest.TestCase):
                     return 1
                 self.assertEqual(archives.call_count,4)
                 self.assertTrue((output/'owner-exit.request').is_file())
-                self.assertIn(f'-MRCoreExitRequestFile={output / "owner-exit.request"}',command.return_value)
+                self.assertIn(f'-MRCoreExitRequestFile={(output / "owner-exit.request").resolve()}',command.return_value)
                 native.returncode=0
                 return 0
 

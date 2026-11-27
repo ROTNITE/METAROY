@@ -141,12 +141,14 @@ class Trial:
         if type(seed) is not int or mission!={'id':'search_and_rescue','parameters':{}}:
             raise Reject('INVALID_SCENARIO','Expected documented reference mission')
         rng=Random(seed)
-        renamed=self.profile=='B'
+        renamed=self.profile in 'BK'
         ids=[f'opaque-{rng.randrange(10**10):010d}' for _ in range(5)] if renamed else [
             'mobile-a','mobile-b','mobile-x','casualty-a','assistance-yard']
         self.episode=uuid4().hex
         self.t=0
+        self.closed=False
         self.status='running'
+        self.base_position=[3.,3.,0.]
         self.plan=deepcopy(EMPTY)
         self.roles={}
         self.agents={
@@ -167,8 +169,27 @@ class Trial:
         if self.profile=='I':
             self.areas.append(zone('three-dimensional-pier','obstacle',
                                    {'kind':'box','min':[14.,5.,0.],'max':[15.,14.,9.]}))
+        if self.profile=='K':
+            # Challenge defined by independent physical rules, not a
+            # controller's search lattice or particular agent identifiers.
+            # A low transverse wall leaves one ground detour; drones can
+            # overfly it. Two dispersed hidden people require two transfers.
+            self.base_position=[rng.uniform(2,5),rng.uniform(2,5),0.]
+            self.agents[ids[0]]['position']=[rng.uniform(4,10),rng.uniform(4,10),rng.uniform(9,17)]
+            self.agents[ids[1]]['position']=list(self.base_position)
+            self.agents[ids[2]]={'kind':'aerial','position':[rng.uniform(4,10),rng.uniform(32,40),rng.uniform(9,17)],
+                                  'energy':.91,'abilities':['sense','move'],'cargo':None}
+            self.targets[ids[3]]['position']=[rng.uniform(22,39),rng.uniform(5,19),0.]
+            second='p/'+str(rng.randrange(10**12))
+            self.targets[second]={'position':[rng.uniform(22,39),rng.uniform(23,39),0.],
+                                  'known':False,'state':'waiting','seen':None,'appear':0}
+            x,y,z=rng.uniform(11,14),rng.uniform(24,30),rng.uniform(4,7)
+            self.areas.append(zone('wall/'+str(rng.randrange(10**9)),'obstacle',
+                                   {'kind':'box','min':[x,0.,0.],'max':[x+3.,y,z]}))
+            self.shuffle_seed=seed
         self.journal=[]
         self.private_handover=[]
+        self.travel={}
         self.log('reset',{'seed':seed})
         return self.response(body['request_id'])
 
@@ -200,13 +221,16 @@ class Trial:
                 shape.update(min=self.fx(shape['min']),max=self.fx(shape['max']))
         if self.profile=='B':
             agents.reverse();targets.reverse();zones.reverse()
+        elif self.profile=='K':
+            order=Random((self.shuffle_seed<<20)+self.t)
+            order.shuffle(agents);order.shuffle(targets);order.shuffle(zones)
         ratio=sum(self.reachable(aid) for aid in self.agents)/len(self.agents)
         return {'protocol_version':PROTOCOL,'episode_id':self.episode,'request_id':request,'time':self.t,
                 'mission':{'id':'search_and_rescue','objectives':goals,'priorities':[],'directives':[],'constraints':[],
-                           'status':{'running':'active','success':'completed','time_limit':'failed','safe_stopped':'safe_stopped'}[self.status],
+                           'status':{'running':'active','success':'completed','time_limit':'failed','failed':'failed','safe_stopped':'safe_stopped'}[self.status],
                            'termination':{'horizon':200}},
                 'agents':agents,'infrastructure':[{'id':self.destination,'kind':'base_station','status':'active',
-                                                 'position':self.fx([3.,3.,0.]),'capabilities':['handover'],
+                                                 'position':self.fx(self.base_position),'capabilities':['handover'],
                                                  'resources':{},'communication':{},'constraints':[]},
                                                  *([{'id':'aerial-recovery-platform','kind':'base_station','status':'active',
                                                       'position':self.fx([8.,8.,14.]),'capabilities':['support_air_recovery'],
@@ -249,6 +273,8 @@ class Trial:
                 raise Reject('CONSTRAINT_VIOLATION','Goal outside published motion medium')
             if any(z['type']=='obstacle' and box_segment(z['geometry'],a['position'],goal) for z in self.areas):
                 raise Reject('CONSTRAINT_VIOLATION','Proposed motion intersects occupied volume')
+            if a['energy']-.001*min(8.,math.dist(a['position'],goal))<.05:
+                raise Reject('RESOURCE_EXHAUSTED','Movement would spend the reserve')
             return aid,action,goal
         expected={'observe':{'radius'},'pickup':{'target_id'},'handover':{'station_id'},'hold':set()}[action]
         if set(params)!=expected:
@@ -258,7 +284,11 @@ class Trial:
             scale=100 if self.profile=='J' else 1
             if type(radius) not in (int,float) or not 1<=radius/scale<=25:
                 raise Reject('INVALID_COMMAND','Invalid observation radius')
+            if a['energy']-.001<.05:
+                raise Reject('RESOURCE_EXHAUSTED','Observation would spend the reserve')
             params={'radius':radius/scale}
+        elif action in ('pickup','handover') and not isinstance(next(iter(params.values())),str):
+            raise Reject('INVALID_COMMAND','Expected an opaque string ID')
         return aid,action,params
 
     def apply(self, aid, action, params, decision_id, index):
@@ -267,8 +297,12 @@ class Trial:
         if action=='move':
             step=min(1.,8./max(math.dist(a['position'],params),1e-9))
             destination=[x+step*(y-x) for x,y in zip(a['position'],params)]
-            a['energy']-=.001*math.dist(a['position'],destination)
+            length=math.dist(a['position'],destination)
+            a['energy']-=.001*length
+            self.travel[aid]=self.travel.get(aid,0.)+length
             a['position']=destination
+            if a['cargo'] is not None:
+                self.targets[a['cargo']]['position']=list(destination)
         elif action=='observe':
             a['energy']-=.001
         elif action=='pickup':
@@ -279,10 +313,10 @@ class Trial:
                 t['state']='loaded';a['cargo']=params['target_id']
         elif action=='handover':
             pid=a['cargo']
-            if not pid or params['station_id']!=self.destination or math.dist(a['position'],[3.,3.,0.])>1.:
+            if not pid or params['station_id']!=self.destination or math.dist(a['position'],self.base_position)>1.:
                 status='failed'
             else:
-                self.targets[pid].update(state='evacuated',position=[3.,3.,0.]);a['cargo']=None
+                self.targets[pid].update(state='evacuated',position=list(self.base_position));a['cargo']=None
                 physical={'effect':'evacuated','target_id':pid,'agent_id':aid,'decision_id':decision_id,
                           'command_index':index,'outcome_id':f'{self.episode}:{pid}'}
                 self.private_handover.append(physical);self.log('physical_outcome',physical)
@@ -293,12 +327,16 @@ class Trial:
         if any(key not in doc for key in ('request_id','decision_id','commands','time','operation','selected_configuration',
                                          'role_assignments','explanation','previous_configuration','candidate_evaluations','constraint_checks')):
             raise Reject('INVALID_REQUEST','Incomplete decision')
-        if doc.get('episode_id')!=self.episode or doc['time']!=self.t or self.status!='running':
+        if doc.get('episode_id')!=self.episode or doc['time']!=self.t or self.status!='running' or self.closed:
             raise Reject('INVALID_REQUEST','Episode or time differs')
         op=doc['operation']; selections=doc['selected_configuration'].get('scenario_ids')
         if op not in OPERATIONS or not isinstance(selections,list) or any(key not in self.scenarios for key in selections):
             raise Reject('INVALID_SCENARIO','Invalid operation or scenario ID')
+        if not isinstance(doc['commands'],list) or len(doc['commands'])>256:
+            raise Reject('INVALID_REQUEST','Expected a bounded command array')
         commands=[self.preflight(command) for command in doc['commands']]
+        if len({item[0] for item in commands})!=len(commands):
+            raise Reject('INVALID_COMMAND','At most one simultaneous action per actor')
         self.log('decision',doc)
         self.plan=deepcopy(doc['selected_configuration'])
         self.roles=deepcopy(doc['role_assignments'])
@@ -317,7 +355,7 @@ class Trial:
                                for z in self.areas)
                    for aid,action,params in commands):
                 t['known']=True;t['seen']=self.t
-        if self.private_handover:
+        if all(target['state']=='evacuated' for target in self.targets.values()):
             self.status='success'
         if self.t>=200 and self.status=='running':
             self.status='time_limit'
@@ -363,7 +401,11 @@ class Handler(BaseHTTPRequestHandler):
                     raise Reject('INVALID_REQUEST','Journal episode differs')
                 return {'episode_id':state.episode,'records':state.journal,'next_cursor':None}
             if method=='POST' and endpoint=='close' and body.get('episode_id')==state.episode:
-                state.log('close',{})
+                if not state.closed:
+                    if state.status=='running':
+                        state.status='failed'
+                    state.closed=True
+                    state.log('close',{})
                 if self.server.output:
                     self.server.output.write_text(json.dumps({'episode_id':state.episode,'status':state.status,
                         'handover':state.private_handover,'time':state.t},indent=2),encoding='utf-8')
@@ -392,7 +434,7 @@ def serve(profile, port, output=None):
 if __name__=='__main__':
     from pathlib import Path
     parser=argparse.ArgumentParser(description=__doc__)
-    parser.add_argument('--profile',default='A',choices=list('ABCDEFGHIJ'))
+    parser.add_argument('--profile',default='A',choices=list('ABCDEFGHIJK'))
     parser.add_argument('--port',type=int,default=8139)
     parser.add_argument('--truth',type=Path)
     opts=parser.parse_args()

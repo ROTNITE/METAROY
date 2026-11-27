@@ -32,6 +32,7 @@ from environment.disturbances import validate_tape as validate_disturbances
 from environment.events import validate_tape
 from environment.layout import generate,public_map
 from environment.main import DEFAULT_OUTPUT,PACKAGED_GAME,existing_unreal,native_command
+from environment.render_profiles import RENDER_PROFILES,render_commands
 from tools.native_archive import file_sha256,verify_archive
 from tools.native_process import AttachedNative
 
@@ -80,6 +81,10 @@ def run(args):
     if rescue_initializer!='heuristic' and (args.policy not in PAIRS or PAIRS[args.policy][1]!='nsga2'):
         raise ValueError('Assignment initialization requires NSGA-II rescue')
     attached=getattr(args,'attach_native_pid',None)
+    render_profile=getattr(args,'render_profile',None)
+    render_commands(profile=render_profile,demo_render=demo_render,headless=args.headless,visible=args.visible)
+    if attached and render_profile is not None:
+        raise ValueError('Render profile requires a standalone mission')
     if frame_profile and (attached or not args.visible or not args.realtime):
         raise ValueError('Frame profiling requires a standalone visible realtime mission')
     if getattr(args,'knowledge_view',False) and (attached or args.headless):
@@ -141,7 +146,8 @@ def run(args):
                                cwd=ROOT,stdout=log,stderr=subprocess.STDOUT,check=True)
         before=hashes(layout);manifest['frozen_inputs']=before;manifest['layout']=str(layout)
         command=None if attached else native_command(layout=layout,port=args.port,output=native_output,visible=args.visible,headless=args.headless,
-               realtime=args.realtime or args.ai_mode=='LIVE',exit_on_close=True,demo_render=demo_render)
+               realtime=args.realtime or args.ai_mode=='LIVE',exit_on_close=True,demo_render=demo_render,
+               **({'render_profile':render_profile} if render_profile is not None else {}))
         if getattr(args,'capture_overview',False):
             if attached or args.headless:raise ValueError('Overview recording needs a standalone rendered mission')
             command.append('-MRCoreCaptureOverview')
@@ -306,6 +312,7 @@ def main():
     parser.add_argument('--frame-profile',action='store_true',help='Measure the visible realtime mission after warmup')
     parser.add_argument('--knowledge-view',action='store_true',help='Render delivered observations over the declared city')
     parser.add_argument('--demo-render',action='store_true',help='Use the lighter RescueQuarter rendering settings')
+    parser.add_argument('--render-profile',choices=tuple(RENDER_PROFILES),help='Opt-in visual quality preset')
     parser.add_argument('--ready-timeout',type=float,default=600);parser.add_argument('--wall-timeout',type=float,default=0)
     parser.add_argument('--control-file',type=Path);parser.add_argument('--control-session')
     parser.add_argument('--operator-file',type=Path,help='Episode-bound local human requirements through Core issue_directive')
