@@ -1,0 +1,87 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#141b19">
+  <title>MetaRescue · Лаборатория M5</title>
+  <link rel="stylesheet" href="/lab.css">
+  <script src="/lab.js" defer></script>
+</head>
+<body>
+<header class="top">
+  <div class="brand"><span class="mark" aria-hidden="true">M<span>R</span></span><div>MetaRescue <small>ЛАБОРАТОРИЯ СОВМЕСТИМОСТИ</small></div></div>
+  <div class="tag"><span class="dot"></span> Локальный стенд · AI OFF</div>
+</header>
+<main>
+  <section class="intro">
+    <div><p class="eyebrow">UNIVERSAL CORE / ЭТАП 3.2</p><h1>Межкомандная проверка M5</h1><p class="muted">Запустите пару контроллер–среда через публичный HTTP-контракт. Отчёт разделяет обмен, выполнение миссии и подтверждение физической цели.</p></div>
+    <aside class="score"><span>Официальная оценка M5</span><strong>Не определена</strong><small>Нужны согласованная шкала Q и внешняя приёмка.</small></aside>
+  </section>
+  <div class="workspace">
+    <section class="panel setup">
+      <div class="heading"><span class="step">01</span><div><h2>Настройка испытания</h2><p>Компоненты, режим, воспроизводимые seed.</p></div></div>
+      <form id="trial-form">
+        <div class="pair">
+          <div class="component">
+            <label for="controller">Контроллер</label><select id="controller" required></select>
+            <p class="detail" id="controller-detail"></p>
+            <button type="button" class="secondary probe" data-role="controller">Проверить подключение</button>
+            <pre class="probe-result" id="controller-probe" hidden></pre>
+          </div>
+          <div class="component">
+            <label for="environment">Среда</label><select id="environment" required></select>
+            <p class="detail" id="environment-detail"></p>
+            <button type="button" class="secondary probe" data-role="environment">Проверить подключение</button>
+            <pre class="probe-result" id="environment-probe" hidden></pre>
+          </div>
+        </div>
+        <div class="settings">
+          <div><label for="profile">Сценарий 3D-эталона</label><select id="profile"><option value="K">K · скрытые цели, препятствие</option><option value="A">A · базовая миссия</option></select></div>
+          <div><label for="mode">Совместимость</label><select id="mode"><option value="strict">Strict · строгий Core</option><option value="declared">Declared · объявленные адаптеры</option><option value="both">Оба режима · сравнение</option></select></div>
+        </div>
+        <label for="seeds">Seed мира <span class="muted">(до 10 значений)</span></label>
+        <input id="seeds" value="89725161" required autocomplete="off" inputmode="numeric">
+        <div class="presets"><button type="button" id="single" class="secondary">Один seed</button><button type="button" id="three" class="secondary">Серия из трёх</button></div>
+        <details id="advanced"><summary>Расширенные настройки</summary>
+          <div class="settings"><div><label for="timeout">Лимит одного испытания, с</label><input id="timeout" type="number" min="5" max="300" step="1" value="90" required></div>
+          <div><label for="decide-path">RPC контроллера</label><select id="decide-path"><option value="decide">/decide</option><option value="decision">/decision</option></select></div>
+          <div><label for="decide-profile">RPC-профиль</label><select id="decide-profile"><option value="core">Core</option><option value="metaroi-v9">Metaroi v9</option></select></div></div>
+          <p class="muted small">RPC-параметры используются только для зарегистрированного внешнего контроллера. Нативный Unreal в этой версии лаборатории не запускается.</p>
+        </details>
+        <p class="summary" id="selection-summary">Выберите компоненты.</p>
+        <label class="confirmation"><input type="checkbox" id="confirm" required> Разрешаю создание и сброс нового эпизода в выбранной среде. Не использую среду с действующей миссией.</label>
+        <button id="start" type="submit" class="primary" disabled>Запустить испытание <span aria-hidden="true">→</span></button>
+        <p id="form-message" role="status" aria-live="polite" class="message"></p>
+      </form>
+    </section>
+    <section class="panel monitor">
+      <div class="heading"><span class="step">02</span><div><h2>Ход серии</h2><p>Состояние реального процесса и результаты.</p></div></div>
+      <div class="monitor-top"><span id="series-state" class="state">Ожидание запуска</span><button type="button" class="secondary danger" id="cancel" disabled>Прервать серию</button></div>
+      <div class="progress-label"><span id="progress-text">0 / 0</span><span id="series-time">—</span></div>
+      <progress id="progress" value="0" max="1"></progress>
+      <div class="stats">
+        <div><span>HTTP-обмен</span><strong id="exchange-stat">—</strong><small>Завершён без протокольной ошибки</small></div>
+        <div><span>Физические передачи</span><strong id="truth-stat">—</strong><small>Только независимая истина модели</small></div>
+        <div><span>Публичные переходы</span><strong id="public-stat">—</strong><small>Свидетельства, не физическая истина</small></div>
+      </div>
+      <div class="table-wrap">
+        <table><thead><tr><th>Seed / режим</th><th>Обмен</th><th>Миссия</th><th>Передачи</th><th>Отчёт</th></tr></thead><tbody id="results"><tr><td colspan="5" class="empty">Серия ещё не выбрана.</td></tr></tbody></table>
+      </div>
+      <div class="export"><button type="button" id="repeat" class="secondary" disabled>Повторить параметры</button><a id="export-json" class="secondary disabled" aria-disabled="true">JSON</a><a id="export-csv" class="secondary disabled" aria-disabled="true">CSV</a></div>
+      <p class="muted small">Прерывание завершает локальный процесс. Для внешней среды остановка физической миссии не гарантируется.</p>
+    </section>
+  </div>
+  <section class="panel archive">
+    <div class="heading"><span class="step">03</span><div><h2>Архив и сравнение пар</h2><p>Серии, сохранённые на этой машине. Статус не заменяет M5.</p></div></div>
+    <div class="table-wrap"><table><thead><tr><th>Контроллер → среда</th><th>Режим</th><th>Серия</th><th>Обмен</th><th>Дата</th><th></th></tr></thead><tbody id="history"><tr><td colspan="6" class="empty">Нет сохранённых серий.</td></tr></tbody></table></div>
+  </section>
+  <section class="panel evidence" id="evidence">
+    <div class="heading"><span class="step">04</span><div><h2>Доказательства испытания</h2><p id="report-title">Выберите строку в результатах серии.</p></div></div>
+    <div id="diagnostic" class="diagnostic">Здесь появится первая ошибка, источник доказательства цели и сохранность входных данных.</div>
+    <details><summary>Полный машиночитаемый отчёт</summary><pre id="report">—</pre></details>
+  </section>
+</main>
+<footer>MetaEvolution Rescue · независимый испытательный контур · результаты сохраняются локально</footer>
+</body>
+</html>
