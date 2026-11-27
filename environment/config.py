@@ -40,6 +40,8 @@ class Settings:
     communication_latency_s: float = 0.2
     communication_loss: float = 0.0
     competition: bool = False
+    # Opt-in; absent from serialized historical settings.
+    disaster_revision: int = 0
 
     @classmethod
     def parse(cls, value: dict | None = None) -> 'Settings':
@@ -67,6 +69,9 @@ class Settings:
                              ('resource_profile', ('unlimited', 'contest'))):
             if data[key] not in choices:
                 raise ProtocolError('INVALID_REQUEST', f'Unknown {key}')
+        if (type(data['disaster_revision']) is not int or data['disaster_revision'] not in (0, 1) or
+                (data['disaster_revision'] and data['city_revision'] != '2.3')):
+            raise ProtocolError('INVALID_REQUEST', 'disaster_revision 1 requires city 2.3')
         if 'horizon' not in value:
             data['horizon'] = 480.0 * data['map_size'] / 25
         if 'sensor_reliability' not in value and data['preset'] == 'uncertain':
@@ -94,4 +99,7 @@ class Settings:
         return 80.0 if self.event_profile == 'v052' else 30.0
 
     def json(self):
-        return asdict(self)
+        result = asdict(self)
+        if not self.disaster_revision:
+            result.pop('disaster_revision')
+        return result
