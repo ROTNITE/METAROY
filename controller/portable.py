@@ -184,13 +184,16 @@ class PortablePolicy:
     def _motion_clear(self, observation, zones, agent, goal):
         if not _path_clear(zones, agent, goal, public_media=self.public.short_actions):
             return False
-        if not self.public.short_actions:
-            return True
         rules = (*observation['constraints'], *observation['mission']['constraints'], *agent['constraints'])
         if any(not _allowed(zone, agent['kind']) and box and box.interval(agent['position'], goal) is not None
                for zone, box in zones):
             return False
         for rule in rules:
+            if rule.get('severity','hard') != 'hard':
+                continue
+            scope=rule.get('scope',{})
+            if scope.get('kind')=='agent' and scope.get('agent_id',scope.get('id',agent['id']))!=agent['id']:
+                continue
             kind = rule.get('type')
             if kind == 'position_bounds':
                 try:
@@ -199,6 +202,8 @@ class PortablePolicy:
                     return False
                 if bounds.interval(goal, goal) is None:
                     return False
+            if not self.public.short_actions:
+                continue
             if kind == 'risk_limit':
                 ceiling = rule.get('maximum_risk')
                 if type(ceiling) not in (int, float) or any(zone['risk'] > ceiling and (

@@ -41,11 +41,18 @@ class PublicBoundary(TestCase):
 
     def test_infrastructure_resource_bounds(self):
         for resource in ({'id':'energy','minimum':.7,'maximum':1.,'value':.1,'unit':'normalized'},
-                         {'id':'other','minimum':0.,'maximum':1.,'value':.5,'unit':'normalized'}):
+                         {'id':'other','minimum':0.,'maximum':1.,'value':1.5,'unit':'normalized'}):
             frame = self.frame()
             frame['infrastructure'][0]['resources'] = {'energy': resource}
             with self.subTest(resource=resource), self.assertRaises(ProtocolError):
                 validate_observation(frame)
+
+    def test_infrastructure_public_id_is_independent_of_map_key(self):
+        frame=self.frame()
+        frame['infrastructure'][0]['resources']={'energy':{'id':'resource','minimum':0.,'maximum':1.,
+                                                          'value':.5,'unit':'normalized'}}
+        self.assertIs(validate_observation(frame),frame)
+        self.assertEqual(frame['infrastructure'][0]['resources']['energy']['id'],'resource')
 
     def test_malformed_or_future_freshness_is_normative_error(self):
         for value in ([], {'position': 1}, {'position': {'observed_at': 1}},

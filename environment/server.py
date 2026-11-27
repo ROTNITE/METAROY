@@ -56,7 +56,10 @@ class Handler(BaseHTTPRequestHandler):
                 length = int(self.headers.get('Content-Length', 0))
                 if not 0 < length <= MAX_BODY_BYTES:
                     raise ProtocolError('INVALID_REQUEST', 'Expected a bounded Core request body')
-                body = strict_json(self.rfile.read(length))
+                wire = self.rfile.read(length)
+                if len(wire) != length:
+                    raise ProtocolError('INVALID_REQUEST', 'Incomplete Core request body')
+                body = strict_json(wire)
                 if not isinstance(body, dict):
                     raise ProtocolError('INVALID_REQUEST', 'Body must be an object')
                 if body.get('protocol_version') != VERSION:

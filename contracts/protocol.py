@@ -191,8 +191,10 @@ def validate(value, schema, code='INVALID_REQUEST'):
     validator = Draft202012Validator(schema,registry=Registry())
     error = next(validator.iter_errors(value), None)
     if error:
-        raise ProtocolError(code, 'Schema validation failed',
-                            {'path': list(error.absolute_path), 'rule': error.validator})
+        details = {'path': list(error.absolute_path), 'rule': error.validator}
+        if error.validator == 'required' and isinstance(error.instance, dict):
+            details['missing'] = sorted(set(error.validator_value) - error.instance.keys())
+        raise ProtocolError(code, 'Schema validation failed', details)
     return value
 
 
@@ -214,12 +216,17 @@ def validate_observation(observation, *, allow_space=False):
     for field in ('agents', 'infrastructure'):
         for entity in observation[field]:
             for key, resource in entity['resources'].items():
-                if key != resource['id'] or not resource['minimum'] <= resource['value'] <= resource['maximum']:
+                # The project's agent planner uses resource keys as semantic IDs.
+                # Infrastructure resources are not command-addressed by this
+                # planner: Appendix A does not require the map key and the
+                # separately published resource ID to be identical.
+                mismatch = field == 'agents' and key != resource['id']
+                if mismatch or not resource['minimum'] <= resource['value'] <= resource['maximum']:
                     raise ProtocolError('INVALID_REQUEST', 'Invalid resource bounds',
                                         {'entity_type':field,'entity_id':entity['id'],'resource_id':key,
                                          'declared_id':resource['id'],'minimum':resource['minimum'],
                                          'value':resource['value'],'maximum':resource['maximum'],
-                                         'rule':'resource_id' if key!=resource['id'] else 'resource_interval'})
+                                         'rule':'resource_id' if mismatch else 'resource_interval'})
     for agent in observation['agents']:
         if agent['position'] is None and agent['kind'] not in ('digital', 'operator'):
             raise ProtocolError('INVALID_REQUEST', 'Spatial agent requires position', {'agent_id': agent['id']})
@@ -262,7 +269,7 @@ def validate_decision(decision, observation, capabilities):
     for agent_id in decision['role_assignments']:
         if agent_id not in agents:
             raise ProtocolError('INVALID_REQUEST', 'Unknown role participant', {'agent_id': agent_id})
-    for command in decision['commands']:
+    for index, command in enumerate(decision['commands']):
         agent = agents.get(command['agent_id'])
         action = command['action']
         if agent is None or action not in {item['action'] for item in agent['available_actions']}:
@@ -270,7 +277,13 @@ def validate_decision(decision, observation, capabilities):
         descriptor = capabilities.get('supported_actions', {}).get(action)
         if descriptor is None or not set(descriptor.get('required_capabilities', [])) <= set(agent['capabilities']):
             raise ProtocolError('INVALID_COMMAND', 'Required capability is unavailable')
-        validate(command['parameters'], descriptor['parameters_schema'], 'INVALID_COMMAND')
+        try:
+            validate(command['parameters'], descriptor['parameters_schema'], 'INVALID_COMMAND')
+        except ProtocolError as error:
+            details = error.details or {}
+            raise ProtocolError(error.code, 'Action parameter schema validation failed',
+                                {**details, 'path': ['commands',index,'parameters',*details.get('path',[])],
+                                 'command_index':index,'agent_id':command['agent_id'],'action':action}) from error
     grouped = set()
     for group in decision.get('metaevolution', {}).get('command_groups', []):
         indices = group.get('command_indices', [])
