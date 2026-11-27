@@ -23,7 +23,7 @@ def expected_failure(parent, building, horizon):
     if (delay is None or parent.get('kind') != 'fire' or parent.get('spread') or
             parent.get('rejection') or parent.get('source_object_id') != building.get('id')):
         return None
-    at = round(parent['time'] + delay, 8)
+    at = parent['time'] + delay
     if at >= horizon or parent.get('expires_at') is None or at >= parent['expires_at']:
         return None
     source = parent['source']
@@ -38,7 +38,8 @@ def expected_failure(parent, building, horizon):
             'rejection': None, 'smoke_emission_height_m': max(0., source[2]+.15)}
 
 
-def append_fire_failures(tape, world, horizon):
+def expected_fire_failures(tape, world, horizon):
+    """Return canonical consequences, independent of any supplied children."""
     buildings = {b['id']: b for b in world['buildings']}
     claimed = set()
     children = []
@@ -50,7 +51,13 @@ def append_fire_failures(tape, world, horizon):
         if child is not None:
             children.append(child)
             claimed.add(site)
-    tape['events'].extend(children)
+    return children
+
+
+def append_fire_failures(tape, world, horizon):
+    existing = {row['id'] for row in tape['events']}
+    tape['events'].extend(row for row in expected_fire_failures(tape, world, horizon)
+                          if row['id'] not in existing)
     tape['events'].sort(key=lambda row: (row['time'], row['spread'], row['id']))
 
 
