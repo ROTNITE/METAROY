@@ -1971,6 +1971,7 @@
       "requirement": "Огонь охватывает комнаты, окна и кровлю конкретного здания; копоть, угли, свет и опасный объём",
       "status": "partial",
       "evidence": [
+        "D:/MetaRescue-output/agent-review-20261128/agent-review-vis-v2-road-first/visual-audit.json",
         "docs/disaster-assets.md",
         "D:/MetaRescue-output/visual-overhaul-20261115/checks/native-scene-04/verification.json",
         "docs/vis02-04-city23-candidate.md"
@@ -1982,6 +1983,7 @@
       "requirement": "Густой объёмный дым с подъёмом/ветром и непрозрачным ядром; сенсор ослабляется по пути луча",
       "status": "partial",
       "evidence": [
+        "D:/MetaRescue-output/agent-review-20261128/agent-review-vis-v2-road-first/visual-audit.json",
         "D:/MetaRescue-output/automation/20261116T010529035110Z/verification.json",
         "D:/MetaRescue-output/visual-overhaul-20261115/checks/native-scene-04/optics-fixture.json",
         "docs/disaster-visual-runtime.md",
@@ -1994,6 +1996,7 @@
       "requirement": "Причинные завалы из существующих плит, балок, кладки и деревьев; частичные повреждения здания, локальный Chaos",
       "status": "partial",
       "evidence": [
+        "D:/MetaRescue-output/agent-review-20261128/agent-review-vis-v2-road-first/visual-audit.json",
         "D:/MetaRescue-output/automation/20261116T015916578219Z/verification.json",
         "D:/MetaRescue-output/visual-overhaul-20261115/checks/native-collapse-01/verification.json",
         "D:/MetaRescue-output/integration-20261127-01/native-collapse-22/verification.json",
@@ -2060,6 +2063,8 @@
       "requirement": "Новая лодка, 0–4/по умолчанию 2, реальный спуск, глубина/осадка/плавучесть/течение/груз/энергия",
       "status": "partial",
       "evidence": [
+        "D:/MetaRescue-output/agent-review-20261128/water-controller-parity.json",
+        "D:/MetaRescue-output/agent-review-20261128/win64-final/verification.json",
         "D:/MetaRescue-output/integration-20261127-01/water-loss-before-departure-main-01-480-audit.json",
         "D:/MetaRescue-output/integration-20261127-01/water-flood-street-03-audit.json",
         "D:/MetaRescue-output/visual-overhaul-20261115/checks/catamaran-import-01/verification.json",
@@ -2077,6 +2082,8 @@
       "requirement": "Промежуточная высадка сохраняет личность и владение грузом; спасение только в медпункте; зависимая коалиция",
       "status": "partial",
       "evidence": [
+        "D:/MetaRescue-output/agent-review-20261128/water-controller-parity.json",
+        "D:/MetaRescue-output/agent-review-20261128/win64-final/verification.json",
         "D:/MetaRescue-output/releases/windows-integrated-verification-20261127-06/native-recovery-verification.json",
         "D:/MetaRescue-output/integration-20261127-01/water-loss-before-departure-main-01-480-audit.json",
         "D:/MetaRescue-output/integration-20261127-01/water-flood-street-03-audit.json",
@@ -2146,6 +2153,8 @@
       "requirement": "Регрессии и отдельная распакованная Windows-сборка; реальные изображения/видео и инструкция отката",
       "status": "partial",
       "evidence": [
+        "D:/MetaRescue-output/agent-review-20261128/win64-final/archive-verification.json",
+        "D:/MetaRescue-output/agent-review-20261128/win64-final/verification.json",
         "D:/MetaRescue-output/releases/windows-integrated-verification-20261127-06/archive-verification.json",
         "D:/MetaRescue-output/releases/windows-integrated-verification-20261127-06/native-recovery-verification.json",
         "D:/MetaRescue-output/integration-20261127-01/water-recovery-film-01/shipping-06/film-verification.json",
@@ -2204,6 +2213,8 @@
       "requirement": "Полноценная локальная лаборатория M5: подключение, реальный двусторонний запуск, диагностика, матрица, воспроизводимость, доказательства цели, безопасность, UX и экспорт",
       "status": "partial",
       "evidence": [
+        "D:/MetaRescue-output/agent-review-20261128/win64-final/m5-runtime/verification.json",
+        "D:/MetaRescue-output/agent-review-20261128/detached-portable/verification.json",
         "docs/m5-interface.md",
         "tools/m5_lab.py",
         "tools/m5_trial.py",
