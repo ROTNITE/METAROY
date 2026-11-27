@@ -22,6 +22,8 @@ class FireFailureTests(unittest.TestCase):
         self.assertEqual(child['cells'], [[10,11],[10,12],[11,11]])
         self.assertAlmostEqual(child['smoke_emission_height_m'],1.2)
         self.assertTrue(valid_fire_failure(child, parent, self.house, 480.))
+        append_fire_failures(tape, {'buildings':[self.house]}, 480.)
+        self.assertEqual(len(tape['events']),2)
 
     def test_not_a_second_trial_or_a_spread_event(self):
         spread = {**self.fire,'id':'spread','spread':True,'time':68.}
