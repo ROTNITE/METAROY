@@ -68,4 +68,32 @@ bool FMRSmokeLifetime::RunTest(const FString& Parameters)
     TestTrue(TEXT("old profiles do not acquire the new optical physics"),Model.SmokeVolumes().IsEmpty());
     return true;
 }
+IMPLEMENT_SIMPLE_AUTOMATION_TEST(FMRClippedSmokeOptics,"MetaRescue.Environment.ClippedSmokeOptics",
+    EAutomationTestFlags::EditorContext|EAutomationTestFlags::EngineFilter)
+bool FMRClippedSmokeOptics::RunTest(const FString&)
+{
+    FMRSmokeVolume Volume;Volume.bClippedQuadrature=true;Volume.RadiusCm=1000;
+    Volume.RadiusGrowth=0;Volume.ExtinctionPerCm=.003;
+    const FVector A(-1000000,990,1500),B(1000000,990,1500);
+    const double Depth=Volume.OpticalDepth(A,B);
+    TestTrue(TEXT("long near-tangent ray retains positive extinction"),Depth>0);
+    TestTrue(TEXT("ray reversal preserves optical depth"),FMath::Abs(Depth-Volume.OpticalDepth(B,A))<1.e-8);
+    TestTrue(TEXT("tangent outside the plume is clear"),Volume.OpticalDepth(FVector(-1000,1001,1500),FVector(1000,1001,1500))==0);
+    TestTrue(TEXT("full central diameter matches analytic integral"),
+        FMath::Abs(Volume.OpticalDepth(FVector(-1000,0,1500),FVector(1000,0,1500))-3.2)<1.e-10);
+    Volume.Source=FVector(150000,150000,340);
+    TestTrue(TEXT("large-city translation preserves integration"),
+        FMath::Abs(Volume.OpticalDepth(A+Volume.Source,B+Volume.Source)-Depth)<1.e-8);
+    FMRDistrictEnvironment Model;Model.bDetailedHazards=true;Model.bRevisedDisasters=true;
+    FMRDisturbance Smoke;Smoke.Id=TEXT("revised-smoke");Smoke.Kind=EMRDisturbance::Smoke;Smoke.Time=1.;
+    Smoke.Cells={FIntPoint(20,20)};Model.Tape={Smoke};Model.Advance(10.);
+    if(!TestEqual(TEXT("one active plume"),Model.SmokeVolumes().Num(),1))return false;
+    TestTrue(TEXT("environment selects the same revised field"),Model.SmokeVolumes()[0].bClippedQuadrature);
+    Model.ResetApplied();
+    TestTrue(TEXT("reset clears revised plumes"),Model.SmokeVolumes().IsEmpty());
+    Model.bRevisedDisasters=false;Model.Advance(10.);
+    if(!TestEqual(TEXT("one legacy plume"),Model.SmokeVolumes().Num(),1))return false;
+    TestFalse(TEXT("old tape keeps legacy integrator"),Model.SmokeVolumes()[0].bClippedQuadrature);
+    return true;
+}
 #endif
