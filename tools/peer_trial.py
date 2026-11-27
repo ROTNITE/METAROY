@@ -101,7 +101,11 @@ def startup_diagnostic(path):
         stream.seek(max(0,path.stat().st_size-32768))
         tail=stream.read(32768).decode("utf-8",errors="replace")
     codes=("ERR_MODULE_NOT_FOUND","MODULE_NOT_FOUND","EADDRINUSE","EACCES","EROFS","ENOSPC",
-           "ModuleNotFoundError","ImportError","SyntaxError")
+           "ModuleNotFoundError","ImportError","SyntaxError","TypeError","ReferenceError","ENOENT",
+           "ERR_REQUIRE_ESM","ERR_UNKNOWN_FILE_EXTENSION","ERR_UNSUPPORTED_DIR_IMPORT",
+           "npm ERR!","vite:","failed to load config","Permission denied","Read-only file system",
+           "Cannot find module","not found","Missing script","Unknown option","EEXIST","ENOTDIR",
+           "Error:","FATAL ERROR")
     result={"startup_error_codes":[code for code in codes if code in tail]}
     for pattern in (r"Cannot find package ['\"]([a-zA-Z0-9_@./-]{1,100})['\"]",
                     r"No module named ['\"]([a-zA-Z0-9_.-]{1,100})['\"]"):
@@ -119,7 +123,7 @@ def summary(report):
     selected = {}
     for key in ("exchange", "status", "goal_status", "goal_verified", "inputs_preserved",
                 "planning_p95_ms", "step_http_p95_ms", "exit_code",
-                "correlated_public_target_count", "evacuated", "aid_delivered", "located"):
+                "correlated_public_target_count", "evacuated", "aid_delivered", "located", "journal_unscoped_metadata"):
         value = result.get(key, report.get(key))
         if value is not None and type(value) in (str, int, float, bool):
             selected[key] = value
@@ -140,7 +144,7 @@ def summary(report):
             selected["error_path"] = details.get("path")
             selected["error_details"] = {key:details[key] for key in
                 ("rule","entity_type","entity_id","resource_id","declared_id","minimum","value","maximum",
-                 "command_index","agent_id","action")
+                 "command_index","agent_id","action","scope","evidence_record")
                 if key in details and type(details[key]) in (str,int,float,bool)}
             if isinstance(details.get("missing"),list):
                 selected["error_details"]["missing"]=[v[:80] for v in details["missing"][:16] if isinstance(v,str)]

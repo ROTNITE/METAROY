@@ -229,3 +229,33 @@ class EvidenceContradictions(OutcomeBoundary):
         self.evidence.record_outcome('e',self.outcome)
         self.evidence.record_decision({**self.decision,'operation':'safe_stop'})
         self.assertEqual(self.evidence.summary()['evacuated'],0)
+
+
+class JournalScopeBoundary(TestCase):
+    def collect(self, records):
+        from pathlib import Path
+        from tempfile import TemporaryDirectory
+        from tools.run_interop import Evidence,public_logs
+        from unittest.mock import Mock
+        client=Mock()
+        client.logs.return_value={'episode_id':'e','records':records,'next_cursor':None}
+        evidence=Evidence()
+        with TemporaryDirectory() as root:
+            public_logs(client,'e',Path(root)/'journal.jsonl',evidence)
+        return evidence.summary()
+
+    def test_unscoped_metadata_not_evidence(self):
+        report=self.collect([{'episode_id':None,'record_type':'startup','payload':{}}])
+        self.assertEqual(report['journal_unscoped_metadata'],1)
+        self.assertEqual(report['evacuated'],0)
+
+    def test_foreign_payload_rejected(self):
+        from contracts.protocol import ProtocolError
+        with self.assertRaises(ProtocolError) as caught:
+            self.collect([{'episode_id':'e','record_type':'decision','payload':{'episode_id':'other'}}])
+        self.assertEqual(caught.exception.details['rule'],'journal_payload_scope')
+
+    def test_unscoped_evidence_rejected(self):
+        from contracts.protocol import ProtocolError
+        with self.assertRaises(ProtocolError):
+            self.collect([{'episode_id':None,'record_type':'physical_outcome','payload':{}}])

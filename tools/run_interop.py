@@ -3,6 +3,7 @@ from __future__ import annotations
 
 import argparse
 from contextlib import contextmanager
+from copy import deepcopy
 from datetime import datetime, timezone
 import gzip
 import http.client
@@ -60,6 +61,7 @@ class Evidence:
         self.failed_receipts=set()
         self.observed={}
         self.last_time={}
+        self.journal_unscoped_metadata=0
 
     @staticmethod
     def _identity(episode,identifier):
@@ -99,7 +101,7 @@ class Evidence:
             self.conflicts.add(key)
         else:
             self.fingerprints[key]=fingerprint
-            self.decisions.setdefault(key,decision)
+            self.decisions.setdefault(key,deepcopy(decision))
         request=self._identity(key[0],decision.get('request_id'))
         if request:
             existing=self.requests.setdefault(request,key)
@@ -180,6 +182,7 @@ class Evidence:
                 'correlated_public_target_count':len({(item['episode_id'],item['target_id']) for item in transitions.values()}),
                 'correlated_public_target_transitions':list(transitions.values()),
                 'first_protocol_error':self.first_error,
+                'journal_unscoped_metadata':self.journal_unscoped_metadata,
                 'planning_p95_ms':percentile(self.planning_ms,.95),'step_http_p95_ms':percentile(self.step_ms,.95),
                 **self.goals.summary()}
 
@@ -195,21 +198,45 @@ def public_logs(client, episode, destination, evidence=None):
             target.write(encode(page) + b'\n')
             if evidence is not None:
                 for record in page['records']:
-                    if not isinstance(record,dict) or record.get('episode_id',episode)!=episode:
-                        raise ProtocolError('INVALID_REQUEST','Journal record belongs to another episode')
+                    if not isinstance(record,dict):
+                        raise ProtocolError('INVALID_REQUEST','Journal record is not an object',
+                                            {'rule':'journal_record_type'})
+                    kind=record.get('record_type')
+                    scope=record.get('episode_id',episode)
+                    relevant=kind in ('decision','command_result','physical_outcome') or record.get('type')=='step'
+                    if scope is None and not relevant:
+                        # E.g. service startup/reset metadata preceding allocation
+                        # of an episode. Retain verbatim, but never use as evidence.
+                        evidence.journal_unscoped_metadata+=1
+                        continue
+                    if scope!=episode:
+                        raise ProtocolError('INVALID_REQUEST','Journal record belongs to another episode',
+                                            {'rule':'journal_scope','scope':'null' if scope is None else 'foreign',
+                                             'evidence_record':relevant})
                     if record.get('type') == 'step' and 'response' in record:
-                        if record['response'].get('episode_id')!=episode or (
-                                'decision' in record and record['decision'].get('episode_id')!=episode):
-                            raise ProtocolError('INVALID_REQUEST','Journal step belongs to another episode')
-                        if 'decision' in record:
-                            evidence.record('decision', {'decision': record['decision']})
-                        evidence.record('step_response', record['response'])
-                    if record.get('record_type') == 'decision':
-                        evidence.record('decision', {'decision': record['payload']})
-                    if record.get('record_type') == 'command_result':
-                        evidence.record('step_response', {'command_results':[record['payload']],'episode_id':episode})
-                    if record.get('record_type')=='physical_outcome':
-                        evidence.record('physical_outcome',{'episode_id':episode,'payload':record['payload']})
+                        response=record['response']
+                        decision=record.get('decision')
+                        if (not isinstance(response,dict) or response.get('episode_id')!=episode or
+                                ('decision' in record and (not isinstance(decision,dict) or decision.get('episode_id')!=episode))):
+                            raise ProtocolError('INVALID_REQUEST','Journal step belongs to another episode',
+                                                {'rule':'journal_step_scope'})
+                        if decision is not None:
+                            evidence.record('decision', {'decision':decision})
+                        evidence.record('step_response',response)
+                    if kind in ('decision','command_result','physical_outcome'):
+                        payload=record.get('payload')
+                        if not isinstance(payload,dict) or payload.get('episode_id',episode)!=episode:
+                            raise ProtocolError('INVALID_REQUEST','Journal payload belongs to another episode',
+                                                {'rule':'journal_payload_scope'})
+                        if kind=='decision':
+                            if payload.get('episode_id')!=episode:
+                                raise ProtocolError('INVALID_REQUEST','Journal decision has no matching episode',
+                                                    {'rule':'journal_decision_scope'})
+                            evidence.record('decision',{'decision':payload})
+                        elif kind=='command_result':
+                            evidence.record('step_response',{'command_results':[payload],'episode_id':episode})
+                        else:
+                            evidence.record('physical_outcome',{'episode_id':episode,'payload':payload})
             cursor = page.get('next_cursor')
             if cursor is None or not page['records']:
                 break
