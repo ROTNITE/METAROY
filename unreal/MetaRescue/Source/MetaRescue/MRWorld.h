@@ -116,7 +116,7 @@ public:
     void AppendEvent(const FString& Type, int32 Id = -1);
     void WriteTelemetry();
     float GroundSpeedFactor(const FVector& Position) const;
-    bool IsUnsafeGround(const FVector& Position) const;
+    bool IsUnsafeGround(const FVector& Position,bool IncludeDebris=true) const;
     bool HasRadio(const FVector& Position) const;
     float WaterDepth(const FVector& Position) const;
     FMRWaterSample WaterAtCm(FVector Position) const;
@@ -150,6 +150,7 @@ private:
     // Private physical occupancy, sampled from current event-owned colliders.
     // History allows a delivered observation to clear a moved obstacle.
     TSet<FIntPoint> DebrisCells,DebrisHistory,StaticDebrisCells;
+    TMap<FIntPoint,FVector> DebrisSamplePoints,StaticDebrisSamplePoints;
     bool bStaticDebrisDirty=true;
     double NextDebrisRefresh=0;
     void RefreshDebrisCells();
