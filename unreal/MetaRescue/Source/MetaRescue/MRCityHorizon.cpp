@@ -139,6 +139,8 @@ void AMRWorld::BuildCityHorizon()
                 {
                     // Lightweight facade LOD: no rooms, no collision, no mission
                     // objects. Repeated dimensions batch across the whole ring.
+                    const double EdgeDepth=FMath::Max(FMath::Max(-P.X,P.X-Size),FMath::Max(-P.Y,P.Y-Size));
+                    const bool NearFacade=EdgeDepth<3300;
                     for(int32 Side=0;Side<4;++Side)
                     {
                         const FRotator Face(0,Side*90.,0);
@@ -160,8 +162,11 @@ void AMRWorld::BuildCityHorizon()
                             {
                                 Detail(FVector(X,-Wall-2,Z),FVector(170,8,157),TEXT("MI_Concrete"));
                                 Detail(FVector(X,-Wall-7,Z),FVector(144,4,126),TEXT("MI_Dark"));
-                                Detail(FVector(X,-Wall-11,Z-68),FVector(180,28,12),TEXT("MI_Plaster"));
-                                Detail(FVector(X,-Wall-10,Z),FVector(7,5,126),TEXT("MI_Metal"));
+                                if(NearFacade)
+                                {
+                                    Detail(FVector(X,-Wall-11,Z-68),FVector(180,28,12),TEXT("MI_Plaster"));
+                                    Detail(FVector(X,-Wall-10,Z),FVector(7,5,126),TEXT("MI_Metal"));
+                                }
                             }
                         }
                         if(Side==0)
@@ -177,7 +182,7 @@ void AMRWorld::BuildCityHorizon()
                     Piece(FVector(W*.24,-D*.2,H+65),FVector(55,55,120),TEXT("MI_Concrete"));
                 }
                 Houses++;
-                if(Environment.bRevisedDisasters&&Houses%24==0)OptimizeDistrictInstances();
+                if(Environment.bRevisedDisasters&&Houses%48==0)OptimizeDistrictInstances();
             }
             else if(Kind==TEXT("green"))
             {
