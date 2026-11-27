@@ -11,7 +11,7 @@ import zipfile
 import json
 import time
 
-from tools.m5_lab import Registry,Lab,Server,build_command,endpoint,load_assessments,csv_cell
+from tools.m5_lab import Registry,Lab,Server,build_command,endpoint,load_assessments,csv_cell,read_report
 from tools.m5_matrix import build_matrix
 
 
@@ -334,6 +334,21 @@ class CatalogPerformance(TestCase):
 
 
 class ArchiveAndRepeatTests(TestCase):
+    def test_small_metadata_does_not_allocate_the_maximum_report_buffer(self):
+        import tracemalloc
+        with TemporaryDirectory() as temp:
+            path=Path(temp)/'report.json'
+            path.write_text('{"status":"running"}')
+            tracemalloc.start()
+            try:
+                self.assertEqual(read_report(path),{'status':'running'})
+                _,peak=tracemalloc.get_traced_memory()
+            finally:
+                tracemalloc.stop()
+            self.assertLess(peak,4*1024*1024)
+            with patch('tools.m5_lab.MAX_REPORT',8):
+                self.assertEqual(read_report(path),{})
+
     def test_bad_archives_are_skipped_not_rewritten(self):
         with TemporaryDirectory() as temp:
             root=Path(temp)

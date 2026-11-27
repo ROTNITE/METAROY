@@ -6,6 +6,9 @@ on:
     paths:
       - .github/workflows/stage3-performance.yml
       - controller/**
+      - contracts/**
+      - tools/profile_protocol_validation.py
+      - tests/test_protocol_validation_regression.py
       - tests/test_zone_index.py
       - tools/profile_public_geometry.py
       - tools/profile_m5_lab.py
@@ -44,6 +47,8 @@ jobs:
         run: .venv/bin/python -B -X utf8 -m tools.profile_public_geometry --output "$RUNNER_TEMP/geometry-performance.json"
       - name: Benchmark read-only M5 HTTP over 450 catalog entries
         run: .venv/bin/python -B -X utf8 -m tools.profile_m5_lab --output "$RUNNER_TEMP/m5-http-performance.json"
+      - name: Benchmark response validation on large public observations
+        run: .venv/bin/python -B -X utf8 -m tools.profile_protocol_validation --output "$RUNNER_TEMP/protocol-validation-performance.json"
       - name: Archive measurements
         if: always()
         uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
@@ -52,4 +57,5 @@ jobs:
           path: |
             ${{ runner.temp }}/geometry-performance.json
             ${{ runner.temp }}/m5-http-performance.json
+            ${{ runner.temp }}/protocol-validation-performance.json
           if-no-files-found: warn

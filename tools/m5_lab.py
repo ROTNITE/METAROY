@@ -157,7 +157,15 @@ def read_report(path):
         if path.is_symlink() or not path.is_file():
             return {}
         with path.open('rb') as stream:
-            raw=stream.read(MAX_REPORT+1)
+            # CPython allocates a buffer for the requested read length even
+            # when the file is tiny. Bound by the opened file's actual size
+            # as well as the protocol cap; reject concurrent size changes.
+            size=os.fstat(stream.fileno()).st_size
+            if size>MAX_REPORT:
+                return {}
+            raw=stream.read(size+1)
+            if len(raw)!=size:
+                return {}
         result=strict_json(raw,maximum_bytes=MAX_REPORT)
         return result if isinstance(result,dict) else {}
     except (ValueError,OSError):
