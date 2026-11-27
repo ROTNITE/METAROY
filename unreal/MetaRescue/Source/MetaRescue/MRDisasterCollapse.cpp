@@ -7,6 +7,8 @@
 #include "Engine/World.h"
 #include "Materials/MaterialInterface.h"
 #include "ProceduralMeshComponent.h"
+#include "PhysicsEngine/BodyInstance.h"
+#include "PhysicsEngine/BodySetup.h"
 #include "Misc/Crc.h"
 
 void AMRWorld::RefreshCitySmokeHeights()
@@ -146,15 +148,14 @@ bool AMRWorld::CollapseCityStructure(const FMRDisturbance& Event)
 
 void AMRWorld::RefreshDebrisCells()
 {
-    if(!Environment.bRevisedDisasters||Environment.Time+1.e-9<NextDebrisRefresh)return;
+    if(!Environment.bRevisedDisasters||(!bStaticDebrisDirty&&Environment.Time+1.e-9<NextDebrisRefresh))return;
     NextDebrisRefresh=Environment.Time+.5;
-    TSet<FIntPoint> Current;
-    const auto Add=[&](const FBox& Bounds)
+    const auto Add=[&](TSet<FIntPoint>& Into,const FBox& Bounds)
     {
         if(!Bounds.IsValid||Bounds.Min.ContainsNaN()||Bounds.Max.ContainsNaN()||
            Bounds.GetSize().Z<30||FMath::Max(Bounds.GetSize().X,Bounds.GetSize().Y)<60)return;
-        // The cell is a conservative navigation observation, not an invisible
-        // collider. High roof debris must not block a street beneath it.
+        // A conservative cell for route planning, not an invisible collider.
+        // Use the physical support height, including subsequent cavities.
         const auto Low=FMRDistrictEnvironment::Cell(Bounds.Min);
         const auto High=FMRDistrictEnvironment::Cell(Bounds.Max);
         const int32 Limit=2*GridSize-1;
@@ -166,27 +167,55 @@ void AMRWorld::RefreshDebrisCells()
                 P.X=FMath::Clamp(P.X,Bounds.Min.X,Bounds.Max.X);
                 P.Y=FMath::Clamp(P.Y,Bounds.Min.Y,Bounds.Max.Y);
                 const double Ground=UrbanTerrain?UrbanTerrain->GroundHeight(P):InitialGroundHeightCm(P);
-                if(Bounds.Min.Z<=Ground+100&&Bounds.Max.Z>=Ground+20)
-                    Current.Add(Cell);
+                if(Bounds.Min.Z<=Ground+100&&Bounds.Max.Z>=Ground+20)Into.Add(Cell);
             }
     };
-    for(USceneComponent* Item:CoreEventComponents)
+    const auto IsDebris=[](const UPrimitiveComponent* C)
     {
-        auto* Primitive=Cast<UPrimitiveComponent>(Item);
-        if(!IsValid(Primitive)||Primitive->GetCollisionEnabled()==ECollisionEnabled::NoCollision||
-           (!Primitive->ComponentHasTag(TEXT("StructuralDebris"))&&!Primitive->ComponentHasTag(TEXT("DisasterVehicleWreck"))))continue;
-        if(auto* Batch=Cast<UInstancedStaticMeshComponent>(Primitive))
+        return IsValid(C)&&C->GetCollisionEnabled()!=ECollisionEnabled::NoCollision&&
+            (C->ComponentHasTag(TEXT("StructuralDebris"))||C->ComponentHasTag(TEXT("DisasterVehicleWreck")));
+    };
+    const auto PhysicalBounds=[](UPrimitiveComponent* C)
+    {
+        // The invisible procedural convex body of a falling slab may have no
+        // render section at all. Render bounds are not its Chaos bounds.
+        if(auto* Body=C->GetBodyInstance();Body&&Body->IsValidBodyInstance())
         {
-            if(!Batch->GetStaticMesh())continue;
-            const auto Local=Batch->GetStaticMesh()->GetBounds();
-            for(int32 I=0;I<Batch->GetInstanceCount();++I)
-            {
-                FTransform Pose;
-                if(Batch->GetInstanceTransform(I,Pose,true))Add(Local.TransformBy(Pose).GetBox());
-            }
+            const FBox Bounds=Body->GetBodyBounds();if(Bounds.IsValid)return Bounds;
         }
-        else Add(Primitive->Bounds.GetBox());
+        if(auto* Setup=C->GetBodySetup();Setup&&Setup->AggGeom.GetElementCount()>0)
+            return Setup->AggGeom.CalcAABB(C->GetComponentTransform());
+        return C->Bounds.GetBox();
+    };
+    if(bStaticDebrisDirty)
+    {
+        StaticDebrisCells.Reset();bStaticDebrisDirty=false;
+        for(USceneComponent* Item:CoreEventComponents)
+        {
+            auto* Primitive=Cast<UPrimitiveComponent>(Item);
+            if(!IsDebris(Primitive)||Primitive->Mobility!=EComponentMobility::Static)continue;
+            if(auto* Batch=Cast<UInstancedStaticMeshComponent>(Primitive))
+            {
+                if(!Batch->GetStaticMesh())continue;
+                const auto Local=Batch->GetStaticMesh()->GetBounds();
+                const auto* Setup=Batch->GetStaticMesh()->GetBodySetup();
+                for(int32 I=0;I<Batch->GetInstanceCount();++I)
+                {
+                    FTransform Pose;if(!Batch->GetInstanceTransform(I,Pose,true))continue;
+                    const FBox Bounds=Setup&&Setup->AggGeom.GetElementCount()>0?
+                        Setup->AggGeom.CalcAABB(Pose):Local.TransformBy(Pose).GetBox();
+                    Add(StaticDebrisCells,Bounds);
+                }
+            }
+            else Add(StaticDebrisCells,PhysicalBounds(Primitive));
+        }
     }
+    TSet<FIntPoint> Current=StaticDebrisCells;
+    // The dynamic body list is bounded by the existing per-event Chaos
+    // budget. Do not iterate every decal, emitter and static instance at 2Hz.
+    for(UProceduralMeshComponent* Piece:PhysicsPieces)
+        if(IsDebris(Piece)&&Piece->Mobility!=EComponentMobility::Static)
+            Add(Current,PhysicalBounds(Piece));
     bool Changed=Current.Num()!=DebrisCells.Num();
     if(!Changed)for(const auto& Cell:Current)if(!DebrisCells.Contains(Cell)){Changed=true;break;}
     if(Changed)
@@ -194,7 +223,7 @@ void AMRWorld::RefreshDebrisCells()
         for(const auto& Cell:Current)DebrisHistory.Add(Cell);
         DebrisCells=MoveTemp(Current);
         ++Environment.Revision;
-        UE_LOG(LogTemp,Verbose,TEXT("MR_DEBRIS_OCCUPANCY time=%.3f blocked=%d historical=%d"),
-            Environment.Time,DebrisCells.Num(),DebrisHistory.Num());
+        UE_LOG(LogTemp,Verbose,TEXT("MR_DEBRIS_OCCUPANCY time=%.3f blocked=%d static=%d historical=%d"),
+            Environment.Time,DebrisCells.Num(),StaticDebrisCells.Num(),DebrisHistory.Num());
     }
 }
