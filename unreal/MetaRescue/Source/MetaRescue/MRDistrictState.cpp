@@ -23,10 +23,10 @@ float AMRWorld::MovementCost(const FVector& P) const
 {return bRescueQuarter?(bCityLayout&&!ElevatedSupportHeightCm(P).IsSet()?CityGroundCost(P):1.f)*FMath::Max(Environment.Cost(P,false),WaterDepth(P)>4?2.f:1.f):1.f;}
 float AMRWorld::GroundSpeedFactor(const FVector& P) const
 { return 1.f/MovementCost(P); }
-bool AMRWorld::IsUnsafeGround(const FVector& P) const
+bool AMRWorld::IsUnsafeGround(const FVector& P,bool IncludeDebris) const
 {
     return bRescueQuarter&&(WaterDepth(P)>MRDistrictSettings::UnsafeWaterCm||Environment.Unsafe(P,false)||
-        (Environment.bRevisedDisasters&&DebrisCells.Contains(FMRDistrictEnvironment::Cell(P)))||
+        (IncludeDebris&&Environment.bRevisedDisasters&&DebrisCells.Contains(FMRDistrictEnvironment::Cell(P)))||
         (!bCityLayout&&P.X>6800&&P.X<8800&&P.Y>14075&&P.Y<14925)||
         (bCityLayout&&((P.X<0&&!ElevatedSupportHeightCm(P).IsSet())||P.Y<0||P.X>GridSize*1000||P.Y>GridSize*1000)));
 }
