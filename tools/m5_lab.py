@@ -45,6 +45,7 @@ MAX_ARCHIVE_FILES=2000
 ID=re.compile(r'[a-zA-Z0-9_-]{1,48}\Z')
 RUN_ID=re.compile(r'[0-9a-f]{32}\Z')
 ACTIVE={'queued','running','stopping'}
+TERMINAL={'completed','failed','cancelled','timed_out','interrupted'}
 
 
 def now():
@@ -152,13 +153,28 @@ def stop_child(process):
 
 
 def read_report(path):
-    if not path.is_file() or path.is_symlink() or path.stat().st_size>MAX_REPORT:
-        return {}
     try:
-        result=strict_json(path.read_bytes(),maximum_bytes=MAX_REPORT)
+        if path.is_symlink() or not path.is_file():
+            return {}
+        with path.open('rb') as stream:
+            raw=stream.read(MAX_REPORT+1)
+        result=strict_json(raw,maximum_bytes=MAX_REPORT)
         return result if isinstance(result,dict) else {}
     except (ValueError,OSError):
         return {}
+
+
+def valid_saved_series(saved,ident):
+    # Old archives can omit newer metadata; corrupt types must not prevent
+    # startup or poison the catalog. Never rewrite an invalid input.
+    def state(value):
+        return isinstance(value,str) and value in ACTIVE|TERMINAL
+    rows=saved.get('rows')
+    return (saved.get('id')==ident and state(saved.get('state')) and
+            isinstance(saved.get('spec',{}),dict) and
+            isinstance(rows,list) and all(isinstance(row,dict) and
+                state(row.get('state')) and isinstance(row.get('result',{}),dict)
+                for row in rows))
 
 
 def summarize(report):
@@ -260,11 +276,13 @@ class Lab:
         self.cancelled=set();self.active=None;self.worker=None
         self._session_revision=uuid.uuid4().hex;self._revision=0
         self._ordered_cache=None;self._matrix_cache=None
+        self.invalid_archives=0
         for path in self.root.iterdir():
             if path.is_symlink() or not path.is_dir() or not RUN_ID.fullmatch(path.name):
                 continue
             saved=read_report(path/'series.json')
-            if saved.get('id')!=path.name or not isinstance(saved.get('rows'),list):
+            if not valid_saved_series(saved,path.name):
+                self.invalid_archives+=1
                 continue
             if saved.get('state') in ACTIVE:
                 saved.update(state='interrupted',ended=now(),note='Previous laboratory process ended; external episode state unknown.')
@@ -289,16 +307,29 @@ class Lab:
         return f'{self._session_revision}:{self._revision}'
 
     def start(self,raw):
-        spec=self.registry.spec(raw)
+        if not isinstance(raw,dict):
+            raise ValueError('Expected trial specification')
+        repeat_of=raw.get('repeat_of')
+        if 'repeat_of' in raw and (not isinstance(repeat_of,str) or not RUN_ID.fullmatch(repeat_of)):
+            raise ValueError('Invalid repeat series ID')
+        spec=self.registry.spec({k:v for k,v in raw.items() if k!='repeat_of'})
         with self.lock:
             if self.active is not None:
                 raise RuntimeError('Another series is active')
+            if repeat_of is not None:
+                original=self.runs.get(repeat_of)
+                if original is None or original['state'] not in TERMINAL:
+                    raise ValueError('Repeat source must be a saved terminal series')
+                if original.get('spec')!=spec:
+                    raise ValueError('Repeat configuration or registered endpoint changed; create a new trial explicitly')
             ident=uuid.uuid4().hex;folder=self.root/ident;folder.mkdir()
             modes=('strict','declared') if spec['mode']=='both' else (spec['mode'],)
             rows=[{'index':i,'seed':seed,'mode':mode,'state':'queued'}
                   for i,(seed,mode) in enumerate((s,m) for s in spec['seeds'] for m in modes)]
             run={'id':ident,'created':now(),'state':'queued','spec':spec,'rows':rows,
                  'official_m5':None,'note':'Diagnostic trials; no agreed external Q score.'}
+            if repeat_of is not None:
+                run['repeat_of']=repeat_of
             self.persist(run);self.runs[ident]=run;self.active=ident
             self.worker=threading.Thread(target=self.execute,args=(ident,),daemon=True)
             self.worker.start()
@@ -392,7 +423,8 @@ class Lab:
                              'spec':{k:spec.get(k) for k in ('controller','environment','mode')},
                              'trial_count':len(results),
                              'passed_count':sum(r.get('result',{}).get('exchange')=='passed' for r in results)})
-            return {'series':rows,'total':len(ordered),'offset':offset,'limit':limit,'active_id':self.active,'revision':self.revision()}
+            return {'series':rows,'total':len(ordered),'offset':offset,'limit':limit,'active_id':self.active,'revision':self.revision(),
+                    'invalid_archives':self.invalid_archives}
 
     def matrix(self,offset=0,limit=30,mode='all',profile='all'):
         if not 0<=offset<=1000000 or not 1<=limit<=100 or mode not in ('all','strict','declared') or profile not in ('all','A','K','none'):

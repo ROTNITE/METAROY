@@ -57,6 +57,11 @@ def main():
                     page.locator('#timeline-reset').click()
                     expect(page.locator('#timeline')).to_contain_text('decision · metarescue')
                     assert not errors,errors
+                    page.locator('#repeat').click()
+                    expect(page.locator('#selection-summary')).to_contain_text('точный повтор')
+                    expect(page.locator('#confirm')).not_to_be_checked()
+                    page.locator('#seeds').fill('42')
+                    expect(page.locator('#selection-summary')).not_to_contain_text('точный повтор')
                     page.screenshot(path=str(args.output/'m5-desktop.png'),full_page=True)
                     page.reload();expect(page.locator('#exchange-stat')).to_have_text('1/1',timeout=10000)
                     page.set_viewport_size({'width':390,'height':844})

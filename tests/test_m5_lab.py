@@ -258,3 +258,53 @@ class CatalogPerformance(TestCase):
         self.assertEqual(repeated['mission_success'],0)
         self.assertEqual(repeated['truth_trials'],0)
         self.assertEqual(repeated['inputs_preserved'],2)
+
+
+class ArchiveAndRepeatTests(TestCase):
+    def test_bad_archives_are_skipped_not_rewritten(self):
+        with TemporaryDirectory() as temp:
+            root=Path(temp)
+            broken=[{'state':'running','rows':[None]},
+                    {'state':'completed','rows':[{'state':'completed','result':None}]},
+                    {'state':'completed','rows':[],'spec':[]},
+                    {'state':[],'rows':[]}]
+            original={}
+            for i,body in enumerate(broken):
+                ident=f'{i:032x}';folder=root/ident;folder.mkdir()
+                path=folder/'series.json'
+                path.write_text(json.dumps(dict(body,id=ident)))
+                original[path]=path.read_bytes()
+            valid='f'*32;folder=root/valid;folder.mkdir()
+            (folder/'series.json').write_text(json.dumps({'id':valid,'state':'completed','rows':[]}))
+            lab=Lab(root,Registry())
+            page=lab.catalog()
+            self.assertEqual(page['invalid_archives'],len(broken))
+            self.assertEqual([row['id'] for row in page['series']],[valid])
+            self.assertEqual(lab.matrix()['cells'],[])
+            for path,wire in original.items():
+                self.assertEqual(path.read_bytes(),wire)
+
+    def test_exact_repeat_rejects_changed_endpoint_and_inputs(self):
+        with TemporaryDirectory() as temp:
+            root=Path(temp)
+            body={'controller':'metarescue','environment':'peer','profile':'K','mode':'strict',
+                  'seeds':[7],'timeout':30,'confirm_reset':True}
+            first='a'*32;folder=root/first;folder.mkdir()
+            spec=Registry(['peer=8140']).spec(body)
+            path=folder/'series.json'
+            path.write_text(json.dumps({'id':first,'state':'completed','spec':spec,'rows':[]}))
+            original=path.read_bytes()
+            other=Lab(root,Registry(['peer=8141']))
+            with self.assertRaisesRegex(ValueError,'endpoint changed'):
+                other.start(dict(body,repeat_of=first))
+            lab=Lab(root,Registry(['peer=8140']))
+            for changes in ({'seeds':[8]},{'timeout':31},{'repeat_of':'b'*32},{'repeat_of':None}):
+                with self.subTest(changes=changes),self.assertRaises(ValueError):
+                    lab.start(dict(body,**{'repeat_of':first,**changes}))
+            self.assertEqual(len(list(root.iterdir())),1)
+            with patch('tools.m5_lab.threading.Thread'):
+                new=lab.start(dict(body,repeat_of=first))
+            self.assertNotEqual(new['id'],first)
+            self.assertEqual(new['repeat_of'],first)
+            self.assertEqual(new['spec'],spec)
+            self.assertEqual(path.read_bytes(),original)

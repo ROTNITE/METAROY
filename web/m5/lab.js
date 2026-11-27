@@ -4,6 +4,7 @@ const activeStates=new Set(['queued','running','stopping']);
 const labels={queued:'В очереди',running:'Выполняется',stopping:'Прерывание',completed:'Завершена',failed:'Ошибка',cancelled:'Прервана',timed_out:'Тайм-аут',interrupted:'Незавершённая',passed:'Успешный',success:'Успех',time_limit:'Лимит времени',safe_stopped:'Безопасная остановка',unverified:'Не подтверждена'};
 let token='',registry={controllers:[],environments:[]},series=[],selected=null,selectedRun=null,activeId=null,offset=0,total=0,requestBusy=false,refreshBusy=false,refreshTimer=null,lastHistory='',lastRender='';
 let matrixOffset=0,matrixRequest=0,lastRevision=null,refreshAgain=false,reportRequest=0;
+let repeatOf=null,invalidArchives=0;
 const display=value=>value===undefined||value===null?'—':(labels[value]||String(value));
 const appendCell=(tr,value,cls)=>{const td=document.createElement('td');td.textContent=display(value);if(cls)td.className=cls;tr.append(td);return td;};
 const button=(text,handler)=>{const b=document.createElement('button');b.type='button';b.textContent=text;b.addEventListener('click',handler);return b;};
@@ -25,7 +26,8 @@ function seeds(){
 function spec(){
   return {controller:byId('controller').value,environment:byId('environment').value,profile:byId('profile').value,
     mode:byId('mode').value,seeds:seeds(),timeout:Number(byId('timeout').value),
-    decide_path:byId('decide-path').value,decide_profile:byId('decide-profile').value,confirm_reset:byId('confirm').checked};
+    decide_path:byId('decide-path').value,decide_profile:byId('decide-profile').value,confirm_reset:byId('confirm').checked,
+    ...(repeatOf?{repeat_of:repeatOf}:{})};
 }
 function syncForm(){
   const c=item('controller'),e=item('environment');
@@ -43,7 +45,7 @@ function syncForm(){
   try{
     const n=seeds().length*(byId('mode').value==='both'?2:1);
     if(e&&e.kind==='external'&&c&&c.id!=='metarescue'){valid=false;message='Для внешней среды выберите MetaRescue.';}
-    else message=n+' испытаний · search_and_rescue · AI OFF · последовательный запуск';
+    else message=n+' испытаний · search_and_rescue · AI OFF · последовательный запуск'+(repeatOf?' · точный повтор '+repeatOf.slice(0,8):'');
   }catch(error){valid=false;message=error.message;}
   byId('selection-summary').textContent=message;
   byId('start').disabled=!valid||!byId('confirm').checked||requestBusy||!!activeId;
@@ -53,10 +55,10 @@ function selectOptions(role){
   for(const row of registry[role+'s']){const o=document.createElement('option');o.value=row.id;o.textContent=row.name;select.append(o);}
 }
 function renderHistory(){
-  const signature=JSON.stringify([series,offset,total,selected]);
+  const signature=JSON.stringify([series,offset,total,selected,invalidArchives]);
   if(signature===lastHistory)return;
   lastHistory=signature;
-  byId('page-label').textContent=total?String(offset+1)+'–'+Math.min(offset+series.length,total)+' из '+total:'0 серий';
+  byId('page-label').textContent=(total?String(offset+1)+'–'+Math.min(offset+series.length,total)+' из '+total:'0 серий')+(invalidArchives?' · повреждённых архивов: '+invalidArchives:'');
   byId('prev-page').disabled=offset===0;
   byId('next-page').disabled=offset+series.length>=total;
   const body=byId('history');body.replaceChildren();
@@ -81,7 +83,7 @@ function render(){
   lastRender=signature;
   const rows=run?run.rows:[],finished=rows.filter(r=>!activeStates.has(r.state)).length;
   byId('series-state').textContent=run?display(run.state):'Ожидание запуска';
-  byId('cancel').disabled=!run||!activeStates.has(run.state)||run.state==='stopping';
+  byId('cancel').disabled=!run||activeId!==run.id||!activeStates.has(run.state)||run.state==='stopping';
   byId('repeat').disabled=!run||!!activeId;
   byId('progress').max=Math.max(rows.length,1);byId('progress').value=finished;
   byId('progress-text').textContent=finished+' / '+rows.length+' испытаний';
@@ -108,7 +110,7 @@ async function refresh(){
   if(refreshBusy){refreshAgain=true;return;}refreshBusy=true;
   try{
     const page=await api('/api/series?offset='+offset+'&limit=30');
-    series=page.series;total=page.total;activeId=page.active_id;
+    series=page.series;total=page.total;activeId=page.active_id;invalidArchives=page.invalid_archives||0;
     if(!selected)selected=activeId||(series[0]&&series[0].id)||null;
     const revisionChanged=page.revision!==lastRevision;
     const requested=selected;
@@ -214,33 +216,44 @@ async function showReport(id,index){
 }
 byId('trial-form').addEventListener('submit',async event=>{
   event.preventDefault();requestBusy=true;syncForm();byId('form-message').textContent='';
-  try{const run=await api('/api/series',spec());selected=run.id;offset=0;byId('confirm').checked=false;await refresh();}
+  try{const run=await api('/api/series',spec());selected=run.id;offset=0;repeatOf=null;byId('confirm').checked=false;await refresh();}
   catch(error){byId('form-message').textContent=error.message;}
   finally{requestBusy=false;syncForm();}
 });
-for(const id of ['controller','environment','profile','mode','seeds','timeout','confirm'])byId(id).addEventListener('input',()=>{
+for(const id of ['controller','environment','profile','mode','seeds','timeout','decide-path','decide-profile','confirm'])byId(id).addEventListener('input',()=>{
+  if(id!=='confirm')repeatOf=null;
   if(id==='controller'||id==='environment')byId(id+'-probe').hidden=true;
   syncForm();
 });
-byId('single').addEventListener('click',()=>{byId('seeds').value='89725161';syncForm();});
-byId('three').addEventListener('click',()=>{byId('seeds').value='89725161, 89725187, 89725213';syncForm();});
+byId('single').addEventListener('click',()=>{repeatOf=null;byId('seeds').value='89725161';syncForm();});
+byId('three').addEventListener('click',()=>{repeatOf=null;byId('seeds').value='89725161, 89725187, 89725213';syncForm();});
 document.querySelectorAll('.probe').forEach(b=>b.addEventListener('click',async()=>{
   const role=b.dataset.role,area=byId(role+'-probe'),component=item(role);
   if(!component)return;b.disabled=true;area.hidden=false;area.textContent='Проверяем…';
-  try{const value=await api('/api/probe',{role,id:component.id});area.textContent=JSON.stringify(value,null,2);}
-  catch(error){area.textContent=error.message;}
+  try{const value=await api('/api/probe',{role,id:component.id});if(item(role)?.id===component.id)area.textContent=JSON.stringify(value,null,2);}
+  catch(error){if(item(role)?.id===component.id)area.textContent=error.message;}
   finally{b.disabled=false;}
 }));
 byId('cancel').addEventListener('click',async()=>{
-  if(!selected)return;
+  const id=selectedRun?.id;
+  if(!id||id!==activeId)return;
   if(!window.confirm('Прервать локальный процесс? Состояние внешней миссии может остаться неизвестным.'))return;
-  try{await api('/api/series/'+selected+'/cancel',{});await refresh();}
+  try{await api('/api/series/'+id+'/cancel',{});await refresh();}
   catch(error){byId('form-message').textContent=error.message;}
 });
 byId('repeat').addEventListener('click',()=>{
-  const run=selectedRun;if(!run)return;const s=run.spec;
+  const run=selectedRun;if(!run)return;const s=run.spec||{};
+  repeatOf=null;byId('confirm').checked=false;
+  const c=registry.controllers.find(x=>x.id===s.controller);
+  const e=registry.environments.find(x=>x.id===s.environment);
+  if(!c||!e||(c.origin||null)!==s.controller_origin||(e.origin||null)!==s.environment_origin||
+     !Array.isArray(s.seeds)){
+    byId('form-message').textContent='Точный повтор невозможен: изменилось подключение или архив не содержит полного TrialSpec.';
+    syncForm();return;
+  }
   for(const [id,key] of [['controller','controller'],['environment','environment'],['profile','profile'],['mode','mode'],['timeout','timeout'],['decide-path','decide_path'],['decide-profile','decide_profile']])byId(id).value=s[key];
-  byId('seeds').value=s.seeds.join(', ');byId('confirm').checked=false;syncForm();byId('controller').focus();
+  byId('seeds').value=s.seeds.join(', ');repeatOf=run.id;byId('form-message').textContent='';
+  syncForm();byId('controller').focus();
 });
 byId('prev-page').addEventListener('click',()=>{offset=Math.max(0,offset-30);refresh();});
 byId('next-page').addEventListener('click',()=>{offset+=30;refresh();});
