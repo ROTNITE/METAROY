@@ -1,5 +1,6 @@
 #include "MRWorld.h"
 #include "MRUrbanWater.h"
+#include "MRUrbanTerrain.h"
 #include "MRAgent.h"
 #include "Components/StaticMeshComponent.h"
 #include "Components/PointLightComponent.h"
@@ -26,6 +27,7 @@ float AMRWorld::GroundSpeedFactor(const FVector& P) const
 bool AMRWorld::IsUnsafeGround(const FVector& P,bool IncludeDebris) const
 {
     return bRescueQuarter&&(WaterDepth(P)>MRDistrictSettings::UnsafeWaterCm||Environment.Unsafe(P,false)||
+        (Environment.bRevisedDisasters&&UrbanTerrain&&UrbanTerrain->DropCm(P)>20)||
         (IncludeDebris&&Environment.bRevisedDisasters&&DebrisCells.Contains(FMRDistrictEnvironment::Cell(P)))||
         (!bCityLayout&&P.X>6800&&P.X<8800&&P.Y>14075&&P.Y<14925)||
         (bCityLayout&&((P.X<0&&!ElevatedSupportHeightCm(P).IsSet())||P.Y<0||P.X>GridSize*1000||P.Y>GridSize*1000)));

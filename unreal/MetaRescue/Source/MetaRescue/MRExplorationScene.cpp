@@ -70,7 +70,7 @@ void FMRExplorationScene::Reset(const FMRExplorationMemory& Knowledge)
     SceneryInstances.Empty();DeliveredReplacements.Empty();GroundRenderers.Empty();
     BackdropBuilt=false;RevealDirty=true;LastRevealEpoch=-1;
     Grid=Knowledge.Grid;Sources.Empty();SourceLookup.Empty();SourceBins.Empty();Objects.Empty();Surfaces.Empty();
-    Actors.Empty();Effects.Empty();ActorRenderers.Empty();ObjectInstances.Empty();ObjectBatches.Empty();ObjectProcedurals.Empty();
+    Actors.Empty();Effects.Empty();EffectObservedAt.Empty();ActorRenderers.Empty();ObjectInstances.Empty();ObjectBatches.Empty();ObjectProcedurals.Empty();
     EffectRenderers.Empty();TerrainRenderers.Empty();Materials.Empty();
     DirtyTiles.Empty();DirtyActors.Empty();DirtyObjects.Empty();EffectsDirty=false;Revision=0;LastSignature=-1;CatalogAt=-1;
     RefreshSources(0);
@@ -130,8 +130,14 @@ void FMRExplorationScene::RefreshSources(double At)
     TArray<UStaticMeshComponent*> Meshes;TArray<UProceduralMeshComponent*> Procedural;
     World->GetComponents(Meshes);World->GetComponents(Procedural);
     uint32 Signature=HashCombineFast(GetTypeHash(Meshes.Num()),GetTypeHash(Procedural.Num()));
-    for(const auto* Mesh:Meshes)if(const auto* Batch=Cast<UInstancedStaticMeshComponent>(Mesh))
-        Signature=HashCombineFast(Signature,HashCombineFast(Mesh->GetUniqueID(),GetTypeHash(Batch->GetInstanceCount())));
+    for(const auto* Mesh:Meshes)
+    {
+        if(World->Environment.bRevisedDisasters)Signature=HashCombineFast(Signature,Mesh->GetUniqueID());
+        if(const auto* Batch=Cast<UInstancedStaticMeshComponent>(Mesh))
+            Signature=HashCombineFast(Signature,HashCombineFast(Mesh->GetUniqueID(),GetTypeHash(Batch->GetInstanceCount())));
+    }
+    if(World->Environment.bRevisedDisasters)
+        for(const auto* Proc:Procedural)Signature=HashCombineFast(Signature,Proc->GetUniqueID());
     bool Reindex=int32(Signature)!=LastSignature;
     if(Reindex)
     {
@@ -355,7 +361,13 @@ void FMRExplorationScene::Apply(const FMRSceneReport& Report,const FMRExploratio
     }
     for(const auto& Effect:Report.Effects)
     {
-        const auto* Previous=Effects.Find(Effect.Id);if(Previous&&Previous->ObservedAt>=Effect.ObservedAt)continue;
+        const auto* Previous=Effects.Find(Effect.Id);
+        if(World->Environment.bRevisedDisasters)
+        {
+            if(const auto* Last=EffectObservedAt.Find(Effect.Id);Last&&*Last>=Effect.ObservedAt)continue;
+            EffectObservedAt.Add(Effect.Id,Effect.ObservedAt);
+        }
+        else if(Previous&&Previous->ObservedAt>=Effect.ObservedAt)continue;
         const bool Present=Effect.Visual.Mesh.IsValid()||!Effect.Visual.Procedural.IsEmpty();
         if(!Present){if(Previous){Effects.Remove(Effect.Id);EffectsDirty=Changed=true;}continue;}
         Effects.Add(Effect.Id,Effect);EffectsDirty=Changed=true;

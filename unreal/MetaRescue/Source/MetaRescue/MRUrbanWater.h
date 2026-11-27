@@ -29,7 +29,7 @@ public:
     void TerrainChanged(FBox Bounds);
     TSharedPtr<FJsonObject> PrivateSnapshot() const;
 private:
-    struct FTile {int32 X=0,Y=0;TWeakObjectPtr<UProceduralMeshComponent> Mesh;};
+    struct FTile {int32 X=0,Y=0;TWeakObjectPtr<UProceduralMeshComponent> Mesh;TArray<int32> Topology;};
     struct FFootprint
     {
         FVector2D Center,Half;

@@ -221,7 +221,24 @@ FVector AMRAgent::SafeVelocity(const FVector& Requested,float Dt)
         {
             StopReason=TEXT("hazard_on_route");StopObstacle=TEXT("restricted_volume");Desired=FVector::ZeroVector;
         }
-        if(!bAerial&&StopReason.IsEmpty())for(float Fraction:{0.f,.35f,.7f,1.f})
+        // Revised roads: inspect both track envelopes over the braking
+        // distance, including the front of the chassis. The legacy four
+        // center samples can miss a rim under just one track.
+        if(!bAerial&&StopReason.IsEmpty()&&Mission->Environment.bRevisedDisasters)
+        {
+            const FVector Along=Direction.GetSafeNormal2D(),Side(-Along.Y,Along.X,0);
+            const double Reach=LookAhead+125.;
+            const int32 Count=FMath::Max(1,FMath::CeilToInt(Reach/50.));
+            for(int32 I=0;I<=Count&&StopReason.IsEmpty();++I)
+                for(double Offset:{0.,-70.,70.})
+                {
+                    const FVector Sensed=P+Along*(Reach*I/Count)+Side*Offset;
+                    if(!Mission->IsUnsafeGround(Sensed))continue;
+                    StopReason=TEXT("hazard_on_route");Desired=FVector::ZeroVector;
+                    SensedBlocker=FBox(Sensed-FVector(100,100,100),Sensed+FVector(100,100,100));break;
+                }
+        }
+        else if(!bAerial&&StopReason.IsEmpty())for(float Fraction:{0.f,.35f,.7f,1.f})
             if(Mission->IsUnsafeGround(P+Direction*LookAhead*Fraction))
             {
                 StopReason=TEXT("hazard_on_route");Desired=FVector::ZeroVector;

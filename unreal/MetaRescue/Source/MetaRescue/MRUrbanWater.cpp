@@ -253,9 +253,15 @@ void FMRUrbanWater::Render()
             const int32 A=Y*(W+1)+X;Triangles.Append({A,A+W+2,A+1,A,A+W+1,A+W+2});
             const FVector P=Center(Tile.X+X,Tile.Y+Y);History.Add(FMRDistrictEnvironment::Cell(P));
         }
-        auto* Mesh=Tile.Mesh.Get();if(Triangles.IsEmpty()){if(Mesh)Mesh->ClearAllMeshSections();continue;}
+        auto* Mesh=Tile.Mesh.Get();
+        if(Triangles.IsEmpty())
+        {
+            if(Mesh&&(!World->Environment.bRevisedDisasters||!Tile.Topology.IsEmpty()))Mesh->ClearAllMeshSections();
+            Tile.Topology.Reset();continue;
+        }
         if(!Mesh)
         {
+            Tile.Topology.Reset();
             Mesh=NewObject<UProceduralMeshComponent>(World);World->AddInstanceComponent(Mesh);Mesh->SetupAttachment(World->GetRootComponent());
             Mesh->SetMobility(EComponentMobility::Movable);Mesh->SetCollisionEnabled(ECollisionEnabled::NoCollision);
             Mesh->SetCastShadow(false);Mesh->SetAffectDistanceFieldLighting(false);Mesh->ComponentTags={TEXT("UrbanFlood")};
@@ -280,7 +286,20 @@ void FMRUrbanWater::Render()
                 float((128+FMath::Clamp(Flow.Y/800.,-1.,1.)*127)/255.),float(FMath::Clamp(Depth/400.,0.,1.)),1.f);
             UV.Add(FVector2D((Tile.X+X)*CellCm,(Tile.Y+Y)*CellCm)/500.);
         }
-        Mesh->CreateMeshSection_LinearColor(0,Vertices,Triangles,Normals,UV,Colors, {},false);
+        if(World->Environment.bRevisedDisasters)
+        {
+            // The hydrology is unchanged. Replace the index buffer only on a
+            // wet/dry topology transition; all stage/flow/depth vertices
+            // still update on every physical step, with linear field colors.
+            if(Tile.Topology==Triangles&&Mesh->GetProcMeshSection(0))
+                Mesh->UpdateMeshSection_LinearColor(0,Vertices,Normals,UV,Colors,{},false);
+            else
+            {
+                Mesh->CreateMeshSection_LinearColor(0,Vertices,Triangles,Normals,UV,Colors,{},false,false);
+                Tile.Topology=MoveTemp(Triangles);
+            }
+        }
+        else Mesh->CreateMeshSection_LinearColor(0,Vertices,Triangles,Normals,UV,Colors,{},false);
     }
 }
 

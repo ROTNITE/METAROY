@@ -146,7 +146,9 @@ class WaterRoute:
                 while cell != source:
                     route.append(list(center(cell)))
                     cell = parent[cell]
-                return route[::-1]
+                # The declared native follow_route limit is 4096; keep
+                # room for the precise final approach appended by the caller.
+                return route[::-1] if len(route)<=4095 else None
             for dx, dy in ((0, 1), (0, -1), (1, 0), (-1, 0), (1, 1), (1, -1), (-1, 1), (-1, -1)):
                 peer = (cell[0] + dx, cell[1] + dy)
                 there = center(peer)
