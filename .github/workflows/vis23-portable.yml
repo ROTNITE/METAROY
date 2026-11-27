@@ -40,6 +40,8 @@ jobs:
           git fetch --depth=1 origin d2762555fcab94ed4651f76a96938231c8827b0b
           git diff --check FETCH_HEAD HEAD
           git worktree add --detach "$RUNNER_TEMP/vis23-baseline" FETCH_HEAD
+      - name: Syntax check environment, tools and Unreal authoring scripts
+        run: python -B -c "import ast,pathlib; files=[p for d in ('environment','tools','unreal/tools') for p in pathlib.Path(d).rglob('*.py')]; [ast.parse(p.read_text(encoding='utf-8-sig'), filename=str(p)) for p in files]; print('syntax files:',len(files))"
       - name: Python tests
         run: python -B -X utf8 -m unittest discover -s tests -v
       - name: Portable Universal Core conformance
