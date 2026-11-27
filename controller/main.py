@@ -234,7 +234,7 @@ def main():
                 rejected = False
                 for attempt in range(step_attempts):
                     try:
-                        response=client.episode_response(client.submit(wire),step=True)
+                        response=client.episode_response(client.submit(wire),step=True,request=wire)
                         break
                     except TransportFailure as error:
                         record('uncertain_step',{'decision_id':request['decision_id'],'attempt':attempt,

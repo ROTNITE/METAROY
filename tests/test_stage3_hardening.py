@@ -4,7 +4,8 @@ from unittest import TestCase
 
 from conformance.reference_environment import Trial
 from contracts.protocol import ProtocolError, validate_observation
-from controller.client import EnvironmentClient, TransportFailure
+from controller.client import EnvironmentClient, PreparedRequest, TransportFailure
+from contracts.protocol import encode
 from controller.public_core import PublicCore
 from tools.goal_evidence import GoalEvidence
 
@@ -66,6 +67,42 @@ class PublicBoundary(TestCase):
         with self.assertRaises(TransportFailure) as result:
             EnvironmentClient().episode_response(response)
         self.assertTrue(result.exception.state_may_have_changed)
+
+
+    def test_self_consistent_wrong_reply_is_not_a_valid_step(self):
+        frame = self.frame()
+        wire = EnvironmentClient.prepare_step({'request_id':'sent','episode_id':frame['episode_id'],'time':0.})
+        for request_id, episode_id, stamp, status in (
+                ('wrong', frame['episode_id'], 1., 'running'),
+                ('sent', 'wrong-episode', 1., 'running'),
+                ('sent', frame['episode_id'], 0., 'running')):
+            obs = {**frame,'request_id':request_id,'episode_id':episode_id,'time':stamp}
+            response = {'protocol_version':'1.0','episode_id':episode_id,'request_id':request_id,
+                        'time':stamp,'status':status,'observation':obs,
+                        'command_results':[],'events':[],'metrics':{}}
+            with self.subTest(request_id=request_id, episode_id=episode_id, stamp=stamp):
+                with self.assertRaises(TransportFailure) as result:
+                    EnvironmentClient().episode_response(response,step=True,request=wire)
+                self.assertTrue(result.exception.state_may_have_changed)
+
+    def test_matching_response_advances_time(self):
+        frame = self.frame()
+        wire = EnvironmentClient.prepare_step({'request_id':'sent','episode_id':frame['episode_id'],'time':0.})
+        frame.update(time=1.,request_id='sent')
+        response = {'protocol_version':'1.0','episode_id':frame['episode_id'],'request_id':'sent',
+                    'time':1.,'status':'running','observation':frame,
+                    'command_results':[],'events':[],'metrics':{}}
+        self.assertEqual(EnvironmentClient().episode_response(response,step=True,request=wire),response)
+
+    def test_reset_cannot_adopt_nonzero_or_uncorrelated_frame(self):
+        frame = self.frame()
+        wire = PreparedRequest('POST','/v1/environment/reset',encode({'request_id':'sent'}))
+        for request_id, stamp in (('other',0.),('sent',1.)):
+            obs = {**frame,'request_id':request_id,'time':stamp}
+            response = {'protocol_version':'1.0','episode_id':frame['episode_id'],'request_id':request_id,
+                        'time':stamp,'status':'running','observation':obs}
+            with self.subTest(request_id=request_id,stamp=stamp),self.assertRaises(TransportFailure):
+                EnvironmentClient().episode_response(response,request=wire)
 
 
 class OutcomeBoundary(TestCase):
