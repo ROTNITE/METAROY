@@ -216,7 +216,10 @@ def validate_observation(observation, *, allow_space=False):
             for key, resource in entity['resources'].items():
                 if key != resource['id'] or not resource['minimum'] <= resource['value'] <= resource['maximum']:
                     raise ProtocolError('INVALID_REQUEST', 'Invalid resource bounds',
-                                        {'entity_id': entity['id'], 'resource_id': key})
+                                        {'entity_type':field,'entity_id':entity['id'],'resource_id':key,
+                                         'declared_id':resource['id'],'minimum':resource['minimum'],
+                                         'value':resource['value'],'maximum':resource['maximum'],
+                                         'rule':'resource_id' if key!=resource['id'] else 'resource_interval'})
     for agent in observation['agents']:
         if agent['position'] is None and agent['kind'] not in ('digital', 'operator'):
             raise ProtocolError('INVALID_REQUEST', 'Spatial agent requires position', {'agent_id': agent['id']})

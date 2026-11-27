@@ -214,8 +214,16 @@ def run_controller(url, output, seed, mode, mission, timeout, *, compatibility='
                     evidence.record(row['record_type'], row['payload'])
         report.update(evidence.summary(), status=manifest.get('episode_status'), metrics=manifest.get('metrics'),
                       patrol=manifest.get('patrol'), episode_id=manifest.get('episode_id'))
+        for name in ('api_accounting_error','close_error'):
+            if manifest.get(name):
+                report[name]=manifest[name]
         if result.returncode != 0:
-            raise RuntimeError(manifest.get('error', 'Controller failed. See controller.log.'))
+            if manifest.get('failure') and not report.get('first_protocol_error'):
+                report['first_protocol_error']=manifest['failure']
+            if manifest.get('api_accounting_error') and not report.get('first_protocol_error'):
+                report['first_protocol_error']={'stage':'accounting','message':manifest['api_accounting_error']}
+            raise RuntimeError(manifest.get('error') or manifest.get('api_accounting_error') or
+                               manifest.get('close_error') or 'Controller failed. See controller.log.')
         if manifest.get('close_error'):
             raise RuntimeError(manifest['close_error'])
         public_logs(client, manifest['episode_id'], output / 'environment-logs.jsonl', evidence)

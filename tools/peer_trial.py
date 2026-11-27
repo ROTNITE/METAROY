@@ -9,6 +9,7 @@ import argparse
 import hashlib
 import json
 import os
+import re
 import signal
 import subprocess
 import sys
@@ -81,6 +82,36 @@ def stop(process):
         process.wait(timeout=3)
 
 
+def offline_env(work,port):
+    # The controller is launched in OFF mode. Its accounting report must not
+    # try to create the Windows production ledger on a read-only Linux mount.
+    # This scratch ledger never replaces or resets a real LIVE ledger.
+    return dict(os.environ, HOME=str(work), PORT=str(port),
+                ENVIRONMENT_PORT=str(port), CONTROLLER_PORT=str(port),
+                METARESCUE_OUTPUT=str(work / "metarescue-output"),
+                METARESCUE_LIVE_BUDGET=str(work / "offline-ai-budget.json"))
+
+
+def startup_diagnostic(path):
+    # Emit only bounded, recognizable dependency/error codes, never arbitrary
+    # partner stdout, private inputs or source snippets into public CI logs.
+    if not path.is_file():
+        return {}
+    with path.open("rb") as stream:
+        stream.seek(max(0,path.stat().st_size-32768))
+        tail=stream.read(32768).decode("utf-8",errors="replace")
+    codes=("ERR_MODULE_NOT_FOUND","MODULE_NOT_FOUND","EADDRINUSE","EACCES","EROFS","ENOSPC",
+           "ModuleNotFoundError","ImportError","SyntaxError")
+    result={"startup_error_codes":[code for code in codes if code in tail]}
+    for pattern in (r"Cannot find package ['\"]([a-zA-Z0-9_@./-]{1,100})['\"]",
+                    r"No module named ['\"]([a-zA-Z0-9_.-]{1,100})['\"]"):
+        match=re.search(pattern,tail)
+        if match and not match.group(1).startswith((".","/")):
+            result["missing_dependency"]=match.group(1)
+            break
+    return result
+
+
 def summary(report):
     result = report.get("run", report)
     if not isinstance(result, dict):
@@ -96,7 +127,7 @@ def summary(report):
         selected["goal_metrics"] = {k:v for k,v in metrics.items()
             if isinstance(k,str) and any(word in k.lower() for word in ("rescu","evacuat","deliver","target"))
             and type(v) in (int,float,bool)}
-    for key in ("confirmed_command_receipts", "confirmed_physical_outcomes", "verified_goals"):
+    for key in ("confirmed_command_receipts", "confirmed_physical_outcomes", "verified_goals","verified_outcomes"):
         value = result.get(key)
         if isinstance(value, (list, dict)):
             selected[key + "_count"] = len(value)
@@ -106,6 +137,12 @@ def summary(report):
         details = error.get("details")
         if isinstance(details,dict):
             selected["error_path"] = details.get("path")
+            selected["error_details"] = {key:details[key] for key in
+                ("rule","entity_type","entity_id","resource_id","declared_id","minimum","value","maximum")
+                if key in details and type(details[key]) in (str,int,float,bool)}
+    for key in ("api_accounting_error","close_error"):
+        if result.get(key):
+            selected[key]=str(result[key])[:240]
     if result.get("error"):
         selected["error"] = str(result["error"])[:240]
     return selected
@@ -128,9 +165,7 @@ def trial(peer, direction, mode, seed):
             component = "environment" if direction == "outbound" else "controller"
             port = 18080
             ports = (port,8000,8001,8080,8081,3000,3001,9000,9001,8130,8131) if peer == "v9" else (port,)
-            env = dict(os.environ, HOME=str(work), PORT=str(port),
-                       ENVIRONMENT_PORT=str(port), CONTROLLER_PORT=str(port),
-                       METARESCUE_OUTPUT=str(work / "metarescue-output"))
+            env = offline_env(work,port)
             with (work / "peer.log").open("wb") as plog, (work / "runner.log").open("wb") as rlog:
                 process = subprocess.Popen(command(peer,component,port,work), cwd=cwd,
                                            env=env, stdout=plog, stderr=subprocess.STDOUT, start_new_session=True)
@@ -161,6 +196,8 @@ def trial(peer, direction, mode, seed):
         finally:
             stop(runner)
             stop(process)
+            if not row.get("health_reached"):
+                row.update(startup_diagnostic(work/"peer.log"))
             row["archive_preserved"] = digest(package)==expected
             row["wall_s"] = round(time.monotonic()-begin,3)
     print(json.dumps(row,ensure_ascii=False),flush=True)

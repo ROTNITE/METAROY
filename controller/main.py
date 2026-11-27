@@ -297,7 +297,13 @@ def main():
                 manifest['patrol']=policy.patrol_summary(response['time'])
         except BaseException as error:
             manifest['state']='failed';manifest['error_type']=type(error).__name__;manifest['error']=str(error)
-            record('controller_failure',{'type':type(error).__name__,'message':str(error)})
+            failure={'type':type(error).__name__,'message':str(error)}
+            if isinstance(error,(ProtocolError,TransportFailure)):
+                failure.update(code=error.code,details=error.details or {})
+            if isinstance(error,TransportFailure):
+                failure['state_may_have_changed']=error.state_may_have_changed
+            manifest['failure']=failure
+            record('controller_failure',failure)
             raise
         finally:
             if isinstance(policy,EvolutionPolicy):

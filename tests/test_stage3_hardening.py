@@ -170,3 +170,38 @@ class ReceiptBoundary(TestCase):
         policy.observe_response({'time':2.,'command_results':[{**base,'action':'pickup','delivery_status':'lost'}]})
         self.assertNotIn('a',policy.cargo)
         self.assertNotIn('a',policy.pending)
+
+
+class DiagnosticBoundary(TestCase):
+    def test_resource_failure_retains_machine_readable_details(self):
+        frame=Trial('A').reset({'request_id':'reset','seed':17,
+            'mission':{'id':'search_and_rescue','parameters':{}}})['observation']
+        frame['agents'][0]['resources']['energy']['id']='wrong'
+        result={'protocol_version':'1.0','episode_id':frame['episode_id'],
+                'request_id':frame['request_id'],'time':frame['time'],
+                'status':'running','observation':frame}
+        with self.assertRaises(TransportFailure) as caught:
+            EnvironmentClient().episode_response(result)
+        self.assertEqual(caught.exception.code,'INVALID_REQUEST')
+        self.assertEqual(caught.exception.details['rule'],'resource_id')
+        self.assertEqual(caught.exception.details['resource_id'],'energy')
+        self.assertEqual(caught.exception.details['declared_id'],'wrong')
+
+    def test_offline_peer_ledger_and_startup_diagnostics(self):
+        from pathlib import Path
+        from tempfile import TemporaryDirectory
+        from tools.peer_trial import offline_env, startup_diagnostic, summary
+        with TemporaryDirectory() as path:
+            work=Path(path)
+            env=offline_env(work,18080)
+            self.assertEqual(env['METARESCUE_LIVE_BUDGET'],str(work/'offline-ai-budget.json'))
+            self.assertEqual(env['METARESCUE_OUTPUT'],str(work/'metarescue-output'))
+            log=work/'peer.log'
+            log.write_text("Error [ERR_MODULE_NOT_FOUND]: Cannot find package 'three' imported from /tmp/private.js\nsecret raw stdout",encoding='utf-8')
+            self.assertEqual(startup_diagnostic(log),{'startup_error_codes':['ERR_MODULE_NOT_FOUND','MODULE_NOT_FOUND'],
+                                                    'missing_dependency':'three'})
+        result=summary({'verified_outcomes':[{'effect':'evacuated'}],'confirmed_command_receipts':[{},{}],
+            'first_protocol_error':{'code':'INVALID_REQUEST','details':{'rule':'resource_id','resource_id':'energy','private':'do not copy'}}})
+        self.assertEqual(result['verified_outcomes_count'],1)
+        self.assertEqual(result['confirmed_command_receipts_count'],2)
+        self.assertEqual(result['error_details'],{'rule':'resource_id','resource_id':'energy'})

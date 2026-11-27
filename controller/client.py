@@ -22,9 +22,11 @@ class PreparedRequest:
 
 class TransportFailure(RuntimeError):
     """No valid response; the caller must not assume a state-changing rollback."""
-    def __init__(self,message,*,state_may_have_changed):
+    def __init__(self,message,*,state_may_have_changed,code=None,details=None):
         super().__init__(message)
         self.state_may_have_changed=state_may_have_changed
+        self.code=code
+        self.details=details or {}
 
 
 class EnvironmentClient:
@@ -101,7 +103,9 @@ class EnvironmentClient:
                     raise ProtocolError('INTERNAL_ERROR','HTTP failure without normative error',{'status':status})
             except ProtocolError as error:
                 self.disconnect()
-                raise TransportFailure('Invalid environment response: '+str(error),state_may_have_changed=request.method!='GET') from error
+                raise TransportFailure('Invalid environment response: '+str(error),
+                                       state_may_have_changed=request.method!='GET',
+                                       code=error.code,details=error.details) from error
             if 'error' in result:
                 error=result['error']
                 # A foreign Core error may omit episode_id. Distinguish an
@@ -143,7 +147,8 @@ class EnvironmentClient:
             self.disconnect()
             location=(error.details or {}).get('path')
             suffix=' at /'+'/'.join(map(str,location)) if location else ''
-            raise TransportFailure('Inconsistent episode response: '+str(error)+suffix,state_may_have_changed=True) from error
+            raise TransportFailure('Inconsistent episode response: '+str(error)+suffix,
+                                   state_may_have_changed=True,code=error.code,details=error.details) from error
 
     def _get(self,name,**parameters):
         suffix='?'+urlencode(parameters) if parameters else ''
