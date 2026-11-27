@@ -880,3 +880,16 @@ web analytics/replay/search/сравнения/HV/IGD+/парныеинтерв�
 Windows package/onecommand/GOST19/essay/scenarioformalizations/licences/frames/video.
 Текущая сравнительная серия **0/450**, LIVE **6/240**. До полного выполнения матрицы
 цель остаётся active. Чужие реализации/M5 только при доступе, свои стенды не подмена.
+
+
+## Stage 3 — продолжение в отдельной ветке chatgpt/stage3-universal-core-hardening
+
+Ревизия кода b5b5ddc. По уточнению пользователя VIS05–VIS12 закреплены
+за параллельным агентом, не изменялись. Шесть коммитов Core/M5, точный
+поиск ID, безопасный repeat, устойчивость повреждённых архивов, медленный
+RPC, JSON Schema/HTTP guards, матрица пар и измерение CPU/памяти.
+Свидетельства, конкретные прогоны, ограничения и остаток:
+[stage3-performance-and-open-audit.md](stage3-performance-and-open-audit.md).
+Linux 414 + 1 skip; Windows на b5b5ddc: 415/415 без пропусков. Core 42/42 по критериям, 45 передач
+в независимых моделях. Новые native/450/LIVE не выполнялись, статусы
+матрицы не повышались. Не смешивать с параллельной VIS-веткой.
