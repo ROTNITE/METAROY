@@ -25,7 +25,7 @@ import tempfile
 import zipfile
 import threading
 import time
-from urllib.parse import urlsplit
+from urllib.parse import urlsplit,parse_qs
 import uuid
 
 from contracts.protocol import strict_json
@@ -264,6 +264,9 @@ class Lab:
                 continue
             if saved.get('state') in ACTIVE:
                 saved.update(state='interrupted',ended=now(),note='Previous laboratory process ended; external episode state unknown.')
+                for row in saved['rows']:
+                    if row.get('state') in ACTIVE:
+                        row['state']='interrupted'
                 atomic_json(path/'series.json',saved)
             self.runs[path.name]=saved
 
@@ -360,6 +363,21 @@ class Lab:
         with self.lock:
             return deepcopy(sorted(self.runs.values(),key=lambda r:r.get('created',''),reverse=True)[:100])
 
+    def catalog(self,offset=0,limit=30):
+        if not 0<=offset<=1000000 or not 1<=limit<=100:
+            raise ValueError('Invalid catalog page')
+        with self.lock:
+            ordered=sorted(self.runs.values(),key=lambda r:r.get('created',''),reverse=True)
+            rows=[]
+            for run in ordered[offset:offset+limit]:
+                spec=run.get('spec',{})
+                results=run['rows']
+                rows.append({'id':run['id'],'created':run.get('created'),'state':run['state'],
+                             'spec':{k:spec.get(k) for k in ('controller','environment','mode')},
+                             'trial_count':len(results),
+                             'passed_count':sum(r.get('result',{}).get('exchange')=='passed' for r in results)})
+            return {'series':rows,'total':len(ordered),'offset':offset,'limit':limit,'active_id':self.active}
+
     def get(self,ident):
         if not RUN_ID.fullmatch(ident):
             raise KeyError('Unknown series')
@@ -421,11 +439,14 @@ class Handler(BaseHTTPRequestHandler):
     def do_GET(self):
         try:
             self.guard()
-            path=urlsplit(self.path).path;lab=self.server.lab
+            parsed=urlsplit(self.path);path=parsed.path;lab=self.server.lab
             if path=='/api/session':
                 self.send({'token':self.server.token,'registry':lab.registry.public(),'official_m5':None,'assessed_m5':self.server.assessment});return
             if path=='/api/series':
-                self.send({'series':lab.list()});return
+                query=parse_qs(parsed.query,keep_blank_values=True)
+                if set(query)-{'offset','limit'} or any(len(v)!=1 for v in query.values()):
+                    raise ValueError('Invalid catalog query')
+                self.send(lab.catalog(int(query.get('offset',['0'])[0]),int(query.get('limit',['30'])[0])));return
             match=re.fullmatch(r'/api/series/([0-9a-f]{32})(?:/trial/(\d{1,3})|/export/(json|csv|zip))?',path)
             if match:
                 ident,index,format=match.groups()

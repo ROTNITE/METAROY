@@ -2,7 +2,7 @@
 const byId=id=>document.getElementById(id);
 const activeStates=new Set(['queued','running','stopping']);
 const labels={queued:'В очереди',running:'Выполняется',stopping:'Прерывание',completed:'Завершена',failed:'Ошибка',cancelled:'Прервана',timed_out:'Тайм-аут',interrupted:'Незавершённая',passed:'Успешный',success:'Успех',time_limit:'Лимит времени',safe_stopped:'Безопасная остановка',unverified:'Не подтверждена'};
-let token='',registry={controllers:[],environments:[]},series=[],selected=null,requestBusy=false,refreshBusy=false,refreshTimer=null;
+let token='',registry={controllers:[],environments:[]},series=[],selected=null,selectedRun=null,activeId=null,offset=0,total=0,requestBusy=false,refreshBusy=false,refreshTimer=null,lastHistory='',lastRender='';
 const display=value=>value===undefined||value===null?'—':(labels[value]||String(value));
 const appendCell=(tr,value,cls)=>{const td=document.createElement('td');td.textContent=display(value);if(cls)td.className=cls;tr.append(td);return td;};
 const button=(text,handler)=>{const b=document.createElement('button');b.type='button';b.textContent=text;b.addEventListener('click',handler);return b;};
@@ -45,22 +45,28 @@ function syncForm(){
     else message=n+' испытаний · search_and_rescue · AI OFF · последовательный запуск';
   }catch(error){valid=false;message=error.message;}
   byId('selection-summary').textContent=message;
-  byId('start').disabled=!valid||!byId('confirm').checked||requestBusy||series.some(r=>activeStates.has(r.state));
+  byId('start').disabled=!valid||!byId('confirm').checked||requestBusy||!!activeId;
 }
 function selectOptions(role){
   const select=byId(role);select.replaceChildren();
   for(const row of registry[role+'s']){const o=document.createElement('option');o.value=row.id;o.textContent=row.name;select.append(o);}
 }
 function renderHistory(){
+  const signature=JSON.stringify([series,offset,total,selected]);
+  if(signature===lastHistory)return;
+  lastHistory=signature;
+  byId('page-label').textContent=total?String(offset+1)+'–'+Math.min(offset+series.length,total)+' из '+total:'0 серий';
+  byId('prev-page').disabled=offset===0;
+  byId('next-page').disabled=offset+series.length>=total;
   const body=byId('history');body.replaceChildren();
   if(!series.length){const tr=document.createElement('tr');const td=appendCell(tr,'Нет сохранённых серий.','empty');td.colSpan=6;body.append(tr);return;}
   for(const run of series){
-    const tr=document.createElement('tr'),s=run.spec||{},rows=run.rows||[];
+    const tr=document.createElement('tr'),s=run.spec||{};
     appendCell(tr,s.controller+' → '+s.environment);
     appendCell(tr,s.mode);appendCell(tr,run.state,run.state==='completed'?'ok':run.state==='failed'?'bad':'');
-    appendCell(tr,rows.filter(r=>r.result&&r.result.exchange==='passed').length+'/'+rows.length);
+    appendCell(tr,run.passed_count+'/'+run.trial_count);
     appendCell(tr,new Date(run.created).toLocaleString('ru-RU'));
-    const cell=appendCell(tr,'');cell.append(button('Открыть',()=>{selected=run.id;render();}));body.append(tr);
+    const cell=appendCell(tr,'');cell.append(button('Открыть',async()=>{selected=run.id;await refresh();}));body.append(tr);
   }
 }
 function exportLink(id,run,format){
@@ -68,12 +74,14 @@ function exportLink(id,run,format){
   if(run)el.href='/api/series/'+run.id+'/export/'+format;else el.removeAttribute('href');
 }
 function render(){
-  const run=series.find(r=>r.id===selected)||series.find(r=>activeStates.has(r.state))||series[0];
-  selected=run?run.id:null;
+  const run=selectedRun;
+  const signature=JSON.stringify([run,activeId]);
+  if(signature===lastRender){renderHistory();syncForm();return;}
+  lastRender=signature;
   const rows=run?run.rows:[],finished=rows.filter(r=>!activeStates.has(r.state)).length;
   byId('series-state').textContent=run?display(run.state):'Ожидание запуска';
   byId('cancel').disabled=!run||!activeStates.has(run.state)||run.state==='stopping';
-  byId('repeat').disabled=!run||series.some(r=>activeStates.has(r.state));
+  byId('repeat').disabled=!run||!!activeId;
   byId('progress').max=Math.max(rows.length,1);byId('progress').value=finished;
   byId('progress-text').textContent=finished+' / '+rows.length+' испытаний';
   byId('series-time').textContent=run?new Date(run.created).toLocaleTimeString('ru-RU'):'—';
@@ -97,7 +105,13 @@ function render(){
 }
 async function refresh(){
   if(refreshBusy)return;refreshBusy=true;
-  try{series=(await api('/api/series')).series;render();}
+  try{
+    const page=await api('/api/series?offset='+offset+'&limit=30');
+    series=page.series;total=page.total;activeId=page.active_id;
+    if(!selected)selected=activeId||(series[0]&&series[0].id)||null;
+    selectedRun=selected?await api('/api/series/'+selected):null;
+    render();
+  }
   catch(error){byId('form-message').textContent='Лаборатория недоступна: '+error.message;}
   finally{refreshBusy=false;}
 }
@@ -119,7 +133,7 @@ async function showReport(id,index){
 }
 byId('trial-form').addEventListener('submit',async event=>{
   event.preventDefault();requestBusy=true;syncForm();byId('form-message').textContent='';
-  try{const run=await api('/api/series',spec());selected=run.id;byId('confirm').checked=false;await refresh();}
+  try{const run=await api('/api/series',spec());selected=run.id;offset=0;byId('confirm').checked=false;await refresh();}
   catch(error){byId('form-message').textContent=error.message;}
   finally{requestBusy=false;syncForm();}
 });
@@ -143,10 +157,12 @@ byId('cancel').addEventListener('click',async()=>{
   catch(error){byId('form-message').textContent=error.message;}
 });
 byId('repeat').addEventListener('click',()=>{
-  const run=series.find(r=>r.id===selected);if(!run)return;const s=run.spec;
+  const run=selectedRun;if(!run)return;const s=run.spec;
   for(const [id,key] of [['controller','controller'],['environment','environment'],['profile','profile'],['mode','mode'],['timeout','timeout'],['decide-path','decide_path'],['decide-profile','decide_profile']])byId(id).value=s[key];
   byId('seeds').value=s.seeds.join(', ');byId('confirm').checked=false;syncForm();byId('controller').focus();
 });
+byId('prev-page').addEventListener('click',()=>{offset=Math.max(0,offset-30);refresh();});
+byId('next-page').addEventListener('click',()=>{offset+=30;refresh();});
 async function init(){
   try{const session=await api('/api/session');token=session.token;registry=session.registry;
     const assessment=session.assessed_m5;

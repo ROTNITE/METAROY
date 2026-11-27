@@ -160,3 +160,24 @@ class AssessmentBoundary(TestCase):
             self.assertAlmostEqual(result['value'],.3)
             self.assertFalse(result['official'])
         self.assertEqual(csv_cell('=SUM(1,2)'),"'=SUM(1,2)")
+
+
+class CatalogPerformance(TestCase):
+    def test_450_archives_paginate_without_full_trial_reports(self):
+        with TemporaryDirectory() as temp:
+            root=Path(temp)
+            for i in range(450):
+                ident=f'{i:032x}';folder=root/ident;folder.mkdir()
+                (folder/'series.json').write_text(json.dumps({'id':ident,'created':f'{i:04d}',
+                    'state':'completed','spec':{'controller':'metarescue','environment':'reference','mode':'strict'},
+                    'rows':[{'state':'completed','result':{'exchange':'passed','error':'x'*2000}}]}))
+            lab=Lab(root,Registry())
+            page=lab.catalog(30,30)
+            self.assertEqual(page['total'],450)
+            self.assertEqual(len(page['series']),30)
+            self.assertEqual(page['series'][0]['id'],f'{419:032x}')
+            self.assertEqual(page['series'][0]['passed_count'],1)
+            self.assertNotIn('rows',page['series'][0])
+            self.assertLess(len(json.dumps(page)),12000)
+            self.assertEqual(len(lab.catalog(440,30)['series']),10)
+            with self.assertRaises(ValueError):lab.catalog(0,1000)
