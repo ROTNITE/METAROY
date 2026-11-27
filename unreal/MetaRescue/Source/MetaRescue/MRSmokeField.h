@@ -1,5 +1,6 @@
 #pragma once
 #include "CoreMinimal.h"
+#include "MRSmokeOptics.h"
 
 // A renderer-independent plume. Positions, lengths and extinction use cm;
 // optical depth is dimensionless. Wind displaces older, higher smoke while
@@ -15,6 +16,7 @@ struct FMRSmokeVolume
     double RiseCmPerSecond=150;
     double ExtinctionPerCm=.0035;
     double Strength=1;
+    bool bClippedQuadrature=false;
 
     bool IsValid() const
     {
@@ -71,6 +73,13 @@ struct FMRSmokeVolume
             const double B=(Box.Max[Axis]-Start[Axis])/Delta[Axis];
             From=FMath::Max(From,FMath::Min(A,B));To=FMath::Min(To,FMath::Max(A,B));
             if(From>=To)return 0;
+        }
+        if(bClippedQuadrature)
+        {
+            const FVector A=Start+Delta*From-Source,B=Start+Delta*To-Source;
+            return MRSmokeOptics::Integrate(
+                {HeightCm,RadiusCm,RadiusGrowth,WindCmPerSecond.X,WindCmPerSecond.Y,RiseCmPerSecond,ExtinctionPerCm,Strength},
+                {A.X,A.Y,A.Z},{B.X,B.Y,B.Z});
         }
         // Clip before sampling: a long clear approach must not skip a narrow
         // plume. Simpson integration bounds work per volume, not per camera.

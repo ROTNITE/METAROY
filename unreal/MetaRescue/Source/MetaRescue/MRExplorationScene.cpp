@@ -22,7 +22,8 @@ namespace
 bool TiledSurface(const UProceduralMeshComponent* P)
 {
     return P&&(P->ComponentHasTag(TEXT("UrbanPhysicalTerrain"))||P->ComponentHasTag(TEXT("UrbanRoadSurface"))||
-        P->ComponentHasTag(TEXT("UrbanFlood"))||P->ComponentHasTag(TEXT("CityLotCover")));
+        P->ComponentHasTag(TEXT("UrbanFlood"))||P->ComponentHasTag(TEXT("CityLotCover"))||
+        P->ComponentHasTag(TEXT("UrbanWetFringe")));
 }
 bool Visible(const USceneComponent* C){return C&&C->IsRegistered()&&C->IsVisible()&&!C->bHiddenInGame;}
 FBox XYCell(const FMRExplorationGrid& Grid,FIntPoint Cell)
@@ -70,7 +71,7 @@ void FMRExplorationScene::Reset(const FMRExplorationMemory& Knowledge)
     SceneryInstances.Empty();DeliveredReplacements.Empty();GroundRenderers.Empty();
     BackdropBuilt=false;RevealDirty=true;LastRevealEpoch=-1;
     Grid=Knowledge.Grid;Sources.Empty();SourceLookup.Empty();SourceBins.Empty();Objects.Empty();Surfaces.Empty();
-    Actors.Empty();Effects.Empty();ActorRenderers.Empty();ObjectInstances.Empty();ObjectBatches.Empty();ObjectProcedurals.Empty();
+    Actors.Empty();Effects.Empty();EffectObservedAt.Empty();ActorRenderers.Empty();ObjectInstances.Empty();ObjectBatches.Empty();ObjectProcedurals.Empty();
     EffectRenderers.Empty();TerrainRenderers.Empty();Materials.Empty();
     DirtyTiles.Empty();DirtyActors.Empty();DirtyObjects.Empty();EffectsDirty=false;Revision=0;LastSignature=-1;CatalogAt=-1;
     RefreshSources(0);
@@ -106,8 +107,10 @@ UMaterialInterface* FMRExplorationScene::RememberMaterial(UMaterialInterface* So
     Info.Empty();Ids.Empty();Source->GetAllTextureParameterInfo(Info,Ids);
     for(const auto& I:Info){UTexture* V=nullptr;Source->GetTextureParameterValue(I,V);Key+=TEXT("|")+I.Name.ToString()+GetPathNameSafe(V);}
     if(const auto* Old=Materials.Find(Key);Old&&Old->IsValid())return Old->Get();
-    auto* Parent=Water?LoadObject<UMaterialInterface>(nullptr,
-        TEXT("/Game/EffectsV3/ExplorationWaterR2/M_RememberedFlood.M_RememberedFlood"),nullptr,LOAD_NoWarn|LOAD_Quiet)
+    const TCHAR* WaterPath=World->Environment.bRevisedDisasters?
+        TEXT("/Game/EffectsV3/WaterR6/M_RememberedFlood.M_RememberedFlood"):
+        TEXT("/Game/EffectsV3/ExplorationWaterR2/M_RememberedFlood.M_RememberedFlood");
+    auto* Parent=Water?LoadObject<UMaterialInterface>(nullptr,WaterPath,nullptr,LOAD_NoWarn|LOAD_Quiet)
         :Dynamic->Parent.Get();
     if(Water&&!Parent)Parent=LoadObject<UMaterialInterface>(nullptr,
         TEXT("/Game/EffectsV3/ExplorationEffectsR1/M_RememberedFlood.M_RememberedFlood"));
@@ -130,8 +133,14 @@ void FMRExplorationScene::RefreshSources(double At)
     TArray<UStaticMeshComponent*> Meshes;TArray<UProceduralMeshComponent*> Procedural;
     World->GetComponents(Meshes);World->GetComponents(Procedural);
     uint32 Signature=HashCombineFast(GetTypeHash(Meshes.Num()),GetTypeHash(Procedural.Num()));
-    for(const auto* Mesh:Meshes)if(const auto* Batch=Cast<UInstancedStaticMeshComponent>(Mesh))
-        Signature=HashCombineFast(Signature,HashCombineFast(Mesh->GetUniqueID(),GetTypeHash(Batch->GetInstanceCount())));
+    for(const auto* Mesh:Meshes)
+    {
+        if(World->Environment.bRevisedDisasters)Signature=HashCombineFast(Signature,Mesh->GetUniqueID());
+        if(const auto* Batch=Cast<UInstancedStaticMeshComponent>(Mesh))
+            Signature=HashCombineFast(Signature,HashCombineFast(Mesh->GetUniqueID(),GetTypeHash(Batch->GetInstanceCount())));
+    }
+    if(World->Environment.bRevisedDisasters)
+        for(const auto* Proc:Procedural)Signature=HashCombineFast(Signature,Proc->GetUniqueID());
     bool Reindex=int32(Signature)!=LastSignature;
     if(Reindex)
     {
@@ -238,6 +247,7 @@ TSharedPtr<FMRSceneReport> FMRExplorationScene::Capture(const FMRExplorationMemo
     for(const auto& Sample:Cells)
     {
         Observed.Add(Sample.Cell);FMRSceneCell Cell;Cell.Cell=Sample.Cell;Cell.ObservedAt=At;
+        TArray<FMRSceneSection> FringeLayers;
         const auto* Nearby=SourceBins.Find(Sample.Cell);
         uint32 VisibleSupport=Sample.SurfaceComponent;
         if(!Owned&&!Sample.Water&&Sample.Normal.Z>.4&&Nearby)
@@ -261,7 +271,12 @@ TSharedPtr<FMRSceneReport> FMRExplorationScene::Capture(const FMRExplorationMemo
             if(!TiledSurface(Proc)){Candidates.Add(Index);continue;}
             if(!Visible(Proc))continue;
             const bool Water=Proc->ComponentHasTag(TEXT("UrbanFlood"));
-            if(!Owned&&(Sample.Water!=Water||!Sample.Water&&VisibleSupport!=Proc->GetUniqueID()&&
+            const bool Fringe=Proc->ComponentHasTag(TEXT("UrbanWetFringe"));
+            if(Fringe)
+            {
+                if(Owned||Sample.Water||Sample.Normal.Z<.4)continue;
+            }
+            else if(!Owned&&(Sample.Water!=Water||!Sample.Water&&VisibleSupport!=Proc->GetUniqueID()&&
                 (!Proc->ComponentHasTag(TEXT("CityLotCover"))||Sample.Normal.Z<.4)))continue;
             const auto Box=XYCell(Grid,Sample.Cell);
             const auto& Indexed=IndexSurface(Item,Proc);
@@ -276,7 +291,7 @@ TSharedPtr<FMRSceneReport> FMRExplorationScene::Capture(const FMRExplorationMemo
                 {
                     const auto& Bounds=Geometry.TriangleBounds[I/3];
                     if(!Bounds.IntersectXY(Box))continue;
-                    if(!Owned&&Proc->ComponentHasTag(TEXT("CityLotCover"))&&
+                    if(!Owned&&(Fringe||Proc->ComponentHasTag(TEXT("CityLotCover")))&&
                         (Bounds.Min.Z>Sample.PointCm.Z+20||Bounds.Max.Z<Sample.PointCm.Z-20))continue;
                     FProcMeshVertex V[3];for(int32 K=0;K<3;++K)
                     {V[K]=Geometry.Vertices[Mesh->ProcIndexBuffer[I+K]];if(Water)V[K].UV3.X=At;}
@@ -284,9 +299,15 @@ TSharedPtr<FMRSceneReport> FMRExplorationScene::Capture(const FMRExplorationMemo
                     MRSceneClip::Triangle(V[0],V[1],V[2],Box,Section.Geometry);
                 }
                 if(!Section.Geometry.ProcIndexBuffer.IsEmpty())
-                {Cell.Surface.Add(MoveTemp(Section));Cell.SurfaceVisible=true;Cell.SolidSurface|=!Water;}
+                {
+                    if(Fringe)FringeLayers.Add(MoveTemp(Section));
+                    else {Cell.Surface.Add(MoveTemp(Section));Cell.SurfaceVisible=true;Cell.SolidSurface|=!Water;}
+                }
             }
         }
+        // A damp overlay alone is not evidence of a visible support surface.
+        // Clip and store only above a dry surface captured in this observation.
+        if(Cell.SolidSurface)for(auto& Layer:FringeLayers)Cell.Surface.Add(MoveTemp(Layer));
         Report->Cells.Add(MoveTemp(Cell));
     }
     for(int32 Index:Candidates)
@@ -355,7 +376,13 @@ void FMRExplorationScene::Apply(const FMRSceneReport& Report,const FMRExploratio
     }
     for(const auto& Effect:Report.Effects)
     {
-        const auto* Previous=Effects.Find(Effect.Id);if(Previous&&Previous->ObservedAt>=Effect.ObservedAt)continue;
+        const auto* Previous=Effects.Find(Effect.Id);
+        if(World->Environment.bRevisedDisasters)
+        {
+            if(const auto* Last=EffectObservedAt.Find(Effect.Id);Last&&*Last>=Effect.ObservedAt)continue;
+            EffectObservedAt.Add(Effect.Id,Effect.ObservedAt);
+        }
+        else if(Previous&&Previous->ObservedAt>=Effect.ObservedAt)continue;
         const bool Present=Effect.Visual.Mesh.IsValid()||!Effect.Visual.Procedural.IsEmpty();
         if(!Present){if(Previous){Effects.Remove(Effect.Id);EffectsDirty=Changed=true;}continue;}
         Effects.Add(Effect.Id,Effect);EffectsDirty=Changed=true;

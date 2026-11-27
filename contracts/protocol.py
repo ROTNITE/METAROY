@@ -2,12 +2,16 @@
 from __future__ import annotations
 
 from dataclasses import dataclass
+from functools import lru_cache
 import json
 import math
+import re
 from typing import Any
 
 from jsonschema import Draft202012Validator
+from jsonschema.exceptions import SchemaError, UnknownType
 from referencing import Registry
+from referencing.exceptions import Unresolvable
 
 VERSION = '1.0'
 MAX_BODY_BYTES = 2 * 1024 * 1024
@@ -174,6 +178,13 @@ STEP_RESPONSE = object_schema({**RESET_RESPONSE['properties'], 'command_results'
     'events': {'type': 'array', 'items': EVENT}, 'metrics': {'type': 'object'}})
 
 
+@lru_cache(maxsize=64)
+def _check_parameter_schema(wire):
+    # Cache by content, not identity: mutable capability dictionaries must not
+    # retain validation of an older version. The caller bounds cache key size.
+    Draft202012Validator.check_schema(json.loads(wire))
+
+
 def validate(value, schema, code='INVALID_REQUEST'):
     _check_values(value)
     # Public schemas may contain local references, never trigger network reads.
@@ -184,15 +195,35 @@ def validate(value, schema, code='INVALID_REQUEST'):
                     raise ProtocolError(code, 'Expected a local JSON Schema reference')
             for child in node.values():
                 check_refs(child)
-        elif isinstance(node, list):
+        elif isinstance(node, (list, tuple)):
             for child in node:
                 check_refs(child)
-    check_refs(schema)
-    validator = Draft202012Validator(schema,registry=Registry())
-    error = next(validator.iter_errors(value), None)
+    try:
+        check_refs(schema)
+        if code in ('INVALID_COMMAND','INVALID_SCENARIO'):
+            # Peer action/program schemas are data, not trusted project code.
+            # Reject malformed keywords even if this particular instance
+            # would not exercise them. Do not retain oversized cache keys.
+            wire = json.dumps(schema, ensure_ascii=True, allow_nan=False, separators=(',', ':'))
+            if len(wire) <= 64 * 1024:
+                _check_parameter_schema(wire)
+            else:
+                Draft202012Validator.check_schema(json.loads(wire))
+        validator = Draft202012Validator(schema,registry=Registry())
+        error = next(validator.iter_errors(value), None)
+    except ProtocolError:
+        raise
+    except (SchemaError, UnknownType, Unresolvable, RecursionError, re.error,
+            TypeError, AttributeError, KeyError, ValueError, OverflowError) as failure:
+        # A dangling local pointer, cyclic reference or malformed foreign
+        # declaration must be a protocol failure, not a Python traceback.
+        raise ProtocolError(code, 'Invalid or unresolved JSON Schema',
+                            {'schema_error':type(failure).__name__}) from failure
     if error:
-        raise ProtocolError(code, 'Schema validation failed',
-                            {'path': list(error.absolute_path), 'rule': error.validator})
+        details = {'path': list(error.absolute_path), 'rule': error.validator}
+        if error.validator == 'required' and isinstance(error.instance, dict):
+            details['missing'] = sorted(set(error.validator_value) - error.instance.keys())
+        raise ProtocolError(code, 'Schema validation failed', details)
     return value
 
 
@@ -207,22 +238,41 @@ def validate_observation(observation, *, allow_space=False):
     if isinstance(observation, dict) and observation.get('protocol_version', VERSION) != VERSION:
         raise ProtocolError('UNSUPPORTED_PROTOCOL_VERSION', 'Unsupported protocol version')
     validate(observation, observation_schema(allow_space))
+    return _validate_observation_semantics(observation)
+
+
+def _validate_observation_semantics(observation):
+    """Check cross-field invariants after structural and JSON-value validation."""
     for field in ('agents', 'targets', 'zones', 'infrastructure', 'events'):
         ids = [item.get('id') for item in observation[field]]
         if any(not isinstance(value, str) or not value for value in ids) or len(ids) != len(set(ids)):
             raise ProtocolError('INVALID_REQUEST', f'Invalid or duplicate {field} IDs')
+    for field in ('agents', 'infrastructure'):
+        for entity in observation[field]:
+            for key, resource in entity['resources'].items():
+                # The project's agent planner uses resource keys as semantic IDs.
+                # Infrastructure resources are not command-addressed by this
+                # planner: Appendix A does not require the map key and the
+                # separately published resource ID to be identical.
+                mismatch = field == 'agents' and key != resource['id']
+                if mismatch or not resource['minimum'] <= resource['value'] <= resource['maximum']:
+                    raise ProtocolError('INVALID_REQUEST', 'Invalid resource bounds',
+                                        {'entity_type':field,'entity_id':entity['id'],'resource_id':key,
+                                         'declared_id':resource['id'],'minimum':resource['minimum'],
+                                         'value':resource['value'],'maximum':resource['maximum'],
+                                         'rule':'resource_id' if mismatch else 'resource_interval'})
     for agent in observation['agents']:
         if agent['position'] is None and agent['kind'] not in ('digital', 'operator'):
             raise ProtocolError('INVALID_REQUEST', 'Spatial agent requires position', {'agent_id': agent['id']})
-        for key, resource in agent['resources'].items():
-            if key != resource['id'] or not resource['minimum'] <= resource['value'] <= resource['maximum']:
-                raise ProtocolError('INVALID_REQUEST', 'Invalid resource bounds', {'agent_id': agent['id'], 'resource_id': key})
-        for data in agent.get('freshness', {}).values():
+        freshness = agent.get('freshness', {})
+        if not isinstance(freshness, dict) or any(not isinstance(data, dict) for data in freshness.values()):
+            raise ProtocolError('INVALID_REQUEST', 'Invalid freshness declaration')
+        for data in freshness.values():
             observed, received = data.get('observed_at'), data.get('received_at')
             for stamp in (observed, received):
-                if stamp is not None and (type(stamp) not in (int, float) or stamp < 0):
+                if stamp is not None and (type(stamp) not in (int, float) or not 0 <= stamp <= observation['time']):
                     raise ProtocolError('INVALID_REQUEST', 'Invalid freshness timestamp')
-            if observed is not None and received is not None and not 0 <= observed <= received <= observation['time']:
+            if observed is not None and received is not None and observed > received:
                 raise ProtocolError('INVALID_REQUEST', 'Freshness timestamps are not causal')
     return observation
 
@@ -232,7 +282,10 @@ def validate_episode_response(response, *, step=False, allow_space=False):
     if allow_space:
         schema = {**schema, 'properties': {**schema['properties'], 'observation': observation_schema(True)}}
     validate(response, schema)
-    observation = validate_observation(response['observation'], allow_space=allow_space)
+    # The envelope schema already validates all nested observation fields and
+    # finite JSON values (including the selected space ontology). Repeat only
+    # the semantic checks, not the expensive schema walk over every zone/agent.
+    observation = _validate_observation_semantics(response['observation'])
     for key in ('episode_id', 'request_id'):
         if response[key] != observation[key]:
             raise ProtocolError('INVALID_REQUEST', f'Response and observation disagree on {key}')
@@ -253,7 +306,7 @@ def validate_decision(decision, observation, capabilities):
     for agent_id in decision['role_assignments']:
         if agent_id not in agents:
             raise ProtocolError('INVALID_REQUEST', 'Unknown role participant', {'agent_id': agent_id})
-    for command in decision['commands']:
+    for index, command in enumerate(decision['commands']):
         agent = agents.get(command['agent_id'])
         action = command['action']
         if agent is None or action not in {item['action'] for item in agent['available_actions']}:
@@ -261,12 +314,26 @@ def validate_decision(decision, observation, capabilities):
         descriptor = capabilities.get('supported_actions', {}).get(action)
         if descriptor is None or not set(descriptor.get('required_capabilities', [])) <= set(agent['capabilities']):
             raise ProtocolError('INVALID_COMMAND', 'Required capability is unavailable')
-        validate(command['parameters'], descriptor['parameters_schema'], 'INVALID_COMMAND')
+        try:
+            validate(command['parameters'], descriptor['parameters_schema'], 'INVALID_COMMAND')
+        except ProtocolError as error:
+            details = error.details or {}
+            raise ProtocolError(error.code, 'Action parameter schema validation failed',
+                                {**details, 'path': ['commands',index,'parameters',*details.get('path',[])],
+                                 'command_index':index,'agent_id':command['agent_id'],'action':action}) from error
     grouped = set()
-    for group in decision.get('metaevolution', {}).get('command_groups', []):
+    extension = decision.get('metaevolution', {})
+    if not isinstance(extension, dict):
+        raise ProtocolError('INVALID_REQUEST', 'Invalid metaevolution declaration')
+    groups = extension.get('command_groups', [])
+    if not isinstance(groups, list):
+        raise ProtocolError('INVALID_REQUEST', 'Expected command_groups array')
+    for group in groups:
+        if not isinstance(group, dict):
+            raise ProtocolError('INVALID_REQUEST', 'Invalid command group')
         indices = group.get('command_indices', [])
-        if not indices:
-            raise ProtocolError('INVALID_REQUEST', 'Empty command group')
+        if not isinstance(indices, list) or not indices:
+            raise ProtocolError('INVALID_REQUEST', 'Expected nonempty command_indices array')
         for index in indices:
             if type(index) is not int or not 0 <= index < len(decision['commands']) or index in grouped:
                 raise ProtocolError('INVALID_REQUEST', 'Invalid or repeated command group index')

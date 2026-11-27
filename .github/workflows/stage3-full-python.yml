@@ -1,0 +1,50 @@
+name: Stage 3 full Python regression
+on:
+  push:
+    branches:
+      - chatgpt/stage3-universal-core-hardening
+    paths:
+      - .github/workflows/stage3-full-python.yml
+      - controller/**
+      - environment/**
+      - contracts/**
+      - conformance/**
+      - tools/**
+      - analytics/**
+      - tests/**
+      - web/**
+      - requirements.txt
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  all-python:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    env:
+      GIT_LFS_SKIP_SMUDGE: "1"
+      PYTHONUTF8: "1"
+      PYTHONHASHSEED: "0"
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          lfs: false
+          persist-credentials: false
+      - name: Install pinned dependencies
+        run: |
+          python3 -m venv .venv
+          .venv/bin/python -m pip install -r requirements.txt
+      - name: Discover and execute all Python tests
+        run: |
+          set -o pipefail
+          export METARESCUE_OUTPUT="$RUNNER_TEMP/full-python"
+          export METARESCUE_LIVE_BUDGET="$RUNNER_TEMP/ai-budget.json"
+          .venv/bin/python -B -X utf8 -m unittest discover -s tests -v 2>&1 | tee "$RUNNER_TEMP/full-python.log"
+      - name: Archive regression log
+        if: always()
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with:
+          name: stage3-full-python
+          path: ${{ runner.temp }}/full-python.log
+          if-no-files-found: warn
+          retention-days: 14

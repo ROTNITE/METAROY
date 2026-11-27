@@ -150,8 +150,8 @@ def build_billow(textures):
     return value
 
 
-def build_volume(textures):
-    value = material('M_PhysicalSmoke', translucent=True)
+def build_volume(textures, shader='disaster_smoke.hlsl', name='M_PhysicalSmoke', remembered=False):
+    value = material(name, translucent=True)
     # When the eye is inside a plume, its back surface lies behind most opaque
     # landmarks. Hardware depth testing would discard the entire integration.
     # The shader clips against the actual opaque scene depth instead.
@@ -169,12 +169,24 @@ def build_volume(textures):
         ('PixelZ', node(value, unreal.MaterialExpressionPixelDepth, -1100, 1260), ''),
         ('Side', node(value, unreal.MaterialExpressionTwoSidedSign, -1100, 1400), ''),
     ]
-    code = (Path(__file__).resolve().parent / 'shaders/disaster_smoke.hlsl').read_text(encoding='utf-8')
+    code = (Path(__file__).resolve().parent / 'shaders' / shader).read_text(encoding='utf-8')
+    if remembered:
+        # Construct the complete graph directly in the commandlet. Do not
+        # query pins from a material editor, which may not exist in headless mode.
+        from smoke_shader_source import remembered_source
+        code = remembered_source(code)
+        inputs.extend([
+            ('ClipMin', vector(value, 'ClipMin', (-1e8,-1e8,-1e8), 2100), 'RGB'),
+            ('ClipMax', vector(value, 'ClipMax', (1e8,1e8,1e8), 2250), 'RGB'),
+        ])
+        value.set_editor_property('allow_translucent_custom_depth_writes', True)
+        value.set_editor_property('opacity_mask_clip_value', .01)
+        value.set_editor_property('used_with_instanced_static_meshes', True)
     opacity = custom(value, code, unreal.CustomMaterialOutputType.CMOT_FLOAT1, inputs, -350, 0)
     property_input(opacity, '', value, unreal.MaterialProperty.MP_OPACITY)
     shade = vector(value, 'SmokeAlbedo', (.045, .048, .05), 1550)
     cloud = texture_object(value, textures['SmokeWisps'], 'SmokeWisps', 1680)
-    clock = node(value, unreal.MaterialExpressionTime, -1100, 1810)
+    clock = scalar(value, 'SnapshotTime', 0, 1810) if remembered else node(value, unreal.MaterialExpressionTime, -1100, 1810)
     color = custom(value, '''
 float3 Ray = normalize(Surface - Camera);
 float3 Middle = Source + float3(Wind.xy * Shape.x / (2 * max(Rise, 1)), Shape.x * .5);

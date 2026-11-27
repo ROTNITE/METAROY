@@ -90,6 +90,16 @@ bool AMRWorld::ReadCityLayout(const FString& File)
        !CityLayout->HasTypedField<EJson::Object>(TEXT("preflight"))||
        !CityLayout->GetObjectField(TEXT("preflight"))->GetBoolField(TEXT("passed")))return false;
     auto Settings=CityLayout->GetObjectField(TEXT("settings"));GridSize=Settings->GetIntegerField(TEXT("map_size"));
+    double DisasterRevision=0;
+    if(Settings->HasField(TEXT("disaster_revision"))&&
+       (!Settings->HasTypedField<EJson::Number>(TEXT("disaster_revision"))||
+        !Settings->TryGetNumberField(TEXT("disaster_revision"),DisasterRevision)||
+        (DisasterRevision!=0&&DisasterRevision!=1)||(DisasterRevision==1&&!bDisasterCity)))return false;
+    Environment.bRevisedDisasters=DisasterRevision==1;
+    if(Environment.bRevisedDisasters&&FApp::CanEverRender()&&
+       (!LoadObject<UMaterialInterface>(nullptr,TEXT("/Game/EffectsV3/Revision6/M_PhysicalSmoke.M_PhysicalSmoke"))||
+        !LoadObject<UMaterialInterface>(nullptr,TEXT("/Game/EffectsV3/Revision6/M_RememberedSmoke.M_RememberedSmoke"))))
+    {UE_LOG(LogTemp,Error,TEXT("MR_DISASTER smoke revision6 is missing; run the smoke-v2 import before rendering"));return false;}
     if(GridSize<25||GridSize>150)return false;
     if(bDisasterCity&&CityLayout->HasField(TEXT("hydrology"))&&
        (!TerrainCheck.IsEnabled()||!CityLayout->HasTypedField<EJson::Object>(TEXT("hydrology"))||
@@ -98,6 +108,11 @@ bool AMRWorld::ReadCityLayout(const FString& File)
     if(bDisasterCity&&FApp::CanEverRender()&&CityLayout->HasField(TEXT("hydrology"))&&
        !LoadObject<UMaterialInterface>(nullptr,TEXT("/Game/EffectsV3/Revision5/M_UrbanFlood.M_UrbanFlood")))
     {UE_LOG(LogTemp,Error,TEXT("MR_CITY required urban flood material is missing"));return false;}
+    if(Environment.bRevisedDisasters&&FApp::CanEverRender()&&CityLayout->HasField(TEXT("hydrology"))&&
+       (!LoadObject<UMaterialInterface>(nullptr,TEXT("/Game/EffectsV3/WaterR6/M_UrbanFlood.M_UrbanFlood"))||
+        !LoadObject<UMaterialInterface>(nullptr,TEXT("/Game/EffectsV3/WaterR6/M_RememberedFlood.M_RememberedFlood"))||
+        !LoadObject<UMaterialInterface>(nullptr,TEXT("/Game/EffectsV3/WaterR6/M_WetFringe.M_WetFringe"))))
+    {UE_LOG(LogTemp,Error,TEXT("MR_CITY WaterR6 missing; run water-v2 import before rendering"));return false;}
     if(bIrregularCity)
     {
         using namespace MRCoreValues;
@@ -908,7 +923,9 @@ void AMRWorld::BuildIrregularStreets(const FBox& BaseBox)
             Streets.Add({Start,End,Width});
             Approaches.FindOrAdd(A).Add(Direction);
             Approaches.FindOrAdd(B).Add(-Direction);
-            if(bDisasterCity&&Kind==TEXT("street")&&Width<=850)
+            // Revised streets use a single graded surface; rigid road modules
+            // on top of it introduce seams, duplicated curbs and mismatched paint.
+            if(bDisasterCity&&!Environment.bRevisedDisasters&&Kind==TEXT("street")&&Width<=850)
             {
                 const double Length=FVector::Dist2D(Start,End),Tile=999.8;
                 const double Inset=FMath::Max(450.,Width*.5+100);

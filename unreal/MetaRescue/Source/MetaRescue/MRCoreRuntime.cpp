@@ -245,6 +245,15 @@ void FMRCoreRuntime::CaptureOverviewFrame()
     }
     const FString File=FString::Printf(TEXT("overview-%05d.png"),OverviewFrame++);
     FScreenshotRequest::RequestScreenshot(Folder/File,false,false);
+    // Associate the requested image with the same delivered observation used
+    // by the audit HUD; never label a frame using the private event tape.
+    if(FParse::Param(FCommandLine::Get(),TEXT("MRCoreCaptureContest"))&&CachedObservation)
+    {
+        const auto& Events=CachedObservation->GetArrayField(TEXT("events"));
+        if(!Events.IsEmpty())
+            Record(TEXT("contest_frame_requested"),Obj({{TEXT("file"),Str(TEXT("overview/")+File)},
+                {TEXT("observation_time"),Num(Time())},{TEXT("events"),Arr(Events)}}),false);
+    }
     Record(TEXT("observer_frame_requested"),Obj({{TEXT("file"),Str(TEXT("overview/")+File)},
         {TEXT("view"),Str(CaptureAtBase?TEXT("base"):TEXT("overhead"))}}),false);
 }

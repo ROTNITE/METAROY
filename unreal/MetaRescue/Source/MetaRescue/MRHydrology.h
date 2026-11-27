@@ -42,6 +42,23 @@ public:
     double DepthM(int32 I) const {return Depth.IsValidIndex(I)?Depth[I]:0;}
     double BedM(int32 I) const {return Bed.IsValidIndex(I)?Bed[I]:0;}
     double StageM(int32 I) const {return BedM(I)+DepthM(I);}
+    // Visual dampness outside standing water only. No mass, flow, collision,
+    // buoyancy or controller knowledge is modified by this accessor.
+    double WetFringeWidthCm(int32 A,int32 B) const
+    {
+        if(!Healthy||!Depth.IsValidIndex(A)||!Depth.IsValidIndex(B)||Solid[A]||Solid[B]||
+           Depth[A]<=.015||Depth[B]>.001)return 0;
+        const int32 AX=A%Width,AY=A/Width,BX=B%Width,BY=B/Width;
+        double Crest;
+        if(AY==BY&&(AX==BX+1||BX==AX+1))Crest=CrestX[AY*(Width-1)+FMath::Min(AX,BX)];
+        else if(AX==BX&&(AY==BY+1||BY==AY+1))Crest=CrestY[FMath::Min(AY,BY)*Width+AX];
+        else return 0;
+        const double Stage=StageM(A);
+        if(!FMath::IsFinite(Stage)||!FMath::IsFinite(Bed[B])||
+           Crest>Stage+.02||Bed[B]>Stage+.15||Bed[B]<Stage-.40)return 0;
+        const double Rise=FMath::Max(0.,Bed[B]-Stage);
+        return (35.+85.*FMath::Min(1.,Depth[A]/.35))*(1.-Rise/.15);
+    }
     double Time() const {return Elapsed;}
     bool IsHealthy() const {return Healthy;}
 
@@ -71,13 +88,15 @@ public:
     {
         if(X<0||X>=Width-1||Y<0||Y>=Height||!FMath::IsFinite(ElevationM))return false;
         const int32 I=Y*(Width-1)+X;CrestX[I]=ElevationM;
-        if(Persistent)InitialCrestX[I]=ElevationM;return true;
+        if(Persistent)InitialCrestX[I]=ElevationM;
+        return true;
     }
     bool SetCrestY(int32 X,int32 Y,double ElevationM,bool Persistent=false)
     {
         if(X<0||X>=Width||Y<0||Y>=Height-1||!FMath::IsFinite(ElevationM))return false;
         const int32 I=Y*Width+X;CrestY[I]=ElevationM;
-        if(Persistent)InitialCrestY[I]=ElevationM;return true;
+        if(Persistent)InitialCrestY[I]=ElevationM;
+        return true;
     }
 
     FVector CurrentMPerSecond(int32 I) const
@@ -145,6 +164,10 @@ private:
         const double SurfaceA=Bed[A]+Depth[A],SurfaceB=Bed[B]+Depth[B];
         const double FlowDepth=FMath::Max(SurfaceA,SurfaceB)-FMath::Max3(Bed[A],Bed[B],Crest);
         if(FlowDepth<=1.e-5)return 0;
+        // Exactly still edges have no flux or friction work. Avoid pow on
+        // the large stationary reservoir; the remaining expression is
+        // mathematically identical for nonzero previous discharge.
+        if(Previous==0)return Previous-9.81*FlowDepth*Dt*(SurfaceB-SurfaceA)/CellM;
         const double N=(Roughness[A]+Roughness[B])*.5;
         const double Friction=1+9.81*Dt*N*N*FMath::Abs(Previous)/FMath::Pow(FlowDepth,7./3.);
         return (Previous-9.81*FlowDepth*Dt*(SurfaceB-SurfaceA)/CellM)/Friction;

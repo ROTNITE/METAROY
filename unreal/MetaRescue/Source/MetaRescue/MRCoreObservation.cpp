@@ -302,7 +302,7 @@ Object FMRCoreRuntime::Capabilities() const
             {TEXT("report_ttl_s"),Num(30)},{TEXT("packets_per_source"),Num(128)},{TEXT("critical_report_attempts"),Num(3)}}))},
         {TEXT("event_model"),Json(Obj({{TEXT("profile"),Str(World->CoreEventProfile.IsEmpty()?TEXT("static"):World->CoreEventProfile)},
             {TEXT("format"),Str(World->bDisasterCity?TEXT("metarescue.events-3d.2.0"):TEXT("metarescue.events-3d.1.0"))},
-            {TEXT("physics_profile"),World->bDisasterCity?Str(TEXT("metarescue.urban-disasters.v1")):Null()},
+            {TEXT("physics_profile"),World->bDisasterCity?Str(World->Environment.bRevisedDisasters?TEXT("metarescue.urban-disasters.v2"):TEXT("metarescue.urban-disasters.v1")):Null()},
             {TEXT("visibility_model"),Str(World->bDisasterCity?TEXT("beer_lambert_wind_plumes"):TEXT("surface_quality_v1"))},
             {TEXT("physics_cell_m"),Num(5)},
             {TEXT("probability_window_s"),World->CoreEventProfile.IsEmpty()?Null():Num(World->CoreEventProfile==TEXT("v052")?80:30)}}))},
@@ -325,8 +325,14 @@ Object FMRCoreRuntime::Capabilities() const
         {TEXT("not_yet_supported"),Unsupported}});
     if(World->bDisasterCity&&DynamicReset)
     {
-        auto Settings=ResetParameters->GetArrayField(TEXT("mission_settings"));Settings.Add(Str(TEXT("boats")));
+        auto Settings=ResetParameters->GetArrayField(TEXT("mission_settings"));Settings.Add(Str(TEXT("boats")));Settings.Add(Str(TEXT("disaster_revision")));
         ResetParameters->SetArrayField(TEXT("mission_settings"),Settings);
+    }
+    if(World->Environment.bRevisedDisasters)
+    {
+        auto Extensions=Result->GetArrayField(TEXT("extensions"));
+        Extensions.Add(Str(TEXT("metarescue.urban-disasters.v2")));
+        Result->SetArrayField(TEXT("extensions"),Extensions);
     }
     if(HasWatercraft)
     {
@@ -506,6 +512,8 @@ void FMRCoreRuntime::Snapshot(const FString& RequestId)
         {TEXT("metaevolution"),Json(Obj({{TEXT("plan"),Json(Plan)},{TEXT("contradictions"),Arr(Contradictions)}}))}});
     if(KnownOrbital)CachedObservation->GetObjectField(TEXT("metaevolution"))->SetObjectField(TEXT("orbital_observation"),KnownOrbital);
     if(World->bDisasterCity)CachedObservation->GetObjectField(TEXT("metaevolution"))->SetObjectField(TEXT("exploration"),ExplorationSnapshot());
+    if(World->Environment.bRevisedDisasters)
+        CachedObservation->GetObjectField(TEXT("metaevolution"))->SetNumberField(TEXT("disaster_revision"),1);
     if(World->bCityLayout)
     {
         auto Map=Obj();for(const FString& Key:{TEXT("format"),TEXT("base_layout_revision"),TEXT("cell_m"),TEXT("size_m"),TEXT("bounds"),TEXT("base"),TEXT("base_position"),

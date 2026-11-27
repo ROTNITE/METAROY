@@ -1,0 +1,40 @@
+name: Stage 3 Windows Python regression
+on:
+  push:
+    branches:
+      - chatgpt/stage3-universal-core-hardening
+    paths:
+      - .github/workflows/stage3-windows-python.yml
+      - tools/m5_*.py
+      - tests/**
+      - .gitattributes
+      - controller/**
+      - environment/**
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  windows-python:
+    runs-on: windows-2022
+    timeout-minutes: 30
+    env:
+      GIT_LFS_SKIP_SMUDGE: "1"
+      PYTHONUTF8: "1"
+      PYTHONHASHSEED: "0"
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          lfs: false
+          persist-credentials: false
+      - name: Install pinned dependencies
+        shell: pwsh
+        run: |
+          py -3 -m venv .venv
+          .venv/Scripts/python.exe -m pip install -r requirements.txt
+      - name: Run full Python regression on Windows
+        shell: pwsh
+        run: |
+          $env:METARESCUE_OUTPUT = Join-Path $env:RUNNER_TEMP "stage3-windows-output"
+          $env:METARESCUE_LIVE_BUDGET = Join-Path $env:RUNNER_TEMP "stage3-windows-budget.json"
+          .venv/Scripts/python.exe -B -X utf8 -m unittest discover -s tests -v
+          exit $LASTEXITCODE

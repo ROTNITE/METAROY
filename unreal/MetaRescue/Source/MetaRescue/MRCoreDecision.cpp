@@ -64,7 +64,7 @@ void FMRCoreRuntime::BeginEpisode(const FPending& R)
     }
     for(auto& T:World->Targets)
     {
-        T.bDiscovered=false;T.bAssigned=false;T.bRescued=false;T.DiscoveredAt=-1;T.ObservedAt=-1;T.Observer=-1;T.bAvailabilityReported=false;T.ObservationEpoch=0;
+        T.bDiscovered=false;T.bAssigned=false;T.bRescued=false;T.DiscoveredAt=-1;T.ObservedAt=-1;T.Observer=-1;T.bAvailabilityReported=false;T.ObservationEpoch=0;T.MedicalHandoverCommand.Empty();
         T.ShoreStation.Empty();T.SupportCarrier.Reset();T.FloatDisplacedM3=0;
         if(T.Visual)
         {

@@ -1,0 +1,127 @@
+name: VIS23 portable verification
+on:
+  pull_request:
+    branches: [main]
+    types: [opened, synchronize, reopened]
+    paths-ignore: ['docs/**']
+  workflow_dispatch:
+    inputs:
+      full:
+        description: Run every size and seed (326 comparisons)
+        type: boolean
+        default: true
+permissions:
+  contents: read
+concurrency:
+  group: vis23-portable-reviewed-${{ github.ref }}
+  cancel-in-progress: false
+jobs:
+  portable:
+    if: github.event_name == 'workflow_dispatch' || (github.event.pull_request.head.repo.full_name == github.repository && github.head_ref == 'chatgpt/vis02-04-city23-regression')
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    env:
+      GIT_LFS_SKIP_SMUDGE: '1'
+      PYTHONDONTWRITEBYTECODE: '1'
+    steps:
+      - name: Checkout candidate
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.sha || github.sha }}
+          lfs: false
+          persist-credentials: false
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Dependencies
+        run: python -m pip install -r requirements.txt
+      - name: Check committed changes
+        run: |
+          git fetch --depth=1 origin d2762555fcab94ed4651f76a96938231c8827b0b
+          git diff --check FETCH_HEAD HEAD
+          git worktree add --detach "$RUNNER_TEMP/vis23-baseline" FETCH_HEAD
+      - name: Syntax check environment, tools and Unreal authoring scripts
+        run: python -B -c "import ast,pathlib; files=[p for d in ('environment','tools','unreal/tools') for p in pathlib.Path(d).rglob('*.py')]; [ast.parse(p.read_text(encoding='utf-8-sig'), filename=str(p)) for p in files]; print('syntax files:',len(files))"
+      - name: Python tests
+        run: python -B -X utf8 -m unittest discover -s tests -v
+      - name: Portable Universal Core conformance
+        if: always()
+        timeout-minutes: 5
+        run: python -B -X utf8 tools/run_interop.py self-test --matrix --output "$RUNNER_TEMP/vis23-interop"
+      - name: Production hydrology and signal arithmetic
+        if: always()
+        timeout-minutes: 8
+        run: |
+          g++ -std=c++17 -O2 -Wall -Wextra -Werror -Itools/portable_ue tools/vis05_12_hydro_probe.cpp -o "$RUNNER_TEMP/vis05_12_hydro"
+          "$RUNNER_TEMP/vis05_12_hydro" --full
+      - name: Portable native optical arithmetic
+        if: always()
+        run: |
+          g++ -std=c++17 -O2 -Wall -Wextra -Werror tools/smoke_optics_probe.cpp -o "$RUNNER_TEMP/smoke_probe"
+          "$RUNNER_TEMP/smoke_probe"
+          g++ -std=c++17 -O2 -Wall -Wextra -Werror tools/smoke_optics_stress.cpp -o "$RUNNER_TEMP/smoke_stress"
+          "$RUNNER_TEMP/smoke_stress"
+          python -B tools/smoke_shader_probe.py
+          g++ -std=c++17 -O2 -Wall -Wextra -Werror tools/smoke_optics_benchmark.cpp -o "$RUNNER_TEMP/smoke_benchmark"
+          "$RUNNER_TEMP/smoke_benchmark"
+      - name: Install independent Vulkan shader compiler and CPU driver
+        if: always()
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y --no-install-recommends glslang-tools spirv-tools libvulkan-dev mesa-vulkan-drivers
+      - name: Compile and execute live and remembered smoke HLSL
+        if: always()
+        run: python -B tools/run_smoke_spirv.py
+      - name: Compile all WaterR6 shader outputs
+        if: always()
+        run: python -B tools/compile_water_shader.py
+      - name: Compare original city fingerprints
+        if: always()
+        env:
+          FULL_MATRIX: ${{ inputs.full }}
+        run: |
+          args=()
+          if [ "$FULL_MATRIX" = "true" ]; then args+=(--full); fi
+          python -B -X utf8 tools/check_city23_regression.py "${args[@]}" --baseline-root "$RUNNER_TEMP/vis23-baseline" --output "$RUNNER_TEMP/vis23-regression.json"
+      - name: Archive comparison report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: vis23-portable-regression
+          path: ${{ runner.temp }}/vis23-regression.json
+          if-no-files-found: warn
+          retention-days: 7
+
+  windows-portable:
+    if: github.event_name == 'workflow_dispatch' || (github.event.pull_request.head.repo.full_name == github.repository && github.head_ref == 'chatgpt/vis02-04-city23-regression')
+    runs-on: windows-latest
+    timeout-minutes: 12
+    env:
+      GIT_LFS_SKIP_SMUDGE: '1'
+      PYTHONDONTWRITEBYTECODE: '1'
+    steps:
+      - name: Checkout candidate
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.sha || github.sha }}
+          lfs: false
+          persist-credentials: false
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Dependencies
+        run: python -m pip install -r requirements.txt
+      - name: Python tests including Windows process handles
+        run: python -B -X utf8 -m unittest discover -s tests -v
+
+      - name: MSVC portable smoke integrator
+        if: always()
+        shell: cmd
+        run: |
+          for /f "usebackq tokens=*" %%i in (`"%ProgramFiles(x86)%\Microsoft Visual Studio\Installer\vswhere.exe" -latest -products * -requires Microsoft.VisualStudio.Component.VC.Tools.x86.x64 -property installationPath`) do set "VSROOT=%%i"
+          if not defined VSROOT exit /b 1
+          call "%VSROOT%\Common7\Tools\VsDevCmd.bat" -arch=x64
+          if errorlevel 1 exit /b 1
+          cl /nologo /std:c++17 /EHsc /O2 /W4 /WX tools\smoke_optics_probe.cpp /Fe:"%RUNNER_TEMP%\smoke_probe.exe" /Fo:"%RUNNER_TEMP%\smoke_probe.obj"
+          if errorlevel 1 exit /b 1
+          "%RUNNER_TEMP%\smoke_probe.exe"

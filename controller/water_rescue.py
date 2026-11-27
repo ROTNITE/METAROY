@@ -5,20 +5,35 @@ import heapq
 import math
 
 from contracts.urban_terrain import Terrain
-from controller.navigation import NavigationMap, RouteFailure
+from controller.navigation import Box, NavigationMap, RouteFailure
 
 
 class WaterRoute:
     def __init__(self, announced, observation, obstacles, draft):
         self.terrain = Terrain(announced.get('terrain'))
         geometry = {key: value for key, value in announced.items() if key != 'road_graph'}
+        self.revised = observation.get('metaevolution', {}).get('disaster_revision') == 1
+        self.now = observation['time']
+        self.edges = {}
+        self.exhausted = {}
         restrictions = []
         for zone in observation.get('zones', ()):
             access = zone.get('access', {}).get('allowed_kinds')
             shape = zone.get('geometry', {})
-            if (zone.get('type') == 'restricted' and isinstance(access, list) and
-                    'surface_water' not in access and shape.get('type') == 'box'):
-                restrictions.append({'kind': 'box', 'min': shape['min'], 'max': shape['max']})
+            restriction = (zone.get('type') == 'restricted' and isinstance(access, list)
+                           and 'surface_water' not in access)
+            surface = zone.get('surface', {})
+            debris = (self.revised and isinstance(surface, dict) and surface.get('active') is True
+                      and surface.get('physical_debris') is True)
+            if (restriction or debris) and shape.get('type') == 'box':
+                received = zone.get('received_at')
+                if self.revised and (type(received) not in (int, float) or not 0 <= received <= self.now):
+                    continue
+                try:
+                    box = Box.parse({'kind': 'box', 'min': shape['min'], 'max': shape['max']})
+                except (ValueError, KeyError, TypeError):
+                    continue
+                restrictions.append({'kind': 'box', 'min': list(box.minimum), 'max': list(box.maximum)})
         self.nav = NavigationMap(geometry, observed_obstacles=[*obstacles, *restrictions])
         self.basin = announced['hydrology']['basin']
         self.stage = announced['hydrology']['initial_stage_m']
@@ -30,13 +45,22 @@ class WaterRoute:
             seen, received = zone.get('observed_at'), zone.get('received_at')
             if (not isinstance(surface, dict) or geometry.get('type') != 'box' or
                     type(seen) not in (int, float) or type(received) not in (int, float) or
-                    not 0 <= seen <= received <= now or now - seen > 20):
+                    not 0 <= seen <= received <= now or (not self.revised and now - seen > 20)):
                 continue
             depth = surface.get('depth_m')
-            if type(depth) not in (int, float) or not math.isfinite(depth):
+            if type(depth) not in (int, float) or not math.isfinite(depth) or depth < 0:
                 continue
-            row = self.cell(geometry['min'])
-            if row not in self.readings or seen > self.readings[row][0]:
+            try:
+                box = Box.parse({'kind': 'box', 'min': geometry['min'], 'max': geometry['max']})
+            except (ValueError, KeyError, TypeError):
+                continue
+            if self.revised and (any(abs(box.maximum[i]-box.minimum[i]-5.) > 1.e-6 for i in (0, 1))
+                                 or any(abs(v/5-round(v/5)) > 1.e-6 for v in box.minimum[:2])):
+                continue
+            row = self.cell(box.minimum)
+            previous = self.readings.get(row)
+            # Equal-time conflicting depths cannot turn an unsafe cell deep.
+            if previous is None or seen > previous[0] or (self.revised and seen == previous[0] and depth < previous[1]):
                 self.readings[row] = (seen, depth)
 
     @staticmethod
@@ -46,11 +70,33 @@ class WaterRoute:
     def deep(self, x, y):
         reading = self.readings.get(self.cell((x, y)))
         if reading is not None:
-            return reading[1] >= self.depth
+            return (not self.revised or self.now - reading[0] <= 20) and reading[1] >= self.depth
         return (all(low + .6 <= value <= high - .6 for low, value, high in zip(self.basin['min'], (x, y), self.basin['max']))
                 and self.stage - self.terrain.height(x, y) >= self.depth)
 
+    def _measured_segment(self, start, goal):
+        # Split at every crossed 5 m grid boundary. Fixed-distance samples
+        # can skip a shallow sliver at the corner of a diagonal cell.
+        cuts = {0., 1.}
+        for a, b in zip(start, goal):
+            if a == b:
+                continue
+            low, high = sorted((a, b))
+            for cell in range(math.floor(low/5)+1, math.ceil(high/5)):
+                cuts.add((cell*5-a)/(b-a))
+        cuts = sorted(cuts)
+        checks = [0., 1., *((a+b)*.5 for a,b in zip(cuts,cuts[1:]))]
+        return all(self.deep(*(a+(b-a)*t for a,b in zip(start,goal))) for t in checks)
+
     def clear(self, start, goal):
+        if self.revised:
+            key = tuple(sorted((tuple(start), tuple(goal))))
+            if key not in self.edges:
+                # Cap the cache even when a caller probes many alternatives.
+                if len(self.edges) >= 50000:
+                    self.edges.clear()
+                self.edges[key] = self._clear_revised(start, goal)
+            return self.edges[key]
         if not self.nav.clear(start, goal, 1.2, .5):
             return False
         distance = math.dist(start[:2], goal[:2])
@@ -61,11 +107,28 @@ class WaterRoute:
                 return False
         return True
 
+    def _clear_revised(self, start, goal):
+        if not self.nav.clear(start, goal, 1.2, .8):
+            return False
+        dx,dy = (b-a for a,b in zip(start[:2],goal[:2]))
+        length = math.hypot(dx,dy)
+        # Sample the width of the planned swept corridor, not just its axis.
+        # Native oriented hull and local depth/braking checks remain decisive.
+        offset = (-dy/length*1.1,dx/length*1.1) if length else (1.1,0.)
+        return all(self._measured_segment(tuple(a+factor*d for a,d in zip(start[:2],offset)),
+                                          tuple(b+factor*d for b,d in zip(goal[:2],offset)))
+                   for factor in (-1,0,1))
+
     def route(self, start, goal):
+        if self.revised and not self.deep(*goal[:2]):
+            return None
         if self.clear(start, goal):
             return [list(goal)]
         source, target = self.cell(start), self.cell(goal)
         z = start[2]
+        if self.revised and (visited := self.exhausted.get(tuple(start))) is not None:
+            if not any((target[0]+x,target[1]+y) in visited for x in (-1,0,1) for y in (-1,0,1)):
+                return None
         def center(cell):
             return (cell[0]*5 + 2.5, cell[1]*5 + 2.5, z)
 
@@ -73,7 +136,10 @@ class WaterRoute:
         parent = {}
         queue = [(0., 0., source)]
         expanded = 0
-        while queue and expanded < 640:
+        # A search on a fresh public snapshot cannot expand arbitrarily into
+        # the city: only measured wet cells or the small declared basin enter.
+        limit = min(12000, max(640, 2*len(self.readings)+128)) if self.revised else 640
+        while queue and expanded < limit:
             _, travel, cell = heapq.heappop(queue)
             if travel != cost.get(cell):
                 continue
@@ -84,7 +150,9 @@ class WaterRoute:
                 while cell != source:
                     route.append(list(center(cell)))
                     cell = parent[cell]
-                return route[::-1]
+                # The declared native follow_route limit is 4096; keep
+                # room for the precise final approach appended by the caller.
+                return route[::-1] if len(route)<=4095 else None
             for dx, dy in ((0, 1), (0, -1), (1, 0), (-1, 0), (1, 1), (1, -1), (-1, 1), (-1, -1)):
                 peer = (cell[0] + dx, cell[1] + dy)
                 there = center(peer)
@@ -94,6 +162,9 @@ class WaterRoute:
                 cost[peer] = distance
                 parent[peer] = cell
                 heapq.heappush(queue, (distance + math.dist(there, goal), distance, peer))
+        if self.revised and not queue:
+            if len(self.exhausted)>=8:self.exhausted.clear()
+            self.exhausted[tuple(start)] = frozenset(cost)
         return None
 
 
@@ -113,10 +184,15 @@ def reserve_shore(workflow, observation, announced, known, directives):
     agents = {agent['id']: agent for agent in observation['agents']}
     previous = workflow.shore_transfer
     if previous:
-        boat = agents[previous['boat_id']]
-        rover = agents[previous['rover_id']]
+        boat = agents.get(previous['boat_id'])
+        rover = agents.get(previous['rover_id'])
         target = known.get(previous['target_id'], {})
-        if (target.get('evacuation_state') != 'evacuated' and rover['status'] != 'failed'
+        valid_owner = (not observation.get('metaevolution', {}).get('disaster_revision') == 1 or
+                       (boat is not None and boat.get('physical', {}).get('carrying') is True and
+                        boat.get('physical', {}).get('cargo_target_id') == previous['target_id']) or
+                       shore_target(target, announced) or
+                       (rover is not None and rover.get('physical', {}).get('cargo_target_id') == previous['target_id']))
+        if (valid_owner and boat is not None and rover is not None and target.get('evacuation_state') != 'evacuated' and rover['status'] != 'failed'
                 and rover['id'] not in directives and (boat['status'] != 'failed' or shore_target(target, announced))):
             return previous
 
@@ -131,7 +207,7 @@ def reserve_shore(workflow, observation, announced, known, directives):
         if not hull or not target_id or not boat.get('position') or boat['status'] != 'busy':
             continue
         observer = boat.get('freshness', {}).get('position', {}).get('observed_at')
-        if type(observer) not in (float,int) or now-observer>5:
+        if type(observer) not in (float,int) or now-observer>5 or (observation.get('metaevolution', {}).get('disaster_revision') == 1 and observer>now):
             continue
         travel = math.dist(boat['position'][:2],dock)
         current = math.hypot(*hull.get('current_m_s',(0,0,0))[:2])
@@ -241,9 +317,16 @@ def water_command(workflow, observation, announced, boat, job, known, *, reroute
     actions = {action.get('action') for action in boat['available_actions']}
     nav = None
 
+    revised = observation.get('metaevolution', {}).get('disaster_revision') == 1
+
+    def need_survey(goal, target_id):
+        if revised:
+            workflow.water_survey_requests[boat_id] = (observation['time'], pose[:2], tuple(goal[:2]), target_id)
+
     def request(action, parameters, phase):
         if action not in actions:
             return None, None
+        if revised:workflow.water_survey_requests.pop(boat_id,None)
         job.water_intercept = None
         job.water_approach = None
         return {'agent_id': boat_id, 'action': action, 'parameters': parameters}, phase
@@ -300,6 +383,7 @@ def water_command(workflow, observation, announced, boat, job, known, *, reroute
         if waypoints and nav.clear((*approach, pose[2]), (*dock, pose[2])):
             waypoints.append([*dock, pose[2]])
             return request('follow_route', {'waypoints': waypoints, 'precise_stop': True}, 'shore')
+        need_survey(dock,job.target)
         return None, None
 
     reserved = {other.target for key, other in workflow.jobs.items() if key != boat_id and other.target}
@@ -362,11 +446,12 @@ def water_command(workflow, observation, announced, boat, job, known, *, reroute
     ready = water_pickup_ready(boat, target)
     needs_confirmation = target.get('status') != 'confirmed' or target['id'] in workflow.reconfirm_after
     stale_support = target.get('supported_by_agent') and not 0 <= age <= 3
-    if ready and not (needs_confirmation or stale_support):
+    stale_water = observation.get('metaevolution', {}).get('disaster_revision') == 1 and not 0 <= age <= 6
+    if ready and not (needs_confirmation or stale_support or stale_water):
         job.target = target['id']
         return request('pickup', {'target_id': job.target}, 'shore')
     if 'inspect' in actions and ((needs_confirmation and math.dist(pose, target['position']) < 11.5)
-                                 or (ready and stale_support)):
+                                 or (ready and stale_support) or (stale_water and math.dist(pose, target['position']) < 11.5)):
         # Inspection can refresh the last delivered pose after carrier loss
         # even if passive reporting has seen too little movement to transmit.
         failed = workflow.failed_inspections.get((boat_id, target['id']), ())
@@ -423,6 +508,7 @@ def water_command(workflow, observation, announced, boat, job, known, *, reroute
                 job.water_intercept = (observed if math.isfinite(age) else now, now, position)
                 job.water_approach = approach_key
                 return command
+    need_survey(position,target['id'])
     if not reroute:
         job.target = None
     return None, None

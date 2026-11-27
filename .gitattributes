@@ -14,3 +14,7 @@
 *.pptx filter=lfs diff=lfs merge=lfs -text
 *.prex filter=lfs diff=lfs merge=lfs -text
 unreal/MetaRescue/Content/Scenario/watercraft-hydrostatics-r1.json -text whitespace=cr-at-eol
+
+# Preserve exact upstream/vendor bytes required by nsga2-origin.json.
+"benchmarks/MetaRescue_Benchmark_v0_5_2/main part/nsga2.py" -text
+controller/vendor/nsga2_v052.py -text

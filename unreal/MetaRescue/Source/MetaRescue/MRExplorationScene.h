@@ -108,6 +108,8 @@ private:
     TMap<int32,FMRSceneCell> Surfaces;
     TMap<FString,FMRSceneActorState> Actors;
     TMap<FString,FMRSceneEffect> Effects;
+    // Retain the observation time even after an effect disappears.
+    TMap<FString,double> EffectObservedAt;
     TMap<FString,TArray<TWeakObjectPtr<USceneComponent>>> ActorRenderers;
     TMap<FString,TWeakObjectPtr<UMaterialInterface>> Materials;
     TArray<FMRSceneMesh> InitialScenery;

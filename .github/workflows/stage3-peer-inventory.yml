@@ -1,0 +1,38 @@
+name: Stage 3 partner archive integrity
+on:
+  push:
+    branches:
+      - chatgpt/stage3-universal-core-hardening
+    paths:
+      - tools/peer_inventory.py
+      - tools/peer_entrypoints.py
+      - .github/workflows/stage3-peer-inventory.yml
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  archive-integrity:
+    runs-on: ubuntu-latest
+    timeout-minutes: 8
+    env:
+      GIT_LFS_SKIP_SMUDGE: "0"
+      PYTHONUTF8: "1"
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+        with:
+          fetch-depth: 1
+          lfs: true
+          persist-credentials: false
+          sparse-checkout-cone-mode: false
+          sparse-checkout: |
+            /tools/peer_inventory.py
+            /tools/peer_entrypoints.py
+            /независимые пары/metaroy_lab.zip
+            /независимые пары/metaroy_portable_v0_1.zip
+            /независимые пары/Atlas_Probe_0.2.zip
+            /controller_team2/metaroi-controller-portable-v9.zip
+      - name: Verify bytes and inspect only ZIP metadata
+        run: python3 -B -X utf8 tools/peer_inventory.py
+
+      - name: Discover documented launch entrypoints without executing packages
+        run: python3 -B -X utf8 tools/peer_entrypoints.py

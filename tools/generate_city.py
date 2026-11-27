@@ -20,6 +20,7 @@ def main():
     parser.add_argument('--preset',choices=PRESETS)
     parser.add_argument('--city-revision',choices=['1.1','2.0','2.1','2.2','2.3'])
     parser.add_argument('--layout-kind',choices=['generated_city','rescue_quarter'])
+    parser.add_argument('--disaster-revision',type=int,choices=[0,1],help='Opt into city 2.3 disaster and streets revision 1')
     parser.add_argument('--scouts',type=int)
     parser.add_argument('--rescuers',type=int)
     parser.add_argument('--people',type=int)
@@ -27,7 +28,7 @@ def main():
     parser.add_argument('--output',type=Path)
     args=parser.parse_args()
     values=strict_json(args.settings.read_bytes()) if args.settings else {}
-    for key in ('seed','preset','scouts','rescuers','people','city_revision'):
+    for key in ('seed','preset','scouts','rescuers','people','city_revision','disaster_revision'):
         if getattr(args,key) is not None:values[key]=getattr(args,key)
     if args.layout_kind is not None:values['layout']=args.layout_kind
     if args.size is not None:values['map_size']=args.size

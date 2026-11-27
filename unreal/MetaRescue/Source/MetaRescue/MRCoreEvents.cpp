@@ -60,6 +60,7 @@ bool AMRWorld::ReadCoreEventTape()
     const FString Profile=Text(Model,TEXT("profile"));
     const bool V052=Profile==TEXT("v052");
     const bool Detailed=bDisasterCity;
+    const bool Revised=Detailed&&Environment.bRevisedDisasters;
     double Horizon=0,Size=0,Window=0,Cell=0;
     if(Text(Model,TEXT("format"))!=(Detailed?TEXT("metarescue.events-3d.2.0"):TEXT("metarescue.events-3d.1.0"))||
        (!V052&&Profile!=TEXT("v3"))||Profile!=Text(Settings,TEXT("event_profile"))||
@@ -70,7 +71,7 @@ bool AMRWorld::ReadCoreEventTape()
        !Is(Model,TEXT("events"),EJson::Array)||!Is(Model,TEXT("late_people"),EJson::Array))
         return Fail(TEXT("version, profile, geometry or limits are invalid"));
     FVector Wind=FVector::ZeroVector;
-    if(Detailed&&(Text(Model,TEXT("physics_profile"))!=TEXT("metarescue.urban-disasters.v1")||
+    if(Detailed&&(Text(Model,TEXT("physics_profile"))!=(Revised?TEXT("metarescue.urban-disasters.v2"):TEXT("metarescue.urban-disasters.v1"))||
         !MRCoreJson::Point(Field(Model,TEXT("wind_m_s")),Wind)||Wind.Z!=0||Wind.Size()>15))
         return Fail(TEXT("invalid disaster physics profile or horizontal wind"));
     const auto& Rows=Model->GetArrayField(TEXT("events"));
@@ -128,6 +129,16 @@ bool AMRWorld::ReadCoreEventTape()
     TArray<FMRDisturbance> Tape;
     TMap<FString,int32> Earlier;
     TSet<int32> ReferencedPeople;
+    TMap<FString,double> FireDelays;
+    TMap<FString,FString> HeatFailedParents;
+    if(Revised)for(const auto& Value:CityLayout->GetArrayField(TEXT("buildings")))
+    {
+        const auto Building=Value->AsObject();
+        const int32 Variant=Building->GetIntegerField(TEXT("variant"));
+        constexpr double Delays[]={110.,85.,65.,55.};
+        if(Variant>=0&&Variant<4&&Building->GetIntegerField(TEXT("floors"))>=2)
+            FireDelays.Add(Text(Building,TEXT("id")),Delays[Variant]);
+    }
     double Previous=0;
     for(const auto& Value:Rows)
     {
@@ -150,7 +161,24 @@ bool AMRWorld::ReadCoreEventTape()
         Event.Kind=EMRDisturbance(KindIndex);
         Event.bPropagation=Row->GetBoolField(TEXT("spread"));
         const bool Hydraulic=Detailed&&Event.Kind==EMRDisturbance::Flood&&UrbanWater.IsValid();
-        if(Event.bPropagation)
+        const FMRDisturbance* CausalFire=nullptr;
+        if(Row->HasField(TEXT("cause")))
+        {
+            Event.bFireFailure=Revised&&Text(Row,TEXT("cause"))==TEXT("fire_structural_failure");
+            const auto* Parent=Earlier.Find(Event.ParentId);
+            const auto* Delay=FireDelays.Find(Event.SiteId);
+            if(!Event.bFireFailure||Event.bPropagation||Event.Kind!=EMRDisturbance::Collapse||
+               !Event.Rejection.IsEmpty()||!Parent||!Delay||HeatFailedParents.Contains(Event.SiteId))
+                return Fail(TEXT("invalid fire failure cause"));
+            CausalFire=&Tape[*Parent];
+            if(CausalFire->Kind!=EMRDisturbance::Fire||CausalFire->bPropagation||!CausalFire->Rejection.IsEmpty()||
+               CausalFire->SiteId!=Event.SiteId||CausalFire->ExpiresAt<=Event.Time||
+               !FMath::IsNearlyEqual(Event.Time,CausalFire->Time+*Delay,1.e-7)||
+               Event.Id!=CausalFire->Id+TEXT("-heat-collapse"))
+                return Fail(TEXT("fire failure must follow active source fire"));
+            HeatFailedParents.Add(Event.SiteId,Event.ParentId);
+        }
+        else if(Event.bPropagation)
         {
             const auto* Parent=Earlier.Find(Event.ParentId);
             if(!Parent||Tape[*Parent].Time>=Event.Time||Tape[*Parent].Kind!=Event.Kind||
@@ -208,6 +236,29 @@ bool AMRWorld::ReadCoreEventTape()
                     return Fail(TEXT("duplicate or protected event cell"));
                 Event.Cells.Add(Key);
             }
+            if(Revised&&Event.Kind==EMRDisturbance::Fire&&Event.bPropagation)
+            {
+                const auto& Origin=Tape[Earlier.FindChecked(Event.ParentId)];
+                if(Origin.bPropagation||Origin.SiteId!=Event.SiteId||Origin.ExpiresAt!=Event.ExpiresAt||
+                   Origin.VisibilityExpiresAt!=Event.VisibilityExpiresAt)
+                    return Fail(TEXT("fire perimeter outlives or changes its source"));
+            }
+            if(CausalFire)
+            {
+                const FIntPoint Center=FMRDistrictEnvironment::Cell(CausalFire->Source);
+                TArray<FIntPoint> Expected;
+                for(const auto& OriginCell:CausalFire->Cells)
+                {
+                    const auto Delta=OriginCell-Center;
+                    if(Delta.X*Delta.X+Delta.Y*Delta.Y<=5)Expected.Add(OriginCell);
+                }
+                if(Expected.IsEmpty()||Expected.Num()!=Event.Cells.Num()||
+                   Event.Cells.ContainsByPredicate([&](const auto& CandidateCell){return !Expected.Contains(CandidateCell);})||
+                   !Event.Source.Equals(CausalFire->Source,1.e-5)||Event.ExpiresAt>=0||
+                   !FMath::IsNearlyEqual(Event.VisibilityExpiresAt,Event.Time+24.,1.e-7)||
+                   !FMath::IsNearlyEqual(double(Event.SmokeEmissionHeightCm),FMath::Max(0.,Event.Source.Z+15.),1.e-3))
+                    return Fail(TEXT("fire failure footprint, lifetime or source mismatch"));
+            }
             if(Event.Kind==EMRDisturbance::NewTarget)
             {
                 if(!Integer(Row,TEXT("target_id"),Event.TargetId)||ReferencedPeople.Contains(Event.TargetId)||!Event.Cells.IsEmpty())
@@ -224,6 +275,29 @@ bool AMRWorld::ReadCoreEventTape()
         Previous=Event.Time;
         const int32 Index=Tape.Add(MoveTemp(Event));
         Earlier.Add(Tape[Index].Id,Index);
+    }
+    if(Revised)
+    {
+        // A valid individual child is not sufficient: an imported tape
+        // cannot silently delete the consequence or substitute a later fire.
+        TMap<FString,const FMRDisturbance*> FirstEligible;
+        for(const auto& Fire:Tape)
+        {
+            if(Fire.Kind!=EMRDisturbance::Fire||Fire.bPropagation||!Fire.Rejection.IsEmpty())continue;
+            const auto* Delay=FireDelays.Find(Fire.SiteId);
+            if(!Delay||Fire.Time+*Delay>=Horizon||Fire.Time+*Delay>=Fire.ExpiresAt)continue;
+            const auto Center=FMRDistrictEnvironment::Cell(Fire.Source);
+            if(!Fire.Cells.ContainsByPredicate([&](const auto& Cell)
+            {const auto D=Cell-Center;return D.X*D.X+D.Y*D.Y<=5;}))continue;
+            const auto* PreviousFire=FirstEligible.FindRef(Fire.SiteId);
+            if(!PreviousFire||Fire.Time<PreviousFire->Time||
+               (Fire.Time==PreviousFire->Time&&Fire.Id.Compare(PreviousFire->Id,ESearchCase::CaseSensitive)<0))
+                FirstEligible.Add(Fire.SiteId,&Fire);
+        }
+        if(FirstEligible.Num()!=HeatFailedParents.Num())return Fail(TEXT("missing causal fire failure"));
+        for(const auto& Pair:FirstEligible)
+            if(HeatFailedParents.FindRef(Pair.Key)!=Pair.Value->Id)
+                return Fail(TEXT("noncanonical causal fire failure"));
     }
     if(ReferencedPeople.Num()!=Late.Num())return Fail(TEXT("unreferenced late person"));
     Scenario->SetArrayField(TEXT("people"),People);
@@ -254,6 +328,8 @@ void AMRWorld::ResetCoreEventEffects()
     for(int32 I=CoreEventComponents.Num()-1;I>=0;--I)
         if(USceneComponent* Component=CoreEventComponents[I])Component->DestroyComponent();
     CoreEventComponents.Empty();
+    DebrisCells.Empty();DebrisHistory.Empty();StaticDebrisCells.Empty();
+    DebrisSamplePoints.Empty();StaticDebrisSamplePoints.Empty();bStaticDebrisDirty=true;NextDebrisRefresh=0;
     MudTracks=nullptr;
     MudTrackPositions.Empty();
     NextMudTrackCleanup=0;
@@ -275,7 +351,20 @@ int32 AMRWorld::ApplyCoreDisturbance(const FMRDisturbance& Event)
     const int32 FirstPiece=PhysicsPieces.Num();
     if(Event.Kind==EMRDisturbance::Collapse)
     {
-        if(bDisasterCity)CollapseCityStructure(Event);
+        if(bDisasterCity)
+        {
+            const bool Damaged=CollapseCityStructure(Event);
+            if(Environment.bRevisedDisasters&&!Damaged)
+            {
+                // A scheduled attempt can encounter a building already reduced
+                // by another event. Retain the conservative instability zone,
+                // but never emit a new dust plume or synthesize another wreck.
+                for(auto& Applied:Environment.Applied)if(Applied.Id==Event.Id)
+                {Applied.VisibilityExpiresAt=Event.Time;++Environment.Revision;break;}
+                UE_LOG(LogTemp,Display,TEXT("MR_STRUCTURE_COLLAPSE event=%s source=%s no_new_damage=1"),*Event.Id,*Event.SiteId);
+                return 0;
+            }
+        }
         else
         {
         // Bound each collapse to a few local convex bodies, released near the
@@ -298,9 +387,13 @@ int32 AMRWorld::ApplyCoreDisturbance(const FMRDisturbance& Event)
     FMRDisturbance VisualEvent=Event;
     if(const auto* Applied=Environment.FindApplied(Event.Id))VisualEvent.SmokeEmissionHeightCm=Applied->SmokeEmissionHeightCm;
     ApplyDisturbance(VisualEvent);
-    PlaceDisasterWreck(VisualEvent);
+    // A fire-derived collapse is a continuation of its parent fire, not a
+    // separate incident requiring a second independently generated vehicle.
+    if(!VisualEvent.bFireFailure)PlaceDisasterWreck(VisualEvent);
     for(int32 I=FirstGenerated;I<Generated.Num();++I)CoreEventComponents.Add(Generated[I]);
     for(int32 I=FirstVisual;I<HazardVisuals.Num();++I)CoreEventComponents.AddUnique(HazardVisuals[I]);
+    if(Environment.bRevisedDisasters&&(Event.Kind==EMRDisturbance::Collapse||
+        Event.Kind==EMRDisturbance::Fire||Event.Kind==EMRDisturbance::RoadDamage))bStaticDebrisDirty=true;
     return PhysicsPieces.Num()-FirstPiece;
 }
 
@@ -326,16 +419,19 @@ void FMRCoreRuntime::AdvanceEvents()
         };
         const auto Before=ProbeRoad?SupportAtSource():Object();
         const int32 Bodies=Event.Rejection.IsEmpty()?World->ApplyCoreDisturbance(Event):0;
+        const auto* Applied=Model.FindApplied(Event.Id);
+        const auto& Effective=Model.bRevisedDisasters&&Applied?*Applied:Event;
         auto EventRecord=Obj({{TEXT("event_id"),Str(Event.Id)},{TEXT("kind"),Str(MRDisturbanceName(Event.Kind))},
                 {TEXT("scheduled_at"),Num(Event.Time)},{TEXT("source_m"),Point(Event.Source/100.)},
                 {TEXT("source_object_id"),Event.SiteId.IsEmpty()?Null():Str(Event.SiteId)},
                 {TEXT("parent_id"),Event.ParentId.IsEmpty()?Null():Str(Event.ParentId)},{TEXT("cells"),Arr(CellsJson(Event))},
                 {TEXT("target_id"),Event.TargetId>=0?Num(Event.TargetId):Null()},
                 {TEXT("expires_at"),Model.ActiveUntil(Event)>=0?Num(Model.ActiveUntil(Event)):Null()},
-                {TEXT("visibility_expires_at"),Model.VisibilityUntil(Event)>=0?Num(Model.VisibilityUntil(Event)):Null()},
-                {TEXT("smoke_emission_height_m"),Num(Event.SmokeEmissionHeightCm/100.)},
+                {TEXT("visibility_expires_at"),Model.VisibilityUntil(Effective)>=0?Num(Model.VisibilityUntil(Effective)):Null()},
+                {TEXT("smoke_emission_height_m"),Num(Effective.SmokeEmissionHeightCm/100.)},
                 {TEXT("reason"),Event.Rejection.IsEmpty()?Null():Str(Event.Rejection)},
                 {TEXT("released_bodies"),Num(Bodies)}});
+        if(Event.bFireFailure)EventRecord->SetStringField(TEXT("cause"),TEXT("fire_structural_failure"));
         if(ProbeRoad)
         {EventRecord->SetObjectField(TEXT("support_before"),Before);EventRecord->SetObjectField(TEXT("support_after"),SupportAtSource());}
         Record(Event.Rejection.IsEmpty()?TEXT("environment_event_applied"):TEXT("environment_attempt_rejected"),EventRecord,false);
@@ -378,6 +474,7 @@ void FMRCoreRuntime::AdvanceEvents()
     }
     if(!World->TickUrbanWater(Time()))
     {Status=TEXT("failed");OutcomeReason=TEXT("hydrology_step_failed");UE_LOG(LogTemp,Error,TEXT("MR_HYDROLOGY failed at %.9f"),Time());}
+    World->RefreshDebrisCells();
     World->TickHazardVisuals(float(ExecutionDelta));
     for(const auto& Event:Model.Applied)
     {
@@ -446,7 +543,8 @@ bool FMRCoreRuntime::SensorAccepts(AMRAgent* Agent,int32 Target,double Quality,i
 void FMRCoreRuntime::GatherHazardReport(AMRAgent* Agent)
 {
     const auto& Environment=World->Environment;
-    if(World->CoreEventProfile.IsEmpty()||Environment.Applied.IsEmpty())return;
+    if((World->CoreEventProfile.IsEmpty()||Environment.Applied.IsEmpty())&&
+       !(Environment.bRevisedDisasters&&World->UrbanWater))return;
     const FString Id=Agent->AgentKey();
     const FVector Pose=Agent->GetActorLocation();
     const double Range=100*SensorRadius.FindRef(Id);
@@ -467,10 +565,60 @@ void FMRCoreRuntime::GatherHazardReport(AMRAgent* Agent)
         for(int32 Y=FMath::Max(0,Origin.Y-Radius);Y<FMath::Min(MaxCell,Origin.Y+Radius+1);++Y)
         {
             const FIntPoint Cell(X,Y);
-            if(!Environment.HasHistoryAt(Cell)&&!(World->UrbanWater&&World->UrbanWater->HasHistory(Cell)))continue;
+            const bool SurfaceHistory=Environment.HasHistoryAt(Cell)||(World->UrbanWater&&World->UrbanWater->HasHistory(Cell));
+            const bool DebrisHistory=Environment.bRevisedDisasters&&World->DebrisHistory.Contains(Cell);
+            if(!SurfaceHistory&&!DebrisHistory)continue;
             FVector Position=FMRDistrictEnvironment::Center(Cell);
             if(World->UrbanWater)Position.Z=World->WaterAtCm(Position).GroundCm;
+            else if(Environment.bRevisedDisasters)Position.Z=World->InitialGroundHeightCm(Position);
             if(FVector::DistSquared2D(Pose,Position)>FMath::Square(Range))continue;
+            if(DebrisHistory)
+            {
+                const FString DebrisId=FString::Printf(TEXT("debris-%d-%d"),X,Y);
+                const bool Occupied=World->DebrisCells.Contains(Cell);
+                const auto* KnownDebris=KnownZones.Find(DebrisId);
+                if((Occupied||KnownDebris)&&(!Occupied||!KnownDebris||Time()-SurfaceObservedAt.FindRef(DebrisId)>=4.))
+                {
+                    bool Seen=false;
+                    FVector Look=Position+FVector(0,0,65);
+                    if(Occupied)
+                    {
+                        if(const auto* Sample=World->DebrisSamplePoints.Find(Cell))
+                        {
+                            FHitResult Hit;
+                            if(FVector::DistSquared(Pose,*Sample)<=FMath::Square(Range)&&
+                               World->GetWorld()->LineTraceSingleByChannel(Hit,Pose,*Sample+(*Sample-Pose).GetSafeNormal()*3.,ECC_Visibility,Query))
+                            {
+                                const auto* Collider=Hit.GetComponent();
+                                Seen=Collider&&(Collider->ComponentHasTag(TEXT("StructuralDebris"))||
+                                    Collider->ComponentHasTag(TEXT("DisasterVehicleWreck")))&&
+                                    FMRDistrictEnvironment::Cell(Hit.ImpactPoint)==Cell;
+                                Look=Hit.ImpactPoint;
+                            }
+                        }
+                    }
+                    else Seen=FVector::DistSquared(Pose,Look)<=FMath::Square(Range)&&
+                        !World->GetWorld()->LineTraceTestByChannel(Pose,Look,ECC_Visibility,Query);
+                    if(Seen)
+                    {
+                        const double Quality=SensorQuality(Pose,Look);
+                        if(Quality>=.15&&SensorAccepts(Agent,X*4096+Y,Quality,3))
+                        {
+                            // This ray observes the obstruction, not water,
+                            // mud or heat hidden beneath it. Keep the two
+                            // measurements and their timestamps independent.
+                            auto Measured=Obj({{TEXT("kinds"),Arr({})},{TEXT("active"),Bool(Occupied)},
+                                {TEXT("ground_blocked"),Bool(Occupied)},{TEXT("surface_multiplier"),Num(1)},
+                                {TEXT("visibility"),Num(Quality)},{TEXT("physical_debris"),Bool(Occupied)},
+                                {TEXT("debris_only"),Bool(true)},
+                                {TEXT("geometry_base_m"),Num(World->InitialGroundHeightCm(Position)/100.)}});
+                            Readings.Add(Json(Obj({{TEXT("id"),Str(DebrisId)},{TEXT("cell"),Arr({Num(X),Num(Y)})},
+                                {TEXT("surface"),Json(Measured)}})));
+                        }
+                    }
+                }
+            }
+            if(!SurfaceHistory)continue;
             const FString ZoneId=FString::Printf(TEXT("surface-%d-%d"),X,Y);
             TArray<Value> Types;
             for(EMRDisturbance Kind:{EMRDisturbance::Collapse,EMRDisturbance::Fire,EMRDisturbance::Flood,
@@ -479,7 +627,7 @@ void FMRCoreRuntime::GatherHazardReport(AMRAgent* Agent)
             const float Visibility=World->VisibilityQuality(Position+FVector(0,0,60));
             const double WaterCm=World->WaterDepth(Position);
             if(World->UrbanWater&&WaterCm>.1)Types.Add(Str(TEXT("flood")));
-            const bool Blocked=World->IsUnsafeGround(Position);
+            const bool Blocked=World->IsUnsafeGround(Position,!Environment.bRevisedDisasters);
             const double Cost=FMath::Max(Environment.Cost(Position,false),WaterCm>4?2.f:1.f);
             const bool Active=!Types.IsEmpty()||Visibility<1||Blocked||Cost>1;
             const auto* Known=KnownZones.Find(ZoneId);
@@ -538,12 +686,24 @@ void FMRCoreRuntime::DeliverHazardReport(const FReport& Packet)
         SurfaceObservedAt.Add(Id,ObservedAt);
         const auto& Cell=Reading->GetArrayField(TEXT("cell"));
         const double X=Cell[0]->AsNumber()*5,Y=Cell[1]->AsNumber()*5;
-        if(Active)
+        // Keep a delivered dry result for a formerly wet cell. Removing it
+        // would let a marine planner incorrectly fall back to initial depth.
+        const bool RetainDry=World->Environment.bRevisedDisasters&&World->UrbanWater&&Previous&&
+            Is(Measured,TEXT("depth_m"),EJson::Number)&&
+            Text(*Previous,TEXT("type"))==TEXT("water");
+        if(Active||RetainDry)
         {
-            const bool Wet=Measured->GetNumberField(TEXT("depth_m"))>0;
+            const bool DebrisOnly=Is(Measured,TEXT("debris_only"),EJson::Boolean)&&Measured->GetBoolField(TEXT("debris_only"));
+            const bool Wet=Is(Measured,TEXT("depth_m"),EJson::Number)&&Measured->GetNumberField(TEXT("depth_m"))>0;
             auto Geometry=Obj({{TEXT("type"),Str(TEXT("box"))},{TEXT("min"),Point(FVector(X,Y,-.15))},
                 {TEXT("max"),Point(FVector(X+5,Y+5,1.2))}});
-            if(Is(Measured,TEXT("ground_height_m"),EJson::Number))
+            if(DebrisOnly)
+            {
+                const double Ground=Measured->GetNumberField(TEXT("geometry_base_m"));
+                Geometry->SetArrayField(TEXT("min"),Point(FVector(X,Y,Ground-.15))->AsArray());
+                Geometry->SetArrayField(TEXT("max"),Point(FVector(X+5,Y+5,Ground+2.2))->AsArray());
+            }
+            else if(Is(Measured,TEXT("ground_height_m"),EJson::Number))
             {
                 const double Ground=Measured->GetNumberField(TEXT("ground_height_m"));
                 const double Stage=Measured->GetNumberField(TEXT("water_stage_m"));
@@ -555,7 +715,7 @@ void FMRCoreRuntime::DeliverHazardReport(const FReport& Packet)
             Allowed.Add(Str(TEXT("aerial")));
             if(Wet&&Measured->GetNumberField(TEXT("depth_m"))>=.55)Allowed.Add(Str(TEXT("surface_water")));
             KnownZones.Add(Id,Obj({{TEXT("id"),Str(Id)},{TEXT("geometry"),Json(Geometry)},
-                {TEXT("type"),Str(Wet?TEXT("water"):TEXT("hazard"))},
+                {TEXT("type"),Str(DebrisOnly?TEXT("obstacle"):(Wet||RetainDry)?TEXT("water"):TEXT("hazard"))},
                 {TEXT("access"),Json(Obj({{TEXT("allowed_kinds"),Arr(Allowed)}}))},
                 {TEXT("risk"),Num(Blocked?1:1-Measured->GetNumberField(TEXT("visibility")))},
                 {TEXT("cost"),Json(Obj({{TEXT("energy_multiplier"),Field(Measured,TEXT("surface_multiplier"))}}))},

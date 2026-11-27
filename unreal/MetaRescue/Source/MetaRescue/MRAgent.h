@@ -61,6 +61,7 @@ public:
     float MaxSpeed = 620;
     FVector Dock;
     int32 GroundContacts = 0;
+    int32 GroundWetContacts = 0;
     bool bRouteBlocked = false;
     float RotorRPM = 0;
     float RampDeployment = 0;
@@ -129,6 +130,7 @@ private:
     int32 PathIndex = 0;
     float ServiceRemaining = 0;
     float WatercraftUnstableSeconds = 0;
+    float WatercraftBlockedLiftSeconds = 0;
     bool bPhysicsStoppedAtBoundary = false;
     void StopAtWorldBoundary(const FString& Reason);
     float ServiceElapsed = 0;

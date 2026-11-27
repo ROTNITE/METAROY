@@ -14,10 +14,12 @@ import random
 from contracts.protocol import ProtocolError
 from contracts.urban_terrain import Terrain
 from environment.config import Settings,EVENT_DEFAULTS
+from environment.fire_failure import CAUSE, append_fire_failures, expected_fire_failures, valid_fire_failure
 
 VERSION='metarescue.events-3d.1.0'
 DETAILED_VERSION='metarescue.events-3d.2.0'
 DETAILED_PHYSICS='metarescue.urban-disasters.v1'
+REVISED_PHYSICS='metarescue.urban-disasters.v2'
 CELL_M=5.
 PERSISTENT={'collapse','fire','flood','mud','road_damage'}
 
@@ -101,7 +103,7 @@ def generate_tape(world):
     if detailed:
         weather=random.Random(_seed(DETAILED_VERSION,settings.seed,'wind'))
         angle=weather.uniform(0,math.tau);speed=weather.uniform(2.,4.)
-        tape.update(physics_profile=DETAILED_PHYSICS,wind_m_s=[round(speed*math.cos(angle),4),round(speed*math.sin(angle),4),0.])
+        tape.update(physics_profile=REVISED_PHYSICS if settings.disaster_revision else DETAILED_PHYSICS,wind_m_s=[round(speed*math.cos(angle),4),round(speed*math.sin(angle),4),0.])
     if 'road_graph' in world:tape['placement_model']='irregular_street_sources_and_clipped_five_metre_cells.2'
     if not any(settings.probabilities.values()):return tape
     placement=Placement(world);used=defaultdict(set)
@@ -192,6 +194,15 @@ def generate_tape(world):
             if row['kind']=='fire':
                 row['expires_at']=row['time']+180.
                 row['visibility_expires_at']=row['expires_at']+45.
+    if settings.disaster_revision:
+        # A perimeter expansion cannot keep an extinguished parent burning.
+        by_id = {row['id']: row for row in tape['events']}
+        for row in tape['events']:
+            if row['kind']=='fire' and row['spread']:
+                parent=by_id[row['parent_id']]
+                row['expires_at']=parent['expires_at']
+                row['visibility_expires_at']=parent['visibility_expires_at']
+        append_fire_failures(tape, world, horizon)
     validate_tape(tape,world)
     return tape
 
@@ -204,7 +215,7 @@ def validate_tape(tape,world):
     if not isinstance(tape,dict) or tape.get('format')!=(DETAILED_VERSION if detailed else VERSION):invalid('unsupported version')
     if detailed:
         wind=tape.get('wind_m_s')
-        if (tape.get('physics_profile')!=DETAILED_PHYSICS or not isinstance(wind,list) or len(wind)!=3 or
+        if (tape.get('physics_profile')!=(REVISED_PHYSICS if settings.disaster_revision else DETAILED_PHYSICS) or not isinstance(wind,list) or len(wind)!=3 or
                 any(type(v) not in (int,float) or not math.isfinite(v) for v in wind) or
                 wind[2]!=0 or math.hypot(*wind[:2])>15):invalid('invalid detailed physics or wind')
     if tape.get('profile')!=settings.event_profile or tape.get('probability_window_s')!=settings.event_window_s or tape.get('physics_cell_m')!=CELL_M:
@@ -212,6 +223,8 @@ def validate_tape(tape,world):
     rows=tape.get('events');people=tape.get('late_people')
     if not isinstance(rows,list) or len(rows)>100000 or not isinstance(people,list):invalid('invalid arrays')
     seen={};previous=0;targets={};placement=Placement(world);appeared=set()
+    buildings={b['id']:b for b in world['buildings']}
+    heat_failed=set()
     original_ids={p['id'] for p in world['people']}
     for person in people:
         if not isinstance(person,dict) or type(person.get('id')) is not int or person['id']<=0 or person['id'] in targets or person['id'] in original_ids:invalid('invalid late target id')
@@ -226,8 +239,17 @@ def validate_tape(tape,world):
         if type(at) not in (int,float) or not math.isfinite(at) or not 0<at<settings.horizon or at<previous:invalid('invalid time/order')
         if not isinstance(kind,str) or kind not in allowed:invalid('unknown kind for profile')
         parent=row.get('parent_id')
-        if parent is not None and (not isinstance(parent,str) or parent not in seen or seen[parent]['kind']!=kind or seen[parent]['time']>=at or seen[parent].get('rejection') or kind not in ('fire','flood')):invalid('missing/future/invalid parent')
-        if type(row.get('spread')) is not bool or bool(parent)!=row['spread']:invalid('invalid spread flag')
+        if 'cause' in row:
+            building=buildings.get(row.get('source_object_id')) if isinstance(row.get('source_object_id'),str) else None
+            if (not settings.disaster_revision or row['cause']!=CAUSE or not isinstance(parent,str) or
+                    parent not in seen or building is None or building['id'] in heat_failed or
+                    not valid_fire_failure(row,seen[parent],building,settings.horizon)):
+                invalid('invalid fire-induced structural failure')
+            heat_failed.add(building['id'])
+        else:
+            if parent is not None and (not isinstance(parent,str) or parent not in seen or seen[parent]['kind']!=kind or seen[parent]['time']>=at or seen[parent].get('rejection') or kind not in ('fire','flood')):invalid('missing/future/invalid parent')
+            if type(row.get('spread')) is not bool or bool(parent)!=row['spread']:invalid('invalid spread flag')
+        if type(row.get('spread')) is not bool:invalid('invalid spread flag')
         seen[eid]=row;previous=at
         rejection=row.get('rejection')
         if rejection is not None:
@@ -253,6 +275,15 @@ def validate_tape(tape,world):
             if not isinstance(cell,list) or len(cell)!=2 or any(type(v) is not int for v in cell) or not placement.cell_eligible(cell,kind):invalid('unsafe cell')
         if len({tuple(c) for c in cells})!=len(cells):invalid('duplicate cells')
         if hydraulic and cells:invalid('hydraulic water cannot be teleported into event cells')
+        if settings.disaster_revision and kind in ('fire','collapse'):
+            site=row.get('source_object_id')
+            if not isinstance(site,str) or site not in buildings:invalid('event has no source structure')
+            if kind=='fire' and row['spread']:
+                origin=seen[parent]
+                if (origin['spread'] or origin['source_object_id']!=site or
+                        row.get('expires_at')!=origin.get('expires_at') or
+                        row.get('visibility_expires_at')!=origin.get('visibility_expires_at')):
+                    invalid('fire perimeter outlives or changes its source')
         if kind=='new_target':
             target_id=row.get('target_id')
             if type(target_id) is not int:invalid('invalid target reference')
@@ -267,4 +298,8 @@ def validate_tape(tape,world):
             value=row.get(key)
             if value is not None and (type(value) not in (int,float) or not math.isfinite(value) or value<=at):invalid('invalid expiry')
     if appeared!=set(targets):invalid('unreferenced late target')
+    if settings.disaster_revision:
+        expected={row['id'] for row in expected_fire_failures(tape,world,settings.horizon)}
+        actual={row['id'] for row in rows if 'cause' in row}
+        if actual!=expected:invalid('missing or noncanonical fire-induced structural failure')
     return tape

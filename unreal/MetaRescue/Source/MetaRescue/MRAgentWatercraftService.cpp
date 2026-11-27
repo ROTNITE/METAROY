@@ -41,7 +41,11 @@ bool AMRAgent::BeginWatercraftPickup(int32 Index,const FString& Id)
     {
         const FVector CarrierSpeed=Source->Body->GetPhysicsLinearVelocityAtPoint(Target.Position);
         if(Source->IsOperational()||(CarrierSpeed-HullVelocity).Size2D()>30)return false;
-        if(Source->bRescueWatercraft)Source->SetWatercraftPayloadKg(0);
+        if(Source->bRescueWatercraft&&!Source->SetWatercraftPayloadKg(0)&&Mission->Environment.bRevisedDisasters)
+        {
+            Source->SetWatercraftPayloadKg(Source->WatercraftProfile->PayloadKg);
+            return false;
+        }
     }
     else if(Target.FloatBody&&(Target.FloatBody->GetPhysicsLinearVelocity()-HullVelocity).Size2D()>30)return false;
     if(Target.FloatBody)Target.FloatBody->SetSimulatePhysics(false);
@@ -51,7 +55,7 @@ bool AMRAgent::BeginWatercraftPickup(int32 Index,const FString& Id)
     Target.FloatDisplacedM3=0;
     Target.bAssigned=true;++Target.ObservationEpoch;TargetIndex=Index;CommandId=Id;
     Path.Empty();PathIndex=0;bExternalHold=true;WatercraftHoldPosition=GetActorLocation();
-    ServiceShoreStation.Empty();ServiceRemaining=12;ServiceElapsed=WatercraftUnstableSeconds=0;State=TEXT("loading");return true;
+    ServiceShoreStation.Empty();ServiceRemaining=12;ServiceElapsed=WatercraftUnstableSeconds=WatercraftBlockedLiftSeconds=0;State=TEXT("loading");return true;
 }
 
 bool AMRAgent::BeginDisembark(const FString& StationId,const FString& Id)
@@ -71,10 +75,13 @@ bool AMRAgent::BeginDisembark(const FString& StationId,const FString& Id)
         const auto& Other=Mission->Targets[I];
         if(!Other.bRescued&&FVector::Dist2D(Other.Position,Landing)<250&&FMath::Abs(Other.Position.Z-Landing.Z)<150)return false;
     }
-    auto& Target=Mission->Targets[TargetIndex];PickupStart=Target.Visual->GetActorLocation();PickupRotation=Target.Visual->GetActorQuat();
+    auto& Target=Mission->Targets[TargetIndex];
+    if(!Target.Visual||(Mission->Environment.bRevisedDisasters&&
+        (!Target.bAssigned||Target.bRescued||Target.SupportCarrier.Get()!=this)))return false;
+    PickupStart=Target.Visual->GetActorLocation();PickupRotation=Target.Visual->GetActorQuat();
     ServiceHeading=Station->GetNumberField(TEXT("boat_yaw_degrees"));
     CommandId=Id;Path.Empty();PathIndex=0;bExternalHold=true;WatercraftHoldPosition=GetActorLocation();
-    ServiceShoreStation=StationId;ServiceRemaining=12;ServiceElapsed=WatercraftUnstableSeconds=0;State=TEXT("unloading");return true;
+    ServiceShoreStation=StationId;ServiceRemaining=12;ServiceElapsed=WatercraftUnstableSeconds=WatercraftBlockedLiftSeconds=0;State=TEXT("unloading");return true;
 }
 
 void AMRAgent::TickWatercraftService(float Dt)
@@ -129,9 +136,53 @@ void AMRAgent::TickWatercraftService(float Dt)
         for(int32 I=0;I<20;++I){const double Mid=(Low+High)*.5;if(LiftWh(CargoAt(Mid))>Energy)High=Mid;else Low=Mid;}
         T=Low;
     }
-    const FVector Cargo=CargoAt(T);Spend(LiftWh(Cargo),ServiceWh);ServiceElapsed=T;ServiceRemaining=12-T;
+    const FVector Cargo=CargoAt(T);
+    const FQuat Rotation=FQuat::Slerp(PickupRotation,Loading?GetActorQuat():FQuat::Identity,FMath::SmoothStep(3.,9.,T));
+    if(Mission->Environment.bRevisedDisasters&&Target.FloatBody)
+    {
+        // The carried body is not simulating while on the hoist. Query its
+        // actual oriented envelope against external blocking geometry before
+        // moving it. The owning vessel is intentionally excluded so that
+        // the authored hoist can load onto its own bed.
+        const auto Current=Target.Visual->GetActorTransform();
+        const FVector Local=Current.InverseTransformPosition(Target.FloatBody->GetComponentLocation());
+        const FQuat LocalRotation=Current.GetRotation().Inverse()*Target.FloatBody->GetComponentQuat();
+        const FVector From=Target.FloatBody->GetComponentLocation();
+        const FVector To=FTransform(Rotation,Cargo,Current.GetScale3D()).TransformPosition(Local);
+        // Two centimetres of contact tolerance avoids counting the planned
+        // support surface as penetration; never shrink a dimension below 1cm.
+        FVector Half=Target.FloatBody->GetScaledBoxExtent()-FVector(2);
+        for(int32 Axis=0;Axis<3;++Axis)Half[Axis]=FMath::Max(1.,Half[Axis]);
+        FCollisionQueryParams Query(SCENE_QUERY_STAT(MRWatercraftLift),false,this);
+        Query.AddIgnoredActor(Target.Visual);
+        const auto Shape=FCollisionShape::MakeBox(Half);
+        auto Blocked=[&](FQuat Orientation)
+        {
+            FHitResult Hit;
+            if(!GetWorld()->SweepSingleByChannel(Hit,From,To,Orientation,ECC_Visibility,Shape,Query))return false;
+            const bool Separating=Hit.bStartPenetrating&&Hit.PenetrationDepth<=2.&&
+                FVector::DotProduct(To-From,Hit.Normal)>0&&Hit.Normal.Z>.7;
+            const bool Landing=!Hit.bStartPenetrating&&T>=9&&Hit.Time>=.99&&
+                Hit.ImpactNormal.Z>.8&&To.Z<=From.Z;
+            return !Separating&&!Landing;
+        };
+        if(Blocked(Target.FloatBody->GetComponentQuat())||Blocked(Rotation*LocalRotation))
+        {
+            WatercraftBlockedLiftSeconds+=Dt;
+            if(WatercraftBlockedLiftSeconds>=3.)
+            {
+                // Keep the last actually reached pose. No manufactured
+                // disembark, handoff, or delivered patient on an aborted lift.
+                StopAndRelease(TEXT("watercraft_service_obstructed"));State=TEXT("idle");
+                FailureReason.Empty();ServiceShoreStation.Empty();ServiceRemaining=ServiceElapsed=0;
+            }
+            return;
+        }
+    }
+    WatercraftBlockedLiftSeconds=0;
+    Spend(LiftWh(Cargo),ServiceWh);ServiceElapsed=T;ServiceRemaining=12-T;
     Target.Visual->SetActorLocation(Cargo);
-    Target.Visual->SetActorRotation(FQuat::Slerp(PickupRotation,Loading?GetActorQuat():FQuat::Identity,FMath::SmoothStep(3.,9.,T)));
+    Target.Visual->SetActorRotation(Rotation);
     Target.Position=Cargo;
     // During loading the boat-mounted hoist takes the weight. At the pier a
     // fixed gantry takes it off the boat as soon as the stretcher lifts free.

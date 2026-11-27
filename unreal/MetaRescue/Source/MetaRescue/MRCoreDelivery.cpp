@@ -67,8 +67,13 @@ void FMRCoreRuntime::GatherReports()
                 if(!T.FloatBody)continue;
                 FVector Last;MRCoreJson::Point(Field(Known,TEXT("position")),Last);
                 const bool Afloat=T.SupportCarrier.IsValid()?T.SupportCarrier->bRescueWatercraft:T.ShoreStation.IsEmpty()&&World->WaterDepth(T.Position)>35;
-                if(Time()-Known->GetNumberField(TEXT("observed_at"))<1||
-                   (FVector::Dist(Last*100,T.Position)<50&&Text(Known,TEXT("access_medium"))==(Afloat?TEXT("surface_water"):TEXT("ground"))))continue;
+                const double Age=Time()-Known->GetNumberField(TEXT("observed_at"));
+                const bool Stable=FVector::Dist(Last*100,T.Position)<50&&
+                    Text(Known,TEXT("access_medium"))==(Afloat?TEXT("surface_water"):TEXT("ground"));
+                // Stable floating targets still need a fresh delivered pose
+                // for a safe hoist. Refresh at a bounded interval without
+                // relying on privileged position or unconditional inspection.
+                if(Age<1||(Stable&&(!World->Environment.bRevisedDisasters||Age<4.)))continue;
             }
             if(Reports.ContainsByPredicate([&](const FReport& R){return R.Agent==Agent&&R.Target==Target&&R.TargetEpoch==T.ObservationEpoch;}))continue;
             const float Quality=SensorQuality(A->GetActorLocation(),SensorPoint);
@@ -293,6 +298,14 @@ void FMRCoreRuntime::UpdateCommands()
             {
                 if(!A||A->CommandId!=C.Key||!A->IsCharging()){Finish=TEXT("cancelled");C.Reason=TEXT("charge_replaced");}
             }
+            else if(World->Environment.bRevisedDisasters&&C.Action==TEXT("handover")&&
+                World->Targets.IsValidIndex(C.TargetIndex)&&World->Targets[C.TargetIndex].bRescued)
+            {
+                // A medical handover belongs to the command which actually
+                // completed it, even if its carrier failed before the ACK.
+                if(World->Targets[C.TargetIndex].MedicalHandoverCommand==C.Key)Finish=TEXT("completed");
+                else {Finish=TEXT("failed");C.Reason=TEXT("target_delivered_by_other_command");}
+            }
             else if(!A||(!A->IsOperational()&&C.Action!=TEXT("hold"))){Finish=TEXT("failed");C.Reason=TEXT("agent_failed_during_execution");}
             else if((C.Action==TEXT("move")||C.Action==TEXT("follow_route")||C.Action==TEXT("hold")))
             {
@@ -303,6 +316,9 @@ void FMRCoreRuntime::UpdateCommands()
             else if(C.Action==TEXT("handover")&&World->Targets.IsValidIndex(C.TargetIndex)&&World->Targets[C.TargetIndex].bRescued)Finish=TEXT("completed");
             else if(C.Action==TEXT("disembark")&&World->Targets.IsValidIndex(C.TargetIndex)&&A->CommandId==C.Key&&
                 !A->bCarrying&&World->Targets[C.TargetIndex].ShoreStation==Text(C.Parameters,TEXT("station_id")))Finish=TEXT("completed");
+            else if(World->Environment.bRevisedDisasters&&C.Action==TEXT("handover")&&
+                (A->CommandId!=C.Key||A->TargetIndex!=C.TargetIndex))
+            {Finish=TEXT("failed");C.Reason=TEXT("handover_interrupted");}
             else if(A->bRescueWatercraft&&A->CommandId==C.Key&&A->TargetIndex==INDEX_NONE&&
                 (C.Action==TEXT("pickup")||C.Action==TEXT("disembark")))
             {Finish=TEXT("failed");C.Reason=TEXT("watercraft_service_unstable");}
@@ -329,6 +345,8 @@ void FMRCoreRuntime::UpdateCommands()
                 {TEXT("priority"),Num(T.Priority)},{TEXT("evacuation_state"),Str(T.bRescued?TEXT("evacuated"):Loaded?TEXT("loaded"):TEXT("waiting"))},
                 {TEXT("aid_received"),Num(ReceivedKits.FindRef(C.TargetIndex))},{TEXT("aid_required"),Num(3)}});
             TargetSupport(World,T,C.TargetReport);
+            if(World->Environment.bRevisedDisasters&&T.bRescued&&!T.MedicalHandoverCommand.IsEmpty())
+                C.TargetReport->SetStringField(TEXT("medical_handover_command_id"),T.MedicalHandoverCommand);
             if(ExplorationScene)C.TargetVisual=ExplorationScene->CaptureTarget(C.TargetIndex,Time());
         }
         if(C.AckDeadline>=0&&Time()+1.e-9>=C.AckDeadline)

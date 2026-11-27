@@ -5,7 +5,11 @@ import math
 
 from contracts.protocol import validate_episode_response
 from controller.baselines import FixedWorkflow
-from tools.native_archive import IndexedRecords
+from tools.native_archive import IndexedRecords, file_sha256
+from pathlib import Path
+import re
+import struct
+import zlib
 
 
 def drive(client,world,decision):
@@ -100,3 +104,72 @@ def verify(result,world,output_root):
                                      for t in release_snapshots)
     result.update(applied_times=starts,ended_times=ends,first_restriction_brake_s=brake[0],restriction_brake_position_m=brake[1],
                   max_degraded_speed_m_s=max(speeds),released_position_m=released['target_position'],release_snapshots=len(release_snapshots))
+
+
+def event_key(event):
+    return (event['id'],event['type'],event['status'],event['received_at'])
+
+
+def png_dimensions(path):
+    """Bounded PNG structure and chunk CRC verification (not pixel review)."""
+    if path.stat().st_size>128*1024*1024:raise ValueError('Oversized PNG')
+    with path.open('rb') as stream:
+        if stream.read(8)!=b'\x89PNG\r\n\x1a\n':raise ValueError('Invalid PNG signature')
+        width=height=None;data=False;end=False
+        while not end:
+            header=stream.read(8)
+            if len(header)!=8:raise ValueError('Truncated PNG chunk')
+            size,kind=struct.unpack('>I4s',header)
+            if size>128*1024*1024:raise ValueError('Oversized PNG chunk')
+            payload=stream.read(size);crc=stream.read(4)
+            if len(payload)!=size or len(crc)!=4 or zlib.crc32(kind+payload)!=struct.unpack('>I',crc)[0]:
+                raise ValueError('PNG chunk CRC or length mismatch')
+            if width is None:
+                if kind!=b'IHDR' or size!=13:raise ValueError('Invalid PNG IHDR')
+                width,height=struct.unpack('>II',payload[:8])
+                if not 640<=width<=16384 or not 480<=height<=16384:raise ValueError('Invalid PNG dimensions')
+            elif kind==b'IHDR':raise ValueError('Duplicate PNG IHDR')
+            if kind==b'IDAT' and size:data=True
+            if kind==b'IEND':
+                if size or not data:raise ValueError('Incomplete PNG image')
+                end=True
+        if stream.read(1):raise ValueError('Unexpected PNG trailing data')
+    return width,height
+
+
+def frame_coverage(directory, expected_events, journal):
+    """Match actual native frame requests to delivered events.
+
+    PNG signatures/dimensions and file hashes are evidence of captured files,
+    not proof that the expected pixels were visible. Manual review remains open.
+    """
+    expected={event_key(e) for e in expected_events}
+    expected_types={key[1] for key in expected}
+    covered=set()
+    frames=[]
+    names=set()
+    for row in journal:
+        if row['record_type']!='contest_frame_requested':continue
+        data=row['payload'];name=data['file']
+        if not re.fullmatch(r'overview/overview-[0-9]+[.]png',name) or name in names:
+            raise ValueError('Invalid or duplicate contest frame path')
+        names.add(name)
+        keys={event_key(e) for e in data['events']}
+        if not keys or not keys<=expected or any(k[3]>data['observation_time'] for k in keys):
+            raise ValueError('Contest frame contains undelivered or future event')
+        path=Path(directory)/name
+        if path.is_symlink():raise ValueError('Unexpected linked contest frame')
+        width,height=png_dimensions(path)
+        covered.update(keys)
+        frames.append({'file':name,'sha256':file_sha256(path),'width':width,'height':height,
+                       'observation_time':data['observation_time'],'event_types':sorted({k[1] for k in keys})})
+    missing=expected-covered
+    if missing or len(expected_types)!=14:
+        raise ValueError('Incomplete contest frame coverage: '+str(sorted(missing)))
+    return {'event_types':sorted(expected_types),'frames':frames,'frame_evidence_complete':True,
+            'visual_inspection_pending':True,'scope':'request correlation and file presence, not pixel acceptance'}
+
+
+def verify_visual(result,output_root):
+    directory=output_root/'core-runs'/result['contest_episode']
+    result['visual_evidence']=frame_coverage(directory,result['events'],IndexedRecords(directory/'truth').json_records())

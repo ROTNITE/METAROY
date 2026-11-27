@@ -221,6 +221,23 @@ FVector AMRAgent::SafeVelocity(const FVector& Requested,float Dt)
         {
             StopReason=TEXT("hazard_on_route");StopObstacle=TEXT("restricted_volume");Desired=FVector::ZeroVector;
         }
+        // Revised roads: inspect both track envelopes over the braking
+        // distance, including the front of the chassis. The legacy four
+        // center samples can miss a rim under just one track.
+        if(!bAerial&&StopReason.IsEmpty()&&Mission->Environment.bRevisedDisasters)
+        {
+            const FVector Along=Direction.GetSafeNormal2D(),Side(-Along.Y,Along.X,0);
+            const double Reach=LookAhead+125.;
+            const int32 Count=FMath::Max(1,FMath::CeilToInt(Reach/50.));
+            for(int32 I=0;I<=Count&&StopReason.IsEmpty();++I)
+                for(double Offset:{0.,-70.,70.})
+                {
+                    const FVector Sensed=P+Along*(Reach*I/Count)+Side*Offset;
+                    if(!Mission->IsUnsafeRoadSupport(Sensed))continue;
+                    StopReason=TEXT("hazard_on_route");StopObstacle=TEXT("road_support");Desired=FVector::ZeroVector;
+                    SensedBlocker=FBox(Sensed-FVector(100,100,100),Sensed+FVector(100,100,100));break;
+                }
+        }
         if(!bAerial&&StopReason.IsEmpty())for(float Fraction:{0.f,.35f,.7f,1.f})
             if(Mission->IsUnsafeGround(P+Direction*LookAhead*Fraction))
             {
@@ -246,7 +263,7 @@ FVector AMRAgent::SafeVelocity(const FVector& Requested,float Dt)
                     Hit.ImpactPoint.Z<=Dock.Z+5;
                 const bool DepartingPad=Motion.Z>0&&P.Z<=Dock.Z+50&&FVector::Dist2D(P,Dock)<170;
                 if(OwnPadSupport&&(FlightAltitude<=Dock.Z+100||DepartingPad))continue;
-                if(StopObstacle==TEXT("restricted_volume"))break;
+                if(StopObstacle==TEXT("restricted_volume")||StopObstacle==TEXT("road_support"))break;
                 StopReason=TEXT("obstacle_on_route");Desired=FVector::ZeroVector;
                 ReportRouteObstacle(Hit);
                 break;

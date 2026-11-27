@@ -222,6 +222,7 @@ float FMRDistrictEnvironment::Visibility(const FVector& P) const
 FMRSmokeVolume FMRDistrictEnvironment::SmokeDescriptor(const FMRDisturbance& E,double Age) const
 {
     FMRSmokeVolume V;V.EventId=E.Id;V.Source=E.Source;V.Source.Z=E.SmokeEmissionHeightCm;
+    V.bClippedQuadrature=bRevisedDisasters;
     V.ExtinctionPerCm=.006;
     V.WindCmPerSecond=WindCmPerSecond;V.Strength=FMath::Clamp(Age/4.,0.,1.);
     if(E.Kind==EMRDisturbance::Fire)

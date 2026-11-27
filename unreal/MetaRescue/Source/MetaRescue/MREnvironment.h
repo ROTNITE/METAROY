@@ -29,6 +29,7 @@ struct FMRDisturbance
     TArray<FIntPoint> Cells;
     int32 TargetId=-1;
     bool bPropagation=false;
+    bool bFireFailure=false;
 };
 
 // No actor, renderer, route planner, or sensor RNG is referenced here.
@@ -44,6 +45,7 @@ public:
     FString Mode=TEXT("random");
     // Explicitly versioned: saved worlds retain the original surface physics.
     bool bDetailedHazards=false;
+    bool bRevisedDisasters=false;
     FVector WindCmPerSecond=FVector::ZeroVector;
     FMRDistrictEnvironment();
     void Generate(const TArray<FMREventSite>& Sites);

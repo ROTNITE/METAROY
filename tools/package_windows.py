@@ -21,9 +21,12 @@ from tools.product_session import default_product_request
 PROJECT = ROOT/'unreal/MetaRescue'
 TOOLS = ('run_product.py', 'product_session.py', 'run_mission.py', 'native_archive.py',
          'native_process.py', 'analytics_service.py', 'run_native_series.py', 'series_plan.py',
-         'issue_operator.py', 'net65_demo.py')
+         'issue_operator.py', 'net65_demo.py', 'verify_distribution_zip.py', 'm5_lab.py', 'm5_trial.py',
+         'm5_matrix.py', 'm5_score.py', 'm5_spec.py', 'run_interop.py', 'goal_evidence.py')
 ENTRYPOINTS = ('run_product.py', 'product_session.py', 'run_mission.py',
-               'run_native_series.py', 'series_plan.py', 'issue_operator.py')
+               'run_native_series.py', 'series_plan.py', 'issue_operator.py', 'verify_distribution_zip.py')
+MODULE_ENTRYPOINTS = ('tools.m5_lab', 'tools.m5_trial', 'tools.run_interop',
+                      'conformance.reference_environment', 'conformance.reference_controller')
 REQUIRED_SCENARIO = ('core-scenarios-v1.json', 'quarter.json', 'scenario.json',
                      'watercraft-hydrostatics-r1.json')
 DEPENDENCIES = ('jsonschema', 'jsonschema-specifications', 'attrs', 'referencing', 'rpds-py')
@@ -36,6 +39,17 @@ if not defined METARESCUE_OUTPUT set "METARESCUE_OUTPUT=%~dp0output"
 if not defined METARESCUE_LIVE_BUDGET if exist "D:\MetaRescue-output\ai-budget.json" set "METARESCUE_LIVE_BUDGET=D:\MetaRescue-output\ai-budget.json"
 if not defined METARESCUE_LIVE_BUDGET set "METARESCUE_LIVE_BUDGET=%LOCALAPPDATA%\MetaRescue\ai-budget.json"
 "%~dp0python\python.exe" -B -X utf8 tools\run_product.py --configuration "%~dp0presets\offline.json" %*
+exit /b %ERRORLEVEL%
+"""
+
+
+M5_STARTUP = r"""@echo off
+setlocal
+cd /d "%~dp0"
+set "PYTHONNOUSERSITE=1"
+set "PYTHONPATH="
+if not defined METARESCUE_OUTPUT set "METARESCUE_OUTPUT=%~dp0output"
+"%~dp0python\python.exe" -B -X utf8 -m tools.m5_lab %*
 exit /b %ERRORLEVEL%
 """
 
@@ -57,6 +71,35 @@ def verify_scenario_files(directory, *, expected=None):
         changed = sorted(name for name in files.keys() | expected.keys() if files.get(name) != expected.get(name))
         raise RuntimeError(f'Runtime scenario data changed in {directory}: '+', '.join(changed))
     return files
+
+
+REVISED_ASSETS=('EffectsV3/Revision6/M_PhysicalSmoke.uasset',
+                'EffectsV3/Revision6/M_RememberedSmoke.uasset',
+                'EffectsV3/Revision5/M_UrbanFlood.uasset',
+                'EffectsV3/ExplorationWaterR2/M_RememberedFlood.uasset',
+                'EffectsV3/WaterR6/M_UrbanFlood.uasset','EffectsV3/WaterR6/M_RememberedFlood.uasset',
+                'EffectsV3/WaterR6/M_WetFringe.uasset')
+
+
+def verify_revised_assets(content):
+    for relative in REVISED_ASSETS:
+        asset=content/relative
+        if not asset.is_file():raise FileNotFoundError('Missing required material: '+relative)
+        with asset.open('rb') as stream:header=stream.read(64)
+        if header.startswith(b'version https://git-lfs.github.com/spec/') or len(header)<64:
+            raise ValueError('Unmaterialized or truncated material: '+relative)
+        # Loose editor packages begin with the UE PACKAGE_FILE_TAG, not
+        # arbitrary bytes or an HTML/download error. Full validation still
+        # belongs to the engine load/cook, not this lightweight preflight.
+        if header[:4]!=bytes.fromhex('c1832a9e'):
+            raise ValueError('Not a little-endian Unreal package: '+relative)
+
+
+def required_material_shader_failures(log):
+    paths = tuple(name.removesuffix('.uasset') for name in REVISED_ASSETS)
+    return [line for line in log.read_text(encoding='utf-8', errors='replace').splitlines()
+            if 'Failed to compile Material' in line
+            and any(path in line.replace('\\', '/') for path in paths)]
 
 
 def project_inputs(project):
@@ -150,14 +193,30 @@ def bundle_python(destination):
     return {'interpreter': sys.version.split()[0], 'dependencies': versions}
 
 
-def check_python_entrypoints(distribution):
-    python = distribution/'python/python.exe'
-    for name in ENTRYPOINTS:
+def check_python_entrypoints(distribution, *, python=None):
+    python = distribution/'python/python.exe' if python is None else python
+    # -I drops the working directory. Reinsert only the staged root for
+    # module entrypoints; never load source-checkout or user-site modules.
+    isolated = "import runpy,sys; from pathlib import Path; sys.path.insert(0,str(Path.cwd())); name=sys.argv.pop(1); runpy.run_module(name,run_name='__main__')"
+    commands = [(name,['tools/'+name]) for name in ENTRYPOINTS]
+    commands += [(name,['-c',isolated,name]) for name in MODULE_ENTRYPOINTS]
+    for name,command in commands:
         result = subprocess.run(
-            [str(python), '-I', '-B', '-X', 'utf8', 'tools/'+name, '--help'],
+            [str(python), '-I', '-B', '-X', 'utf8', *command, '--help'],
             cwd=distribution, capture_output=True, text=True, encoding='utf-8', check=False, timeout=30)
         if result.returncode:
             raise RuntimeError(f'Packaged Python entry point {name} failed:\n{result.stderr.strip()}')
+
+
+def stage_python_sources(distribution):
+    """Copy the exact runtime modules, including independent M5 peers."""
+    for part in ('controller', 'contracts', 'environment', 'analytics', 'web', 'conformance'):
+        shutil.copytree(ROOT/part, distribution/part, ignore=shutil.ignore_patterns('__pycache__', '*.pyc'))
+    (distribution/'tools').mkdir()
+    for name in TOOLS:
+        shutil.copy2(ROOT/'tools'/name, distribution/'tools'/name)
+    (distribution/'Start-M5.cmd').write_text(M5_STARTUP, encoding='ascii', newline='\r\n')
+    shutil.copy2(ROOT/'docs/m5-interface.md', distribution/'M5.md')
 
 
 def stage_runtime(distribution, demo, *, scenario_files, configuration='Development', fab_usage_notice=None):
@@ -166,11 +225,7 @@ def stage_runtime(distribution, demo, *, scenario_files, configuration='Developm
         raise FileNotFoundError(f'BuildCookRun did not archive the Win64 game executable {executable.name}')
     native_scenario = executable.parents[2]/'Content/Scenario'
     verify_scenario_files(native_scenario, expected=scenario_files)
-    for part in ('controller', 'contracts', 'environment', 'analytics', 'web'):
-        shutil.copytree(ROOT/part, distribution/part, ignore=shutil.ignore_patterns('__pycache__', '*.pyc'))
-    (distribution/'tools').mkdir()
-    for name in TOOLS:
-        shutil.copy2(ROOT/'tools'/name, distribution/'tools'/name)
+    stage_python_sources(distribution)
     shutil.copytree(native_scenario, distribution/'unreal/MetaRescue/Content/Scenario')
     details = bundle_python(distribution/'python')
     write_json(distribution/'python/dependencies.json', details)
@@ -186,12 +241,13 @@ def stage_runtime(distribution, demo, *, scenario_files, configuration='Developm
     if fab_usage_notice is not None:
         shutil.copy2(fab_usage_notice, distribution/'Fab-Content-Notice.txt')
     check_python_entrypoints(distribution)
-    details['verified_entrypoints'] = list(ENTRYPOINTS)
+    details['verified_entrypoints'] = list(ENTRYPOINTS) + list(MODULE_ENTRYPOINTS)
     return details
 
 
 def build(output, engine, demo, *, configuration='Shipping', fab_usage_notice=None):
     scenario_files = verify_scenario_files(PROJECT/'Content/Scenario')
+    verify_revised_assets(PROJECT/'Content')
     fab_packages = PROJECT/'Content/EffectsV3/Revision3/Fab'
     if any(fab_packages.rglob('*.uasset')) and fab_usage_notice is None:
         raise ValueError('Provide --fab-usage-notice for a cooked distribution containing Fab content')
@@ -227,16 +283,20 @@ def build(output, engine, demo, *, configuration='Shipping', fab_usage_notice=No
                 'scenario_sha256': scenario_files, 'configuration': configuration,
                 'grounding': grounding, 'grounding_changes': sorted(grounding_changes)}
     write_json(output/'build-manifest.json', manifest)
-    with (output/'BuildCookRun.log').open('w', encoding='utf-8') as log:
+    cook_log = output/'BuildCookRun.log'
+    with cook_log.open('w', encoding='utf-8') as log:
         status = subprocess.run(command, cwd=project, stdout=log, stderr=subprocess.STDOUT, check=False)
     after = {name: file_sha256(project/name) if (project/name).is_file() else None for name in before}
     changed_inputs = [name for name, checksum in before.items() if after[name] != checksum]
-    manifest.update(state='staging' if status.returncode == 0 and before == after else 'failed',
+    shader_failures = required_material_shader_failures(cook_log)
+    manifest.update(state='staging' if status.returncode == 0 and before == after and not shader_failures else 'failed',
                     exit_code=status.returncode, frozen_inputs_preserved=not changed_inputs,
-                    changed_inputs=changed_inputs)
+                    changed_inputs=changed_inputs, required_material_shader_failures=shader_failures)
     write_json(output/'build-manifest.json', manifest)
+    if shader_failures:
+        raise RuntimeError('A required material failed to compile. See '+str(cook_log))
     if manifest['state'] == 'failed':
-        raise RuntimeError('BuildCookRun or source verification failed. See '+str(output/'BuildCookRun.log'))
+        raise RuntimeError('BuildCookRun or source verification failed. See '+str(cook_log))
     try:
         manifest['python'] = stage_runtime(distribution, demo, scenario_files=scenario_files,
                                            configuration=configuration, fab_usage_notice=fab_usage_notice)

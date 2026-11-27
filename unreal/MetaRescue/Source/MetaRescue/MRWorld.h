@@ -52,6 +52,7 @@ struct FMRTarget
     void SetFlotationActive(bool Active);
     double VisualAnchorOffsetCm=0,FloatDisplacedM3=0;
     FString ShoreStation;
+    FString MedicalHandoverCommand;
     TWeakObjectPtr<AMRAgent> SupportCarrier;
     TArray<FVector> Path;
 };
@@ -116,7 +117,8 @@ public:
     void AppendEvent(const FString& Type, int32 Id = -1);
     void WriteTelemetry();
     float GroundSpeedFactor(const FVector& Position) const;
-    bool IsUnsafeGround(const FVector& Position) const;
+    bool IsUnsafeGround(const FVector& Position,bool IncludeDebris=true) const;
+    bool IsUnsafeRoadSupport(const FVector& Position) const;
     bool HasRadio(const FVector& Position) const;
     float WaterDepth(const FVector& Position) const;
     FMRWaterSample WaterAtCm(FVector Position) const;
@@ -147,6 +149,13 @@ private:
     void PlaceDisasterWreck(const FMRDisturbance& Event);
     FString CoreEventProfile;
     UPROPERTY() TArray<TObjectPtr<USceneComponent>> CoreEventComponents;
+    // Private physical occupancy, sampled from current event-owned colliders.
+    // History allows a delivered observation to clear a moved obstacle.
+    TSet<FIntPoint> DebrisCells,DebrisHistory,StaticDebrisCells;
+    TMap<FIntPoint,FVector> DebrisSamplePoints,StaticDebrisSamplePoints;
+    bool bStaticDebrisDirty=true;
+    double NextDebrisRefresh=0;
+    void RefreshDebrisCells();
     UPROPERTY() TObjectPtr<UInstancedStaticMeshComponent> MudTracks;
     TArray<FVector> MudTrackPositions;
     double NextMudTrackCleanup=0;

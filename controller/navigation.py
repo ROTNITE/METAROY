@@ -112,6 +112,9 @@ class ObservedSurface:
     visibility: float
     aerial_blocked: bool = False
     restriction: bool = False
+    # A local physical stop can leave the chassis centre inside a planning
+    # margin, but never authorizes crossing the actual reported footprint.
+    margin_egress: bool = False
 
 
 def observed_surfaces(observation):
@@ -187,7 +190,7 @@ class NavigationMap:
             self.obstacles.extend(StreetBuilding.parse({'bounds':box,'footprint':box['footprint']})
                                   if 'footprint' in box else Box.parse(box) for box in item.get('obstacles', ()))
         self.obstacles.extend(Box.parse(box) for box in observed_obstacles)
-        self.ground_only = set();self.air_only = set();self.restrictions = set()
+        self.ground_only = set();self.air_only = set();self.restrictions = set();self.margin_egress = set()
         for surface in surfaces:
             if not (surface.ground_blocked or surface.aerial_blocked):continue
             bounds=surface.bounds
@@ -200,6 +203,7 @@ class NavigationMap:
             if not surface.aerial_blocked:self.ground_only.add(index)
             if not surface.ground_blocked:self.air_only.add(index)
             if surface.restriction:self.restrictions.add(index)
+            if surface.margin_egress and surface.ground_blocked and not surface.aerial_blocked:self.margin_egress.add(index)
             self.obstacles.append(bounds)
         self.surfaces = []
         for surface in announced_map.get('surfaces', ()):
@@ -268,6 +272,14 @@ class NavigationMap:
             overlap=self.obstacles[i].interval(a,b,radius,half_height)
             if overlap is None:continue
             if i in self.restrictions and overlap[0]==0 and overlap[1]<1:continue
+            if i in self.margin_egress and overlap[0]==0 and overlap[1]<1:
+                box=self.obstacles[i]
+                # A separating axis must already exist and the movement must
+                # increase separation along that axis. Never traverse the
+                # physical box, even if a segment ends outside the margin.
+                away=any((a[d]<box.minimum[d] and b[d]<a[d]) or
+                         (a[d]>box.maximum[d] and b[d]>a[d]) for d in (0,1))
+                if away and box.interval(a,b,0.,half_height) is None:continue
             return False
         return True
 
@@ -449,6 +461,19 @@ class NavigationMap:
                 if distance > 36:
                     continue
                 anchors = [q] if passable(p, q) else []
+                if not anchors and not arriving and self.margin_egress:
+                    # If the projection is within the braking margin, make a
+                    # short connector to the same street in either direction.
+                    # Its first real leg must leave the margin monotonically.
+                    for key in (u,v):
+                        end=nodes[key]
+                        span=math.dist(q,end)
+                        if span<=1.e-9:continue
+                        for shift in (2.,4.,6.):
+                            t=min(1.,shift/span)
+                            anchor=tuple(a+t*(b-a) for a,b in zip(q,end))
+                            if distance<=width/2-radius and passable(p,anchor):
+                                anchors.append(anchor);break
                 if not anchors and self.parked_ground_peers and on_apron(p) and on_apron(q):
                     # A perpendicular projection can enter a parked vehicle's
                     # braking envelope. Try both directions on the same road.

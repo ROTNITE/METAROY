@@ -125,7 +125,8 @@ class MissionCompletionTests(unittest.TestCase):
 class CoreInteropAcceptanceTests(unittest.TestCase):
     def test_persistent_interop_verifies_four_archives_before_owner_exit(self):
         with tempfile.TemporaryDirectory() as directory:
-            root=Path(directory)
+            # Match the runner's resolved paths, including Windows 8.3 aliases.
+            root=Path(directory).resolve()
             layout=root/'layout.json';layout.write_text('{}',encoding='utf-8')
             output=root/'core-acceptance/test'
             ids=[f'{i:032x}' for i in range(4)]
@@ -153,7 +154,7 @@ class CoreInteropAcceptanceTests(unittest.TestCase):
                     return 1
                 self.assertEqual(archives.call_count,4)
                 self.assertTrue((output/'owner-exit.request').is_file())
-                self.assertIn(f'-MRCoreExitRequestFile={output / "owner-exit.request"}',command.return_value)
+                self.assertIn(f'-MRCoreExitRequestFile={(output / "owner-exit.request").resolve()}',command.return_value)
                 native.returncode=0
                 return 0
 

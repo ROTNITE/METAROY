@@ -88,6 +88,12 @@ bool FMRUrbanWater::Build()
     if(!World->bDisasterCity||!Is(World->CityLayout,TEXT("hydrology"),EJson::Object))return false;
     const auto Data=World->CityLayout->GetObjectField(TEXT("hydrology"));
     if(!ReadBlueprint(Data,World->GridSize))return false;
+    if(World->Environment.bRevisedDisasters&&FApp::CanEverRender())
+    {
+        FringeMaterial.Reset(LoadObject<UMaterialInterface>(nullptr,TEXT("/Game/EffectsV3/WaterR6/M_WetFringe.M_WetFringe")));
+        if(!FringeMaterial.IsValid())
+        {UE_LOG(LogTemp,Error,TEXT("Revised water requires imported M_WetFringe"));return false;}
+    }
     const int32 Width=Columns,Height=Rows;const double Drain=DrainCapacity,CellM=CellCm/100;
     for(const FString& Key:{TEXT("buildings"),TEXT("facilities"),TEXT("fixed_obstacles")})
         for(const auto& Value:World->CityLayout->GetArrayField(Key))
@@ -147,7 +153,7 @@ bool FMRUrbanWater::Build()
     {
         FVector P;MRCoreJson::Point(Field(Value->AsObject(),TEXT("position")),P);Hydro.SetDrain(At(P*100),Drain);
     }
-    for(int32 Y=0;Y<Height;Y+=16)for(int32 X=0;X<Width;X+=16)Tiles.Add({X,Y,{}});
+    for(int32 Y=0;Y<Height;Y+=16)for(int32 X=0;X<Width;X+=16)Tiles.Add({X,Y,{},{}});
     LastTime=0;Render();
     UE_LOG(LogTemp,Display,TEXT("MR_HYDROLOGY built %dx%d cell_m=%.1f source_cells=%d volume_m3=%.3f"),Width,Height,CellM,Sources.Num(),Hydro.VolumeM3());
     return Sources.Num()>0;
@@ -234,6 +240,69 @@ void FMRUrbanWater::TerrainChanged(FBox Bounds)
     Render();
 }
 
+void FMRUrbanWater::RenderFringe(FTile& Tile,int32 W,int32 H,FVector TileOrigin)
+{
+    TArray<FVector> Vertices,Normals;TArray<int32> Triangles;
+    TArray<FVector2D> UV;TArray<FLinearColor> Colors;
+    for(int32 Y=Tile.Y;Y<Tile.Y+H;++Y)for(int32 X=Tile.X;X<Tile.X+W;++X)
+    {
+        const int32 I=Hydro.Index(X,Y);if(Hydro.DepthM(I)<=.015)continue;
+        for(const FIntPoint D:{FIntPoint(1,0),FIntPoint(-1,0),FIntPoint(0,1),FIntPoint(0,-1)})
+        {
+            const double Width=Hydro.WetFringeWidthCm(I,Hydro.Index(X+D.X,Y+D.Y));
+            if(Width<=1)continue;
+            const FVector Along(D.X,D.Y,0),Side(-D.Y,D.X,0);
+            const FVector Edge=Center(X,Y)+Along*(CellCm*.5+1);
+            // Three short strips follow actual ground. Suppress strips over
+            // occupied footprints and sharp discontinuities instead of
+            // painting walls, cliffs, building roofs, or the inside of a pit.
+            for(int32 K=0;K<3;++K)
+            {
+                const double S0=-CellCm*.5+10+(CellCm-20)*K/3.;
+                const double S1=-CellCm*.5+10+(CellCm-20)*(K+1)/3.;
+                const auto Taper=[&](int32 J)
+                {return J==0||J==3?.45:1.;};
+                FVector P[4]={Edge+Side*S0,Edge+Side*S1,Edge+Side*S1+Along*(Width*Taper(K+1)),
+                    Edge+Side*S0+Along*(Width*Taper(K))};
+                double MinZ=MAX_dbl,MaxZ=-MAX_dbl;bool Clear=true;
+                for(auto& Point:P)
+                {
+                    if(const auto* Nearby=FootprintBins.Find(FIntPoint(FMath::FloorToInt(Point.X/3200),FMath::FloorToInt(Point.Y/3200))))
+                        for(int32 Id:*Nearby)if(Footprints[Id].Contains(Point)){Clear=false;break;}
+                    Point.Z=GroundCm(Point)+1.5;
+                    MinZ=FMath::Min(MinZ,Point.Z);MaxZ=FMath::Max(MaxZ,Point.Z);
+                }
+                if(!Clear||MaxZ-MinZ>45)continue;
+                const int32 Base=Vertices.Num();
+                for(int32 J=0;J<4;++J)
+                {
+                    Vertices.Add(P[J]-TileOrigin);Normals.Add(FVector::UpVector);
+                    UV.Add(FVector2D(P[J].X,P[J].Y)/500.);
+                    Colors.Emplace(0,0,0,J<2?.85f:0.f);
+                }
+                Triangles.Append({Base,Base+1,Base+2,Base,Base+2,Base+3});
+            }
+        }
+    }
+    auto* Mesh=Tile.Fringe.Get();
+    if(Triangles.IsEmpty())
+    {if(Mesh&&Mesh->GetNumSections()>0)Mesh->ClearAllMeshSections();return;}
+    if(!Mesh)
+    {
+        Mesh=NewObject<UProceduralMeshComponent>(World);World->AddInstanceComponent(Mesh);
+        Mesh->SetupAttachment(World->GetRootComponent());Mesh->SetMobility(EComponentMobility::Movable);
+        Mesh->SetCollisionEnabled(ECollisionEnabled::NoCollision);Mesh->SetCastShadow(false);
+        Mesh->SetAffectDistanceFieldLighting(false);Mesh->ComponentTags={TEXT("UrbanWetFringe")};
+        Mesh->SetMaterial(0,FringeMaterial.Get());Mesh->RegisterComponent();
+        World->Generated.Add(Mesh);Tile.Fringe=Mesh;
+    }
+    Mesh->SetWorldLocation(TileOrigin);
+    const auto* Previous=Mesh->GetProcMeshSection(0);
+    if(Previous&&Previous->ProcVertexBuffer.Num()==Vertices.Num())
+        Mesh->UpdateMeshSection_LinearColor(0,Vertices,Normals,UV,Colors,{},false);
+    else Mesh->CreateMeshSection_LinearColor(0,Vertices,Triangles,Normals,UV,Colors,{},false,false);
+}
+
 void FMRUrbanWater::Render()
 {
     if(!FApp::CanEverRender())
@@ -253,16 +322,27 @@ void FMRUrbanWater::Render()
             const int32 A=Y*(W+1)+X;Triangles.Append({A,A+W+2,A+1,A,A+W+1,A+W+2});
             const FVector P=Center(Tile.X+X,Tile.Y+Y);History.Add(FMRDistrictEnvironment::Cell(P));
         }
-        auto* Mesh=Tile.Mesh.Get();if(Triangles.IsEmpty()){if(Mesh)Mesh->ClearAllMeshSections();continue;}
+        auto* Mesh=Tile.Mesh.Get();
+        if(Triangles.IsEmpty())
+        {
+            if(Mesh&&(!World->Environment.bRevisedDisasters||!Tile.Topology.IsEmpty()))Mesh->ClearAllMeshSections();
+            Tile.Topology.Reset();
+            if(auto* Fringe=Tile.Fringe.Get();Fringe&&Fringe->GetNumSections()>0)Fringe->ClearAllMeshSections();
+            continue;
+        }
         if(!Mesh)
         {
+            Tile.Topology.Reset();
             Mesh=NewObject<UProceduralMeshComponent>(World);World->AddInstanceComponent(Mesh);Mesh->SetupAttachment(World->GetRootComponent());
             Mesh->SetMobility(EComponentMobility::Movable);Mesh->SetCollisionEnabled(ECollisionEnabled::NoCollision);
             Mesh->SetCastShadow(false);Mesh->SetAffectDistanceFieldLighting(false);Mesh->ComponentTags={TEXT("UrbanFlood")};
             auto* Material=WaterMaterial.Get();
             if(!Material)
             {
-                Material=UMaterialInstanceDynamic::Create(LoadObject<UMaterialInterface>(nullptr,TEXT("/Game/EffectsV3/Revision5/M_UrbanFlood.M_UrbanFlood")),World);
+                const TCHAR* Path=World->Environment.bRevisedDisasters?
+                    TEXT("/Game/EffectsV3/WaterR6/M_UrbanFlood.M_UrbanFlood"):
+                    TEXT("/Game/EffectsV3/Revision5/M_UrbanFlood.M_UrbanFlood");
+                Material=UMaterialInstanceDynamic::Create(LoadObject<UMaterialInterface>(nullptr,Path),World);
                 WaterMaterial=Material;if(Material)Material->SetScalarParameterValue(TEXT("ModelTime"),LastTime);
             }
             Mesh->SetMaterial(0,Material);
@@ -280,7 +360,21 @@ void FMRUrbanWater::Render()
                 float((128+FMath::Clamp(Flow.Y/800.,-1.,1.)*127)/255.),float(FMath::Clamp(Depth/400.,0.,1.)),1.f);
             UV.Add(FVector2D((Tile.X+X)*CellCm,(Tile.Y+Y)*CellCm)/500.);
         }
-        Mesh->CreateMeshSection_LinearColor(0,Vertices,Triangles,Normals,UV,Colors, {},false);
+        if(World->Environment.bRevisedDisasters)
+        {
+            // The hydrology is unchanged. Replace the index buffer only on a
+            // wet/dry topology transition; all stage/flow/depth vertices
+            // still update on every physical step, with linear field colors.
+            if(Tile.Topology==Triangles&&Mesh->GetProcMeshSection(0))
+                Mesh->UpdateMeshSection_LinearColor(0,Vertices,Normals,UV,Colors,{},false);
+            else
+            {
+                Mesh->CreateMeshSection_LinearColor(0,Vertices,Triangles,Normals,UV,Colors,{},false,false);
+                Tile.Topology=MoveTemp(Triangles);
+            }
+        }
+        else Mesh->CreateMeshSection_LinearColor(0,Vertices,Triangles,Normals,UV,Colors,{},false);
+        if(World->Environment.bRevisedDisasters)RenderFringe(Tile,W,H,TileOrigin);
     }
 }
 

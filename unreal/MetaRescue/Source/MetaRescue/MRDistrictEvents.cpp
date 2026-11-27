@@ -269,7 +269,7 @@ void AMRWorld::ApplyDisturbance(const FMRDisturbance& E)
     if(E.Kind==EMRDisturbance::Collapse)
     {
         if(!bCoreControlled)ReleaseCollapse();
-        DustEffect=VFX(TEXT("CollapseDust"),E.Source+FVector(0,0,120),FVector(5.2,5.2,3.6));
+        if(!Environment.bRevisedDisasters)DustEffect=VFX(TEXT("CollapseDust"),E.Source+FVector(0,0,120),FVector(5.2,5.2,3.6));
         const FIntPoint Origin=FMRDistrictEnvironment::Cell(E.Source);
         if(!bDisasterCity)for(const FIntPoint& Cell:E.Cells)
             if(FMath::Abs(Cell.X-Origin.X)+FMath::Abs(Cell.Y-Origin.Y)<=1)

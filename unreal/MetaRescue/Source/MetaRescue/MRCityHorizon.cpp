@@ -1,12 +1,15 @@
 #include "MRWorld.h"
 #include "MRCityAssets.h"
+#include "MRHorizonRoof.h"
 #include "Components/PrimitiveComponent.h"
 #include "Components/StaticMeshComponent.h"
+#include "Components/HierarchicalInstancedStaticMeshComponent.h"
 #include "Dom/JsonObject.h"
 #include "Engine/StaticMesh.h"
 #include "Materials/MaterialInterface.h"
 #include "Misc/App.h"
 #include "ProceduralMeshComponent.h"
+#include <initializer_list>
 
 void AMRWorld::BuildCityHorizon()
 {
@@ -65,6 +68,82 @@ void AMRWorld::BuildCityHorizon()
     const auto Graph=CityLayout->GetObjectField(TEXT("road_graph"));TMap<FString,FVector> Nodes;
     for(const auto& Entry:Graph->GetArrayField(TEXT("nodes")))
         Nodes.Add(Entry->AsObject()->GetStringField(TEXT("id")),Point(Entry->AsObject()->GetArrayField(TEXT("position"))));
+    // Facade details are decorative and already outside mission bounds.
+    // Allocate their final batches directly, rather than thousands of
+    // transient components followed by repeated global city optimization.
+    struct FDetailShape { UStaticMesh* Mesh=nullptr; FVector Scale=FVector::OneVector; };
+    TMap<FString,FDetailShape> DetailShapes;
+    TMap<FString,UMaterialInterface*> DetailMaterials;
+    TMap<FString,UHierarchicalInstancedStaticMeshComponent*> DetailBatches;
+    int32 FacadeInstances=0;
+    const auto AddFacadeDetail=[&](FVector Position,FRotator Rotation,FVector Dimensions,const TCHAR* Mat)
+    {
+        const FString ShapeKey=FString::Printf(TEXT("%.3f,%.3f,%.3f"),Dimensions.X,Dimensions.Y,Dimensions.Z);
+        auto* Cached=DetailShapes.Find(ShapeKey);
+        if(!Cached)
+        {
+            FDetailShape Shape;
+            Shape.Mesh=MRCityBakedBox(Dimensions);
+            if(!Shape.Mesh)
+            {
+                auto* Cube=LoadObject<UStaticMesh>(nullptr,TEXT("/Engine/BasicShapes/Cube.Cube"));
+                const auto Parts=MRCityMeshParts(Cube);
+                if(!Parts.IsEmpty())Shape.Mesh=Parts[0].Mesh;
+                Shape.Scale=Dimensions/100.;
+            }
+            Cached=&DetailShapes.Add(ShapeKey,Shape);
+        }
+        if(!Cached->Mesh)return;
+        const FString MaterialKey(Mat);
+        if(!DetailMaterials.Contains(MaterialKey))
+        {
+            const FString Path=TEXT("/Game/Materials/")+MaterialKey+TEXT(".")+MaterialKey;
+            DetailMaterials.Add(MaterialKey,MRCityMaterial(MRSceneMaterial(LoadObject<UMaterialInterface>(nullptr,*Path))));
+        }
+        auto* Material=DetailMaterials.FindRef(MaterialKey);
+        const FString BatchKey=Cached->Mesh->GetPathName()+TEXT("|")+GetPathNameSafe(Material);
+        auto*& Batch=DetailBatches.FindOrAdd(BatchKey);
+        if(!Batch)
+        {
+            Batch=NewObject<UHierarchicalInstancedStaticMeshComponent>(this);
+            AddInstanceComponent(Batch);Batch->SetupAttachment(GetRootComponent());
+            Batch->SetMobility(EComponentMobility::Static);Batch->SetStaticMesh(Cached->Mesh);
+            Batch->SetMaterial(0,Material);Batch->SetCastShadow(false);Decorative(Batch);
+            Batch->bAutoRebuildTreeOnInstanceChanges=false;
+            Generated.Add(Batch);
+        }
+        Batch->AddInstance(FTransform(Rotation.Quaternion(),Position,Cached->Scale));
+        ++FacadeInstances;
+    };
+    // Merge the roof and gable faces into spatial batches. A pitched
+    // roof is a closed facade silhouette, not two floating cube slabs.
+    struct FRoofBatch
+    {
+        FVector Origin=FVector::ZeroVector;
+        TArray<FVector> Vertices,Normals;
+        TArray<FVector2D> UV;
+        TArray<int32> Triangles;
+    };
+    TMap<FIntVector,FRoofBatch> RoofBatches;
+    int32 PitchedRoofs=0;
+    const auto RoofFace=[&](FVector Position,const FRotator& Turn,int32 Finish,std::initializer_list<FVector> Face)
+    {
+        const FIntVector Key(FMath::FloorToInt(Position.X/8000),FMath::FloorToInt(Position.Y/8000),Finish);
+        auto& Batch=RoofBatches.FindOrAdd(Key);Batch.Origin=FVector(Key.X*8000.,Key.Y*8000.,0);
+        const FVector* Points=Face.begin();
+        const FVector U=(Points[1]-Points[0]).GetSafeNormal();
+        // Unreal's procedural mesh uses clockwise front faces.
+        const FVector N=-FVector::CrossProduct(Points[1]-Points[0],Points[2]-Points[0]).GetSafeNormal();
+        const FVector V=FVector::CrossProduct(N,U);
+        const int32 Base=Batch.Vertices.Num();
+        for(const auto& Local:Face)
+        {
+            Batch.Vertices.Add(Position+Turn.RotateVector(Local)-Batch.Origin);
+            Batch.Normals.Add(Turn.RotateVector(N));
+            Batch.UV.Add(FVector2D(FVector::DotProduct(Local-Points[0],U),FVector::DotProduct(Local-Points[0],V))/100.);
+        }
+        for(int32 I=1;I+1<int32(Face.size());++I)Batch.Triangles.Append({Base,Base+I,Base+I+1});
+    };
     int32 Houses=0,GreenLots=0,ServiceLots=0;
     for(const auto& Entry:Graph->GetArrayField(TEXT("entrances")))
     {
@@ -129,11 +208,77 @@ void AMRWorld::BuildCityHorizon()
             };
             if(Kind==TEXT("housing"))
             {
-                const double H=300*Lot->GetIntegerField(TEXT("floors"));
+                const int32 Floors=Lot->GetIntegerField(TEXT("floors"));
+                const double H=300*Floors;
                 const double W=Variant%2?740:890, D=Variant<2?720:870;
                 Piece(FVector(0,0,H*.5),FVector(W,D,H),Variant<2?TEXT("MI_Plaster"):TEXT("MI_Concrete"));
-                Piece(FVector(0,0,H+14),FVector(W+32,D+32,28),Variant%2?TEXT("MI_Dark"):TEXT("M_QuarterAsphalt"));
-                Piece(FVector(-W*.23,D*.21,H+47),FVector(130,154,45),TEXT("MI_Dark"));
+                const auto Roof=FMRHorizonRoof::Make(Environment.bRevisedDisasters,Floors,Variant,W,D);
+                if(Roof.Enabled())
+                {
+                    const double L=Roof.EaveLength(),E=Roof.EaveDepth(),Z=Roof.HeightAt(E),R=Roof.RidgeZ();
+                    const int32 Finish=Variant%2?0:1,WallFinish=Variant<2?2:3;
+                    RoofFace(P,Turn,Finish,{{-L,-E,Z},{-L,0,R},{L,0,R},{L,-E,Z}});
+                    RoofFace(P,Turn,Finish,{{-L,0,R},{-L,E,Z},{L,E,Z},{L,0,R}});
+                    RoofFace(P,Turn,WallFinish,{{-W*.5,-D*.5,H},{-W*.5,D*.5,H},{-W*.5,0,R}});
+                    RoofFace(P,Turn,WallFinish,{{W*.5,D*.5,H},{W*.5,-D*.5,H},{W*.5,0,R}});
+                    // Gutters and chimney break the silhouette; all repeatable
+                    // details use the existing instanced facade batches.
+                    for(double Side:{-1.,1.})
+                        AddFacadeDetail(P+Turn.RotateVector(FVector(0,Side*E,Z-5)),Turn,
+                            FVector(2*L,12,12),TEXT("MI_Metal"));
+                    AddFacadeDetail(P+Turn.RotateVector(FVector(W*.24,-D*.2,Roof.HeightAt(-D*.2)+35)),Turn,
+                        FVector(55,55,120),TEXT("MI_Concrete"));
+                    ++PitchedRoofs;
+                }
+                else
+                {
+                    Piece(FVector(0,0,H+14),FVector(W+32,D+32,28),Variant%2?TEXT("MI_Dark"):TEXT("M_QuarterAsphalt"));
+                    Piece(FVector(-W*.23,D*.21,H+47),FVector(130,154,45),TEXT("MI_Dark"));
+                }
+                if(Environment.bRevisedDisasters)
+                {
+                    // Lightweight facade LOD: no rooms, no collision, no mission
+                    // objects. Repeated dimensions batch across the whole ring.
+                    const double EdgeDepth=FMath::Max(FMath::Max(-P.X,P.X-Size),FMath::Max(-P.Y,P.Y-Size));
+                    const bool NearFacade=EdgeDepth<3300;
+                    for(int32 Side=0;Side<4;++Side)
+                    {
+                        const FRotator Face(0,Side*90.,0);
+                        const FRotator WorldTurn(0,Turn.Yaw+Face.Yaw,0);
+                        const double Facade=Side%2?D:W,Depth=Side%2?W:D;
+                        auto Detail=[&](FVector Local,FVector Extent,const TCHAR* Mat)
+                        {
+                            AddFacadeDetail(P+Turn.RotateVector(Face.RotateVector(Local)),WorldTurn,Extent,Mat);
+                        };
+                        const double Wall=Depth*.5;
+                        for(int32 Floor=0;Floor<Floors;++Floor)
+                        {
+                            const double Z=Floor*300+165;
+                            // Two recessed-looking window bays per floor, lintel
+                            // and sill. A dark pane is never a fake rescue marker.
+                            for(double X:{-Facade*.25,Facade*.25})
+                            {
+                                Detail(FVector(X,-Wall-2,Z),FVector(170,8,157),TEXT("MI_Concrete"));
+                                Detail(FVector(X,-Wall-7,Z),FVector(144,4,126),TEXT("MI_Dark"));
+                                if(NearFacade)
+                                {
+                                    Detail(FVector(X,-Wall-11,Z-68),FVector(180,28,12),TEXT("MI_Plaster"));
+                                    Detail(FVector(X,-Wall-10,Z),FVector(7,5,126),TEXT("MI_Metal"));
+                                }
+                            }
+                        }
+                        if(Side==0)
+                        {
+                            Detail(FVector(0,-Wall-8,112),FVector(115,9,224),TEXT("MI_Dark"));
+                            Detail(FVector(0,-Wall-43,245),FVector(180,100,14),TEXT("MI_Concrete"));
+                            Detail(FVector(0,-Wall-30,10),FVector(150,90,20),TEXT("MI_Concrete"));
+                        }
+                        if(!Roof.Enabled())Detail(FVector(0,-Wall-8,H+31),FVector(Facade+25,20,45),TEXT("MI_Concrete"));
+                    }
+                    // Roof vent and two different chimney positions break the
+                    // skyline without introducing new collision bodies.
+                    if(!Roof.Enabled())Piece(FVector(W*.24,-D*.2,H+65),FVector(55,55,120),TEXT("MI_Concrete"));
+                }
                 Houses++;
             }
             else if(Kind==TEXT("green"))
@@ -157,10 +302,40 @@ void AMRWorld::BuildCityHorizon()
                 Cover->SetCastShadow(false);
                 Piece(FVector(0,255,135),FVector(840,380,270),TEXT("MI_Concrete"));
                 Piece(FVector(0,255,278),FVector(865,406,18),TEXT("MI_Dark"));
+                if(Environment.bRevisedDisasters)
+                {
+                    // A small inhabited service yard: garage shutters, canopy,
+                    // and bollards are real decorative geometry, not flat boxes.
+                    for(double X:{-220.,220.})
+                    {
+                        Piece(FVector(X,60,112),FVector(310,10,224),TEXT("MI_Dark"));
+                        for(int32 Slat=1;Slat<7;++Slat)
+                            Piece(FVector(X,53,Slat*31),FVector(300,4,5),TEXT("MI_Metal"));
+                        Piece(FVector(X,5,238),FVector(355,125,16),TEXT("MI_Concrete"));
+                    }
+                    for(double X:{-465.,465.})
+                        Piece(FVector(X,-120,48),FVector(16,16,96),TEXT("MI_Metal"));
+                }
                 ServiceLots++;
             }
         }
     }
+    for(auto& Pair:RoofBatches)
+    {
+        auto& Batch=Pair.Value;
+        const TCHAR* Finish=Pair.Key.Z==0?TEXT("MI_Dark"):Pair.Key.Z==1?TEXT("M_QuarterAsphalt"):
+            Pair.Key.Z==2?TEXT("MI_Plaster"):TEXT("MI_Concrete");
+        const FString Name(Finish),Path=TEXT("/Game/Materials/")+Name+TEXT(".")+Name;
+        auto* Mesh=NewObject<UProceduralMeshComponent>(this);
+        AddInstanceComponent(Mesh);Mesh->SetupAttachment(GetRootComponent());
+        Mesh->SetMobility(EComponentMobility::Static);Mesh->SetRelativeLocation(Batch.Origin);
+        Decorative(Mesh);Mesh->SetCastShadow(false);
+        Mesh->SetMaterial(0,MRCityMaterial(MRSceneMaterial(LoadObject<UMaterialInterface>(nullptr,*Path))));
+        Mesh->CreateMeshSection_LinearColor(0,Batch.Vertices,Batch.Triangles,Batch.Normals,Batch.UV,{},{},false);
+        Generated.Add(Mesh);
+    }
+    if(Environment.bRevisedDisasters)UE_LOG(LogTemp,Display,TEXT("MR_HORIZON_FACADES instances=%d batches=%d pitched_roofs=%d roof_batches=%d"),
+        FacadeInstances,DetailBatches.Num(),PitchedRoofs,RoofBatches.Num());
     UE_LOG(LogTemp,Display,TEXT("MR_CITY_HORIZON extent_m=20000 houses=%d green=%d service=%d triangles=%d collision=none basin_open=%d"),
         Houses,GreenLots,ServiceLots,Triangles.Num()/3,Basin.IsValid?1:0);
 }

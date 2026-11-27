@@ -57,6 +57,9 @@ def source_hashes(layout):
         files.extend((content/'RescueAssets/CityV2').rglob('*.uasset'))
     if world.get('format')=='rescue-city-2.3':
         files.extend((content/'EffectsV3/Revision5').rglob('*.uasset'))
+        files.extend((content/'EffectsV3/Revision6').rglob('*.uasset'))
+        files.extend((content/'EffectsV3/ExplorationWaterR2').rglob('*.uasset'))
+        files.extend((content/'EffectsV3/WaterR6').rglob('*.uasset'))
         files.append(content/'Materials/M_QuarterWater.uasset')
         files.extend((content/'RescueAssets/WatercraftV1').rglob('*.uasset'))
     def checksum(path):
@@ -521,6 +524,7 @@ def main():
     if owner_exit is not None:command.append('-MRCoreExitRequestFile='+str(owner_exit))
     if args.capture_events:command.append('-MRCoreCaptureEvents')
     if args.capture_overview:command.append('-MRCoreCaptureOverview')
+    if args.contest_events and args.capture_overview:command.append('-MRCoreCaptureContest')
     startup = subprocess.STARTUPINFO() if os.name == 'nt' else None
     if startup:
         startup.dwFlags |= subprocess.STARTF_USESHOWWINDOW
@@ -612,7 +616,9 @@ def main():
             if args.events:core_event_check.verify(result,world,DEFAULT_OUTPUT,capture=args.capture_events)
             if args.resources:core_resource_check.verify(result,DEFAULT_OUTPUT)
             if args.radio:core_radio_check.verify(result,DEFAULT_OUTPUT)
-            if args.contest_events:core_contest_check.verify(result,world,DEFAULT_OUTPUT)
+            if args.contest_events:
+                core_contest_check.verify(result,world,DEFAULT_OUTPUT)
+                if args.capture_overview:core_contest_check.verify_visual(result,DEFAULT_OUTPUT)
             if args.city_collider and world.get('fixture',{}).get('id')=='core-loaded-bypass-v1':
                 core_city_check.verify_loaded_bypass(result,DEFAULT_OUTPUT)
             if args.scenarios and 'aid_command_id' in result:core_scenario_check.verify_actions(result,DEFAULT_OUTPUT)

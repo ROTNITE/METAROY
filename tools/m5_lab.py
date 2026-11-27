@@ -1,0 +1,832 @@
+"""Explicitly launched loopback M5 laboratory, separate from read-only analytics.
+
+Only built-in test engines and operator-configured loopback HTTP services are
+launchable. Browser requests cannot supply executables, filesystem paths or
+arbitrary URLs. One active series at a time; subprocesses own their trial.
+"""
+from __future__ import annotations
+
+import argparse
+from copy import deepcopy
+import csv
+import hashlib
+from datetime import datetime,timezone
+from http.server import BaseHTTPRequestHandler,ThreadingHTTPServer
+import io
+import json
+import os
+from pathlib import Path
+import re
+import secrets
+import signal
+import socket
+import subprocess
+import sys
+import tempfile
+import zipfile
+import threading
+import time
+from urllib.parse import urlsplit,parse_qs
+import uuid
+
+from contracts.protocol import encode, strict_json
+from controller.m5_trace import read_trace
+from controller.m5_progress import read_page as read_progress_page,read_reference_page
+from controller.ai import atomic_json,file_lock
+from controller.client import EnvironmentClient
+from tools.run_interop import controller_call,ROOT
+from tools.m5_score import aggregate_m5
+from tools.m5_matrix import build_matrix,pair_grid
+from tools.m5_spec import checked_mission_parameters
+from environment.main import DEFAULT_OUTPUT
+
+WEB=ROOT/'web'/'m5'
+MAX_REQUEST=16384
+MAX_REPORT=16*1024*1024
+MAX_ARCHIVE=256*1024*1024
+MAX_ARCHIVE_FILES=2000
+MAX_HTTP_WORKERS=24
+ID=re.compile(r'[a-zA-Z0-9_-]{1,48}\Z')
+RUN_ID=re.compile(r'[0-9a-f]{32}\Z')
+ACTIVE={'queued','running','stopping'}
+TERMINAL={'completed','failed','cancelled','timed_out','interrupted'}
+
+
+def now():
+    return datetime.now(timezone.utc).isoformat()
+
+
+def endpoint(value):
+    """CLI only: name=port; no DNS resolution, redirect or external URL."""
+    name,sep,port=value.partition('=')
+    if not sep or not ID.fullmatch(name) or not port.isdecimal() or not 1<=int(port)<=65535:
+        raise ValueError('Use NAME=PORT for a trusted loopback service')
+    return name,f'http://127.0.0.1:{int(port)}'
+
+
+class Registry:
+    def __init__(self,environments=(),controllers=()):
+        self.environments={};self.controllers={}
+        for values,target,reserved in ((environments,self.environments,{'planar','reference'}),
+                                       (controllers,self.controllers,{'metarescue','independent'})):
+            for value in values:
+                key,origin=endpoint(value)
+                if key in target or key in reserved:
+                    raise ValueError('Duplicate or reserved component ID')
+                target[key]=origin
+
+    def public(self):
+        return {'controllers':[{'id':'metarescue','name':'MetaRescue','kind':'builtin'},
+                               {'id':'independent','name':'Независимый контроллер','kind':'reference'}]+
+                              [{'id':k,'name':k,'kind':'external','origin':v} for k,v in self.controllers.items()],
+                'environments':[{'id':'reference','name':'Независимая 3D-модель','kind':'reference'},
+                                {'id':'planar','name':'MetaRescue 2D','kind':'builtin'}]+
+                               [{'id':k,'name':k,'kind':'external','origin':v} for k,v in self.environments.items()]}
+
+    def spec(self,raw):
+        allowed={'controller','environment','profile','mode','seeds','timeout','decide_path','decide_profile',
+                 'mission_parameters','decision_timeout','confirm_reset'}
+        if not isinstance(raw,dict) or set(raw)-allowed or raw.get('confirm_reset') is not True:
+            raise ValueError('Confirm episode creation/reset and use recognized fields')
+        controller,environment=raw.get('controller'),raw.get('environment')
+        if not isinstance(controller,str) or not isinstance(environment,str):
+            raise ValueError('Choose controller and environment')
+        if controller not in ('metarescue','independent') and controller not in self.controllers:
+            raise ValueError('Unknown controller')
+        if environment not in ('planar','reference') and environment not in self.environments:
+            raise ValueError('Unknown environment')
+        if environment in self.environments and controller!='metarescue':
+            raise ValueError('External environment requires the MetaRescue controller in this lab version')
+        profile=raw.get('profile','K');mode=raw.get('mode','strict')
+        if profile not in ('A','K') or mode not in ('strict','declared','both'):
+            raise ValueError('Invalid profile or mode')
+        if controller=='independent' and mode!='strict':
+            raise ValueError('Independent controller supports strict mode only')
+        seeds=raw.get('seeds')
+        if (not isinstance(seeds,list) or not 1<=len(seeds)<=10 or
+                any(type(s) is not int or not 0<=s<=2**31-1 for s in seeds) or len(set(seeds))!=len(seeds)):
+            raise ValueError('Choose 1–10 distinct integer seeds, from 0 to 2147483647')
+        timeout=raw.get('timeout',90)
+        if type(timeout) is not int or not 5<=timeout<=300:
+            raise ValueError('Timeout must be 5–300 seconds per trial')
+        path=raw.get('decide_path','decide');rpc=raw.get('decide_profile','core')
+        if path not in ('decide','decision') or rpc not in ('core','metaroi-v9'):
+            raise ValueError('Invalid RPC profile')
+        params=checked_mission_parameters(environment,controller,raw.get('mission_parameters',{}))
+        decision_timeout=raw.get('decision_timeout',10)
+        if (type(decision_timeout) is not int or not 1<=decision_timeout<=60 or
+                (controller not in self.controllers and decision_timeout!=10)):
+            raise ValueError('Decision timeout must be 1..60 seconds for an external RPC controller')
+        return {'controller':controller,'environment':environment,'profile':profile,'mode':mode,
+                'seeds':seeds[:],'timeout':timeout,'decide_path':path,'decide_profile':rpc,
+                'controller_origin':self.controllers.get(controller),'environment_origin':self.environments.get(environment),
+                'mission_id':'search_and_rescue','mission_parameters':params,'decision_timeout':decision_timeout,'ai_mode':'OFF'}
+
+
+def build_command(spec,seed,mode,output):
+    prefix=[sys.executable,'-B','-X','utf8','-m']
+    common=['--seed',str(seed),'--core-mode',mode,'--timeout',str(spec['timeout']),'--output',str(output)]
+    if spec.get('mission_parameters'):
+        digest=hashlib.sha256(encode(spec['mission_parameters'])).hexdigest()
+        common+=['--mission-parameters',str(output.parent/'mission-parameters.json'),
+                 '--mission-parameters-sha256',digest]
+    if spec['environment_origin']:
+        return prefix+['tools.run_interop','our-controller','--environment',spec['environment_origin']]+common
+    if spec['controller_origin']:
+        return prefix+['tools.run_interop','our-environment','--controller',spec['controller_origin'],
+                       '--engine',spec['environment'],'--mode','decide','--decide-path',spec['decide_path'],
+                       '--decide-profile',spec['decide_profile'],'--reference-profile',spec['profile'],
+                       '--environment-port','0','--decision-timeout',str(spec.get('decision_timeout',10))]+common
+    return prefix+['tools.m5_trial','--controller',spec['controller'],'--engine',spec['environment'],
+                   '--profile',spec['profile']]+common
+
+
+def stop_child(process):
+    if process.poll() is not None:
+        return
+    if os.name=='nt':
+        # Terminate only the owned child tree, never registered services.
+        subprocess.run(['taskkill','/PID',str(process.pid),'/T','/F'],stdout=subprocess.DEVNULL,
+                       stderr=subprocess.DEVNULL,timeout=10,check=False)
+    else:
+        try:
+            os.killpg(process.pid,signal.SIGTERM)
+        except ProcessLookupError:
+            pass
+    try:
+        process.wait(timeout=3)
+    except subprocess.TimeoutExpired:
+        if os.name!='nt':
+            try:
+                os.killpg(process.pid,signal.SIGKILL)
+            except ProcessLookupError:
+                pass
+        else:
+            process.kill()
+        process.wait(timeout=5)
+
+
+def read_report(path):
+    try:
+        if path.is_symlink() or not path.is_file():
+            return {}
+        with path.open('rb') as stream:
+            # CPython allocates a buffer for the requested read length even
+            # when the file is tiny. Bound by the opened file's actual size
+            # as well as the protocol cap; reject concurrent size changes.
+            size=os.fstat(stream.fileno()).st_size
+            if size>MAX_REPORT:
+                return {}
+            raw=stream.read(size+1)
+            if len(raw)!=size:
+                return {}
+        result=strict_json(raw,maximum_bytes=MAX_REPORT)
+        return result if isinstance(result,dict) else {}
+    except (ValueError,OSError):
+        return {}
+
+
+def valid_saved_series(saved,ident):
+    # Old archives can omit newer metadata; corrupt types must not prevent
+    # startup or poison the catalog. Never rewrite an invalid input.
+    def state(value):
+        return isinstance(value,str) and value in ACTIVE|TERMINAL
+    rows=saved.get('rows')
+    return (saved.get('id')==ident and state(saved.get('state')) and
+            isinstance(saved.get('spec',{}),dict) and
+            isinstance(rows,list) and all(isinstance(row,dict) and
+                state(row.get('state')) and isinstance(row.get('result',{}),dict)
+                for row in rows))
+
+
+def compact_error_details(value):
+    if not isinstance(value,dict):
+        return {}
+    result={}
+    for key in ('rule','agent_id','entity_id','resource_id','declared_id','action',
+                'command_index','minimum','maximum','value','status','schema_error'):
+        item=value.get(key)
+        if isinstance(item,str):
+            result[key]=item[:128]
+        elif type(item) in (int,float,bool):
+            result[key]=item
+    path=value.get('path')
+    if isinstance(path,list):
+        result['path']=[part[:128] if isinstance(part,str) else part
+                        for part in path[:16] if isinstance(part,str) or type(part) is int]
+    return result
+
+
+def summarize(report,*,stored=False):
+    result={}
+    for k in ('exchange','status','goal_status','evacuated','located','aid_delivered',
+              'correlated_public_target_count','planning_p95_ms','step_http_p95_ms','inputs_preserved','error'):
+        value=report.get(k)
+        if isinstance(value,str):
+            result[k]=value[:1000]
+        elif type(value) in (int,float,bool):
+            result[k]=value
+    error=report.get('first_protocol_error')
+    if isinstance(error,dict):
+        result['first_protocol_error']={k:error[k][:500] for k in ('kind','code','stage','message')
+                                        if isinstance(error.get(k),str)}
+        details=compact_error_details(error.get('details'))
+        if details:
+            result['first_protocol_error']['details']=details
+    truth=report.get('independent_truth')
+    if isinstance(truth,dict):
+        result['independent_truth']={k:truth[k][:128] if isinstance(truth[k],str) else truth[k]
+                                     for k in ('profile','target_count','physical_handovers','all_evacuated','closed')
+                                     if k in truth and (truth[k] is None or type(truth[k]) in (str,int,bool))}
+    if stored:
+        basis=report.get('evidence_basis')
+        result['evidence_basis']=basis if basis in ('independent_model_truth','project_model_truth','public_only') else 'public_only'
+    else:
+        result['evidence_basis']=('independent_model_truth' if report.get('engine') in ('reference','independent-reference')
+                                  else 'project_model_truth') if isinstance(truth,dict) else 'public_only'
+    return result
+
+
+def csv_cell(value):
+    # Prevent a foreign status/error from becoming a spreadsheet formula.
+    if isinstance(value,str) and value.lstrip().startswith(('=','+','-','@')):
+        return "'"+value
+    return value
+
+
+def archive_series(root,run,stream):
+    """Export a stable, bounded evidence bundle, excluding scratch ledgers."""
+    if run['state'] in ACTIVE:
+        raise ValueError('Wait until the series reaches a terminal process state')
+    folder=(root/run['id']).resolve(strict=True)
+    if not folder.is_relative_to(root):
+        raise ValueError('Unsafe archive root')
+    candidates=[folder/'series.json',folder/'mission-parameters.json']
+    for row in run['rows']:
+        stem=f"trial-{row['index']:03d}"
+        candidates.append(folder/(stem+'.log'))
+        trial=folder/stem
+        if trial.is_symlink():
+            raise ValueError('Unsafe trial directory')
+        if trial.is_dir():
+            candidates.extend(trial.rglob('*'))
+    files=[];total=0
+    for path in candidates:
+        if path.is_symlink():
+            raise ValueError('Symlink in evidence archive')
+        if not path.is_file():
+            continue
+        if not path.resolve().is_relative_to(folder):
+            raise ValueError('Unsafe evidence path')
+        if any(part.is_symlink() for part in path.parents if part!=folder and part.is_relative_to(folder)):
+            raise ValueError('Symlinked evidence parent')
+        size=path.stat().st_size
+        total+=size
+        files.append((path,size))
+        if total>MAX_ARCHIVE or len(files)>MAX_ARCHIVE_FILES:
+            raise ValueError('Evidence bundle exceeds export budget; use local files')
+    entries=[]
+    with zipfile.ZipFile(stream,'w',compression=zipfile.ZIP_DEFLATED,compresslevel=3) as archive:
+        for path,size in files:
+            name=path.relative_to(folder).as_posix()
+            hasher=hashlib.sha256();written=0
+            with path.open('rb') as source,archive.open(name,'w') as destination:
+                for block in iter(lambda:source.read(1024*1024),b''):
+                    written+=len(block)
+                    if written>size:
+                        raise ValueError('Evidence changed during export')
+                    hasher.update(block);destination.write(block)
+            if written!=size:
+                raise ValueError('Evidence changed during export')
+            entries.append({'path':name,'sha256':hasher.hexdigest(),'bytes':written})
+        archive.writestr('evidence-manifest.json',json.dumps({'format':'metarescue.m5-evidence.v1',
+                         'series_id':run['id'],'entries':entries,'official_m5':None},ensure_ascii=False,indent=2))
+    stream.seek(0)
+
+
+def load_assessments(path):
+    if path is None:
+        return None
+    if path.stat().st_size>MAX_REQUEST*16:
+        raise ValueError('Assessment file exceeds size limit')
+    document=strict_json(path.read_bytes(),maximum_bytes=MAX_REQUEST*16)
+    if not isinstance(document,dict) or set(document)!={'controllers','environments','assessments','method_id'}:
+        raise ValueError('Invalid external Q assessment document')
+    if not isinstance(document['assessments'],list):
+        raise ValueError('Expected list of pair assessments')
+    return aggregate_m5(document['controllers'],document['environments'],
+                        document['assessments'],method_id=document['method_id'])
+
+
+class Lab:
+    def __init__(self,root,registry):
+        self.root=Path(root).resolve();self.root.mkdir(parents=True,exist_ok=True)
+        self.registry=registry;self.lock=threading.RLock();self.runs={}
+        self.cancelled=set();self.active=None;self.worker=None
+        self._session_revision=uuid.uuid4().hex;self._revision=0
+        self._ordered_cache=None;self._matrix_cache=None
+        self.invalid_archives=0
+        for path in self.root.iterdir():
+            if path.is_symlink() or not path.is_dir() or not RUN_ID.fullmatch(path.name):
+                continue
+            saved=read_report(path/'series.json')
+            if not valid_saved_series(saved,path.name):
+                self.invalid_archives+=1
+                continue
+            if saved.get('state') in ACTIVE:
+                saved.update(state='interrupted',ended=now(),note='Previous laboratory process ended; external episode state unknown.')
+                for row in saved['rows']:
+                    if row.get('state') in ACTIVE:
+                        row['state']='interrupted'
+                atomic_json(path/'series.json',saved)
+            self.runs[path.name]=saved
+
+    def persist(self,run):
+        with self.lock:
+            atomic_json(self.root/run['id']/'series.json',run)
+            self._revision+=1;self._ordered_cache=None;self._matrix_cache=None
+
+    def _ordered(self):
+        # Called under the same lock as all run mutations.
+        if self._ordered_cache is None:
+            self._ordered_cache=sorted(self.runs.values(),key=lambda r:(str(r.get('created','')),r['id']),reverse=True)
+        return self._ordered_cache
+
+    def revision(self):
+        return f'{self._session_revision}:{self._revision}'
+
+    def start(self,raw):
+        if not isinstance(raw,dict):
+            raise ValueError('Expected trial specification')
+        repeat_of=raw.get('repeat_of')
+        if 'repeat_of' in raw and (not isinstance(repeat_of,str) or not RUN_ID.fullmatch(repeat_of)):
+            raise ValueError('Invalid repeat series ID')
+        spec=self.registry.spec({k:v for k,v in raw.items() if k!='repeat_of'})
+        with self.lock:
+            if self.active is not None:
+                raise RuntimeError('Another series is active')
+            if repeat_of is not None:
+                original=self.runs.get(repeat_of)
+                if original is None or original['state'] not in TERMINAL:
+                    raise ValueError('Repeat source must be a saved terminal series')
+                previous=dict(original.get('spec',{}))
+                previous.setdefault('mission_parameters',{})
+                previous.setdefault('decision_timeout',10)
+                if previous!=spec:
+                    raise ValueError('Repeat configuration or registered endpoint changed; create a new trial explicitly')
+            ident=uuid.uuid4().hex;folder=self.root/ident;folder.mkdir()
+            if spec['mission_parameters']:
+                atomic_json(folder/'mission-parameters.json',spec['mission_parameters'])
+            modes=('strict','declared') if spec['mode']=='both' else (spec['mode'],)
+            rows=[{'index':i,'seed':seed,'mode':mode,'state':'queued'}
+                  for i,(seed,mode) in enumerate((s,m) for s in spec['seeds'] for m in modes)]
+            run={'id':ident,'created':now(),'state':'queued','spec':spec,'rows':rows,
+                 'official_m5':None,'note':'Diagnostic trials; no agreed external Q score.'}
+            if repeat_of is not None:
+                run['repeat_of']=repeat_of
+            self.persist(run);self.runs[ident]=run;self.active=ident
+            self.worker=threading.Thread(target=self.execute,args=(ident,),daemon=True)
+            self.worker.start()
+            return deepcopy(run)
+
+    def cancel(self,ident):
+        with self.lock:
+            if self.active!=ident:
+                raise ValueError('Series is not active')
+            self.cancelled.add(ident)
+            run=self.runs[ident];run['state']='stopping';self.persist(run)
+            return deepcopy(run)
+
+    def execute(self,ident):
+        folder=self.root/ident;run=self.runs[ident];spec=run['spec']
+        child=None
+        try:
+            with self.lock:
+                if ident not in self.cancelled:
+                    run['state']='running';self.persist(run)
+            for row in run['rows']:
+                with self.lock:
+                    if ident in self.cancelled:
+                        break
+                    row.update(state='running',started=now());self.persist(run)
+                output=folder/f"trial-{row['index']:03d}"
+                # OFF-only scratch accounting; never changes the LIVE ledger.
+                env=dict(os.environ,METARESCUE_OUTPUT=str(folder/'scratch'),
+                         METARESCUE_LIVE_BUDGET=str(folder/'scratch'/'offline-budget.json'),PYTHONUTF8='1',
+                         METARESCUE_M5_PROGRESS_FILE=str(output/'progress.jsonl'),
+                         METARESCUE_M5_TRACE_FILE=str(output/'trace.jsonl'))
+                (folder/'scratch').mkdir(exist_ok=True)
+                begin=time.monotonic();state='completed'
+                argv=build_command(spec,row['seed'],row['mode'],output)
+                with (folder/f"trial-{row['index']:03d}.log").open('xb') as log:
+                    child=subprocess.Popen(argv,cwd=ROOT,env=env,stdout=log,stderr=subprocess.STDOUT,
+                                           start_new_session=os.name!='nt',
+                                           creationflags=subprocess.CREATE_NEW_PROCESS_GROUP if os.name=='nt' else 0)
+                    while child.poll() is None:
+                        with self.lock:
+                            abort=ident in self.cancelled
+                        if abort or time.monotonic()-begin>spec['timeout']+35:
+                            state='cancelled' if abort else 'timed_out'
+                            stop_child(child);break
+                        time.sleep(.1)
+                result=read_report(output/'report.json')
+                if state=='completed' and (not result or child.returncode!=0 or result.get('exchange')!='passed'
+                                           or result.get('inputs_preserved') is not True):
+                    state='failed'
+                with self.lock:
+                    row.update(state=state,ended=now(),wall_s=round(time.monotonic()-begin,3),
+                               exit_code=child.returncode,result=summarize(result))
+                    if state in ('cancelled','timed_out'):
+                        row['note']='Process stopped; remote episode outcome is not guaranteed.'
+                    self.persist(run)
+                child=None
+        except Exception as error:
+            with self.lock:
+                run['error']=f'{type(error).__name__}: {error}'
+                for row in run['rows']:
+                    if row['state']=='running':
+                        row.update(state='failed',ended=now())
+        finally:
+            if child is not None:
+                try:
+                    stop_child(child)
+                except (OSError,subprocess.SubprocessError):
+                    pass
+            with self.lock:
+                for row in run['rows']:
+                    if row['state']=='queued':
+                        row['state']='cancelled' if ident in self.cancelled else 'interrupted'
+                run['state']='cancelled' if ident in self.cancelled else (
+                    'completed' if all(r['state']=='completed' for r in run['rows']) else 'failed')
+                run['ended']=now();self.cancelled.discard(ident);self.active=None
+                self.persist(run)
+
+    def list(self):
+        with self.lock:
+            return deepcopy(self._ordered()[:100])
+
+    def catalog(self,offset=0,limit=30):
+        if not 0<=offset<=1000000 or not 1<=limit<=100:
+            raise ValueError('Invalid catalog page')
+        with self.lock:
+            ordered=self._ordered()
+            rows=[]
+            for run in ordered[offset:offset+limit]:
+                spec=run.get('spec',{})
+                results=run['rows']
+                rows.append({'id':run['id'],'created':run.get('created'),'state':run['state'],
+                             'spec':{k:spec.get(k) for k in ('controller','environment','mode')},
+                             'trial_count':len(results),
+                             'passed_count':sum(r.get('result',{}).get('exchange')=='passed' for r in results)})
+            return {'series':rows,'total':len(ordered),'offset':offset,'limit':limit,'active_id':self.active,'revision':self.revision(),
+                    'invalid_archives':self.invalid_archives}
+
+    def _filtered_matrix(self,mode,profile):
+        # The caller holds self.lock; all views share the same cached snapshot.
+        if mode not in ('all','strict','declared') or profile not in ('all','A','K','none'):
+            raise ValueError('Invalid matrix filters')
+        if self._matrix_cache is None:
+            self._matrix_cache=build_matrix(self._ordered())
+        cells,excluded=self._matrix_cache
+        return ([c for c in cells if (mode=='all' or c['mode']==mode) and
+                 (profile=='all' or (c['profile'] or 'none')==profile)],excluded)
+
+    def matrix(self,offset=0,limit=30,mode='all',profile='all',*,controller=None,environment=None):
+        if (not 0<=offset<=1000000 or not 1<=limit<=100 or
+                any(v is not None and (not isinstance(v,str) or not ID.fullmatch(v))
+                    for v in (controller,environment))):
+            raise ValueError('Invalid matrix query')
+        with self.lock:
+            cells,excluded=self._filtered_matrix(mode,profile)
+            selected=[c for c in cells if (controller is None or c['controller']==controller) and
+                      (environment is None or c['environment']==environment)]
+            return {'cells':deepcopy(selected[offset:offset+limit]),'total':len(selected),
+                    'offset':offset,'limit':limit,'excluded_trials':excluded,'revision':self.revision(),
+                    'official_m5':None}
+
+    def pairs(self,row_offset=0,column_offset=0,limit=8,mode='all',profile='all'):
+        with self.lock:
+            cells,excluded=self._filtered_matrix(mode,profile)
+            public=self.registry.public()
+            result=pair_grid(cells,[r['id'] for r in public['controllers']],
+                             [r['id'] for r in public['environments']],
+                             row_offset,column_offset,limit)
+            result.update(excluded_trials=excluded,revision=self.revision())
+            return result
+
+    def get(self,ident):
+        if not RUN_ID.fullmatch(ident):
+            raise KeyError('Unknown series')
+        with self.lock:
+            return deepcopy(self.runs[ident])
+
+    def progress(self,ident,index,cursor=0,limit=50,*,identifier=None):
+        run=self.get(ident)
+        if not 0<=index<len(run['rows']):
+            raise KeyError('Unknown trial')
+        independent=run.get('spec',{}).get('controller')=='independent'
+        filename='reference.jsonl' if independent else 'progress.jsonl'
+        path=self.root/ident/f'trial-{index:03d}'/filename
+        resolved=path.resolve()
+        if not resolved.is_relative_to(self.root/ident) or not resolved.is_relative_to(self.root):
+            raise KeyError('Unsafe progress path')
+        return (read_reference_page if independent else read_progress_page)(path,cursor,limit,identifier=identifier)
+
+    def trace(self,ident,index,cursor=0,limit=10,*,identifier=None):
+        run=self.get(ident)
+        if not 0<=index<len(run['rows']):
+            raise KeyError('Unknown trial')
+        independent=run.get('spec',{}).get('controller')=='independent'
+        path=self.root/ident/f'trial-{index:03d}'/('reference.jsonl' if independent else 'trace.jsonl')
+        if not path.resolve().is_relative_to(self.root/ident):
+            raise KeyError('Unsafe trace path')
+        return read_trace(path,cursor,limit,query=identifier,reference=independent)
+
+    def _trial_report_path(self,ident,index):
+        if not RUN_ID.fullmatch(ident):
+            raise KeyError('Unknown series')
+        with self.lock:
+            if not 0<=index<len(self.runs[ident]['rows']):
+                raise KeyError('Unknown trial')
+        path=self.root/ident/f'trial-{index:03d}'/'report.json'
+        if not path.resolve().is_relative_to(self.root/ident):
+            raise KeyError('Unsafe report path')
+        return path
+
+    def trial_summary(self,ident,index):
+        # The runner has already saved a compact summary. Do not parse a
+        # multi-megabyte report, duplicate all rows or send it to the browser.
+        path=self._trial_report_path(ident,index)
+        with self.lock:
+            row=self.runs[ident]['rows'][index]
+            result=summarize(row.get('result',{}),stored=True)
+            result.update(trial_state=row['state'],official_m5=None)
+            if type(row.get('exit_code')) is int:
+                result['exit_code']=row['exit_code']
+            if isinstance(row.get('note'),str):
+                result['note']=row['note'][:500]
+        try:
+            result['full_report_available']=(not path.is_symlink() and path.is_file()
+                                             and path.stat().st_size<=MAX_REPORT)
+        except OSError:
+            result['full_report_available']=False
+        return result
+
+    def report(self,ident,index):
+        path=self._trial_report_path(ident,index)
+        result=read_report(path)
+        if not result:
+            raise KeyError('Trial report is unavailable')
+        return result
+
+    def shutdown(self):
+        with self.lock:
+            if self.active:
+                self.cancelled.add(self.active)
+            worker=self.worker
+        if worker:
+            worker.join(timeout=15)
+
+
+class Server(ThreadingHTTPServer):
+    daemon_threads=True
+    allow_reuse_address=False
+    allow_reuse_port=False
+    request_queue_size=32
+
+    def __init__(self,address,lab,assessment=None):
+        if address[0]!='127.0.0.1':
+            raise ValueError('M5 laboratory requires IPv4 loopback')
+        self.lab=lab;self.assessment=assessment;self.token=secrets.token_urlsafe(32)
+        self.worker_slots=threading.BoundedSemaphore(MAX_HTTP_WORKERS)
+        self.export_slot=threading.BoundedSemaphore(1)
+        super().__init__(address,Handler)
+
+    def server_bind(self):
+        # Windows SO_REUSEADDR can permit another listener on an occupied
+        # address. M5 must never accidentally share another service's port.
+        if hasattr(socket,'SO_EXCLUSIVEADDRUSE'):
+            self.socket.setsockopt(socket.SOL_SOCKET,socket.SO_EXCLUSIVEADDRUSE,1)
+        super().server_bind()
+
+    def process_request(self,request,client_address):
+        if not self.worker_slots.acquire(blocking=False):
+            # Reject overload without starting another worker or waiting
+            # indefinitely on a client that does not read its response.
+            try:
+                request.settimeout(.2)
+                body=b'{"error":"M5 request capacity reached; retry"}'
+                request.sendall(b'HTTP/1.0 503 Service Unavailable\r\n'
+                    b'Content-Type: application/json\r\nConnection: close\r\n'
+                    b'Cache-Control: no-store\r\nRetry-After: 1\r\nContent-Length: '+
+                    str(len(body)).encode('ascii')+b'\r\n\r\n'+body)
+            except OSError:
+                pass
+            finally:
+                self.shutdown_request(request)
+            return
+        try:
+            super().process_request(request,client_address)
+        except BaseException:
+            self.worker_slots.release()
+            raise
+
+    def process_request_thread(self,request,client_address):
+        try:
+            super().process_request_thread(request,client_address)
+        finally:
+            self.worker_slots.release()
+
+
+class Handler(BaseHTTPRequestHandler):
+    timeout=15
+    def log_message(self,*args):
+        pass
+
+    def send(self,value,status=200,mime='application/json; charset=utf-8',name=None):
+        data=json.dumps(value,ensure_ascii=False,allow_nan=False).encode('utf-8') if not isinstance(value,bytes) else value
+        self.send_response(status);self.send_header('Content-Type',mime)
+        self.send_header('Content-Length',str(len(data)));self.send_header('Cache-Control','no-store')
+        self.send_header('X-Content-Type-Options','nosniff')
+        self.send_header('Content-Security-Policy',"default-src 'self'; frame-ancestors 'none'; base-uri 'none'; form-action 'self'")
+        if name:
+            self.send_header('Content-Disposition',f'attachment; filename="{name}"')
+        self.end_headers();self.wfile.write(data)
+
+    def guard(self,post=False):
+        port=self.server.server_port
+        hosts=self.headers.get_all('Host',[])
+        host=hosts[0] if len(hosts)==1 else ''
+        if host not in (f'127.0.0.1:{port}',f'localhost:{port}'):
+            raise PermissionError('Loopback host required')
+        origins=self.headers.get_all('Origin',[])
+        tokens=self.headers.get_all('X-M5-Token',[])
+        if post and (origins!=['http://'+host] or len(tokens)!=1 or
+                     not tokens[0].isascii() or not secrets.compare_digest(tokens[0],self.server.token)):
+            raise PermissionError('Local origin and session token required')
+
+    def do_GET(self):
+        try:
+            self.guard()
+            parsed=urlsplit(self.path);path=parsed.path;lab=self.server.lab
+            if path=='/api/session':
+                self.send({'token':self.server.token,'registry':lab.registry.public(),'official_m5':None,'assessed_m5':self.server.assessment});return
+            if path=='/api/matrix':
+                query=parse_qs(parsed.query,keep_blank_values=True,max_num_fields=16)
+                if set(query)-{'offset','limit','mode','profile','controller','environment'} or any(len(v)!=1 for v in query.values()):
+                    raise ValueError('Invalid matrix query')
+                self.send(lab.matrix(int(query.get('offset',['0'])[0]),int(query.get('limit',['30'])[0]),
+                                     query.get('mode',['all'])[0],query.get('profile',['all'])[0],
+                                     controller=query.get('controller',[None])[0],
+                                     environment=query.get('environment',[None])[0]));return
+            if path=='/api/pairs':
+                query=parse_qs(parsed.query,keep_blank_values=True,max_num_fields=16)
+                if set(query)-{'row_offset','column_offset','limit','mode','profile'} or any(len(v)!=1 for v in query.values()):
+                    raise ValueError('Invalid pair grid query')
+                self.send(lab.pairs(int(query.get('row_offset',['0'])[0]),int(query.get('column_offset',['0'])[0]),
+                                    int(query.get('limit',['8'])[0]),query.get('mode',['all'])[0],
+                                    query.get('profile',['all'])[0]));return
+            if path=='/api/series':
+                query=parse_qs(parsed.query,keep_blank_values=True,max_num_fields=16)
+                if set(query)-{'offset','limit'} or any(len(v)!=1 for v in query.values()):
+                    raise ValueError('Invalid catalog query')
+                self.send(lab.catalog(int(query.get('offset',['0'])[0]),int(query.get('limit',['30'])[0])));return
+            summary_match=re.fullmatch(r'/api/series/([0-9a-f]{32})/trial/(\d{1,3})/summary',path)
+            if summary_match:
+                if parsed.query:
+                    raise ValueError('Unexpected trial summary query')
+                ident,index=summary_match.groups()
+                self.send(lab.trial_summary(ident,int(index)));return
+            trace_match=re.fullmatch(r'/api/series/([0-9a-f]{32})/trial/(\d{1,3})/trace',path)
+            if trace_match:
+                query=parse_qs(parsed.query,keep_blank_values=True,max_num_fields=16)
+                if set(query)-{'cursor','limit','id'} or any(len(v)!=1 for v in query.values()):
+                    raise ValueError('Invalid trace query')
+                ident,index=trace_match.groups()
+                self.send(lab.trace(ident,int(index),int(query.get('cursor',['0'])[0]),
+                                    int(query.get('limit',['10'])[0]),identifier=query.get('id',[None])[0]));return
+            progress_match=re.fullmatch(r'/api/series/([0-9a-f]{32})/trial/(\d{1,3})/progress',path)
+            if progress_match:
+                query=parse_qs(parsed.query,keep_blank_values=True,max_num_fields=16)
+                if set(query)-{'cursor','limit','id'} or any(len(v)!=1 for v in query.values()):
+                    raise ValueError('Invalid progress query')
+                ident,index=progress_match.groups()
+                self.send(lab.progress(ident,int(index),int(query.get('cursor',['0'])[0]),
+                                       int(query.get('limit',['50'])[0]),identifier=query.get('id',[None])[0]));return
+            match=re.fullmatch(r'/api/series/([0-9a-f]{32})(?:/trial/(\d{1,3})|/export/(json|csv|zip))?',path)
+            if match:
+                ident,index,format=match.groups()
+                if index is not None:
+                    self.send(lab.report(ident,int(index)));return
+                run=lab.get(ident)
+                if format=='zip':
+                    if not self.server.export_slot.acquire(blocking=False):
+                        self.send({'error':'Another evidence export is running; retry'},503);return
+                    try:
+                        with tempfile.TemporaryFile() as stream:
+                            archive_series(lab.root,run,stream)
+                            stream.seek(0,2);size=stream.tell();stream.seek(0)
+                            self.send_response(200);self.send_header('Content-Type','application/zip')
+                            self.send_header('Content-Length',str(size));self.send_header('Cache-Control','no-store')
+                            self.send_header('Content-Disposition',f'attachment; filename="{ident}.zip"')
+                            self.send_header('X-Content-Type-Options','nosniff');self.end_headers()
+                            for block in iter(lambda:stream.read(1024*1024),b''):self.wfile.write(block)
+                    finally:
+                        self.server.export_slot.release()
+                    return
+                if format=='csv':
+                    stream=io.StringIO(newline='');writer=csv.writer(stream)
+                    writer.writerow(['seed','mode','state','exchange','mission_status','physical_handovers','public_transitions','wall_s'])
+                    for row in run['rows']:
+                        result=row.get('result',{});truth=result.get('independent_truth') or {}
+                        writer.writerow([csv_cell(v) for v in (row['seed'],row['mode'],row['state'],result.get('exchange'),
+                                         result.get('status'),truth.get('physical_handovers'),
+                                         result.get('correlated_public_target_count'),row.get('wall_s'))])
+                    self.send(stream.getvalue().encode('utf-8-sig'),mime='text/csv; charset=utf-8',name=ident+'.csv');return
+                self.send(run,name=ident+'.json' if format=='json' else None);return
+            static={'/':('index.html','text/html; charset=utf-8'),'/lab.js':('lab.js','text/javascript; charset=utf-8'),
+                    '/lab.css':('lab.css','text/css; charset=utf-8')}
+            if path not in static:
+                raise KeyError('Unknown route')
+            filename,mime=static[path];self.send((WEB/filename).read_bytes(),mime=mime)
+        except (ConnectionError,TimeoutError):self.close_connection=True
+        except PermissionError as error:self.send({'error':str(error)},403)
+        except (KeyError,FileNotFoundError):self.send({'error':'Not found'},404)
+        except (OSError,ValueError,TypeError) as error:self.send({'error':str(error)},400)
+
+    def do_POST(self):
+        try:
+            self.guard(post=True)
+            if self.headers.get_content_type()!='application/json':
+                raise ValueError('Expected application/json')
+            lengths=self.headers.get_all('Content-Length',[])
+            if (self.headers.get_all('Transfer-Encoding',[]) or len(lengths)!=1 or
+                    not lengths[0].isascii() or not lengths[0].isdecimal()):
+                raise ValueError('Expected exactly one Content-Length and no Transfer-Encoding')
+            length=int(lengths[0])
+            if not 0<length<=MAX_REQUEST:
+                raise ValueError('Invalid body length')
+            data=self.rfile.read(length)
+            if len(data)!=length:
+                raise ValueError('Incomplete body')
+            body=strict_json(data,maximum_bytes=MAX_REQUEST)
+            if not isinstance(body,dict):
+                raise ValueError('Expected JSON object')
+            path=urlsplit(self.path).path;lab=self.server.lab
+            if path=='/api/series':
+                self.send(lab.start(body),202);return
+            if path=='/api/probe':
+                if set(body)!={'role','id'} or body['role'] not in ('controller','environment') or not isinstance(body['id'],str):
+                    raise ValueError('Choose a registered component')
+                role=body['role'];key=body['id']
+                registry=lab.registry.controllers if role=='controller' else lab.registry.environments
+                if key not in registry:
+                    # No pretend health response for an engine that has not been started.
+                    if key not in (('metarescue','independent') if role=='controller' else ('reference','planar')):
+                        raise ValueError('Unknown component')
+                    self.send({'state':'launch_on_trial','message':'Built-in service starts only during a trial'});return
+                origin=registry[key]
+                if role=='controller':
+                    health=controller_call(origin,'health',timeout=3)
+                    self.send({'state':'responded','health':health});return
+                client=EnvironmentClient(origin,timeout_s=3)
+                try:
+                    self.send({'state':'responded','health':client.health(),'capabilities':client.capabilities()})
+                finally:
+                    client.disconnect()
+                return
+            match=re.fullmatch(r'/api/series/([0-9a-f]{32})/cancel',path)
+            if match and not body:
+                self.send(lab.cancel(match.group(1)),202);return
+            raise KeyError('Unknown route')
+        except (ConnectionError,TimeoutError):self.close_connection=True
+        except PermissionError as error:self.send({'error':str(error)},403)
+        except KeyError:self.send({'error':'Not found'},404)
+        except RuntimeError as error:self.send({'error':str(error)},409)
+        except (OSError,ValueError,TypeError) as error:self.send({'error':str(error)},400)
+
+
+def main():
+    parser=argparse.ArgumentParser(description=__doc__)
+    parser.add_argument('--port',type=int,default=8766)
+    parser.add_argument('--output',type=Path,default=DEFAULT_OUTPUT/'m5-lab')
+    parser.add_argument('--environment',action='append',default=[],metavar='NAME=PORT')
+    parser.add_argument('--controller',action='append',default=[],metavar='NAME=PORT')
+    parser.add_argument('--q-assessments',type=Path,help='Operator-provided cross-team Q and evidence; never official jury certification')
+    args=parser.parse_args()
+    assessment=load_assessments(args.q_assessments)
+    registry=Registry(args.environment,args.controller)
+    with file_lock(args.output.resolve()/'laboratory-owner.lock'):
+        lab=Lab(args.output,registry)
+        with Server(('127.0.0.1',args.port),lab,assessment=assessment) as server:
+            print(f'M5 laboratory: http://127.0.0.1:{server.server_port}',flush=True)
+            try:
+                server.serve_forever()
+            except KeyboardInterrupt:
+                pass
+            finally:
+                lab.shutdown()
+
+
+if __name__=='__main__':
+    main()
