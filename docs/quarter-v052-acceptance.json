@@ -1888,6 +1888,57 @@
         "D:/MetaRescue-output/checks/net65-atlas-probe-20261127-01/acceptance-and-handover-audit.log"
       ],
       "scope_note": "В прямом направлении все шесть прогонов на зафиксированных ZIP Metaroy Lab и Portable v0.1 подтвердили цели. Их контроллеры в RescueQuarter дали три тайм-аута первого решения и три INVALID_SCENARIO. Повтор первого кадра на 218 зонах дал тайм-аут Lab при 200 с. Нативная диагностика Portable подтвердила пять лишних ключей coverage_search на step. Локальный автономный режим тестера подтвердил две передачи. Atlas Probe 0.1 содержит контроллер и тестовый стенд. В RescueQuarter на трёх новых seed автономный и RPC-режимы Atlas приняли решение safe_stop без команд. Net65 на тех же картах подтвердил одну передачу на seed. Ретест автономного режима прошёл с задержкой health в 26 с. Для двусторонней приёмки по Atlas нужна отдельная среда."
+    },
+    {
+      "id": "CONTROLLER-TOURNAMENT",
+      "requirement": "Выбор контроллера на сопоставимых публичных миссиях с текущим Net65 и нативное парное подтверждение",
+      "status": "passed",
+      "evidence": [
+        "D:/MetaRescue-output/controller-tournament-20261127-01/freeze.json",
+        "D:/MetaRescue-output/controller-tournament-20261127-01/protocol.json",
+        "D:/MetaRescue-output/controller-tournament-20261127-01/stock-self-test/report.json",
+        "D:/MetaRescue-output/controller-tournament-20261127-01/pilot-admission.json",
+        "D:/MetaRescue-output/controller-tournament-20261127-01/atlas-stock/result.json",
+        "D:/MetaRescue-output/controller-tournament-20261127-01/holdout-plan.json",
+        "D:/MetaRescue-output/controller-tournament-20261127-01/holdout-report/summary.json",
+        "D:/MetaRescue-output/controller-tournament-20261127-01/holdout-diagnostics/diagnostics.json",
+        "D:/MetaRescue-output/controller-tournament-20261127-01/transfer-report/summary.json",
+        "D:/MetaRescue-output/controller-tournament-20261127-01/final-selection.json",
+        "D:/MetaRescue-output/controller-tournament-round2-20261127-01/freeze.json",
+        "D:/MetaRescue-output/controller-tournament-round2-20261127-01/protocol.json",
+        "D:/MetaRescue-output/controller-tournament-round2-20261127-01/pilot-plan.json",
+        "D:/MetaRescue-output/controller-tournament-round2-20261127-01/pilot-admission.json",
+        "D:/MetaRescue-output/controller-tournament-round2-20261127-01/round2-preholdout.json",
+        "D:/MetaRescue-output/controller-tournament-round2-20261127-01/holdout-report/summary.json",
+        "D:/MetaRescue-output/controller-tournament-round2-20261127-01/holdout-diagnostics/diagnostics.json",
+        "D:/MetaRescue-output/controller-tournament-round2-20261127-01/duel-plan.json",
+        "D:/MetaRescue-output/controller-tournament-round2-20261127-01/duel-report/summary.json",
+        "D:/MetaRescue-output/controller-tournament-round2-20261127-01/duel-diagnostics/diagnostics.json",
+        "D:/MetaRescue-output/controller-tournament-round2-20261127-01/final-selection.json",
+        "D:/MetaRescue-output/integration-20261127-01/managed-materialized.json",
+        "D:/MetaRescue-output/integration-20261127-01/baseline-build/verification.json",
+        "D:/MetaRescue-output/integration-20261127-01/candidate-build/verification.json",
+        "D:/MetaRescue-output/automation/20261127T042110256587Z/verification.json",
+        "D:/MetaRescue-output/integration-20261127-01/portable-parity.json",
+        "D:/MetaRescue-output/integration-20261127-01/native-pilot/summary.json",
+        "D:/MetaRescue-output/integration-20261127-01/native-holdout/summary.json",
+        "D:/MetaRescue-output/integration-20261127-01/product-recheck/verification.json"
+      ],
+      "scope_note": "Counterfactual Value выиграл второй тур и финал. Нативные 8 пилотных и 16 закрытых прогонов архивированы. В закрытой серии по 5 физических передач, M1 одинаков на всех восьми геометриях, контактов 0. В UI 2 передачи за 300 с, повтор на идентичной карте и безопасная остановка. Рост спасений в 3D не подтверждён. Проверенный профиль используется дальше."
+    },
+    {
+      "id": "ADD-12",
+      "requirement": "Финальный этап: размещение, извлечение и эвакуация пострадавших",
+      "status": "deferred",
+      "queue_status": "отложено до завершения основного плана",
+      "start_condition": "Все ранее согласованные требования выполнены и проверены, включая обязательные 3D-прогоны, Windows-поставку и материалы сдачи",
+      "specification": "docs/casualty-rescue-scenarios.md",
+      "tracking": [
+        "docs/additional-tasks.md",
+        "docs/quarter-v052-execution.md"
+      ],
+      "evidence": [],
+      "scope_note": "Приёмка на отдельной ревизии миров по нативным кадрам и журналу этапов до подтверждённого приёма на базе. Проверить недоступный проход, отсутствие оснащения, отмену при погрузке, повторное перекрытие и передачу при отказе перевозчика. Сохранить совместимость базового Core и единственность человека и груза."
     }
   ],
   "external_tournament": {
