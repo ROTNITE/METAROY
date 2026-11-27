@@ -13,7 +13,7 @@ jobs:
   portable:
     if: github.event_name == 'workflow_dispatch' || (github.event.pull_request.head.repo.full_name == github.repository && github.head_ref == 'chatgpt/vis02-04-city23-regression')
     runs-on: ubuntu-latest
-    timeout-minutes: 20
+    timeout-minutes: 30
     env:
       GIT_LFS_SKIP_SMUDGE: '1'
       PYTHONDONTWRITEBYTECODE: '1'
@@ -42,9 +42,17 @@ jobs:
           g++ -std=c++17 -O2 -Wall -Wextra -Werror tools/smoke_optics_probe.cpp -o "$RUNNER_TEMP/smoke_probe"
           "$RUNNER_TEMP/smoke_probe"
           python -B tools/smoke_shader_probe.py
+      - name: Install independent Vulkan shader compiler and CPU driver
+        if: always()
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y --no-install-recommends glslang-tools spirv-tools libvulkan-dev mesa-vulkan-drivers
+      - name: Compile and execute live and remembered smoke HLSL
+        if: always()
+        run: python -B tools/run_smoke_spirv.py
       - name: Compare original city fingerprints
         if: always()
-        run: python -B -X utf8 tools/check_city23_regression.py --baseline-root "$RUNNER_TEMP/vis23-baseline" --output "$RUNNER_TEMP/vis23-regression.json"
+        run: python -B -X utf8 tools/check_city23_regression.py --full --baseline-root "$RUNNER_TEMP/vis23-baseline" --output "$RUNNER_TEMP/vis23-regression.json"
       - name: Archive comparison report
         if: always()
         uses: actions/upload-artifact@v4
