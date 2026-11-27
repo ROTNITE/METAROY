@@ -2,6 +2,7 @@
 #include "MRWorld.h"
 #include "MRUrbanWater.h"
 #include "MRWatercraftHydro.h"
+#include "MRWatercraftCorridor.h"
 #include "Components/BoxComponent.h"
 #include "Components/StaticMeshComponent.h"
 #include "PhysicsEngine/PhysicsConstraintComponent.h"
@@ -216,12 +217,30 @@ void AMRAgent::DriveWatercraft(float Dt)
     if(bWatercraftMoored||!IsOperational())return;
     StopReason.Empty();StopObstacle.Empty();SensedBlocker=FBox(ForceInit);
     bool BrakeInDirectionOfMotion=false,DepartingHull=false;
+    const auto EnoughWater=[&](FVector End,double Draft)
+    {
+        if(!Mission->Environment.bRevisedDisasters)
+        {
+            const auto Projected=Mission->WaterAtCm(End);
+            return MediumPointAllowed(End)&&Projected.InDomain&&Projected.DepthCm>=Draft+8;
+        }
+        // The hulls span approximately 1.88 m across. Inspect their tracks
+        // as well as the centre; do not extend beyond the precise approach
+        // endpoint. Unknown/out-of-domain depths are not navigable.
+        return MRWatercraftCorridorClear(P.X,P.Y,End.X,End.Y,94.,
+            [&](double X,double Y)
+            {
+                const FVector Point(X,Y,P.Z);
+                if(!MediumPointAllowed(Point))return false;
+                const auto Projected=Mission->WaterAtCm(Point);
+                return Projected.InDomain&&FMath::IsFinite(Projected.DepthCm)&&Projected.DepthCm>=Draft+8;
+            });
+    };
     if(WatercraftDisplacedM3*1000>Mass*.6&&Velocity.Size2D()>30)
     {
         const FVector Ahead=P+Velocity.GetSafeNormal2D()*(Velocity.Size2D()*.95+185);
         const double Draft=Hull.EquilibriumDraftM(Mass).Get(.5)*100;
-        const auto Projected=Mission->WaterAtCm(Ahead);
-        BrakeInDirectionOfMotion=!MediumPointAllowed(Ahead)||!Projected.InDomain||Projected.DepthCm<Draft+8;
+        BrakeInDirectionOfMotion=!EnoughWater(Ahead,Draft);
         if(BrakeInDirectionOfMotion)
         {
             Desired=FVector::ZeroVector;
@@ -270,7 +289,9 @@ void AMRAgent::DriveWatercraft(float Dt)
             }
         }
         const bool Restricted=Mission->RestrictionOnRoute(P,End,Kind(),255,80,SensedBlocker);
-        if(!MediumPointAllowed(End)||Mission->WaterAtCm(End).DepthCm<Draft+8||Obstacle||Restricted)
+        const bool WaterClear=Mission->Environment.bRevisedDisasters?EnoughWater(End,Draft):
+            MediumPointAllowed(End)&&Mission->WaterAtCm(End).DepthCm>=Draft+8;
+        if(!WaterClear||Obstacle||Restricted)
         {
             Desired=FVector::ZeroVector;
             StopReason=Restricted?TEXT("restricted_volume_on_route"):Obstacle?TEXT("obstacle_on_route"):TEXT("shallow_water_on_route");

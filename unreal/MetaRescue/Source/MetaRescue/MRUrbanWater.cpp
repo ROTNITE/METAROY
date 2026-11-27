@@ -90,7 +90,7 @@ bool FMRUrbanWater::Build()
     if(!ReadBlueprint(Data,World->GridSize))return false;
     if(World->Environment.bRevisedDisasters&&FApp::CanEverRender())
     {
-        FringeMaterial=LoadObject<UMaterialInterface>(nullptr,TEXT("/Game/EffectsV3/WaterR6/M_WetFringe.M_WetFringe"));
+        FringeMaterial.Reset(LoadObject<UMaterialInterface>(nullptr,TEXT("/Game/EffectsV3/WaterR6/M_WetFringe.M_WetFringe")));
         if(!FringeMaterial.IsValid())
         {UE_LOG(LogTemp,Error,TEXT("Revised water requires imported M_WetFringe"));return false;}
     }

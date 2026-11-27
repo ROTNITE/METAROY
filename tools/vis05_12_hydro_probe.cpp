@@ -1,3 +1,4 @@
+#include "../unreal/MetaRescue/Source/MetaRescue/MRWatercraftCorridor.h"
 // Compile the actual production numeric solver and signal phase function,
 // using only the explicitly test-only value/container adapter.
 #ifndef MR_HYDROLOGY_HEADER
@@ -92,6 +93,25 @@ void open_field(int size,int seconds,bool repeat)
     if(repeat){g.Reset();require(g.Time()==0&&g.AddedM3()==0,"clean reset");require(run()==hash,"exact replay");}
     std::cout<<"size="<<size<<" elapsed_wall_s="<<std::chrono::duration<double>(std::chrono::steady_clock::now()-start).count()<<"\n";
 }
+void watercraft_corridor()
+{
+    auto safe=[](double,double){return true;};
+    require(MRWatercraftCorridorClear(0,0,800,0,94,safe),"clear native corridor");
+    require(!MRWatercraftCorridorClear(0,0,800,0,94,[](double x,double){return x<300||x>400;}),
+        "intermediate shallow bar");
+    require(!MRWatercraftCorridorClear(0,0,800,0,94,[](double x,double y){return x<250||x>500||y<90;}),
+        "shallow starboard track");
+    require(!MRWatercraftCorridorClear(0,0,800,0,94,[](double x,double y){return x<250||x>500||y>-90;}),
+        "shallow port track");
+    require(!MRWatercraftCorridorClear(800,0,0,0,94,[](double x,double){return x>500;}),
+        "reverse drift meets domain edge");
+    require(!MRWatercraftCorridorClear(0,0,3201,0,94,safe),"prediction budget");
+    require(!MRWatercraftCorridorClear(0,0,std::numeric_limits<double>::quiet_NaN(),0,94,safe),"nonfinite prediction");
+    int calls=0;
+    require(MRWatercraftCorridorClear(0,0,3200,0,94,[&](double,double){++calls;return true;})&&calls==192,
+        "bounded sample count");
+    std::cout<<"native watercraft corridor: both tracks, intervening shallows and bounds passed\n";
+}
 void wet_fringe()
 {
     FMRHydrology g;TArray<double> bed={0,0,.4,0,0,0};TArray<double> depth={.2,0,0,0,0,0};
@@ -115,7 +135,7 @@ void wet_fringe()
 int main(int argc,char** argv)
 {
     std::cout<<std::setprecision(12);
-    closed_and_barrier();wet_fringe();
+    closed_and_barrier();wet_fringe();watercraft_corridor();
     for(int offset=0;offset<28;++offset)for(int t=0;t<2800;++t)
     {
         const auto a=MRStreetPhase(t*.1,offset,0,true),b=MRStreetPhase(t*.1,offset,1,true);

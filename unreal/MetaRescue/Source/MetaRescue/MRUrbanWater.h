@@ -1,6 +1,7 @@
 #pragma once
 #include "CoreMinimal.h"
 #include "MRHydrology.h"
+#include "UObject/StrongObjectPtr.h"
 
 class AMRWorld;
 class UProceduralMeshComponent;
@@ -56,7 +57,7 @@ private:
     TArray<FTile> Tiles;
     TArray<double> VertexBeds,InitialVertexBeds;
     TWeakObjectPtr<UMaterialInstanceDynamic> WaterMaterial;
-    TWeakObjectPtr<UMaterialInterface> FringeMaterial;
+    TStrongObjectPtr<UMaterialInterface> FringeMaterial;
     TSet<FIntPoint> History;
     double ForcingStage(double At) const;
     FVector Center(int32 X,int32 Y) const;
