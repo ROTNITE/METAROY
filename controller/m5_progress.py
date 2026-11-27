@@ -22,6 +22,10 @@ def _token(value):
     return value if isinstance(value, str) and TOKEN.fullmatch(value) else None
 
 
+def _identifier(value):
+    return value if isinstance(value, str) and 0 < len(value) <= 128 and value.isprintable() else None
+
+
 def _number(value):
     return value if type(value) in (int, float) and abs(value) <= 1e15 and math.isfinite(value) else None
 
@@ -31,7 +35,7 @@ def _safe_fields(item):
     if not isinstance(item, dict):
         return result
     for name in ('episode_id', 'request_id', 'decision_id', 'status', 'operation', 'code', 'stage'):
-        value = _token(item.get(name))
+        value = (_identifier if name.endswith('_id') else _token)(item.get(name))
         if value is not None:
             result[name] = value
     for name in ('time', 'model_time', 'planning_wall_s', 'wall_s', 'commands', 'command_results', 'events'):
@@ -84,6 +88,9 @@ class Progress:
                 self.path = None
                 return
             with self.path.open('ab') as stream:
+                if os.fstat(stream.fileno()).st_size + len(wire) > MAX_FILE:
+                    self.path = None
+                    return
                 stream.write(wire)
             self.written += len(wire)
         except (OSError, ValueError, TypeError, OverflowError):
@@ -160,9 +167,14 @@ def read_reference_page(path, cursor=0, limit=50):
             if not isinstance(decision, dict) or not isinstance(response, dict):
                 raise ValueError('Invalid reference journal exchange')
             row = summarize('step_response', response, 'reference', None)
-            if (response.get('request_id') == decision.get('request_id') and
-                    response.get('episode_id') == decision.get('episode_id')):
-                row.update(_safe_fields({'decision_id': decision.get('decision_id')}))
+            row.pop('decision_id', None)
+            row.pop('commands', None)
+            decision_id = _identifier(decision.get('decision_id'))
+            if (decision_id is not None and
+                    all(_identifier(decision.get(key)) is not None and
+                        decision[key] == response.get(key) for key in ('request_id', 'episode_id')) and
+                    ('decision_id' not in response or response['decision_id'] == decision_id)):
+                row['decision_id'] = decision_id
                 if isinstance(decision.get('commands'), list):
                     row['commands'] = len(decision['commands'])
             rows.append(row)

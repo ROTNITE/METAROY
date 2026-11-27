@@ -80,3 +80,30 @@ class ProgressTests(unittest.TestCase):
             second=read_reference_page(path,first['cursor'],1)
             self.assertFalse(second['more'])
             self.assertEqual(path.read_bytes(),original+original)
+
+    def test_reference_correlation_requires_explicit_matching_ids(self):
+        with TemporaryDirectory() as folder:
+            path=Path(folder)/'reference.jsonl'
+            decision={'decision_id':'решение/λ','episode_id':'эпизод','request_id':'请求','commands':[{}]}
+            response={'episode_id':'эпизод','request_id':'请求'}
+            entries=[{'decision':decision,'response':response},
+                     {'decision':{'decision_id':'d','commands':[{}]},'response':{}},
+                     {'decision':decision,'response':dict(response,request_id='other',decision_id='fake')},
+                     {'decision':decision,'response':dict(response,decision_id='other')}]
+            path.write_text(''.join(json.dumps(e)+'\n' for e in entries))
+            rows=read_reference_page(path)['rows']
+            self.assertEqual(rows[0]['decision_id'],'решение/λ')
+            self.assertEqual(rows[0]['commands'],1)
+            for row in rows[1:]:
+                self.assertNotIn('decision_id',row)
+                self.assertNotIn('commands',row)
+
+    def test_writer_respects_existing_file_size(self):
+        with TemporaryDirectory() as folder:
+            path=Path(folder)/'progress.jsonl'
+            with path.open('wb') as stream:
+                stream.truncate(MAX_FILE-1)
+            p=Progress('interop',path)
+            p.record('decision',{'decision':{'decision_id':'d'}})
+            self.assertEqual(path.stat().st_size,MAX_FILE-1)
+            self.assertIsNone(p.path)
