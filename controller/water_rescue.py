@@ -192,10 +192,14 @@ def water_pickup_ready(boat, target):
     bearing = math.radians(yaw)
     dx, dy = (t-a for t,a in zip(target['position'][:2],boat['position'][:2]))
     lateral = abs(-math.sin(bearing)*dx+math.cos(bearing)*dy)
+    # A supported casualty can be lifted from a settled approach by the
+    # other vessel. Leave 5 cm of margin to the native 1.45 m hoist limit.
+    supported = target.get('supported_by_agent') and target.get('evacuation_state') == 'waiting'
+    lateral_limit = 1.40 if supported else 1.28
     return (target.get('status') == 'confirmed'
             and math.dist(boat['position'][:2], target['position'][:2]) < 4.32
             and math.hypot(*velocity) <= .62 and math.dist(velocity, drift) < .27
-            and lateral <= 1.28 and max(abs(roll), abs(pitch)) <= 7
+            and lateral <= lateral_limit and max(abs(roll), abs(pitch)) <= 7
             and abs(physical['watercraft'].get('yaw_rate_degrees_s', 0)) <= 7.5)
 
 
@@ -241,17 +245,44 @@ def water_command(workflow, observation, announced, boat, job, known, *, reroute
         if action not in actions:
             return None, None
         job.water_intercept = None
+        job.water_approach = None
         return {'agent_id': boat_id, 'action': action, 'parameters': parameters}, phase
+
+    def marine_navigation(peers):
+        draft = hull.get('hydrostatic_draft_m', hull.get('draft_m', .5))
+        obstacles = workflow._obstacles(boat, peers)
+        obstacles.extend(workflow.local_obstacles.get(boat_id, ()))
+        return WaterRoute(announced, observation, obstacles, draft)
 
     def route(goal):
         nonlocal nav
         if nav is None:
-            draft = hull.get('hydrostatic_draft_m', hull.get('draft_m', .5))
-            nav = WaterRoute(announced, observation, workflow._obstacles(boat, agents), draft)
+            nav = marine_navigation(agents)
         return nav.route(pose, (*goal[:2], pose[2]))
+
+    def leave_failed_hull(carrier):
+        if not carrier.get('position') or 'follow_route' not in actions:
+            return None
+        offset = tuple(value - peer for value, peer in zip(pose[:2], carrier['position']))
+        gap = math.hypot(*offset)
+        padding = carrier.get('physical', {}).get('radius_m', 2.55) + 1.2
+        if gap <= .15 or max(map(abs, offset)) >= padding:
+            return None
+        away = tuple(value + delta * 5. / gap for value, delta in zip(pose[:2], offset))
+        departure = marine_navigation([peer for peer in agents if peer is not carrier])
+        if departure.clear(pose, (*away, pose[2])):
+            return {'waypoints': [[*away, pose[2]]]}
+        return None
 
     if physical.get('carrying'):
         job.target = physical.get('cargo_target_id') or job.target
+        # The pickup itself can leave the boat inside a disabled peer's
+        # clearance margin. Leave directly before planning the shore route.
+        for carrier in agents:
+            if carrier['kind'] == 'surface_water' and carrier['status'] == 'failed':
+                departure = leave_failed_hull(carrier)
+                if departure:
+                    return request('follow_route', departure, 'shore')
         reservation = workflow.shore_transfer
         if reservation and reservation['boat_id'] != boat_id:
             return None, None
@@ -273,9 +304,7 @@ def water_command(workflow, observation, announced, boat, job, known, *, reroute
 
     reserved = {other.target for key, other in workflow.jobs.items() if key != boat_id and other.target}
     waiting = {tid: t for tid, t in known.items() if t.get('access_medium') == 'surface_water'
-               and t.get('evacuation_state') == 'waiting' and t.get('position') and tid not in reserved
-               and (tid not in workflow.reconfirm_after
-                    or (t.get('observed_at') or 0) > workflow.reconfirm_after[tid])}
+               and t.get('evacuation_state') == 'waiting' and t.get('position') and tid not in reserved}
     target = waiting.get(job.target)
     if target is None:
         job.target = None
@@ -325,42 +354,65 @@ def water_command(workflow, observation, announced, boat, job, known, *, reroute
                     return request('follow_route',{'waypoints':waypoints},'search_water')
         return None, None
 
-    if target.get('status') != 'confirmed' and math.dist(pose, target['position']) < 11.5:
-        job.target = target['id']
-        return request('inspect', {'target_id': job.target}, 'search_water')
-    if water_pickup_ready(boat, target):
-        job.target = target['id']
-        return request('pickup', {'target_id': job.target}, 'shore')
     now = observation['time']
-    observed = target.get('observed_at', now)
-    if type(observed) not in (int, float):
-        observed = now
+    observed = target.get('observed_at')
+    age = now - observed if type(observed) in (int, float) else math.inf
     position = tuple(target['position'][:2])
     current = pose[:2]
+    ready = water_pickup_ready(boat, target)
+    needs_confirmation = target.get('status') != 'confirmed' or target['id'] in workflow.reconfirm_after
+    stale_support = target.get('supported_by_agent') and not 0 <= age <= 3
+    if ready and not (needs_confirmation or stale_support):
+        job.target = target['id']
+        return request('pickup', {'target_id': job.target}, 'shore')
+    if 'inspect' in actions and ((needs_confirmation and math.dist(pose, target['position']) < 11.5)
+                                 or (ready and stale_support)):
+        # Inspection can refresh the last delivered pose after carrier loss
+        # even if passive reporting has seen too little movement to transmit.
+        failed = workflow.failed_inspections.get((boat_id, target['id']), ())
+        if not any(math.dist(last, position) < 1. and math.dist(vantage, current) < 2. for last, vantage in failed):
+            job.target = target['id']
+            job.inspection = (job.target, position, current)
+            return request('inspect', {'target_id': job.target}, 'search_water')
     velocity = target.get('velocity_m_s', (0, 0, 0))[:2]
-    age = now - observed
+    job.blocked_water_approaches = {key: expires for key, expires in job.blocked_water_approaches.items()
+                                   if expires > now}
+    reach = 3.5
     if target.get('supported_by_agent'):
-        carrier = next((item for item in agents if item['id']==target['supported_by_agent']),None)
-        if carrier and carrier.get('position') and carrier['status']=='failed':
-            # A disabled hull can drift beyond the last patient position.
-            # A new view from that vicinity is required before the hoist.
-            if age>3 or math.dist(carrier['position'][:2],position)>2.5:
-                position=tuple(carrier['position'][:2])
-    time_to_reach = max(0., math.dist(current, position) - 3.5) / 2.
+        carrier = next((item for item in agents if item['id'] == target['supported_by_agent']), None)
+        if carrier and carrier['kind'] == 'surface_water' and carrier['status'] == 'failed':
+            # Another hull requires more clearance. Keep the staging point
+            # within the native hoist's 4.4 m envelope.
+            reach = 4.12
+            if carrier.get('position'):
+                departure = leave_failed_hull(carrier)
+                if departure:
+                    job.target = target['id']
+                    return request('follow_route', departure, 'search_water')
+                if age > 6 and math.dist(carrier['position'][:2], position) > 2.5:
+                    position = tuple(carrier['position'][:2])
+                    if math.dist(current, position) < 11.:
+                        job.target = target['id']
+                        return request('inspect', {'target_id': job.target}, 'search_water')
+    time_to_reach = max(0., math.dist(current, position) - reach) / 2.
     latency = boat.get('communication', {}).get('latency') or 0.
     lead = min(5., age + latency + time_to_reach + 1.5) if 0 <= age <= 6 else 0.
     intercept = tuple(value + speed * lead for value, speed in zip(position, velocity))
     for x, y in dict.fromkeys((intercept, position)):
         distance = math.dist(current, (x, y))
-        offsets = [(0, 3.5), (0, -3.5), (3.5, 0), (-3.5, 0)]
+        offsets = [(0, reach), (0, -reach), (reach, 0), (-reach, 0)]
         if distance > .01:
-            safe_range = min(3.5, max(2.2, distance - 1.))
+            safe_range = min(reach, max(2.2, distance - 1.))
             offsets.append(((current[0]-x)*safe_range/distance, (current[1]-y)*safe_range/distance))
         candidates = [(x+dx, y+dy) for dx,dy in offsets]
         for candidate in sorted(candidates, key=lambda point: (math.dist(current, point), point)):
             if math.dist(current, candidate) < .6 or 'follow_route' not in actions:
                 continue
             dx, dy = x-candidate[0], y-candidate[1]
+            direction = round(math.atan2(dy, dx) * 4 / math.pi) % 8
+            approach_key = (target['id'], direction)
+            if approach_key in job.blocked_water_approaches:
+                continue
             length = math.hypot(dx, dy)
             approach = (candidate[0]-dx*3.2/length,candidate[1]-dy*3.2/length)
             waypoints = route(approach)
@@ -368,7 +420,8 @@ def water_command(workflow, observation, announced, boat, job, known, *, reroute
                 waypoints.append([*candidate,pose[2]])
                 job.target = target['id']
                 command = request('follow_route', {'waypoints': waypoints, 'precise_stop': True}, 'search_water')
-                job.water_intercept = (observed, now, position)
+                job.water_intercept = (observed if math.isfinite(age) else now, now, position)
+                job.water_approach = approach_key
                 return command
     if not reroute:
         job.target = None

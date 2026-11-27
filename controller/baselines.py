@@ -5,7 +5,7 @@ Observation/StepResponse. Private layouts and environment modules are absent.
 """
 from __future__ import annotations
 
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 from copy import deepcopy
 import math
 
@@ -31,6 +31,8 @@ class Job:
     inspection:tuple[str,tuple,tuple]|None=None
     inspection_route:bool=False
     water_intercept:tuple[float,float,tuple[float,float]]|None=None
+    water_approach:tuple[str,int]|None=None
+    blocked_water_approaches:dict[tuple[str,int],float]=field(default_factory=dict)
 
 
 class FixedWorkflow:
@@ -516,6 +518,8 @@ class FixedWorkflow:
                             stored=self.local_obstacles.setdefault(a['id'],[])
                             if blocker not in stored:stored.append(deepcopy(blocker))
                             del stored[:-64]
+                    if a['kind']=='surface_water' and job.water_approach is not None:
+                        job.blocked_water_approaches[job.water_approach]=observation['time']+45.
                     outgoing.append({'agent_id':a['id'],'action':'hold','parameters':{}})
                     effects.append((a['id'],None))
                 elif (a['kind']=='surface_water' and job.action=='follow_route'

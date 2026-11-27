@@ -155,5 +155,6 @@ private:
     bool IsDockEntryLeg() const;
     void DriveCompetitionMedium(float Dt);
     FVector SafeVelocity(const FVector& Desired,float Dt);
+    void ReportRouteObstacle(const FHitResult& Hit);
     UFUNCTION() void OnAgentHit(UPrimitiveComponent* HitComponent,AActor* OtherActor,UPrimitiveComponent* OtherComponent,FVector Impulse,const FHitResult& Hit);
 };

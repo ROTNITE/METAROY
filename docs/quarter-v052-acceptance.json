@@ -2053,6 +2053,8 @@
       "requirement": "Новая лодка, 0–4/по умолчанию 2, реальный спуск, глубина/осадка/плавучесть/течение/груз/энергия",
       "status": "partial",
       "evidence": [
+        "D:/MetaRescue-output/integration-20261127-01/water-loss-before-departure-main-01-480-audit.json",
+        "D:/MetaRescue-output/integration-20261127-01/water-flood-street-03-audit.json",
         "D:/MetaRescue-output/visual-overhaul-20261115/checks/catamaran-import-01/verification.json",
         "tests/test_watercraft_config.py",
         "tests/test_watercraft_shore.py",
@@ -2061,20 +2063,22 @@
         "D:/MetaRescue-output/integration-20261127-01/native-transfer-21/verification.json",
         "D:/MetaRescue-output/integration-20261127-01/water-automatic-06-moderate-audit.json"
       ],
-      "scope_note": "Плавучесть, работа водомётов и физическая передача массы 98 кг подтверждены. Число катамаранов 0–4 и 2 по умолчанию добавлено в UI. Открыты оконная проверка настройки, рейс с затопленной улицы и восстановление при отказе с грузом."
+      "scope_note": "Плавучесть, работа водомётов и физическая передача массы 98 кг подтверждены. Число катамаранов 0–4 и 2 по умолчанию добавлено в UI. Из распакованной сборки подтверждены пресеты с 0 и 4 катамаранами. Полная передача груза после одного типа отказа подтверждена. Рейс с затопленной улицы и другие геометрии восстановления открыты."
     },
     {
       "id": "VIS11",
       "requirement": "Промежуточная высадка сохраняет личность и владение грузом; спасение только в медпункте; зависимая коалиция",
       "status": "partial",
       "evidence": [
+        "D:/MetaRescue-output/integration-20261127-01/water-loss-before-departure-main-01-480-audit.json",
+        "D:/MetaRescue-output/integration-20261127-01/water-flood-street-03-audit.json",
         "D:/MetaRescue-output/visual-overhaul-20261115/checks/native-transfer-04/verification.json",
         "tests/test_watercraft_shore.py",
         "D:/MetaRescue-output/integration-20261127-01/water-automatic-06-calm-audit.json",
         "D:/MetaRescue-output/integration-20261127-01/water-automatic-06-moderate-audit.json",
         "D:/MetaRescue-output/integration-20261127-01/water-automatic-06-loss-audit.json"
       ],
-      "scope_note": "Автоматическая береговая коалиция дала одну передачу в бассейне на 198,02 с и в паводке на 195,02 с. Длительность и энергия обоих плеч оцениваются по доставленному состоянию. При отказе пациент удержан на плаву и отказ доставлен после восстановления связи. Резервное плечо остаётся открытым."
+      "scope_note": "Автоматическая береговая коалиция дала одну передачу в бассейне на 198,02 с и в паводке на 195,02 с. Длительность и энергия обоих плеч оцениваются по доставленному состоянию. При отказе пациент удержан на плаву и отказ доставлен после восстановления связи. В основной копии резервное судно, пирс и ровер подтвердили одну передачу на 339,02 с. До подъёма резервным судном отмечены контакты корпусов. Отказ у пирса и на рейде требуют дополнительных проверок."
     },
     {
       "id": "VIS12",
