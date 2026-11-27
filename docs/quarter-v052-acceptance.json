@@ -2118,9 +2118,16 @@
     {
       "id": "VIS16",
       "requirement": "Регрессии и отдельная распакованная Windows-сборка; реальные изображения/видео и инструкция отката",
-      "status": "pending",
-      "evidence": [],
-      "scope_note": "Новый визуальный этап; полная приёмка описана в docs/disaster-visual-runtime.md."
+      "status": "partial",
+      "evidence": [
+        "D:/MetaRescue-output/automation/20261127T134506536623Z/verification.json",
+        "D:/MetaRescue-output/integration-20261127-01/main-profile-root-tests.log",
+        "D:/MetaRescue-output/releases/windows-integrated-verification-20261127-04/archive-verification.json",
+        "D:/MetaRescue-output/integration-20261127-01/packaged-product-03/four-boats-verification.json",
+        "D:/MetaRescue-output/integration-20261127-01/packaged-product-03/startup-failure.json",
+        "D:/MetaRescue-output/integration-20261127-01/packaged-product-03/windows-firewall.json"
+      ],
+      "scope_note": "Python 316/316 и Unreal 31/31. Windows-кандидат 04 прошёл CRC и SHA всех 1225 файлов. Извлечённая сборка завершила миссию 2.3 на 480 с с четырьмя катамаранами и двумя физическими передачами. Конфликт портов отклонён перед запуском. При старте формы Development Windows запросила доступ из-за диагностического TCP-порта. Требуется повтор через интерактивный интерфейс на готовой поставке и полный визуальный цикл."
     },
     {
       "id": "UNIVERSAL-CORE",
@@ -2137,9 +2144,11 @@
         "D:/MetaRescue-output/integration-20261127-01/universal-review/peer-outbound/summary.json",
         "D:/MetaRescue-output/integration-20261127-01/universal-review/peer-v9-outbound/summary.json",
         "D:/MetaRescue-output/integration-20261127-01/universal-review/peer-inbound/summary.json",
-        "D:/MetaRescue-output/integration-20261127-01/universal-review/peer-inbound-lab-r2/summary.json"
+        "D:/MetaRescue-output/integration-20261127-01/universal-review/peer-inbound-lab-r2/summary.json",
+        "D:/MetaRescue-output/integration-20261127-01/main-promotion-01/native-pair/verification.json",
+        "D:/MetaRescue-output/integration-20261127-01/main-promotion-01/detached-portable/verification.json"
       ],
-      "scope_note": "25 транспортных проверок, 33 независимых проверки, 6 физических передач независимого контроллера в 2D и 6/6 в новой нативной серии на трёх геометриях. В локальном партнёрском обмене остаются тайм-аут Lab, недекларированные параметры Portable, отсутствующий id ресурса v9 и нулевой физический результат контроллеров v9 и Atlas 0.2 в RescueQuarter. Внешняя приёмка открыта."
+      "scope_note": "25 транспортных проверок, 33 независимых проверки, 6 физических передач независимого контроллера в 2D и 6/6 в новой нативной серии на трёх геометриях. В локальном партнёрском обмене остаются тайм-аут Lab, недекларированные параметры Portable, отсутствующий id ресурса v9 и нулевой физический результат контроллеров v9 и Atlas 0.2 в RescueQuarter. Внешняя приёмка открыта. Из опубликованного main повторены две нативные миссии с одной физической передачей в каждой. Из извлечённого ZIP контроллер дал по одной передаче в независимой HTTP-среде в strict и declared."
     }
   ],
   "external_tournament": {
