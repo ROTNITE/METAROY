@@ -105,6 +105,8 @@ bool AMRWorld::CollapseCityStructure(const FMRDisturbance& Event)
         Body->SetSimulatePhysics(true);
         Generated.Add(Body);Generated.Add(Visual);PhysicsPieces.Add(Body);InitialPiecePositions.Add(Center);++Bodies;
     }
+    // Failed or already-removed parts must never create phantom fragments.
+    if(Environment.bRevisedDisasters&&LostParts==0)return false;
     for(int32 I=HazardVisuals.Num()-1;I>=0;--I)
     {
         auto* Effect=HazardVisuals[I].Get();if(!Effect||!Effect->ComponentHasTag(StructureTag))continue;
@@ -150,7 +152,7 @@ void AMRWorld::RefreshDebrisCells()
     const auto Add=[&](const FBox& Bounds)
     {
         if(!Bounds.IsValid||Bounds.Min.ContainsNaN()||Bounds.Max.ContainsNaN()||
-           Bounds.GetSize().Z<30||Bounds.GetSize().GetMax()<60)return;
+           Bounds.GetSize().Z<30||FMath::Max(Bounds.GetSize().X,Bounds.GetSize().Y)<60)return;
         // The cell is a conservative navigation observation, not an invisible
         // collider. High roof debris must not block a street beneath it.
         const auto Low=FMRDistrictEnvironment::Cell(Bounds.Min);
@@ -185,8 +187,8 @@ void AMRWorld::RefreshDebrisCells()
         }
         else Add(Primitive->Bounds.GetBox());
     }
-    const bool Changed=Current.Num()!=DebrisCells.Num()||
-        Current.Array().ContainsByPredicate([&](const FIntPoint& Cell){return !DebrisCells.Contains(Cell);});
+    bool Changed=Current.Num()!=DebrisCells.Num();
+    if(!Changed)for(const auto& Cell:Current)if(!DebrisCells.Contains(Cell)){Changed=true;break;}
     if(Changed)
     {
         for(const auto& Cell:Current)DebrisHistory.Add(Cell);
