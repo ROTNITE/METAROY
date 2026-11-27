@@ -298,8 +298,11 @@ void AMRAgent::Tick(float Dt)
         else
         {
             const double Speed=MaxSpeed*SpeedFactor;
+            // RescueDistrict drives a box sliding directly on the ground. At
+            // a waypoint its approach force still has to break static friction.
+            const double GroundSpeedFloor=!Mission->bRescueQuarter?300.:(DockApproach||SlowApproach)?35.:75.;
             Desired=Delta.GetSafeNormal()*(bAerial?FMath::Min(Speed,Delta.Size()*2):
-                FMath::Min(Speed,FMath::Clamp(Delta.Size()*1.2,(DockApproach||SlowApproach)?35.:75.,SlowApproach?70.:double(MaxSpeed))));
+                FMath::Min(Speed,FMath::Clamp(Delta.Size()*1.2,GroundSpeedFloor,SlowApproach?70.:double(MaxSpeed))));
         }
     }
     // A temporary traffic stop freezes thrust at the current height. Restore

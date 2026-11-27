@@ -283,6 +283,7 @@
       "requirement": "Все 14 нормативных типов возмущений",
       "status": "verified",
       "evidence": [
+        "D:/MetaRescue-output/core-acceptance/contest-20261127-final-01/verification.json",
         "D:/MetaRescue-output/core-acceptance/core-resources-02-power-loss/verification.json",
         "D:/MetaRescue-output/core-acceptance/core-radio-02-relay/verification.json",
         "docs/core-radio.md",
@@ -784,6 +785,7 @@
       "requirement": "Фиксированный и локальный реактивный baseline",
       "status": "verified",
       "evidence": [
+        "D:/MetaRescue-output/integration-20261127-01/series-pilot-01/mirrored-evidence.json",
         "D:/MetaRescue-output/core-acceptance/core-rescue-02-roads/verification.json",
         "D:/MetaRescue-output/missions/standalone-07-local-reactive/manifest.json",
         "D:/MetaRescue-output/checks/handoff-build69-summary-01.json",
@@ -1007,8 +1009,10 @@
     {
       "id": "V06",
       "requirement": "Legacy90",
-      "status": "pending",
-      "evidence": []
+      "status": "verified",
+      "evidence": [
+        "D:/MetaRescue-output/integration-20261127-01/main-legacy-traction-smoke-01/verification.json"
+      ]
     },
     {
       "id": "V07",
@@ -1025,6 +1029,8 @@
       "requirement": "450 последовательных native runs",
       "status": "partial",
       "evidence": [
+        "D:/MetaRescue-output/integration-20261127-01/series-pilot-01/mirrored-evidence.json",
+        "D:/MetaRescue-output/integration-20261127-01/historical-series-comparison-02/comparison.json",
         "D:/MetaRescue-output/series/competition-design-02-r3/plan.json",
         "tools/run_native_series.py",
         "D:/MetaRescue-output/integration-20261127-01/historical-series-audit-01.json",
@@ -1033,7 +1039,7 @@
         "D:\\MetaRescue-output\\checks\\series-checkpoint-20261113T092617Z\\verification.json",
         "D:/MetaRescue-output/integration-20261127-01/historical-series-comparison-01/comparison.json"
       ],
-      "scope_note": "Для прежнего плана 02-r3 сверены 180 завершённых строк из 450, сохранённые отчёты CRC/SHA и размеры потоков. Историческая сборка по закреплённому пути доступна. Новый план на 2.3 содержит 30 новых карт и 450 строк с Counterfactual Value и двумя контрольными политиками."
+      "scope_note": "Прежний план 02-r3 содержит 181 из 450 проверенных завершённых эпизодов. Новый план 2.3 содержит 30 карт и 450 строк. Отдельный пилот завершил шесть нативных эпизодов."
     },
     {
       "id": "V09",
@@ -1643,8 +1649,10 @@
     {
       "id": "V3-V10",
       "requirement": "RescueDistrict сохранён и работает",
-      "status": "pending",
-      "evidence": [],
+      "status": "verified",
+      "evidence": [
+        "D:/MetaRescue-output/integration-20261127-01/main-legacy-traction-smoke-01/verification.json"
+      ],
       "source": "quarter-v3-acceptance-matrix.md"
     },
     {
@@ -2035,9 +2043,10 @@
       "requirement": "Все конкурсные события имеют соответствующее фактам представление техники/интерфейса",
       "status": "partial",
       "evidence": [
+        "D:/MetaRescue-output/core-acceptance/contest-20261127-final-01/verification.json",
         "D:/MetaRescue-output/integration-20261127-01/city-faults-build-01/verification.json"
       ],
-      "scope_note": "Показаны метки отказов, давности поз и опубликованного приоритета, список событий строится по доставленному шагу. Проверка поведения и оконных кадров со всеми типами открыта."
+      "scope_note": "Показаны метки отказов, давности поз и опубликованного приоритета, список событий строится по доставленному шагу. Поведение всех 14 типов проверено нативно. Оконные кадры техники и интерфейса по каждому типу требуют отдельной проверки."
     },
     {
       "id": "VIS10",
