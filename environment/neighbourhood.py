@@ -15,6 +15,7 @@ from environment.streets import build_streets, clip_halfplane
 VERSION = 'rescue-city-2.0'
 DECORATED_VERSION = 'rescue-city-2.1'
 STREET_PROP_VERSION = 'rescue-city-2.2'
+DISASTER_VERSION = 'rescue-city-2.3'
 HOUSE_HALF_M = 4.75
 VEGETATION_REVISION = 3
 CONTENT = Path(__file__).resolve().parents[1] / 'unreal/MetaRescue/Content'
@@ -37,6 +38,45 @@ def _street_index(streets):
         margin=width/2+1
         index.add(i,[min(x,y)-margin for x,y in zip(a,b)],[max(x,y)+margin for x,y in zip(a,b)])
     return index
+
+
+def _curb_relays(graph, open_lot):
+    spacing = 60.
+    positions = {node['id']: node['position'][:2] for node in graph['nodes']}
+    bins = defaultdict(list)
+    for edge in graph['edges']:
+        if edge['street_class'] == 'access':
+            continue
+        start, end = positions[edge['from']], positions[edge['to']]
+        length = math.dist(start, end)
+        if length <= 18:
+            continue
+        dx, dy = ((b - a) / length for a, b in zip(start, end))
+        divisions = math.ceil(length / 22)
+        margin = edge['width_m'] / 2 + 2.7
+        for i in range(divisions):
+            along = 8. + (length - 16.) * (i + .5) / divisions
+            anchor = (start[0] + dx * along, start[1] + dy * along)
+            for side in (-1, 1):
+                x = round(anchor[0] - dy * margin * side, 3)
+                y = round(anchor[1] + dx * margin * side, 3)
+                if open_lot(_rect(x, y, .8, .8), margin=.65):
+                    bins[int(x // spacing), int(y // spacing)].append((x, y, edge['from'], edge['to'], anchor))
+
+    selected = {}
+    result = []
+    for (bx, by), candidates in sorted(bins.items()):
+        center = ((bx + .5) * spacing, (by + .5) * spacing)
+        nearby = [selected[x, y] for x in range(bx - 1, bx + 2) for y in range(by - 1, by + 2) if (x, y) in selected]
+        for x, y, start, end, anchor in sorted(candidates, key=lambda p: (math.dist(p[:2], center), *p[:4])):
+            if any(math.dist((x, y), previous) < 45. for previous in nearby):
+                continue
+            result.append({'id': f'relay-{bx}-{by}', 'kind': 'relay', 'position': [x, y, 3.],
+                           'range_m': 180, 'street_anchor': {'from': start, 'to': end,
+                                                           'position_m': [round(v, 3) for v in anchor]}})
+            selected[bx, by] = (x, y)
+            break
+    return result
 
 
 def _center(outline):
@@ -203,7 +243,7 @@ def _decorated_yards(lots, seed, open_lot, reserve, *, street_props):
 
 
 def build_neighbourhood(settings,size,base,seed,*,person_clearance,revision='2.0',fixed_obstacles=()):
-    decorated=revision in ('2.1','2.2')
+    decorated=revision in ('2.1','2.2','2.3')
     rng=random.Random(seed('fronts'))
     graph,blocks=build_streets(size,seed('roads'),
                               access_obstacles=tuple(Footprint.from_area(area) for area in fixed_obstacles))
@@ -317,7 +357,7 @@ def build_neighbourhood(settings,size,base,seed,*,person_clearance,revision='2.0
 
     detailing={}
     if decorated:
-        detailing,features=_decorated_yards(lots,seed('yard-detail-2.1'),open_lot,reserve,street_props=revision=='2.2')
+        detailing,features=_decorated_yards(lots,seed('yard-detail-2.1'),open_lot,reserve,street_props=revision in ('2.2','2.3'))
     people_rng=random.Random(seed('people'))
     choices=[(a,b,w) for a,b,w,_ in streets if math.dist(a,b)>7]
     clustered=sorted(choices,key=lambda edge:math.dist(edge[0][:2],(size*.52,size*.55)))[:max(18,len(choices)//12)]
@@ -339,16 +379,19 @@ def build_neighbourhood(settings,size,base,seed,*,person_clearance,revision='2.0
         people.append({'id':len(people)+1,'position':[x,y,.06],'priority':people_rng.randrange(1,4),'available_at':0})
     if len(people)!=settings.people:raise ProtocolError('CONSTRAINT_VIOLATION','Insufficient irregular road shoulder space')
 
-    relays=[];bins=defaultdict(list)
-    for node in graph['nodes']:
-        x,y,_=node['position'];bins[(int(x//90),int(y//90))].append((x,y))
-    for (bx,by),points in sorted(bins.items()):
-        x,y=min(points,key=lambda p:math.dist(p,(bx*90+45,by*90+45)))
-        for dx,dy in ((7,7),(-7,7),(7,-7),(-7,-7)):
-            rx,ry=x+dx,y+dy
-            if open_lot(_rect(rx,ry,.8,.8)):
-                relays.append({'id':f'relay-{bx}-{by}','kind':'relay','position':[rx,ry,3.],'range_m':180})
-                break
+    if revision=='2.3':
+        relays=_curb_relays(graph,open_lot)
+    else:
+        relays=[];bins=defaultdict(list)
+        for node in graph['nodes']:
+            x,y,_=node['position'];bins[(int(x//90),int(y//90))].append((x,y))
+        for (bx,by),points in sorted(bins.items()):
+            x,y=min(points,key=lambda p:math.dist(p,(bx*90+45,by*90+45)))
+            for dx,dy in ((7,7),(-7,7),(7,-7),(-7,-7)):
+                rx,ry=x+dx,y+dy
+                if open_lot(_rect(rx,ry,.8,.8)):
+                    relays.append({'id':f'relay-{bx}-{by}','kind':'relay','position':[rx,ry,3.],'range_m':180})
+                    break
     if decorated:
         detailing['background_revision'] = 2
         background = _outskirts(graph, size, random.Random(seed('edge')))

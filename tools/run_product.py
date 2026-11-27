@@ -15,7 +15,7 @@ sys.path.insert(0,str(ROOT))
 from controller.ai import atomic_json,file_lock
 from controller.health import require_port_available
 from environment.main import DEFAULT_OUTPUT,PACKAGED_GAME,existing_unreal,native_command
-from tools.product_session import SESSION_FORMAT,parse_request
+from tools.product_session import SESSION_FORMAT,default_product_request,parse_request
 from tools.run_mission import hashes
 from tools.native_archive import file_sha256
 from tools.analytics_service import available_port,ensure_analytics
@@ -50,7 +50,8 @@ def main():
         session={'format':SESSION_FORMAT,'id':uuid.uuid4().hex,'workspace':str(directory),'source_root':str(ROOT),
                  'python':sys.executable,'port':args.port,'health_port':args.health_port,
                  'analytics_port':args.analytics_port,'state':'starting','native_pid':None}
-        if args.configuration:session['configuration']=parse_request(json.loads(args.configuration.read_text(encoding='utf-8-sig')))
+        session['configuration']=(parse_request(json.loads(args.configuration.read_text(encoding='utf-8-sig')))
+                                  if args.configuration else default_product_request())
         path=directory/'session.json';atomic_json(path,session)
         session['analytics']=ensure_analytics(directory,DEFAULT_OUTPUT,port=args.analytics_port)
         command=native_command(output=directory,port=args.port,visible=not args.offscreen,demo_render=args.demo_render)
@@ -59,7 +60,7 @@ def main():
         marker=directory/'initial-configuration.json';atomic_json(marker,session.get('configuration',{}))
         def inputs():
             values=hashes(marker)
-            for name in ('run_product.py','product_session.py','native_process.py','analytics_service.py'):
+            for name in ('run_product.py','product_session.py','net65_demo.py','native_process.py','analytics_service.py'):
                 file=ROOT/'tools'/name;values[str(file)]=file_sha256(file)
             for folder in ('analytics','web'):
                 for file in (ROOT/folder).rglob('*'):

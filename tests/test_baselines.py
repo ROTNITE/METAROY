@@ -1,4 +1,5 @@
 from copy import deepcopy
+import math
 import unittest
 
 from controller.baselines import FixedWorkflow, Job, LocalReactive
@@ -6,6 +7,36 @@ from test_problem_builder import public_state
 
 
 class BaselineTests(unittest.TestCase):
+    def test_failed_aerial_inspection_requests_a_new_vantage(self):
+        state = public_state()
+        drone = state['agents'][1]
+        drone['position'] = [75., 25., 20.]
+        state['targets'] = state['targets'][:1]
+        target = state['targets'][0]
+        target['status'] = 'suspected'
+        policy = FixedWorkflow()
+        first = policy.decide(state)
+        self.assertEqual(first['commands'][0]['action'], 'inspect')
+        policy.observe_response({'status': 'running', 'command_results': [{
+            'decision_id': first['decision_id'], 'agent_id': drone['id'], 'command_index': 0,
+            'validation_status': 'accepted', 'delivery_status': 'delivered',
+            'execution_status': 'failed', 'reason_code': 'local_execution_precondition_failed'}]})
+
+        state['time'] = 1.
+        second = policy.decide(state)
+        approach = second['commands'][0]
+        self.assertEqual(approach['action'], 'follow_route')
+        destination = approach['parameters']['waypoints'][-1]
+        self.assertGreater(math.dist(drone['position'], destination), 4.)
+        self.assertLess(math.dist(target['position'], destination), 40.)
+        policy.observe_response({'status': 'running', 'command_results': [{
+            'decision_id': second['decision_id'], 'agent_id': drone['id'], 'command_index': 0,
+            'validation_status': 'accepted', 'delivery_status': 'delivered', 'execution_status': 'completed'}]})
+        drone['position'] = destination
+        state['time'] = 5.
+        self.assertEqual(policy.decide(state)['commands'][0], {
+            'agent_id': drone['id'], 'action': 'inspect', 'parameters': {'target_id': target['id']}})
+
     def test_lost_carriers_target_requires_a_new_delivered_confirmation(self):
         state = public_state()
         state['targets'] = state['targets'][:1]

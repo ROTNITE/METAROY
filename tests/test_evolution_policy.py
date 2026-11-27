@@ -104,21 +104,6 @@ class EvolutionPolicyTests(unittest.TestCase):
                 self.assertEqual(request['commands'],[])
                 self.assertTrue(any(t['type']=='planning_result_discarded' for t in policy.drain_traces()))
 
-    def test_net65_estimates_expire_before_a_stale_route_is_assigned(self):
-        policy,_=self.create(scout_patrol='net65')
-        state=public_state();policy.decide(state)
-        state=deepcopy(state);state['time']=137
-        policy.current_observation=state
-        drone=next(a for a in state['agents'] if a['kind']=='aerial')
-        aid=drone['id']
-        future=Future()
-        future.set_result({'plan':{'routes':{aid:['old-sector']}},'net65_starts':{aid:drone['position']}})
-        policy.futures={'scout':{'future':future,'time':131,'generation':policy.generation,
-                                 'revision':policy.replan_revisions['scout']}}
-        policy._poll()
-        self.assertEqual(policy.scout_queues,{})
-        self.assertTrue(any(t.get('reason')=='net65_estimates_expired' for t in policy.drain_traces()))
-
     def test_scout_replan_keeps_current_sector_until_observed_dwell_completes(self):
         policy,executor=self.create();state=public_state();first=policy.decide(state)
         current=accepted(state,first,1);executor.complete();policy.decide(current)

@@ -35,6 +35,21 @@ const FSlateColorBrush Panel(FLinearColor(.047f,.059f,.050f,.96f));
 FText Tx(const FString& S){return FText::FromString(S);}
 FSlateFontInfo Font(int32 Size=13,bool Bold=false){return FCoreStyle::GetDefaultFontStyle(Bold?TEXT("Bold"):TEXT("Regular"),Size);}
 
+const TMap<FString,FString> EventLabels={
+    {TEXT("agent_failure"),TEXT("Отказ техники")},
+    {TEXT("agent_degradation"),TEXT("Снижение возможностей")},
+    {TEXT("infrastructure_failure"),TEXT("Отказ инфраструктуры")},
+    {TEXT("connectivity_loss"),TEXT("Связь")},
+    {TEXT("stale_information"),TEXT("Устаревшие данные")},
+    {TEXT("contradictory_information"),TEXT("Противоречие")},
+    {TEXT("mission_priority_change"),TEXT("Приоритет")},
+    {TEXT("operator_directive"),TEXT("Директива")},
+    {TEXT("restricted_zone_appeared"),TEXT("Ограничение")},
+    {TEXT("resource_shortage"),TEXT("Дефицит ресурса")},
+    {TEXT("target_detected"),TEXT("Цель обнаружена")},
+    {TEXT("target_state_changed"),TEXT("Состояние цели")}
+};
+
 struct FInterfaceStyle
 {
     FButtonStyle Normal,Primary;
@@ -148,8 +163,15 @@ private:
         Add(World,TEXT("Условия"),Combo(TEXT("settings"),TEXT("preset"),{{TEXT("open"),TEXT("S1 · Открытая местность")},{TEXT("urban"),TEXT("S2 · Город")},
             {TEXT("clusters"),TEXT("S3 · Группы целей")},{TEXT("scarce"),TEXT("S4 · Дефицит")},{TEXT("uncertain"),TEXT("S5 · Неопределённость")},{TEXT("dynamic"),TEXT("S6 · Динамика")}}));
         Add(World,TEXT("Окружение"),Combo(TEXT("settings"),TEXT("layout"),{{TEXT("rescue_quarter"),TEXT("Детальный квартал")},{TEXT("generated_city"),TEXT("Городской район")}}));
+        Add(World,TEXT("Версия города"),Combo(TEXT("settings"),TEXT("city_revision"),
+            {{TEXT("2.3"),TEXT("2.3 · Рельеф и вода")},{TEXT("2.2"),TEXT("2.2")},{TEXT("2.1"),TEXT("2.1")},
+             {TEXT("2.0"),TEXT("2.0")},{TEXT("1.1"),TEXT("1.1")}},
+            [this](const FString& Value){Group(TEXT("settings"))->SetNumberField(TEXT("boats"),Value==TEXT("2.3")?2:0);}));
         Add(World,TEXT("Дроны разведки"),Number(TEXT("settings"),TEXT("scouts"),1,48,true));
         Add(World,TEXT("Эвакуаторы"),Number(TEXT("settings"),TEXT("rescuers"),1,40,true));
+        World->AddSlot().AutoHeight().Padding(0,6)
+            [SNew(SBox).Visibility_Lambda([this]{return Text(Group(TEXT("settings")),TEXT("city_revision"))==TEXT("2.3")?
+                EVisibility::Visible:EVisibility::Collapsed;})[Row(TEXT("Катамараны"),Number(TEXT("settings"),TEXT("boats"),0,4,true))]];
         Add(World,TEXT("Люди при старте"),Number(TEXT("settings"),TEXT("people"),3,600,true));
         Add(World,TEXT("Горизонт, с"),Number(TEXT("settings"),TEXT("horizon"),1,86400));
         World->AddSlot().AutoHeight().Padding(0,10)[Check(TEXT("settings"),TEXT("competition"),TEXT("Конкурсный участок · все 8 категорий"))];
@@ -164,13 +186,31 @@ private:
         Add(Algorithms,TEXT("Алгоритмы"),Combo(TEXT("controller"),TEXT("policy"),{{TEXT("nsga2_nsga2"),TEXT("NSGA-II ×2")},{TEXT("greedy_greedy"),TEXT("Greedy + Greedy")},
             {TEXT("frontier_local"),TEXT("Frontier + Local")},{TEXT("nsga2_greedy"),TEXT("NSGA-II + Greedy")},{TEXT("greedy_nsga2"),TEXT("Greedy + NSGA-II")},
             {TEXT("fixed_workflow"),TEXT("Фиксированный workflow")},{TEXT("local_reactive"),TEXT("Локальный реактивный")}},[this](const FString& Value)
-            {if(Value==TEXT("fixed_workflow")||Value==TEXT("local_reactive")){Group(TEXT("controller"))->SetStringField(TEXT("ai_mode"),TEXT("OFF"));Group(TEXT("controller"))->SetBoolField(TEXT("contest_coordination"),false);Group(TEXT("controller"))->SetStringField(TEXT("scout_patrol"),TEXT("core"));}}));
+            {
+                const auto Controller=Group(TEXT("controller"));
+                if(Value!=TEXT("nsga2_nsga2"))Controller->SetStringField(TEXT("controller_profile"),TEXT("standard"));
+                if(Value==TEXT("fixed_workflow")||Value==TEXT("local_reactive"))
+                {
+                    Controller->SetStringField(TEXT("ai_mode"),TEXT("OFF"));
+                    Controller->SetBoolField(TEXT("contest_coordination"),false);
+                    Controller->SetStringField(TEXT("scout_patrol"),TEXT("core"));
+                }
+            }));
+        Add(Algorithms,TEXT("Профиль контроллера"),Combo(TEXT("controller"),TEXT("controller_profile"),
+            {{TEXT("standard"),TEXT("Штатный")},{TEXT("counterfactual-value"),TEXT("Counterfactual Value")}},[this](const FString& Value)
+            {
+                if(Value!=TEXT("counterfactual-value"))return;
+                const auto Controller=Group(TEXT("controller"));
+                Controller->SetStringField(TEXT("policy"),TEXT("nsga2_nsga2"));
+                Controller->SetStringField(TEXT("scout_patrol"),TEXT("net65"));
+            }));
         Add(Algorithms,TEXT("Повторная разведка"),Combo(TEXT("controller"),TEXT("scout_patrol"),
-            {{TEXT("core"),TEXT("Штатный Core")},{TEXT("net65"),TEXT("Net65")}},[this](const FString&)
+            {{TEXT("core"),TEXT("Штатный Core")},{TEXT("net65"),TEXT("Net65")}},[this](const FString& Value)
             {
                 const auto Controller=Group(TEXT("controller"));
                 const auto Policy=Text(Controller,TEXT("policy"));
                 if(Policy==TEXT("fixed_workflow")||Policy==TEXT("local_reactive"))Controller->SetStringField(TEXT("scout_patrol"),TEXT("core"));
+                if(Value!=TEXT("net65"))Controller->SetStringField(TEXT("controller_profile"),TEXT("standard"));
             }));
         Add(Algorithms,TEXT("Seed оптимизатора"),Number(TEXT("controller"),TEXT("optimizer_seed"),0,999999999,true));
         Add(Algorithms,TEXT("Scout · популяция"),Number(TEXT("controller"),TEXT("scout_population"),4,256,true));
@@ -278,7 +318,8 @@ private:
             Rows->AddSlot().AutoHeight().Padding(0,5)[Toggle(Entry.Key,Entry.Value)];
         Rows->AddSlot().AutoHeight().Padding(0,12,0,0)[LabelDynamic([this]{return Session->ObserverView?
             TEXT("Физическая истина доступна наблюдателю. Контроллер получает только доставленные сведения."):
-            TEXT("Схема команды: объявленные объёмы, доставленные позы и цели. Разрывы связи не заполняются.");},10,Muted)];
+            TEXT("Приглушённый фон показывает исходный город. Изменения видны после доставки наблюдений. При потере связи остаётся последняя полученная картина.");},10,Muted)];
+        Rows->AddSlot().AutoHeight().Padding(0,8,0,0)[Label(TEXT("Красный — отказ или запрет. Янтарный — устаревшие данные. Синий — вода."),10,Muted)];
         Rows->AddSlot().AutoHeight().Padding(0,8,0,0)[Label(TEXT("Сплошной след — пройдено. Пунктир — текущая команда. До 2048 точек на агента."),10,Muted)];
         Rows->AddSlot().AutoHeight().Padding(0,12,0,0)[Label(TEXT("RMB · поворот\nКолесо · масштаб\nWASD · перемещение\nR · следить за агентом"),10,Muted)];
         return SNew(SBorder).BorderImage(&Panel).Padding(16)[Rows];
@@ -303,6 +344,34 @@ private:
             P->GetNumberField(TEXT("consumed_wh")),P->GetNumberField(TEXT("distance_m")),C->GetBoolField(TEXT("reachable"))?TEXT("доступна"):TEXT("нет доставки"),100*C->GetNumberField(TEXT("quality")),
             Known?*FString::Printf(TEXT("%.2f с назад"),FMath::Max(0.,Now-At)):TEXT("время неизвестно"),Text(P,TEXT("stop_reason")).IsEmpty()?TEXT("—"):*Text(P,TEXT("stop_reason")),*Text(P,TEXT("active_command_id")));
         return Out;
+    }
+    FString EventsText() const
+    {
+        auto Observation=Session->Observation();
+        if(!Observation)return FString();
+        TArray<Object> Notices;
+        for(const auto& Value:Observation->GetArrayField(TEXT("events")))
+        {
+            const auto Event=Value->AsObject();
+            if(EventLabels.Contains(Text(Event,TEXT("type"))))Notices.Add(Event);
+        }
+        Notices.Sort([](const Object& A,const Object& B)
+        {
+            const double At=A->GetNumberField(TEXT("received_at")),Bt=B->GetNumberField(TEXT("received_at"));
+            return At!=Bt?At>Bt:Text(A,TEXT("id"))<Text(B,TEXT("id"));
+        });
+        if(Notices.IsEmpty())return FString();
+        FString Result=TEXT("Доставлено за последний шаг");
+        for(int32 Index=0;Index<FMath::Min(Notices.Num(),6);++Index)
+        {
+            const auto& Event=Notices[Index];
+            const auto& Targets=Event->GetArrayField(TEXT("targets"));
+            const FString Subject=Targets.IsEmpty()?FString():TEXT(" · ")+Targets[0]->AsString();
+            const FString Resolved=Text(Event,TEXT("status"))==TEXT("resolved")?TEXT(" · снято"):FString();
+            Result+=FString::Printf(TEXT("\n%.1f с · %s%s%s"),Event->GetNumberField(TEXT("received_at")),
+                *EventLabels.FindChecked(Text(Event,TEXT("type"))),*Subject,*Resolved);
+        }
+        return Result;
     }
     FString PlanText() const
     {
@@ -346,6 +415,7 @@ private:
             +SVerticalBox::Slot().AutoHeight()[LabelDynamic([this]{return InspectorText();},12)]
             +SVerticalBox::Slot().AutoHeight().Padding(0,14)[Button(TEXT("Следить за агентом"),[this]{FollowSelected();})]
             +SVerticalBox::Slot().AutoHeight().Padding(0,10)[LabelDynamic([this]{return PlanText();},11,Muted)]
+            +SVerticalBox::Slot().AutoHeight().Padding(0,8)[LabelDynamic([this]{return EventsText();},11,Warning)]
             +SVerticalBox::Slot().AutoHeight().Padding(0,14)[LabelDynamic([this]{return AIText();},11,Accent)]
         ]];
     }

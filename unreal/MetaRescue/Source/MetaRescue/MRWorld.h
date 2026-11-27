@@ -3,6 +3,8 @@
 #include "GameFramework/Actor.h"
 #include "MRAssetAssembly.h"
 #include "MREnvironment.h"
+#include "MRStructureState.h"
+#include "MRStreetSignals.h"
 #include "MRWorld.generated.h"
 
 class AMRAgent;
@@ -13,6 +15,11 @@ class UPrimitiveComponent;
 class FJsonObject;
 class UNiagaraComponent;
 class FMRCoreRuntime;
+class FMRUrbanTerrain;
+class FMRUrbanWater;
+class FMRWatercraftHydro;
+class UBoxComponent;
+struct FMRWaterSample;
 
 USTRUCT(BlueprintType)
 struct FMRSurfaceState
@@ -41,6 +48,11 @@ struct FMRTarget
     bool bAvailabilityReported = false;
     int32 ObservationEpoch = 0;
     TObjectPtr<AActor> Visual = nullptr;
+    TObjectPtr<UBoxComponent> FloatBody = nullptr;
+    void SetFlotationActive(bool Active);
+    double VisualAnchorOffsetCm=0,FloatDisplacedM3=0;
+    FString ShoreStation;
+    TWeakObjectPtr<AMRAgent> SupportCarrier;
     TArray<FVector> Path;
 };
 
@@ -70,6 +82,7 @@ public:
     bool bIrregularCity=false;
     bool bDecoratedCity=false;
     bool bCityProps=false;
+    bool bDisasterCity=false;
     UFUNCTION(CallInEditor, BlueprintCallable, Category="Rescue") void BuildScene();
     UFUNCTION(BlueprintCallable, Category="Rescue") void ReleaseCollapse();
     virtual void BeginPlay() override;
@@ -78,6 +91,7 @@ public:
     bool bCoreControlled=false;
     TMap<FString,FMRRestriction> CoreRestrictions;
     bool RestrictionOnRoute(const FVector& Start,const FVector& End,const FString& Kind,double Radius,double HalfHeight,FBox& Blocker) const;
+    double StreetSpeedLimit(FVector Position,FVector Direction,double LookAhead,FName& Junction) const;
     TSharedPtr<FMRCoreRuntime> CoreRuntime;
     int32 FoundCount() const;
     int32 SavedCount() const;
@@ -105,7 +119,11 @@ public:
     bool IsUnsafeGround(const FVector& Position) const;
     bool HasRadio(const FVector& Position) const;
     float WaterDepth(const FVector& Position) const;
+    FMRWaterSample WaterAtCm(FVector Position) const;
     float MovementCost(const FVector& Position) const;
+    TSharedPtr<FJsonObject> ShoreStation() const;
+    double ShoreHoistHeightCm() const;
+    TOptional<double> ElevatedSupportHeightCm(const FVector& Position) const;
     float SensorRange(const FVector& Position) const;
     int32 PendingReports() const;
     bool bRelayOnline = true;
@@ -118,18 +136,35 @@ public:
     UFUNCTION(BlueprintPure,Category="Rescue|Integration") FString PublicObservationJson() const;
     float VisibilityQuality(const FVector& Position) const;
     void RecordEnvironmentEvent(const FMRDisturbance& Event);
+    void StampMudTrack(const FVector& From,const FVector& To,const FVector& Normal);
 private:
     friend class FMRCoreRuntime;
+    friend class FMRUrbanTerrain;
+    friend class FMRUrbanWater;
     bool ReadCoreEventTape();
     void ResetCoreEventEffects();
     int32 ApplyCoreDisturbance(const FMRDisturbance& Event);
+    void PlaceDisasterWreck(const FMRDisturbance& Event);
     FString CoreEventProfile;
     UPROPERTY() TArray<TObjectPtr<USceneComponent>> CoreEventComponents;
+    UPROPERTY() TObjectPtr<UInstancedStaticMeshComponent> MudTracks;
+    TArray<FVector> MudTrackPositions;
+    double NextMudTrackCleanup=0;
     bool ReadCityLayout(const FString& File);
     bool ValidateCompetitionLayout() const;
     void BuildCompetitionAnnex();
     void SpawnCompetitionUnits();
+    bool ValidateWatercraftLayout();
+    void BuildWatercraftSlips();
+    void SpawnWatercraft();
+    TSharedPtr<FMRWatercraftHydro> WatercraftPhysicsProfile;
     void BuildIrregularStreets(const FBox& BaseBox);
+    void BuildStreetSignals(const FBox& BaseBox,const TMap<FString,FVector>& Positions);
+    void TickStreetSignals();
+    EMRStreetPhase StreetPhase(const FMRStreetArm& Signal) const;
+    TArray<FMRStreetArm> StreetSignals;
+    TMap<FIntPoint,TArray<int32>> StreetSignalBins;
+    UPROPERTY() TObjectPtr<UMaterialInterface> StreetSignalOff;
     void BuildCityYards();
     void BuildCityHorizon();
     void BuildCityFeature(const TSharedPtr<FJsonObject>& Feature);
@@ -137,6 +172,24 @@ private:
     void PrepareCityAssetViews();
     void PrepareCityBuildingViews();
     void BuildCity();
+    void RecordCityStructure(FName Id,int32 FirstGenerated,double StoreyDatumCm=0);
+    void RebindCityStructurePart(UStaticMeshComponent* Previous,UInstancedStaticMeshComponent* Batch,FPrimitiveInstanceId Id);
+    void ResetCityStructures();
+    void BuildUrbanTerrain();
+    void UrbanRoadPatch(FVector Start,FVector End,double Width,double Offset,const FString& Material);
+    void DamageUrbanRoad(const FMRDisturbance& Event);
+    void ResetUrbanTerrain();
+    double InitialGroundHeightCm(FVector Position) const;
+    TSharedPtr<FMRUrbanTerrain> UrbanTerrain;
+    TSharedPtr<FMRUrbanWater> UrbanWater;
+    bool BuildUrbanWater();
+    bool TickUrbanWater(double ModelSeconds);
+    void ResetUrbanWater();
+    bool CollapseCityStructure(const FMRDisturbance& Event);
+    void RefreshCitySmokeHeights();
+    void BatchDisasterDebris(int32 FirstGenerated,const FMRDisturbance& Event);
+    TMap<FName,FMRStructureState> CityStructures;
+    TMap<TWeakObjectPtr<UStaticMeshComponent>,FMRStructureOwner> CityPartOwners;
     bool bBuildingCity=false;
     int32 CityVegetationRevision=1;
     double CityBuildWallSeconds=0;
@@ -145,6 +198,11 @@ private:
     void InitializeEnvironment();
     void ApplyDisturbance(const FMRDisturbance& Event);
     void TickHazardVisuals(float Dt);
+    UNiagaraComponent* SpawnDisasterEffect(const FString& Name,const FVector& Position,
+        const FVector& Scale,const FMRDisturbance& Event);
+    void BuildDisasterSmoke(const FMRDisturbance& Event);
+    void BuildDisasterFire(const FMRDisturbance& Event);
+    void TickDisasterSmoke(USceneComponent* Component,const FMRDisturbance& Event);
     void ExportEnvironmentManifest() const;
     UPROPERTY() TArray<TObjectPtr<USceneComponent>> HazardVisuals;
     UPROPERTY() TArray<FBox> StructureFootprints;
@@ -210,6 +268,8 @@ private:
     void Checkpoint();
     void SpawnAgents();
     void SpawnTargets();
+    USceneComponent* MakeCasualtyRoot(AActor* Visual,FMRTarget& Target);
+    void TickFloatingCasualties(float Dt);
     void SenseAndDispatch(float Dt);
     bool ReadScenario();
     UFUNCTION() void OnRubbleHit(UPrimitiveComponent* HitComponent, AActor* OtherActor,

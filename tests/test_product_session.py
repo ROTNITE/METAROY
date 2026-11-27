@@ -7,7 +7,7 @@ import unittest
 from unittest.mock import patch
 
 from controller.operational import OperationalControl
-from tools.product_session import REQUEST_FORMAT,SESSION_FORMAT,availability,parse_request,prepare,presets,session_file
+from tools.product_session import REQUEST_FORMAT,SESSION_FORMAT,availability,default_product_request,parse_request,prepare,session_file
 from tools.native_archive import file_sha256
 from tools.native_process import AttachedNative
 
@@ -15,6 +15,14 @@ from tools.native_process import AttachedNative
 class ProductSessionTests(unittest.TestCase):
     def request(self,**controller):
         return {'format':REQUEST_FORMAT,'settings':{'layout':'rescue_quarter','city_revision':'2.2','people':3},'controller':controller}
+
+    def test_fresh_product_starts_with_winner_and_two_boats(self):
+        default = default_product_request()
+        self.assertEqual((default['settings']['city_revision'], default['settings']['boats']), ('2.3', 2))
+        self.assertEqual(default['controller']['controller_profile'], 'counterfactual-value')
+        self.assertEqual(default['controller']['scout_patrol'], 'net65')
+        self.assertEqual(default['controller']['ai_mode'], 'OFF')
+        self.assertEqual(parse_request(self.request())['controller']['controller_profile'], 'standard')
 
     def test_launcher_rejects_occupied_health_port_before_creating_native_or_session(self):
         from tools.run_product import main
@@ -62,23 +70,6 @@ class ProductSessionTests(unittest.TestCase):
             self.assertEqual(request.read_bytes(),before)
             gate=OperationalControl(request.parent/'control.json',session_id=result['control_session'])
             self.assertEqual(gate.take(),'wait')
-
-    def test_net65_demo_preset_prepares_the_timed_fixture(self):
-        with tempfile.TemporaryDirectory() as directory:
-            root=Path(directory)
-            with patch('tools.product_session.DEFAULT_OUTPUT',root), \
-                 patch('tools.product_session.availability',return_value={}):
-                demo=next(item for item in presets() if item['id']=='net65-demo')
-                request=root/'request.json'
-                request.write_text(json.dumps(demo['configuration']),encoding='utf-8')
-                result=prepare({},request)
-            self.assertEqual(result['configuration']['controller']['scout_patrol'],'net65')
-            self.assertEqual(parse_request(self.request())['controller']['scout_patrol'],'core')
-            private=json.loads((root/'world.private.json').read_bytes())
-            public=json.loads((root/'world.public.json').read_bytes())
-            self.assertEqual(private['settings']['horizon'],300)
-            self.assertEqual(private['fixture']['late_person_available_at'],198)
-            self.assertNotIn('fixture',public)
 
     def test_availability_returns_only_key_presence_and_existing_budget(self):
         with patch('tools.product_session.load_key',return_value=''),patch('tools.product_session.LiveBudget.snapshot',return_value={'used':6,'limit':240}):

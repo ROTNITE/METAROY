@@ -69,7 +69,7 @@ void AMRAgent::Initialize(AMRWorld* InWorld, int32 InId, bool Aerial, const TArr
     Body->SetEnableGravity(!Aerial);
     if(Mission->bRescueQuarter)
     {
-        InitializeDistrictVisual();Body->SetSimulatePhysics(true);SetWaypoints(InitialPath);return;
+        InitializeDistrictVisual();Body->SetSimulatePhysics(true);InitializeGroundPayload();SetWaypoints(InitialPath);return;
     }
     if(Aerial)
     {
@@ -189,6 +189,7 @@ void AMRAgent::AccountExecutedMovement()
     const FVector Current=GetActorLocation();
     const float Travel=FVector::Dist(Current,Previous);Previous=Current;
     DistanceTravelled+=Travel;
+    if(bRescueWatercraft)return; // Its actual jet electrical work is metered instead.
     const float SurfaceCost=MediumLimits.IsValid?(Category==TEXT("underground")?1.2f:1.3f):
         Mission->bRescueQuarter&&!bAerial?Mission->QuerySurfaceMeters(Current/100.f).MovementCost:1.f;
     const double Wh=Travel/1000.f*(bAerial?.69f:bCarrying?1.18f:.82f)*SurfaceCost;
@@ -200,6 +201,7 @@ void AMRAgent::Tick(float Dt)
     Super::Tick(Dt);
     if(!Mission||!Body->IsSimulatingPhysics())return;
     AccountExecutedMovement();
+    if(bRescueWatercraft){TickWatercraftService(Dt);DriveWatercraft(Dt);return;}
     if(MediumLimits.IsValid){DriveCompetitionMedium(Dt);return;}
     const FVector Current=GetActorLocation();
     if(Mission->bRescueQuarter)AnimateMechanisms(Dt);
@@ -213,13 +215,13 @@ void AMRAgent::Tick(float Dt)
             if(T.Visual)
             {
                 const float Alpha=FMath::SmoothStep(0.f,State=="loading"?8.f:6.f,ServiceElapsed);
-                const FVector Bed=GetActorTransform().TransformPosition(FVector(0,0,15));
+                const FVector Bed=GetActorTransform().TransformPosition(FVector(0,0,15+T.VisualAnchorOffsetCm));
                 if(State=="loading")
                 {
                     T.Visual->SetActorLocation(FMath::Lerp(PickupStart,Bed,Alpha));
                     T.Visual->SetActorRotation(FQuat::Slerp(PickupRotation,GetActorQuat(),Alpha));
                 }
-                else T.Visual->SetActorRelativeLocation(FMath::Lerp(FVector(0,0,15),FVector(-285,0,-42),Alpha));
+                else T.Visual->SetActorRelativeLocation(FMath::Lerp(FVector(0,0,15+T.VisualAnchorOffsetCm),FVector(-285,0,-42+T.VisualAnchorOffsetCm),Alpha));
             }
         }
         if(ServiceRemaining<=0&&TargetIndex>=0)
@@ -227,10 +229,11 @@ void AMRAgent::Tick(float Dt)
             auto& T=Mission->Targets[TargetIndex];
             if(State=="loading")
             {
-                if(T.Visual){T.Visual->AttachToActor(this,FAttachmentTransformRules::KeepWorldTransform);T.Visual->SetActorRelativeLocation(FVector(0,0,Mission->bRescueQuarter?15:87));T.Visual->SetActorRelativeRotation(FRotator::ZeroRotator);}
+                if(T.Visual){T.Visual->AttachToActor(this,FAttachmentTransformRules::KeepWorldTransform);T.Visual->SetActorRelativeLocation(FVector(0,0,(Mission->bRescueQuarter?15:87)+T.VisualAnchorOffsetCm));T.Visual->SetActorRelativeRotation(FRotator::ZeroRotator);}
+                T.SupportCarrier=this;T.ShoreStation.Empty();
                 State="inbound";
                 bCarrying=true;
-                if(Mission->bRescueQuarter){Body->SetMassOverrideInKg(NAME_None,320.f);Body->SetCenterOfMass(FVector(0,0,16));}
+                if(Mission->bRescueQuarter)SetGroundPayloadKg(T.FloatBody?98.:80.);
                 if(Mission->bCoreControlled)
                 {State=TEXT("loaded");bExternalHold=true;Mission->AppendEvent(TEXT("person_loaded"),T.Id);}
                 else
@@ -259,11 +262,12 @@ void AMRAgent::Tick(float Dt)
             else
             {
                 T.bRescued=true;
+                T.SupportCarrier.Reset();
                 if(T.Visual)
                 {if(Mission->bCoreControlled){T.Visual->DetachFromActor(FDetachmentTransformRules::KeepWorldTransform);T.Position=T.Visual->GetActorLocation();}T.Visual->SetActorHiddenInGame(true);}
                 bCarrying=false;
                 Mission->AppendEvent(TEXT("person_delivered"),T.Id);TargetIndex=-1;State="idle";
-                if(Mission->bRescueQuarter){Body->SetMassOverrideInKg(NAME_None,240.f);Body->SetCenterOfMass(FVector::ZeroVector);}
+                if(Mission->bRescueQuarter)SetGroundPayloadKg(0);
             }
         }
     }
@@ -371,7 +375,11 @@ void AMRAgent::AnimateMechanisms(float Dt)
     const float YawSpeed=Body->GetPhysicsAngularVelocityInRadians().Z;
     if(!bAerial)
     {
-        const bool Wet=Mission->GroundSpeedFactor(GetActorLocation())<.8f&&FMath::Abs(ForwardSpeed)>60;
+        const FVector Position=GetActorLocation();
+        const bool WetSurface=Mission->bDisasterCity
+            ?GroundContacts>0&&(Mission->Environment.HasEffect(EMRDisturbance::Mud,Position)||Mission->WaterDepth(Position)>2.)
+            :Mission->GroundSpeedFactor(Position)<.8f;
+        const bool Wet=WetSurface&&FMath::Abs(ForwardSpeed)>60;
         if(Wet&&!SurfaceSpray)
             if(auto* System=LoadObject<UNiagaraSystem>(nullptr,TEXT("/Game/EffectsV3/NS_WheelSplash.NS_WheelSplash")))
                 SurfaceSpray=UNiagaraFunctionLibrary::SpawnSystemAttached(System,Body,NAME_None,FVector(0,0,-40),FRotator::ZeroRotator,EAttachLocation::KeepRelativeOffset,false);
@@ -425,14 +433,34 @@ void AMRAgent::DriveDistrictGround(const FVector& Desired)
         return;
     }
     const float Mass=Body->GetMass();float Support=0;GroundContacts=0;
+    const bool Mud=Mission->bDisasterCity&&Mission->Environment.HasEffect(EMRDisturbance::Mud,GetActorLocation());
+    const bool DrawTracks=Mud&&FApp::CanEverRender();
+    if(!DrawTracks)for(auto& Contact:RearTrackContacts)Contact.Reset();
     FCollisionQueryParams Params;Params.AddIgnoredActor(this);
     for(AMRAgent* Other:Mission->Agents)if(Other!=this)Params.AddIgnoredActor(Other);
     for(float X:{-90.f,0.f,90.f})for(float Y:{-48.f,48.f})
     {
         const FVector Point=GetActorTransform().TransformPosition(FVector(X,Y,0));
         FHitResult Hit;
-        if(GetWorld()->LineTraceSingleByChannel(Hit,Point+FVector(0,0,30),Point-FVector(0,0,90),ECC_Visibility,Params)
-            &&Hit.ImpactNormal.Z>.35)
+        const bool Ground=GetWorld()->LineTraceSingleByChannel(Hit,Point+FVector(0,0,30),Point-FVector(0,0,90),ECC_Visibility,Params)
+            &&Hit.ImpactNormal.Z>.35;
+        if(DrawTracks&&X<0)
+        {
+            auto& PreviousContact=RearTrackContacts[Y>0?1:0];
+            if(!Ground||Hit.ImpactNormal.Z<.8)PreviousContact.Reset();
+            else if(!PreviousContact.IsSet())PreviousContact=Hit.ImpactPoint;
+            else
+            {
+                const double Travel=FVector::DistSquared2D(PreviousContact.GetValue(),Hit.ImpactPoint);
+                if(Travel>=FMath::Square(85.))
+                {
+                    if(Travel<=FMath::Square(160.))
+                        Mission->StampMudTrack(PreviousContact.GetValue(),Hit.ImpactPoint,Hit.ImpactNormal);
+                    PreviousContact=Hit.ImpactPoint;
+                }
+            }
+        }
+        if(Ground)
         {
             const float Height=Point.Z-Hit.ImpactPoint.Z;
             const float Speed=Body->GetPhysicsLinearVelocityAtPoint(Point).Z;
@@ -460,7 +488,7 @@ void AMRAgent::DriveDistrictGround(const FVector& Desired)
     // A frame with unloaded springs can still have tyre/track contact with the
     // ground. Keep bounded braking at that contact instead of coasting through
     // a safety stop until the next spring compression.
-    const float Traction=FMath::Max(Support/Mass,490.f)*.72f;
+    const float Traction=FMath::Max(Support/Mass,490.f)*(Mud?.48f:.72f);
     Acceleration=Acceleration.GetClampedToMaxSize(Traction);
     Body->AddForce(Acceleration*Mass);
     float Yaw=0;

@@ -15,11 +15,15 @@ sys.path.insert(0, str(ROOT))
 from controller.ai import file_lock
 from environment.main import DEFAULT_OUTPUT, existing_unreal
 from tools.native_archive import file_sha256
+from tools.product_session import default_product_request
 
 
 PROJECT = ROOT/'unreal/MetaRescue'
 TOOLS = ('run_product.py', 'product_session.py', 'run_mission.py', 'native_archive.py',
-         'native_process.py', 'analytics_service.py', 'run_native_series.py', 'series_plan.py', 'issue_operator.py')
+         'native_process.py', 'analytics_service.py', 'run_native_series.py', 'series_plan.py',
+         'issue_operator.py', 'net65_demo.py')
+ENTRYPOINTS = ('run_product.py', 'product_session.py', 'run_mission.py',
+               'run_native_series.py', 'series_plan.py', 'issue_operator.py')
 DEPENDENCIES = ('jsonschema', 'jsonschema-specifications', 'attrs', 'referencing', 'rpds-py')
 STARTUP = r"""@echo off
 setlocal
@@ -133,6 +137,16 @@ def bundle_python(destination):
     return {'interpreter': sys.version.split()[0], 'dependencies': versions}
 
 
+def check_python_entrypoints(distribution):
+    python = distribution/'python/python.exe'
+    for name in ENTRYPOINTS:
+        result = subprocess.run(
+            [str(python), '-I', '-B', '-X', 'utf8', 'tools/'+name, '--help'],
+            cwd=distribution, capture_output=True, text=True, encoding='utf-8', check=False, timeout=30)
+        if result.returncode:
+            raise RuntimeError(f'Packaged Python entry point {name} failed:\n{result.stderr.strip()}')
+
+
 def stage_runtime(distribution, demo, *, fab_usage_notice=None):
     for part in ('controller', 'contracts', 'environment', 'analytics', 'web'):
         shutil.copytree(ROOT/part, distribution/part, ignore=shutil.ignore_patterns('__pycache__', '*.pyc'))
@@ -148,18 +162,18 @@ def stage_runtime(distribution, demo, *, fab_usage_notice=None):
     details = bundle_python(distribution/'python')
     write_json(distribution/'python/dependencies.json', details)
     (distribution/'presets').mkdir()
-    write_json(distribution/'presets/offline.json', {'format': 'metarescue.product-request.v1',
-        'settings': {'map_size': 25, 'seed': 2026, 'city_revision': '2.2', 'preset': 'urban', 'competition': True,
-                     'resource_profile': 'contest', 'scouts': 2, 'rescuers': 2, 'people': 6},
-        'controller': {'ai_mode': 'OFF', 'contest_coordination': True, 'realtime': True}})
+    write_json(distribution/'presets/offline.json', default_product_request())
     if demo is not None:
         shutil.copy2(demo, distribution/'presets/recovery.private.json')
     (distribution/'Start-MetaRescue.cmd').write_text(STARTUP, encoding='ascii', newline='\r\n')
     shutil.copy2(ROOT/'docs/stage-1-interaction.md', distribution/'Core-1.0.md')
     shutil.copy2(ROOT/'docs/windows-runtime.md', distribution/'README.md')
     shutil.copy2(ROOT/'docs/core-operator.md', distribution/'Operator.md')
+    shutil.copy2(ROOT/'docs/disaster-assets.md', distribution/'Asset-Sources.md')
     if fab_usage_notice is not None:
         shutil.copy2(fab_usage_notice, distribution/'Fab-Content-Notice.txt')
+    check_python_entrypoints(distribution)
+    details['verified_entrypoints'] = list(ENTRYPOINTS)
     return details
 
 

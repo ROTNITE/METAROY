@@ -7,6 +7,7 @@ import math
 from typing import Any
 
 from jsonschema import Draft202012Validator
+from referencing import Registry
 
 VERSION = '1.0'
 MAX_BODY_BYTES = 2 * 1024 * 1024
@@ -178,15 +179,16 @@ def validate(value, schema, code='INVALID_REQUEST'):
     # Public schemas may contain local references, never trigger network reads.
     def check_refs(node):
         if isinstance(node, dict):
-            if '$ref' in node and not node['$ref'].startswith('#'):
-                raise ProtocolError(code, 'External JSON Schema references are not supported')
+            for name in ('$ref','$dynamicRef'):
+                if name in node and (not isinstance(node[name],str) or not node[name].startswith('#')):
+                    raise ProtocolError(code, 'Expected a local JSON Schema reference')
             for child in node.values():
                 check_refs(child)
         elif isinstance(node, list):
             for child in node:
                 check_refs(child)
     check_refs(schema)
-    validator = Draft202012Validator(schema)
+    validator = Draft202012Validator(schema,registry=Registry())
     error = next(validator.iter_errors(value), None)
     if error:
         raise ProtocolError(code, 'Schema validation failed',

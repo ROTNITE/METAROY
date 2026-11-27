@@ -14,6 +14,7 @@ ROOT=Path(__file__).resolve().parents[1]
 sys.path.insert(0,str(ROOT))
 from controller.ai import file_lock
 from environment.main import DEFAULT_OUTPUT,existing_unreal
+from controller.profiles import COUNTERFACTUAL,STANDARD
 from tools.native_archive import file_sha256
 from tools.run_mission import hashes
 from tools.series_plan import FORMAT,FAMILIES,OPTIMIZER_SEEDS,POLICIES,digest,json_bytes,tape_digest
@@ -26,6 +27,9 @@ def validate_design(plan_path):
     data=json.loads(plan_path.read_bytes())
     if data.get('format')!=FORMAT or data.get('renderer')!='null_rhi':
         raise ValueError('Unknown native series format')
+    profile=data.get('evolutionary_controller_profile',STANDARD)
+    if profile not in (STANDARD,COUNTERFACTUAL):
+        raise ValueError('Unknown evolutionary series controller')
     worlds={}
     for entry in data['worlds']:
         identifier=entry['id']
@@ -37,6 +41,8 @@ def validate_design(plan_path):
             raise ValueError(f'Frozen world or external tape changed for {identifier}')
         if world['settings']['seed']!=entry['seed'] or world['settings']['horizon']!=data['comparison_horizon_s']:
             raise ValueError(f'World settings changed for {identifier}')
+        if profile==COUNTERFACTUAL and (world.get('format')!='rescue-city-2.3' or not world.get('street_controls_revision')):
+            raise ValueError(f'Integrated city data is missing for {identifier}')
         worlds[identifier]=(entry,path)
     if len(worlds)!=30 or sorted(e['family'] for e,_ in worlds.values())!=[f'S{f}' for f in range(1,len(FAMILIES)+1) for _ in range(5)]:
         raise ValueError('Exactly five maps per S1..S6 are required')
@@ -95,6 +101,7 @@ def run(plan_path,*,limit=0,cases=(),port=8130,health_port=8131):
     if unknown:raise ValueError('Unknown series rows: '+', '.join(sorted(unknown)))
     output=plan_path.parent/'execution';output.mkdir(exist_ok=True)
     plan_hash=file_sha256(plan_path)
+    profile=json.loads(plan_path.read_bytes()).get('evolutionary_controller_profile',STANDARD)
     first_world=next(iter(worlds.values()))[1]
     inputs=runtime_hashes(first_world)
     series_tools={str(path):file_sha256(path) for path in (Path(__file__).resolve(),ROOT/'tools/series_plan.py')}
@@ -132,7 +139,9 @@ def run(plan_path,*,limit=0,cases=(),port=8130,health_port=8131):
              '--optimizer-seed',str(case['optimizer_seed']),'--policy',case['policy'],
              '--ai-mode',case['ai_mode'],'--ai-scope',case['ai_scope']]
         # All three evolutionary policies use the same scenario library.
-        if case['policy']=='nsga2_nsga2':cmd.append('--contest-coordination')
+        if case['policy']=='nsga2_nsga2':
+            cmd.append('--contest-coordination')
+            if profile!=STANDARD:cmd.extend(['--controller-profile',profile])
         with (row_output/('attempt-'+stamp+'.log')).open('x',encoding='utf-8') as log:
             process=subprocess.run(cmd,cwd=ROOT,stdout=log,stderr=subprocess.STDOUT,check=False)
         executed+=1

@@ -29,7 +29,8 @@ from controller.operator_input import OperatorInput
 from controller.operational import OperationalControl
 from controller.net65 import PATROL_MODES
 from controller.portable import PortablePolicy
-from controller.public_core import STEP_DEDUPLICATION, PublicCore
+from controller.profiles import CONTROLLER_PROFILES, COUNTERFACTUAL, STANDARD, select_patrol
+from controller.public_core import CORE_MODES, STEP_DEDUPLICATION
 
 
 _MISSION_STATUS = {'active': 'running', 'completed': 'success', 'failed': 'failed', 'safe_stopped': 'safe_stopped'}
@@ -41,7 +42,9 @@ def main():
     parser.add_argument('--health-port',type=int,default=8131)
     parser.add_argument('--seed',type=int,default=2026)
     parser.add_argument('--policy',choices=[*BASELINES,*PAIRS],default='nsga2_nsga2')
-    parser.add_argument('--scout-patrol',choices=PATROL_MODES,default='core')
+    parser.add_argument('--scout-patrol',choices=PATROL_MODES)
+    parser.add_argument('--controller-profile',choices=CONTROLLER_PROFILES,default=STANDARD)
+    parser.add_argument('--core-mode',choices=CORE_MODES,default='declared')
     parser.add_argument('--public-core',action='store_true',help='Use the portable public policy even when a native map is advertised')
     parser.add_argument('--mission-id',default='search_and_rescue')
     parser.add_argument('--mission-parameters',type=Path)
@@ -68,6 +71,12 @@ def main():
     parser.add_argument('--control-session',help='Required identity of the operator gate')
     parser.add_argument('--operator-file',type=Path,help='Optional episode-bound structured human requirements')
     args=parser.parse_args()
+    try:
+        args.scout_patrol=select_patrol(args.controller_profile,args.policy,args.scout_patrol)
+    except ValueError as error:
+        parser.error(str(error))
+    if args.controller_profile==COUNTERFACTUAL:
+        args.rescue_initializer='assignment'
     # Validate the origin before it is persisted in the run manifest.
     EnvironmentClient(args.environment)
     if args.ai_mode!='OFF' and args.policy in BASELINES:parser.error('AI requires an evolutionary policy')
@@ -88,7 +97,7 @@ def main():
     partial=output/'controller.jsonl.gz.part'
     run_id=args.run_id or uuid.uuid4().hex
     manifest={'format':'metarescue.controller-run.v1','policy':args.policy,'state':'incomplete','ai_mode':args.ai_mode,'run_id':run_id,
-              'scout_patrol':args.scout_patrol,
+              'scout_patrol':args.scout_patrol,'controller_profile':args.controller_profile,'core_mode':args.core_mode,
               'ai_scope':args.ai_scope if args.ai_mode!='OFF' else None,
               'contest_coordination':args.contest_coordination,
               'optimizer':{'seed':args.optimizer_seed,'scout_population':args.scout_population,'scout_generations':args.scout_generations,
@@ -116,13 +125,15 @@ def main():
                                     'sha256':hashlib.sha256(value).hexdigest()}
                 else:converted[key]=value
             record('http_exchange',converted)
-        client=EnvironmentClient(args.environment,timeout_s=60,audit=audit)
+        client=EnvironmentClient(args.environment,timeout_s=60,audit=audit,core_mode=args.core_mode,
+                                 compatibility_audit=lambda item:record('wire_compatibility',item))
         context={'run_id':run_id,'purpose':'mission','policy':args.policy,'world_seed':args.seed,
                  'optimizer_seed':args.optimizer_seed,'config_sha256':digest({'policy':args.policy,'seed':args.seed,
                     'optimizer_seed':args.optimizer_seed,'ai_mode':args.ai_mode,'ai_scope':args.ai_scope,
                     'budgets':[args.scout_population,args.scout_generations,args.rescue_population,args.rescue_generations],
                     'strategy_candidates':args.strategy_candidates,'contest_coordination':args.contest_coordination,
                     **({'scout_patrol':args.scout_patrol} if args.scout_patrol!='core' else {}),
+                    **({'controller_profile':args.controller_profile} if args.controller_profile!=STANDARD else {}),
                     **({'rescue_initializer':args.rescue_initializer} if args.rescue_initializer!='heuristic' else {})})}
         provider=(DeepSeek(LiveBudget(args.ai_budget),key_file=args.ai_key_file,key_environment=args.ai_key_environment,
                            context=context,tariff=strict_json(args.ai_tariff.read_bytes()) if args.ai_tariff else None)
@@ -130,7 +141,8 @@ def main():
                   load_replay(args.ai_replay) if args.ai_mode=='REPLAY' else Off())
         budgets={'population_scout':args.scout_population,'generations_scout':args.scout_generations,
                  'population_rescue':args.rescue_population,'generations_rescue':args.rescue_generations,
-                 'rescue_initializer':args.rescue_initializer,'scout_patrol':args.scout_patrol}
+                 'rescue_initializer':args.rescue_initializer,'scout_patrol':args.scout_patrol,
+                 'controller_profile':args.controller_profile}
         policy=(FixedWorkflow() if args.policy=='fixed_workflow' else
                 LocalReactive() if args.policy=='local_reactive' else
                 SupervisedPolicy(provider,pair=args.policy,seed=args.optimizer_seed,local_enabled=args.ai_scope=='global_local',**budgets)
@@ -141,7 +153,7 @@ def main():
         last_control=None;operator_stopped=False
         try:
             capabilities=client.capabilities();record('capabilities',capabilities)
-            public=PublicCore(capabilities)
+            public=client.public
             step_attempts=3 if STEP_DEDUPLICATION in public.extensions else 1
             communications=CommunicationLog(capabilities)
             operator_requirements=OperatorDirectives(capabilities)
@@ -171,14 +183,19 @@ def main():
             if portable:
                 if isinstance(policy, EvolutionPolicy):
                     policy.close()
-                policy = PortablePolicy(capabilities, args.policy, scout_patrol=args.scout_patrol, public=public)
+                if args.controller_profile==COUNTERFACTUAL:
+                    from controller.counterfactual_final import CounterfactualValuePolicy
+                    policy=CounterfactualValuePolicy(capabilities,args.policy,scout_patrol=args.scout_patrol,public=public)
+                else:
+                    policy=PortablePolicy(capabilities,args.policy,scout_patrol=args.scout_patrol,public=public)
             elif args.contest_coordination:
                 coordinator=ScenarioCoordinator(capabilities)
             manifest['policy_profile'] = 'core_1_0' if portable else 'metarescue'
-            record('policy_profile', {'name': manifest['policy_profile']})
+            record('policy_profile', {'name': manifest['policy_profile'],'controller_profile':args.controller_profile})
             record('observation',observation)
             for item in communications.observe(observation):record('agent_communication',item)
             health.update(status='ready',episode_id=episode_id,policy=args.policy,scout_patrol=args.scout_patrol,
+                                                          controller_profile=args.controller_profile,
                                                           time=observation['time'],episode_status=response['status'])
             rejections = 0
             while response['status']=='running':

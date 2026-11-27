@@ -7,12 +7,16 @@
 #include "HAL/PlatformProcess.h"
 #include "MRCoreStore.h"
 #include "MRCoreClock.h"
+#include "MRExplorationMemory.h"
 
 class AMRWorld;
 class AMRAgent;
 class IHttpRouter;
 class IFileHandle;
 class UProceduralMeshComponent;
+class FMRExplorationScene;
+struct FMRSceneReport;
+struct FMRSceneActorReport;
 class UGameViewportClient;
 struct FHttpServerRequest;
 struct FMRCoreResetState;
@@ -30,12 +34,16 @@ public:
     bool ReadyForInterface() const {return Ready;}
     TSharedPtr<FJsonObject> ObservationForInterface() const {return CachedObservation;}
     TArray<TSharedPtr<FJsonValue>> PublicRoutesForInterface() const;
+    bool IsKnowledgeView() const;
+    bool HasExplorationScene() const {return ExplorationScene.IsValid();}
+    bool DisplayPosition(const FString& Agent,FVector& PositionCm) const;
 private:
     struct FCommand
     {
         FString Key,Decision,Agent,Action,Station,Recipient;
         int32 Index=0,TargetIndex=-1,TargetEpoch=-1;
         TSharedPtr<FJsonObject> Parameters,PublicResult,TargetReport,AgentReport,ServiceResult;
+        TSharedPtr<FMRSceneActorReport> AgentVisual,TargetVisual;
         double Due=0,Deadline=0,AckDue=-1,AckDeadline=-1;
         double MessageDue=-1,MessageDeadline=-1;
         double ServiceDue=-1;
@@ -43,7 +51,7 @@ private:
         FString FinalStatus,Reason;
         int32 Revision=0,Sequence=0,DeliveryAttempts=0,AckAttempts=0,MessageAttempts=0;
     };
-    enum class EPacket : uint8 { Pose,Target,Hazard,Command,Ack,Message };
+    enum class EPacket : uint8 { Pose,Target,Hazard,Command,Ack,Message,Exploration };
     struct FReport
     {
         FString Agent,Target,MessageId;
@@ -52,6 +60,8 @@ private:
         int64 Sequence=0;
         int32 Attempts=0;
         TSharedPtr<FJsonObject> Data;
+        TSharedPtr<FMRSceneReport> Scene;
+        TSharedPtr<FMRSceneActorReport> ActorScene;
         EPacket Kind=EPacket::Pose;
     };
     struct FReplay
@@ -152,6 +162,12 @@ private:
     TMap<FString,TSharedPtr<FJsonObject>> KnownZones,StepEvents;
     TArray<TSharedPtr<FJsonValue>> DeclaredZones;
     TMap<FString,double> SurfaceObservedAt;
+    FMRExplorationMemory Exploration;
+    TSharedPtr<FMRExplorationScene> ExplorationScene;
+    TMap<FString,TSet<int32>> PendingExploration;
+    TMap<FString,int64> ExplorationCursor;
+    TSharedPtr<FJsonObject> ExplorationView;
+    int32 ExplorationViewRevision=-1,ExplorationViewStateRevision=-1,ExplorationViewSceneRevision=-1;
     struct FEventView {double At;FVector Focus;FString Name;float Distance,Yaw;};
     bool CaptureEventFrames=false;
     bool CaptureOverview=false;
@@ -204,6 +220,7 @@ private:
     FProcHandle LayoutWorker;
     FTSTicker::FDelegateHandle LayoutTickHandle;
     FTSTicker::FDelegateHandle OwnerExitTickHandle;
+    FTSTicker::FDelegateHandle ExplorationDisplayTick;
     double LayoutDeadline=0;
     TArray<FPending> Waiting;
     TArray<FHttpResultCallback> StepCallbacks;
@@ -231,7 +248,7 @@ private:
     void CompleteStep(const FString& Response,bool Stored);
     void UpdateNetwork();
     void UpdateFreshnessEvents();
-    void UpdateAgentKnowledge(const FString& Agent,const TSharedPtr<FJsonObject>& Report);
+    void UpdateAgentKnowledge(const FString& Agent,const TSharedPtr<FJsonObject>& Report,const TSharedPtr<FMRSceneActorReport>& Visual={});
     void PublishEvent(const FString& Id,const FString& Type,double OccurredAt,const FString& Source,
         const TArray<FString>& Subjects,const TSharedPtr<FJsonObject>& Parameters,const FString& State=TEXT("new"),double Confidence=1.);
     void QueueReport(FReport Packet);
@@ -239,6 +256,8 @@ private:
     bool PacketLost(const FString& Agent,EPacket Kind,int64 Sequence,int32 Attempt) const;
     void QueueAck(FCommand& Command,double Delay);
     void GatherReports();
+    void ResetExplorationScene();
+    void RefreshExplorationView();
     void DeliverReports();
     void UpdateCommands();
     void ResetTeamActions();
@@ -285,6 +304,11 @@ private:
     void AdvanceEvents();
     void UpdateEventView();
     void GatherHazardReport(AMRAgent* Agent);
+    void ResetExploration();
+    void GatherExplorationReport(AMRAgent* Agent);
+    void TrackExplorationPacket(const FReport& Packet,bool Add);
+    void DeliverExplorationReport(const FReport& Packet);
+    TSharedPtr<FJsonObject> ExplorationSnapshot();
     void DeliverHazardReport(const FReport& Report);
     float SensorQuality(const FVector& Start,const FVector& End) const;
     bool SensorAccepts(AMRAgent* Agent,int32 Target,double Quality,int32 Channel) const;

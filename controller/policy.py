@@ -12,6 +12,7 @@ from controller.native_patrol import solve as solve_net65
 from controller.net65 import MAX_PLAN_AGE_S, PATROL_MODES, due, horizon_of, scan_ages
 from controller.optimization import optimize_rescue,optimize_scout
 from controller.problem_builder import ProblemBuilder,mobiles
+from controller.profiles import COUNTERFACTUAL, STANDARD, select_patrol
 from controller.strategies import continuation_forecast,propose
 
 PAIRS={'greedy_greedy':('greedy','greedy'),'frontier_local':('frontier','local'),
@@ -49,7 +50,8 @@ def heuristic_rescue(problem,kind):
 class EvolutionPolicy(FixedWorkflow):
     def __init__(self,*,pair='nsga2_nsga2',seed=2026,strategy_candidates=False,
                  population_scout=40,generations_scout=32,population_rescue=26,generations_rescue=17,
-                 executor=None,rescue_initializer='heuristic',scout_patrol='core'):
+                 executor=None,rescue_initializer='heuristic',scout_patrol=None,controller_profile=STANDARD):
+        scout_patrol=select_patrol(controller_profile,pair,scout_patrol)
         if pair not in PAIRS:raise ValueError('Unknown algorithm pair')
         if rescue_initializer not in ('heuristic','assignment'):raise ValueError('Unknown rescue initializer')
         if rescue_initializer!='heuristic' and PAIRS[pair][1]!='nsga2':
@@ -72,6 +74,10 @@ class EvolutionPolicy(FixedWorkflow):
         self.replan_revisions={'scout':0,'rescue':0};self.replan_requested=set()
         self.planning_surfaces=()
         self.scout_patrol=scout_patrol
+        self.counterfactual=None
+        if controller_profile==COUNTERFACTUAL:
+            from controller.counterfactual_native import NativeCounterfactual
+            self.counterfactual=NativeCounterfactual()
         self._reset_patrol()
 
     def _reset_patrol(self):
@@ -81,10 +87,15 @@ class EvolutionPolicy(FixedWorkflow):
         self.net65_selected={}
         self.net65_arrival_ids={}
         self.net65_repeats=0
+        if self.counterfactual:self.counterfactual.reset()
 
     def patrol_summary(self,now):
-        return {'mode':self.scout_patrol,'net65_repeats':self.net65_repeats,
-                **scan_ages(self.scanned_at,now)}
+        summary={'mode':self.scout_patrol,'net65_repeats':self.net65_repeats,**scan_ages(self.scanned_at,now)}
+        if self.counterfactual:
+            summary['counterfactual_value']={'evaluated_phases':len(self.counterfactual.phases),
+                'options':dict(self.counterfactual.applied),'deferred_first_trips':len(self.counterfactual.deferred),
+                'observed_arrivals':self.counterfactual.arrivals}
+        return summary
 
     def close(self):
         if self.owns_executor:self.executor.shutdown(wait=True,cancel_futures=True)
@@ -340,6 +351,22 @@ class EvolutionPolicy(FixedWorkflow):
                 self._trace('hazard_patrol_completed',agent_id=aid,sector_id=sector,observed_at=observed)
             self._trace('sector_completed',agent_id=aid,sector_id=sector,observed_at=observed)
         queue=self.scout_queues.get(aid,[])
+        if (self.counterfactual and aid not in self.scout_active and aid not in self.scenario_reserved and
+                self.patrol_mode=='coverage' and not self.priority_patrol):
+            excluded=set(self.scout_active.values())|{s for s,_ in self.arrivals.values()}
+            excluded.update(other[0] for peer,other in self.scout_queues.items() if peer!=aid and other)
+            baseline=queue[0] if queue else None
+            choice,audit=self.counterfactual.survey(self.current_observation,self.builder,agent,self.scanned_at,
+                excluded,baseline,self.patrol_started)
+            if audit:self._trace('native_counterfactual_choice',**audit)
+            if choice is not None:
+                alternative,option=choice
+                if alternative is None:return None
+                if alternative!=baseline:
+                    self.net65_selected.pop(aid,None)
+                    queue=[alternative,*[sid for sid in queue if sid!=alternative]]
+                    self.scout_queues[aid]=queue
+                    self._trace('native_counterfactual_survey',agent_id=aid,sector_id=alternative,option=option)
         if not queue:return None
         sector=queue[0]
         goal=self.scout_goals.get(aid) if self.scout_active.get(aid)==sector else None
@@ -350,7 +377,16 @@ class EvolutionPolicy(FixedWorkflow):
     def _choose_target(self,agent,choices):
         allowed={t['id']:t for t in choices};queue=self.rescue_queues.get(agent['id'],[])
         while queue:
-            target=queue.pop(0)
+            target=queue[0]
+            if target in allowed and self.counterfactual and self.counterfactual.defer(
+                    self.current_observation,self.builder,agent,allowed[target],self.patrol_started,self.scanned_at):
+                key=(agent['id'],target)
+                if key not in self.counterfactual.deferred:
+                    self.counterfactual.deferred.add(key)
+                    self._trace('native_counterfactual_coordination',agent_id=agent['id'],target_id=target,
+                                wait_at_most_until=self.patrol_started+12.)
+                return None
+            queue.pop(0)
             if target in allowed:return allowed[target]
         return None
 
@@ -364,7 +400,7 @@ class EvolutionPolicy(FixedWorkflow):
                 r['decision_id']==job.pending and r['command_index']==job.pending_index)
         for aid,job in self.jobs.items():
             if not job.pending:continue
-            if not job.charge_station and (job.action!='follow_route' or aid not in self.scout_active):continue
+            if not job.charge_station and (job.action!='follow_route' or job.inspection_route or aid not in self.scout_active):continue
             result=next((r for r in response.get('command_results',()) if r['decision_id']==job.pending and
                 r['agent_id']==aid and r['command_index']==job.pending_index),None)
             if job.charge_station:
@@ -380,6 +416,9 @@ class EvolutionPolicy(FixedWorkflow):
                              result.get('validation_status')=='rejected' or result.get('delivery_status') in ('expired','lost')):
                 self.scout_active.pop(aid,None);self.scout_goals.pop(aid,None);self.arrivals.pop(aid,None)
                 self.net65_selected.pop(aid,None);self.net65_arrival_ids.pop(aid,None)
+        if self.counterfactual and received and received['episode_id']==self.episode:
+            for item in self.counterfactual.reconcile_motion(response,self.jobs):
+                self._trace(item.pop('type'),**item)
         super().observe_response(response)
         if service_changed:self.request_replan(planners=('rescue',),reason='service_availability_changed')
 
@@ -396,7 +435,11 @@ class EvolutionPolicy(FixedWorkflow):
         self._schedule()
         result=super().decide(observation)
         for aid in tuple(self.arrivals):
-            if self.jobs[aid].charge_station:self.arrivals.pop(aid)
+            job=self.jobs[aid]
+            if job.charge_station:self.arrivals.pop(aid)
+            elif job.pending==result['decision_id'] and job.inspection_route:
+                self.arrivals.pop(aid)
+                self.net65_arrival_ids.pop(aid,None)
         result['explanation']['reason_codes']=[self.pair,'public_state_only','independent_scout_rescue_planning']
         summaries={}
         for name,entry in (('scout',self.last_scout_result),('rescue',self.last_rescue_result)):

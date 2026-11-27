@@ -8,6 +8,8 @@ class UStaticMeshComponent;
 class UPrimitiveComponent;
 class UNiagaraComponent;
 class AMRWorld;
+class FMRWatercraftHydro;
+class UPhysicsConstraintComponent;
 
 UCLASS()
 class METARESCUE_API AMRAgent : public AActor
@@ -17,7 +19,10 @@ public:
     AMRAgent();
     void Initialize(AMRWorld* InWorld, int32 InId, bool Aerial, const TArray<FVector>& InitialPath);
     void InitializeCompetition(AMRWorld* InWorld,int32 InId,const FString& Kind,const FString& Site,const FBox& Limits);
+    bool InitializeWatercraft(AMRWorld* InWorld,int32 InId,const FString& Id,const TSharedPtr<FMRWatercraftHydro>& Profile);
     virtual void Tick(float Dt) override;
+    virtual void FellOutOfWorld(const UDamageType& Damage) override;
+    virtual void OutsideWorldBounds() override;
     // Flush real movement through the same sampling instant as a pose read.
     // Calling twice without intervening physics is deliberately a no-op.
     void AccountExecutedMovement();
@@ -31,12 +36,17 @@ public:
     int32 AgentId = 0;
     FString PublicId;
     FString Category,InfrastructureSite;
+    bool bRescueWatercraft=false,bWatercraftMoored=false;
+    TSharedPtr<FMRWatercraftHydro> WatercraftProfile;
+    double WatercraftDisplacedM3=0,WatercraftLeftJetN=0,WatercraftRightJetN=0;
+    FVector WatercraftCurrentCmPerSecond=FVector::ZeroVector;
+    FVector WatercraftCargoAnchorCm() const {return WatercraftBedLocal;}
     FBox MediumLimits=FBox(ForceInit);
     FString Kind() const {return Category.IsEmpty()?(bAerial?TEXT("aerial"):TEXT("ground")):Category;}
     bool IsSpatial() const {return Category!=TEXT("digital")&&Category!=TEXT("operator");}
     bool CanMove() const {return Category.IsEmpty()||MediumLimits.IsValid;}
-    bool CanCarry() const {return Category.IsEmpty()&&!bAerial;}
-    bool CanSense() const {return IsSpatial();}
+    bool CanCarry() const {return bRescueWatercraft||(Category.IsEmpty()&&!bAerial);}
+    bool CanSense() const;
     bool MediumPointAllowed(const FVector& Position) const;
     int32 TargetIndex = -1;
     FString State = "idle";
@@ -64,7 +74,7 @@ public:
     int32 AgentContacts=0;
     bool bCarrying=false;
     void ResetTestPose(FVector Position,FRotator Rotation);
-    float SafetyRadius() const { return bAerial?165.f:145.f+80.f*RampDeployment; }
+    float SafetyRadius() const { return bRescueWatercraft?255.f:bAerial?165.f:145.f+80.f*RampDeployment; }
     FString AgentKey() const { return PublicId.IsEmpty()?FString::Printf(TEXT("%s_%d"),bAerial?TEXT("aerial"):TEXT("ground"),AgentId):PublicId; }
     bool AcceptRoute(const FString& Id,const TArray<FVector>& PointsCm,bool PreciseStop=false);
     bool Hold(const FString& Id);
@@ -72,6 +82,7 @@ public:
     void ResetForEpisode(const FTransform& Pose,bool UnlimitedEnergy);
     bool BeginPickup(int32 Index,const FString& Id);
     bool BeginHandover(const FString& Id);
+    bool BeginDisembark(const FString& Station,const FString& Id);
     void AccountPoweredTime(double Dt);
     bool ChargeDocked(const FVector& Position,double RadiusCm) const;
     bool BeginCharge(const FString& Id);
@@ -92,9 +103,34 @@ private:
     // Only a digest is retained. The Core server owns exact-body HTTP replay.
     TMap<FString,FString> AcceptedCommands;
     UPROPERTY() TObjectPtr<UNiagaraComponent> SurfaceSpray;
+    TOptional<FVector> RearTrackContacts[2];
+    UPROPERTY() TObjectPtr<UPhysicsConstraintComponent> WatercraftMooring;
+    UPROPERTY() TObjectPtr<UBoxComponent> WatercraftCargoMass;
+    UPROPERTY() TObjectPtr<UStaticMeshComponent> WatercraftBoom;
+    UPROPERTY() TObjectPtr<UStaticMeshComponent> WatercraftCable;
+    UPROPERTY() TObjectPtr<UStaticMeshComponent> WatercraftTrolley;
+    UPROPERTY() TArray<TObjectPtr<UStaticMeshComponent>> WatercraftSlings;
+    UPROPERTY() TObjectPtr<UBoxComponent> GroundPayloadCollision;
+    FString ServiceShoreStation;
+    FVector WatercraftHoldPosition=FVector::ZeroVector;
+    FVector WatercraftLiftOrigin=FVector::ZeroVector;
+    FVector WatercraftBedLocal=FVector::ZeroVector;
+    bool SetWatercraftPayloadKg(double MassKg);
+    void MoveWatercraftPayloadTo(const FVector& WorldCG);
+    bool BeginWatercraftPickup(int32 Index,const FString& Id);
+    void TickWatercraftService(float Dt);
+    void InitializeGroundPayload();
+    void SetGroundPayloadKg(double MassKg);
+    void MakeWatercraftMooring();
+    void ReleaseWatercraftMooring();
+    void ResetWatercraft();
+    void DriveWatercraft(float Dt);
     TArray<FVector> Path;
     int32 PathIndex = 0;
     float ServiceRemaining = 0;
+    float WatercraftUnstableSeconds = 0;
+    bool bPhysicsStoppedAtBoundary = false;
+    void StopAtWorldBoundary(const FString& Reason);
     float ServiceElapsed = 0;
     float ServiceHeading = 0;
     FVector PickupStart;

@@ -1,9 +1,11 @@
 from copy import deepcopy
 import math
+from statistics import median
 import unittest
 from unittest.mock import patch
 
 from contracts.protocol import ProtocolError
+from contracts.urban_terrain import Terrain
 from controller.navigation import NavigationMap
 from environment.config import MAP_SIZES,Settings
 from environment.events import validate_tape
@@ -15,6 +17,32 @@ def city(**settings):
 
 
 class StreetGraphTests(unittest.TestCase):
+    def test_disaster_relays_follow_open_street_shoulders_with_spare_links(self):
+        for map_size in (25, 75, 150):
+            with self.subTest(map_size=map_size):
+                world = city(city_revision='2.3', map_size=map_size, seed=2027, boats=2)
+                legacy = city(city_revision='2.2', map_size=map_size, seed=2027)
+                relays = [node for node in world['infrastructure'] if node['kind'] == 'relay']
+                previous = [node for node in legacy['infrastructure'] if node['kind'] == 'relay']
+                terrain = Terrain(world['terrain'])
+                roads = {(edge['from'], edge['to']): edge for edge in world['road_graph']['edges']}
+                self.assertGreater(len(relays), len(previous))
+                self.assertTrue(world['preflight']['passed'])
+                closest = []
+                for relay in relays:
+                    x, y, z = relay['position']
+                    anchor = relay['street_anchor']
+                    road = roads[anchor['from'], anchor['to']]
+                    self.assertNotEqual(road['street_class'], 'access')
+                    self.assertAlmostEqual(math.dist((x, y), anchor['position_m']), road['width_m']/2 + 2.7, places=2)
+                    self.assertAlmostEqual(z, terrain.height(x, y) + 3.)
+                    neighbors = sorted(math.dist(relay['position'][:2], peer['position'][:2])
+                                       for peer in relays if peer is not relay)
+                    self.assertGreaterEqual(neighbors[0], 45.)
+                    self.assertLess(neighbors[1], relay['range_m'])
+                    closest.append(neighbors[0])
+                self.assertLessEqual(median(closest), 68.)
+
     def test_series_urban_5204_keeps_access_lanes_outside_base_fixtures(self):
         world = generate(Settings.parse({'city_revision': '2.2', 'seed': 5204, 'preset': 'urban',
                                          'scouts': 3, 'rescuers': 3, 'people': 12}))

@@ -43,6 +43,7 @@ def validate_tape(tape, world):
             or not isinstance(tape['events'], list) or len(tape['events']) > 256):
         invalid('format or event limit')
     agents = {a['id'] for a in world['spawns']}
+    agents.update(a['id'] for a in world.get('watercraft', {}).get('spawns', ()))
     infrastructure = {n['id']: n['kind'] for n in world['infrastructure']}
     people = {'person-' + str(p['id']) for p in [*world['people'], *world.get('event_model', {}).get('late_people', ())]}
     horizon = world['settings']['horizon']

@@ -4,13 +4,15 @@
 #include "MRCoreValues.h"
 #include "MRWorld.h"
 #include "MRAgent.h"
+#include "MRWatercraftHydro.h"
+#include "MRUrbanWater.h"
 #include "Components/BoxComponent.h"
 #include "Engine/World.h"
 
 using namespace MRCoreValues;
 
 AMRAgent* FMRCoreRuntime::FindAgent(const FString& Id) const
-{for(AMRAgent* A:World->Agents)if(A->AgentKey()==Id)return A;return nullptr;}
+{for(AMRAgent* A:World->Agents)if(IsValid(A)&&A->AgentKey()==Id)return A;return nullptr;}
 
 int32 FMRCoreRuntime::FindTarget(const FString& Id) const
 {for(int32 I=0;I<World->Targets.Num();I++)if(Id==FString::Printf(TEXT("person-%d"),World->Targets[I].Id))return I;return -1;}
@@ -44,7 +46,12 @@ Object FMRCoreRuntime::AgentSnapshot(AMRAgent* A,double ObservedAt) const
             Add(TEXT("hold"));
             if(!Service&&!Charging){Add(TEXT("move"));Add(TEXT("follow_route"));}
         }
-        if(A->CanCarry()&&!Service&&!Charging){if(A->bCarrying)Add(TEXT("handover"));else Add(TEXT("pickup"));}
+        if(A->CanCarry()&&!Service&&!Charging)
+        {
+            if(!A->bCarrying)Add(TEXT("pickup"));
+            else if(A->bRescueWatercraft){if(World->ShoreStation())Add(TEXT("disembark"));}
+            else Add(TEXT("handover"));
+        }
         if(Kits&&*Kits>0&&!A->bCarrying&&!Service&&!Charging)Add(TEXT("deliver"));
         if(Credits&&*Credits>0)Add(TEXT("compute"));
         if(A->Kind()==TEXT("operator"))Add(TEXT("issue_directive"));
@@ -102,7 +109,7 @@ Object FMRCoreRuntime::AgentSnapshot(AMRAgent* A,double ObservedAt) const
         {TEXT("stop_obstacle"),Str(A->StopObstacle)},{TEXT("active_waypoint"),Point(A->ActiveWaypoint()/100.)},
         {TEXT("active_command_id"),Str(A->CommandId)},{TEXT("route_finished"),Bool(A->RouteFinished())},{TEXT("carrying"),Bool(A->bCarrying)},
         {TEXT("cargo_target_id"),A->bCarrying&&World->Targets.IsValidIndex(A->TargetIndex)?Str(FString::Printf(TEXT("person-%d"),World->Targets[A->TargetIndex].Id)):Null()},
-        {TEXT("radius_m"),Num(A->SafetyRadius()/100.)},{TEXT("chassis_radius_m"),Num(A->bAerial?1.65:1.45)},
+        {TEXT("radius_m"),Num(A->SafetyRadius()/100.)},{TEXT("chassis_radius_m"),Num(A->bRescueWatercraft?2.55:A->bAerial?1.65:1.45)},
         {TEXT("speed_limit_m_s"),Num(A->MaxSpeed*A->SpeedFactor/100.)},
         {TEXT("mass_kg"),Num(A->Body->IsSimulatingPhysics()?A->Body->GetMass():0)},
         {TEXT("speed_factor"),Num(A->SpeedFactor)},{TEXT("sensor_factor"),Num(A->SensorFactor)},
@@ -116,6 +123,26 @@ Object FMRCoreRuntime::AgentSnapshot(AMRAgent* A,double ObservedAt) const
         Data->GetObjectField(TEXT("physical"))->SetObjectField(TEXT("route_blocker"),Obj({
             {TEXT("kind"),Str(TEXT("box"))},{TEXT("min"),Point(A->SensedBlocker.Min/100.)},
             {TEXT("max"),Point(A->SensedBlocker.Max/100.)}}));
+    if(A->bRescueWatercraft)
+    {
+        const auto Water=World->WaterAtCm(A->GetActorLocation());const auto& Hull=*A->WatercraftProfile;
+        const double Keel=A->GetActorTransform().TransformPosition(FVector(0,0,-Hull.BodyAboveKeelM*100)).Z;
+        Data->GetObjectField(TEXT("physical"))->SetObjectField(TEXT("watercraft"),Obj({
+            {TEXT("moored"),Bool(A->bWatercraftMoored)},{TEXT("draft_m"),Num(FMath::Max(0.,Water.StageCm-Keel)/100)},
+            {TEXT("hydrostatic_draft_m"),Num(Hull.EquilibriumDraftM(A->Body->GetMass()).Get(0))},
+            {TEXT("depth_m"),Water.InDomain?Num(Water.DepthCm/100):Null()},
+            {TEXT("stage_m"),Water.InDomain?Num(Water.StageCm/100):Null()},
+            {TEXT("center_of_mass_local_m"),Point(A->GetActorTransform().InverseTransformPosition(A->Body->GetCenterOfMass())/100)},
+            {TEXT("displaced_water_kg"),Num(A->WatercraftDisplacedM3*1000)},
+            {TEXT("current_m_s"),Point(A->WatercraftCurrentCmPerSecond/100)},
+            {TEXT("yaw_rate_degrees_s"),Num(A->Body->GetPhysicsAngularVelocityInDegrees().Z)},
+            {TEXT("left_jet_n"),Num(A->WatercraftLeftJetN)},{TEXT("right_jet_n"),Num(A->WatercraftRightJetN)},
+            {TEXT("payload_limit_kg"),Num(Hull.PayloadLimitKg)},{TEXT("deck_above_keel_m"),Num(Hull.DeckAboveKeelM)}}));
+        Data->GetObjectField(TEXT("physical"))->GetObjectField(TEXT("watercraft"))->SetNumberField(
+            TEXT("supported_payload_kg"),FMath::Max(0.,A->Body->GetMass()-Hull.DryMassKg));
+        Data->GetObjectField(TEXT("physical"))->GetObjectField(TEXT("watercraft"))->SetField(
+            TEXT("cargo_anchor_local_m"),Point(A->WatercraftCargoAnchorCm()/100));
+    }
     if(!World->CoreEventProfile.IsEmpty()&&A->Category.IsEmpty())
     {
         const FVector Pose=A->GetActorLocation();
@@ -143,6 +170,8 @@ Object FMRCoreRuntime::AgentSnapshot(AMRAgent* A,double ObservedAt) const
 Object FMRCoreRuntime::Capabilities() const
 {
     const bool HasAnnex=World->bCityLayout&&Is(World->CityLayout,TEXT("competition"),EJson::Object);
+    bool HasWatercraft=false;
+    for(const auto& Agent:World->Agents)if(Agent&&Agent->bRescueWatercraft){HasWatercraft=true;break;}
     auto Number=Json(Obj({{TEXT("type"),Str(TEXT("number"))}}));
     auto Id=Json(Obj({{TEXT("type"),Str(TEXT("string"))},{TEXT("minLength"),Num(1)}}));
     auto P=Json(Obj({{TEXT("type"),Str(TEXT("array"))},{TEXT("minItems"),Num(3)},{TEXT("maxItems"),Num(3)},{TEXT("items"),Number}}));
@@ -160,6 +189,8 @@ Object FMRCoreRuntime::Capabilities() const
         {TEXT("precise_stop"),Json(Obj({{TEXT("type"),Str(TEXT("boolean"))}}))}}),Strings({TEXT("waypoints")}));
     Add(TEXT("pickup"),Strings({TEXT("carry")}),Obj({{TEXT("target_id"),Id}}),Strings({TEXT("target_id")}));
     Add(TEXT("handover"),Strings({TEXT("carry")}),Obj({{TEXT("station_id"),Id}}),Strings({TEXT("station_id")}));
+    if(HasWatercraft&&World->ShoreStation())
+        Add(TEXT("disembark"),Strings({TEXT("carry")}),Obj({{TEXT("station_id"),Id}}),Strings({TEXT("station_id")}));
     Add(TEXT("deliver"),Strings({TEXT("deliver")}),Obj({{TEXT("target_id"),Id},{TEXT("resource_id"),Id},
         {TEXT("amount"),Json(Obj({{TEXT("type"),Str(TEXT("integer"))},{TEXT("minimum"),Num(1)},{TEXT("maximum"),Num(3)}}))}}),
         Strings({TEXT("target_id"),TEXT("resource_id"),TEXT("amount")}));
@@ -236,7 +267,7 @@ Object FMRCoreRuntime::Capabilities() const
     TArray<Value> Ids;auto ScenarioDeclarations=Obj();
     for(const FString& ScenarioId:ScenarioIds)
     {Ids.Add(Str(ScenarioId));ScenarioDeclarations->SetObjectField(ScenarioId,ScenarioCatalog.FindChecked(ScenarioId));}
-    return Obj({{TEXT("protocol_version"),Str(TEXT("1.0"))},{TEXT("environment_id"),Str(TEXT("metarescue_unreal"))},
+    auto Result=Obj({{TEXT("protocol_version"),Str(TEXT("1.0"))},{TEXT("environment_id"),Str(TEXT("metarescue_unreal"))},
         {TEXT("profile"),Json(Obj({{TEXT("id"),Str(TEXT("metaevolution"))},{TEXT("version"),Str(TEXT("1.0"))},{TEXT("document_revision"),Str(TEXT("1.1"))}}))},
         {TEXT("implementation_stage"),Str(TEXT("physical_core_vertical_slice"))},
         {TEXT("orbital_sensor"),Json(Orbital)},
@@ -251,12 +282,17 @@ Object FMRCoreRuntime::Capabilities() const
         {TEXT("supported_operations"),Strings({TEXT("keep"),TEXT("select"),TEXT("switch"),TEXT("modify"),
             TEXT("compose"),TEXT("synthesize"),TEXT("safe_stop")})},
         {TEXT("supported_actions"),Json(Actions)},
+        {TEXT("action_semantics"),Json(Obj({
+            {TEXT("handover"),Json(Obj({{TEXT("semantic_id"),Str(TEXT("handover"))},{TEXT("effect"),Str(TEXT("evacuated"))}}))},
+            {TEXT("deliver"),Json(Obj({{TEXT("semantic_id"),Str(TEXT("deliver"))},{TEXT("effect"),Str(TEXT("aid_delivered"))}}))}
+        }))},
         {TEXT("extensions"),Strings({TEXT("metaevolution.freshness.v1"),TEXT("metaevolution.step_deduplication.v1"),
             TEXT("metaevolution.reset_deduplication.v1"),TEXT("metaevolution.command_groups.v1"),TEXT("metaevolution.plan_confirmation.v1"),
             TEXT("metarescue.follow_route.v1"),TEXT("metarescue.casualty_transfer.v1"),TEXT("metarescue.announced_map.v1"),
             TEXT("metarescue.indexed_journals.v1"),TEXT("metarescue.command_result_deltas.v1"),TEXT("metarescue.observed_surfaces.v1"),
             TEXT("metarescue.radio_transport.v1"),TEXT("metarescue.disturbances.v1"),TEXT("metarescue.aid_and_peer_messages.v1"),
-            TEXT("metarescue.competition_services.v1"),TEXT("metarescue.orbital_surface_pass.v1"),TEXT("metarescue.operator_directives.v1")})},
+            TEXT("metarescue.competition_services.v1"),TEXT("metarescue.orbital_surface_pass.v1"),TEXT("metarescue.operator_directives.v1"),
+            TEXT("metaroy.action_semantics.v1")})},
         {TEXT("observation_event_types"),Strings({TEXT("agent_failure"),TEXT("agent_degradation"),TEXT("infrastructure_failure"),
             TEXT("connectivity_loss"),TEXT("mission_priority_change"),TEXT("operator_directive"),TEXT("hazard_appeared"),
             TEXT("restricted_zone_appeared"),TEXT("resource_shortage"),TEXT("target_detected"),TEXT("target_state_changed"),
@@ -265,7 +301,10 @@ Object FMRCoreRuntime::Capabilities() const
             {TEXT("latency_per_hop_s"),Num(Latency)},{TEXT("base_loss_per_hop"),Num(RadioLoss)},
             {TEXT("report_ttl_s"),Num(30)},{TEXT("packets_per_source"),Num(128)},{TEXT("critical_report_attempts"),Num(3)}}))},
         {TEXT("event_model"),Json(Obj({{TEXT("profile"),Str(World->CoreEventProfile.IsEmpty()?TEXT("static"):World->CoreEventProfile)},
-            {TEXT("format"),Str(TEXT("metarescue.events-3d.1.0"))},{TEXT("physics_cell_m"),Num(5)},
+            {TEXT("format"),Str(World->bDisasterCity?TEXT("metarescue.events-3d.2.0"):TEXT("metarescue.events-3d.1.0"))},
+            {TEXT("physics_profile"),World->bDisasterCity?Str(TEXT("metarescue.urban-disasters.v1")):Null()},
+            {TEXT("visibility_model"),Str(World->bDisasterCity?TEXT("beer_lambert_wind_plumes"):TEXT("surface_quality_v1"))},
+            {TEXT("physics_cell_m"),Num(5)},
             {TEXT("probability_window_s"),World->CoreEventProfile.IsEmpty()?Null():Num(World->CoreEventProfile==TEXT("v052")?80:30)}}))},
         {TEXT("time_model"),Json(Obj({{TEXT("external_step"),Num(1)},{TEXT("maximum_internal_step"),Num(1./60.)},
             {TEXT("maximum_physics_substep"),Num(1./120.)},{TEXT("epsilon_time"),Num(1.e-9)},
@@ -284,6 +323,33 @@ Object FMRCoreRuntime::Capabilities() const
             {TEXT("energy_unit"),Str(TEXT("Wh"))},{TEXT("charge_enabled"),Bool(!ChargingStations.IsEmpty())},
             {TEXT("reserve_fraction"),Num(Unlimited?0:ReserveFraction)}}))},
         {TEXT("not_yet_supported"),Unsupported}});
+    if(World->bDisasterCity&&DynamicReset)
+    {
+        auto Settings=ResetParameters->GetArrayField(TEXT("mission_settings"));Settings.Add(Str(TEXT("boats")));
+        ResetParameters->SetArrayField(TEXT("mission_settings"),Settings);
+    }
+    if(HasWatercraft)
+    {
+        auto Extensions=Result->GetArrayField(TEXT("extensions"));Extensions.Add(Str(TEXT("metarescue.rescue-watercraft.v1")));
+        if(World->ShoreStation())Extensions.Add(Str(TEXT("metarescue.shore-transfer.v1")));
+        Result->SetArrayField(TEXT("extensions"),Extensions);
+        Result->SetObjectField(TEXT("watercraft_model"),Obj({{TEXT("profile"),Str(TEXT("watercraft-hydrostatics-r1.json"))},
+            {TEXT("buoyancy"),Str(TEXT("eight_section_archimedes"))},{TEXT("propulsion"),Str(TEXT("two_energy_limited_jets"))},
+            {TEXT("pickup_relative_speed_m_s"),Num(.3)},{TEXT("floating_pickup_max_hull_speed_m_s"),Num(.65)},
+            {TEXT("floating_pickup_lateral_limit_m"),Num(1.45)},{TEXT("floating_pickup_yaw_rate_degrees_s"),Num(10.)},
+            {TEXT("fixed_pier_service_max_hull_speed_m_s"),Num(.3)},
+            {TEXT("initial_state"),Str(TEXT("moored_on_physical_slip"))}}));
+    }
+    if(World->bDisasterCity)
+    {
+        auto Extensions=Result->GetArrayField(TEXT("extensions"));Extensions.Add(Str(TEXT("metarescue.exploration.v1")));
+        Result->SetArrayField(TEXT("extensions"),Extensions);
+        Result->SetObjectField(TEXT("exploration_model"),Obj({{TEXT("cell_m"),Num(5)},
+            {TEXT("persistence"),Str(TEXT("episode_permanent"))},{TEXT("delivery_required"),Bool(true)},
+            {TEXT("camera_reveals"),Bool(false)},{TEXT("surface_renderer_connected"),Bool(true)},
+            {TEXT("surface_sensor_kinds"),Strings({TEXT("aerial"),TEXT("ground"),TEXT("surface_water"),TEXT("infrastructure")})}}));
+    }
+    return Result;
 }
 
 void FMRCoreRuntime::DeclareZones()
@@ -439,11 +505,13 @@ void FMRCoreRuntime::Snapshot(const FString& RequestId)
                 {TEXT("unknown_timestamp_groups"),Num(KnownGroups-TimedGroups)}}))}}))},
         {TEXT("metaevolution"),Json(Obj({{TEXT("plan"),Json(Plan)},{TEXT("contradictions"),Arr(Contradictions)}}))}});
     if(KnownOrbital)CachedObservation->GetObjectField(TEXT("metaevolution"))->SetObjectField(TEXT("orbital_observation"),KnownOrbital);
+    if(World->bDisasterCity)CachedObservation->GetObjectField(TEXT("metaevolution"))->SetObjectField(TEXT("exploration"),ExplorationSnapshot());
     if(World->bCityLayout)
     {
         auto Map=Obj();for(const FString& Key:{TEXT("format"),TEXT("base_layout_revision"),TEXT("cell_m"),TEXT("size_m"),TEXT("bounds"),TEXT("base"),TEXT("base_position"),
             TEXT("road_axes_m"),TEXT("road_width_m"),TEXT("road_graph"),TEXT("buildings"),TEXT("features"),TEXT("facilities"),
-            TEXT("fixed_obstacles"),TEXT("surfaces"),TEXT("infrastructure")})
+            TEXT("fixed_obstacles"),TEXT("surfaces"),TEXT("infrastructure"),TEXT("terrain"),TEXT("hydrology"),TEXT("watercraft"),
+            TEXT("street_controls_revision")})
             if(const auto Value=Field(World->CityLayout,Key))Map->SetField(Key,Value);
         const bool Irregular=World->bIrregularCity;
         Map->SetObjectField(TEXT("navigation"),Obj({{TEXT("kind"),Str(Irregular?TEXT("street_surface_graph.v2"):TEXT("road_surface_graph.v1"))},

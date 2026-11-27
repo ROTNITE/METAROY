@@ -171,6 +171,7 @@ void FMRCoreRuntime::AdvanceContest()
             Record(TEXT("agent_fault_effect"),Obj({{TEXT("event_id"),Str(E.Id)},{TEXT("agent_id"),Str(Subject)},
                 {TEXT("position"),Point(Agent->GetActorLocation()/100.)},
                 {TEXT("released_target"),Target?Str(FString::Printf(TEXT("person-%d"),Target->Id)):Null()},
+                {TEXT("support_retained"),Bool(Target&&Target->SupportCarrier.IsValid())},
                 {TEXT("target_position"),Target?Point(Target->Position/100.):Null()}}),false);
             Refresh=true;
         }

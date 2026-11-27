@@ -3,7 +3,10 @@
 #include "MRCoreJson.h"
 #include "MRCoreValues.h"
 #include "MRWorld.h"
+#include "MRUrbanWater.h"
 #include "MRAgent.h"
+#include "Engine/World.h"
+#include "Components/BoxComponent.h"
 #include "ProceduralMeshComponent.h"
 #include "Misc/Base64.h"
 #include "Misc/FileHelper.h"
@@ -90,22 +93,97 @@ void FMRCoreRuntime::ArchiveManifest(const FString& State)
 void FMRCoreRuntime::RecordTruthSnapshot(const FString& Phase)
 {
     TArray<Value> Agents,Targets,Pieces;
-    for(AMRAgent* A:World->Agents)Agents.Add(Json(AgentSnapshot(A,Time())));
+    for(AMRAgent* A:World->Agents)
+    {
+        auto Data=AgentSnapshot(A,Time());
+        if(World->bDisasterCity&&A->CanCarry()&&A->State!=TEXT("loading")&&A->State!=TEXT("unloading"))
+        {
+            const bool Loaded=A->bCarrying||(A->bRescueWatercraft&&
+                Data->GetObjectField(TEXT("physical"))->GetObjectField(TEXT("watercraft"))->GetNumberField(TEXT("supported_payload_kg"))>1);
+            const FVector Bed=A->bRescueWatercraft?A->WatercraftCargoAnchorCm():FVector(0,0,15);
+            const auto Pose=A->GetActorTransform();
+            const FVector Expected=Pose.TransformPosition(Bed+FVector(0,0,70));
+            const FVector Start=Pose.TransformPosition(Bed+FVector(0,0,150)),End=Pose.TransformPosition(Bed+FVector(0,0,5));
+            FHitResult Hit;FCollisionQueryParams Query(SCENE_QUERY_STAT(MRCargoCollisionProof),false);
+            Query.AddIgnoredActor(World);
+            for(auto& Other:World->Agents)if(Other!=A)Query.AddIgnoredActor(Other);
+            for(auto& Target:World->Targets)if(Target.Visual)Query.AddIgnoredActor(Target.Visual);
+            const bool Found=World->GetWorld()->LineTraceSingleByChannel(Hit,Start,End,ECC_Visibility,Query);
+            const bool CargoTop=Found&&Hit.GetActor()==A&&FVector::Dist(Hit.ImpactPoint,Expected)<3;
+            const bool Empty=Found&&Hit.GetActor()==A&&Pose.InverseTransformPosition(Hit.ImpactPoint).Z<Bed.Z+60;
+            Data->SetObjectField(TEXT("private_cargo_collision"),Obj({{TEXT("hit"),Bool(Found&&Hit.GetActor()==A)},
+                {TEXT("loaded"),Bool(Loaded)},
+                {TEXT("impact_m"),Found?Point(Hit.ImpactPoint/100):Null()},{TEXT("expected_m"),Point(Expected/100)},
+                {TEXT("matches"),Bool(Loaded?CargoTop:Empty)}}));
+        }
+        Agents.Add(Json(Data));
+    }
     for(int32 Index=0;Index<World->Targets.Num();Index++)
     {
         const auto& T=World->Targets[Index];
-        Targets.Add(Json(Obj({{TEXT("id"),Str(FString::Printf(TEXT("person-%d"),T.Id))},
+        auto Target=Obj({{TEXT("id"),Str(FString::Printf(TEXT("person-%d"),T.Id))},
             {TEXT("position"),Point((T.Visual?T.Visual->GetActorLocation():T.Position)/100.)},
             {TEXT("available_at"),Num(T.AvailableAt)},{TEXT("discovered"),Bool(T.bDiscovered)},
-            {TEXT("visible"),Bool(T.Visual&&!T.Visual->IsHidden())},
+            {TEXT("visible"),Bool(T.Visual&&!T.bRescued&&Time()+1.e-9>=T.AvailableAt)},
             {TEXT("assigned"),Bool(T.bAssigned)},{TEXT("rescued"),Bool(T.bRescued)},
-            {TEXT("priority"),Num(T.Priority)},{TEXT("aid_received"),Num(ReceivedKits.FindRef(Index))}})));
+            {TEXT("priority"),Num(T.Priority)},{TEXT("aid_received"),Num(ReceivedKits.FindRef(Index))}});
+        if(T.FloatBody)
+        {
+            Target->SetObjectField(TEXT("flotation"),Obj({{TEXT("mass_kg"),Num(T.FloatBody->BodyInstance.GetBodyMass())},
+                {TEXT("simulating"),Bool(T.FloatBody->IsSimulatingPhysics())},{TEXT("displaced_water_kg"),Num(T.FloatDisplacedM3*1000)},
+                {TEXT("keel_z_m"),Num(T.Position.Z/100-T.VisualAnchorOffsetCm/100)},
+                {TEXT("velocity_m_s"),Point(T.FloatBody->GetPhysicsLinearVelocity()/100)}}));
+            Target->SetField(TEXT("shore_station"),T.ShoreStation.IsEmpty()?Null():Str(T.ShoreStation));
+            Target->SetField(TEXT("support_carrier"),T.SupportCarrier.IsValid()?Str(T.SupportCarrier->AgentKey()):Null());
+            Target->SetNumberField(TEXT("ownership_epoch"),T.ObservationEpoch);
+        }
+        Targets.Add(Json(Target));
     }
     for(UProceduralMeshComponent* P:World->PhysicsPieces)if(P)
-        Pieces.Add(Json(Obj({{TEXT("id"),Str(P->GetName())},{TEXT("position"),Point(P->GetComponentLocation()/100.)},
+    {
+        auto Piece=Obj({{TEXT("id"),Str(P->GetName())},{TEXT("position"),Point(P->GetComponentLocation()/100.)},
             {TEXT("rotation_degrees"),Point(FVector(P->GetComponentRotation().Roll,P->GetComponentRotation().Pitch,P->GetComponentRotation().Yaw))},
-            {TEXT("velocity_m_s"),Point(P->GetPhysicsLinearVelocity()/100.)},{TEXT("simulating"),Bool(P->IsSimulatingPhysics())}})));
-    Record(TEXT("truth_snapshot"),Obj({{TEXT("format"),Str(TEXT("metarescue.truth-snapshot.v1"))},{TEXT("phase"),Str(Phase)},
+            {TEXT("velocity_m_s"),Point(P->GetPhysicsLinearVelocity()/100.)},{TEXT("simulating"),Bool(P->IsSimulatingPhysics())}});
+        if(World->bDisasterCity&&P->ComponentHasTag(TEXT("StructuralDebris"))&&P->ComponentTags.Num()>=3)
+        {
+            Piece->SetStringField(TEXT("source_object_id"),P->ComponentTags[2].ToString());
+            Piece->SetStringField(TEXT("event_id"),P->ComponentTags[0].ToString());
+            Piece->SetNumberField(TEXT("mass_kg"),P->GetMass());
+        }
+        Pieces.Add(Json(Piece));
+    }
+    auto Snapshot=Obj({{TEXT("format"),Str(TEXT("metarescue.truth-snapshot.v1"))},{TEXT("phase"),Str(Phase)},
         {TEXT("agents"),Arr(Agents)},{TEXT("targets"),Arr(Targets)},{TEXT("physics_pieces"),Arr(Pieces)},
-        {TEXT("environment_revision"),Num(World->Environment.Revision)},{TEXT("applied_events"),Num(World->Environment.Applied.Num())}}),false);
+        {TEXT("environment_revision"),Num(World->Environment.Revision)},{TEXT("applied_events"),Num(World->Environment.Applied.Num())}});
+    if(World->bDisasterCity)
+    {
+        TArray<Value> Damage;
+        for(const auto& Pair:World->CityStructures)
+        {
+            int32 Removed=0;for(const auto& Part:Pair.Value.Pieces)Removed+=Part.Removed;
+            if(Removed)Damage.Add(Json(Obj({{TEXT("source_object_id"),Str(Pair.Key.ToString())},
+                {TEXT("removed_parts"),Num(Removed)},{TEXT("remaining_top_m"),Num(Pair.Value.RemainingTopCm()/100.)}})));
+        }
+        Damage.Sort([](const Value& A,const Value& B){return Text(A->AsObject(),TEXT("source_object_id"))<Text(B->AsObject(),TEXT("source_object_id"));});
+        Snapshot->SetArrayField(TEXT("structure_damage"),Damage);
+        TArray<Value> Supports;
+        FCollisionQueryParams Query(SCENE_QUERY_STAT(MRPrivateRoadSupport),false);
+        for(AMRAgent* Agent:World->Agents)Query.AddIgnoredActor(Agent);
+        // A bounded diagnostic sample also survives reset, proving real
+        // collision restoration rather than just an empty damage counter.
+        for(const auto& Event:World->Environment.Tape)
+        {
+            if(Supports.Num()>=4)break;
+            if(Event.Kind!=EMRDisturbance::RoadDamage||!Event.Rejection.IsEmpty()||Event.bPropagation)continue;
+            FHitResult Hit;
+            const bool Found=World->GetWorld()->LineTraceSingleByChannel(Hit,Event.Source+FVector(0,0,1000),
+                Event.Source-FVector(0,0,2000),ECC_Visibility,Query);
+            Supports.Add(Json(Obj({{TEXT("event_id"),Str(Event.Id)},{TEXT("position"),Point(Event.Source/100.)},
+                {TEXT("height_m"),Found?Num(Hit.ImpactPoint.Z/100.):Null()},
+                {TEXT("component"),Found?Str(GetNameSafe(Hit.GetComponent())):Null()}})));
+        }
+        Snapshot->SetArrayField(TEXT("road_support_probes"),Supports);
+        if(World->UrbanWater)Snapshot->SetObjectField(TEXT("hydrology"),World->UrbanWater->PrivateSnapshot());
+    }
+    Record(TEXT("truth_snapshot"),Snapshot,false);
 }

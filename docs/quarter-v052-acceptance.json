@@ -272,9 +272,11 @@
       "status": "verified",
       "evidence": [
         "D:/MetaRescue-output/core-acceptance/core-events-04-effects/verification.json",
-        "D:/MetaRescue-output/core-acceptance/defense-events-announced-zones-final01/verification.json"
+        "D:/MetaRescue-output/core-acceptance/defense-events-announced-zones-final01/verification.json",
+        "D:/MetaRescue-output/integration-20261127-01/native-graded-late-02-audit.json",
+        "D:/MetaRescue-output/integration-20261127-01/native-late-flotation-01/verification.json"
       ],
-      "scope_note": "Поздний человек появился в 12,375 с, обнаружен в 12,5 с и доставлен в знание в 12,7 с. Приватные записи отсутствовали в публичном журнале."
+      "scope_note": "Поздний человек появился в 12,375 с, обнаружен в 12,5 с и доставлен в знание в 12,7 с. Приватные записи отсутствовали в публичном журнале. В районе 2.3 первые наблюдения поздней цели на рельефе доставлены после появления, а носилки при паводке начали двигаться на 154-й секунде."
     },
     {
       "id": "E07",
@@ -1025,10 +1027,13 @@
       "evidence": [
         "D:/MetaRescue-output/series/competition-design-02-r3/plan.json",
         "tools/run_native_series.py",
+        "D:/MetaRescue-output/integration-20261127-01/historical-series-audit-01.json",
+        "D:/MetaRescue-output/series/competition-integrated-20261127-01/plan.json",
         "D:/MetaRescue-output/checks/series-preflight-r3-access-01.json",
-        "D:\\MetaRescue-output\\checks\\series-checkpoint-20261113T092617Z\\verification.json"
+        "D:\\MetaRescue-output\\checks\\series-checkpoint-20261113T092617Z\\verification.json",
+        "D:/MetaRescue-output/integration-20261127-01/historical-series-comparison-01/comparison.json"
       ],
-      "scope_note": "План02-r3, SHA92395633b0ed4a0d367e67415354f5a09bf4302861c5e85d5ea0c63e3be9567e; 30карт preflight. На2026-11-13T09:26:24.982361+00:00 завершено174/450. Manifest и терминальная физическая истина сверены; CRC/SHA потоков проверены runner каждого эпизода. Серия продолжается на прежнем runtime."
+      "scope_note": "Для прежнего плана 02-r3 сверены 180 завершённых строк из 450, сохранённые отчёты CRC/SHA и размеры потоков. Историческая сборка по закреплённому пути доступна. Новый план на 2.3 содержит 30 новых карт и 450 строк с Counterfactual Value и двумя контрольными политиками."
     },
     {
       "id": "V09",
@@ -1939,6 +1944,202 @@
       ],
       "evidence": [],
       "scope_note": "Приёмка на отдельной ревизии миров по нативным кадрам и журналу этапов до подтверждённого приёма на базе. Проверить недоступный проход, отсутствие оснащения, отмену при погрузке, повторное перекрытие и передачу при отказе перевозчика. Сохранить совместимость базового Core и единственность человека и груза."
+    },
+    {
+      "id": "VIS01",
+      "requirement": "Полный локальный снимок, включая untracked и содержимое junction-ассетов; независимая копия; Git baseline и контрольные коммиты",
+      "status": "verified",
+      "evidence": [
+        "docs/disaster-visual-baseline.json"
+      ],
+      "scope_note": "Новый визуальный этап; полная приёмка описана в docs/disaster-visual-runtime.md."
+    },
+    {
+      "id": "VIS02",
+      "requirement": "Огонь охватывает комнаты, окна и кровлю конкретного здания; копоть, угли, свет и опасный объём",
+      "status": "partial",
+      "evidence": [
+        "docs/disaster-assets.md",
+        "D:/MetaRescue-output/visual-overhaul-20261115/checks/native-scene-04/verification.json"
+      ],
+      "scope_note": "Native-scene-04: парные кадры12/45с, 33 реальных проёма выбранного здания; копоть/угли, первоначально отсутствующая крыша не горит. Динамическое разрушение и полная матрица впереди."
+    },
+    {
+      "id": "VIS03",
+      "requirement": "Густой объёмный дым с подъёмом/ветром и непрозрачным ядром; сенсор ослабляется по пути луча",
+      "status": "partial",
+      "evidence": [
+        "D:/MetaRescue-output/automation/20261116T010529035110Z/verification.json",
+        "D:/MetaRescue-output/visual-overhaul-20261115/checks/native-scene-04/optics-fixture.json",
+        "docs/disaster-visual-runtime.md"
+      ],
+      "scope_note": "Native Automation21/21, оптика/ветер/срок/reset. Исправлена камера внутри объёма; native-scene-04 даёт фиксированные пары до/после, детали ориентира за ядром дыма не читаются. Остальная матрица/масштаб/headless-сверка впереди."
+    },
+    {
+      "id": "VIS04",
+      "requirement": "Причинные завалы из существующих плит, балок, кладки и деревьев; частичные повреждения здания, локальный Chaos",
+      "status": "partial",
+      "evidence": [
+        "D:/MetaRescue-output/automation/20261116T015916578219Z/verification.json",
+        "D:/MetaRescue-output/visual-overhaul-20261115/checks/native-collapse-01/verification.json",
+        "D:/MetaRescue-output/integration-20261127-01/native-collapse-22/verification.json",
+        "D:/MetaRescue-output/integration-20261127-01/native-collapse-23/verification.json"
+      ],
+      "scope_note": "Исправлен отсчёт этажей по основанию дома. Нативный повтор на приподнятом грунте подтвердил появление физических тел и восстановление дома при сбросе. Зафиксировано появление обгоревшей машины по событию пожара. Остальные сочетания, объезд и несколько масштабов остаются открыты."
+    },
+    {
+      "id": "VIS05",
+      "requirement": "Дорожные модели используются систематически; реальные разрывы/просадки/подслой и согласованные коллизии",
+      "status": "partial",
+      "evidence": [
+        "D:/MetaRescue-output/visual-overhaul-20261115/checks/native-road-03/verification.json",
+        "D:/MetaRescue-output/integration-20261127-01/native-road-21/verification.json"
+      ],
+      "scope_note": "На удерживаемом маршруте 2.3 подтверждены вырез, реальная просадка и возврат опоры после сброса. Проверено 12 нативных кадров. Физический объезд и сочетания проверяются отдельно."
+    },
+    {
+      "id": "VIS06",
+      "requirement": "Связное затопление улиц/входов порядка 1–3 м с притоком, рельефом, препятствиями и стоком; мутность, мокрый край, нанос, течение",
+      "status": "partial",
+      "evidence": [
+        "tests/test_urban_terrain.py",
+        "D:/MetaRescue-output/visual-overhaul-20261115/checks/native-base-02/verification.json",
+        "D:/MetaRescue-output/visual-overhaul-20261115/checks/native-water-02/verification.json",
+        "D:/MetaRescue-output/integration-20261127-01/native-water-21/verification.json",
+        "D:/MetaRescue-output/integration-20261127-01/water-automatic-06-moderate-audit.json"
+      ],
+      "scope_note": "Повтор в Unreal показал связный 420-секундный паводок, фактическую глубину, совпадение буферов и физической поверхности и сброс. В отдельной автоматической миссии 1 547 мокрых городских клеток и максимум 1,20 м при передаче одного пациента. Рябь, мокрый край и рейс с затопленной улицы остаются открыты."
+    },
+    {
+      "id": "VIS07",
+      "requirement": "Грязь, колеи, лужи и брызги согласованы с движением/энергией; low_visibility v3 поддержан",
+      "status": "partial",
+      "evidence": [
+        "D:/MetaRescue-output/integration-20261127-01/city-faults-build-01/verification.json"
+      ],
+      "scope_note": "Материал следует высоте опоры. Колеи и брызги привязаны к физическим контактам гусениц и состоянию поверхности. Нативная приёмка движения и раздельной низкой видимости открыта."
+    },
+    {
+      "id": "VIS08",
+      "requirement": "Логичные переходы/светофоры/стоп-линии/тротуары/понижения бордюров; усиленная сеть ретрансляторов примерно по 60 м",
+      "status": "partial",
+      "evidence": [
+        "D:/MetaRescue-output/integration-20261127-01/native-relays-04/verification.json",
+        "D:/MetaRescue-output/integration-20261127-01/night-city-tests.log",
+        "D:/MetaRescue-output/integration-20261127-01/native-street-signals-02/verification.json"
+      ],
+      "scope_note": "Подтверждены резервный ретранслятор, неподвижная последняя поза, ACK в 74 с, истечение отдельной команды в 72 с. Ровер выдержал стоп за 1,51 м и затем прошёл. Девять подходов отключились из-за уровня воды. Бордюры, масштаб и типы подходов остаются открыты."
+    },
+    {
+      "id": "VIS09",
+      "requirement": "Все конкурсные события имеют соответствующее фактам представление техники/интерфейса",
+      "status": "partial",
+      "evidence": [
+        "D:/MetaRescue-output/integration-20261127-01/city-faults-build-01/verification.json"
+      ],
+      "scope_note": "Показаны метки отказов, давности поз и опубликованного приоритета, список событий строится по доставленному шагу. Проверка поведения и оконных кадров со всеми типами открыта."
+    },
+    {
+      "id": "VIS10",
+      "requirement": "Новая лодка, 0–4/по умолчанию 2, реальный спуск, глубина/осадка/плавучесть/течение/груз/энергия",
+      "status": "partial",
+      "evidence": [
+        "D:/MetaRescue-output/visual-overhaul-20261115/checks/catamaran-import-01/verification.json",
+        "tests/test_watercraft_config.py",
+        "tests/test_watercraft_shore.py",
+        "D:/MetaRescue-output/visual-overhaul-20261115/checks/native-boat-02/verification.json",
+        "D:/MetaRescue-output/visual-overhaul-20261115/checks/native-transfer-04/verification.json",
+        "D:/MetaRescue-output/integration-20261127-01/native-transfer-21/verification.json",
+        "D:/MetaRescue-output/integration-20261127-01/water-automatic-06-moderate-audit.json"
+      ],
+      "scope_note": "Плавучесть, работа водомётов и физическая передача массы 98 кг подтверждены. Число катамаранов 0–4 и 2 по умолчанию добавлено в UI. Открыты оконная проверка настройки, рейс с затопленной улицы и восстановление при отказе с грузом."
+    },
+    {
+      "id": "VIS11",
+      "requirement": "Промежуточная высадка сохраняет личность и владение грузом; спасение только в медпункте; зависимая коалиция",
+      "status": "partial",
+      "evidence": [
+        "D:/MetaRescue-output/visual-overhaul-20261115/checks/native-transfer-04/verification.json",
+        "tests/test_watercraft_shore.py",
+        "D:/MetaRescue-output/integration-20261127-01/water-automatic-06-calm-audit.json",
+        "D:/MetaRescue-output/integration-20261127-01/water-automatic-06-moderate-audit.json",
+        "D:/MetaRescue-output/integration-20261127-01/water-automatic-06-loss-audit.json"
+      ],
+      "scope_note": "Автоматическая береговая коалиция дала одну передачу в бассейне на 198,02 с и в паводке на 195,02 с. Длительность и энергия обоих плеч оцениваются по доставленному состоянию. При отказе пациент удержан на плаву и отказ доставлен после восстановления связи. Резервное плечо остаётся открытым."
+    },
+    {
+      "id": "VIS12",
+      "requirement": "Тёмная неизведанная территория; база известна; постоянное открытие только от доставленной разведки; без теней/эффектов/меток неизвестных",
+      "status": "partial",
+      "evidence": [
+        "D:/MetaRescue-output/visual-overhaul-20261115/checks/native-exploration-02/verification.json",
+        "D:/MetaRescue-output/integration-20261127-01/night-optical-compare-03.json",
+        "D:/MetaRescue-output/integration-20261127-01/night-blackout-flythrough.mp4",
+        "D:/MetaRescue-output/integration-20261127-01/night-optical-compare-04.json",
+        "D:/MetaRescue-output/integration-20261127-01/night-water-isolation-01/verification.json"
+      ],
+      "scope_note": "Начальная ночная застройка читается. Доставленные наблюдения обновляют материалы, поверхности, позы и эффекты. Две пары по 90 с дали точное совпадение 9 854 оптических выборок в каждой, в том числе при обвале внутри обрыва. Подтверждены пауза, повтор и сброс. Переключение в UI, изменение уровня воды во время обрыва и масштаб остаются открыты. В паре с водой знание стабильно во время изоляции, пока физический уровень поднялся с 1,186 до 1,691 м. На кадрах запомненной поверхности заметны перепады между соседними выборками. Приёмка изображения, переключение в UI и масштаб остаются открыты."
+    },
+    {
+      "id": "VIS13",
+      "requirement": "Новая редакция города 2.3/версия физики; старые миры и v1-семантика сохранены; расширения объявлены",
+      "status": "partial",
+      "evidence": [
+        "tests/test_disaster_profile.py",
+        "D:/MetaRescue-output/visual-overhaul-20261115/python-disaster-checkpoint01.log"
+      ],
+      "scope_note": "2.3/v2 поддержаны генератором и native; 270 Python-тестов и события в двух native-эпизодах. Полная совместимость и остальные механики нового профиля ещё открыты."
+    },
+    {
+      "id": "VIS14",
+      "requirement": "Бесплатные открытые ассеты действительно подключены; оригиналы/лицензии/авторы/URL/SHA сохранены",
+      "status": "partial",
+      "evidence": [
+        "docs/disaster-assets.md",
+        "D:/MetaRescue-output/visual-overhaul-20261115/checks/art-import-07/verification.json",
+        "D:/MetaRescue-output/integration-20261127-01/wreck-import-01/verification.json",
+        "D:/MetaRescue-output/integration-20261127-01/native-collapse-23/verification.json",
+        "D:/MetaRescue-output/integration-20261127-01/native-street-signals-02/survey/engine.log"
+      ],
+      "scope_note": "Нативный импорт двух повреждённых машин и появление обгоревшей модели подтверждены. На новой карте нативный журнал показывает семь типов моделей Poly Haven. Открыты визуальная проверка размещения обеих машин, cook и покрытие прочих видов растительности."
+    },
+    {
+      "id": "VIS15",
+      "requirement": "Все размеры preflight; нативно 25/75/150 и несколько seed; измерение после прогрева 1600×1000",
+      "status": "partial",
+      "evidence": [
+        "D:/MetaRescue-output/visual-overhaul-20261115/checks/raised-world-preflight-01.json",
+        "D:/MetaRescue-output/integration-20261127-01/window-scale-design-01/design.json",
+        "D:/MetaRescue-output/integration-20261127-01/window-scale-pilot-01/verification.json",
+        "D:/MetaRescue-output/integration-20261127-01/window-scale-r2-small/verification.json"
+      ],
+      "scope_note": "После оптимизации на 25×25 получено 57,67 FPS при 1600×1000, p95 22,47 мс и p99 67,33 мс. Предыдущая сборка дала 42,90 FPS и тайм-аут на максимуме. Новый замер 75/150, несколько seed и максимальный флот остаются открыты."
+    },
+    {
+      "id": "VIS16",
+      "requirement": "Регрессии и отдельная распакованная Windows-сборка; реальные изображения/видео и инструкция отката",
+      "status": "pending",
+      "evidence": [],
+      "scope_note": "Новый визуальный этап; полная приёмка описана в docs/disaster-visual-runtime.md."
+    },
+    {
+      "id": "UNIVERSAL-CORE",
+      "requirement": "Двусторонняя работа по публичному контракту с независимыми реализациями и сохранение доказательств физической цели",
+      "status": "partial",
+      "evidence": [
+        "docs/universal-core.md",
+        "D:/MetaRescue-output/integration-20261127-01/universal-review/stock-matrix/report.json",
+        "D:/MetaRescue-output/integration-20261127-01/universal-review/independent-matrix-02/report.json",
+        "D:/MetaRescue-output/integration-20261127-01/universal-review/reference-2d-pairs/report.json",
+        "D:/MetaRescue-output/integration-20261127-01/universal-review/native-closed/summary.json",
+        "D:/MetaRescue-output/integration-20261127-01/universal-review/native-closed-repro/summary.json",
+        "D:/MetaRescue-output/integration-20261127-01/universal-review/native-closed-r2/summary.json",
+        "D:/MetaRescue-output/integration-20261127-01/universal-review/peer-outbound/summary.json",
+        "D:/MetaRescue-output/integration-20261127-01/universal-review/peer-v9-outbound/summary.json",
+        "D:/MetaRescue-output/integration-20261127-01/universal-review/peer-inbound/summary.json",
+        "D:/MetaRescue-output/integration-20261127-01/universal-review/peer-inbound-lab-r2/summary.json"
+      ],
+      "scope_note": "25 транспортных проверок, 33 независимых проверки, 6 физических передач независимого контроллера в 2D и 6/6 в новой нативной серии на трёх геометриях. В локальном партнёрском обмене остаются тайм-аут Lab, недекларированные параметры Portable, отсутствующий id ресурса v9 и нулевой физический результат контроллеров v9 и Atlas 0.2 в RescueQuarter. Внешняя приёмка открыта."
     }
   ],
   "external_tournament": {

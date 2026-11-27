@@ -11,6 +11,7 @@ import math
 
 from controller.decisions import decision
 from controller.navigation import Box, NavigationMap, RouteFailure, handover_xy, observed_surfaces
+from controller.water_rescue import ground_target, reserve_shore, shore_target, water_command, water_intercept_opportunity
 
 
 BASELINES=('fixed_workflow','local_reactive')
@@ -27,6 +28,9 @@ class Job:
     charge_station:str|None=None
     acknowledgement_unknown_at:float|None=None
     using_dock_exit:bool=False
+    inspection:tuple[str,tuple,tuple]|None=None
+    inspection_route:bool=False
+    water_intercept:tuple[float,float,tuple[float,float]]|None=None
 
 
 class FixedWorkflow:
@@ -52,6 +56,8 @@ class FixedWorkflow:
         self.static_yields={}
         self.traffic_holds={}
         self.reconfirm_after={}
+        self.failed_inspections={}
+        self.shore_transfer=None
 
     @staticmethod
     def available(agent,action):
@@ -67,10 +73,16 @@ class FixedWorkflow:
             if status=='completed':
                 job.pending=None;job.acknowledgement_unknown_at=None;job.using_dock_exit=False
                 if job.next_phase is not None:job.phase=job.next_phase;job.next_phase=None
-                if job.action=='handover':job.target=None
+                if job.action in ('handover','disembark'):job.target=None
                 if job.action=='charge':job.charge_station=None
             elif status in ('failed','cancelled') or current['validation_status']=='rejected' or current['delivery_status'] in ('expired','lost'):
                 self.failures.append({'agent_id':agent,'result':current})
+                if (job.inspection and (job.action=='inspect' or job.action=='follow_route' and job.inspection_route)
+                        and status=='failed' and current['delivery_status']=='delivered'):
+                    target,position,vantage=job.inspection
+                    failed=self.failed_inspections.setdefault((agent,target),[])
+                    failed.append((position,vantage))
+                    del failed[:-8]
                 job.pending=None;job.next_phase=None;job.acknowledgement_unknown_at=None;job.using_dock_exit=False
                 if job.action=='charge':job.charge_station=None
             elif status=='unknown':
@@ -160,6 +172,39 @@ class FixedWorkflow:
                 if precise:
                     parameters['precise_stop'] = True
                 return parameters
+        return None
+
+    def _aerial_inspection(self,announced,agent,agents,job,known,disputes):
+        if not agent.get('position') or not self.available(agent,'inspect'):return None
+        pose=tuple(agent['position']);aid=agent['id']
+        suspects=sorted((t for t in known.values() if (t['status']=='suspected' or t['id'] in disputes)
+                         and t.get('position') and math.dist(pose,t['position'])<40),
+                        key=lambda t:(math.dist(pose,t['position']),t['id']))
+        blocked=[]
+        for target in suspects:
+            position=tuple(target['position']);tid=target['id']
+            failed=[vantage for last,vantage in self.failed_inspections.get((aid,tid),())
+                    if math.dist(position,last)<2]
+            if all(math.dist(pose,vantage)>=4 for vantage in failed):
+                job.inspection=(tid,position,pose)
+                return {'agent_id':aid,'action':'inspect','parameters':{'target_id':tid}}
+            blocked.append((tid,position,failed))
+        if not blocked or not self.available(agent,'follow_route'):return None
+        # Search from another side after a delivered failure. An unchanged
+        # viewpoint can stay occluded even when the suspect is in range.
+        nav=NavigationMap(announced,surfaces=self.known_surfaces)
+        for tid,position,failed in blocked[:2]:
+            x,y,z=position
+            altitude=min(max(pose[2],z+12),z+28)
+            candidates=[(x+dx,y+dy,altitude) for offset in (10.,18.)
+                        for dx,dy in ((offset,0),(0,offset),(-offset,0),(0,-offset))]
+            for vantage in sorted(candidates,key=lambda p:(math.dist(p,pose),p)):
+                if any(math.dist(vantage,prior)<5 for prior in failed):continue
+                if not nav.clear(vantage,(x,y,z+.6),0,0,aerial=True):continue
+                try:points=self._route(announced,agent,agents,vantage)
+                except RouteFailure:continue
+                job.inspection=(tid,position,vantage);job.inspection_route=True
+                return {'agent_id':aid,'action':'follow_route','parameters':{'waypoints':points}}
         return None
 
     def _route_failure(self,agent,goal,error):
@@ -325,9 +370,12 @@ class FixedWorkflow:
         elif job.action=='handover':
             completed=known.get(job.target,{}).get('evacuation_state')=='evacuated'
             if not completed and not physical.get('carrying'):return None
+        elif job.action=='disembark':
+            completed=known.get(job.target,{}).get('support')=='shore_platform'
+            if not completed and not physical.get('carrying'):return None
         if completed:
             if job.next_phase is not None:job.phase=job.next_phase
-            if job.action=='handover':job.target=None
+            if job.action in ('handover','disembark'):job.target=None
         if job.action=='charge':job.charge_station=None
         job.pending=job.next_phase=job.acknowledgement_unknown_at=None
         return {'agent_id':agent['id'],'command_id':command_id,'observed_at':observed_at,
@@ -361,6 +409,8 @@ class FixedWorkflow:
         self.static_yields={}
         self.traffic_holds={}
         self.reconfirm_after={}
+        self.failed_inspections={}
+        self.shore_transfer=None
 
     def _released_jobs(self, observation):
         now = observation['time']
@@ -374,7 +424,7 @@ class FixedWorkflow:
                 observed = agent.get('freshness', {}).get('position', {}).get('observed_at')
                 self.reconfirm_after[job.target] = now if observed is None else observed
             job.target = None
-            job.phase = 'scan' if agent['kind'] == 'aerial' else 'choose'
+            job.phase = {'aerial': 'scan', 'surface_water': 'search_water'}.get(agent['kind'], 'choose')
             if not job.pending:
                 job.charge_station = None
         for target in observation['targets']:
@@ -393,13 +443,15 @@ class FixedWorkflow:
         self.route_failures=[]
         self._released_jobs(observation)
         for a in agents:
-            job=self.jobs.setdefault(a['id'],Job('scan' if a['kind']=='aerial' else 'choose'))
+            initial_phase={'aerial': 'scan', 'surface_water': 'search_water'}.get(a['kind'], 'choose')
+            job=self.jobs.setdefault(a['id'],Job(initial_phase))
             if a['kind']=='ground' and a.get('position') and not a.get('physical',{}).get('carrying'):
                 base=announced.get('base',{});low=base.get('min');high=base.get('max')
                 if low and high and all(low[i]<=a['position'][i]<=high[i] for i in (0,1)):
                     self.home_positions.setdefault(a['id'],list(a['position']))
         outgoing=[];effects=[];reconciliations=[];directive_checks=[]
         directives=self.hold_orders(observation)
+        self.shore_transfer=reserve_shore(self,observation,announced,known,directives)
         traffic_events=self._coordinate_ground_yields(observation,directives)
         disputes={r.get('target_id') for r in observation.get('metaevolution',{}).get('contradictions',())}
         disputes.update(self.reconfirm_after)
@@ -438,7 +490,7 @@ class FixedWorkflow:
                     effects.append((a['id'],None))
                 continue
             if (a['id'] in self.blocked_agents or a['id'] in self.scenario_reserved or
-                a['kind'] not in ('ground','aerial') or a['status'] in ('offline','unknown','charging') or
+                a['kind'] not in ('ground','aerial','surface_water') or a['status'] in ('offline','unknown','charging') or
                 a.get('communication',{}).get('reachable') is False):continue
             if a['status']=='failed' and not self.available(a,'charge'):continue
             if job.pending and job.acknowledgement_unknown_at is not None:
@@ -450,9 +502,11 @@ class FixedWorkflow:
                 reason=physical.get('stop_reason')
                 active_id=physical.get('active_command_id')
                 stationary_yield=self._stationary_yield(observation,a)
+                blocked_water=a['kind']=='surface_water' and reason in (
+                    'shallow_water_on_route','water_boundary_braking','restricted_volume_on_route')
                 if (self.automatic_route_recovery and job.action=='follow_route'
                         and active_id==f'{job.pending}:{job.pending_index}' and
-                        (reason in ('obstacle_on_route','hazard_on_route') or stationary_yield)
+                        (reason in ('obstacle_on_route','hazard_on_route') or stationary_yield or blocked_water)
                         and self.available(a,'hold')):
                     blocker=physical.get('route_blocker')
                     if reason=='obstacle_on_route' and blocker:
@@ -464,8 +518,16 @@ class FixedWorkflow:
                             del stored[:-64]
                     outgoing.append({'agent_id':a['id'],'action':'hold','parameters':{}})
                     effects.append((a['id'],None))
+                elif (a['kind']=='surface_water' and job.action=='follow_route'
+                      and active_id==f'{job.pending}:{job.pending_index}'
+                      and water_intercept_opportunity(a,job,known,observation['time'])):
+                    command,next_phase=water_command(self,observation,announced,a,job,known,reroute=True)
+                    if command is not None:
+                        outgoing.append(command)
+                        effects.append((a['id'],next_phase))
                 continue
-            needs_charge,charge=self._charge_command(observation,announced,a,job)
+            job.inspection=None;job.inspection_route=False
+            needs_charge,charge=(False,None) if a['kind']=='surface_water' else self._charge_command(observation,announced,a,job)
             if needs_charge:
                 if charge:
                     uses_exit=a['kind']=='ground' and a.get('physical',{}).get('at_dock') and charge['action']=='follow_route'
@@ -474,13 +536,11 @@ class FixedWorkflow:
                         exit_in_use=True;exit_departures.add(a['id'])
                     outgoing.append(charge);effects.append((a['id'],None))
                 continue
-            if a['kind']=='aerial':
-                suspects=[t for t in known.values() if (t['status']=='suspected' or t['id'] in disputes) and t.get('position') and
-                          math.dist(a['position'],t['position'])<40]
-                if suspects and self.available(a,'inspect'):
-                    target=min(suspects,key=lambda t:(math.dist(a['position'],t['position']),t['id']))
-                    command={'agent_id':a['id'],'action':'inspect','parameters':{'target_id':target['id']}}
-                elif self.available(a,'follow_route'):
+            if a['kind']=='surface_water':
+                command,next_phase=water_command(self,observation,announced,a,job,known)
+            elif a['kind']=='aerial':
+                command=self._aerial_inspection(announced,a,agents,job,known,disputes)
+                if command is None and self.available(a,'follow_route'):
                     goal=self._scan_goal(a,announced)
                     if goal is None:continue
                     try:points=self._route(announced,a,agents,goal)
@@ -488,17 +548,42 @@ class FixedWorkflow:
                     command={'agent_id':a['id'],'action':'follow_route','parameters':{'waypoints':points}}
             elif a['kind']=='ground':
                 at_dock=a.get('physical',{}).get('at_dock') and a['physical'].get('dock_exit_waypoints')
+                reserved_shore=self.shore_transfer and self.shore_transfer['rover_id']==a['id']
+                if job.phase.startswith('shore_') and not reserved_shore:
+                    job.target,job.phase=None,'choose'
+                if reserved_shore and job.phase=='choose':
+                    job.target=self.shore_transfer['target_id']
+                    job.phase='shore_depart' if at_dock else 'shore_stage'
+                if job.phase.startswith('shore_') and shore_target(known.get(job.target, {}), announced):
+                    job.phase='depart' if at_dock else 'approach'
+                if job.phase=='shore_depart':
+                    if not exit_in_use and self.available(a,'follow_route'):
+                        outgoing.append({'agent_id':a['id'],'action':'follow_route',
+                                         'parameters':{'waypoints':a['physical']['dock_exit_waypoints']}})
+                        effects.append((a['id'],'shore_stage'))
+                        exit_in_use=True;exit_departures.add(a['id'])
+                    continue
+                if job.phase=='shore_stage':
+                    if self.available(a,'follow_route'):
+                        point=announced['watercraft']['shore_station']['ground_pickup']
+                        try:waypoints=self._route(announced,a,agents,point,precise_stop=True)
+                        except RouteFailure:continue
+                        outgoing.append({'agent_id':a['id'],'action':'follow_route',
+                                         'parameters':{'waypoints':waypoints,'precise_stop':True}})
+                        effects.append((a['id'],'shore_wait'))
+                    continue
+                if job.phase=='shore_wait':continue
                 if exit_in_use and (job.phase=='depart' or (job.phase=='choose' and at_dock)):
                     continue
                 if job.phase=='choose':
                     reserved={j.target for j in self.jobs.values() if j.target}
                     choices=[t for t in known.values() if t['status']=='confirmed' and
                              t.get('position') and t.get('evacuation_state','waiting')=='waiting' and
-                             t['id'] not in reserved and t['id'] not in disputes]
-                    selected=self._choose_target(a,choices)
+                             t['id'] not in reserved and t['id'] not in disputes and ground_target(t)]
+                    selected=next((t for t in choices if shore_target(t,announced)),None) or self._choose_target(a,choices)
                     if selected is None:
                         unconfirmed = [t for t in known.values() if t['id'] in self.reconfirm_after and
-                                       t['id'] not in reserved and t.get('position') and self.available(a, 'inspect')]
+                                       t['id'] not in reserved and t.get('position') and ground_target(t) and self.available(a, 'inspect')]
                         selected = min(unconfirmed, key=lambda t: (math.dist(a['position'], t['position']), t['id']), default=None)
                     if selected is None:continue
                     job.target=selected['id']
@@ -524,7 +609,18 @@ class FixedWorkflow:
                     exit_in_use=True;exit_departures.add(a['id'])
                     next_phase='approach'
                 elif job.phase=='approach' and job.target in known and self.available(a,'follow_route'):
-                    parameters = self._approach_target(announced, a, agents, target['position'])
+                    if shore_target(target,announced):
+                        station=announced['watercraft']['shore_station']
+                        approach=station['ground_pickup']
+                        x,y,z=target['position']
+                        dx,dy=approach[0]-x,approach[1]-y
+                        length=math.hypot(dx,dy)
+                        goal=(x+2.5*dx/length,y+2.5*dy/length,z) if length>1.e-6 else tuple(approach)
+                        try:points=self._route(announced,a,agents,goal,precise_stop=True)
+                        except RouteFailure:continue
+                        parameters={'waypoints':points,'precise_stop':True}
+                    else:
+                        parameters=self._approach_target(announced,a,agents,target['position'])
                     if parameters is None:continue
                     command={'agent_id':a['id'],'action':'follow_route','parameters':parameters}
                     next_phase='pickup'
@@ -567,6 +663,7 @@ class FixedWorkflow:
         if directive_checks:result.setdefault('metaevolution',{})['directive_checks']=directive_checks
         if traffic_events:result.setdefault('metaevolution',{})['traffic_coordination']=traffic_events
         if self.route_failures:result.setdefault('metaevolution',{})['workflow']={'route_failures':self.route_failures}
+        if self.shore_transfer:result.setdefault('metaevolution',{})['water_coalition']=self.shore_transfer
         for index,(owner,next_phase) in enumerate(effects):
             job=self.jobs[owner];job.pending=result['decision_id'];job.pending_index=index;job.next_phase=next_phase
             job.using_dock_exit=owner in exit_departures or (job.using_dock_exit and outgoing[index]['action']=='hold')

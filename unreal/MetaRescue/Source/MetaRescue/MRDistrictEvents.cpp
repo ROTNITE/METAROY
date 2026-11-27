@@ -1,8 +1,11 @@
 #include "MRWorld.h"
+#include "MRDisasterFade.h"
 #include "MRAgent.h"
 #include "Components/StaticMeshComponent.h"
+#include "Components/InstancedStaticMeshComponent.h"
 #include "Components/PointLightComponent.h"
 #include "Components/BoxComponent.h"
+#include "Components/DecalComponent.h"
 #include "Materials/MaterialInstanceDynamic.h"
 #include "Engine/StaticMesh.h"
 #include "Engine/World.h"
@@ -101,6 +104,8 @@ UMaterialInterface* EventSurfaceMaterial(const TCHAR* Name,bool bUseOptionalArt)
 double HazardVisualEnd(const FMRDistrictEnvironment& Environment,const FMRDisturbance& Event,FName Kind)
 {
     const double EffectEnd=Environment.ActiveUntil(Event);
+    if(Kind==TEXT("PhysicalSmoke")||(Environment.bDetailedHazards&&Kind==TEXT("HeavySmoke")))
+        return Environment.VisibilityUntil(Event);
     if(Kind==TEXT("HeavySmoke")||Kind==TEXT("LowVisibility")||Kind==TEXT("CollapseDust")||IsEventVeil(Kind))
     {
         const double VisibilityEnd=Environment.VisibilityUntil(Event);
@@ -217,6 +222,12 @@ void AMRWorld::ApplyDisturbance(const FMRDisturbance& E)
         }
         EventInspections.Sort([](const auto& A,const auto& B){return A.Time<B.Time;});
     }
+    if(bDisasterCity&&E.Kind==EMRDisturbance::RoadDamage)
+    {
+        // The real cavity and grounded source fragments replace the legacy
+        // vertex-displaced fracture overlay in this physical revision.
+        DamageUrbanRoad(E);return;
+    }
     auto VFX=[&](const FString& Name,FVector P,FVector Scale,FName EffectRole=NAME_None)
     {
         const TCHAR* Revision=TEXT("Revision2");
@@ -230,7 +241,16 @@ void AMRWorld::ApplyDisturbance(const FMRDisturbance& E)
         if(!System)
             System=LoadObject<UNiagaraSystem>(nullptr,*FString::Printf(TEXT("/Game/EffectsV3/Revision2/NS_%s.NS_%s"),*Name,*Name));
         if(!System){UE_LOG(LogTemp,Error,TEXT("MR missing v3 effect %s"),*Name);return (UNiagaraComponent*)nullptr;}
-        auto* C=UNiagaraFunctionLibrary::SpawnSystemAtLocation(this,System,P,FRotator::ZeroRotator,Scale,false);
+        UNiagaraComponent* C=nullptr;
+        if(bDisasterCity)
+        {
+            if(!FApp::CanEverRender())return C;
+            C=NewObject<UNiagaraComponent>(this);AddInstanceComponent(C);C->SetupAttachment(GetRootComponent());
+            C->SetMobility(EComponentMobility::Movable);C->SetAsset(System);C->SetRelativeLocation(P);C->SetRelativeScale3D(Scale);
+            C->SetAutoActivate(false);C->SetRandomSeedOffset(FCrc::StrCrc32(*E.Id)^GetTypeHash(P));
+            C->RegisterComponent();C->Activate(true);
+        }
+        else C=UNiagaraFunctionLibrary::SpawnSystemAtLocation(this,System,P,FRotator::ZeroRotator,Scale,false);
         if(C)
         {
             C->ComponentTags={FName(*E.Id),EffectRole.IsNone()?FName(*Name):EffectRole};
@@ -244,14 +264,22 @@ void AMRWorld::ApplyDisturbance(const FMRDisturbance& E)
         }
         return C;
     };
+    if(bDisasterCity&&!E.bPropagation&&(E.Kind==EMRDisturbance::Fire||E.Kind==EMRDisturbance::Smoke||
+        E.Kind==EMRDisturbance::Collapse||E.Kind==EMRDisturbance::LowVisibility))BuildDisasterSmoke(E);
     if(E.Kind==EMRDisturbance::Collapse)
     {
         if(!bCoreControlled)ReleaseCollapse();
         DustEffect=VFX(TEXT("CollapseDust"),E.Source+FVector(0,0,120),FVector(5.2,5.2,3.6));
         const FIntPoint Origin=FMRDistrictEnvironment::Cell(E.Source);
-        for(const FIntPoint& Cell:E.Cells)
+        if(!bDisasterCity)for(const FIntPoint& Cell:E.Cells)
             if(FMath::Abs(Cell.X-Origin.X)+FMath::Abs(Cell.Y-Origin.Y)<=1)
                 BuildHazardSurface(E,Cell,2);
+    }
+    else if(E.Kind==EMRDisturbance::Fire&&bDisasterCity)
+    {
+        // Propagation expands the dangerous perimeter of this same building;
+        // it must not duplicate the roof plume or ignite empty road cells.
+        if(!E.bPropagation)BuildDisasterFire(E);
     }
     else if(E.Kind==EMRDisturbance::Fire)
     {
@@ -321,7 +349,7 @@ void AMRWorld::ApplyDisturbance(const FMRDisturbance& E)
             Lamp->SetCastShadows(false);Lamp->RegisterComponent();Lamp->ComponentTags={FName(*E.Id),TEXT("FireLight")};HazardVisuals.Add(Lamp);
         }
     }
-    else if(E.Kind==EMRDisturbance::Smoke||E.Kind==EMRDisturbance::LowVisibility)
+    else if(!bDisasterCity&&(E.Kind==EMRDisturbance::Smoke||E.Kind==EMRDisturbance::LowVisibility))
     {
         const bool Smoke=E.Kind==EMRDisturbance::Smoke;
         if(Smoke)VFX(TEXT("HeavySmoke"),E.Source+FVector(0,0,90),FVector(6.3,5.7,4.5));
@@ -371,12 +399,13 @@ void AMRWorld::ApplyDisturbance(const FMRDisturbance& E)
             }
         }
     }
-    if(E.Kind==EMRDisturbance::Flood)
+    const bool HydraulicFlood=E.Kind==EMRDisturbance::Flood&&UrbanWater.IsValid();
+    if(E.Kind==EMRDisturbance::Flood&&!HydraulicFlood)
     {
         GroundedAssembly(TEXT("Manhole"),E.Source,FRotator::ZeroRotator,FVector::OneVector,TEXT(""));
         LeakEffect=VFX(TEXT("PipeLeak"),E.Source+FVector(0,0,35),FVector(1.2,1.2,1.05));
     }
-    if(E.Kind==EMRDisturbance::Flood||E.Kind==EMRDisturbance::Mud||E.Kind==EMRDisturbance::RoadDamage)
+    if((E.Kind==EMRDisturbance::Flood&&!HydraulicFlood)||E.Kind==EMRDisturbance::Mud||E.Kind==EMRDisturbance::RoadDamage)
         for(const auto Cell:E.Cells)
         {
             const FVector P=FMRDistrictEnvironment::Center(Cell);
@@ -439,11 +468,13 @@ void AMRWorld::BuildHazardSurface(const FMRDisturbance& E,FIntPoint Cell,int32 L
         const FVector P(Cell.X*500+X*50+25,Cell.Y*500+Y*50+25,0);
         if(InBuilding(P))continue;
         FHitResult Hit;
-        if(!GetWorld()->LineTraceSingleByChannel(Hit,P+FVector(0,0,60),P-FVector(0,0,400),ECC_Visibility,Params)||
-            Hit.ImpactNormal.Z<.8||Hit.ImpactPoint.Z>55||Hit.ImpactPoint.Z<-100)continue;
+        const double Datum=bDisasterCity?InitialGroundHeightCm(P):0.;
+        const FVector DatumPoint(P.X,P.Y,Datum);
+        if(!GetWorld()->LineTraceSingleByChannel(Hit,DatumPoint+FVector(0,0,60),DatumPoint-FVector(0,0,400),ECC_Visibility,Params)||
+            Hit.ImpactNormal.Z<.8||Hit.ImpactPoint.Z>Datum+55||Hit.ImpactPoint.Z<Datum-(bDisasterCity?390:100))continue;
         const float Ground=Hit.ImpactPoint.Z;
         FVector Local=P-Origin;Local.Z=Layer==0?0:Ground-Origin.Z+1+Layer*.2;
-        Quad(V,N,T,UV,Local,FVector(50,50,0),Ground,&SurfaceColors);
+        Quad(V,N,T,UV,Local,FVector(50,50,0),Ground-Datum,&SurfaceColors);
         if(Layer!=0)continue;
         FloodGroundHeights.Add(FIntPoint(FMath::FloorToInt(P.X/50),FMath::FloorToInt(P.Y/50)),Ground);
         for(FVector D:{FVector(1,0,0),FVector(-1,0,0),FVector(0,1,0),FVector(0,-1,0)})
@@ -466,7 +497,15 @@ void AMRWorld::BuildHazardSurface(const FMRDisturbance& E,FIntPoint Cell,int32 L
         C->SetMobility(EComponentMobility::Movable);C->SetRelativeLocation(Origin);
         C->SetCollisionEnabled(ECollisionEnabled::NoCollision);C->SetCastShadow(false);
         C->RegisterComponent();C->CreateMeshSection_LinearColor(0,Vertices,Triangles,Normals,Tex,Colors,{},false);
-        C->SetMaterial(0,EventSurfaceMaterial(Material,FApp::CanEverRender()));
+        auto* SurfaceMaterial=EventSurfaceMaterial(Material,FApp::CanEverRender());
+        if(bDisasterCity&&Layer==1)
+        {
+            auto* Mud=UMaterialInstanceDynamic::Create(LoadObject<UMaterialInterface>(nullptr,
+                TEXT("/Game/EffectsV3/Revision5/M_EventMud.M_EventMud")),C);
+            Mud->SetVectorParameterValue(TEXT("MudTint"),FLinearColor(.42f,.32f,.22f));
+            Mud->SetScalarParameterValue(TEXT("Wetness"),.6f);SurfaceMaterial=Mud;
+        }
+        C->SetMaterial(0,SurfaceMaterial);
         const TCHAR* RoleName=Floating?TEXT("flood"):Layer==2?TEXT("fractured_surface"):MRDisturbanceName(E.Kind);
         C->ComponentTags={FName(*E.Id),FName(RoleName)};
         // A fixed wet rim follows the ground, rather than rising with the water.
@@ -479,12 +518,51 @@ void AMRWorld::BuildHazardSurface(const FMRDisturbance& E,FIntPoint Cell,int32 L
     Mesh(TEXT("M_EventWetEdge"),WV,WN,WT,WUV,{},false);
 }
 
+void AMRWorld::StampMudTrack(const FVector& From,const FVector& To,const FVector& Normal)
+{
+    const FVector Middle=(From+To)*.5;
+    if(!Environment.HasEffect(EMRDisturbance::Mud,Middle)||WaterDepth(Middle)>8.)return;
+    if(!MudTracks)
+    {
+        auto* Plane=LoadObject<UStaticMesh>(nullptr,TEXT("/Engine/BasicShapes/Plane.Plane"));
+        auto* BaseMaterial=LoadObject<UMaterialInterface>(nullptr,
+            TEXT("/Game/EffectsV3/Revision5/M_EventMud.M_EventMud"));
+        if(!Plane||!BaseMaterial)return;
+        MudTracks=NewObject<UInstancedStaticMeshComponent>(this);
+        AddInstanceComponent(MudTracks);MudTracks->SetupAttachment(GetRootComponent());
+        MudTracks->SetMobility(EComponentMobility::Movable);
+        MudTracks->SetStaticMesh(Plane);MudTracks->SetCollisionEnabled(ECollisionEnabled::NoCollision);
+        MudTracks->SetCastShadow(false);MudTracks->SetCanEverAffectNavigation(false);
+        MudTracks->SetRemoveSwap();MudTracks->SetCullDistances(16000,19000);
+        MudTracks->ComponentTags.Add(TEXT("DisasterMudTracks"));
+        auto* Material=UMaterialInstanceDynamic::Create(BaseMaterial,MudTracks);
+        Material->SetVectorParameterValue(TEXT("MudTint"),FLinearColor(.31f,.26f,.20f));
+        Material->SetScalarParameterValue(TEXT("Wetness"),.87f);
+        MudTracks->SetMaterial(0,Material);MudTracks->RegisterComponent();
+        CoreEventComponents.Add(MudTracks);
+    }
+    if(MudTrackPositions.Num()==1536)return;
+    const FVector Along=To-From;
+    const FQuat Rotation=FRotationMatrix::MakeFromZX(Normal,Along).ToQuat();
+    MudTracks->AddInstance(FTransform(Rotation,Middle+Normal*2.5,
+        FVector(Along.Size()/100+.03,.24,1)),true);
+    MudTrackPositions.Add(Middle);
+}
+
 void AMRWorld::TickHazardVisuals(float Dt)
 {
+    if(MudTracks&&Environment.Time>=NextMudTrackCleanup)
+    {
+        NextMudTrackCleanup=Environment.Time+1;
+        for(int32 Index=MudTrackPositions.Num()-1;Index>=0;--Index)
+            if(!Environment.HasEffect(EMRDisturbance::Mud,MudTrackPositions[Index])&&MudTracks->RemoveInstance(Index))
+                MudTrackPositions.RemoveAtSwap(Index,1,EAllowShrinking::No);
+    }
     for(int32 Index=HazardVisuals.Num()-1;Index>=0;--Index)
     {
         USceneComponent* C=HazardVisuals[Index];
-        if(!C||C->ComponentTags.Num()<2)continue;
+        if(!C){HazardVisuals.RemoveAtSwap(Index,1,EAllowShrinking::No);continue;}
+        if(C->ComponentTags.Num()<2)continue;
         const FName Kind=C->ComponentTags[1];
         const auto* E=Environment.FindApplied(C->ComponentTags[0].ToString());
         if(!E)continue;
@@ -500,6 +578,19 @@ void AMRWorld::TickHazardVisuals(float Dt)
             continue;
         }
         const float Age=float(Environment.Time-E->Time);
+        if(Kind==TEXT("PhysicalSmoke")){TickDisasterSmoke(C,*E);continue;}
+        float IgnitionDelay=0;
+        for(int32 Tag=2;Tag<C->ComponentTags.Num();++Tag)
+        {
+            const FString Text=C->ComponentTags[Tag].ToString();
+            if(Text.StartsWith(TEXT("IgnitionDelay_")))IgnitionDelay=FCString::Atof(*Text.RightChop(14));
+        }
+        if(auto* Stain=Cast<UDecalComponent>(C))
+        {
+            if(auto* Material=Cast<UMaterialInstanceDynamic>(Stain->GetDecalMaterial()))
+                Material->SetScalarParameterValue(TEXT("BurnFraction"),FMath::SmoothStep(0.f,30.f,Age-IgnitionDelay));
+            continue;
+        }
         if(Kind==TEXT("flood"))
         {
             FVector P=C->GetComponentLocation();
@@ -517,13 +608,15 @@ void AMRWorld::TickHazardVisuals(float Dt)
         }
         if(auto* Light=Cast<UPointLightComponent>(C))Light->SetIntensity(22000*(.85+.12*FMath::Sin(Age*11)+.08*FMath::Sin(Age*17)));
         auto* FX=Cast<UNiagaraComponent>(C);
+        if(bDisasterCity&&FX&&Kind==TEXT("HeavySmoke")&&E->Kind==EMRDisturbance::Fire)
+        {FVector Position=C->GetComponentLocation();Position.Z=E->SmokeEmissionHeightCm+120;C->SetWorldLocation(Position);}
         if(FX||IsEventVeil(Kind))
         {
+            if(bDisasterCity&&FX&&(Kind==TEXT("BuildingFire")||Kind==TEXT("Sparks")))
+            {FX->SetPaused(Age<IgnitionDelay);FX->SetVisibility(Age>=IgnitionDelay);}
             const float Duration=End>=0?float(End-E->Time):0.f;
-            const float FadeOutSeconds=FMath::Min(4.f,Duration*.25f);
             const float FadeInSeconds=Kind==TEXT("ElectricalIgnition")?.08f:1.5f;
-            const float Fade=FMath::SmoothStep(0.f,FadeInSeconds,Age)*(Duration>0?
-                1-FMath::SmoothStep(Duration-FadeOutSeconds,Duration,Age):1.f);
+            const float Fade=MRDisasterFade(Age,IgnitionDelay,Duration,FadeInSeconds);
             if(FX)
             {
                 TArray<UMaterialInterface*> Materials;

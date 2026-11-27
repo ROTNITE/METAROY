@@ -36,7 +36,7 @@ SCENARIOS = {
 
 
 def capabilities(*, estimates=True):
-    extensions = ['metaevolution.step_deduplication.v1']
+    extensions = ['metaevolution.step_deduplication.v1', 'metaroy.action_semantics.v1']
     result = {'protocol_version': '1.0', 'environment_id': 'metarescue_planar_reference',
               'mission_ids': ['search_and_rescue'], 'agent_kinds': ['aerial', 'ground'],
               'coordinates': {'unit': 'meter', 'axes': ['x', 'y', 'z']},
@@ -45,7 +45,8 @@ def capabilities(*, estimates=True):
               'supported_scenarios': SCENARIOS,
               'supported_actions': {action: {'required_capabilities': [required], 'parameters_schema': schema}
                                     for action, (required, schema) in ACTIONS.items()},
-              'extensions': extensions}
+              'extensions': extensions,
+              'action_semantics': {'handover': {'semantic_id':'handover','effect':'evacuated'}}}
     if estimates:
         extensions.append('metarescue.patrol_estimates.v1')
         result['patrol_estimates'] = {'speed_m_s': SPEED, 'scan_s': SCAN_S, 'move_fraction_per_m': MOVE_COST,

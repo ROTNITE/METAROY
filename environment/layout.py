@@ -18,8 +18,9 @@ from contracts.protocol import ProtocolError
 from environment.competition import attach as attach_competition_annex
 from environment.config import Settings
 from environment.events import generate_tape
+from environment.urban_disasters import attach_elevation
 from environment.geometry import Footprint, SpatialIndex, box as _box, overlap as _overlap, segment_clear as _segment_clear
-from environment.neighbourhood import VERSION as IRREGULAR_VERSION,DECORATED_VERSION,STREET_PROP_VERSION,build_neighbourhood
+from environment.neighbourhood import VERSION as IRREGULAR_VERSION,DECORATED_VERSION,STREET_PROP_VERSION,DISASTER_VERSION,build_neighbourhood
 
 VERSION = 'rescue-city-1.1'
 CELL_M = 10.0
@@ -100,11 +101,11 @@ def _base_obstacles():
 def generate(settings: Settings, *, include_events=False) -> dict:
     size = int(settings.map_size * CELL_M)
     base,spawns,infrastructure=_base_plan(settings)
-    city_versions={'2.0':IRREGULAR_VERSION,'2.1':DECORATED_VERSION,'2.2':STREET_PROP_VERSION}
+    city_versions={'2.0':IRREGULAR_VERSION,'2.1':DECORATED_VERSION,'2.2':STREET_PROP_VERSION,'2.3':DISASTER_VERSION}
     if settings.city_revision in city_versions or settings.layout=='rescue_quarter':
         revision=settings.city_revision if settings.city_revision in city_versions else '2.0'
         fixed_obstacles = _base_obstacles()
-        if revision in ('2.1','2.2'):
+        if revision in ('2.1','2.2','2.3'):
             fixed_obstacles.extend([
                 {'id':'van-service-lane','asset':'Van','position':[3.1,25.7,.08],'yaw':90.,
                  'bounds':_box((1.6,22.5,0),(4.6,35.5,2.8))},
@@ -122,6 +123,9 @@ def generate(settings: Settings, *, include_events=False) -> dict:
               'bounds':_box((0,0,-12),(size,size,90)),'base':base,'base_position':[20,22,0],
               'spawns':spawns,'infrastructure':infrastructure,'fixed_obstacles':fixed_obstacles,**parts}
         if settings.competition:attach_competition_annex(data)
+        if revision=='2.3':
+            attach_elevation(data)
+            data['street_controls_revision']=1
         data['preflight']=preflight(data)
         if include_events:data['event_model']=generate_tape(data)
         return data
@@ -278,7 +282,7 @@ def preflight(data):
         person_cells.setdefault(cell,[]).append(p[:2])
     if 'road_graph' in data:
         roads=data['road_graph'];positions={n['id']:n['position'] for n in roads['nodes']}
-        if data['format'] in (DECORATED_VERSION,STREET_PROP_VERSION):
+        if data['format'] in (DECORATED_VERSION,STREET_PROP_VERSION,DISASTER_VERSION):
             for feature in data['features']:
                 for obstacle in feature['obstacles']:
                     boxes.append(obstacle)
@@ -323,7 +327,8 @@ def preflight(data):
 def public_map(data):
     """Announced static map: no hidden people, future disturbances or RNG state."""
     fields=('format','base_layout_revision','cell_m','size_m','bounds','base','base_position','road_axes_m','road_width_m',
-            'road_graph','buildings','features','facilities','fixed_obstacles','surfaces','infrastructure')
+            'road_graph','buildings','features','facilities','fixed_obstacles','surfaces','infrastructure','terrain','hydrology','watercraft',
+            'street_controls_revision')
     result={key:data[key] for key in fields if key in data}
     if 'competition' in data:result['declared_zones']=data['competition']['zones']
     return result

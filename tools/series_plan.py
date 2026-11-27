@@ -13,6 +13,7 @@ from environment.config import EVENT_DEFAULTS,Settings
 from environment.disturbances import FORMAT as DISTURBANCE_FORMAT,validate_tape as validate_disturbances
 from environment.events import validate_tape as validate_events
 from environment.layout import generate,public_map
+from controller.profiles import COUNTERFACTUAL
 
 
 FORMAT='metarescue.native-series.v1'
@@ -40,7 +41,7 @@ def tape_digest(world):
     return digest({name:world.get(name) for name in ('event_model','disturbances')})
 
 
-def world_for(family,index):
+def world_for(family,index,*,integrated=False):
     settings={'map_size':25,'city_revision':'2.2','preset':FAMILIES[family-1],'horizon':480,
               'scouts':3,'rescuers':3,'people':12,'seed':5000+100*family+index,
               'event_profile':'v052','probabilities':dict.fromkeys(EVENT_DEFAULTS['v052'],0)}
@@ -51,6 +52,8 @@ def world_for(family,index):
         settings.update(sensor_reliability=.74,communication_loss=.12,communication_latency_s=.35)
     if family==6:
         settings['probabilities']=dict(EVENT_DEFAULTS['v052'])
+    if integrated:
+        settings.update(city_revision='2.3', boats=2, seed=settings['seed']+270000)
     world=generate(Settings.parse(settings),include_events=True)
     if family==6:
         # The subject is chosen before dispatch, independent of route/score.
@@ -60,22 +63,23 @@ def world_for(family,index):
             {'id':'s6-carrier-loss','type':'agent_failure','time':132,'until':None,
              'source':'scenario-supervisor','targets':[failed],'parameters':{'reason':'traction_failure'}},
             {'id':'s6-radio-gap','type':'connectivity_loss','time':208,'until':249,
-             'source':'scenario-supervisor','targets':[world['spawns'][-1]['id']],
+             'source':'scenario-supervisor','targets':[(ground if integrated else world['spawns'])[-1]['id']],
              'parameters':{'reason':'transient_radio_partition'}}]}
         validate_disturbances(world['disturbances'],world)
     validate_events(world['event_model'],world)
     return world
 
 
-def design(output):
+def design(output,*,integrated=False):
     output.mkdir(parents=True,exist_ok=False)
     maps=output/'maps';maps.mkdir()
     plan={'format':FORMAT,'simulation':'Unreal Core Protocol 1.0',
           'renderer':'null_rhi','comparison_horizon_s':480,'worlds':[],'runs':[]}
+    if integrated:plan['evolutionary_controller_profile']=COUNTERFACTUAL
     for family in range(1,7):
         for index in range(1,6):
             identifier=f'S{family}-{index:02d}'
-            world=world_for(family,index)
+            world=world_for(family,index,integrated=integrated)
             private=maps/(identifier+'.private.json')
             public=maps/(identifier+'.public.json')
             private.write_bytes(json_bytes(world));public.write_bytes(json_bytes(public_map(world)))
@@ -99,7 +103,8 @@ def design(output):
 if __name__=='__main__':
     parser=argparse.ArgumentParser(description=__doc__)
     parser.add_argument('output',type=Path)
+    parser.add_argument('--integrated',action='store_true',help='Use the integrated controller, city 2.3 and independent world seeds')
     args=parser.parse_args()
-    manifest=design(args.output)
+    manifest=design(args.output,integrated=args.integrated)
     print(json.dumps({'plan':str(manifest.resolve()),'sha256':hashlib.sha256(manifest.read_bytes()).hexdigest(),
                       'worlds':30,'planned_runs':450,'completed_native_runs':0}))
