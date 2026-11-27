@@ -160,11 +160,29 @@ class ProblemBuilder:
         duration=out/speed+back/(speed*.8)+8+6+4
         return Trip(duration,out*.082+back*.118+duration*35/3600)
 
+    def observed_rescue_trip(self, agent, target):
+        physical=agent['physical'];speed=physical.get('speed_limit_m_s',0.)
+        if speed<=0:return None
+        exits=physical.get('dock_exit_waypoints',()) if physical.get('at_dock') else ()
+        return self._trip(tuple(agent['position']),target,speed,exits)
+
+    def survey_rescue_eta(self, agent, target, remaining_s):
+        # Forecast an opportunity using a currently free crew member.
+        actions={record['action'] for record in agent.get('available_actions',())}
+        if (agent['status'] not in ('active','degraded') or agent['physical'].get('carrying') or
+                not {'follow_route','pickup'}<=actions):return None
+        trip=self.observed_rescue_trip(agent,target)
+        usable=usable_energy(agent)
+        if trip is None or trip.duration_s>=remaining_s or (usable is not None and trip.energy_wh>usable):
+            return None
+        return trip.duration_s
+
     def rescue(self,observation,jobs,*,max_targets=30):
         now=observation['time'];agents=mobiles(observation,'ground')
         known={t['id']:t for t in observation['targets']}
         reserved={job.get('target_id') for job in jobs.values() if job.get('target_id')}
         targets=[t for t in known.values() if t.get('status')=='confirmed' and t.get('position') and
+                 t.get('access_medium')!='surface_water' and
                  t.get('evacuation_state','waiting')=='waiting' and t['id'] not in reserved and
                  t.get('observed_at',now)<=now]
         targets=sorted(targets,key=lambda t:(-t.get('priority',0),math.dist(t['position'],self.base),t['id']))[:max_targets]

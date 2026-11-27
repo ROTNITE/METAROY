@@ -4,6 +4,7 @@
 #include "MRAgent.h"
 #include "MRWorld.h"
 #include "Misc/Guid.h"
+#include "MRExplorationScene.h"
 
 using namespace MRCoreValues;
 
@@ -128,12 +129,14 @@ void FMRCoreRuntime::QueueReport(FReport Packet)
         {TEXT("target_id"),Packet.Target.IsEmpty()?Null():Str(Packet.Target)},{TEXT("deadline"),Num(Packet.Deadline)},
         {TEXT("initial_delivery"),Route?Num(Packet.Due):Null()},{TEXT("kind"),Num(uint8(Packet.Kind))}}),false);
     ++ReportCounts.FindOrAdd(Packet.Agent);
+    TrackExplorationPacket(Packet,true);
     Reports.Add(MoveTemp(Packet));
 }
 
 void FMRCoreRuntime::RemoveReport(int32 Index)
 {
     const FString Agent=Reports[Index].Agent;
+    TrackExplorationPacket(Reports[Index],false);
     if(--ReportCounts.FindChecked(Agent)==0)ReportCounts.Remove(Agent);
     Reports.RemoveAt(Index);
 }
@@ -163,7 +166,7 @@ void FMRCoreRuntime::UpdateFreshnessEvents()
     }
 }
 
-void FMRCoreRuntime::UpdateAgentKnowledge(const FString& Agent,const Object& Report)
+void FMRCoreRuntime::UpdateAgentKnowledge(const FString& Agent,const Object& Report,const TSharedPtr<FMRSceneActorReport>& Visual)
 {
     const auto Previous=KnownAgents.FindChecked(Agent);
     const double Observed=Report->GetObjectField(TEXT("freshness"))->GetObjectField(TEXT("position"))->GetNumberField(TEXT("observed_at"));
@@ -172,6 +175,7 @@ void FMRCoreRuntime::UpdateAgentKnowledge(const FString& Agent,const Object& Rep
     auto Copy=MRCoreJson::Copy(Report);
     for(auto& Group:Copy->GetObjectField(TEXT("freshness"))->Values)Group.Value->AsObject()->SetNumberField(TEXT("received_at"),Time());
     KnownAgents.Add(Agent,Copy);AgentReceived.Add(Agent,Time());
+    if(ExplorationScene)ExplorationScene->ApplyActors(Visual);
     const FString Message=Text(Report,TEXT("message_id"));
     if(!Message.IsEmpty())Record(TEXT("message_delivered"),Obj({{TEXT("message_id"),Str(Message)},
         {TEXT("source_id"),Str(Agent)},{TEXT("observed_at"),Num(Observed)},{TEXT("received_at"),Num(Time())},

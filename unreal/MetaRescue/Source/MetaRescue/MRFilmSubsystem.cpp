@@ -2,6 +2,8 @@
 #include "MRAgent.h"
 #include "MRWorld.h"
 #include "MRCoreRuntime.h"
+#include "MRCoreValues.h"
+#include "MRCoreJson.h"
 #include "Camera/CameraActor.h"
 #include "Camera/CameraComponent.h"
 #include "GameFramework/PlayerController.h"
@@ -140,13 +142,26 @@ void UMRFilmSubsystem::ApplyCamera(const FMRFilmShot& Shot,double U,float DeltaT
     {
         for(TActorIterator<AMRAgent> It(GetWorld());It;++It)if(It->AgentKey()==Shot.Follow){Followed=*It;break;}
         if(!Followed){Fail(TEXT("Follow agent is missing: ")+Shot.Follow);return;}
-        const FVector Actual=Followed->GetActorLocation();
+        bool Knowledge=false;FVector Actual=Followed->GetActorLocation();float KnownYaw=0;
+        for(TActorIterator<AMRWorld> It(GetWorld());It;++It)if(It->CoreRuntime&&It->CoreRuntime->IsKnowledgeView())
+        {
+            Knowledge=true;
+            if(!It->CoreRuntime->DisplayPosition(Shot.Follow,Actual)){Fail(TEXT("No delivered pose for camera follow"));return;}
+            if(auto O=It->CoreRuntime->ObservationForInterface())for(const auto& V:O->GetArrayField(TEXT("agents")))
+            {
+                const auto ReportedAgent=V->AsObject();if(MRCoreValues::Text(ReportedAgent,TEXT("id"))!=Shot.Follow)continue;
+                FVector R;if(MRCoreJson::Point(MRCoreValues::Field(ReportedAgent->GetObjectField(TEXT("physical")),TEXT("rotation_degrees")),R))KnownYaw=R.Z;
+            }
+            break;
+        }
         if(!AnchorReady){Anchor=Actual;AnchorReady=true;}
         else Anchor=FMath::Lerp(Anchor,Actual,1.-FMath::Exp(-DeltaTime*8.));
-        if(Shot.HeadingSpace){const FRotator Heading(0,Followed->GetActorRotation().Yaw,0);Eye=Heading.RotateVector(Eye);Look=Heading.RotateVector(Look);}
+        if(Shot.HeadingSpace){const FRotator Heading(0,Knowledge?KnownYaw:Followed->GetActorRotation().Yaw,0);Eye=Heading.RotateVector(Eye);Look=Heading.RotateVector(Look);}
         Eye+=Anchor;Look+=Anchor;
     }
-    if(Shot.CollisionTest)
+    bool KnowledgeView=false;for(TActorIterator<AMRWorld> It(GetWorld());It;++It)
+        if(It->CoreRuntime&&It->CoreRuntime->IsKnowledgeView()){KnowledgeView=true;break;}
+    if(Shot.CollisionTest&&!KnowledgeView)
     {
         FHitResult Hit;FCollisionQueryParams Params(SCENE_QUERY_STAT(MRFilmCamera),false,FilmCamera);
         if(Followed)Params.AddIgnoredActor(Followed);
@@ -214,6 +229,7 @@ void UMRFilmSubsystem::ScreenshotProcessed()
     {
         Row->SetNumberField(TEXT("found"),It->FoundCount());Row->SetNumberField(TEXT("delivered"),It->SavedCount());
         Row->SetBoolField(TEXT("core_controlled"),It->bCoreControlled);
+        Row->SetStringField(TEXT("view_basis"),It->CoreRuntime&&It->CoreRuntime->IsKnowledgeView()?TEXT("delivered_knowledge"):TEXT("physical_observer"));
         if(It->bCoreControlled&&It->CoreRuntime)Row->SetNumberField(TEXT("core_time_s"),It->CoreRuntime->Time());
         TArray<TSharedPtr<FJsonValue>> Agents;
         for(const auto& Agent:It->Agents)if(Agent)

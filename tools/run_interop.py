@@ -2,7 +2,6 @@
 from __future__ import annotations
 
 import argparse
-from collections import OrderedDict
 from contextlib import contextmanager
 from datetime import datetime, timezone
 import gzip
@@ -22,7 +21,8 @@ from controller.ai import atomic_json, file_lock
 from controller.client import EnvironmentClient, TransportFailure
 from controller.health import require_port_available
 from controller.net65 import PATROL_MODES
-from controller.public_core import PublicCore
+from controller.public_core import CORE_MODES, PublicCore
+from tools.goal_evidence import GoalEvidence
 from environment.main import DEFAULT_OUTPUT, existing_unreal, native_command
 from environment.server import PlanarServer
 from environment.world import CASES
@@ -40,12 +40,13 @@ def percentile(samples, fraction):
 
 
 class Evidence:
-    def __init__(self):
+    def __init__(self, capabilities=None):
+        self.goals=GoalEvidence(capabilities or {})
         self.transfers = {}
         self.step_ms = []
         self.planning_ms = []
         self.first_error = None
-        self.decisions = OrderedDict()
+        self.decisions = {}
         self.last_decision_id = None
         self.completed_targets = set()
 
@@ -54,22 +55,36 @@ class Evidence:
             decision = data['decision']
             identifier = decision.get('decision_id')
             if isinstance(identifier, str):
-                self.decisions[identifier] = decision
+                self.decisions[identifier] = {'commands':decision.get('commands',()),'episode_id':decision.get('episode_id'),
+                    'request_id':decision.get('request_id'),'decision_id':identifier,'time':decision.get('time',0)}
                 self.last_decision_id = identifier
-                if len(self.decisions) > 512:
-                    self.decisions.popitem(last=False)
+                self.goals.record_decision(decision)
             if 'planning_wall_s' in data:
                 self.planning_ms.append(data['planning_wall_s'] * 1000)
         if kind == 'http_exchange' and data.get('path') == '/v1/environment/step':
             self.step_ms.append(data['elapsed_s'] * 1000)
+        if kind=='physical_outcome':
+            self.goals.record_outcome(data.get('episode_id'),data['payload'])
         if kind == 'step_response':
             observation = data.get('observation', {})
+            current=self.decisions.get(self.last_decision_id,{})
+            episode=data.get('episode_id',observation.get('episode_id'))
+            if 'request_id' in data and (not current or
+                    data['request_id']!=current['request_id'] or episode!=current['episode_id'] or
+                    data.get('time',current['time'])<current['time']):
+                return
+            for event in data.get('events',()):
+                p=event.get('parameters',{})
+                if event.get('type')=='target_state_changed' and p.get('evacuation_state')=='evacuated' and len(event.get('targets',()))==1:
+                    self.goals.record_outcome(episode,{**p,'target_id':event['targets'][0],
+                        'agent_id':event.get('source'),'effect':'evacuated','outcome_id':event['id']})
             finished = {(target['id'], target['status']) for target in observation.get('targets', ())
                         if target.get('id') and target.get('status') in ('rescued', 'delivered')}
             new_targets = finished - self.completed_targets
             self.completed_targets.update(finished)
             current = self.decisions.get(self.last_decision_id, {})
             for receipt in data['command_results']:
+                self.goals.record_receipt(episode,receipt)
                 identifier, index = receipt.get('decision_id'), receipt.get('command_index')
                 submitted = self.decisions.get(identifier, {}) if isinstance(identifier, str) else {}
                 commands = submitted.get('commands', ())
@@ -95,7 +110,8 @@ class Evidence:
 
     def summary(self):
         return {'confirmed_command_receipts': list(self.transfers.values()), 'first_protocol_error': self.first_error,
-                'planning_p95_ms': percentile(self.planning_ms, .95), 'step_http_p95_ms': percentile(self.step_ms, .95)}
+                'planning_p95_ms': percentile(self.planning_ms, .95), 'step_http_p95_ms': percentile(self.step_ms, .95),
+                **self.goals.summary()}
 
 
 def public_logs(client, episode, destination, evidence=None):
@@ -116,7 +132,9 @@ def public_logs(client, episode, destination, evidence=None):
                     if record.get('record_type') == 'decision':
                         evidence.record('decision', {'decision': record['payload']})
                     if record.get('record_type') == 'command_result':
-                        evidence.record('step_response', {'command_results': [record['payload']]})
+                        evidence.record('step_response', {'command_results':[record['payload']],'episode_id':episode})
+                    if record.get('record_type')=='physical_outcome':
+                        evidence.record('physical_outcome',{'episode_id':episode,'payload':record['payload']})
             cursor = page.get('next_cursor')
             if cursor is None or not page['records']:
                 break
@@ -162,24 +180,24 @@ def scenario_parameter_error(decision, capabilities):
     return None
 
 
-def run_controller(url, output, seed, mode, mission, timeout):
+def run_controller(url, output, seed, mode, mission, timeout, *, compatibility='declared'):
     output.mkdir(exist_ok=False)
     params = output / 'mission-parameters.json'
     atomic_json(params, mission['parameters'])
     report = {'seed': seed, 'environment': url, 'mission': mission, 'scout_patrol': mode}
-    client = EnvironmentClient(url, timeout_s=10)
-    evidence = Evidence()
+    client = EnvironmentClient(url, timeout_s=10,core_mode=compatibility)
+    evidence = None
     try:
         health = client.health()
         assert_ready(health, 'environment')
         if health.get('status') != 'ready':
             raise ProtocolError('INVALID_REQUEST', 'Environment is not ready')
         caps = client.capabilities()
-        PublicCore(caps)
+        evidence=Evidence(caps)
         atomic_json(output / 'capabilities.json', caps)
         command = [sys.executable, '-B', '-X', 'utf8', '-m', 'controller.main', '--environment', url,
                    '--health-port', '0', '--seed', str(seed), '--scout-patrol', mode, '--ai-mode', 'OFF',
-                   '--public-core', '--mission-id', mission['id'], '--mission-parameters', str(params),
+                   '--public-core','--core-mode',compatibility,'--mission-id',mission['id'], '--mission-parameters', str(params),
                    '--output', str(output / 'controller')]
         with (output / 'controller.log').open('xb') as log:
             result = subprocess.run(command, cwd=ROOT, stdout=log, stderr=subprocess.STDOUT, timeout=timeout)
@@ -200,7 +218,8 @@ def run_controller(url, output, seed, mode, mission, timeout):
             raise RuntimeError(manifest.get('error', 'Controller failed. See controller.log.'))
         if manifest.get('close_error'):
             raise RuntimeError(manifest['close_error'])
-        public_logs(client, manifest['episode_id'], output / 'environment-logs.jsonl')
+        public_logs(client, manifest['episode_id'], output / 'environment-logs.jsonl', evidence)
+        report.update(evidence.summary())
         report['exchange'] = 'passed'
     except (OSError, ValueError, RuntimeError, subprocess.SubprocessError) as error:
         report.update(exchange='failed', error=f'{type(error).__name__}: {error}')
@@ -293,7 +312,6 @@ def native(output, args):
 
 def run_external(args, client, output, mission):
     caps = client.capabilities()
-    PublicCore(caps)
     atomic_json(output / 'capabilities.json', caps)
     reset = caps.get('reset_parameters', {})
     seed = args.seed if args.seed is not None else reset.get('seed', SEEDS[0])
@@ -328,7 +346,7 @@ def run_external(args, client, output, mission):
     stage = 'reset'
     submitted = None
     model_time = None
-    evidence = Evidence()
+    evidence = Evidence(caps)
     with (output / 'exchange.jsonl').open('xb') as journal:
         def record(kind, body):
             journal.write(encode({'kind': kind, 'data': body}) + b'\n')
@@ -367,12 +385,12 @@ def run_external(args, client, output, mission):
                     before = time.perf_counter()
                     result = client.step(answer)
                     evidence.step_ms.append((time.perf_counter() - before) * 1000)
-                    record('step_response', result)
                     stage = 'step_response'
                     if (result['episode_id'] != episode or result['request_id'] != answer['request_id'] or
                             result['time'] < observation['time'] or
                             result['status'] == 'running' and result['time'] <= observation['time']):
                         raise ProtocolError('INVALID_REQUEST', 'Step response does not correlate with the submitted decision')
+                    record('step_response',result)
                     last_feedback = {'decision_id': answer['decision_id'], 'step_completed': True,
                                      'submitted_decision_id': answer['decision_id'], 'command_results': result['command_results']}
                 if result['status'] == 'running':
@@ -381,7 +399,7 @@ def run_external(args, client, output, mission):
                 final = {'episode_id': episode, 'status': result['status'], 'time': result['time'],
                          'metrics': result['observation']['metrics']}
                 stage = 'logs'
-                public_logs(client, episode, output / 'environment-logs.jsonl')
+                public_logs(client, episode, output / 'environment-logs.jsonl', evidence)
             else:
                 stage = 'observation'
                 while time.monotonic() - started < args.timeout:
@@ -482,6 +500,7 @@ def main():
     trial.add_argument('--mission-parameters', type=Path)
     trial.add_argument('--input-package', type=Path, action='append', default=[])
     trial.add_argument('--require-goal', action='store_true')
+    trial.add_argument('--core-mode',choices=CORE_MODES,default='strict')
     sub = parser.add_subparsers(dest='operation', required=True)
     check = sub.add_parser('self-test', parents=[common])
     check.add_argument('--matrix', action='store_true')
@@ -525,22 +544,18 @@ def main():
             mission = {'id': args.mission_id, 'parameters': params}
             if args.operation == 'our-controller':
                 seed = SEEDS[0] if args.seed is None else args.seed
-                report.update(run_controller(args.environment, output / 'run', seed, args.scout_patrol, mission, args.timeout))
+                report.update(run_controller(args.environment,output/'run',seed,args.scout_patrol,mission,args.timeout,
+                                             compatibility=args.core_mode))
             else:
                 scope = planar(port=args.environment_port) if args.engine == 'planar' else native(output, args)
                 with scope as url:
-                    client = EnvironmentClient(url, timeout_s=30)
+                    client = EnvironmentClient(url,timeout_s=30,core_mode=args.core_mode)
                     try:
                         report.update(run_external(args, client, output, mission))
                     finally:
                         client.disconnect()
             if args.require_goal:
-                metrics = report.get('metrics') or {}
-                report['goal_verified'] = bool(report.get('confirmed_command_receipts') and
-                                               (metrics.get('confirmed_evacuations', 0) > 0 or
-                                                metrics.get('actual_delivery_count', 0) > 0 or
-                                                metrics.get('targets_rescued', 0) > 0 or metrics.get('delivery_ratio', 0) > 0 or
-                                                report.get('status') == 'success'))
+                report['goal_verified'] = report.get('goal_status')=='verified'
     except (OSError, ValueError, RuntimeError, subprocess.SubprocessError, http.client.HTTPException) as error:
         report.update(exchange='failed', error=f'{type(error).__name__}: {error}',
                       first_protocol_error={'message': str(error), 'details': getattr(error, 'details', {})})

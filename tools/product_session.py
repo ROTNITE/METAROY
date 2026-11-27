@@ -19,6 +19,7 @@ from controller.baselines import BASELINES
 from controller.net65 import PATROL_MODES
 from controller.operational import FORMAT
 from controller.policy import PAIRS
+from controller.profiles import COUNTERFACTUAL, STANDARD, select_patrol
 from environment.config import Settings
 from environment.layout import generate,public_map
 from environment.main import DEFAULT_OUTPUT,existing_unreal
@@ -31,7 +32,7 @@ REQUEST_FORMAT='metarescue.product-request.v1'
 SESSION_FORMAT='metarescue.product-session.v1'
 CONTROLLER_DEFAULTS={'policy':'nsga2_nsga2','optimizer_seed':2026,'ai_mode':'OFF',
                      'ai_scope':'global_local','contest_coordination':True,'realtime':True,
-                     'scout_patrol':'core',
+                     'scout_patrol':'core','controller_profile':STANDARD,
                      'scout_population':40,'scout_generations':32,'rescue_population':26,'rescue_generations':17}
 
 
@@ -47,6 +48,7 @@ def parse_request(value):
     for key in ('contest_coordination','realtime'):
         if type(options[key]) is not bool:raise ValueError(key+' must be boolean')
     if options['policy'] not in (*BASELINES,*PAIRS):raise ValueError('Unknown policy')
+    options['scout_patrol']=select_patrol(options['controller_profile'],options['policy'],supplied.get('scout_patrol'))
     if options['scout_patrol'] not in PATROL_MODES:raise ValueError('Unknown patrol mode')
     if options['ai_mode'] not in ('OFF','MOCK','LIVE'):raise ValueError('Unknown interactive AI mode')
     if options['ai_scope'] not in ('global','global_local'):raise ValueError('Unknown AI scope')
@@ -58,6 +60,16 @@ def parse_request(value):
     if options['ai_mode']=='LIVE':options['realtime']=True
     return {'format':REQUEST_FORMAT,'settings':settings.json(),'controller':options,
             **({'fixture':value['fixture']} if 'fixture' in value else {})}
+
+
+def default_product_request():
+    return parse_request({
+        'format': REQUEST_FORMAT,
+        'settings': {'map_size': 25, 'seed': 2026, 'city_revision': '2.3', 'boats': 2,
+                     'preset': 'urban', 'competition': True, 'resource_profile': 'contest',
+                     'scouts': 2, 'rescuers': 2, 'people': 6},
+        'controller': {'controller_profile': COUNTERFACTUAL},
+    })
 
 
 def session_file(path):
@@ -134,7 +146,7 @@ def attach(session,request):
     options=config['controller']
     args=argparse.Namespace(layout=layout,config=None,name=prepared['run_name'],seed=None,
         optimizer_seed=options['optimizer_seed'],policy=options['policy'],ai_mode=options['ai_mode'],ai_scope=options['ai_scope'],
-        scout_patrol=options['scout_patrol'],
+        scout_patrol=options['scout_patrol'],controller_profile=options['controller_profile'],
         contest_coordination=options['contest_coordination'],ai_replay=None,ai_tariff=None,
         port=session['port'],health_port=session['health_port'],visible=True,headless=False,
         realtime=options['realtime'],build=False,ready_timeout=120,wall_timeout=0,attach_native_pid=pid,

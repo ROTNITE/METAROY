@@ -86,7 +86,9 @@ void FMRMissionOverlay::Draw(UMRMissionSession* Session,UCanvas* Canvas)
     }
     const auto Map=O->GetObjectField(TEXT("metaevolution"))->GetObjectField(TEXT("announced_map"));
     const auto Bounds=Map->GetObjectField(TEXT("bounds"));const FVector Lo=ReadPoint(Field(Bounds,TEXT("min"))),Hi=ReadPoint(Field(Bounds,TEXT("max")));
-    KnowledgeFloor->SetVisibility(!Session->ObserverView);
+    const bool RememberedScene=World->CoreRuntime->HasExplorationScene();
+    Ribbons->SetRenderCustomDepth(RememberedScene&&!Session->ObserverView);Ribbons->SetCustomDepthStencilValue(1);
+    KnowledgeFloor->SetVisibility(!Session->ObserverView&&!RememberedScene);
     if(!Session->ObserverView)
     {KnowledgeFloor->SetWorldLocation(FVector((Lo.X+Hi.X)*.5,(Lo.Y+Hi.Y)*.5,-3));KnowledgeFloor->SetWorldScale3D(FVector((Hi.X-Lo.X)/100.,(Hi.Y-Lo.Y)/100.,1));}
 
@@ -233,13 +235,13 @@ void FMRMissionOverlay::Draw(UMRMissionSession* Session,UCanvas* Canvas)
         Rectangle(FVector(Lo.X,Lo.Y,8),FVector(Hi.X,Hi.Y,8),FLinearColor(.4f,.5f,.4f));
         // Select visible declared volumes by distance to the viewport centre.
         TArray<TPair<double,Object>> Visible;
-        for(const auto& Value:Map->GetArrayField(TEXT("buildings")))
+        if(!RememberedScene)for(const auto& Value:Map->GetArrayField(TEXT("buildings")))
         {const auto B=Value->AsObject()->GetObjectField(TEXT("bounds"));const FVector A=ReadPoint(Field(B,TEXT("min"))),Z=ReadPoint(Field(B,TEXT("max")));FVector2D Screen;
             if(PC->ProjectWorldLocationToScreen((A+Z)*.5,Screen)&&Screen.X>=-100&&Screen.Y>=-100&&Screen.X<=Canvas->ClipX+100&&Screen.Y<=Canvas->ClipY+100)
                 Visible.Add({FVector2D::DistSquared(Screen,FVector2D(Canvas->ClipX*.5,Canvas->ClipY*.5)),B});}
         Visible.Sort([](const auto& A,const auto& B){return A.Key<B.Key;});
         for(const auto& Pair:Visible){if(Lines.Num()>MaximumLines-192)break;Box(ReadPoint(Field(Pair.Value,TEXT("min"))),ReadPoint(Field(Pair.Value,TEXT("max"))),FLinearColor(.38f,.45f,.41f));++BuildingWires;}
-        if(Is(Map,TEXT("road_graph"),EJson::Object))
+        if(!RememberedScene&&Is(Map,TEXT("road_graph"),EJson::Object))
         {
             const auto Roads=Map->GetObjectField(TEXT("road_graph"));TMap<FString,FVector> Nodes;
             for(const auto& Value:Roads->GetArrayField(TEXT("nodes")))Nodes.Add(Text(Value->AsObject(),TEXT("id")),ReadPoint(Field(Value->AsObject(),TEXT("position")))+FVector(0,0,8));
@@ -247,35 +249,59 @@ void FMRMissionOverlay::Draw(UMRMissionSession* Session,UCanvas* Canvas)
             {const auto Edge=Value->AsObject();const auto* A=Nodes.Find(Text(Edge,TEXT("from")));const auto* B=Nodes.Find(Text(Edge,TEXT("to")));if(A&&B)Line(*A,*B,FLinearColor(.58f,.64f,.59f),2.f);if(Lines.Num()>=LineLimit)break;}
         }
         LineLimit=MaximumLines;
+        for(const auto& Value:O->GetArrayField(TEXT("infrastructure")))
+        {
+            const auto Node=Value->AsObject();
+            if(Text(Node,TEXT("status"))!=TEXT("failed"))continue;
+            const FString Id=Text(Node,TEXT("id"));
+            if(const FVector* P=Positions.Find(Id))
+            {
+                const FLinearColor Fault(1,.28f,.12f);
+                Rectangle(*P-FVector(105,105,-15),*P+FVector(105,105,15),Fault,3);
+                Label(TEXT("Отказ · ")+Id,Id,*P+FVector(0,0,360),Fault,6);
+            }
+        }
         for(const auto& Pair:Known)if(Positions.Contains(Pair.Key))
         {
-            const auto P=Positions.FindChecked(Pair.Key);const auto Color=MRDisplayColor(Pair.Key);const double Radius=Text(Pair.Value,TEXT("kind"))==TEXT("aerial")?120:95;
+            const auto P=Positions.FindChecked(Pair.Key);
+            const auto Status=Text(Pair.Value,TEXT("status"));
+            const bool Failed=Status==TEXT("failed"),Stale=Status==TEXT("offline");
+            const auto Color=Failed?FLinearColor(1,.28f,.12f):Stale?FLinearColor(1,.68f,.22f):MRDisplayColor(Pair.Key);
+            const double Radius=Text(Pair.Value,TEXT("kind"))==TEXT("aerial")?120:95;
             Rectangle(P+FVector(-Radius,-Radius,8),P+FVector(Radius,Radius,8),Color,2.5f);Line(P+FVector(0,0,-15),P+FVector(0,0,150),Color,2.5f);
             FString Name=Pair.Key;
+            if(Failed)Name+=TEXT(" · отказ");
+            else if(Stale)Name+=TEXT(" · прежняя поза");
             const FString Role=Session->ShowScenarios?Text(Pair.Value,TEXT("role")):FString();
             if(!Role.IsEmpty())Name+=TEXT(" · ")+Role;
             const auto Physical=Is(Pair.Value,TEXT("physical"),EJson::Object)?Pair.Value->GetObjectField(TEXT("physical")):Object();
             const bool bLoaded=Is(Physical,TEXT("cargo_target_id"),EJson::String);
-            const int32 Priority=Pair.Key==Session->SelectedAgent?6:bLoaded?5:!Role.IsEmpty()?3:1;
+            const int32 Priority=Pair.Key==Session->SelectedAgent?7:Failed||Stale?6:bLoaded?5:!Role.IsEmpty()?3:1;
             Label(Name,Pair.Key,P+FVector(0,0,170),Color,Priority,true);
         }
         for(const auto& Value:O->GetArrayField(TEXT("targets")))
         {const auto Target=Value->AsObject();if(Text(Target,TEXT("evacuation_state"))==TEXT("evacuated")||!Is(Target,TEXT("position"),EJson::Array))continue;
-            const FVector P=ReadPoint(Field(Target,TEXT("position")));Line(P+FVector(-75,0,20),P+FVector(75,0,20),FLinearColor(1,.4f,.2f),3);Line(P+FVector(0,-75,20),P+FVector(0,75,20),FLinearColor(1,.4f,.2f),3);const FString Id=Text(Target,TEXT("id"));Label(Id,Id,P+FVector(0,0,120),FLinearColor(1,.5f,.3f),4);}
+            const FVector P=ReadPoint(Field(Target,TEXT("position")));
+            Line(P+FVector(-75,0,20),P+FVector(75,0,20),FLinearColor(1,.4f,.2f),3);
+            Line(P+FVector(0,-75,20),P+FVector(0,75,20),FLinearColor(1,.4f,.2f),3);
+            const FString Id=Text(Target,TEXT("id"));
+            double Priority=0;
+            const bool Elevated=Target->TryGetNumberField(TEXT("priority"),Priority)&&Priority>=.66;
+            Label(Elevated?Id+TEXT(" · приоритет"):Id,Id,P+FVector(0,0,120),FLinearColor(1,.5f,.3f),Elevated?5:4);}
     }
     else
     {
-        for(AMRAgent* Agent:World->Agents)if(Agent->CanMove()||(Session->CaptureOverview&&MobileKind(Agent->Kind())))
+        for(AMRAgent* Agent:World->Agents)if(MobileKind(Agent->Kind()))
         {
             const FString Id=Agent->AgentKey();
             FString Name=Id;
             const auto Observed=Known.FindRef(Id);
             const FString Role=Session->ShowScenarios&&Observed?Text(Observed,TEXT("role")):FString();
             FLinearColor Color=MRDisplayColor(Id);
+            if(!Agent->IsOperational()){Name+=TEXT(" · отказ");Color=FLinearColor(1,.33f,.22f);}
             if(Session->CaptureOverview)
             {
-                Name=(Agent->bAerial?TEXT("UAV "):TEXT("ROVER "))+Name;
-                if(!Agent->IsOperational()){Name+=TEXT("  OFFLINE");Color=FLinearColor(1,.33f,.22f);}
+                Name=(Agent->bAerial?TEXT("UAV "):Agent->bRescueWatercraft?TEXT("BOAT "):TEXT("ROVER "))+Name;
             }
             if(!Role.IsEmpty())Name+=TEXT(" · ")+Role;
             const int32 Priority=Id==Session->SelectedAgent?6:Agent->bCarrying||!Agent->IsOperational()?5:

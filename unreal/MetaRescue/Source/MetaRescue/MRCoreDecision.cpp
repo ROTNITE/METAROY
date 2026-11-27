@@ -51,6 +51,7 @@ void FMRCoreRuntime::BeginEpisode(const FPending& R)
     ResetServices();
     ResetResources();
     World->ResetCoreEventEffects();
+    ResetExploration();
     for(const auto& Body:InitialBodies)if(auto* Piece=Body.Key.Get())
     {
         Piece->SetSimulatePhysics(Body.Value.Simulating);
@@ -64,10 +65,22 @@ void FMRCoreRuntime::BeginEpisode(const FPending& R)
     for(auto& T:World->Targets)
     {
         T.bDiscovered=false;T.bAssigned=false;T.bRescued=false;T.DiscoveredAt=-1;T.ObservedAt=-1;T.Observer=-1;T.bAvailabilityReported=false;T.ObservationEpoch=0;
-        if(T.Visual){T.Visual->DetachFromActor(FDetachmentTransformRules::KeepWorldTransform);T.Visual->SetActorTransform(InitialTargetPoses.FindChecked(T.Id));T.Position=T.Visual->GetActorLocation();T.Visual->SetActorHiddenInGame(T.AvailableAt>0);}
+        T.ShoreStation.Empty();T.SupportCarrier.Reset();T.FloatDisplacedM3=0;
+        if(T.Visual)
+        {
+            T.Visual->DetachFromActor(FDetachmentTransformRules::KeepWorldTransform);
+            if(T.FloatBody)T.FloatBody->SetSimulatePhysics(false);
+            T.Visual->SetActorTransform(InitialTargetPoses.FindChecked(T.Id),false,nullptr,ETeleportType::TeleportPhysics);
+            T.Position=T.Visual->GetActorLocation();T.Visual->SetActorHiddenInGame(T.AvailableAt>0);
+            T.SetFlotationActive(T.AvailableAt<=0);
+        }
     }
-    ResetContest();AdvanceContest();World->ContactCount=0;UpdateNetwork();
+    ResetContest();
+    World->TickStreetSignals();
+    ResetExplorationScene();
+    AdvanceContest();World->ContactCount=0;UpdateNetwork();
     for(AMRAgent* A:World->Agents){KnownAgents.Add(A->AgentKey(),AgentSnapshot(A,0));AgentReceived.Add(A->AgentKey(),0);}
+    RefreshExplorationView();
     UGameplayStatics::SetGamePaused(World,true);Snapshot(Id);
     Record(TEXT("reset_request"),R.Request);Record(TEXT("observation"),CachedObservation);
     if(!World->CoreEventProfile.IsEmpty())
@@ -123,9 +136,19 @@ FString FMRCoreRuntime::ValidateCommand(const Object& C) const
         {
             if(!Is(P,TEXT("waypoints"),EJson::Array))return TEXT("invalid_route");Points=P->GetArrayField(TEXT("waypoints"));
             if(Points.IsEmpty()||Points.Num()>4096)return TEXT("invalid_route_size");
-            if(const auto Precision=Field(P,TEXT("precise_stop"));Precision&&
-                (Precision->Type!=EJson::Boolean||(Precision->AsBool()&&(!Actor||Actor->Kind()!=TEXT("ground")))))
-                return TEXT("invalid_ground_precision_stop");
+            if(const auto Precision=Field(P,TEXT("precise_stop"));Precision)
+            {
+                if(Precision->Type!=EJson::Boolean||(Precision->AsBool()&&
+                   (!Actor||(Actor->Kind()!=TEXT("ground")&&!Actor->bRescueWatercraft))))
+                    return TEXT("invalid_ground_precision_stop");
+                if(Precision->AsBool()&&Actor->bRescueWatercraft)
+                {
+                    FVector From,To;
+                    if(Points.Num()<2||!MRCoreJson::Point(Points[Points.Num()-2],From)||
+                       !MRCoreJson::Point(Points.Last(),To)||FVector::DistSquared2D(From,To)<=FMath::Square(.5))
+                        return TEXT("watercraft_precision_requires_final_leg");
+                }
+            }
         }
         for(const auto& V:Points)
         {
@@ -155,6 +178,11 @@ FString FMRCoreRuntime::ValidateCommand(const Object& C) const
         if(Action==TEXT("pickup")&&Text(KnownTargets.FindChecked(Id),TEXT("status"))!=TEXT("confirmed"))return TEXT("target_not_confirmed");
     }
     else if(Action==TEXT("handover")){if(Text(P,TEXT("station_id"))!=TEXT("rescue-base"))return TEXT("unknown_station");}
+    else if(Action==TEXT("disembark"))
+    {
+        const auto Station=World->ShoreStation();const auto* Actor=FindAgent(Agent);
+        if(!Station||!Actor||!Actor->bRescueWatercraft||Text(P,TEXT("station_id"))!=Text(Station,TEXT("id")))return TEXT("unknown_shore_station");
+    }
     else if(Action==TEXT("charge"))
     {
         const auto* Station=ChargingStations.Find(Text(P,TEXT("station_id")));

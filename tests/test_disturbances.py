@@ -11,6 +11,19 @@ from test_problem_builder import public_state
 
 
 class DisturbanceTests(unittest.TestCase):
+    def test_watercraft_can_fail_or_lose_its_radio(self):
+        world=generate(Settings.parse({'city_revision':'2.3','boats':1}))
+        boat=world['watercraft']['spawns'][0]['id']
+        tape={'format':FORMAT,'events':[
+            {'id':'radio','type':'connectivity_loss','time':2,'until':12,'source':'station',
+             'targets':[boat],'parameters':{'reason':'lost_link'}},
+            {'id':'engine','type':'agent_failure','time':4,'until':None,'source':'station',
+             'targets':[boat],'parameters':{'reason':'failed_jet'}},
+        ]}
+        self.assertEqual(validate_tape(tape,world),tape)
+        tape['events'][1]['targets']=['unregistered-watercraft']
+        with self.assertRaises(ProtocolError):validate_tape(tape,world)
+
     def test_private_restriction_and_effect_timing(self):
         world=generate(Settings.parse({'scouts':1,'rescuers':1,'people':3}))
         tape={'format':FORMAT,'events':[{'id':'road','type':'restricted_zone_appeared','time':2.125,'until':5.5,

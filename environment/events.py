@@ -12,9 +12,12 @@ import math
 import random
 
 from contracts.protocol import ProtocolError
+from contracts.urban_terrain import Terrain
 from environment.config import Settings,EVENT_DEFAULTS
 
 VERSION='metarescue.events-3d.1.0'
+DETAILED_VERSION='metarescue.events-3d.2.0'
+DETAILED_PHYSICS='metarescue.urban-disasters.v1'
 CELL_M=5.
 PERSISTENT={'collapse','fire','flood','mud','road_damage'}
 
@@ -92,11 +95,17 @@ class Placement:
 
 def generate_tape(world):
     settings=Settings.parse(world['settings']);profile=settings.event_profile;horizon=settings.horizon
-    tape={'format':VERSION,'profile':profile,'probability_window_s':settings.event_window_s,'physics_cell_m':CELL_M,
+    detailed=settings.city_revision=='2.3'
+    tape={'format':DETAILED_VERSION if detailed else VERSION,'profile':profile,'probability_window_s':settings.event_window_s,'physics_cell_m':CELL_M,
           'placement_model':'street_sources_and_clipped_five_metre_cells.1','events':[],'late_people':[]}
+    if detailed:
+        weather=random.Random(_seed(DETAILED_VERSION,settings.seed,'wind'))
+        angle=weather.uniform(0,math.tau);speed=weather.uniform(2.,4.)
+        tape.update(physics_profile=DETAILED_PHYSICS,wind_m_s=[round(speed*math.cos(angle),4),round(speed*math.sin(angle),4),0.])
     if 'road_graph' in world:tape['placement_model']='irregular_street_sources_and_clipped_five_metre_cells.2'
     if not any(settings.probabilities.values()):return tape
     placement=Placement(world);used=defaultdict(set)
+    terrain=Terrain(world.get('terrain'))
     windows=range(1,max(2,int(horizon//80))) if profile=='v052' else range(1,math.ceil(horizon/30))
     next_person=max((p['id'] for p in world['people']),default=0)+1
     for window in windows:
@@ -110,6 +119,7 @@ def generate_tape(world):
             if not 0<at<horizon:continue
             eid='event-'+hashlib.sha256(f'{VERSION}:{settings.seed}:{profile}:{requested}:{window}'.encode()).hexdigest()[:20]
             source,source_id=placement.source(kind,rng,used[kind])
+            if source is not None:source[2]+=terrain.height(*source[:2])
             row={'id':eid,'kind':kind,'time':at,'source':source,'source_object_id':source_id,
                  'parent_id':None,'spread':False,'cells':[],'expires_at':None,'visibility_expires_at':None,'rejection':None}
             if source is None:row['rejection']='no_eligible_source';tape['events'].append(row);continue
@@ -119,7 +129,8 @@ def generate_tape(world):
                     else:
                         x,y=rng.choice(placement.ground)
                         point=[x+3.1,y,.06] if rng.random()<.5 else [x,y+3.1,.06]
-                    if placement.person_clear(point):break
+                    if placement.person_clear(point):
+                        point[2]+=terrain.height(*point[:2]);break
                 else:row['rejection']='no_safe_late_person_space';tape['events'].append(row);continue
                 row.update(source=point,target_id=next_person)
                 tape['late_people'].append({'id':next_person,'position':point,'priority':rng.choices((1,2,3),(.6,.3,.1))[0],
@@ -160,18 +171,42 @@ def generate_tape(world):
                     ordered=[list(c) for c in sorted(spread)]
                     growth={**deepcopy(row),'id':eid+'-spread-'+str(step),'parent_id':eid,'spread':True,
                             'time':spread_at,'cells':ordered,'source':[(ordered[0][i]+.5)*CELL_M for i in (0,1)]+[.05]}
+                    growth['source'][2]+=terrain.height(*growth['source'][:2])
                     if kind=='fire':growth['visibility_expires_at']=spread_at+70
                     tape['events'].append(growth)
                     cells.update(spread);frontier=sorted(spread)
     tape['events'].sort(key=lambda r:(r['time'],r['spread'],r['id']))
+    if detailed:
+        buildings={building['id']:building for building in world['buildings']}
+        for row in tape['events']:
+            if row['kind']=='flood' and 'hydrology' in world:
+                basin=world['hydrology']['basin']
+                row.update(source=[basin['min'][0]+7.5,(basin['min'][1]+basin['max'][1])/2,
+                                   world['hydrology']['initial_stage_m']],
+                           source_object_id='retention-basin-west',hydraulic_boundary_id='retention-basin-west',
+                           hydraulic_forcing='connected_flow' if row['spread'] else 'stage_rise',cells=[],rejection=None)
+            if row['rejection']:continue
+            house=buildings.get(row['source_object_id'])
+            row['smoke_emission_height_m']=house['bounds']['max'][2] if row['kind']=='fire' and house else .2+terrain.height(*row['source'][:2])
+            if row['kind']=='flood' and 'hydrology' in world:row['smoke_emission_height_m']=.2
+            if row['kind']=='fire':
+                row['expires_at']=row['time']+180.
+                row['visibility_expires_at']=row['expires_at']+45.
     validate_tape(tape,world)
     return tape
 
 
 def validate_tape(tape,world):
     def invalid(message):raise ProtocolError('INVALID_REQUEST','Private event tape: '+message)
-    if not isinstance(tape,dict) or tape.get('format')!=VERSION:invalid('unsupported version')
     settings=Settings.parse(world['settings'])
+    detailed=settings.city_revision=='2.3'
+    terrain=Terrain(world.get('terrain') if detailed else None)
+    if not isinstance(tape,dict) or tape.get('format')!=(DETAILED_VERSION if detailed else VERSION):invalid('unsupported version')
+    if detailed:
+        wind=tape.get('wind_m_s')
+        if (tape.get('physics_profile')!=DETAILED_PHYSICS or not isinstance(wind,list) or len(wind)!=3 or
+                any(type(v) not in (int,float) or not math.isfinite(v) for v in wind) or
+                wind[2]!=0 or math.hypot(*wind[:2])>15):invalid('invalid detailed physics or wind')
     if tape.get('profile')!=settings.event_profile or tape.get('probability_window_s')!=settings.event_window_s or tape.get('physics_cell_m')!=CELL_M:
         invalid('profile/window/cell mismatch')
     rows=tape.get('events');people=tape.get('late_people')
@@ -198,22 +233,36 @@ def validate_tape(tape,world):
         if rejection is not None:
             if not isinstance(rejection,str) or not rejection:invalid('invalid rejection')
             continue
+        if detailed:
+            height=row.get('smoke_emission_height_m')
+            if type(height) not in (int,float) or not math.isfinite(height) or not 0<=height<=80:invalid('invalid smoke emission height')
         source=row.get('source')
         if not isinstance(source,list) or len(source)!=3 or any(type(v) not in (int,float) or not math.isfinite(v) for v in source):invalid('invalid source')
-        if not 0<=source[0]<=placement.size or not 0<=source[1]<=placement.size or placement.protected(*source[:2]):invalid('unsafe source')
+        hydraulic=detailed and kind=='flood' and 'hydrology' in world
+        if hydraulic:
+            basin=world['hydrology']['basin']
+            expected=[basin['min'][0]+7.5,(basin['min'][1]+basin['max'][1])/2,world['hydrology']['initial_stage_m']]
+            if source!=expected or row.get('source_object_id')!='retention-basin-west' or \
+                    row.get('hydraulic_boundary_id')!='retention-basin-west' or \
+                    row.get('hydraulic_forcing')!=('connected_flow' if row['spread'] else 'stage_rise'):
+                invalid('invalid hydraulic forcing boundary')
+        elif not 0<=source[0]<=placement.size or not 0<=source[1]<=placement.size or placement.protected(*source[:2]):invalid('unsafe source')
         cells=row.get('cells')
         if not isinstance(cells,list) or len(cells)>256:invalid('invalid cells')
         for cell in cells:
             if not isinstance(cell,list) or len(cell)!=2 or any(type(v) is not int for v in cell) or not placement.cell_eligible(cell,kind):invalid('unsafe cell')
         if len({tuple(c) for c in cells})!=len(cells):invalid('duplicate cells')
+        if hydraulic and cells:invalid('hydraulic water cannot be teleported into event cells')
         if kind=='new_target':
             target_id=row.get('target_id')
             if type(target_id) is not int:invalid('invalid target reference')
             person=targets.get(target_id)
             if person is not None and type(person.get('available_at')) not in (int,float):invalid('invalid availability time')
             if person is None or person.get('position')!=source or person.get('available_at')!=at or not placement.person_clear(source) or person.get('appearance_event_id')!=eid:invalid('invalid late target')
+            above_ground = source[2] - terrain.height(*source[:2])
+            if not -.25 - 1.e-8 <= above_ground <= .6 + 1.e-8:invalid('invalid late target height above ground')
             placement.add_person(source);appeared.add(person['id'])
-        elif not cells:invalid('empty active surface')
+        elif not cells and not hydraulic:invalid('empty active surface')
         for key in ('expires_at','visibility_expires_at'):
             value=row.get(key)
             if value is not None and (type(value) not in (int,float) or not math.isfinite(value) or value<=at):invalid('invalid expiry')

@@ -28,7 +28,7 @@ class TransportFailure(RuntimeError):
 
 
 class EnvironmentClient:
-    def __init__(self,url='http://127.0.0.1:8080',*,timeout_s=30,audit=None):
+    def __init__(self,url='http://127.0.0.1:8080',*,timeout_s=30,audit=None,core_mode='declared',compatibility_audit=None):
         target=urlsplit(url)
         if target.scheme not in ('http','https') or not target.hostname or target.username or target.password:
             raise ValueError('Environment URL must be HTTP(S) without embedded credentials')
@@ -36,6 +36,7 @@ class EnvironmentClient:
             raise ValueError('Supply the environment origin, without an endpoint path')
         self.target=target;self.timeout_s=timeout_s;self.audit=audit
         self.connection=None
+        self.core_mode,self.compatibility_audit=core_mode,compatibility_audit
         self.extensions=set()
         self.public=None
 
@@ -121,7 +122,7 @@ class EnvironmentClient:
         result=self._get('capabilities')
         declared=result.get('extensions')
         self.extensions={name for name in declared if isinstance(name,str)} if isinstance(declared,list) else set()
-        self.public=PublicCore(result)
+        self.public=PublicCore(result,mode=self.core_mode,audit=self.compatibility_audit)
         return result
 
     def observation(self,request_id=None):

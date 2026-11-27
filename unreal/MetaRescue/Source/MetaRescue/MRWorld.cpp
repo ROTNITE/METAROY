@@ -255,21 +255,23 @@ void AMRWorld::SpawnTargets()
         for(const auto& P:J->GetArrayField(TEXT("path")))
         {const auto& XY=P->AsArray();T.Path.Add(FVector(XY[0]->AsNumber()*1000,XY[1]->AsNumber()*1000,48));}
         AActor* Visual=GetWorld()->SpawnActor<AActor>(T.Position,FRotator::ZeroRotator);
-        USceneComponent* Root=NewObject<USceneComponent>(Visual);Visual->SetRootComponent(Root);Visual->AddInstanceComponent(Root);Root->RegisterComponent();Visual->SetActorLocation(T.Position);
+        USceneComponent* Root=MakeCasualtyRoot(Visual,T);Visual->SetActorLocation(T.Position);
         if(bRescueQuarter)
         {
             TArray<FMRAssemblyPart> Parts;
             constexpr double StretcherPadHeightCm=20.4354;
-            auto* Stretcher=MRBuildAssembly(Visual,Root,TEXT("StretcherV2"),FVector::ZeroVector,
+            auto* Stretcher=MRBuildAssembly(Visual,Root,TEXT("StretcherV2"),FVector(0,0,-T.VisualAnchorOffsetCm),
                 FRotator::ZeroRotator,FVector::OneVector,false,true,Parts);
             if(!Stretcher)
-                MRBuildAssembly(Visual,Root,TEXT("Stretcher"),FVector::ZeroVector,FRotator::ZeroRotator,FVector::OneVector,false,true,Parts);
-            MRBuildAssembly(Visual,Root,TEXT("Casualty"),FVector(0,0,Stretcher?StretcherPadHeightCm:31.),
+                MRBuildAssembly(Visual,Root,TEXT("Stretcher"),FVector(0,0,-T.VisualAnchorOffsetCm),FRotator::ZeroRotator,FVector::OneVector,false,true,Parts);
+            MRBuildAssembly(Visual,Root,TEXT("Casualty"),FVector(0,0,(Stretcher?StretcherPadHeightCm:31.)-T.VisualAnchorOffsetCm),
                 FRotator::ZeroRotator,FVector::OneVector,false,true,Parts);
             if(J->HasTypedField<EJson::Number>(TEXT("available_at")))T.AvailableAt=J->GetNumberField(TEXT("available_at"));
             if(J->HasTypedField<EJson::Number>(TEXT("priority")))T.Priority=J->GetNumberField(TEXT("priority"));
             Visual->SetActorHiddenInGame(T.AvailableAt>0);
-            T.Visual=Visual;Targets.Add(T);continue;
+            T.Visual=Visual;
+            if(T.AvailableAt>0)T.SetFlotationActive(false);
+            Targets.Add(T);continue;
         }
         auto BodyPart=[Visual,Root](FVector P,FVector S,const FString& Mesh)
         {
@@ -317,6 +319,7 @@ void AMRWorld::SpawnAgents()
         if(Aerial&&External)A->State=TEXT("landed");Agents.Add(A);
     }
     if(bCityLayout)SpawnCompetitionUnits();
+    if(bCityLayout)SpawnWatercraft();
 }
 
 void AMRWorld::BeginPlay()
@@ -429,7 +432,11 @@ void AMRWorld::SenseAndDispatch(float Dt)
         const float Time=GetWorld()->GetTimeSeconds();
         if(Time<T.AvailableAt)continue;
         if(T.AvailableAt>0&&!T.bAvailabilityReported)
-        {T.bAvailabilityReported=true;if(T.Visual)T.Visual->SetActorHiddenInGame(false);AppendEvent(TEXT("person_became_observable"),T.Id);}
+        {
+            T.bAvailabilityReported=true;T.SetFlotationActive(true);
+            if(T.Visual)T.Visual->SetActorHiddenInGame(false);
+            AppendEvent(TEXT("person_became_observable"),T.Id);
+        }
         if(bRescueQuarter&&T.ObservedAt>=0)
         {
             for(AMRAgent* A:Agents)if(A->bAerial&&A->AgentId==T.Observer)T.ReportOrigin=A->GetActorLocation();
@@ -722,6 +729,8 @@ void AMRWorld::WriteTelemetry()
 void AMRWorld::Tick(float Dt)
 {
     Super::Tick(Dt);if(!Scenario)return;
+    TickStreetSignals();
+    TickFloatingCasualties(Dt);
     if(bCoreControlled){if(CoreRuntime)CoreRuntime->BeforePhysics(Dt);return;}
     const float Time=GetWorld()->GetTimeSeconds();if(bRescueQuarter){TickDistrict(Dt);TickTrafficProbe();}SenseAndDispatch(Dt);
     if(bCaptureFrames&&Time>=28&&Time<=148)

@@ -24,6 +24,7 @@
 #include "Misc/Parse.h"
 #include "Serialization/JsonSerializer.h"
 #include "ProceduralMeshComponent.h"
+#include "MRExplorationScene.h"
 #include "UnrealClient.h"
 #if PLATFORM_WINDOWS
 #include "Windows/WindowsHWrapper.h"
@@ -36,6 +37,8 @@ FMRCoreRuntime::~FMRCoreRuntime(){Stop();}
 bool FMRCoreRuntime::Start(int32 Port)
 {
     if(Port<1024||Port>65535||Started)return false;
+    if(World->bDisasterCity&&World->CityLayout->HasField(TEXT("hydrology"))&&!World->UrbanWater)
+    {UE_LOG(LogTemp,Error,TEXT("MR_CORE refusing an incomplete hydraulic world"));return false;}
     if(auto* Session=UMRMissionSession::Get(World->GetWorld()))
     {
         if(!Session->CoreReset)Session->CoreReset=MakeShared<FMRCoreResetState>();
@@ -119,6 +122,8 @@ bool FMRCoreRuntime::Start(int32 Port)
         }
     for(AMRAgent* Agent:World->Agents)Agent->AddTickPrerequisiteActor(World);
     PostTickHandle=FWorldDelegates::OnWorldPostActorTick.AddRaw(this,&FMRCoreRuntime::AfterPhysics);
+    ExplorationDisplayTick=FTSTicker::GetCoreTicker().AddTicker(FTickerDelegate::CreateLambda([this](float)
+        {RefreshExplorationView();return Started;}));
     FHttpServerModule::Get().StartAllListeners();
     UE_LOG(LogTemp,Display,TEXT("MR_CORE listening on 127.0.0.1:%d; warming physics, external=1s execution=1/60s pacing=%s"),Port,Realtime?TEXT("realtime"):TEXT("accelerated"));
     return true;
@@ -134,6 +139,8 @@ void FMRCoreRuntime::Stop()
     }
     if(auto* Viewport=ProfileViewport.Get())Viewport->OnEndDraw().Remove(FrameProfileHandle);
     ProfileViewport.Reset();FrameProfileHandle.Reset();
+    if(ExplorationDisplayTick.IsValid()){FTSTicker::GetCoreTicker().RemoveTicker(ExplorationDisplayTick);ExplorationDisplayTick.Reset();}
+    ExplorationScene.Reset();
     if(OwnerExitTickHandle.IsValid()){FTSTicker::GetCoreTicker().RemoveTicker(OwnerExitTickHandle);OwnerExitTickHandle.Reset();}
     if(LayoutTickHandle.IsValid()){FTSTicker::GetCoreTicker().RemoveTicker(LayoutTickHandle);LayoutTickHandle.Reset();}
     if(LayoutWorker.IsValid())
@@ -412,9 +419,14 @@ void FMRCoreRuntime::AfterPhysics(UWorld* InWorld,ELevelTick TickType,float Dt)
     AdvanceServices();
     for(auto& T:World->Targets)
     {
-        if(T.bAssigned&&T.Visual)T.Position=T.Visual->GetActorLocation();
+        if((T.bAssigned||T.FloatBody)&&T.Visual)T.Position=T.Visual->GetActorLocation();
         if(!T.bAvailabilityReported&&Time()+1.e-9>=T.AvailableAt)
-        {T.bAvailabilityReported=true;if(T.Visual)T.Visual->SetActorHiddenInGame(false);Record(TEXT("target_became_observable"),Obj({{TEXT("target_id"),Str(FString::Printf(TEXT("person-%d"),T.Id))}}),false);}
+        {
+            T.bAvailabilityReported=true;
+            if(T.AvailableAt>0)T.SetFlotationActive(true);
+            if(T.Visual)T.Visual->SetActorHiddenInGame(ExplorationScene&&IsKnowledgeView());
+            Record(TEXT("target_became_observable"),Obj({{TEXT("target_id"),Str(FString::Printf(TEXT("person-%d"),T.Id))}}),false);
+        }
     }
     if(Time()+1.e-9>=(TelemetrySamples+1)/10.)UpdateNetwork();
     if(Time()+1.e-9>=(SensorSamples+1)*.5){++SensorSamples;GatherReports();}

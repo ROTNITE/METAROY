@@ -25,7 +25,7 @@ Object DefaultProductConfiguration()
     return Obj({{TEXT("format"),Str(TEXT("metarescue.product-request.v1"))},
         {TEXT("settings"),Json(Obj({{TEXT("map_size"),Num(25)},{TEXT("seed"),Num(2026)},
             {TEXT("preset"),Str(TEXT("urban"))},{TEXT("layout"),Str(TEXT("rescue_quarter"))},
-            {TEXT("city_revision"),Str(TEXT("2.2"))},{TEXT("scouts"),Num(3)},{TEXT("rescuers"),Num(4)},
+            {TEXT("city_revision"),Str(TEXT("2.3"))},{TEXT("scouts"),Num(3)},{TEXT("rescuers"),Num(4)},{TEXT("boats"),Num(2)},
             {TEXT("people"),Num(16)},{TEXT("horizon"),Num(480)},{TEXT("event_profile"),Str(TEXT("v052"))},
             {TEXT("resource_profile"),Str(TEXT("contest"))},{TEXT("competition"),Bool(false)},
             {TEXT("ground_battery_wh"),Num(220)},{TEXT("aerial_battery_wh"),Num(120)},
@@ -35,11 +35,19 @@ Object DefaultProductConfiguration()
             {TEXT("probabilities"),Json(Obj({{TEXT("collapse"),Num(20)},{TEXT("fire"),Num(18)},
                 {TEXT("flood"),Num(12)},{TEXT("mud"),Num(25)},{TEXT("road_damage"),Num(23)},
                 {TEXT("smoke"),Num(28)},{TEXT("appearance"),Num(30)}}))}}))},
-        {TEXT("controller"),Json(Obj({{TEXT("policy"),Str(TEXT("nsga2_nsga2"))},{TEXT("scout_patrol"),Str(TEXT("core"))},{TEXT("optimizer_seed"),Num(2026)},
+        {TEXT("controller"),Json(Obj({{TEXT("policy"),Str(TEXT("nsga2_nsga2"))},{TEXT("scout_patrol"),Str(TEXT("net65"))},
+            {TEXT("controller_profile"),Str(TEXT("counterfactual-value"))},{TEXT("optimizer_seed"),Num(2026)},
             {TEXT("ai_mode"),Str(TEXT("OFF"))},{TEXT("ai_scope"),Str(TEXT("global_local"))},
             {TEXT("contest_coordination"),Bool(true)},{TEXT("realtime"),Bool(true)},
             {TEXT("scout_population"),Num(40)},{TEXT("scout_generations"),Num(32)},
             {TEXT("rescue_population"),Num(26)},{TEXT("rescue_generations"),Num(17)}}))}});
+}
+
+void FillBoatCount(const Object& Configuration)
+{
+    const auto Settings=Configuration->GetObjectField(TEXT("settings"));
+    if(!Settings->HasField(TEXT("boats")))
+        Settings->SetNumberField(TEXT("boats"),Text(Settings,TEXT("city_revision"))==TEXT("2.3")?2:0);
 }
 }
 
@@ -78,6 +86,7 @@ void UMRMissionSession::Init()
     Port=Lease->GetIntegerField(TEXT("port"));HealthPort=Lease->GetIntegerField(TEXT("health_port"));
     if(Is(Lease,TEXT("analytics_port"),EJson::Number))AnalyticsPort=Lease->GetIntegerField(TEXT("analytics_port"));
     if(Is(Lease,TEXT("configuration"),EJson::Object))Configuration=MRCoreJson::Copy(Lease->GetObjectField(TEXT("configuration")));
+    FillBoatCount(Configuration);
     TickHandle=FTSTicker::GetCoreTicker().AddTicker(FTickerDelegate::CreateUObject(this,&UMRMissionSession::TickSession),.1f);
     StartHelper(TEXT("inspect"),Workspace/TEXT("inspect/request.json"));
     LogAction(TEXT("application_opened"));
@@ -203,7 +212,11 @@ void UMRMissionSession::LoadPreset(const FString& Id)
 {
     if(Busy()||!SetupOpen)return;
     for(const auto& Value:Presets)if(Text(Value->AsObject(),TEXT("id"))==Id)
-    {Configuration=MRCoreJson::Copy(Value->AsObject()->GetObjectField(TEXT("configuration")));Message=TEXT("Пресет загружен.");LogAction(TEXT("preset_loaded"));break;}
+    {
+        Configuration=MRCoreJson::Copy(Value->AsObject()->GetObjectField(TEXT("configuration")));
+        FillBoatCount(Configuration);
+        Message=TEXT("Пресет загружен.");LogAction(TEXT("preset_loaded"));break;
+    }
 }
 
 Object UMRMissionSession::Observation() const

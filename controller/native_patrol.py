@@ -7,12 +7,34 @@ from controller.navigation import RouteFailure, point
 from controller.net65 import Candidate, MAX_CANDIDATES, choose_sector, horizon_of
 from controller.problem_builder import mobiles, usable_energy
 
+SCAN_S = 2.8
+POWER_WH_S = (130. + 14.) / 3600.
+MOTION_WH_M = .069
+
+
+def flight_estimator(builder, rates, altitude, radius):
+    speed, climb, descent = rates
+
+    @lru_cache(maxsize=512)
+    def estimate(origin, goal):
+        try:
+            route = builder.nav.route(origin, goal, aerial=True, radius_m=radius, half_height_m=.4,
+                                      cruise_altitude_m=altitude, max_expanded=128)
+        except RouteFailure:
+            return None
+        seconds = sum(max(math.dist(a[:2], b[:2]) / speed,
+                          abs(b[2] - a[2]) / (climb if b[2] >= a[2] else descent))
+                      for a, b in zip(route.points, route.points[1:]))
+        return seconds, route.distance_m * MOTION_WH_M + seconds * POWER_WH_S
+
+    return estimate
+
 
 def solve(builder, observation, excluded, scanned_at, eligible):
     began = time.perf_counter()
     now, horizon = observation['time'], horizon_of(observation['mission'])
-    scan_s, side = 2.8, 50.
-    power_wh_s, motion_wh_m = (130. + 14.) / 3600., .069
+    scan_s, side = SCAN_S, 50.
+    power_wh_s, motion_wh_m = POWER_WH_S, MOTION_WH_M
     agents = []
     for agent in mobiles(observation, 'aerial'):
         physical = agent.get('physical', {})
@@ -52,17 +74,7 @@ def solve(builder, observation, excluded, scanned_at, eligible):
         usable = usable_energy(agent)
         radius = agent.get('physical', {}).get('radius_m', 1.65)
 
-        @lru_cache(maxsize=512)
-        def estimate(origin, goal):
-            try:
-                route = builder.nav.route(origin, goal, aerial=True, radius_m=radius, half_height_m=.4,
-                                          cruise_altitude_m=altitude, max_expanded=128)
-            except RouteFailure:
-                return None
-            seconds = sum(max(math.dist(a[:2], b[:2]) / speed,
-                              abs(b[2] - a[2]) / (climb if b[2] >= a[2] else descent))
-                          for a, b in zip(route.points, route.points[1:]))
-            return seconds, route.distance_m * motion_wh_m + seconds * power_wh_s
+        estimate = flight_estimator(builder, (speed, climb, descent), altitude, radius)
 
         def return_energy(goal):
             if usable is None:

@@ -3,6 +3,7 @@ import json
 import unittest
 
 from contracts.protocol import ProtocolError
+from contracts.urban_terrain import Terrain
 from environment.config import Settings,EVENT_DEFAULTS
 from environment.events import generate_tape,validate_tape
 from environment.layout import generate,public_map
@@ -64,6 +65,25 @@ class EventTapeTests(unittest.TestCase):
     def test_short_horizon_never_creates_negative_or_past_end_events(self):
         world=self.world();world['settings']['horizon']=1
         tape=generate_tape(world);self.assertTrue(all(0<r['time']<1 for r in tape['events']))
+
+    def test_late_person_height_is_relative_to_the_city_grade(self):
+        settings = Settings.parse({'city_revision': '2.3', 'seed': 2026, 'preset': 'urban',
+                                   'competition': True, 'resource_profile': 'contest',
+                                   'scouts': 2, 'rescuers': 2, 'boats': 4, 'people': 6})
+        world = generate(settings, include_events=True)
+        tape = world['event_model']
+        person = next(row for row in tape['late_people'] if row['position'][2] > .6)
+        terrain = Terrain(world['terrain'])
+        x, y, z = person['position']
+        self.assertAlmostEqual(z - terrain.height(x, y), .06)
+        self.assertEqual(validate_tape(tape, world), tape)
+
+        event = next(row for row in tape['events'] if row['id'] == person['appearance_event_id'])
+        for offset in (-.5, 1.):
+            point = [x, y, terrain.height(x, y) + offset]
+            person['position'] = event['source'] = point
+            with self.subTest(offset=offset), self.assertRaisesRegex(ProtocolError, 'late target height'):
+                validate_tape(tape, world)
 
     def test_malformed_rows_and_orphan_targets_fail_as_protocol_errors(self):
         world=self.world();tape=generate_tape(world)

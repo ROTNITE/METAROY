@@ -127,6 +127,7 @@ bool AMRAgent::AcceptRoute(const FString& Id,const TArray<FVector>& Points,bool 
     if(const auto* Prior=AcceptedCommands.Find(Id))return *Prior==Signature;
     if(Mission&&Mission->bCoreControlled&&(!IsOperational()||IsCharging()||State==TEXT("loading")||State==TEXT("unloading")))return false;
     AcceptedCommands.Add(Id,Signature);
+    if(bRescueWatercraft)ReleaseWatercraftMooring();
     CommandId=Id;bExternalHold=false;SetWaypoints(Points);
     bPreciseFinalStop=PreciseStop;
     if(!bAerial&&TargetIndex<0)State=TEXT("external_route");
@@ -139,6 +140,7 @@ bool AMRAgent::Hold(const FString& Id)
     if(IsCharging())EndCharge();
     AcceptedCommands.Add(Id,TEXT("hold"));
     CommandId=Id;bExternalHold=true;IntendedVelocity=FVector::ZeroVector;
+    if(bRescueWatercraft)WatercraftHoldPosition=GetActorLocation();
     if(bAerial)FlightAltitude=GetActorLocation().Z;
     return true;
 }
@@ -191,6 +193,13 @@ FVector AMRAgent::SafeVelocity(const FVector& Requested,float Dt)
     if(!bAerial&&!bExternalHold&&Path.IsValidIndex(PathIndex))
         LookAhead=FiniteGroundLookAhead(LookAhead,FVector::Dist2D(P,Path[PathIndex]),V.Size2D());
     FVector Direction=Motion.GetSafeNormal();
+    if(Kind()==TEXT("ground")&&StopReason.IsEmpty()&&!Direction.IsNearlyZero())
+    {
+        FName Junction;
+        const double Limit=Mission->StreetSpeedLimit(P,Direction,LookAhead,Junction);
+        if(Limit<Desired.Size2D())Desired=Desired.GetClampedToMaxSize2D(Limit);
+        if(Limit==0){StopReason=TEXT("yield_to_signal");StopObstacle=Junction.ToString();}
+    }
     if(StopReason.IsEmpty()&&!Direction.IsNearlyZero())
     {
         if(Mission->RestrictionOnRoute(P,P+Direction*LookAhead,Kind(),SafetyRadius(),bAerial?40:110,SensedBlocker))
@@ -207,8 +216,9 @@ FVector AMRAgent::SafeVelocity(const FVector& Requested,float Dt)
         FCollisionQueryParams Params(SCENE_QUERY_STAT(MRLocalSafety),false,this);
         for(AMRAgent* Other:Mission->Agents)if(Other)Params.AddIgnoredActor(Other);
         TArray<FHitResult> Hits;
-        const FVector Half=bAerial?FVector(115,115,22):FVector(125,70,45);
-        const FVector SweepOrigin=P+(bAerial?FVector::ZeroVector:FVector(0,0,15));
+        const bool TallPayload=GroundPayloadCollision&&bCarrying;
+        const FVector Half=bAerial?FVector(115,115,22):FVector(125,70,TallPayload?65:45);
+        const FVector SweepOrigin=P+(bAerial?FVector::ZeroVector:FVector(0,0,TallPayload?25:15));
         GetWorld()->SweepMultiByChannel(Hits,SweepOrigin,SweepOrigin+Direction*LookAhead,GetActorQuat(),ECC_Visibility,
             FCollisionShape::MakeBox(Half),Params);
         for(const auto& Hit:Hits)

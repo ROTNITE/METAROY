@@ -7,6 +7,18 @@
 #include "PhysicalMaterials/PhysicalMaterial.h"
 #include "Dom/JsonObject.h"
 
+bool AMRAgent::CanSense() const
+{
+    if(!IsSpatial())return false;
+    if(!Mission||!Mission->bDisasterCity||Category!=TEXT("infrastructure"))return true;
+    if(Mission->CityLayout)for(const auto& Entry:Mission->CityLayout->GetArrayField(TEXT("infrastructure")))
+    {
+        const auto Node=Entry->AsObject();
+        if(Node->GetStringField(TEXT("id"))==InfrastructureSite)return Node->GetStringField(TEXT("kind"))==TEXT("sensor_node");
+    }
+    return false;
+}
+
 void AMRAgent::InitializeCompetition(AMRWorld* InWorld,int32 InId,const FString& Mobility,const FString& Site,const FBox& Limits)
 {
     Mission=InWorld;AgentId=InId;Category=Mobility;InfrastructureSite=Site;MediumLimits=Limits;
@@ -73,6 +85,7 @@ void AMRAgent::InitializeCompetition(AMRWorld* InWorld,int32 InId,const FString&
 bool AMRAgent::MediumPointAllowed(const FVector& Position) const
 {
     if(!MediumLimits.IsValid)return false;
+    if(bRescueWatercraft)return MediumLimits.IsInsideOrOn(Position);
     const FVector Half=Body->GetScaledBoxExtent();
     if(Category==TEXT("surface_water")&&FMath::Abs(Position.Z-Dock.Z)>12)return false;
     if(Category==TEXT("underground")&&FMath::Abs(Position.Z-(MediumLimits.Min.Z+Half.Z))>60)return false;

@@ -8,8 +8,12 @@ import hashlib
 from contracts.expressions import Expression, ExpressionError
 from contracts.protocol import OPERATIONS, ProtocolError, validate
 from controller.baselines import FixedWorkflow
+from controller.assignment import minimum_assignment, AssignmentError
 from controller.decisions import decision
+from controller.declared_scenarios import SCENARIO_SEMANTICS, choose_declared
 from controller.navigation import Box, point
+from controller.public_geometry import geometry as parse_geometry, segments
+from controller.public_patrol import PublicPatrolEstimates
 from controller.net65 import Candidate, MAX_CANDIDATES, choose_sector, due, horizon_of, scan_ages
 from controller.public_core import PATROL_ESTIMATES, PublicCore
 from controller.scenarios import COVERAGE, PRIORITY, SAFETY, configuration, risk_of
@@ -29,8 +33,7 @@ _RESOURCE_RULES = {'resource_minimum', 'minimum_energy_reserve', 'resource_reser
 def _box(zone):
     geometry = zone['geometry']
     try:
-        shape = geometry.get('type', geometry.get('kind', geometry.get('shape')))
-        return Box.parse({**geometry, 'kind': 'box' if shape == 'aabb' else shape})
+        return parse_geometry(geometry)
     except (KeyError, ValueError):
         return None
 
@@ -60,9 +63,7 @@ def _path_clear(zones, agent, goal, *, public_media=False):
             if kind == 'ground':
                 support_start = (*start[:2], box.maximum[2])
                 support_goal = (*goal[:2], box.maximum[2])
-            interval = box.interval(support_start, support_goal)
-            if interval is not None:
-                intervals.append(interval)
+            intervals.extend(segments(box,support_start,support_goal))
     covered = 0.
     for lower, upper in sorted(intervals):
         if lower > covered + 1e-9:
@@ -83,7 +84,7 @@ def _path_margin(start, end, position):
 class PortablePolicy:
     """Use the mandatory wire profile when the scene-specific adapter is absent."""
 
-    def __init__(self, capabilities, requested_policy, *, scout_patrol='core', public=None):
+    def __init__(self, capabilities, requested_policy, *, scout_patrol='core', public=None, flow_dispatch=False):
         self.public = public or PublicCore(capabilities)
         self.actions = self.public.actions
         self.scenarios = capabilities.get('supported_scenarios', {})
@@ -91,6 +92,8 @@ class PortablePolicy:
         self.operations = set(capabilities.get('supported_operations', capabilities.get('operations', OPERATIONS))) & set(OPERATIONS)
         self.capabilities = capabilities
         self.scout_patrol = scout_patrol
+        self.flow_dispatch = flow_dispatch
+        self.patrol_estimates = PublicPatrolEstimates(capabilities,self.public)
         self._reset(None)
 
     def _reset(self, episode):
@@ -113,6 +116,7 @@ class PortablePolicy:
         self.repeat_goals = {}
         self.cargo = {}
         self.net65_repeats = 0
+        self.patrol_estimates.reset()
         self.traces = []
 
     def drain_traces(self):
@@ -131,7 +135,7 @@ class PortablePolicy:
         if not isinstance(schema, dict):
             return False
         try:
-            validate(parameters, schema, 'INVALID_COMMAND')
+            validate(self.public.command_parameters(action, parameters), schema, 'INVALID_COMMAND')
         except (ProtocolError, ValueError):
             return False
         return True
@@ -247,6 +251,8 @@ class PortablePolicy:
         old = self.previous['selected_configuration']['scenario_ids'] if self.previous else []
         if self.requested_policy == 'local_reactive' or self.requested_policy == 'fixed_workflow' and old:
             return 'keep', None, None, []
+        if SCENARIO_SEMANTICS in self.public.extensions and self.requested_policy != 'fixed_workflow':
+            return choose_declared(self,observation,agents,old)
         if self.requested_policy == 'fixed_workflow':
             desired = COVERAGE
         evaluated = {identifier: candidate for identifier in dict.fromkeys((desired, COVERAGE))
@@ -380,16 +386,17 @@ class PortablePolicy:
                     yield (box.minimum[0] + fx * (box.maximum[0] - box.minimum[0]),
                            box.minimum[1] + fy * (box.maximum[1] - box.minimum[1]), altitude)
 
+    def _patrol_due(self, now, start, horizon, coverage_complete):
+        return due(now, start, horizon, coverage_complete)
+
     def _repeat_sector(self, observation, zones, agent, points, claimed, scouts):
-        data = self.capabilities.get('patrol_estimates', {}) if PATROL_ESTIMATES in self.public.extensions else {}
-        if not isinstance(data, dict):
+        values,source = self.patrol_estimates.values(agent,points)
+        if values is None:
             return None, 'net65_missing_public_estimates'
-        values = tuple(data.get(key) for key in ('speed_m_s', 'scan_s', 'move_fraction_per_m',
-                                                'scan_fraction', 'reference_distance_m'))
         energy = agent['resources'].get('energy')
         stations = [point(row['position']) for row in observation['infrastructure']
                     if row['kind'] == 'base_station' and row['status'] == 'active']
-        if (not energy or not stations or not self._supports(agent, 'observe', self.public.parameters('observe', self._observe_parameters())) or
+        if (not energy or not stations or not self._supports(agent, 'observe', self._observe_parameters()) or
                 any(type(value) not in (int, float) or not math.isfinite(value) or value <= 0 for value in values)):
             return None, 'net65_missing_public_estimates'
 
@@ -424,7 +431,31 @@ class PortablePolicy:
         goal = choose_sector(candidates[:MAX_CANDIDATES], start=start, now=now, horizon=horizon, cycle=cycle,
                              scan_s=scan_s, scan_energy=scan_energy, energy_scale=side * move_energy,
                              estimate=estimate, available_energy=available, return_energy=return_energy)
+        if goal is not None and source != 'declared_patrol_estimates':
+            self.traces.append({'type':'net65_public_estimate_used','provider':source,'episode_id':self.episode,
+                                'observation_id':observation['request_id'],'agent_id':agent['id'],'goal':list(goal)})
         return goal, 'net65_repeat_patrol' if goal is not None else 'net65_wait'
+
+
+    def _continue_repeat(self, observation, zones, agent, goal, points, issue):
+        if goal not in points or not self._motion_clear(observation,zones,agent,goal):
+            return False
+        values,source=self.patrol_estimates.values(agent,points)
+        if not values or source=='declared_patrol_estimates':
+            return False
+        speed,scan_seconds,per_meter,scan_energy,_=values
+        start=agent['position']
+        distance=math.dist(start,goal)
+        energy=agent['resources'].get('energy')
+        remaining=horizon_of(observation['mission'])-observation['time']
+        if not energy or distance/speed+scan_seconds>=remaining:
+            return False
+        returns=[math.dist(goal,station['position']) for station in observation['infrastructure']
+                 if station['status']=='active' and station['kind']=='base_station'
+                 and _path_clear(zones,{**agent,'position':goal},station['position'])]
+        if not returns or (distance+min(returns))*per_meter+scan_energy>energy['value']-energy['minimum']:
+            return False
+        return issue(agent,'move',{'target':list(goal)},('repeat',goal))
 
     def _observe_parameters(self):
         schema = self.actions.get('observe', {}).get('parameters_schema', {})
@@ -462,7 +493,67 @@ class PortablePolicy:
                     return True
         return False
 
-    def _casualty(self, observation, zones, agent, claimed, issue):
+    def _flow_wave(self, observation, zones, agents, claimed, orders):
+        """One-wave matching using only declared public geometry and actions.
+
+        No guessed speeds, energy consumption, or hidden target positions.
+        Unknown/nonstandard action profiles retain the baseline dispatcher.
+        """
+        if (not self.flow_dispatch or not self.public.identity or self.public.short_actions or
+                self.program or orders or observation['observation_quality']['contradiction_count'] or
+                not {'pickup','handover','move'} <= self.actions.keys()):
+            return {}
+        crew = [a for a in agents if a['id'] not in self.pending and a['id'] not in self.cargo
+                and 'carry' in a['capabilities'] and a['kind']=='ground'
+                and (not a['resources'].get('energy') or a['resources']['energy']['value']>a['resources']['energy']['minimum'])
+                and not any(c['status']=='failed' for c in self._constraint_checks(observation,a))]
+        # A geometry-only cost cannot certify energy feasibility. Retain the
+        # stock dispatcher if any free ground carrier is near its public reserve.
+        # 25% of the declared usable range is an explicit conservative gate,
+        # not a model of ground energy consumption or a safety certificate.
+        for a in crew:
+            energy=a['resources'].get('energy')
+            if energy:
+                span=energy.get('maximum',energy['minimum'])-energy['minimum']
+                if span<=0 or (energy['value']-energy['minimum'])/span<.25:
+                    return {}
+        targets = sorted((t for t in observation['targets'] if t.get('kind')=='person'
+                          and t.get('status')=='confirmed' and t.get('position') is not None
+                          and t.get('evacuation_state','waiting')=='waiting'
+                          and ('casualty',t['id']) not in claimed and ('casualty',t['id']) not in self.completed),
+                         key=lambda t:t['id'])
+        stations = [s for s in observation['infrastructure'] if s['kind']=='base_station' and s['status']=='active']
+        if not (2<=len(crew)<=32 and 1<=len(targets)<=64 and stations):return {}
+        edges={}
+        priorities={o.get('target_id'):o.get('priority',0) for o in observation['mission']['objectives'] if o.get('type')=='rescue'}
+        for i,a in enumerate(crew):
+            for j,t in enumerate(targets):
+                goal=point(t['position']);dist=math.dist(a['position'],goal)
+                action,params=('pickup',{'target_id':t['id']}) if dist<=1 else ('move',{'target':list(goal)})
+                if not self._supports(a,action,params) or self.cooldowns.get((a['id'],action,repr(params)),-1)>observation['time']:continue
+                if dist>1 and not _path_clear(zones,a,goal):continue
+                at={**a,'position':goal}
+                back=[math.dist(goal,s['position']) for s in stations if _path_clear(zones,at,s['position'])]
+                if not back:continue
+                p=t.get('priority',priorities.get(t['id'],0))
+                edges[i,j]=(max(0,round(p*1000)),round((dist+min(back))*1000))
+        if not edges:return {}
+        n=len(crew);cost_bound=n*max(d for p,d in edges.values())+1
+        count_weight=n*max(p for p,d in edges.values())*cost_bound+cost_bound
+        costs=[[(-count_weight-p*cost_bound+d if (i,j) in edges else None)
+                for j in range(len(targets)) for p,d in [edges.get((i,j),(0,0))]]+[0]*n for i in range(n)]
+        try:chosen,_,_,work=minimum_assignment(costs)
+        except AssignmentError:return {}
+        result={a['id']:targets[j]['id'] if j<len(targets) else None for a,j in zip(crew,chosen)}
+        self.traces.append({'kind':'flow_wave','type':'portable_flow_wave', 'episode_id':self.episode,
+                            'time':observation['time'], 'request_id':observation['request_id'],
+                            'matches':result,'relaxations':work,
+                            'candidate_edges':[{'agent_id':crew[i]['id'],'target_id':targets[j]['id'],
+                                                'priority_milli':p,'round_trip_mm':d}
+                                               for (i,j),(p,d) in edges.items()]})
+        return result
+
+    def _casualty(self, observation, zones, agent, claimed, issue, wave=None):
         identifier = agent['id']
         if identifier in self.cargo:
             intent = ('casualty', self.cargo[identifier])
@@ -486,6 +577,8 @@ class PortablePolicy:
                           and row.get('status') == 'confirmed' and row.get('position') is not None
                           and row.get('evacuation_state', 'waiting') == 'waiting'),
                          key=lambda row: (-row.get('priority', 0), math.dist(agent['position'], row['position']), row['id']))
+        if wave and identifier in wave:
+            targets = [t for t in targets if t['id']==wave[identifier]]
         for target in targets:
             intent = ('casualty', target['id'])
             goal = point(target['position'])
@@ -566,6 +659,8 @@ class PortablePolicy:
             self.raw_observation = observation
             self.raw_agents = {row['id']: row for row in observation['agents']}
             observation = self.public.view(observation)
+        elif self.public.semantic_ids:
+            observation = self.public.view(observation)
         if self.stopping:
             core_view = {key: observation[key] for key in ('episode_id', 'time', 'request_id')}
             request = decision(core_view, previous=self.previous)
@@ -601,22 +696,23 @@ class PortablePolicy:
             self._clear_program()
 
         def issue(agent, action, params, intent):
-            params = self.public.parameters(action, params)
             signature = (agent['id'], action, repr(params))
             if self.cooldowns.get(signature, -1.) > now or not self._supports(agent, action, params):
                 return False
+            params = self.public.command_parameters(action, params)
             if self.public.short_actions and action == 'move' and agent['kind'] in ('ground','surface_water'):
                 # Older synchronous peers do not publish the swept paths of
                 # actors within their tick. Serialize same-medium movement.
                 if agent['kind'] in moving_ground:
                     return False
                 moving_ground.add(agent['kind'])
-            commands.append({'agent_id': agent['id'], 'action': action, 'parameters': params})
+            commands.append({'agent_id': agent['id'], 'action': self.public.wire_action(action), 'parameters': params})
             intents.append((intent, signature))
             if intent is not None:
                 claimed.add(intent)
             return True
 
+        wave = self._flow_wave(observation,zones,agents,claimed,orders) if not program_failed else {}
         for agent in agents:
             identifier = agent['id']
             if identifier in self.pending:
@@ -634,7 +730,7 @@ class PortablePolicy:
             if (energy and energy['value'] <= energy['minimum'] or
                     any(c['status'] == 'failed' for c in checks_for_agent)):
                 continue
-            if (self._casualty(observation, zones, agent, claimed, issue) or
+            if (self._casualty(observation, zones, agent, claimed, issue, wave) or
                     self._target_service(observation, zones, agent, claimed, issue)):
                 continue
             for obj, goal, params in tasks:
@@ -677,12 +773,14 @@ class PortablePolicy:
                         break
                 else:
                     if (self.scout_patrol == 'net65' and agent['kind'] == 'aerial' and points and
-                            due(now, self.started, horizon_of(observation['mission']),
+                            self._patrol_due(now, self.started, horizon_of(observation['mission']),
                                 all(goal in self.scanned_at for goal in points))):
                         goal = self.repeat_goals.get(identifier)
                         if goal is not None and math.dist(agent['position'], goal) <= 1.:
                             issue(agent, 'observe', self._observe_parameters(), ('repeat', goal))
                             patrol_reasons.add('net65_confirm_repeat')
+                        elif goal is not None and self._continue_repeat(observation,zones,agent,goal,points,issue):
+                            patrol_reasons.add('net65_committed_repeat')
                         else:
                             self.repeat_goals.pop(identifier, None)
                             goal, reason = self._repeat_sector(observation, zones, agent, points, claimed, scouts)
@@ -714,7 +812,8 @@ class PortablePolicy:
         core_view = {key: observation[key] for key in ('episode_id', 'time', 'request_id')}
         request = decision(core_view, commands=commands, operation=operation, selected=selected, roles=roles, previous=self.previous)
         if program_commands:
-            wire_program = [{**c, 'parameters': self.public.parameters(c['action'], c['parameters'])} for c in program_commands]
+            wire_program = [{**c,'action':self.public.wire_action(c['action']),
+                             'parameters':self.public.command_parameters(c['action'],c['parameters'])} for c in program_commands]
             indices = [i for i, c in enumerate(commands) if c in wire_program]
             if len(indices) != len(program_commands):
                 raise ProgramError('A proposed public program phase changed before dispatch')
@@ -723,6 +822,12 @@ class PortablePolicy:
         request['constraint_checks'] = checks
         request['explanation']['reason_codes'] = ['core_public_profile', 'declared_actions' if commands else 'no_admissible_action']
         request['explanation']['reason_codes'].extend(sorted(patrol_reasons))
+        if wave:
+            request['explanation']['reason_codes'].append('portable_flow_wave')
+            for trace in reversed(self.traces):
+                if trace.get('kind')=='flow_wave' and trace.get('request_id')==observation['request_id']:
+                    trace['decision_id']=request['decision_id']
+                    break
         if self.program:
             request['explanation']['reason_codes'].append('public_program_' + self.program.current)
         if operation == 'safe_stop':
@@ -731,9 +836,11 @@ class PortablePolicy:
             request['explanation']['reason_codes'].append('waiting_for_public_actor')
         request['explanation']['expected_effects'] = [command['action'] for command in commands]
         self.proposed = (request, intents)
+        self.patrol_estimates.begin(request,observation)
         return request
 
     def observe_response(self, response):
+        self.patrol_estimates.finish(response)
         request, intents = self.proposed
         self.previous = request
         self.stopping = self.stopping or request['operation'] == 'safe_stop'

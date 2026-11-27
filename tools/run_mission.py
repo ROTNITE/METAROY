@@ -26,6 +26,7 @@ from controller.baselines import BASELINES
 from controller.client import EnvironmentClient
 from controller.net65 import PATROL_MODES
 from controller.policy import PAIRS
+from controller.profiles import CONTROLLER_PROFILES, COUNTERFACTUAL, STANDARD, select_patrol
 from environment.config import Settings
 from environment.disturbances import validate_tape as validate_disturbances
 from environment.events import validate_tape
@@ -47,13 +48,16 @@ def hashes(layout):
         files.extend(p for p in (ROOT/directory).rglob('*') if p.is_file() and p.suffix in ('.py','.cpp','.h','.cs','.ini'))
     content=ROOT/'unreal/MetaRescue/Content'
     files.extend((content/'RescueAssets/UIV1').glob('*.uasset'))
+    files.extend((ROOT/'controller/models').glob('*.json'))
     files.extend((content/'Scenario').glob('*.json'))
     files.append(content/'Maps/RescueQuarter.umap')
     world=strict_json(layout.read_bytes(),maximum_bytes=64*1024*1024)
     if world.get('competition'):
         files.extend((content/'RescueAssets/Competition').glob('*.uasset'))
-    if world.get('format') in ('rescue-city-2.1','rescue-city-2.2'):
+    if world.get('format') in ('rescue-city-2.1','rescue-city-2.2','rescue-city-2.3'):
         files.extend((content/'RescueAssets/CityV2').rglob('*.uasset'))
+    if world.get('format')=='rescue-city-2.3':
+        files.extend((content/'EffectsV3/Revision5').rglob('*.uasset'))
     return {str(p.resolve()):file_sha256(p) for p in files if p.is_file()}
 
 
@@ -65,7 +69,9 @@ def save_manifest(output,manifest):
 
 def run(args):
     rescue_initializer=getattr(args,'rescue_initializer','heuristic')
-    scout_patrol=getattr(args,'scout_patrol','core')
+    controller_profile=getattr(args,'controller_profile',STANDARD)
+    scout_patrol=select_patrol(controller_profile,args.policy,getattr(args,'scout_patrol',None))
+    if controller_profile==COUNTERFACTUAL:rescue_initializer='assignment'
     frame_profile=getattr(args,'frame_profile',False)
     demo_render=getattr(args,'demo_render',False)
     if scout_patrol not in PATROL_MODES or scout_patrol!='core' and args.policy in BASELINES:
@@ -76,6 +82,8 @@ def run(args):
     attached=getattr(args,'attach_native_pid',None)
     if frame_profile and (attached or not args.visible or not args.realtime):
         raise ValueError('Frame profiling requires a standalone visible realtime mission')
+    if getattr(args,'knowledge_view',False) and (attached or args.headless):
+        raise ValueError('The command view requires a standalone rendered mission')
     running=existing_unreal()
     if attached:
         if len(running)!=1 or int(running[0]['pid'])!=attached:
@@ -92,7 +100,7 @@ def run(args):
               'ai_scope':args.ai_scope if args.ai_mode!='OFF' else None,
               'contest_coordination':args.contest_coordination,
               'rescue_initializer':rescue_initializer,
-              'scout_patrol':scout_patrol,
+              'scout_patrol':scout_patrol,'controller_profile':controller_profile,
               'policy':args.policy,'rendering':'null_rhi' if args.headless else 'visible' if args.visible else 'offscreen',
               'native_pid':None,'controller_pid':None,'started_utc':datetime.now(timezone.utc).isoformat()}
     save_manifest(output,manifest)
@@ -119,13 +127,13 @@ def run(args):
             manifest['source_layout']={'path':str(layout),'sha256':hashlib.sha256(private_bytes).hexdigest()}
             layout=output/'world.private.json';layout.write_bytes(private_bytes)
             (output/'world.public.json').write_text(json.dumps(public_map(world),ensure_ascii=False,indent=2),encoding='utf-8')
-        if world.get('format') in ('rescue-city-2.1','rescue-city-2.2'):
+        if world.get('format') in ('rescue-city-2.1','rescue-city-2.2','rescue-city-2.3'):
             revision=world.get('vegetation_revision',1)
             name=f'city-vegetation-v2-r{revision}.json' if revision>1 else 'city-vegetation-v2.json'
             vegetation=ROOT/'unreal/MetaRescue/Content/Scenario'/name
             if file_sha256(vegetation)!=world['vegetation_manifest_sha256']:
                 raise ValueError('CityV2 vegetation manifest differs from the generated layout')
-            if world['format']=='rescue-city-2.2' and file_sha256(vegetation.with_name('city-props-v1.json'))!=world['city_props_manifest_sha256']:
+            if world['format'] in ('rescue-city-2.2','rescue-city-2.3') and file_sha256(vegetation.with_name('city-props-v1.json'))!=world['city_props_manifest_sha256']:
                 raise ValueError('CityV2 prop manifest differs from the generated layout')
         if args.build:
             with (output/'build.log').open('w',encoding='utf-8') as log:
@@ -140,6 +148,7 @@ def run(args):
             if args.capture_base_at is not None:
                 command.append('-MRCoreCaptureBaseAt='+str(args.capture_base_at))
         if frame_profile:command.append('-MRCoreFrameProfile')
+        if getattr(args,'knowledge_view',False):command.append('-MRKnowledgeView')
         manifest['native_command']=command
         if attached:manifest['attached_native_pid']=attached
         save_manifest(output,manifest)
@@ -179,6 +188,7 @@ def run(args):
             if args.ai_tariff:command+=['--ai-tariff',str(args.ai_tariff.resolve(strict=True))]
             if args.contest_coordination:command.append('--contest-coordination')
             if scout_patrol!='core':command+=['--scout-patrol',scout_patrol]
+            if controller_profile!=STANDARD:command+=['--controller-profile',controller_profile]
             if rescue_initializer!='heuristic':command+=['--rescue-initializer',rescue_initializer]
             if attached:command.append('--attach')
             for key in ('scout_population','scout_generations','rescue_population','rescue_generations'):
@@ -280,7 +290,8 @@ def main():
     parser.add_argument('--rescue-generations',type=int,default=17)
     parser.add_argument('--rescue-initializer',choices=('heuristic','assignment'),default='heuristic')
     parser.add_argument('--policy',choices=[*BASELINES,*PAIRS],default='nsga2_nsga2')
-    parser.add_argument('--scout-patrol',choices=PATROL_MODES,default='core')
+    parser.add_argument('--scout-patrol',choices=PATROL_MODES)
+    parser.add_argument('--controller-profile',choices=CONTROLLER_PROFILES,default=STANDARD)
     parser.add_argument('--ai-mode',choices=['OFF','MOCK','LIVE','REPLAY'],default='OFF')
     parser.add_argument('--ai-scope',choices=['global','global_local'],default='global_local')
     parser.add_argument('--contest-coordination',action='store_true')
@@ -293,11 +304,16 @@ def main():
     parser.add_argument('--capture-base-at',type=float,help='Switch the recording to the base view at this model second')
     parser.add_argument('--realtime',action='store_true');parser.add_argument('--build',action='store_true')
     parser.add_argument('--frame-profile',action='store_true',help='Measure the visible realtime mission after warmup')
+    parser.add_argument('--knowledge-view',action='store_true',help='Render delivered observations over the declared city')
     parser.add_argument('--demo-render',action='store_true',help='Use the lighter RescueQuarter rendering settings')
     parser.add_argument('--ready-timeout',type=float,default=600);parser.add_argument('--wall-timeout',type=float,default=0)
     parser.add_argument('--control-file',type=Path);parser.add_argument('--control-session')
     parser.add_argument('--operator-file',type=Path,help='Episode-bound local human requirements through Core issue_directive')
     args=parser.parse_args()
+    try:
+        args.scout_patrol=select_patrol(args.controller_profile,args.policy,args.scout_patrol)
+    except ValueError as error:
+        parser.error(str(error))
     if args.capture_base_at is not None and (not args.capture_overview or not 0<=args.capture_base_at<=86400):
         parser.error('--capture-base-at requires overview recording and a model second in 0..86400')
     if args.ai_mode!='OFF' and args.policy in BASELINES:parser.error('Control specimens run with AI OFF')
