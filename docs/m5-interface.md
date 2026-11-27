@@ -265,3 +265,5 @@ python -B -X utf8 -m tools.m5_lab --output ./m5-results --environment lab=8145 -
   driver через UI, интеграция с основным интерфейсом, нативная проверка
   Unreal и распакованной Windows-поставки, нагрузочная приёмка и внешний
   турнир. Не считать ADD-13 закрытым только по browser smoke.
+
+Дополнительный результат: [Windows Python regression](https://github.com/ROTNITE/METAROY/actions/runs/46063039531) — 378/378 без пропусков. Это проверка Python-кода, а не подтверждение нативного Unreal, установки готовой поставки или ручной браузерной приёмки на Windows.
