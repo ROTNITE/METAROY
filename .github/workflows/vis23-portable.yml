@@ -3,6 +3,7 @@ on:
   pull_request:
     branches: [main]
     types: [opened, synchronize, reopened]
+    paths-ignore: ['docs/**']
   workflow_dispatch:
 permissions:
   contents: read
@@ -42,6 +43,8 @@ jobs:
           g++ -std=c++17 -O2 -Wall -Wextra -Werror tools/smoke_optics_probe.cpp -o "$RUNNER_TEMP/smoke_probe"
           "$RUNNER_TEMP/smoke_probe"
           python -B tools/smoke_shader_probe.py
+          g++ -std=c++17 -O2 -Wall -Wextra -Werror tools/smoke_optics_benchmark.cpp -o "$RUNNER_TEMP/smoke_benchmark"
+          "$RUNNER_TEMP/smoke_benchmark"
       - name: Install independent Vulkan shader compiler and CPU driver
         if: always()
         run: |
@@ -61,3 +64,25 @@ jobs:
           path: ${{ runner.temp }}/vis23-regression.json
           if-no-files-found: warn
           retention-days: 7
+
+  windows-portable:
+    if: github.event_name == 'workflow_dispatch' || (github.event.pull_request.head.repo.full_name == github.repository && github.head_ref == 'chatgpt/vis02-04-city23-regression')
+    runs-on: windows-latest
+    timeout-minutes: 12
+    env:
+      GIT_LFS_SKIP_SMUDGE: '1'
+      PYTHONDONTWRITEBYTECODE: '1'
+    steps:
+      - name: Checkout candidate
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.sha || github.sha }}
+          lfs: false
+          persist-credentials: false
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Dependencies
+        run: python -m pip install -r requirements.txt
+      - name: Python tests including Windows process handles
+        run: python -B -X utf8 -m unittest discover -s tests -v
