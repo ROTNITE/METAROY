@@ -96,6 +96,9 @@ bool AMRWorld::ReadCityLayout(const FString& File)
         !Settings->TryGetNumberField(TEXT("disaster_revision"),DisasterRevision)||
         (DisasterRevision!=0&&DisasterRevision!=1)||(DisasterRevision==1&&!bDisasterCity)))return false;
     Environment.bRevisedDisasters=DisasterRevision==1;
+    if(Environment.bRevisedDisasters&&FApp::CanEverRender()&&
+       !LoadObject<UMaterialInterface>(nullptr,TEXT("/Game/EffectsV3/Revision6/M_PhysicalSmoke.M_PhysicalSmoke")))
+    {UE_LOG(LogTemp,Error,TEXT("MR_DISASTER smoke revision6 is missing; run the smoke-v2 import before rendering"));return false;}
     if(GridSize<25||GridSize>150)return false;
     if(bDisasterCity&&CityLayout->HasField(TEXT("hydrology"))&&
        (!TerrainCheck.IsEnabled()||!CityLayout->HasTypedField<EJson::Object>(TEXT("hydrology"))||
