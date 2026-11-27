@@ -59,6 +59,7 @@ def source_hashes(layout):
         files.extend((content/'EffectsV3/Revision5').rglob('*.uasset'))
         files.extend((content/'EffectsV3/Revision6').rglob('*.uasset'))
         files.extend((content/'EffectsV3/ExplorationWaterR2').rglob('*.uasset'))
+        files.extend((content/'EffectsV3/WaterR6').rglob('*.uasset'))
         files.append(content/'Materials/M_QuarterWater.uasset')
         files.extend((content/'RescueAssets/WatercraftV1').rglob('*.uasset'))
     def checksum(path):

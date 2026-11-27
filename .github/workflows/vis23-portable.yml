@@ -71,6 +71,9 @@ jobs:
       - name: Compile and execute live and remembered smoke HLSL
         if: always()
         run: python -B tools/run_smoke_spirv.py
+      - name: Compile all WaterR6 shader outputs
+        if: always()
+        run: python -B tools/compile_water_shader.py
       - name: Compare original city fingerprints
         if: always()
         env:

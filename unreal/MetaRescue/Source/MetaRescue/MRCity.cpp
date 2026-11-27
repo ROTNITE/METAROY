@@ -108,6 +108,10 @@ bool AMRWorld::ReadCityLayout(const FString& File)
     if(bDisasterCity&&FApp::CanEverRender()&&CityLayout->HasField(TEXT("hydrology"))&&
        !LoadObject<UMaterialInterface>(nullptr,TEXT("/Game/EffectsV3/Revision5/M_UrbanFlood.M_UrbanFlood")))
     {UE_LOG(LogTemp,Error,TEXT("MR_CITY required urban flood material is missing"));return false;}
+    if(Environment.bRevisedDisasters&&FApp::CanEverRender()&&CityLayout->HasField(TEXT("hydrology"))&&
+       (!LoadObject<UMaterialInterface>(nullptr,TEXT("/Game/EffectsV3/WaterR6/M_UrbanFlood.M_UrbanFlood"))||
+        !LoadObject<UMaterialInterface>(nullptr,TEXT("/Game/EffectsV3/WaterR6/M_RememberedFlood.M_RememberedFlood"))))
+    {UE_LOG(LogTemp,Error,TEXT("MR_CITY WaterR6 missing; run water-v2 import before rendering"));return false;}
     if(bIrregularCity)
     {
         using namespace MRCoreValues;

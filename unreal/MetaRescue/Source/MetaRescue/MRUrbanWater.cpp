@@ -147,7 +147,7 @@ bool FMRUrbanWater::Build()
     {
         FVector P;MRCoreJson::Point(Field(Value->AsObject(),TEXT("position")),P);Hydro.SetDrain(At(P*100),Drain);
     }
-    for(int32 Y=0;Y<Height;Y+=16)for(int32 X=0;X<Width;X+=16)Tiles.Add({X,Y,{}});
+    for(int32 Y=0;Y<Height;Y+=16)for(int32 X=0;X<Width;X+=16)Tiles.Add({X,Y,{},{}});
     LastTime=0;Render();
     UE_LOG(LogTemp,Display,TEXT("MR_HYDROLOGY built %dx%d cell_m=%.1f source_cells=%d volume_m3=%.3f"),Width,Height,CellM,Sources.Num(),Hydro.VolumeM3());
     return Sources.Num()>0;
@@ -268,7 +268,10 @@ void FMRUrbanWater::Render()
             auto* Material=WaterMaterial.Get();
             if(!Material)
             {
-                Material=UMaterialInstanceDynamic::Create(LoadObject<UMaterialInterface>(nullptr,TEXT("/Game/EffectsV3/Revision5/M_UrbanFlood.M_UrbanFlood")),World);
+                const TCHAR* Path=World->Environment.bRevisedDisasters?
+                    TEXT("/Game/EffectsV3/WaterR6/M_UrbanFlood.M_UrbanFlood"):
+                    TEXT("/Game/EffectsV3/Revision5/M_UrbanFlood.M_UrbanFlood");
+                Material=UMaterialInstanceDynamic::Create(LoadObject<UMaterialInterface>(nullptr,Path),World);
                 WaterMaterial=Material;if(Material)Material->SetScalarParameterValue(TEXT("ModelTime"),LastTime);
             }
             Mesh->SetMaterial(0,Material);

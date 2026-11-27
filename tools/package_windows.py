@@ -62,7 +62,8 @@ def verify_scenario_files(directory, *, expected=None):
 REVISED_ASSETS=('EffectsV3/Revision6/M_PhysicalSmoke.uasset',
                 'EffectsV3/Revision6/M_RememberedSmoke.uasset',
                 'EffectsV3/Revision5/M_UrbanFlood.uasset',
-                'EffectsV3/ExplorationWaterR2/M_RememberedFlood.uasset')
+                'EffectsV3/ExplorationWaterR2/M_RememberedFlood.uasset',
+                'EffectsV3/WaterR6/M_UrbanFlood.uasset','EffectsV3/WaterR6/M_RememberedFlood.uasset')
 
 
 def verify_revised_assets(content):
