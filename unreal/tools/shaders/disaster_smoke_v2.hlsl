@@ -59,7 +59,7 @@ if (abs(Q.z-P.z)>1.e-6)
     Cuts[5] = saturate((Shape.x-TopFeather-P.z)/(Q.z-P.z));
 }
 [unroll] for (int I=0; I<5; ++I)
-    [unroll] for (int J=0; J<5-I; ++J)
+    [unroll] for (int J=0; J<5; ++J)
     {
         float L = min(Cuts[J], Cuts[J+1]), H = max(Cuts[J], Cuts[J+1]);
         Cuts[J] = L; Cuts[J+1] = H;
