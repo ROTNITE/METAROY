@@ -207,7 +207,10 @@ void AMRWorld::BuildStreetSignals(const FBox& BaseBox,const TMap<FString,FVector
 
 EMRStreetPhase AMRWorld::StreetPhase(const FMRStreetArm& Signal) const
 {
-    const bool Powered=WaterDepth(Signal.PowerPoint)<15;
+    const bool Powered=WaterDepth(Signal.PowerPoint)<15&&(!Environment.bRevisedDisasters||
+        (!Environment.Unsafe(Signal.PowerPoint,false)&&
+         !Environment.HasEffect(EMRDisturbance::RoadDamage,Signal.PowerPoint)&&
+         !DebrisCells.Contains(FMRDistrictEnvironment::Cell(Signal.PowerPoint))));
     const double At=CoreRuntime?CoreRuntime->Time():GetWorld()->GetTimeSeconds();
     return MRStreetPhase(At,Signal.Offset,Signal.Group,Powered);
 }
