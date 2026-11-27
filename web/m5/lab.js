@@ -149,6 +149,12 @@ byId('repeat').addEventListener('click',()=>{
 });
 async function init(){
   try{const session=await api('/api/session');token=session.token;registry=session.registry;
+    const assessment=session.assessed_m5;
+    if(assessment){
+      byId('assessed-score').textContent=assessment.value===null?
+        'Q: оценено '+assessment.assessed_pairs+' из '+assessment.required_pairs+' внешних пар.':
+        'Расчёт из предоставленных Q: '+assessment.value.toFixed(4)+' ('+assessment.numerator.toFixed(3)+' / '+assessment.denominator+'). Не оценка жюри.';
+    }
     selectOptions('controller');selectOptions('environment');await refresh();refreshTimer=setInterval(refresh,1400);}
   catch(error){byId('form-message').textContent=error.message;}
 }

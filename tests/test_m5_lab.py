@@ -10,7 +10,7 @@ import zipfile
 import json
 import time
 
-from tools.m5_lab import Registry,Lab,Server,build_command,endpoint
+from tools.m5_lab import Registry,Lab,Server,build_command,endpoint,load_assessments,csv_cell
 
 
 class RegistryTests(TestCase):
@@ -146,3 +146,17 @@ class HTTPBoundary(TestCase):
             self.assertEqual(run['state'],'cancelled',run)
             self.assertTrue(all(row['state']=='cancelled' for row in run['rows']))
             self.assertEqual(json.loads((self.lab.root/ident/'series.json').read_text())['state'],'cancelled')
+
+
+class AssessmentBoundary(TestCase):
+    def test_external_q_file_is_not_official(self):
+        with TemporaryDirectory() as temp:
+            path=Path(temp)/'q.json'
+            path.write_text(json.dumps({'controllers':{'a':'A','b':'B'},'environments':{'a':'A','b':'B'},
+                'method_id':'rubric-v1','assessments':[{'controller_id':'a','environment_id':'b',
+                    'q':.8,'method_id':'rubric-v1','evidence':['a/b']},{'controller_id':'b','environment_id':'a',
+                    'q':.4,'method_id':'rubric-v1','evidence':['b/a']}]}))
+            result=load_assessments(path)
+            self.assertAlmostEqual(result['value'],.3)
+            self.assertFalse(result['official'])
+        self.assertEqual(csv_cell('=SUM(1,2)'),"'=SUM(1,2)")

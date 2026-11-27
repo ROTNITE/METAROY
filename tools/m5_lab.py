@@ -32,6 +32,7 @@ from contracts.protocol import strict_json
 from controller.ai import atomic_json,file_lock
 from controller.client import EnvironmentClient
 from tools.run_interop import controller_call,ROOT
+from tools.m5_score import aggregate_m5
 from environment.main import DEFAULT_OUTPUT
 
 WEB=ROOT/'web'/'m5'
@@ -174,7 +175,8 @@ def summarize(report):
     if isinstance(truth,dict):
         result['independent_truth']={k:truth[k] for k in ('profile','target_count','physical_handovers','all_evacuated','closed')
                                      if k in truth and (truth[k] is None or type(truth[k]) in (str,int,bool))}
-    result['evidence_basis']='independent_model_truth' if isinstance(truth,dict) else 'public_only'
+    result['evidence_basis']=('independent_model_truth' if report.get('engine') in ('reference','independent-reference')
+                              else 'project_model_truth') if isinstance(truth,dict) else 'public_only'
     return result
 
 
@@ -233,6 +235,20 @@ def archive_series(root,run,stream):
         archive.writestr('evidence-manifest.json',json.dumps({'format':'metarescue.m5-evidence.v1',
                          'series_id':run['id'],'entries':entries,'official_m5':None},ensure_ascii=False,indent=2))
     stream.seek(0)
+
+
+def load_assessments(path):
+    if path is None:
+        return None
+    if path.stat().st_size>MAX_REQUEST*16:
+        raise ValueError('Assessment file exceeds size limit')
+    document=strict_json(path.read_bytes(),maximum_bytes=MAX_REQUEST*16)
+    if not isinstance(document,dict) or set(document)!={'controllers','environments','assessments','method_id'}:
+        raise ValueError('Invalid external Q assessment document')
+    if not isinstance(document['assessments'],list):
+        raise ValueError('Expected list of pair assessments')
+    return aggregate_m5(document['controllers'],document['environments'],
+                        document['assessments'],method_id=document['method_id'])
 
 
 class Lab:
@@ -373,8 +389,8 @@ class Lab:
 
 class Server(ThreadingHTTPServer):
     daemon_threads=True
-    def __init__(self,address,lab):
-        self.lab=lab;self.token=secrets.token_urlsafe(32)
+    def __init__(self,address,lab,assessment=None):
+        self.lab=lab;self.assessment=assessment;self.token=secrets.token_urlsafe(32)
         super().__init__(address,Handler)
 
 
@@ -407,7 +423,7 @@ class Handler(BaseHTTPRequestHandler):
             self.guard()
             path=urlsplit(self.path).path;lab=self.server.lab
             if path=='/api/session':
-                self.send({'token':self.server.token,'registry':lab.registry.public(),'official_m5':None});return
+                self.send({'token':self.server.token,'registry':lab.registry.public(),'official_m5':None,'assessed_m5':self.server.assessment});return
             if path=='/api/series':
                 self.send({'series':lab.list()});return
             match=re.fullmatch(r'/api/series/([0-9a-f]{32})(?:/trial/(\d{1,3})|/export/(json|csv|zip))?',path)
@@ -498,11 +514,13 @@ def main():
     parser.add_argument('--output',type=Path,default=DEFAULT_OUTPUT/'m5-lab')
     parser.add_argument('--environment',action='append',default=[],metavar='NAME=PORT')
     parser.add_argument('--controller',action='append',default=[],metavar='NAME=PORT')
+    parser.add_argument('--q-assessments',type=Path,help='Operator-provided cross-team Q and evidence; never official jury certification')
     args=parser.parse_args()
+    assessment=load_assessments(args.q_assessments)
     registry=Registry(args.environment,args.controller)
     with file_lock(args.output.resolve()/'laboratory-owner.lock'):
         lab=Lab(args.output,registry)
-        with Server(('127.0.0.1',args.port),lab) as server:
+        with Server(('127.0.0.1',args.port),lab,assessment=assessment) as server:
             print(f'M5 laboratory: http://127.0.0.1:{server.server_port}',flush=True)
             try:
                 server.serve_forever()

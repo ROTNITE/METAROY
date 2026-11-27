@@ -4,7 +4,7 @@ from pathlib import Path
 from tempfile import TemporaryDirectory
 from threading import Thread
 
-from playwright.sync_api import sync_playwright
+from playwright.sync_api import sync_playwright,expect
 from tools.m5_lab import Lab,Registry,Server
 
 
@@ -29,17 +29,17 @@ def main():
                     page.locator('#profile').select_option('K')
                     page.locator('#confirm').check()
                     page.locator('#start').click()
-                    page.wait_for_function("document.querySelector('#series-state').textContent==='Завершена'",timeout=90000)
+                    expect(page.locator('#series-state')).to_have_text('Завершена',timeout=90000)
                     assert page.locator('#exchange-stat').inner_text()=='1/1'
                     assert int(page.locator('#truth-stat').inner_text())==2
                     page.locator('#results button').first.click()
-                    page.wait_for_function("document.querySelector('#diagnostic').textContent.includes('Физический результат: 2 / 2')",timeout=10000)
+                    expect(page.locator('#diagnostic')).to_contain_text('Физический результат: 2 / 2',timeout=10000)
                     assert not errors,errors
                     page.screenshot(path=str(args.output/'m5-desktop.png'),full_page=True)
-                    page.reload();page.wait_for_function("document.querySelector('#exchange-stat').textContent==='1/1'")
+                    page.reload();expect(page.locator('#exchange-stat')).to_have_text('1/1',timeout=10000)
                     page.set_viewport_size({'width':390,'height':844})
                     page.screenshot(path=str(args.output/'m5-mobile.png'),full_page=True)
-                    assert page.evaluate('document.documentElement.scrollWidth <= window.innerWidth')
+                    assert page.locator('body').bounding_box()['width']<=391
                     browser.close()
             finally:
                 lab.shutdown();server.shutdown();thread.join()

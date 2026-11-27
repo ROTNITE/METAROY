@@ -106,7 +106,11 @@ def startup_diagnostic(path):
            "ERR_REQUIRE_ESM","ERR_UNKNOWN_FILE_EXTENSION","ERR_UNSUPPORTED_DIR_IMPORT",
            "npm ERR!","vite:","failed to load config","Permission denied","Read-only file system",
            "Cannot find module","not found","Missing script","Unknown option","EEXIST","ENOTDIR",
-           "Error:","FATAL ERROR")
+           "Error:","FATAL ERROR","EADDRNOTAVAIL","ERR_SYSTEM_ERROR","ERR_INVALID_ARG_TYPE",
+           "ENOSYS","uv_interface_addresses","networkInterfaces","WebSocket server error",
+           "Cannot read properties","is not a function","ERR_PACKAGE_PATH_NOT_EXPORTED",
+           "Failed to resolve","ERR_INVALID_URL","Missing required","not configured",
+           "ECONNREFUSED","EPERM","ENETUNREACH","ERR_UNKNOWN_BUILTIN_MODULE")
     result={"startup_error_codes":[code for code in codes if code in tail]}
     for pattern in (r"Cannot find package ['\"]([a-zA-Z0-9_@./-]{1,100})['\"]",
                     r"No module named ['\"]([a-zA-Z0-9_.-]{1,100})['\"]"):
