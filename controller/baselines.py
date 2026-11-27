@@ -156,6 +156,37 @@ class FixedWorkflow:
             # safety stop remains authoritative if an old record is evicted.
             del self.road_support_blockers[:-256]
 
+    def _changed_rescue_medium(self,observation,agent,job,known):
+        """A new delivered medium may invalidate a reservation, never cargo."""
+        if observation.get('metaevolution',{}).get('disaster_revision')!=1:
+            return False
+        kind=agent.get('kind')
+        target=known.get(job.target,{})
+        medium=target.get('access_medium')
+        if kind not in ('ground','surface_water') or medium not in ('ground','surface_water') or kind==medium:
+            return False
+        if target.get('status')!='confirmed' or target.get('evacuation_state')!='waiting':
+            return False
+        physical=agent.get('physical',{})
+        if (physical.get('carrying') or physical.get('cargo_target_id') or
+            physical.get('state') in ('loading','unloading','charging','charge_wait') or
+            (job.pending and job.action in ('pickup','handover','disembark','charge'))):
+            return False
+        now=observation['time']
+        target_at=target.get('observed_at')
+        agent_at=agent.get('freshness',{}).get('position',{}).get('observed_at')
+        return (type(target_at) in (float,int) and 0<=now-target_at<=6 and
+                type(agent_at) in (float,int) and 0<=now-agent_at<=5)
+
+    def _release_medium_reservation(self,agent,job):
+        # Called only without an outstanding physical command or after the
+        # cancellation ACK. The new medium must make a new ordinary claim.
+        job.target=None
+        job.phase='search_water' if agent['kind']=='surface_water' else 'choose'
+        job.water_intercept=job.water_approach=job.inspection=None
+        job.inspection_route=False
+        self.water_survey_requests.pop(agent['id'],None)
+
     def _planned_route(self,announced,agent,agents,goal,*,precise_stop=False):
         obstacles=self._obstacles(agent,agents)
         obstacles.extend(self.local_obstacles.get(agent['id'],()))
@@ -532,6 +563,28 @@ class FixedWorkflow:
                 evidence=self._reconcile(a,job,known)
                 if evidence is None:continue
                 reconciliations.append(evidence)
+            if observation.get('metaevolution',{}).get('disaster_revision')==1:
+                if job.phase=='medium_recheck' and not job.pending:
+                    self._release_medium_reservation(a,job)
+                if self._changed_rescue_medium(observation,a,job,known):
+                    physical=a.get('physical',{})
+                    active=physical.get('active_command_id')
+                    # Keep the claim while a route is in flight. Only an
+                    # acknowledged hold (or fresh completed motion) allows
+                    # another vehicle to take the target. An in-progress
+                    # pickup/handover is protected by the predicate above.
+                    if job.pending:
+                        if (job.action in ('move','follow_route') and
+                            active==f'{job.pending}:{job.pending_index}' and self.available(a,'hold')):
+                            outgoing.append({'agent_id':a['id'],'action':'hold','parameters':{}})
+                            effects.append((a['id'],'medium_recheck'))
+                        continue
+                    if physical.get('route_finished') is False:
+                        if self.available(a,'hold'):
+                            outgoing.append({'agent_id':a['id'],'action':'hold','parameters':{}})
+                            effects.append((a['id'],'medium_recheck'))
+                        continue
+                    self._release_medium_reservation(a,job)
             if job.pending:
                 physical=a.get('physical',{})
                 reason=physical.get('stop_reason')
@@ -665,6 +718,13 @@ class FixedWorkflow:
                     command={'agent_id':a['id'],'action':'follow_route','parameters':parameters}
                     next_phase='pickup'
                 elif job.phase=='pickup' and self.available(a,'pickup'):
+                    if observation.get('metaevolution',{}).get('disaster_revision')==1 and not ground_target(target):
+                        # Even a stale wet report must not author a new ground
+                        # pickup. Reobserve until the transfer is resolved.
+                        if self.available(a,'inspect') and math.dist(a['position'],target['position'])<=16:
+                            outgoing.append({'agent_id':a['id'],'action':'inspect','parameters':{'target_id':job.target}})
+                            effects.append((a['id'],'pickup'))
+                        continue
                     if math.dist(a['position'][:2], target['position'][:2]) > 3.7:
                         job.phase = 'approach'
                         continue
