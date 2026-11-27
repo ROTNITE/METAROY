@@ -92,10 +92,30 @@ void open_field(int size,int seconds,bool repeat)
     if(repeat){g.Reset();require(g.Time()==0&&g.AddedM3()==0,"clean reset");require(run()==hash,"exact replay");}
     std::cout<<"size="<<size<<" elapsed_wall_s="<<std::chrono::duration<double>(std::chrono::steady_clock::now()-start).count()<<"\n";
 }
+void wet_fringe()
+{
+    FMRHydrology g;TArray<double> bed={0,0,.4,0,0,0};TArray<double> depth={.2,0,0,0,0,0};
+    TBitArray<> solid(false,6);solid[3]=true;
+    require(g.Configure(3,2,5,bed,solid,depth),"fringe configure");
+    const double volume=g.VolumeM3();
+    const double width=g.WetFringeWidthCm(0,1);
+    require(width>35&&width<=120,"adjacent wet fringe");
+    require(g.WetFringeWidthCm(0,3)==0,"no wet fringe in solid");
+    require(g.WetFringeWidthCm(0,4)==0,"no diagonal fringe");
+    require(g.WetFringeWidthCm(-1,1)==0&&g.WetFringeWidthCm(0,6)==0,"fringe bounds");
+    require(g.WetFringeWidthCm(1,0)==0,"fringe direction");
+    require(g.SetCrestX(0,0,.5,true)&&g.WetFringeWidthCm(0,1)==0,"fringe blocked by crest");
+    require(g.SetCrestX(0,0,0,true)&&g.WetFringeWidthCm(0,1)==width,"fringe reopened");
+    require(g.SetBed(1,.5)&&g.WetFringeWidthCm(0,1)==0,"fringe high bank");
+    require(g.SetBed(1,-.5)&&g.WetFringeWidthCm(0,1)==0,"fringe deep dry hole");
+    require(g.VolumeM3()==volume,"fringe has no water mass");
+    g.Reset();require(g.WetFringeWidthCm(0,1)==width,"fringe reset");
+    std::cout<<"wet fringe: dry-neighbor, barrier, footprint, height, direction, reset and mass checks passed\n";
+}
 int main(int argc,char** argv)
 {
     std::cout<<std::setprecision(12);
-    closed_and_barrier();
+    closed_and_barrier();wet_fringe();
     for(int offset=0;offset<28;++offset)for(int t=0;t<2800;++t)
     {
         const auto a=MRStreetPhase(t*.1,offset,0,true),b=MRStreetPhase(t*.1,offset,1,true);

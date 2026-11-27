@@ -5,6 +5,7 @@
 class AMRWorld;
 class UProceduralMeshComponent;
 class UMaterialInstanceDynamic;
+class UMaterialInterface;
 class FJsonObject;
 
 struct FMRWaterSample
@@ -29,7 +30,7 @@ public:
     void TerrainChanged(FBox Bounds);
     TSharedPtr<FJsonObject> PrivateSnapshot() const;
 private:
-    struct FTile {int32 X=0,Y=0;TWeakObjectPtr<UProceduralMeshComponent> Mesh;TArray<int32> Topology;};
+    struct FTile {int32 X=0,Y=0;TWeakObjectPtr<UProceduralMeshComponent> Mesh;TArray<int32> Topology;TWeakObjectPtr<UProceduralMeshComponent> Fringe;};
     struct FFootprint
     {
         FVector2D Center,Half;
@@ -55,6 +56,7 @@ private:
     TArray<FTile> Tiles;
     TArray<double> VertexBeds,InitialVertexBeds;
     TWeakObjectPtr<UMaterialInstanceDynamic> WaterMaterial;
+    TWeakObjectPtr<UMaterialInterface> FringeMaterial;
     TSet<FIntPoint> History;
     double ForcingStage(double At) const;
     FVector Center(int32 X,int32 Y) const;
@@ -63,5 +65,6 @@ private:
     double VertexStageCm(int32 X,int32 Y) const;
     FVector VertexCurrentCm(int32 X,int32 Y) const;
     TOptional<double> RenderedHeightCm(FVector Position) const;
+    void RenderFringe(FTile& Tile,int32 W,int32 H,FVector TileOrigin);
     void Render();
 };

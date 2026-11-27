@@ -15,7 +15,7 @@ from water_shader_source import water_source,OUTPUTS
 def main():
     report=Path(os.environ['MR_WATER_V2_REPORT']).resolve()
     art.FOLDER='/Game/EffectsV3/WaterR6'
-    names=('M_UrbanFlood','M_RememberedFlood')
+    names=('M_UrbanFlood','M_RememberedFlood','M_WetFringe')
     if report.exists() or any(art.ASSETS.does_asset_exist(art.FOLDER+'/'+n) for n in names):
         raise ValueError('Preserve previous water materials; use a fresh worktree and evidence directory')
     art.ASSETS.make_directory(art.FOLDER)
@@ -53,9 +53,16 @@ def main():
         [('World',world,''),('Field',field,''),('Stamp',stamp,''),('Camera',camera,'')],-400,0)
     exposure_independent_emissive(remembered,shade)
     art.save(remembered)
+    fringe=art.material(names[2],translucent=True,luminous=True)
+    field=art.node(fringe,unreal.MaterialExpressionVertexColor,-1200,0)
+    opacity=art.custom(fringe,'return .48*saturate(Field.a);',unreal.CustomMaterialOutputType.CMOT_FLOAT1,
+                       [('Field',field,'')],-400,0)
+    art.property_input(opacity,'',fringe,unreal.MaterialProperty.MP_OPACITY)
+    art.property_input(art.vector(fringe,'WetTint',(0.,0.,0.),260),'RGB',fringe,unreal.MaterialProperty.MP_EMISSIVE_COLOR)
+    art.save(fringe)
     unreal.MRAssetTools.finish_asset_compilation()
     with report.open('x',encoding='utf-8') as stream:
-        json.dump({'format':'metarescue.water-r6.import.v1','materials':[live.get_path_name(),remembered.get_path_name()],
+        json.dump({'format':'metarescue.water-r6.import.v1','materials':[live.get_path_name(),remembered.get_path_name(),fringe.get_path_name()],
                    'shader_sha256':hashlib.sha256(source.encode()).hexdigest(),'world_position_offset':False,
                    'inputs':'authoritative depth/current; model time or UV3 observation time; procedural no external texture'},stream,indent=2)
         stream.write('\n')
