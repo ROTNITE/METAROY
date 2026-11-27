@@ -177,7 +177,10 @@ class HTTPBoundary(TestCase):
                 conn.putrequest('POST','/api/probe',skip_host=True)
                 for key,value in headers:
                     conn.putheader(key,value)
-                conn.endheaders(b'{}')
+                # Prove the server rejects malformed headers without waiting
+                # for a body. Windows can abort the socket when a rejected
+                # request already has unread payload bytes in its buffer.
+                conn.endheaders()
                 response=conn.getresponse();response.read();return response.status
             finally:conn.close()
         base=[('Host',self.host),('Origin','http://'+self.host),
