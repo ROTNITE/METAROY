@@ -12,6 +12,20 @@ from tools import package_windows
 
 
 class WindowsScenarioPackagingTests(unittest.TestCase):
+    def test_cook_log_detects_required_material_fallback_in_both_path_formats(self):
+        expected = [
+            'Failed to compile Material /Game/EffectsV3/WaterR6/M_WetFringe.M_WetFringe',
+            r'[AssetLog] Content\EffectsV3\Revision6\M_PhysicalSmoke.uasset: Failed to compile Material',
+        ]
+        with tempfile.TemporaryDirectory() as temp:
+            log = Path(temp)/'BuildCookRun.log'
+            log.write_text('\n'.join([
+                'Failed to compile Material /Game/RescueAssets/M_Tree',
+                'Missing cached shadermap for /Game/EffectsV3/Revision6/M_PhysicalSmoke',
+                *expected,
+            ]), encoding='utf-8')
+            self.assertEqual(package_windows.required_material_shader_failures(log), expected)
+
     def test_build_rejects_missing_watercraft_profile_before_cook(self):
         with tempfile.TemporaryDirectory() as temp:
             project = Path(temp)/'project'

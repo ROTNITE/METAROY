@@ -52,8 +52,8 @@ def main():
     exposure_independent_emissive(remembered,shade)
     fringe=art.material(names[2],translucent=True,luminous=True)
     field=art.node(fringe,unreal.MaterialExpressionVertexColor,-1200,0)
-    opacity=art.custom(fringe,'return .48*saturate(Field.a);',unreal.CustomMaterialOutputType.CMOT_FLOAT1,
-                       [('Field',field,'')],-400,0)
+    opacity=art.custom(fringe,'return .48*saturate(Alpha);',unreal.CustomMaterialOutputType.CMOT_FLOAT1,
+                       [('Alpha',field,'A')],-400,0)
     art.property_input(opacity,'',fringe,unreal.MaterialProperty.MP_OPACITY)
     art.property_input(art.vector(fringe,'WetTint',(0.,0.,0.),260),'RGB',fringe,unreal.MaterialProperty.MP_EMISSIVE_COLOR)
     for material in (live,remembered,fringe):

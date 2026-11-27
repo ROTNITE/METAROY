@@ -95,6 +95,13 @@ def verify_revised_assets(content):
             raise ValueError('Not a little-endian Unreal package: '+relative)
 
 
+def required_material_shader_failures(log):
+    paths = tuple(name.removesuffix('.uasset') for name in REVISED_ASSETS)
+    return [line for line in log.read_text(encoding='utf-8', errors='replace').splitlines()
+            if 'Failed to compile Material' in line
+            and any(path in line.replace('\\', '/') for path in paths)]
+
+
 def project_inputs(project):
     values = {'MetaRescue.uproject': file_sha256(project/'MetaRescue.uproject')}
     for folder in ('Source', 'Config', 'Content'):
@@ -276,16 +283,20 @@ def build(output, engine, demo, *, configuration='Shipping', fab_usage_notice=No
                 'scenario_sha256': scenario_files, 'configuration': configuration,
                 'grounding': grounding, 'grounding_changes': sorted(grounding_changes)}
     write_json(output/'build-manifest.json', manifest)
-    with (output/'BuildCookRun.log').open('w', encoding='utf-8') as log:
+    cook_log = output/'BuildCookRun.log'
+    with cook_log.open('w', encoding='utf-8') as log:
         status = subprocess.run(command, cwd=project, stdout=log, stderr=subprocess.STDOUT, check=False)
     after = {name: file_sha256(project/name) if (project/name).is_file() else None for name in before}
     changed_inputs = [name for name, checksum in before.items() if after[name] != checksum]
-    manifest.update(state='staging' if status.returncode == 0 and before == after else 'failed',
+    shader_failures = required_material_shader_failures(cook_log)
+    manifest.update(state='staging' if status.returncode == 0 and before == after and not shader_failures else 'failed',
                     exit_code=status.returncode, frozen_inputs_preserved=not changed_inputs,
-                    changed_inputs=changed_inputs)
+                    changed_inputs=changed_inputs, required_material_shader_failures=shader_failures)
     write_json(output/'build-manifest.json', manifest)
+    if shader_failures:
+        raise RuntimeError('A required material failed to compile. See '+str(cook_log))
     if manifest['state'] == 'failed':
-        raise RuntimeError('BuildCookRun or source verification failed. See '+str(output/'BuildCookRun.log'))
+        raise RuntimeError('BuildCookRun or source verification failed. See '+str(cook_log))
     try:
         manifest['python'] = stage_runtime(distribution, demo, scenario_files=scenario_files,
                                            configuration=configuration, fab_usage_notice=fab_usage_notice)
