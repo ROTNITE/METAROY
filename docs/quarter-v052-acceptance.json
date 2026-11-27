@@ -1972,9 +1972,10 @@
       "status": "partial",
       "evidence": [
         "docs/disaster-assets.md",
-        "D:/MetaRescue-output/visual-overhaul-20261115/checks/native-scene-04/verification.json"
+        "D:/MetaRescue-output/visual-overhaul-20261115/checks/native-scene-04/verification.json",
+        "docs/vis02-04-city23-candidate.md"
       ],
-      "scope_note": "Native-scene-04: парные кадры12/45с, 33 реальных проёма выбранного здания; копоть/угли, первоначально отсутствующая крыша не горит. Динамическое разрушение и полная матрица впереди."
+      "scope_note": "Native-scene-04: парные кадры12/45с, 33 реальных проёма выбранного здания; копоть/угли, первоначально отсутствующая крыша не горит. Динамическое разрушение и полная матрица впереди. Кандидат opt-in 2.3/disaster_revision=1: причинный тепловой отказ, полнота канонической ленты, отсутствие дубликатов, Python CI подтверждён; нативное разрушение горящего здания ещё не принято."
     },
     {
       "id": "VIS03",
@@ -1983,9 +1984,10 @@
       "evidence": [
         "D:/MetaRescue-output/automation/20261116T010529035110Z/verification.json",
         "D:/MetaRescue-output/visual-overhaul-20261115/checks/native-scene-04/optics-fixture.json",
-        "docs/disaster-visual-runtime.md"
+        "docs/disaster-visual-runtime.md",
+        "docs/vis02-04-city23-candidate.md"
       ],
-      "scope_note": "Native Automation21/21, оптика/ветер/срок/reset. Исправлена камера внутри объёма; native-scene-04 даёт фиксированные пары до/после, детали ориентира за ядром дыма не читаются. Остальная матрица/масштаб/headless-сверка впереди."
+      "scope_note": "Native Automation21/21, оптика/ветер/срок/reset. Исправлена камера внутри объёма; native-scene-04 даёт фиксированные пары до/после, детали ориентира за ядром дыма не читаются. Остальная матрица/масштаб/headless-сверка впереди. Кандидат R6: одинаковая интеграция live/remembered и C++; внешний CI подтвердил 506 C++ + 1000 арифметических + 2048 сценариев скомпилированного HLSL/Vulkan. Импорт UE, кадры, FPS и нативное сравнение пока отсутствуют."
     },
     {
       "id": "VIS04",
@@ -1995,9 +1997,10 @@
         "D:/MetaRescue-output/automation/20261116T015916578219Z/verification.json",
         "D:/MetaRescue-output/visual-overhaul-20261115/checks/native-collapse-01/verification.json",
         "D:/MetaRescue-output/integration-20261127-01/native-collapse-22/verification.json",
-        "D:/MetaRescue-output/integration-20261127-01/native-collapse-23/verification.json"
+        "D:/MetaRescue-output/integration-20261127-01/native-collapse-23/verification.json",
+        "docs/vis02-04-city23-candidate.md"
       ],
-      "scope_note": "Исправлен отсчёт этажей по основанию дома. Нативный повтор на приподнятом грунте подтвердил появление физических тел и восстановление дома при сбросе. Зафиксировано появление обгоревшей машины по событию пожара. Остальные сочетания, объезд и несколько масштабов остаются открыты."
+      "scope_note": "Исправлен отсчёт этажей по основанию дома. Нативный повтор на приподнятом грунте подтвердил появление физических тел и восстановление дома при сбросе. Зафиксировано появление обгоревшей машины по событию пожара. Остальные сочетания, объезд и несколько масштабов остаются открыты. Кандидат: физические bounds, статический кэш, независимые доставленные измерения/очистка завала, тесты контроллера passed; нативный объезд/комбинации/деревья/масштаб ещё открыты."
     },
     {
       "id": "VIS05",
@@ -2108,9 +2111,10 @@
       "status": "partial",
       "evidence": [
         "tests/test_disaster_profile.py",
-        "D:/MetaRescue-output/visual-overhaul-20261115/python-disaster-checkpoint01.log"
+        "D:/MetaRescue-output/visual-overhaul-20261115/python-disaster-checkpoint01.log",
+        "docs/vis02-04-city23-candidate.md"
       ],
-      "scope_note": "2.3/v2 поддержаны генератором и native; 270 Python-тестов и события в двух native-эпизодах. Полная совместимость и остальные механики нового профиля ещё открыты."
+      "scope_note": "2.3/v2 поддержаны генератором и native; 270 Python-тестов и события в двух native-эпизодах. Полная совместимость и остальные механики нового профиля ещё открыты. Внешний CI: 31 исходный мир с идентичными хэшами и 7 revised passed, включая max fleet. Полная 271+55 матрица запущена; нативные reset/replay, старый RescueDistrict, build/cook ещё открыты."
     },
     {
       "id": "VIS14",
