@@ -305,7 +305,8 @@ void AMRWorld::ResetCoreEventEffects()
     for(int32 I=CoreEventComponents.Num()-1;I>=0;--I)
         if(USceneComponent* Component=CoreEventComponents[I])Component->DestroyComponent();
     CoreEventComponents.Empty();
-    DebrisCells.Empty();DebrisHistory.Empty();StaticDebrisCells.Empty();bStaticDebrisDirty=true;NextDebrisRefresh=0;
+    DebrisCells.Empty();DebrisHistory.Empty();StaticDebrisCells.Empty();
+    DebrisSamplePoints.Empty();StaticDebrisSamplePoints.Empty();bStaticDebrisDirty=true;NextDebrisRefresh=0;
     MudTracks=nullptr;
     MudTrackPositions.Empty();
     NextMudTrackCleanup=0;
@@ -523,11 +524,60 @@ void FMRCoreRuntime::GatherHazardReport(AMRAgent* Agent)
         for(int32 Y=FMath::Max(0,Origin.Y-Radius);Y<FMath::Min(MaxCell,Origin.Y+Radius+1);++Y)
         {
             const FIntPoint Cell(X,Y);
-            if(!Environment.HasHistoryAt(Cell)&&!(World->UrbanWater&&World->UrbanWater->HasHistory(Cell))&&
-               !(Environment.bRevisedDisasters&&World->DebrisHistory.Contains(Cell)))continue;
+            const bool SurfaceHistory=Environment.HasHistoryAt(Cell)||(World->UrbanWater&&World->UrbanWater->HasHistory(Cell));
+            const bool DebrisHistory=Environment.bRevisedDisasters&&World->DebrisHistory.Contains(Cell);
+            if(!SurfaceHistory&&!DebrisHistory)continue;
             FVector Position=FMRDistrictEnvironment::Center(Cell);
             if(World->UrbanWater)Position.Z=World->WaterAtCm(Position).GroundCm;
+            else if(Environment.bRevisedDisasters)Position.Z=World->InitialGroundHeightCm(Position);
             if(FVector::DistSquared2D(Pose,Position)>FMath::Square(Range))continue;
+            if(DebrisHistory)
+            {
+                const FString DebrisId=FString::Printf(TEXT("debris-%d-%d"),X,Y);
+                const bool Occupied=World->DebrisCells.Contains(Cell);
+                const auto* KnownDebris=KnownZones.Find(DebrisId);
+                if((Occupied||KnownDebris)&&(!Occupied||!KnownDebris||Time()-SurfaceObservedAt.FindRef(DebrisId)>=4.))
+                {
+                    bool Seen=false;
+                    FVector Look=Position+FVector(0,0,65);
+                    if(Occupied)
+                    {
+                        if(const auto* Sample=World->DebrisSamplePoints.Find(Cell))
+                        {
+                            FHitResult Hit;
+                            if(FVector::DistSquared(Pose,*Sample)<=FMath::Square(Range)&&
+                               World->GetWorld()->LineTraceSingleByChannel(Hit,Pose,*Sample+(*Sample-Pose).GetSafeNormal()*3.,ECC_Visibility,Query))
+                            {
+                                const auto* Collider=Hit.GetComponent();
+                                Seen=Collider&&(Collider->ComponentHasTag(TEXT("StructuralDebris"))||
+                                    Collider->ComponentHasTag(TEXT("DisasterVehicleWreck")))&&
+                                    FMRDistrictEnvironment::Cell(Hit.ImpactPoint)==Cell;
+                                Look=Hit.ImpactPoint;
+                            }
+                        }
+                    }
+                    else Seen=FVector::DistSquared(Pose,Look)<=FMath::Square(Range)&&
+                        !World->GetWorld()->LineTraceTestByChannel(Pose,Look,ECC_Visibility,Query);
+                    if(Seen)
+                    {
+                        const double Quality=SensorQuality(Pose,Look);
+                        if(Quality>=.15&&SensorAccepts(Agent,X*4096+Y,Quality,3))
+                        {
+                            // This ray observes the obstruction, not water,
+                            // mud or heat hidden beneath it. Keep the two
+                            // measurements and their timestamps independent.
+                            auto Measured=Obj({{TEXT("kinds"),Arr({})},{TEXT("active"),Bool(Occupied)},
+                                {TEXT("ground_blocked"),Bool(Occupied)},{TEXT("surface_multiplier"),Num(1)},
+                                {TEXT("visibility"),Num(Quality)},{TEXT("physical_debris"),Bool(Occupied)},
+                                {TEXT("debris_only"),Bool(true)},
+                                {TEXT("geometry_base_m"),Num(World->InitialGroundHeightCm(Position)/100.)}});
+                            Readings.Add(Json(Obj({{TEXT("id"),Str(DebrisId)},{TEXT("cell"),Arr({Num(X),Num(Y)})},
+                                {TEXT("surface"),Json(Measured)}})));
+                        }
+                    }
+                }
+            }
+            if(!SurfaceHistory)continue;
             const FString ZoneId=FString::Printf(TEXT("surface-%d-%d"),X,Y);
             TArray<Value> Types;
             for(EMRDisturbance Kind:{EMRDisturbance::Collapse,EMRDisturbance::Fire,EMRDisturbance::Flood,
@@ -536,7 +586,7 @@ void FMRCoreRuntime::GatherHazardReport(AMRAgent* Agent)
             const float Visibility=World->VisibilityQuality(Position+FVector(0,0,60));
             const double WaterCm=World->WaterDepth(Position);
             if(World->UrbanWater&&WaterCm>.1)Types.Add(Str(TEXT("flood")));
-            const bool Blocked=World->IsUnsafeGround(Position);
+            const bool Blocked=World->IsUnsafeGround(Position,!Environment.bRevisedDisasters);
             const double Cost=FMath::Max(Environment.Cost(Position,false),WaterCm>4?2.f:1.f);
             const bool Active=!Types.IsEmpty()||Visibility<1||Blocked||Cost>1;
             const auto* Known=KnownZones.Find(ZoneId);
@@ -544,7 +594,6 @@ void FMRCoreRuntime::GatherHazardReport(AMRAgent* Agent)
             const auto Measurement=Obj({{TEXT("kinds"),Arr(Types)},{TEXT("active"),Bool(Active)},
                 {TEXT("ground_blocked"),Bool(Blocked)},{TEXT("surface_multiplier"),Num(Cost)},
                 {TEXT("depth_m"),Num(FMath::FloorToDouble(WaterCm)/100.)},{TEXT("visibility"),Num(Visibility)}});
-            if(Environment.bRevisedDisasters)Measurement->SetBoolField(TEXT("physical_debris"),World->DebrisCells.Contains(Cell));
             if(World->UrbanWater)
             {
                 const auto Water=World->WaterAtCm(Position);
@@ -598,10 +647,17 @@ void FMRCoreRuntime::DeliverHazardReport(const FReport& Packet)
         const double X=Cell[0]->AsNumber()*5,Y=Cell[1]->AsNumber()*5;
         if(Active)
         {
-            const bool Wet=Measured->GetNumberField(TEXT("depth_m"))>0;
+            const bool DebrisOnly=Is(Measured,TEXT("debris_only"),EJson::Boolean)&&Measured->GetBoolField(TEXT("debris_only"));
+            const bool Wet=Is(Measured,TEXT("depth_m"),EJson::Number)&&Measured->GetNumberField(TEXT("depth_m"))>0;
             auto Geometry=Obj({{TEXT("type"),Str(TEXT("box"))},{TEXT("min"),Point(FVector(X,Y,-.15))},
                 {TEXT("max"),Point(FVector(X+5,Y+5,1.2))}});
-            if(Is(Measured,TEXT("ground_height_m"),EJson::Number))
+            if(DebrisOnly)
+            {
+                const double Ground=Measured->GetNumberField(TEXT("geometry_base_m"));
+                Geometry->SetArrayField(TEXT("min"),Point(FVector(X,Y,Ground-.15))->AsArray());
+                Geometry->SetArrayField(TEXT("max"),Point(FVector(X+5,Y+5,Ground+2.2))->AsArray());
+            }
+            else if(Is(Measured,TEXT("ground_height_m"),EJson::Number))
             {
                 const double Ground=Measured->GetNumberField(TEXT("ground_height_m"));
                 const double Stage=Measured->GetNumberField(TEXT("water_stage_m"));
@@ -613,7 +669,7 @@ void FMRCoreRuntime::DeliverHazardReport(const FReport& Packet)
             Allowed.Add(Str(TEXT("aerial")));
             if(Wet&&Measured->GetNumberField(TEXT("depth_m"))>=.55)Allowed.Add(Str(TEXT("surface_water")));
             KnownZones.Add(Id,Obj({{TEXT("id"),Str(Id)},{TEXT("geometry"),Json(Geometry)},
-                {TEXT("type"),Str(Wet?TEXT("water"):TEXT("hazard"))},
+                {TEXT("type"),Str(DebrisOnly?TEXT("obstacle"):Wet?TEXT("water"):TEXT("hazard"))},
                 {TEXT("access"),Json(Obj({{TEXT("allowed_kinds"),Arr(Allowed)}}))},
                 {TEXT("risk"),Num(Blocked?1:1-Measured->GetNumberField(TEXT("visibility")))},
                 {TEXT("cost"),Json(Obj({{TEXT("energy_multiplier"),Field(Measured,TEXT("surface_multiplier"))}}))},
