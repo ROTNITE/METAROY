@@ -92,3 +92,23 @@ class CoreValidationRegression(unittest.TestCase):
                      unrelated_extension=['anything'])
         self.world.step(valid, 'fingerprint', capabilities())
         self.assertEqual(self.world.time, 1)
+
+    def test_bad_peer_parameter_schema_is_rejected_as_normative_error(self):
+        for schema in ({'$ref':'#/$defs/missing'}, {'$ref':'#'},
+                       {'type':'no-such-type'}, {'type':7}, {'pattern':'['},
+                       {'type':'object','properties':[]}):
+            for code in ('INVALID_COMMAND','INVALID_SCENARIO'):
+                with self.subTest(schema=schema,code=code),self.assertRaises(protocol.ProtocolError) as error:
+                    protocol.validate({},schema,code)
+                self.assertEqual(error.exception.code,code)
+        with self.assertRaises(protocol.ProtocolError):
+            protocol.validate({}, {'$ref':'#/missing'})
+
+    def test_checked_schema_cache_does_not_reuse_mutated_descriptor(self):
+        schema={'type':'object','properties':{'x':{'type':'integer'}},'required':['x']}
+        for _ in range(3):
+            self.assertEqual(protocol.validate({'x':1},schema,'INVALID_COMMAND'),{'x':1})
+        schema['properties']['x']['type']='string'
+        with self.assertRaises(protocol.ProtocolError):
+            protocol.validate({'x':1},schema,'INVALID_COMMAND')
+        self.assertEqual(protocol.validate({'x':'yes'},schema,'INVALID_COMMAND'),{'x':'yes'})

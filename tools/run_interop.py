@@ -350,12 +350,16 @@ def controller_call(origin, endpoint, body=None, *, timeout=10):
                            body=encode(body) if body is not None else None,
                            headers={'Content-Type': 'application/json', 'Connection': 'close'})
         reply = connection.getresponse()
+        if reply.status < 200 or 300 <= reply.status < 400:
+            raise ProtocolError('INVALID_REQUEST','Unexpected controller HTTP status; redirects are not followed',{'status':reply.status})
         data = strict_json(reply.read(MAX_RESPONSE_BYTES + 1), maximum_bytes=MAX_RESPONSE_BYTES)
         if not isinstance(data, dict):
             raise ProtocolError('INVALID_REQUEST', 'Controller reply must be an object')
         if reply.status >= 400:
             error = data.get('error', {})
-            if not isinstance(error, dict):
+            if (not isinstance(error, dict) or
+                    not isinstance(error.get('code','INTERNAL_ERROR'),str) or
+                    (error.get('details') is not None and not isinstance(error['details'],dict))):
                 raise ProtocolError('INVALID_REQUEST', 'Malformed controller error')
             raise ProtocolError(error.get('code', 'INTERNAL_ERROR'), error.get('message', f'HTTP {reply.status}'),
                                 error.get('details'))

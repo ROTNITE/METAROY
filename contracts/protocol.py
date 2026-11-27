@@ -2,12 +2,16 @@
 from __future__ import annotations
 
 from dataclasses import dataclass
+from functools import lru_cache
 import json
 import math
+import re
 from typing import Any
 
 from jsonschema import Draft202012Validator
+from jsonschema.exceptions import SchemaError, UnknownType
 from referencing import Registry
+from referencing.exceptions import Unresolvable
 
 VERSION = '1.0'
 MAX_BODY_BYTES = 2 * 1024 * 1024
@@ -174,6 +178,13 @@ STEP_RESPONSE = object_schema({**RESET_RESPONSE['properties'], 'command_results'
     'events': {'type': 'array', 'items': EVENT}, 'metrics': {'type': 'object'}})
 
 
+@lru_cache(maxsize=64)
+def _check_parameter_schema(wire):
+    # Cache by content, not identity: mutable capability dictionaries must not
+    # retain validation of an older version. The caller bounds cache key size.
+    Draft202012Validator.check_schema(json.loads(wire))
+
+
 def validate(value, schema, code='INVALID_REQUEST'):
     _check_values(value)
     # Public schemas may contain local references, never trigger network reads.
@@ -184,12 +195,30 @@ def validate(value, schema, code='INVALID_REQUEST'):
                     raise ProtocolError(code, 'Expected a local JSON Schema reference')
             for child in node.values():
                 check_refs(child)
-        elif isinstance(node, list):
+        elif isinstance(node, (list, tuple)):
             for child in node:
                 check_refs(child)
-    check_refs(schema)
-    validator = Draft202012Validator(schema,registry=Registry())
-    error = next(validator.iter_errors(value), None)
+    try:
+        check_refs(schema)
+        if code in ('INVALID_COMMAND','INVALID_SCENARIO'):
+            # Peer action/program schemas are data, not trusted project code.
+            # Reject malformed keywords even if this particular instance
+            # would not exercise them. Do not retain oversized cache keys.
+            wire = json.dumps(schema, ensure_ascii=True, allow_nan=False, separators=(',', ':'))
+            if len(wire) <= 64 * 1024:
+                _check_parameter_schema(wire)
+            else:
+                Draft202012Validator.check_schema(json.loads(wire))
+        validator = Draft202012Validator(schema,registry=Registry())
+        error = next(validator.iter_errors(value), None)
+    except ProtocolError:
+        raise
+    except (SchemaError, UnknownType, Unresolvable, RecursionError, re.error,
+            TypeError, AttributeError, KeyError, ValueError, OverflowError) as failure:
+        # A dangling local pointer, cyclic reference or malformed foreign
+        # declaration must be a protocol failure, not a Python traceback.
+        raise ProtocolError(code, 'Invalid or unresolved JSON Schema',
+                            {'schema_error':type(failure).__name__}) from failure
     if error:
         details = {'path': list(error.absolute_path), 'rule': error.validator}
         if error.validator == 'required' and isinstance(error.instance, dict):

@@ -83,6 +83,8 @@ class EnvironmentClient:
             if self.audit:self.audit({'kind':'http_exchange','method':request.method,'path':request.path,
                 'body':request.body,'response':raw,'status':status,'attempt':attempt,'elapsed_s':time.perf_counter()-started})
             try:
+                if status < 200 or 300 <= status < 400:
+                    raise ProtocolError('INVALID_REQUEST','Unexpected HTTP status; redirects are not followed',{'status':status})
                 result=strict_json(raw,maximum_bytes=MAX_RESPONSE_BYTES)
                 if not isinstance(result,dict):raise ProtocolError('INVALID_REQUEST','Response must be an object')
                 if result.get('protocol_version')!=VERSION:
@@ -157,9 +159,12 @@ class EnvironmentClient:
     def health(self):return self._get('health')
     def capabilities(self):
         result=self._get('capabilities')
-        declared=result.get('extensions')
-        self.extensions={name for name in declared if isinstance(name,str)} if isinstance(declared,list) else set()
-        self.public=PublicCore(result,mode=self.core_mode,audit=self.compatibility_audit)
+        # No retry or compatibility state may be installed from an invalid
+        # capabilities response. Commit both only after the new public profile
+        # validates, leaving no mixed old/new state after a failed refresh.
+        public=PublicCore(result,mode=self.core_mode,audit=self.compatibility_audit)
+        self.public=public
+        self.extensions=set(public.extensions)
         return result
 
     def observation(self,request_id=None):

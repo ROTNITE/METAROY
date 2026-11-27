@@ -5,6 +5,7 @@ from pathlib import Path
 import socket
 import threading
 import unittest
+from unittest.mock import patch
 
 from contracts.protocol import (ProtocolError,encode,strict_json,validate_episode_response,
                                 MAX_BODY_BYTES,MAX_RESPONSE_BYTES)
@@ -78,6 +79,47 @@ class ClientTests(unittest.TestCase):
             self.assertTrue(failure.exception.state_may_have_changed)
         finally:
             client.disconnect();server.shutdown();server.server_close();thread.join(timeout=2)
+
+    def test_redirect_is_never_an_acknowledged_step_or_controller_decision(self):
+        from tools.run_interop import controller_call
+        requested=[]
+        raw=encode(self.examples['step_response'])
+        class Handler(BaseHTTPRequestHandler):
+            def log_message(self,*args):pass
+            def do_POST(self):
+                requested.append(self.path)
+                self.rfile.read(int(self.headers['Content-Length']))
+                self.send_response(307);self.send_header('Location','/other')
+                self.send_header('Content-Length',str(len(raw)));self.end_headers();self.wfile.write(raw)
+        with ThreadingHTTPServer(('127.0.0.1',0),Handler) as server:
+            thread=threading.Thread(target=server.serve_forever,daemon=True);thread.start()
+            origin='http://127.0.0.1:'+str(server.server_port)
+            client=EnvironmentClient(origin)
+            try:
+                with self.assertRaises(TransportFailure) as failure:
+                    client.submit(PreparedRequest('POST','/v1/environment/step',b'{}'))
+                self.assertTrue(failure.exception.state_may_have_changed)
+                self.assertEqual(failure.exception.details['status'],307)
+                with self.assertRaises(ProtocolError) as failure:
+                    controller_call(origin,'decide',{})
+                self.assertEqual(failure.exception.details['status'],307)
+                self.assertEqual(requested,['/v1/environment/step','/v1/controller/decide'])
+            finally:
+                client.disconnect();server.shutdown();thread.join(timeout=2)
+
+    def test_invalid_capability_refresh_never_installs_new_retry_guarantees(self):
+        from controller.public_core import STEP_DEDUPLICATION,RESET_DEDUPLICATION
+        client=EnvironmentClient()
+        initial={'protocol_version':'1.0','extensions':[STEP_DEDUPLICATION]}
+        invalid={'protocol_version':'1.0','extensions':[RESET_DEDUPLICATION],
+                 'coordinates':{'unit':'unknown'}}
+        with patch.object(client,'_get',side_effect=[initial,invalid]):
+            client.capabilities()
+            previous=client.public
+            with self.assertRaises(ProtocolError):
+                client.capabilities()
+        self.assertIs(client.public,previous)
+        self.assertEqual(client.extensions,{STEP_DEDUPLICATION})
 
 
 if __name__=='__main__':unittest.main()
