@@ -6,6 +6,7 @@ from contextlib import contextmanager
 from copy import deepcopy
 from datetime import datetime, timezone
 import gzip
+import hashlib
 import http.client
 import math
 from pathlib import Path
@@ -17,7 +18,7 @@ import time
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT))
 
-from contracts.protocol import DECISION, MAX_RESPONSE_BYTES, ProtocolError, encode, strict_json, validate
+from contracts.protocol import DECISION, MAX_BODY_BYTES, MAX_RESPONSE_BYTES, ProtocolError, encode, strict_json, validate
 from controller.ai import atomic_json, file_lock
 from controller.client import EnvironmentClient, TransportFailure
 from controller.health import require_port_available
@@ -32,6 +33,21 @@ from tools.run_mission import hashes as native_hashes
 
 
 SEEDS = (17331, 17332, 17333)
+
+
+def read_parameter_bytes(path, *, maximum_bytes=MAX_BODY_BYTES):
+    if path is None:
+        return None
+    with path.open('rb') as stream:
+        raw=stream.read(maximum_bytes+1)
+    if len(raw)>maximum_bytes:
+        raise ValueError(f'Mission parameters exceed {maximum_bytes} bytes')
+    return raw
+
+
+def verify_parameter_digest(raw, expected):
+    if expected is not None and (raw is None or hashlib.sha256(raw).hexdigest()!=expected):
+        raise ValueError('Mission parameters do not match the approved SHA-256')
 
 
 def percentile(samples, fraction):
@@ -682,6 +698,7 @@ def main():
     trial.add_argument('--seed', type=int)
     trial.add_argument('--mission-id', default='search_and_rescue')
     trial.add_argument('--mission-parameters', type=Path)
+    trial.add_argument('--mission-parameters-sha256',help='Expected digest of the approved mission parameter file')
     trial.add_argument('--input-package', type=Path, action='append', default=[])
     trial.add_argument('--require-goal', action='store_true')
     trial.add_argument('--core-mode',choices=CORE_MODES,default='strict')
@@ -718,18 +735,24 @@ def main():
     if args.operation == 'our-environment' and args.engine == 'reference':
         sources += list((ROOT / 'conformance').glob('*.py'))
     sources += [ROOT/'tools/goal_evidence.py']
-    if getattr(args,'mission_parameters',None) is not None:
-        sources.append(args.mission_parameters)
     packages = getattr(args, 'input_package', ())
-    frozen = {str(p.resolve(strict=True)): file_sha256(p) for p in (*sources, *packages)}
-    if args.operation == 'our-environment' and args.engine == 'unreal':
-        frozen.update(native_hashes(args.layout or ROOT / 'unreal/MetaRescue/MetaRescue.uproject'))
-    report = {'operation': args.operation, 'input_sha256': frozen}
+    parameter_file=getattr(args,'mission_parameters',None)
+    expected=getattr(args,'mission_parameters_sha256',None)
+    frozen=None
+    report = {'operation': args.operation, 'input_sha256': {}}
     try:
+        raw=read_parameter_bytes(parameter_file,maximum_bytes=16384 if expected is not None else MAX_BODY_BYTES)
+        verify_parameter_digest(raw,expected)
+        frozen = {str(p.resolve(strict=True)): file_sha256(p) for p in (*sources, *packages)}
+        if raw is not None:
+            frozen[str(parameter_file.resolve(strict=True))]=hashlib.sha256(raw).hexdigest()
+        if args.operation == 'our-environment' and args.engine == 'unreal':
+            frozen.update(native_hashes(args.layout or ROOT / 'unreal/MetaRescue/MetaRescue.uproject'))
+        report['input_sha256']=frozen
         if args.operation == 'self-test':
             report.update(self_test(output, args.matrix, args.timeout))
         else:
-            params = strict_json(args.mission_parameters.read_bytes()) if args.mission_parameters else {}
+            params = strict_json(raw) if raw is not None else {}
             if not isinstance(params, dict):
                 raise ValueError('Mission parameters must be an object')
             mission = {'id': args.mission_id, 'parameters': params}
@@ -765,7 +788,12 @@ def main():
         report.update(exchange='failed', error=f'{type(error).__name__}: {error}',
                       first_protocol_error={'message': str(error), 'details': getattr(error, 'details', {})})
     finally:
-        report['inputs_preserved'] = all(Path(name).is_file() and file_sha256(Path(name)) == digest for name, digest in frozen.items())
+        try:
+            report['inputs_preserved'] = frozen is not None and all(
+                Path(name).is_file() and file_sha256(Path(name)) == digest for name, digest in frozen.items())
+        except OSError as error:
+            report['inputs_preserved']=False
+            report['input_verification_error']=f'{type(error).__name__}: {error}'
         atomic_json(output / 'report.json', report)
         print(str(output / 'report.json'), flush=True)
     return 0 if report['exchange'] == 'passed' and report['inputs_preserved'] and report.get('goal_verified', True) else 1

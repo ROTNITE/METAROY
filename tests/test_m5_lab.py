@@ -46,6 +46,9 @@ class RegistryTests(TestCase):
         self.assertEqual(spec['mission_parameters'],{'case':'late_target','opaque':True})
         argv=build_command(spec,7,'strict',Path('series/trial-000'))
         self.assertEqual(argv[argv.index('--mission-parameters')+1],str(Path('series/mission-parameters.json')))
+        from contracts.protocol import encode
+        self.assertEqual(argv[argv.index('--mission-parameters-sha256')+1],
+                         hashlib.sha256(encode(spec['mission_parameters'])).hexdigest())
         default=registry.spec(self.spec(environment='planar',mission_parameters={'case':'normal','opaque':False}))
         self.assertEqual(default['mission_parameters'],{})
         inbound=registry.spec(self.spec(environment='planar',controller='rpc',decision_timeout=3,
@@ -97,6 +100,34 @@ class RegistryTests(TestCase):
             self.assertEqual(report['exchange'],'failed')
             self.assertFalse(report['inputs_preserved'])
             self.assertIn('input_verification_error',report)
+
+    def test_changed_approved_parameter_bytes_are_rejected_by_both_runners(self):
+        from argparse import Namespace
+        from tools.m5_trial import trial
+        from tools.run_interop import main as interop_main
+
+        with TemporaryDirectory() as temp:
+            root=Path(temp)
+            params=root/'parameters.json'
+            approved=hashlib.sha256(b'{"case":"late_target"}').hexdigest()
+            params.write_bytes(b'{"case":"link_loss"}')
+            args=Namespace(output=root/'builtin',engine='planar',controller='metarescue',
+                           profile='K',seed=7,core_mode='strict',timeout=10,
+                           mission_parameters=params,mission_parameters_sha256=approved)
+            with patch('tools.m5_trial.local_environment') as start:
+                self.assertEqual(trial(args),1)
+                start.assert_not_called()
+            argv=['run_interop','our-environment','--controller','http://127.0.0.1:8146',
+                  '--engine','planar','--mode','decide','--mission-parameters',str(params),
+                  '--mission-parameters-sha256',approved,'--output',str(root/'rpc')]
+            with patch('sys.argv',argv),patch('tools.run_interop.planar') as start:
+                self.assertEqual(interop_main(),1)
+                start.assert_not_called()
+            for name in ('builtin','rpc'):
+                report=json.loads((root/name/'report.json').read_text(encoding='utf-8'))
+                self.assertEqual(report['exchange'],'failed')
+                self.assertFalse(report['inputs_preserved'])
+                self.assertIn('approved SHA-256',report['error'])
 
     def test_historical_interruption_does_not_restart(self):
         with TemporaryDirectory() as temp:

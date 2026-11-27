@@ -14,7 +14,7 @@ from contracts.protocol import strict_json
 from controller.ai import atomic_json
 from conformance.reference_environment import serve
 from environment.server import PlanarServer
-from tools.run_interop import independent_truth,run_controller,ROOT
+from tools.run_interop import independent_truth,read_parameter_bytes,run_controller,verify_parameter_digest,ROOT
 from tools.m5_spec import checked_mission_parameters
 
 
@@ -53,13 +53,7 @@ def trial(args):
     output.mkdir(parents=True,exist_ok=False)
     parameter_file=getattr(args,'mission_parameters',None)
     def parameter_bytes():
-        if parameter_file is None:
-            return None
-        with parameter_file.open('rb') as stream:
-            data=stream.read(16385)
-        if len(data)>16384:
-            raise ValueError('Mission parameters exceed 16384 bytes')
-        return data
+        return read_parameter_bytes(parameter_file,maximum_bytes=16384)
 
     def inputs(data):
         values=freeze_sources()
@@ -72,6 +66,7 @@ def trial(args):
             'seed':args.seed,'core_mode':args.core_mode,'input_sha256':{}}
     try:
         data=parameter_bytes()
+        verify_parameter_digest(data,getattr(args,'mission_parameters_sha256',None))
         frozen=inputs(data)
         report['input_sha256']=frozen
         params=checked_mission_parameters(args.engine,args.controller,
@@ -125,6 +120,7 @@ def main():
     parser.add_argument('--timeout',type=int,default=90)
     parser.add_argument('--output',type=Path,required=True)
     parser.add_argument('--mission-parameters',type=Path)
+    parser.add_argument('--mission-parameters-sha256',help='Expected digest of the approved mission parameter file')
     args=parser.parse_args()
     if not 0<=args.seed<=2**31-1 or not 1<=args.timeout<=300:
         parser.error('Invalid seed or timeout')

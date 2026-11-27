@@ -29,7 +29,7 @@ import time
 from urllib.parse import urlsplit,parse_qs
 import uuid
 
-from contracts.protocol import strict_json
+from contracts.protocol import encode, strict_json
 from controller.m5_trace import read_trace
 from controller.m5_progress import read_page as read_progress_page,read_reference_page
 from controller.ai import atomic_json,file_lock
@@ -127,7 +127,9 @@ def build_command(spec,seed,mode,output):
     prefix=[sys.executable,'-B','-X','utf8','-m']
     common=['--seed',str(seed),'--core-mode',mode,'--timeout',str(spec['timeout']),'--output',str(output)]
     if spec.get('mission_parameters'):
-        common+=['--mission-parameters',str(output.parent/'mission-parameters.json')]
+        digest=hashlib.sha256(encode(spec['mission_parameters'])).hexdigest()
+        common+=['--mission-parameters',str(output.parent/'mission-parameters.json'),
+                 '--mission-parameters-sha256',digest]
     if spec['environment_origin']:
         return prefix+['tools.run_interop','our-controller','--environment',spec['environment_origin']]+common
     if spec['controller_origin']:
