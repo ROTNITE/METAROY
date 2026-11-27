@@ -236,6 +236,13 @@ bool AMRWorld::ReadCoreEventTape()
                     return Fail(TEXT("duplicate or protected event cell"));
                 Event.Cells.Add(Key);
             }
+            if(Revised&&Event.Kind==EMRDisturbance::Fire&&Event.bPropagation)
+            {
+                const auto& Origin=Tape[Earlier.FindChecked(Event.ParentId)];
+                if(Origin.bPropagation||Origin.SiteId!=Event.SiteId||Origin.ExpiresAt!=Event.ExpiresAt||
+                   Origin.VisibilityExpiresAt!=Event.VisibilityExpiresAt)
+                    return Fail(TEXT("fire perimeter outlives or changes its source"));
+            }
             if(CausalFire)
             {
                 const FIntPoint Center=FMRDistrictEnvironment::Cell(CausalFire->Source);
