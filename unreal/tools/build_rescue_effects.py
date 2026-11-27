@@ -23,6 +23,7 @@ lib.connect_material_property(color,'',unreal.MaterialProperty.MP_BASE_COLOR)
 lib.recompile_material(rotor);assets.save_loaded_asset(rotor)
 
 beacon=unreal.load_asset('/Game/Effects/M_VanBeacon') or tools.create_asset('M_VanBeacon','/Game/Effects',unreal.Material,unreal.MaterialFactoryNew())
+beacon.set_editor_property('used_with_instanced_static_meshes', True)
 lib.delete_all_material_expressions(beacon)
 tint=lib.create_material_expression(beacon,unreal.MaterialExpressionConstant3Vector,-500,0)
 tint.set_editor_property('constant',unreal.LinearColor(.012,.08,.8,1))
