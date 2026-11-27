@@ -67,7 +67,7 @@ bool AMRWorld::CollapseCityStructure(const FMRDisturbance& Event)
 {
     if(!bDisasterCity||Event.bPropagation)return false;
     auto* Building=CityStructures.Find(FName(*Event.SiteId));if(!Building)return false;
-    TArray<int32> Removed=Building->UpperStoreyPieces();if(Removed.IsEmpty())return true;
+    TArray<int32> Removed=Building->UpperStoreyPieces();if(Removed.IsEmpty())return !Environment.bRevisedDisasters;
     Removed.Sort([&](int32 A,int32 B){return Building->Pieces[A].Bounds.GetVolume()>Building->Pieces[B].Bounds.GetVolume();});
     const int32 First=Generated.Num();int32 Bodies=0,LostParts=0;
     const FName StructureTag(*(FString(TEXT("SourceStructure_"))+Event.SiteId));
@@ -89,6 +89,7 @@ bool AMRWorld::CollapseCityStructure(const FMRDisturbance& Event)
         Body->SetMobility(EComponentMobility::Movable);Body->bUseComplexAsSimpleCollision=false;Body->bUseAsyncCooking=false;
         Body->SetWorldLocationAndRotation(Center,Part.InitialTransform.GetRotation());
         Body->SetCollisionProfileName(TEXT("PhysicsActor"));Body->SetCollisionResponseToChannel(ECC_Camera,ECR_Ignore);
+        if(Environment.bRevisedDisasters)Body->SetCollisionResponseToChannel(ECC_Visibility,ECR_Block);
         Body->RegisterComponent();
         TArray<FVector> Corners;
         for(int32 Corner=0;Corner<8;++Corner)Corners.Add(FVector((Corner&1?1:-1)*Size.X,(Corner&2?1:-1)*Size.Y,(Corner&4?1:-1)*Size.Z));
