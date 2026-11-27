@@ -120,7 +120,7 @@ async function refresh(){
     lastRevision=page.revision;
     render();
     if(revisionChanged)void refreshMatrix();
-    if(timelineTrial&&activeId===timelineTrial.id)void pollTimeline();
+    if(timelineTrial&&(activeId===timelineTrial.id||revisionChanged))void pollTimeline();
   }
   catch(error){byId('form-message').textContent='Лаборатория недоступна: '+error.message;}
   finally{refreshBusy=false;if(refreshAgain){refreshAgain=false;void refresh();}}

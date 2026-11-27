@@ -3,7 +3,7 @@ from pathlib import Path
 from tempfile import TemporaryDirectory
 import unittest
 
-from controller.m5_progress import Progress, read_page, MAX_LINE, MAX_FILE
+from controller.m5_progress import Progress, read_page, read_reference_page, MAX_LINE, MAX_FILE
 
 
 class ProgressTests(unittest.TestCase):
@@ -60,3 +60,23 @@ class ProgressTests(unittest.TestCase):
             path=Path(folder)/'progress.jsonl'
             path.write_text('{"kind":"decision","source":"reference","time":2,"private":"secret"}\n')
             self.assertNotIn('private',read_page(path)['rows'][0])
+
+
+    def test_independent_journal_is_projected_without_fabricated_wall_time(self):
+        with TemporaryDirectory() as folder:
+            path=Path(folder)/'reference.jsonl'
+            entry={'decision':{'decision_id':'d1','episode_id':'e','request_id':'r','commands':[{},{}]},
+                   'response':{'episode_id':'e','request_id':'r','time':2,'status':'running',
+                               'command_results':[{}],'observation':{'private':'secret'}}}
+            original=(json.dumps(entry)+'\n').encode()
+            path.write_bytes(original+original)
+            first=read_reference_page(path,0,1)
+            self.assertEqual(first['rows'][0]['decision_id'],'d1')
+            self.assertEqual(first['rows'][0]['commands'],2)
+            self.assertEqual(first['rows'][0]['command_results'],1)
+            self.assertNotIn('wall_s',first['rows'][0])
+            self.assertNotIn('observation',first['rows'][0])
+            self.assertTrue(first['more'])
+            second=read_reference_page(path,first['cursor'],1)
+            self.assertFalse(second['more'])
+            self.assertEqual(path.read_bytes(),original+original)

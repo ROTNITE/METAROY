@@ -12,6 +12,9 @@ KINDS = frozenset(('reset_response', 'observation', 'decision', 'step_response',
                    'environment_failure', 'environment_rejection'))
 MAX_FILE = 8 * 1024 * 1024
 MAX_LINE = 2048
+MAX_REFERENCE_FILE = 64 * 1024 * 1024
+MAX_REFERENCE_LINE = 512 * 1024
+MAX_REFERENCE_READ = 2 * 1024 * 1024
 TOKEN = re.compile(r'[A-Za-z0-9_.:/-]{1,128}\Z')
 
 
@@ -50,7 +53,9 @@ def summarize(kind, payload, source, elapsed):
     for name in ('commands', 'command_results', 'events'):
         if isinstance(data.get(name), list):
             row[name] = len(data[name])
-    row.update(kind=kind, source=source, wall_s=round(elapsed, 6))
+    row.update(kind=kind, source=source)
+    if _number(elapsed) is not None:
+        row['wall_s'] = round(elapsed, 6)
     return row
 
 
@@ -110,8 +115,56 @@ def read_page(path, cursor=0, limit=50):
                 stream.seek(start)
                 break
             row = json.loads(line)
-            if not isinstance(row, dict) or row.get('kind') not in KINDS or row.get('source') not in SOURCES:
+            if (not isinstance(row, dict) or not isinstance(row.get('kind'), str) or
+                    not isinstance(row.get('source'), str) or
+                    row['kind'] not in KINDS or row['source'] not in SOURCES):
                 raise ValueError('Invalid progress row')
             rows.append({**_safe_fields(row), 'kind': row['kind'], 'source': row['source']})
+        cursor = stream.tell()
+    return {'available': True, 'rows': rows, 'cursor': cursor, 'more': cursor < size}
+
+
+def read_reference_page(path, cursor=0, limit=50):
+    """Project the independent controller's existing JSONL without modifying it.
+
+    Each record describes an already recorded correlated decision/response.
+    No guessed process wall time; do not expose observation bodies.
+    """
+    if type(cursor) is not int or not 0 <= cursor <= MAX_REFERENCE_FILE or type(limit) is not int or not 1 <= limit <= 100:
+        raise ValueError('Invalid reference progress page')
+    if not path.is_file():
+        return {'available': False, 'rows': [], 'cursor': cursor, 'more': False}
+    rows = []
+    with path.open('rb') as stream:
+        size = min(path.stat().st_size, MAX_REFERENCE_FILE)
+        if cursor > size:
+            raise ValueError('Reference progress cursor beyond file')
+        if cursor:
+            stream.seek(cursor - 1)
+            if stream.read(1) != b'\n':
+                raise ValueError('Reference progress cursor is not a record boundary')
+        stream.seek(cursor)
+        initial = cursor
+        while len(rows) < limit and stream.tell() < size and stream.tell() - initial < MAX_REFERENCE_READ:
+            start = stream.tell()
+            line = stream.readline(min(MAX_REFERENCE_LINE + 1, size - start))
+            if len(line) > MAX_REFERENCE_LINE:
+                raise ValueError('Oversized reference journal row; use the full archive')
+            if not line.endswith(b'\n'):
+                stream.seek(start)
+                break
+            entry = json.loads(line)
+            if not isinstance(entry, dict):
+                raise ValueError('Invalid reference journal row')
+            decision, response = entry.get('decision'), entry.get('response')
+            if not isinstance(decision, dict) or not isinstance(response, dict):
+                raise ValueError('Invalid reference journal exchange')
+            row = summarize('step_response', response, 'reference', None)
+            if (response.get('request_id') == decision.get('request_id') and
+                    response.get('episode_id') == decision.get('episode_id')):
+                row.update(_safe_fields({'decision_id': decision.get('decision_id')}))
+                if isinstance(decision.get('commands'), list):
+                    row['commands'] = len(decision['commands'])
+            rows.append(row)
         cursor = stream.tell()
     return {'available': True, 'rows': rows, 'cursor': cursor, 'more': cursor < size}

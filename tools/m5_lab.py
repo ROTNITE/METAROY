@@ -29,7 +29,7 @@ from urllib.parse import urlsplit,parse_qs
 import uuid
 
 from contracts.protocol import strict_json
-from controller.m5_progress import read_page as read_progress_page
+from controller.m5_progress import read_page as read_progress_page,read_reference_page
 from controller.ai import atomic_json,file_lock
 from controller.client import EnvironmentClient
 from tools.run_interop import controller_call,ROOT
@@ -417,10 +417,13 @@ class Lab:
         run=self.get(ident)
         if not 0<=index<len(run['rows']):
             raise KeyError('Unknown trial')
-        path=self.root/ident/f'trial-{index:03d}'/'progress.jsonl'
-        if not path.resolve().is_relative_to((self.root/ident).resolve()) or not path.resolve().is_relative_to(self.root):
+        independent=run.get('spec',{}).get('controller')=='independent'
+        filename='reference.jsonl' if independent else 'progress.jsonl'
+        path=self.root/ident/f'trial-{index:03d}'/filename
+        resolved=path.resolve()
+        if not resolved.is_relative_to(self.root/ident) or not resolved.is_relative_to(self.root):
             raise KeyError('Unsafe progress path')
-        return read_progress_page(path,cursor,limit)
+        return (read_reference_page if independent else read_progress_page)(path,cursor,limit)
 
     def report(self,ident,index):
         run=self.get(ident)
