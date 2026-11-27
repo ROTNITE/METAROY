@@ -58,7 +58,7 @@ UNiagaraComponent* AMRWorld::SpawnDisasterEffect(const FString& Name,const FVect
 void AMRWorld::BuildDisasterSmoke(const FMRDisturbance& Event)
 {
     if(!FApp::CanEverRender())return;
-    auto* Material=DisasterMaterial(TEXT("M_PhysicalSmoke"));
+    auto* Material=DisasterMaterial(TEXT("M_PhysicalSmoke"),Environment.bRevisedDisasters?TEXT("/Game/EffectsV3/Revision6/"):ArtFolder);
     auto* Cube=LoadObject<UStaticMesh>(nullptr,TEXT("/Engine/BasicShapes/Cube.Cube"));
     if(!Material||!Cube)return;
     auto* Component=NewObject<UStaticMeshComponent>(this);
@@ -68,12 +68,14 @@ void AMRWorld::BuildDisasterSmoke(const FMRDisturbance& Event)
     Component->SetCollisionEnabled(ECollisionEnabled::NoCollision);
     Component->SetGenerateOverlapEvents(false);Component->SetCanEverAffectNavigation(false);
     Component->SetCastShadow(false);Component->bAffectDistanceFieldLighting=false;
-    Component->SetCullDistance(65000);Component->SetTranslucentSortPriority(3);
+    Component->SetCullDistance(Environment.bRevisedDisasters?0.f:65000.f);Component->SetTranslucentSortPriority(3);
     Component->SetMaterial(0,UMaterialInstanceDynamic::Create(Material,Component));
     Component->ComponentTags={FName(*Event.Id),TEXT("PhysicalSmoke")};
     Component->RegisterComponent();HazardVisuals.Add(Component);
     TickDisasterSmoke(Component,Event);
-    if(Event.Kind==EMRDisturbance::Smoke||Event.Kind==EMRDisturbance::Fire)
+    // Additional sprite opacity is not part of the sensor field. V2 uses
+    // only the textured optical volume to avoid double-counting extinction.
+    if(!Environment.bRevisedDisasters&&(Event.Kind==EMRDisturbance::Smoke||Event.Kind==EMRDisturbance::Fire))
     {
         FVector Source=Event.Source;Source.Z=Event.SmokeEmissionHeightCm+120;
         SpawnDisasterEffect(TEXT("HeavySmoke"),Source,FVector(Event.Kind==EMRDisturbance::Fire?1.6:2.4),Event);
