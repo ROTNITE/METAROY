@@ -302,7 +302,7 @@ Object FMRCoreRuntime::Capabilities() const
             {TEXT("report_ttl_s"),Num(30)},{TEXT("packets_per_source"),Num(128)},{TEXT("critical_report_attempts"),Num(3)}}))},
         {TEXT("event_model"),Json(Obj({{TEXT("profile"),Str(World->CoreEventProfile.IsEmpty()?TEXT("static"):World->CoreEventProfile)},
             {TEXT("format"),Str(World->bDisasterCity?TEXT("metarescue.events-3d.2.0"):TEXT("metarescue.events-3d.1.0"))},
-            {TEXT("physics_profile"),World->bDisasterCity?Str(TEXT("metarescue.urban-disasters.v1")):Null()},
+            {TEXT("physics_profile"),World->bDisasterCity?Str(World->Environment.bRevisedDisasters?TEXT("metarescue.urban-disasters.v2"):TEXT("metarescue.urban-disasters.v1")):Null()},
             {TEXT("visibility_model"),Str(World->bDisasterCity?TEXT("beer_lambert_wind_plumes"):TEXT("surface_quality_v1"))},
             {TEXT("physics_cell_m"),Num(5)},
             {TEXT("probability_window_s"),World->CoreEventProfile.IsEmpty()?Null():Num(World->CoreEventProfile==TEXT("v052")?80:30)}}))},
