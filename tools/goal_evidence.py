@@ -1,7 +1,25 @@
 """Correlate declared mission outcomes with commands and physical evidence."""
 from copy import deepcopy
+import hashlib
+import json
 
 from contracts.action_semantics import declared_goal_effects
+
+
+def decision_fingerprint(decision):
+    """Compare decoded records canonically; exact wire bytes are audited separately."""
+    try:
+        raw=json.dumps(decision,sort_keys=True,ensure_ascii=False,allow_nan=False,
+                       separators=(',',':')).encode('utf-8')
+    except (TypeError,ValueError,UnicodeError,RecursionError):
+        return None
+    return hashlib.sha256(raw).digest()
+
+
+def terminal_failure(receipt):
+    return (receipt.get('validation_status')=='rejected'
+            or receipt.get('delivery_status') in ('lost','expired')
+            or receipt.get('execution_status') in ('failed','cancelled'))
 
 
 class GoalEvidence:
@@ -18,6 +36,7 @@ class GoalEvidence:
         self.receipts = {}
         self.conflicting_decisions = set()
         self.conflicting_outcomes = set()
+        self.failed_receipts = set()
         self.decisions = {}
 
     @staticmethod
@@ -33,6 +52,9 @@ class GoalEvidence:
             return
         if not isinstance(commands, (list, tuple)):
             return
+        fingerprint=decision_fingerprint(decision)
+        if fingerprint is None:
+            return
         signatures = {}
         for index, cmd in enumerate(commands):
             if not isinstance(cmd, dict) or not isinstance(cmd.get('action'), str) or cmd['action'] not in self.effects:
@@ -44,15 +66,17 @@ class GoalEvidence:
             target = params.get(name) if name is not None else None
             signatures[index] = (cmd['agent_id'], cmd['action'], target)
         decision_key = (episode, identifier)
-        if decision_key in self.decisions and self.decisions[decision_key] != signatures:
+        if decision_key in self.decisions and self.decisions[decision_key] != fingerprint:
             self.conflicting_decisions.add(decision_key)
             return
-        self.decisions[decision_key] = deepcopy(signatures)
+        self.decisions[decision_key] = fingerprint
         for index, signature in signatures.items():
             self.pending.setdefault((*decision_key, index), deepcopy(signature))
 
     def record_receipt(self, episode, item):
         key = self.key(episode, item)
+        if key and terminal_failure(item):
+            self.failed_receipts.add(key)
         # Keep terminal successful receipts even if logs arrive before the
         # corresponding decision. The full correlation is checked at readout.
         if (key and item.get('validation_status') == 'accepted'
@@ -65,7 +89,8 @@ class GoalEvidence:
     def record_outcome(self, episode, occurrence):
         key = self.key(episode, occurrence)
         effect, ident, target = (occurrence.get(field) for field in ('effect', 'outcome_id', 'target_id'))
-        if (not key or not isinstance(ident, str) or not ident or not isinstance(target, str) or not target
+        if (not key or occurrence.get('episode_id',episode)!=episode
+                or not isinstance(ident, str) or not ident or not isinstance(target, str) or not target
                 or effect not in ('evacuated', 'located', 'aid_delivered')):
             return
         outcome_key = (episode, ident)
@@ -82,7 +107,8 @@ class GoalEvidence:
         for outcome_key, (signature, occurrence) in self.outcomes.items():
             key, agent, effect, target = signature
             expected = self.pending.get(key)
-            if (outcome_key in self.conflicting_outcomes or key[:2] in self.conflicting_decisions or not expected):
+            if (outcome_key in self.conflicting_outcomes or key[:2] in self.conflicting_decisions
+                    or key in self.failed_receipts or not expected):
                 continue
             expected_agent, action, expected_target = expected
             if (agent != expected_agent or self.receipts.get(key) != {(expected_agent, action)}
@@ -95,7 +121,7 @@ class GoalEvidence:
             target_key = (key[0], effect, target) if effect != 'aid_delivered' else (key, effect, target)
             if target_key not in seen:
                 seen.add(target_key)
-                results.append(deepcopy(occurrence))
+                results.append({**deepcopy(occurrence),'episode_id':key[0]})
         return results
 
     def summary(self):

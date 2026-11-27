@@ -212,3 +212,20 @@ class DiagnosticBoundary(TestCase):
         self.assertEqual(result['verified_outcomes_count'],1)
         self.assertEqual(result['confirmed_command_receipts_count'],2)
         self.assertEqual(result['error_details'],{'rule':'resource_id','resource_id':'energy'})
+
+
+class EvidenceContradictions(OutcomeBoundary):
+    def test_terminal_failure_invalidates_conflicting_completion(self):
+        self.evidence.record_decision(self.decision)
+        self.evidence.record_receipt('e',self.receipt)
+        self.evidence.record_outcome('e',self.outcome)
+        self.assertEqual(self.evidence.summary()['evacuated'],1)
+        self.evidence.record_receipt('e',{**self.receipt,'execution_status':'failed'})
+        self.assertEqual(self.evidence.summary()['evacuated'],0)
+
+    def test_conflicting_non_goal_decision_content_invalidates_goal(self):
+        self.evidence.record_decision(self.decision)
+        self.evidence.record_receipt('e',self.receipt)
+        self.evidence.record_outcome('e',self.outcome)
+        self.evidence.record_decision({**self.decision,'operation':'safe_stop'})
+        self.assertEqual(self.evidence.summary()['evacuated'],0)

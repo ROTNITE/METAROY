@@ -47,6 +47,7 @@ class EvidenceTiers(TestCase):
         evidence=Evidence()
         decision={'episode_id':'e','decision_id':'d','request_id':'r','time':0,
                   'commands':[{'agent_id':'carrier','action':'rescue','parameters':{'target_id':'person'}}]}
+        evidence.record('observation',{'episode_id':'e','time':0,'targets':[{'id':'person','status':'confirmed'}]})
         evidence.record('decision',{'decision':decision})
         receipt={'status':'applied','agent_id':'carrier','action':'rescue'}
         evidence.record('step_response',{'episode_id':'e','request_id':'r','time':1,
@@ -56,3 +57,30 @@ class EvidenceTiers(TestCase):
         self.assertEqual(summary['correlated_public_target_count'],1)
         self.assertEqual(summary['goal_status'],'unverified')
         self.assertEqual(summary['evacuated'],0)
+
+    def test_existing_terminal_target_and_replay_cannot_create_new_evidence(self):
+        evidence=Evidence()
+        initial={'episode_id':'e','time':0,'targets':[{'id':'person','status':'rescued'}]}
+        evidence.record('observation',initial)
+        d={'episode_id':'e','decision_id':'d','request_id':'r','time':0,
+           'commands':[{'agent_id':'carrier','action':'rescue','parameters':{'target_id':'person'}}]}
+        evidence.record('decision',{'decision':d})
+        step={'episode_id':'e','request_id':'r','time':1,
+              'observation':{**initial,'time':1,'request_id':'r'},
+              'command_results':[{'status':'applied','agent_id':'carrier','action':'rescue'}]}
+        for _ in range(3):
+            evidence.record('step_response',step)
+            evidence.record('observation',{**initial,'targets':[{'id':'person','status':'confirmed'}]})
+        self.assertEqual(evidence.summary()['correlated_public_target_count'],0)
+
+    def test_request_lookup_handles_delayed_receipts_and_episode_reuse(self):
+        evidence=Evidence()
+        for episode in ('e1','e2'):
+            evidence.record('decision',{'decision':{'episode_id':episode,'decision_id':'d','request_id':'r','time':0,
+                'commands':[{'agent_id':episode,'action':'handover','parameters':{}}]}})
+        receipt={'decision_id':'d','command_index':0,'agent_id':'e1','action':'handover',
+                 'validation_status':'accepted','delivery_status':'delivered','execution_status':'completed'}
+        evidence.record('step_response',{'episode_id':'e2','command_results':[receipt]})
+        self.assertEqual(evidence.summary()['confirmed_command_receipts'],[])
+        evidence.record('step_response',{'episode_id':'e1','command_results':[receipt]})
+        self.assertEqual(evidence.summary()['confirmed_command_receipts'],[receipt])

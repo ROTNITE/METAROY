@@ -22,7 +22,7 @@ from controller.client import EnvironmentClient, TransportFailure
 from controller.health import require_port_available
 from controller.net65 import PATROL_MODES
 from controller.public_core import CORE_MODES, PublicCore
-from tools.goal_evidence import GoalEvidence
+from tools.goal_evidence import GoalEvidence, decision_fingerprint, terminal_failure
 from environment.main import DEFAULT_OUTPUT, existing_unreal, native_command
 from environment.server import PlanarServer
 from environment.world import CASES
@@ -40,85 +40,147 @@ def percentile(samples, fraction):
 
 
 class Evidence:
+    """Collect command receipts and goal evidence without conflating their trust levels.
+
+    Decision IDs are scoped to episodes. Legacy state transitions require a
+    prior nonterminal observation, a matching command and the same request.
+    Re-reading earlier journal pages cannot manufacture another transition.
+    """
     def __init__(self, capabilities=None):
         self.goals=GoalEvidence(capabilities or {})
-        self.transfers = {}
-        self.step_ms = []
-        self.planning_ms = []
-        self.first_error = None
-        self.decisions = {}
-        self.last_decision_id = None
-        self.completed_targets = set()
+        self.transfers={}
+        self.legacy_transitions={}
+        self.step_ms=[]
+        self.planning_ms=[]
+        self.first_error=None
+        self.decisions={}
+        self.requests={}
+        self.fingerprints={}
+        self.conflicts=set()
+        self.failed_receipts=set()
+        self.observed={}
+        self.last_time={}
 
-    def record(self, kind, data):
-        if kind == 'decision':
-            decision = data['decision']
-            identifier = decision.get('decision_id')
-            if isinstance(identifier, str):
-                self.decisions[identifier] = {'commands':decision.get('commands',()),'episode_id':decision.get('episode_id'),
-                    'request_id':decision.get('request_id'),'decision_id':identifier,'time':decision.get('time',0)}
-                self.last_decision_id = identifier
-                self.goals.record_decision(decision)
+    @staticmethod
+    def _identity(episode,identifier):
+        return (episode,identifier) if all(isinstance(v,str) and v for v in (episode,identifier)) else None
+
+    def _observe(self,frame,episode=None,stamp=None):
+        episode=frame.get('episode_id',episode)
+        stamp=frame.get('time',stamp)
+        if (not isinstance(episode,str) or not episode or type(stamp) not in (int,float)
+                or not math.isfinite(stamp) or stamp<0 or stamp<=self.last_time.get(episode,-1)):
+            return set()
+        states=self.observed.setdefault(episode,{})
+        transitions=set()
+        for target in frame.get('targets',()):
+            if not isinstance(target,dict):
+                continue
+            ident,status=target.get('id'),target.get('status')
+            if not isinstance(ident,str) or not ident or not isinstance(status,str):
+                continue
+            prior=states.get(ident)
+            if (prior is not None and prior not in ('rescued','delivered','evacuated')
+                    and status in ('rescued','delivered')):
+                transitions.add((ident,status))
+            # Terminal targets cannot become "new" again by replay, staleness
+            # or inconsistent state. This is a conservative public diagnostic.
+            if prior not in ('rescued','delivered','evacuated'):
+                states[ident]=status
+        self.last_time[episode]=stamp
+        return transitions
+
+    def _decision(self,decision):
+        key=self._identity(decision.get('episode_id'),decision.get('decision_id'))
+        fingerprint=decision_fingerprint(decision)
+        if not key or fingerprint is None:
+            return
+        if key in self.fingerprints and self.fingerprints[key]!=fingerprint:
+            self.conflicts.add(key)
+        else:
+            self.fingerprints[key]=fingerprint
+            self.decisions.setdefault(key,decision)
+        request=self._identity(key[0],decision.get('request_id'))
+        if request:
+            existing=self.requests.setdefault(request,key)
+            if existing!=key:
+                self.requests[request]=None
+                self.conflicts.add(key)
+                if existing:
+                    self.conflicts.add(existing)
+        self.goals.record_decision(decision)
+
+    def record(self,kind,data):
+        if kind=='decision':
+            self._decision(data['decision'])
             if 'planning_wall_s' in data:
-                self.planning_ms.append(data['planning_wall_s'] * 1000)
-        if kind == 'http_exchange' and data.get('path') == '/v1/environment/step':
-            self.step_ms.append(data['elapsed_s'] * 1000)
-        if kind=='physical_outcome':
+                self.planning_ms.append(data['planning_wall_s']*1000)
+        elif kind in ('observation','reset_response'):
+            frame=data if kind=='observation' else data.get('observation',{})
+            self._observe(frame)
+        elif kind=='http_exchange' and data.get('path')=='/v1/environment/step':
+            self.step_ms.append(data['elapsed_s']*1000)
+        elif kind=='physical_outcome':
             self.goals.record_outcome(data.get('episode_id'),data['payload'])
-        if kind == 'step_response':
-            observation = data.get('observation', {})
-            current=self.decisions.get(self.last_decision_id,{})
+        elif kind=='step_response':
+            observation=data.get('observation',{})
             episode=data.get('episode_id',observation.get('episode_id'))
-            if 'request_id' in data and (not current or
-                    data['request_id']!=current['request_id'] or episode!=current['episode_id'] or
-                    data.get('time',current['time'])<current['time']):
+            request=data.get('request_id')
+            current_key=self.requests.get(self._identity(episode,request))
+            current=self.decisions.get(current_key,{})
+            if request is not None and (not current or current_key in self.conflicts
+                    or observation.get('episode_id',episode)!=episode
+                    or observation.get('request_id',request)!=request
+                    or data.get('time',-1)<current.get('time',0)):
                 return
             for event in data.get('events',()):
                 p=event.get('parameters',{})
                 if event.get('type')=='target_state_changed' and p.get('evacuation_state')=='evacuated' and len(event.get('targets',()))==1:
                     self.goals.record_outcome(episode,{**p,'target_id':event['targets'][0],
                         'agent_id':event.get('source'),'effect':'evacuated','outcome_id':event['id']})
-            finished = {(target['id'], target['status']) for target in observation.get('targets', ())
-                        if target.get('id') and target.get('status') in ('rescued', 'delivered')}
-            new_targets = finished - self.completed_targets
-            self.completed_targets.update(finished)
-            current = self.decisions.get(self.last_decision_id, {})
-            for receipt in data['command_results']:
+            new_targets=self._observe(observation,episode,data.get('time')) if current else set()
+            for receipt in data.get('command_results',()):
                 self.goals.record_receipt(episode,receipt)
-                identifier, index = receipt.get('decision_id'), receipt.get('command_index')
-                submitted = self.decisions.get(identifier, {}) if isinstance(identifier, str) else {}
-                commands = submitted.get('commands', ())
-                if (receipt.get('validation_status') == 'accepted' and receipt.get('delivery_status') == 'delivered'
-                        and receipt.get('execution_status') == 'completed' and receipt.get('action') in ('handover', 'deliver', 'rescue')
-                        and type(index) is int and 0 <= index < len(commands)
-                        and all(commands[index][key] == receipt.get(key) for key in ('agent_id', 'action'))):
-                    self.transfers[(identifier, index)] = receipt
-                if (receipt.get('status') in ('applied', 'accepted') and receipt.get('action') in ('rescue', 'deliver') and
-                        data.get('request_id') == current.get('request_id') and current):
-                    indices = [(index, cmd['parameters'].get('target_id'))
-                               for index, cmd in enumerate(current.get('commands', ()))
-                               if cmd['agent_id'] == receipt.get('agent_id') and cmd['action'] == receipt['action']]
-                    if len(indices) == 1 and (indices[0][1], 'rescued' if receipt['action'] == 'rescue' else 'delivered') in new_targets:
-                        index, target_id = indices[0]
-                        key = (current['decision_id'], index)
-                        self.transfers[key] = {'decision_id': key[0], 'command_index': index, 'target_id': target_id,
-                                               'basis': 'public_target_transition', 'receipt': receipt,
-                                               'observation_request_id': observation.get('request_id')}
-        if self.first_error is None and kind in ('controller_failure', 'environment_failure',
-                                                 'environment_rejection', 'uncertain_step'):
-            self.first_error = {'kind': kind, **data}
+                key=GoalEvidence.key(episode,receipt)
+                submitted=self.decisions.get(key[:2],{}) if key else {}
+                commands=submitted.get('commands',())
+                if (key and key[2]<len(commands)
+                        and all(commands[key[2]].get(field)==receipt.get(field) for field in ('agent_id','action'))):
+                    if terminal_failure(receipt):
+                        self.failed_receipts.add(key)
+                    if (receipt.get('validation_status')=='accepted' and receipt.get('delivery_status')=='delivered'
+                            and receipt.get('execution_status')=='completed'
+                            and receipt.get('action') in ('handover','deliver','rescue')):
+                        self.transfers[key]=receipt
+                if (current and request is not None and receipt.get('status') in ('applied','accepted')
+                        and receipt.get('action') in ('rescue','deliver')):
+                    indices=[(index,cmd.get('parameters',{}).get('target_id'))
+                             for index,cmd in enumerate(current.get('commands',()))
+                             if cmd.get('agent_id')==receipt.get('agent_id') and cmd.get('action')==receipt['action']]
+                    expected='rescued' if receipt['action']=='rescue' else 'delivered'
+                    if len(indices)==1 and (indices[0][1],expected) in new_targets:
+                        index,target_id=indices[0]
+                        key=(*current_key,index)
+                        self.legacy_transitions[key]={'episode_id':episode,'decision_id':current_key[1],
+                            'command_index':index,'target_id':target_id,'basis':'public_target_transition',
+                            'receipt':receipt,'observation_request_id':observation.get('request_id',request)}
+        if self.first_error is None and kind in ('controller_failure','environment_failure',
+                                                 'environment_rejection','uncertain_step'):
+            self.first_error={'kind':kind,**data}
 
     def summary(self):
-        # A legacy, command-correlated public state transition is stronger
-        # than a bare ACK but is not independent physical truth and cannot
-        # substitute for a declared outcome in GoalEvidence.
-        target_transitions=[item for item in self.transfers.values()
-                            if item.get('basis')=='public_target_transition']
-        return {'confirmed_command_receipts': list(self.transfers.values()),
-                'correlated_public_target_count':len({item['target_id'] for item in target_transitions}),
-                'correlated_public_target_transitions':target_transitions,
-                'first_protocol_error': self.first_error,
-                'planning_p95_ms': percentile(self.planning_ms, .95), 'step_http_p95_ms': percentile(self.step_ms, .95),
+        def admissible(key):
+            return key[:2] not in self.conflicts and key not in self.failed_receipts
+        transitions={key:item for key,item in self.legacy_transitions.items() if admissible(key)}
+        receipts={key:item for key,item in self.transfers.items() if admissible(key)}
+        # Keep the existing report field compatible; count transitions
+        # separately and never promote them to declared physical outcomes.
+        combined={**receipts,**transitions}
+        return {'confirmed_command_receipts':list(combined.values()),
+                'correlated_public_target_count':len({(item['episode_id'],item['target_id']) for item in transitions.values()}),
+                'correlated_public_target_transitions':list(transitions.values()),
+                'first_protocol_error':self.first_error,
+                'planning_p95_ms':percentile(self.planning_ms,.95),'step_http_p95_ms':percentile(self.step_ms,.95),
                 **self.goals.summary()}
 
 
@@ -133,7 +195,12 @@ def public_logs(client, episode, destination, evidence=None):
             target.write(encode(page) + b'\n')
             if evidence is not None:
                 for record in page['records']:
+                    if not isinstance(record,dict) or record.get('episode_id',episode)!=episode:
+                        raise ProtocolError('INVALID_REQUEST','Journal record belongs to another episode')
                     if record.get('type') == 'step' and 'response' in record:
+                        if record['response'].get('episode_id')!=episode or (
+                                'decision' in record and record['decision'].get('episode_id')!=episode):
+                            raise ProtocolError('INVALID_REQUEST','Journal step belongs to another episode')
                         if 'decision' in record:
                             evidence.record('decision', {'decision': record['decision']})
                         evidence.record('step_response', record['response'])
