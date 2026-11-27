@@ -86,7 +86,7 @@ python -B -X utf8 unreal/launch.py --quarter --build
 python -B -X utf8 unreal/tools/run_disaster_art.py --kind smoke-v2 --inputs "<existing-disaster-input-manifest.json>" --output "D:/MetaRescue-output/smoke-v2-import-01"
 python -B -X utf8 unreal/launch.py --automation MetaRescue
 python -B -X utf8 tools/generate_city.py --city-revision 2.3 --disaster-revision 1 --size 25 --seed 2026 --output "D:/MetaRescue-output/vis23-world-01.private.json"
-python -B -X utf8 tools/run_mission.py --layout "D:/MetaRescue-output/vis23-world-01.private.json" --controller-profile counterfactual_value --ai-mode OFF --visible --realtime --frame-profile --name vis23-visible-01
+python -B -X utf8 tools/run_mission.py --layout "D:/MetaRescue-output/vis23-world-01.private.json" --controller-profile counterfactual-value --ai-mode OFF --visible --realtime --frame-profile --name vis23-visible-01
 git diff --check
 ```
 
