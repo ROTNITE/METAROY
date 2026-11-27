@@ -183,18 +183,28 @@ void AMRAgent::DriveWatercraft(float Dt)
     const bool Servicing=State==TEXT("loading")||State==TEXT("unloading");
     const double HoldHeading=Servicing?ServiceHeading:FinalHeading.Rotation().Yaw;
     const double HeadingError=FMath::Abs(FMath::FindDeltaAngleDegrees(GetActorRotation().Yaw,HoldHeading));
+    const FVector Velocity=Body->GetPhysicsLinearVelocity();
     FVector Desired=FVector::ZeroVector;
     if(!bExternalHold&&Path.IsValidIndex(PathIndex))
     {
         FVector Delta=Path[PathIndex]-P;Delta.Z=0;
         const bool Last=PathIndex==Path.Num()-1;
-        if(Delta.Size()<50&&(!Last||(Body->GetPhysicsLinearVelocity().Size2D()<30&&(!Berthing||HeadingError<9))))
+        // Settle at the last approach point before turning into a precise
+        // leg. At cruising speed the hull can drift across the turn.
+        const bool Staging=bPreciseFinalStop&&PathIndex==Path.Num()-2&&FinalHeading.Size2D()>50&&HeadingError>35;
+        if(Delta.Size()<50&&(!Staging||Velocity.Size2D()<40)&&(!Last||(Velocity.Size2D()<30&&(!Berthing||HeadingError<9))))
         {
             WatercraftHoldPosition=Path[PathIndex];++PathIndex;
             if(RouteFinished())Arrived();
         }
         if(Path.IsValidIndex(PathIndex))
-        {Delta=Path[PathIndex]-P;Delta.Z=0;Desired=Delta.GetSafeNormal()*FMath::Min(double(MaxSpeed*SpeedFactor),Delta.Size()*.45);}
+        {
+            Delta=Path[PathIndex]-P;Delta.Z=0;
+            const bool SlowLeg=bPreciseFinalStop&&(PathIndex==Path.Num()-1||(Staging&&Delta.Size2D()<400));
+            const double Limit=SlowLeg?
+                FMath::Min(110.,double(MaxSpeed*SpeedFactor)):double(MaxSpeed*SpeedFactor);
+            Desired=Delta.GetSafeNormal()*FMath::Min(Limit,Delta.Size()*.45);
+        }
     }
     else if(!bWatercraftMoored)
     {
@@ -204,9 +214,8 @@ void AMRAgent::DriveWatercraft(float Dt)
     IntendedVelocity=Desired;
     WatercraftLeftJetN=WatercraftRightJetN=0;
     if(bWatercraftMoored||!IsOperational())return;
-    StopReason.Empty();StopObstacle.Empty();
-    const FVector Velocity=Body->GetPhysicsLinearVelocity();
-    bool BrakeInDirectionOfMotion=false;
+    StopReason.Empty();StopObstacle.Empty();SensedBlocker=FBox(ForceInit);
+    bool BrakeInDirectionOfMotion=false,DepartingHull=false;
     if(WatercraftDisplacedM3*1000>Mass*.6&&Velocity.Size2D()>30)
     {
         const FVector Ahead=P+Velocity.GetSafeNormal2D()*(Velocity.Size2D()*.95+185);
@@ -223,18 +232,61 @@ void AMRAgent::DriveWatercraft(float Dt)
     {
         const double Ahead=FMath::Clamp(Velocity.Size2D()*.8+150,150.,800.);
         const FVector Goal=Path.IsValidIndex(PathIndex)?Path[PathIndex]:WatercraftHoldPosition;
-        const FVector End=P+Desired.GetSafeNormal2D()*FMath::Min(Ahead,FVector::Dist2D(P,Goal));
+        const double LookAhead=FMath::Min(Ahead,FVector::Dist2D(P,Goal));
+        FVector End=P+Desired.GetSafeNormal2D()*LookAhead;
         const double Draft=Hull.EquilibriumDraftM(Mass).Get(.5)*100;
         FHitResult Hit;FCollisionQueryParams Query(SCENE_QUERY_STAT(MRWatercraftSafety),false,this);
-        const bool Obstacle=GetWorld()->SweepSingleByChannel(Hit,P+FVector(0,0,40),End+FVector(0,0,40),GetActorQuat(),
-            ECC_Visibility,FCollisionShape::MakeBox(FVector(235,105,80)),Query)&&Hit.ImpactNormal.Z<.7;
+        auto HullBlocked=[&](FVector Point)
+        {
+            return GetWorld()->SweepSingleByChannel(Hit,P+FVector(0,0,40),Point+FVector(0,0,40),GetActorQuat(),
+                ECC_Visibility,FCollisionShape::MakeBox(FVector(235,105,80)),Query)&&Hit.ImpactNormal.Z<.7;
+        };
+        bool Obstacle=HullBlocked(End);
+        if(bCarrying&&Obstacle&&Hit.bStartPenetrating)
+        {
+            const auto* Peer=Cast<AMRAgent>(Hit.GetActor());
+            const FVector Away=Hit.Normal.GetSafeNormal2D();
+            const FVector Drive=Forward.GetSafeNormal2D()*FVector::DotProduct(Forward,Desired);
+            // Leaving an existing overlap of the safety envelope is possible
+            // along its separating normal. Keep the hull heading fixed while
+            // translating away. The disabled hull retains physical collisions.
+            if(Peer&&Peer->bRescueWatercraft&&!Peer->IsOperational()&&
+               FVector::DotProduct(Away,(P-Peer->GetActorLocation()).GetSafeNormal2D())>.5&&
+               FVector::DotProduct(Away,Desired)>5&&FVector::DotProduct(Away,Drive)>5&&
+               FVector::DotProduct(Away,Velocity)>-10&&FMath::Abs(Body->GetPhysicsAngularVelocityInDegrees().Z)<6)
+            {
+                const FVector Exit=P+Drive.GetSafeNormal2D()*LookAhead;
+                FHitResult Clearance;
+                // Check the actual hull footprint against every collider.
+                // Only the extra horizontal safety margin may overlap here.
+                if(!GetWorld()->SweepSingleByChannel(Clearance,P+FVector(0,0,40),Exit+FVector(0,0,40),GetActorQuat(),
+                    ECC_Visibility,FCollisionShape::MakeBox(FVector(210,94,80)),Query))
+                {
+                    Query.AddIgnoredActor(Peer);
+                    End=Exit;
+                    Obstacle=HullBlocked(End);
+                    if(!Obstacle){Desired=Drive;DepartingHull=true;}
+                }
+            }
+        }
         const bool Restricted=Mission->RestrictionOnRoute(P,End,Kind(),255,80,SensedBlocker);
         if(!MediumPointAllowed(End)||Mission->WaterAtCm(End).DepthCm<Draft+8||Obstacle||Restricted)
-        {Desired=FVector::ZeroVector;StopReason=Restricted?TEXT("restricted_volume_on_route"):Obstacle?TEXT("obstacle_on_route"):TEXT("shallow_water_on_route");
-         StopObstacle=Restricted?TEXT("restricted_volume"):Obstacle?GetNameSafe(Hit.GetComponent()):TEXT("measured_depth");WatercraftHoldPosition=P;}
+        {
+            Desired=FVector::ZeroVector;
+            StopReason=Restricted?TEXT("restricted_volume_on_route"):Obstacle?TEXT("obstacle_on_route"):TEXT("shallow_water_on_route");
+            if(Restricted)StopObstacle=TEXT("restricted_volume");
+            else if(Obstacle)
+            {
+                if(const auto* Peer=Cast<AMRAgent>(Hit.GetActor()))StopObstacle=Peer->AgentKey();
+                else ReportRouteObstacle(Hit);
+            }
+            else StopObstacle=TEXT("measured_depth");
+            WatercraftHoldPosition=P;
+        }
     }
     FVector Heading=Desired;
     if(BrakeInDirectionOfMotion)Heading=Velocity;
+    else if(DepartingHull)Heading=Forward*100;
     else if(Berthing||Servicing)Heading=FRotator(0,HoldHeading,0).Vector()*100;
     else if(WatercraftCurrentCmPerSecond.Size2D()>20)
         Heading=Desired-WatercraftCurrentCmPerSecond;

@@ -177,6 +177,21 @@ FVector AMRAgent::PlannedVelocity() const
     }
     return Desired;
 }
+void AMRAgent::ReportRouteObstacle(const FHitResult& Hit)
+{
+    StopObstacle=GetNameSafe(Hit.GetComponent());
+    if(auto* Primitive=Hit.GetComponent())SensedBlocker=Primitive->Bounds.GetBox();
+    if(auto* Instanced=Cast<UInstancedStaticMeshComponent>(Hit.GetComponent()))
+    {
+        FTransform Instance;
+        if(Instanced->GetStaticMesh()&&Instanced->GetInstanceTransform(Hit.Item,Instance,true))
+            SensedBlocker=Instanced->GetStaticMesh()->GetBoundingBox().TransformBy(Instance);
+        else SensedBlocker=FBox(ForceInit);
+    }
+    if(auto* Mesh=Cast<UStaticMeshComponent>(Hit.GetComponent()))
+        StopObstacle+=TEXT(":")+GetNameSafe(Mesh->GetStaticMesh())+TEXT(":")+GetNameSafe(Mesh->GetMaterial(0))+FString::Printf(TEXT(":instance_%d"),Hit.Item);
+}
+
 FVector AMRAgent::SafeVelocity(const FVector& Requested,float Dt)
 {
     const FString PreviousReason=StopReason;StopReason.Empty();StopObstacle.Empty();SensedBlocker=FBox(ForceInit);
@@ -233,16 +248,7 @@ FVector AMRAgent::SafeVelocity(const FVector& Requested,float Dt)
                 if(OwnPadSupport&&(FlightAltitude<=Dock.Z+100||DepartingPad))continue;
                 if(StopObstacle==TEXT("restricted_volume"))break;
                 StopReason=TEXT("obstacle_on_route");Desired=FVector::ZeroVector;
-                StopObstacle=GetNameSafe(Hit.GetComponent());
-                if(auto* Primitive=Hit.GetComponent())SensedBlocker=Primitive->Bounds.GetBox();
-                if(auto* Instanced=Cast<UInstancedStaticMeshComponent>(Hit.GetComponent()))
-                {
-                    FTransform Instance;
-                    if(Instanced->GetStaticMesh()&&Instanced->GetInstanceTransform(Hit.Item,Instance,true))
-                        SensedBlocker=Instanced->GetStaticMesh()->GetBoundingBox().TransformBy(Instance);
-                }
-                if(auto* Mesh=Cast<UStaticMeshComponent>(Hit.GetComponent()))
-                    StopObstacle+=TEXT(":")+GetNameSafe(Mesh->GetStaticMesh())+TEXT(":")+GetNameSafe(Mesh->GetMaterial(0))+FString::Printf(TEXT(":instance_%d"),Hit.Item);
+                ReportRouteObstacle(Hit);
                 break;
             }
     }
