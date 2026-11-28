@@ -414,8 +414,13 @@ class TournamentPolicy:
                         claimed.add(tid)
                         return name, args
                     if agent['kind'] == 'aerial':
-                        # Close the actual 3D sensing gap after a nearby attempt.
-                        altitude = min(p[2], goal[2]+8.) if inspection and attempt else p[2]
+                        altitude = p[2]
+                        if inspection:
+                            if math.dist(p[:2], goal[:2]) <= SURVEY_ARRIVAL_M and not provenance:
+                                # An overhead position is not yet within inspection range.
+                                altitude = goal[2] + 1.
+                            elif attempt:
+                                altitude = min(altitude, goal[2]+8.)
                         goal = (*goal[:2], altitude)
                     if cmd := go(goal):
                         claimed.add(tid)

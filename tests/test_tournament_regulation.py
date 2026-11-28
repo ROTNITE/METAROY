@@ -221,6 +221,22 @@ class TournamentAdversarialTests(TestCase):
         self.assertIn({'agent_id': scout['id'], 'action': 'move',
                        'parameters': {'target': aim}}, decision['commands'])
 
+    def test_scout_closes_vertical_gap_to_another_agents_detection(self):
+        obs = checker.make_synthetic_obs(0)
+        scout, rover = obs['agents']
+        scout['position'] = [68.3, 17.2, 12.]
+        scout['available_actions'].append({'action': 'inspect'})
+        target = obs['targets'][0]
+        target.update(status='suspected', source_id=rover['id'], position=[68., 17., 0.])
+        policy = TournamentPolicy()
+        first = next(c for c in policy.decide(obs)['commands'] if c['agent_id'] == scout['id'])
+        self.assertEqual(first, {'agent_id': scout['id'], 'action': 'move',
+                                 'parameters': {'target': [68., 17., 1.]}})
+        scout['position'] = [68.1, 17.0, 1.4]
+        next_obs = {**obs, 'request_id': 'different-reporter', 'time': 5.}
+        second = next(c for c in policy.decide(next_obs)['commands'] if c['agent_id'] == scout['id'])
+        self.assertEqual(second['action'], 'inspect')
+
     def test_survey_advances_after_a_near_waypoint_and_keeps_native_sensor_default(self):
         obs = checker.make_synthetic_obs(0)
         scout = obs['agents'][0]
