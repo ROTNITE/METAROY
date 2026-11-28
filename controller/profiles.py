@@ -2,14 +2,16 @@
 
 STANDARD = 'standard'
 COUNTERFACTUAL = 'counterfactual-value'
-CONTROLLER_PROFILES = (STANDARD, COUNTERFACTUAL)
+FULLFLEET = 'cf-full-fleet-fast'
+COUNTERFACTUAL_PROFILES = (COUNTERFACTUAL, FULLFLEET)
+CONTROLLER_PROFILES = (STANDARD, *COUNTERFACTUAL_PROFILES)
 
 
 def select_patrol(profile, policy, patrol):
     if profile not in CONTROLLER_PROFILES:
         raise ValueError('Unknown controller profile')
-    if profile == COUNTERFACTUAL:
+    if profile in COUNTERFACTUAL_PROFILES:
         if policy != 'nsga2_nsga2' or patrol not in (None, 'net65'):
-            raise ValueError('Counterfactual Value requires NSGA-II x2 and the Net65 patrol')
+            raise ValueError('Counterfactual profiles require NSGA-II x2 and the Net65 patrol')
         return 'net65'
     return 'core' if patrol is None else patrol

@@ -1,0 +1,45 @@
+name: FullFleet integration regression
+on:
+  push:
+    branches: [chatgpt/fullfleet-fast-integration]
+  pull_request:
+    branches: [main]
+    paths:
+      - 'controller/**'
+      - 'environment/**'
+      - 'contracts/**'
+      - 'tools/**'
+      - 'tests/**'
+      - 'unreal/MetaRescue/Source/MetaRescue/MRMissionInterface.cpp'
+      - '.github/workflows/fullfleet-integration.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  python:
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, windows-2022]
+    runs-on: ${{ matrix.os }}
+    timeout-minutes: 30
+    env:
+      GIT_LFS_SKIP_SMUDGE: "1"
+      PYTHONUTF8: "1"
+      PYTHONHASHSEED: "0"
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          lfs: false
+          persist-credentials: false
+      - run: python -m pip install -r requirements.txt
+      - name: Targeted FullFleet tests
+        env:
+          METARESCUE_OUTPUT: ${{ runner.temp }}/fullfleet-output
+          METARESCUE_LIVE_BUDGET: ${{ runner.temp }}/fullfleet-budget.json
+        run: python -B -X utf8 -m unittest discover -s tests -p test_fullfleet_integration.py -v
+      - name: Full Python regression
+        env:
+          METARESCUE_OUTPUT: ${{ runner.temp }}/fullfleet-output
+          METARESCUE_LIVE_BUDGET: ${{ runner.temp }}/fullfleet-budget.json
+        run: python -B -X utf8 -m unittest discover -s tests -v

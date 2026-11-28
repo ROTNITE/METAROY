@@ -54,6 +54,8 @@ class RouteValuePolicy(ReliablePolicy):
         super().__init__(*args,**kw)
     def _reset(self,episode):
         super()._reset(episode);self.router=None;self.route_key=None;self.route_active=False
+    def _research_constraints_supported(self, obs):
+        return not (obs['constraints'] or obs['mission']['constraints'] or any(a['constraints'] for a in obs['agents']))
     def decide(self,obs):
         if self.episode!=obs['episode_id']:
             self._reset(obs['episode_id']);self.started=obs['time']
@@ -62,7 +64,7 @@ class RouteValuePolicy(ReliablePolicy):
             self.info_eligible=len(carriers)>=2 and self._profile() and all((e:=self._usable_energy(a)) is not None and e>=.25 for a in carriers)
         zones=[(z,_box(z)) for z in obs['zones']]
         land=[b for z,b in zones if b and z['type']=='land' and _allowed(z,'ground') and not z['constraints'] and not z['risk']]
-        self.route_active=bool(self._profile() and self.capabilities.get('environment_id')=='metarescue_planar_reference' and len(land)==1 and land[0].minimum[2]==land[0].maximum[2]==0 and len(zones)<=16 and all(b and not z['constraints'] and not z['access'] for z,b in zones) and not obs['constraints'] and not obs['mission']['constraints'] and not obs['mission'].get('directives') and not obs['observation_quality']['contradiction_count'] and not self.program and all(not a['constraints'] for a in obs['agents']) and (self.route_mode!='route' or any(z['type'] in ('obstacle','restricted','hazard') for z,b in zones)))
+        self.route_active=bool(self._profile() and self.capabilities.get('environment_id')=='metarescue_planar_reference' and len(land)==1 and land[0].minimum[2]==land[0].maximum[2]==0 and len(zones)<=16 and all(b and not z['constraints'] and not z['access'] for z,b in zones) and self._research_constraints_supported(obs) and not obs['mission'].get('directives') and not obs['observation_quality']['contradiction_count'] and not self.program and (self.route_mode!='route' or any(z['type'] in ('obstacle','restricted','hazard') for z,b in zones)))
         if self.route_active and self.route_mode.startswith(('gate','eco')):
             self.route_active=self.low_initial or any(z['type'] in ('obstacle','restricted','hazard') for z,b in zones)
         if self.route_active:

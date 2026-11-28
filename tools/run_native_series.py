@@ -14,7 +14,7 @@ ROOT=Path(__file__).resolve().parents[1]
 sys.path.insert(0,str(ROOT))
 from controller.ai import file_lock
 from environment.main import DEFAULT_OUTPUT,existing_unreal
-from controller.profiles import COUNTERFACTUAL,STANDARD
+from controller.profiles import CONTROLLER_PROFILES,COUNTERFACTUAL_PROFILES,STANDARD
 from tools.native_archive import file_sha256
 from tools.run_mission import hashes
 from tools.series_plan import FORMAT,FAMILIES,OPTIMIZER_SEEDS,POLICIES,digest,json_bytes,tape_digest
@@ -28,7 +28,7 @@ def validate_design(plan_path):
     if data.get('format')!=FORMAT or data.get('renderer')!='null_rhi':
         raise ValueError('Unknown native series format')
     profile=data.get('evolutionary_controller_profile',STANDARD)
-    if profile not in (STANDARD,COUNTERFACTUAL):
+    if profile not in CONTROLLER_PROFILES:
         raise ValueError('Unknown evolutionary series controller')
     worlds={}
     for entry in data['worlds']:
@@ -41,7 +41,7 @@ def validate_design(plan_path):
             raise ValueError(f'Frozen world or external tape changed for {identifier}')
         if world['settings']['seed']!=entry['seed'] or world['settings']['horizon']!=data['comparison_horizon_s']:
             raise ValueError(f'World settings changed for {identifier}')
-        if profile==COUNTERFACTUAL and (world.get('format')!='rescue-city-2.3' or not world.get('street_controls_revision')):
+        if profile in COUNTERFACTUAL_PROFILES and (world.get('format')!='rescue-city-2.3' or not world.get('street_controls_revision')):
             raise ValueError(f'Integrated city data is missing for {identifier}')
         worlds[identifier]=(entry,path)
     if len(worlds)!=30 or sorted(e['family'] for e,_ in worlds.values())!=[f'S{f}' for f in range(1,len(FAMILIES)+1) for _ in range(5)]:

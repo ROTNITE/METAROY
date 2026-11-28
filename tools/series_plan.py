@@ -13,7 +13,7 @@ from environment.config import EVENT_DEFAULTS,Settings
 from environment.disturbances import FORMAT as DISTURBANCE_FORMAT,validate_tape as validate_disturbances
 from environment.events import validate_tape as validate_events
 from environment.layout import generate,public_map
-from controller.profiles import COUNTERFACTUAL
+from controller.profiles import COUNTERFACTUAL, COUNTERFACTUAL_PROFILES
 
 
 FORMAT='metarescue.native-series.v1'
@@ -70,12 +70,14 @@ def world_for(family,index,*,integrated=False):
     return world
 
 
-def design(output,*,integrated=False):
+def design(output,*,integrated=False,controller_profile=COUNTERFACTUAL):
+    if controller_profile not in COUNTERFACTUAL_PROFILES or (not integrated and controller_profile!=COUNTERFACTUAL):
+        raise ValueError('FullFleet series requires --integrated')
     output.mkdir(parents=True,exist_ok=False)
     maps=output/'maps';maps.mkdir()
     plan={'format':FORMAT,'simulation':'Unreal Core Protocol 1.0',
           'renderer':'null_rhi','comparison_horizon_s':480,'worlds':[],'runs':[]}
-    if integrated:plan['evolutionary_controller_profile']=COUNTERFACTUAL
+    if integrated:plan['evolutionary_controller_profile']=controller_profile
     for family in range(1,7):
         for index in range(1,6):
             identifier=f'S{family}-{index:02d}'
@@ -104,7 +106,9 @@ if __name__=='__main__':
     parser=argparse.ArgumentParser(description=__doc__)
     parser.add_argument('output',type=Path)
     parser.add_argument('--integrated',action='store_true',help='Use the integrated controller, city 2.3 and independent world seeds')
+    parser.add_argument('--controller-profile',choices=COUNTERFACTUAL_PROFILES,default=COUNTERFACTUAL)
     args=parser.parse_args()
-    manifest=design(args.output,integrated=args.integrated)
+    if not args.integrated and args.controller_profile!=COUNTERFACTUAL:parser.error('FullFleet requires --integrated')
+    manifest=design(args.output,integrated=args.integrated,controller_profile=args.controller_profile)
     print(json.dumps({'plan':str(manifest.resolve()),'sha256':hashlib.sha256(manifest.read_bytes()).hexdigest(),
                       'worlds':30,'planned_runs':450,'completed_native_runs':0}))

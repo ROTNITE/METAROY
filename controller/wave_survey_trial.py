@@ -12,8 +12,7 @@ class WaveSurveyPolicy(MarginalPolicy):
         if ArrivalPolicy._target_service(self,obs,zones,a,claimed,issue):return True
         if (a['kind']!='aerial' or 'sense' not in a['capabilities'] or self.scout_patrol!='net65' or not self._profile() or
             self.capabilities.get('environment_id')!='metarescue_planar_reference' or 'metarescue.patrol_estimates.v1' not in self.public.extensions or
-            self.program or obs['constraints'] or obs['mission']['constraints'] or obs['mission'].get('directives') or obs['observation_quality']['contradiction_count'] or
-            any(r['constraints'] for r in obs['agents'])):return False
+            self.program or not self._research_constraints_supported(obs) or obs['mission'].get('directives') or obs['observation_quality']['contradiction_count']):return False
         data=self._geometry(zones,a)
         if data is None:return False
         router,samples,cover=data; now=obs['time'];h=horizon_of(obs['mission']);energy=a['resources'].get('energy');est=self.capabilities.get('patrol_estimates',{})

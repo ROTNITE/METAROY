@@ -10,6 +10,8 @@ class ArrivalPolicy(RouteValuePolicy):
         super().__init__(*args,route_mode='gate-1.8',**kw)
     def _reset(self,episode):
         super()._reset(episode);self.accepted_moves={};self.arrival_released={};self.arrival_disabled=False
+    def _arrival_constraints_supported(self, obs, agent=None):
+        return not (obs['constraints'] or obs['mission']['constraints'] or (agent is not None and agent['constraints']))
     def observe_response(self,response):
         request,intents=self.proposed
         for i,c in enumerate(request['commands']):
@@ -27,11 +29,11 @@ class ArrivalPolicy(RouteValuePolicy):
                     if item['execution_status']!='completed':self.arrival_disabled=True
         super().observe_response(response)
         obs=response.get('observation')
-        if self.arrival_disabled or not obs or not self._profile() or self.capabilities.get('environment_id')!='metarescue_planar_reference' or self.program or request['operation']=='safe_stop' or obs['constraints'] or obs['mission']['constraints'] or obs['mission'].get('directives') or obs['observation_quality']['contradiction_count']:return
+        if self.arrival_disabled or not obs or not self._profile() or self.capabilities.get('environment_id')!='metarescue_planar_reference' or self.program or request['operation']=='safe_stop' or not self._arrival_constraints_supported(obs) or obs['mission'].get('directives') or obs['observation_quality']['contradiction_count']:return
         if self.arrival_mode=='arrival-radio' and obs['observation_quality'].get('maximum_delay',0)<=1:return
         for a in obs['agents']:
             aid=a['id'];p=self.pending.get(aid)
-            if not p or p[3][1]!='move' or a['status']!='active' or a['constraints'] or not a['communication'].get('reachable',False) or a.get('position') is None or not any(x.get('action')=='move' for x in a['available_actions']):continue
+            if not p or p[3][1]!='move' or a['status']!='active' or not self._arrival_constraints_supported(obs,a) or not a['communication'].get('reachable',False) or a.get('position') is None or not any(x.get('action')=='move' for x in a['available_actions']):continue
             if self.arrival_mode=='arrival-ground' and a['kind']!='ground':continue
             accepted=self.accepted_moves.get(p[:2]);intent=p[2]
             if not accepted or accepted[0]!=aid or math.dist(a['position'],accepted[1])>1e-8 or not intent or intent[0] not in ('casualty','coverage','repeat'):continue

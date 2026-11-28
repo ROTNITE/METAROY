@@ -20,7 +20,7 @@ class OptionPolicy(CounterfactualPolicy):
         aid=a['id'];now=obs['time'];h=horizon_of(obs['mission'])
         # Allow previously started route to finish. Only intervene if the same
         # narrow public profile still applies and no external directives apply.
-        valid=self._profile() and self.capabilities.get('environment_id')=='metarescue_planar_reference' and 'metarescue.patrol_estimates.v1' in self.public.extensions and self.dock_mode!='dock-only' and not self.program and not obs['constraints'] and not obs['mission']['constraints'] and not obs['mission'].get('directives') and not obs['observation_quality']['contradiction_count'] and not any(r['constraints'] for r in obs['agents'])
+        valid=self._profile() and self.capabilities.get('environment_id')=='metarescue_planar_reference' and 'metarescue.patrol_estimates.v1' in self.public.extensions and self.dock_mode!='dock-only' and not self.program and self._research_constraints_supported(obs) and not obs['mission'].get('directives') and not obs['observation_quality']['contradiction_count']
         if not valid or h is None or h<=self.started:
             self.option_active.pop(aid,None);return baseline()
         if self._supported_cf(obs,a):
