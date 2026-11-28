@@ -97,7 +97,7 @@ void FMRCoreRuntime::GatherExplorationReport(AMRAgent* Agent)
     // rendered and headless execution.
     Cursor+=Budget;
     FReport Packet;Packet.Kind=EPacket::Exploration;Packet.Agent=Id;Packet.Sequence=SensorSamples;
-    Packet.MessageId=FGuid::NewGuid().ToString(EGuidFormats::Digits);
+    Packet.MessageId=NextObservationId(TEXT("report"));
     Packet.Data=Obj({{TEXT("message_id"),Str(Packet.MessageId)},{TEXT("source_id"),Str(Id)},
         {TEXT("observed_at"),Num(Time())},{TEXT("sensor_origin_m"),MRCoreValues::Point(Pose/100)},
         {TEXT("footprint_radius_m"),Num(Range/100)},{TEXT("cells"),Arr(Cells)}});

@@ -658,7 +658,7 @@ void FMRCoreRuntime::GatherHazardReport(AMRAgent* Agent)
     if(Readings.IsEmpty())return;
     FReport Packet;
     Packet.Agent=Id;
-    Packet.MessageId=FGuid::NewGuid().ToString(EGuidFormats::Digits);
+    Packet.MessageId=NextObservationId(TEXT("report"));
     Packet.Kind=EPacket::Hazard;
     Packet.Sequence=SensorSamples;
     Packet.Data=Obj({{TEXT("message_id"),Str(Packet.MessageId)},{TEXT("source_id"),Str(Id)},

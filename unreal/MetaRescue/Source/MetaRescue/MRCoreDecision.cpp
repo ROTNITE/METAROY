@@ -37,10 +37,10 @@ void FMRCoreRuntime::BeginEpisode(const FPending& R)
     Substeps.Reset();SubstepWindowsStarted=0;
     Status=TEXT("running");OutcomeReason.Empty();Closed=false;SafeStopRequested=false;
     SafetyViolations=0;VehicleContactAt.Reset();SafetyOccupancies.Reset();
-    KnownAgents.Empty();KnownTargets.Empty();AgentReceived.Empty();ActualConfigurations.Empty();Reports.Empty();ReportCounts.Empty();Commands.Empty();ReplayKeys.Empty();
+    KnownAgents.Empty();KnownTargets.Empty();AgentReceived.Empty();ActualConfigurations.Empty();Reports.Empty();ReportCounts.Empty();Commands.Empty();ReplayKeys.Empty();DecisionRequestKeys.Empty();
     KnownZones.Empty();StepEvents.Empty();SurfaceObservedAt.Empty();SensorRadius.Empty();StaleAlerts.Empty();DegradationAlerts.Empty();
     EventViews.Empty();ScheduledViews.Empty();ViewStartedAt=-1;
-    LastMotionSequence.Empty();CommandSequence=0;
+    LastMotionSequence.Empty();CommandSequence=0;ObservationSequence=0;
     StepRequest.Reset();PlanRevision=0;
     Accepted=Obj({{TEXT("scenario_ids"),Arr({})},{TEXT("parameters"),Json(Obj())},{TEXT("synthesized_scenario"),Null()}});DesiredRoles=Obj();
     for(AMRAgent* A:World->Agents)
@@ -229,12 +229,16 @@ void FMRCoreRuntime::Step(const FPending& R)
         else Reply(R.Complete,Prior.Response,Prior.HttpStatus);return;
     }
     if(ReplayKeys.Num()>=100000){Error(R.Complete,TEXT("RESOURCE_EXHAUSTED"),TEXT("Declared decision limit reached"),RequestId);return;}
+    const FString RequestKey=ReplayKey(RequestId);
+    if(DecisionRequestKeys.Contains(RequestKey))
+    {Error(R.Complete,TEXT("INVALID_REQUEST"),TEXT("request_id belongs to an earlier decision"),RequestId);return;}
     auto Reject=[&](const FString& Code,const FString& Message)
     {
         FString Response;int32 HttpStatus=400;
         const FHttpResultCallback Capture=[&](TUniquePtr<FHttpServerResponse>&& Result)
         {FUTF8ToTCHAR Text(reinterpret_cast<const ANSICHAR*>(Result->Body.GetData()),Result->Body.Num());Response=FString(Text.Length(),Text.Get());HttpStatus=int32(Result->Code);};
         Error(Capture,Code,Message,RequestId);
+        if(!Id.IsEmpty())DecisionRequestKeys.Add(RequestKey);
         Record(TEXT("protocol_error"),Obj({{TEXT("code"),Str(Code)},{TEXT("message"),Str(Message)},{TEXT("decision_id"),Str(Id)}}));
         if((!Id.IsEmpty()&&!StoreReplay(Id,{R.Body,Response,HttpStatus}))||!FlushArchive())
         {Error(R.Complete,TEXT("INTERNAL_ERROR"),StorageError,RequestId,500);return;}
@@ -314,6 +318,7 @@ void FMRCoreRuntime::Step(const FPending& R)
     }
     int32 Valid=0;for(const auto& Reason:Reasons)Valid+=Reason.IsEmpty();
     if(!Input.IsEmpty()&&Valid==0){Reject(TEXT("INVALID_COMMAND"),TEXT("All independent command groups were rejected"));return;}
+    DecisionRequestKeys.Add(RequestKey);
     StepRequest=R.Request;StepBody=R.Body;StepCallbacks={R.Complete};
     StepEvents.Empty();
     const auto PriorRoles=DesiredRoles;

@@ -116,9 +116,15 @@ double FMRCoreRuntime::ReportDelay(const FReport& Packet,int32 HopsCount) const
     return RadioDelay+Latency*(FMath::Clamp(Bias,1.,2.)-1.)*(1.-Priority);
 }
 
+FString FMRCoreRuntime::NextObservationId(const TCHAR* Kind)
+{
+    // Public message and event IDs are scoped by episode and replay in model order.
+    return FString::Printf(TEXT("%s-%lld"),Kind,++ObservationSequence);
+}
+
 void FMRCoreRuntime::QueueReport(FReport Packet)
 {
-    if(Packet.MessageId.IsEmpty())Packet.MessageId=FGuid::NewGuid().ToString(EGuidFormats::Digits);
+    if(Packet.MessageId.IsEmpty())Packet.MessageId=NextObservationId(TEXT("report"));
     const auto* Route=Hops.Find(Packet.Agent);
     Packet.Deadline=Time()+ReportTtlSeconds;
     Packet.Due=Route?Time()+ReportDelay(Packet,*Route):-1;
@@ -174,7 +180,7 @@ void FMRCoreRuntime::UpdateFreshnessEvents()
         const double Observed=Stamp->GetNumberField(TEXT("observed_at")),Age=Time()-Observed;
         auto* Existing=StaleAlerts.Find(Pair.Key);
         if((Age>5)==(Existing!=nullptr))continue;
-        const FStaleAlert Alert=Existing?*Existing:FStaleAlert{FGuid::NewGuid().ToString(EGuidFormats::Digits),Time()};
+        const FStaleAlert Alert=Existing?*Existing:FStaleAlert{NextObservationId(TEXT("stale")),Time()};
         const FString State=Existing?TEXT("resolved"):TEXT("active");
         auto Parameters=Obj({{TEXT("observed_at"),Num(Observed)},{TEXT("age_s"),Num(Age)},
             {TEXT("threshold_s"),Num(5)},{TEXT("basis"),Str(TEXT("received_pose_timeout"))}});
@@ -199,7 +205,7 @@ void FMRCoreRuntime::UpdateAgentKnowledge(const FString& Agent,const Object& Rep
         {TEXT("source_id"),Str(Agent)},{TEXT("observed_at"),Num(Observed)},{TEXT("received_at"),Num(Time())},
         {TEXT("payload"),Json(Copy)}}));
     if(Text(Copy,TEXT("status"))==TEXT("failed")&&Text(Previous,TEXT("status"))!=TEXT("failed"))
-        PublishEvent(FGuid::NewGuid().ToString(EGuidFormats::Digits),TEXT("agent_failure"),Observed,Agent,{Agent},
+        PublishEvent(NextObservationId(TEXT("failure")),TEXT("agent_failure"),Observed,Agent,{Agent},
             Obj({{TEXT("reason"),Field(Copy->GetObjectField(TEXT("physical")),TEXT("stop_reason"))},
                 {TEXT("basis"),Str(TEXT("delivered_agent_state"))}}));
     const auto Physical=Copy->GetObjectField(TEXT("physical"));
@@ -207,7 +213,7 @@ void FMRCoreRuntime::UpdateAgentKnowledge(const FString& Agent,const Object& Rep
     auto* Existing=DegradationAlerts.Find(Agent);
     if(Degraded!=(Existing!=nullptr))
     {
-        const FStaleAlert Alert=Existing?*Existing:FStaleAlert{FGuid::NewGuid().ToString(EGuidFormats::Digits),Observed};
+        const FStaleAlert Alert=Existing?*Existing:FStaleAlert{NextObservationId(TEXT("degraded")),Observed};
         PublishEvent(Alert.Id,TEXT("agent_degradation"),Alert.StartedAt,Agent,{Agent},
             Obj({{TEXT("speed_factor"),Field(Physical,TEXT("speed_factor"))},{TEXT("sensor_factor"),Field(Physical,TEXT("sensor_factor"))}}),
             Degraded?TEXT("active"):TEXT("resolved"));

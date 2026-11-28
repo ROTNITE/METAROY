@@ -212,6 +212,8 @@ private:
     TSharedPtr<FJsonObject> PendingOrbital,KnownOrbital;
     double NextOrbitalScan=-1,OrbitalDeliveryAt=-1;
     int32 CommandSequence=0;
+    int64 ObservationSequence=0;
+    FString NextObservationId(const TCHAR* Kind);
     TArray<FReport> Reports;
     TMap<FString,int32> ReportCounts;
     TArray<FCommand> Commands;
@@ -220,6 +222,7 @@ private:
     int32 PlanRevision=0;
     // Fixed-size digest -> disk record; bodies/responses are not retained in RAM.
     TMap<FString,int64> ReplayKeys;
+    TSet<FString> DecisionRequestKeys;
     TSharedPtr<FMRCoreResetState> ResetState;
     FString ResetPython,ResetSource,LayoutRequestDirectory;
     FProcHandle LayoutWorker;
