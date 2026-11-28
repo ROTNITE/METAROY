@@ -21,6 +21,11 @@ MEDIA = {'aerial': 'air', 'ground': 'land', 'surface_water': 'water',
          'underwater': 'water', 'underground': 'underground'}
 BLOCKING = {'obstacle', 'restricted', 'hazard'}
 STOP = {'safe_stop', 'stop', 'pause', 'cancel', 'abort', 'halt'}
+CARRIED = {'carried', 'loaded'}
+ROUTE_RULES = {'position_bounds', 'zone_access', 'domain_access', 'restricted_zone',
+               'minimum_separation', 'collision', 'risk_limit'}
+RESOURCE_RULES = {'minimum_energy_reserve', 'resource_minimum', 'resource_reserve'}
+REVISIT_SECONDS = 30.
 TARGET_STATES = {'detected', 'suspected', 'confirmed', 'delivered'}
 
 
@@ -90,6 +95,19 @@ def public_observation(body):
     for agent in obs['agents']:
         if agent['kind'] in MEDIA and _position(agent['position']) is None:
             raise ProtocolError('INVALID_REQUEST', 'Spatial agent requires XYZ position')
+    for target in obs['targets']:
+        for key in ('status', 'evacuation_state', 'carrier_id', 'supported_by_agent'):
+            if key in target and target[key] is not None and not isinstance(target[key], str):
+                raise ProtocolError('INVALID_REQUEST', 'Invalid target field', {'field': key})
+        if target.get('position') is not None and _position(target['position']) is None:
+            raise ProtocolError('INVALID_REQUEST', 'Invalid target position')
+    groups = [obs['constraints'], obs['mission']['constraints']]
+    groups.extend(a['constraints'] for a in (*obs['agents'], *obs['zones']))
+    for group in groups:
+        for rule in group:
+            for key in ('id', 'type', 'severity'):
+                if key in rule and not isinstance(rule[key], str):
+                    raise ProtocolError('INVALID_REQUEST', 'Invalid constraint field', {'field': key})
     for key in ('directives', 'objectives', 'constraints'):
         obs['mission'][key].sort(key=lambda row: json.dumps(row, sort_keys=True))
     return obs
@@ -117,6 +135,34 @@ def _access(zone, kind):
 def _energy(agent):
     resource = agent['resources'].get('energy', {})
     return resource.get('value', 1.), resource.get('minimum', 0.)
+
+
+def _hard_rules(obs, agent):
+    for rule in (*obs['constraints'], *obs['mission']['constraints'], *agent['constraints']):
+        if rule.get('severity', 'hard') != 'hard':
+            continue
+        scope = rule.get('scope', {})
+        if isinstance(scope, dict) and scope.get('kind') == 'agent' and scope.get('agent_id', scope.get('id')) != agent['id']:
+            continue
+        yield rule
+
+
+def _reserve(agent, rules):
+    energy, reserve = _energy(agent)
+    for rule in rules:
+        if rule.get('type', rule.get('id')) in RESOURCE_RULES and rule.get('resource', rule.get('resource_id', 'energy')) == 'energy':
+            reserve = max(reserve, _number(rule.get('minimum'), 1.))
+    return energy, reserve
+
+
+def _loaded_owner(target, known):
+    if target.get('evacuation_state') not in CARRIED:
+        return None
+    for key in ('carrier_id', 'supported_by_agent'):
+        owner = target.get(key)
+        if isinstance(owner, str) and owner in known:
+            return owner
+    return None
 
 
 def _supports(agent, action, params):
@@ -162,6 +208,7 @@ class TournamentPolicy:
         self.previous = None
         self.cache = OrderedDict()
         self.scan_attempts = set()
+        self.scan_times = {}
         self.pickup_attempts = {}
         self.cargo = {}
         self.time = -1.
@@ -170,16 +217,26 @@ class TournamentPolicy:
         kind = agent['kind']
         intervals = []
         for zone, shape in zones:
+            # Media are overlapping permission volumes, not exclusions for
+            # other kinds: an air zone above a land surface does not forbid a rover.
+            same_medium = zone['type'] == MEDIA.get(kind)
             denied = not _access(zone, kind)
             explicit = zone['access'].get('allowed_kinds', zone['access'].get('allowed_agent_kinds', []))
             explicit = explicit if isinstance(explicit, list) else []
-            blocked = denied or (zone['type'] in BLOCKING and
-                                (zone['type'] == 'obstacle' or kind not in explicit))
+            restricted = zone['type'] in BLOCKING and (zone['type'] == 'obstacle' or kind not in explicit)
+            hard = any(r.get('severity', 'hard') == 'hard' for r in zone['constraints'])
+            blocked = restricted or (same_medium and (denied or zone['risk'] >= 1)) or hard
             if blocked and (shape is None or shape.interval(start, end) is not None):
                 return False
-            if (shape is not None and not blocked and zone['type'] == MEDIA.get(kind)
-                    and zone['risk'] < 1 and not zone['constraints']):
-                intervals.extend(segments(shape, start, end))
+            if shape is not None and not blocked and same_medium:
+                # For surface vehicles the public pose may be the chassis centre,
+                # above a thin land surface. Keep commanded Z unchanged; project
+                # only the support test, and only for a nearby declared surface.
+                a, b = start, end
+                top = shape.maximum[2]
+                if kind == 'ground' and 0 <= start[2] - top <= 1.5 and abs(start[2] - end[2]) < 1e-9:
+                    a, b = (*start[:2], top), (*end[:2], top)
+                intervals.extend(segments(shape, a, b))
         coverage = 0.
         for lo, hi in sorted(intervals):
             if lo > coverage + 1e-9:
@@ -187,12 +244,7 @@ class TournamentPolicy:
             coverage = max(coverage, hi)
         if coverage < 1. - 1e-9:
             return False
-        for rule in (*obs['constraints'], *obs['mission']['constraints'], *agent['constraints']):
-            if rule.get('severity', 'hard') != 'hard':
-                continue
-            scope = rule.get('scope', {})
-            if isinstance(scope, dict) and scope.get('kind') == 'agent' and scope.get('agent_id', scope.get('id')) != agent['id']:
-                continue
+        for rule in _hard_rules(obs, agent):
             typ = rule.get('type', rule.get('id'))
             if typ == 'position_bounds':
                 lo, hi = _position(rule.get('min')), _position(rule.get('max'))
@@ -235,15 +287,19 @@ class TournamentPolicy:
     def _command(self, obs, zones, budget, agent, claimed, inspect):
         aid = agent['id']
         p = _position(agent['position'])
-        energy, reserve = _energy(agent)
-        for rule in (*obs['constraints'], *obs['mission']['constraints'], *agent['constraints']):
-            if rule.get('type', rule.get('id')) in ('minimum_energy_reserve', 'resource_minimum', 'resource_reserve') and rule.get('resource', 'energy') == 'energy':
-                reserve = max(reserve, _number(rule.get('minimum')))
+        rules = list(_hard_rules(obs, agent))
+        energy, reserve = _reserve(agent, rules)
         def action(name, params=None):
             params = params or {}
             return (name, params) if _supports(agent, name, params) else None
         def go(goal):
             return self._move(obs, zones, budget, agent, goal)
+        if any(rule.get('type', rule.get('id')) not in ROUTE_RULES | RESOURCE_RULES for rule in rules):
+            # Never execute an action under an unknown mandatory constraint.
+            return action('hold')
+        for directive in _directives(obs):
+            if _directive_kind(directive) & {'hold'} and directive.get('target_id', directive.get('agent_id')) == aid:
+                return action('hold')
         stations = [s for s in obs['infrastructure'] if s['status'] == 'active' and _position(s['position']) is not None]
         if energy <= reserve + .05:
             for s in sorted((s for s in stations if s['kind'] == 'charging_station'),
@@ -255,21 +311,26 @@ class TournamentPolicy:
         if p is None:
             return action('relay', {'enabled': True}) or action('observe') or action('hold')
         if aid in self.cargo:
+            if agent['status'] == 'busy' and not any(a['action'] in ('move', 'handover') for a in agent['available_actions']):
+                return None
             for s in sorted((s for s in stations if s['kind'] == 'base_station'), key=lambda s: math.dist(p, s['position'])):
                 if math.dist(p, s['position']) <= 1.:
                     if cmd := action('handover', {'station_id': s['id']}):
                         return cmd
                 elif cmd := go(_position(s['position'])):
                     return cmd
-            return action('hold')
+            return None if agent['status'] == 'busy' else action('hold')
+        if agent['status'] == 'busy':
+            # Busy without confirmed custody may be in the middle of service.
+            return None
         if inspect is not None and agent['kind'] == 'aerial' and _supports(agent, 'move', {'target': list(p)}):
             goal = (*inspect[:2], p[2])
             if math.dist(p, goal) > 2. and (cmd := go(goal)):
                 return cmd
             if math.dist(p, goal) <= 2.:
-                return action('observe') or action('hold')
+                return action('observe', {'radius': 10.}) or action('observe') or action('hold')
         targets = sorted((t for t in obs['targets'] if t.get('status') in TARGET_STATES and
-                          t.get('evacuation_state') not in ('evacuated', 'carried') and _position(t.get('position')) is not None),
+                          t.get('evacuation_state') not in CARRIED | {'evacuated'} and _position(t.get('position')) is not None),
                          key=lambda t: (-_number(t.get('priority')), math.dist(p, t['position']), t['id']))
         if not obs['observation_quality']['contradiction_count']:
             for target in targets:
@@ -306,11 +367,17 @@ class TournamentPolicy:
                         return cmd
         if obs['network']['connectivity_score'] < .6 and (cmd := action('relay', {'enabled': True})):
             return cmd
+        if not any(a['action'] == 'observe' for a in agent['available_actions']):
+            # A carrier with no search capability should preserve its energy
+            # while scouts discover work, rather than roaming a survey grid.
+            return action('hold')
         scan = (aid, tuple(round(x, 2) for x in p))
-        if scan not in self.scan_attempts and (cmd := action('observe') or action('observe', {'radius': 10.})):
+        if scan not in self.scan_attempts and (cmd := action('observe', {'radius': 10.}) or action('observe')):
             if len(self.scan_attempts) >= 4096:
                 self.scan_attempts.clear()
+                self.scan_times.clear()
             self.scan_attempts.add(scan)
+            self.scan_times[scan] = obs['time']
             return cmd
         candidates = set()
         for zone, shape in zones:
@@ -321,12 +388,22 @@ class TournamentPolicy:
             for x in (.2, .5, .8):
                 for y in (.2, .5, .8):
                     candidates.add((lo[0]+x*(hi[0]-lo[0]), lo[1]+y*(hi[1]-lo[1]), z))
-        for goal in sorted(candidates, key=lambda q: (math.dist(p, q), q))[:48]:
-            if (aid, tuple(round(x, 2) for x in goal)) in self.scan_attempts:
+        def scan_key(q):
+            return aid, tuple(round(x, 2) for x in q)
+        # Complete novel coverage first, then revisit the oldest locations so
+        # targets that appear later are not permanently skipped.
+        for goal in sorted(candidates, key=lambda q: (self.scan_times.get(scan_key(q), -1.), math.dist(p, q), q))[:48]:
+            stamp = self.scan_times.get(scan_key(goal), -math.inf)
+            if obs['time'] - stamp < REVISIT_SECONDS:
                 continue
-            if cmd := go(goal):
+            if math.dist(p, goal) < .05:
+                if cmd := action('observe', {'radius': 10.}) or action('observe'):
+                    self.scan_attempts.add(scan_key(goal))
+                    self.scan_times[scan_key(goal)] = obs['time']
+                    return cmd
+            elif cmd := go(goal):
                 return cmd
-        return action('observe') or action('hold')
+        return action('observe', {'radius': 10.}) or action('observe') or action('hold')
 
     def decide(self, body):
         obs = public_observation(body)
@@ -355,7 +432,7 @@ class TournamentPolicy:
     def _decide(self, obs):
         agents = obs['agents']
         known = {a['id'] for a in agents}
-        active = sorted((a for a in agents if a['status'] in ('active', 'degraded') and
+        active = sorted((a for a in agents if a['status'] in ('active', 'degraded', 'busy') and
                          a['communication'].get('reachable', a['communication'].get('connected', True)) is not False),
                         key=lambda a: (a['kind'], _position(a['position']) or (), a['id']))
         reported = list(dict.fromkeys(s for a in agents for s in a['scenario_ids']))
@@ -425,12 +502,32 @@ class TournamentPolicy:
         commands = []
         if not stop:
             targets = {t['id']: t for t in obs['targets']}
-            for tid, aid in list(self.pickup_attempts.items()):
-                if aid not in known or targets.get(tid, {}).get('evacuation_state') == 'evacuated':
-                    self.pickup_attempts.pop(tid, None)
+            # A sent pickup is not an acknowledgement, and a bare 'carried'
+            # status does not identify which carrier owns the target.
+            for aid, tid in list(self.cargo.items()):
+                if aid not in known or (tid in targets and (targets[tid].get('evacuation_state') not in CARRIED or
+                        (_loaded_owner(targets[tid], known) is not None and _loaded_owner(targets[tid], known) != aid))):
                     self.cargo.pop(aid, None)
-                elif targets.get(tid, {}).get('evacuation_state') == 'carried':
-                    self.cargo[aid] = tid
+            if not obs['observation_quality']['contradiction_count']:
+                for tid, target in targets.items():
+                    owner = _loaded_owner(target, known)
+                    # Legacy public observations can report a loaded target at
+                    # the carrier's pose without publishing a carrier ID. A
+                    # matching pickup intent plus unique observed co-location
+                    # is a planning hypothesis, never a completed goal. Do
+                    # not resolve ambiguous custody by the order of agent IDs.
+                    if owner is None and target.get('evacuation_state') in CARRIED:
+                        attempted = self.pickup_attempts.get(tid)
+                        pose = _position(target.get('position'))
+                        possible = [a['id'] for a in agents if pose is not None and 'carry' in a['capabilities']
+                                    and _position(a['position']) is not None and math.dist(a['position'], pose) <= 1e-6]
+                        if possible == [attempted]:
+                            owner = attempted
+                    if owner is not None:
+                        self.cargo[owner] = tid
+            for tid, aid in list(self.pickup_attempts.items()):
+                if aid not in known or targets.get(tid, {}).get('evacuation_state') in CARRIED | {'evacuated'}:
+                    self.pickup_attempts.pop(tid, None)
             zones = [(z, _zone_shape(z)) for z in obs['zones']]
             budget = RouteBudget(len(zones))
             claimed = set(self.cargo.values())

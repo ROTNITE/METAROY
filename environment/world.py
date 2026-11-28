@@ -96,6 +96,7 @@ class World:
         self.time = 0
         self.status = 'running'
         self.closed = False
+        self.safety_violations = 0
         self.configuration = {'scenario_ids': [], 'role_assignments': {}}
         self.synthesized = {}
         self.scenario_parameters = {}
@@ -126,7 +127,9 @@ class World:
     def _actions(self, agent):
         if agent.action:
             return ('hold',)
-        return ('move', 'hold', 'observe', 'inspect') if agent.kind == 'aerial' else ('move', 'hold', 'pickup', 'handover')
+        if agent.kind == 'aerial':
+            return ('move', 'hold', 'observe', 'inspect')
+        return ('move', 'hold', 'handover' if agent.cargo is not None else 'pickup')
 
     def observation(self, request_id):
         agents = []
@@ -154,7 +157,8 @@ class World:
                                                    ([('obstacle', self.wall)] if self.wall else []))]
         targets = [{'id': identifier, 'kind': 'person', 'status': 'confirmed', 'confidence': 1.,
                     'position': list(person.position), 'observed_at': self.visible[identifier],
-                    'evacuation_state': 'evacuated' if person.custody == self.base else 'carried' if person.custody else 'waiting'}
+                    'evacuation_state': 'evacuated' if person.custody == self.base else 'carried' if person.custody else 'waiting',
+                    'carrier_id': person.custody if person.custody in self.agents else None}
                    for identifier, person in self.people.items() if identifier in self.visible]
         if self.opaque:
             agents.reverse()
@@ -180,7 +184,7 @@ class World:
                                         'unknown_state_ratio': 0. if connected else .5},
                 'constraints': [], 'events': list(self.events),
                 'metrics': {'mission_completion': sum(p.custody == self.base for p in self.people.values()) / len(self.people),
-                            'safety_violations': 0,
+                            'safety_violations': self.safety_violations,
                             'confirmed_evacuations': sum(t['evacuation_state'] == 'evacuated' for t in targets),
                             'known_people': len(targets), 'energy_fraction_spent': sum(1. - e for e in self.energy.values())}}
 
@@ -219,25 +223,35 @@ class World:
         elif action == 'handover' and (parameters['station_id'] != self.base or agent.cargo is None or
                                        math.dist(agent.position, BASE) > TRANSFER_RADIUS):
             raise ProtocolError('INVALID_COMMAND', 'Handover requires cargo at the base')
-        elif action == 'observe' and agent.energy - SCAN_COST < MINIMUM:
+        if action in ('observe', 'inspect') and agent.energy - SCAN_COST < MINIMUM:
             raise ProtocolError('RESOURCE_EXHAUSTED', 'Scan would spend the energy reserve')
 
     @staticmethod
     def _synthesis(selected):
         # Listing 3 base declaration: no project-specific graph is required.
-        strings = {'type': 'array', 'items': ID}
+        strings = {'type': 'array', 'items': ID, 'uniqueItems': True}
         array = {'type': 'array'}
+        role = object_schema({'id': ID, 'required_capabilities': strings,
+                              'minimum': {'type': 'integer', 'minimum': 0, 'maximum': 256},
+                              'maximum': {'type': 'integer', 'minimum': 0, 'maximum': 256}}, required=['id'])
         schema = object_schema({'id': ID, 'version': ID, 'title': ID,
             'game_model': object_schema({'class': ID, 'players': array,
                 'information_structure': ID, 'stability_criterion': ID}),
             'applicability': object_schema({name: array for name in ('entry', 'continuation', 'exit', 'emergency_exit')}),
-            'roles': {'type': 'array', 'items': {'anyOf': [ID, object_schema({'id': ID})]}},
+            'roles': {'type': 'array', 'items': {'anyOf': [ID, role]}},
             'objectives': array, 'constraints': array, 'allowed_actions': strings,
             'transition_targets': strings, 'metrics': array})
         scenario = selected['synthesized_scenario']
         validate(scenario, schema, 'INVALID_SCENARIO')
         if selected['scenario_ids'] != [scenario['id']]:
             raise ProtocolError('INVALID_SCENARIO', 'Synthesis ID does not match selection')
+        roles = [dict(id=r) if isinstance(r, str) else r for r in scenario['roles']]
+        if len({r['id'] for r in roles}) != len(roles) or any(r.get('minimum', 0) > r.get('maximum', 256) for r in roles):
+            raise ProtocolError('INVALID_SCENARIO', 'Duplicate role or inconsistent cardinality')
+        # Base declarations describe intent; unsupported executable predicates
+        # must not silently become satisfied hard constraints in this 2D model.
+        if any(not isinstance(c, dict) or c.get('severity', 'hard') == 'hard' for c in scenario['constraints']):
+            raise ProtocolError('INVALID_SCENARIO', 'Unsupported hard synthesis constraint')
         return scenario
 
     def step(self, decision, body_sha, declarations):
@@ -278,6 +292,8 @@ class World:
                 raise ProtocolError('INVALID_SCENARIO', 'Invalid scenario cardinality')
             if operation in ('keep', 'modify') and (set(ids) != set(old_ids) or roles != old_roles):
                 raise ProtocolError('INVALID_SCENARIO', 'Operation must retain scenario membership and roles')
+            if operation == 'keep' and selected['parameters'] != self.scenario_parameters:
+                raise ProtocolError('INVALID_SCENARIO', 'Keep must retain accepted scenario parameters')
             role_specs = {}
             for sid in ids:
                 for spec in catalog[sid]['roles']:
@@ -288,6 +304,11 @@ class World:
                 if not any(required <= caps for required in role_specs.get(role, [])):
                     raise ProtocolError('INVALID_SCENARIO', 'Invalid 2D scenario role')
             for sid in ids:
+                for spec in catalog[sid]['roles']:
+                    if isinstance(spec, dict):
+                        count = sum(role == spec['id'] for role in roles.values())
+                        if not spec.get('minimum', 0) <= count <= spec.get('maximum', 256):
+                            raise ProtocolError('INVALID_SCENARIO', 'Scenario role cardinality is invalid')
                 params = selected['parameters']
                 if 'by_scenario' in params:
                     groups = params['by_scenario']
@@ -337,7 +358,11 @@ class World:
     def _advance(self):
         self.time += 1
         for identifier, agent in self.agents.items():
+            before = agent.position
             self._advance_agent(identifier, agent)
+            # Count executed breaches, not rejected requests or harmless waits.
+            if not self._clear(before, agent.position) or not MINIMUM - 1e-9 <= agent.energy <= 1. + 1e-9:
+                self.safety_violations += 1
             if self.reachable(identifier):
                 self.pose[identifier], self.energy[identifier] = agent.position, agent.energy
         for ready, receipt in self.ack_queue[:]:
@@ -386,6 +411,10 @@ class World:
                     self._finish(agent, 'failed')
                     return
                 person.custody, agent.cargo = identifier, key
+                self.events.append(self._event('target_state_changed', identifier, key, self.time,
+                                               {'evacuation_state': 'carried', 'carrier_id': identifier,
+                                                'decision_id': action.result['decision_id'],
+                                                'command_index': action.result['command_index']}))
             elif name == 'handover':
                 key = agent.cargo
                 self.people[key].custody, agent.cargo = self.base, None
