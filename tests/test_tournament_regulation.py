@@ -238,8 +238,9 @@ class TournamentAdversarialTests(TestCase):
             current = {**obs, 'request_id': f'survey-{t}', 'time': t}
             return next(c for c in policy.decide(current)['commands'] if c['agent_id'] == scout['id'])
         self.assertEqual(command(0)['parameters'], {})
-        self.assertEqual(command(1)['action'], 'observe')
-        self.assertEqual(command(2)['parameters'], {'target': onward})
+        self.assertEqual(command(1)['parameters'], {'target': near})
+        self.assertEqual(command(6)['action'], 'observe')
+        self.assertEqual(command(7)['parameters'], {'target': onward})
 
     def test_unchanged_move_intent_does_not_cancel_the_active_motion_each_step(self):
         obs = checker.make_synthetic_obs(0)

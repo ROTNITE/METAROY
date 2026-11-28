@@ -206,7 +206,6 @@ class TournamentPolicy:
         self.unavailable_scenarios = set()
         self.previous = None
         self.cache = OrderedDict()
-        self.initial_scans = set()
         self.scan_times = {}
         self.last_moves = {}
         self.pickup_attempts = {}
@@ -428,13 +427,18 @@ class TournamentPolicy:
             # A carrier with no search capability should preserve its energy
             # while scouts discover work, rather than roaming a survey grid.
             return action('hold')
-        if aid not in self.initial_scans and (cmd := observe()):
-            self.initial_scans.add(aid)
+        scan = aid, tuple(round(x, 2) for x in p)
+        if scan not in self.scan_times and (cmd := observe()):
+            if len(self.scan_times) >= 4096:
+                self.scan_times.pop(next(iter(self.scan_times)))
+            self.scan_times[scan] = obs['time']
             return cmd
         mission_points = {goal for task in obs['mission']['objectives'] if task.get('type') in ('search', 'search_and_evacuate')
                           and task.get('status') not in ('completed', 'failed', 'cancelled')
                           and (goal := _position(task.get('position'))) is not None}
-        if agent['kind'] in ('ground', 'surface_water'):
+        if agent['kind'] == 'aerial':
+            mission_points = {(*goal[:2], max(p[2], goal[2])) for goal in mission_points}
+        elif agent['kind'] in ('ground', 'surface_water'):
             mission_points = {(*goal[:2], p[2]) for goal in mission_points}
         candidates = set(mission_points)
         for zone, shape in zones:
@@ -442,13 +446,13 @@ class TournamentPolicy:
                 continue
             lo, hi = shape.minimum, shape.maximum
             z = min(hi[2], max(lo[2], p[2]))
-            if agent['kind'] == 'aerial' and hi[2]-lo[2] > 4.:
+            if agent['kind'] == 'aerial' and z-lo[2] < 2. and hi[2]-lo[2] > 4.:
                 z = lo[2]+min(15., (hi[2]-lo[2])*.25)
             for x in (.2, .5, .8):
                 for y in (.2, .5, .8):
                     candidates.add((lo[0]+x*(hi[0]-lo[0]), lo[1]+y*(hi[1]-lo[1]), z))
         def scan_key(q):
-            if agent['kind'] in ('ground', 'surface_water'):
+            if agent['kind'] in ('aerial', 'ground', 'surface_water'):
                 q = q[:2]
             return aid, tuple(round(x*2) for x in q)
         # Complete novel coverage first, then revisit the oldest locations so
@@ -458,7 +462,14 @@ class TournamentPolicy:
             stamp = self.scan_times.get(scan_key(goal), -math.inf)
             if obs['time'] - stamp < REVISIT_SECONDS:
                 continue
-            if math.dist(p, goal) <= SURVEY_ARRIVAL_M:
+            distance = math.dist(p, goal)
+            intent = self.last_moves.get(aid)
+            # Some executors stop inside a tolerance. Relax arrival only
+            # after repeated public poses show that the nearby move settled.
+            settled = (distance <= SURVEY_ARRIVAL_M and intent is not None and
+                       obs['time']-intent[0] >= MOVE_RETRY_SECONDS and math.dist(intent[1], goal) <= .25 and
+                       math.dist(intent[2], p) <= .05)
+            if distance < .05 or settled:
                 if cmd := observe():
                     if len(self.scan_times) >= 4096:
                         self.scan_times.pop(next(iter(self.scan_times)))
@@ -617,7 +628,6 @@ class TournamentPolicy:
                 # Keep the accepted plan and route only reachable actors.
                 reasons.append('connectivity_degraded')
         commands = []
-        self.initial_scans.intersection_update(known)
         self.last_moves = {aid: intent for aid, intent in self.last_moves.items() if aid in known}
         if not stop:
             targets = {t['id']: t for t in obs['targets']}
@@ -661,7 +671,7 @@ class TournamentPolicy:
                         if (last and obs['time']-last[0] < MOVE_RETRY_SECONDS and
                                 math.dist(last[1], args['target']) <= .25):
                             continue
-                        self.last_moves[aid] = (obs['time'], args['target'])
+                        self.last_moves[aid] = (obs['time'], args['target'], _position(agent['position']))
                     elif name not in ('observe', 'relay'):
                         self.last_moves.pop(aid, None)
                     if self.public:
