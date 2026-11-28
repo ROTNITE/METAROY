@@ -2213,6 +2213,9 @@
       "requirement": "Полноценная локальная лаборатория M5: подключение, реальный двусторонний запуск, диагностика, матрица, воспроизводимость, доказательства цели, безопасность, UX и экспорт",
       "status": "partial",
       "evidence": [
+        "docs/tournament-acceptance-2026-11-28.md",
+        "D:/MetaRescue-output/tournament-20261128/m5-browser-budget/verification.json",
+        "D:/MetaRescue-output/tournament-20261128/shipping-terminal/tournament-smoke/verification.json",
         "D:/MetaRescue-output/agent-review-20261128/win64-final/m5-runtime/verification.json",
         "D:/MetaRescue-output/agent-review-20261128/detached-portable/verification.json",
         "docs/m5-interface.md",
@@ -2237,18 +2240,20 @@
         "https://github.com/ROTNITE/METAROY/actions/runs/46068645500",
         "https://github.com/ROTNITE/METAROY/actions/runs/46068911288"
       ],
-      "scope_note": "Реальные локальные HTTP-испытания, независимая 3D/planar, зарегистрированные loopback-сервисы, серии, фильтруемая диагностическая таблица, публичный журнал по byte cursor, отмена, JSON/CSV/ZIP и расчёт при согласованных Q. Chromium E2E: две физические передачи в модели K, матрица/журнал/reload/desktop/narrow. Синтетический каталог 450 записей, 4 000 событий и 400 GET: p95 1.60/2.58/3.09 мс, без мутации. Полная UI-спецификация, native/Windows-поставка, нагрузка реальной сцены и внешняя приёмка открыты. Официальное M5 не выводить из собственных эталонов. Финальная Python-регрессия 398/398 Windows, 397 + 1 skip Linux. Stage 3 b5b5ddc: точный поиск по ID, разреженная матрица пар с раскрытием, точный повтор, изоляция битого архива, тест медленного RPC без продвижения модельного времени. Linux 414 + 1 skip. Windows на b5b5ddc: 415/415 без пропусков. 450 синтетических GET, поиск p95 17.529 мс, startup peak 1 029 944 байт. Полная причинная трасса, native, Windows-поставка и внешняя приёмка открыты."
+      "scope_note": "Реальные локальные HTTP-испытания, независимая 3D/planar, зарегистрированные loopback-сервисы, серии, фильтруемая диагностическая таблица, публичный журнал по byte cursor, отмена, JSON/CSV/ZIP и расчёт при согласованных Q. Chromium E2E: две физические передачи в модели K, матрица/журнал/reload/desktop/narrow. Синтетический каталог 450 записей, 4 000 событий и 400 GET: p95 1.60/2.58/3.09 мс, без мутации. Ранняя Python-регрессия 398/398 Windows, 397 + 1 skip Linux. Stage 3 b5b5ddc: точный поиск по ID, разреженная матрица пар с раскрытием, точный повтор, изоляция битого архива, тест медленного RPC без продвижения модельного времени. Linux 414 + 1 skip. Windows на b5b5ddc: 415/415 без пропусков. 450 синтетических GET, поиск p95 17.529 мс, startup peak 1 029 944 байт. На 0001b29 повторён браузерный сценарий и пройден строгий допуск Win64 Shipping. Полная причинная трасса, нагрузка реальной сцены и внешняя приёмка остаются открыты. Официальный M5 ждёт актуальные пары и подтверждённые Q."
     }
   ],
   "external_tournament": {
     "status": "partial",
     "report": "docs/cross-team2-final-2026-11-13.md",
+    "current_regulation_report": "docs/tournament-acceptance-2026-11-28.md",
     "evidence": [
+      "D:/MetaRescue-output/tournament-20261128/acceptance-evidence.json",
       "D:/MetaRescue-output/checks/m5-final-20261113-01/forward-v8/verification.json",
       "D:/MetaRescue-output/checks/m5-final-20261113-01/native-v9-rendered-123456-r2/interop-verification.json",
       "D:/MetaRescue-output/checks/m5-final-20261113-01/native-v9-123457/interop-verification.json",
       "D:/MetaRescue-output/checks/m5-final-20261113-01/native-v9-123458/interop-verification.json"
     ],
-    "note": "Real supplied foreign code tested locally in both directions, three seeds each. Pythonv8 only public air survey (0 rescue). Nodev9 rescues2/3 on one world and0/3 on two; all time_limit. No agreed tournament Q or independently archived partner-machine report. Full tournament not claimed."
+    "note": "13 ноября испытаны архивные Python v8 и Node v9. v8 выполнил разведку, v9 эвакуировал 2/3 на одной карте и 0/3 на двух других. 28 ноября старый v9 и три испытательные реализации проверены по новому регламенту. Свежие среды и контроллеры команд и подтверждённые Q ещё ожидаются."
   }
 }

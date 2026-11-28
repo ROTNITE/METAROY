@@ -61,6 +61,8 @@ Unreal Automation на 5.8.4 прошла 10 из 10. Подтверждены �
 `tournament-policy-budget.log`, `automation-priority-final/index.json`,
 `benchmark-v052-r3.log` и
 `benchmark-metarescue-v0.3.log` содержат исходный вывод.
+Дорожная и грязевая геометрия также прошла [GitHub Actions](https://github.com/ROTNITE/METAROY/actions/runs/46172428014)
+на опубликованной ревизии `1a6bd28`.
 
 ## Нативные механизмы
 
