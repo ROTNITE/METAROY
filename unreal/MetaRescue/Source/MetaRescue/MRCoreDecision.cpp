@@ -311,7 +311,15 @@ void FMRCoreRuntime::Step(const FPending& R)
     const auto PriorRoles=DesiredRoles;
     if(Operation!=TEXT("keep"))
     {
-        Accepted=MRCoreJson::Copy(R.Request->GetObjectField(TEXT("selected_configuration")));
+        auto Next=MRCoreJson::Copy(R.Request->GetObjectField(TEXT("selected_configuration")));
+        // Preserve the actual last accepted declaration when a base-profile
+        // safe_stop omits it. Do not lose the scenario on the final snapshot.
+        const auto Definition=Field(Accepted,TEXT("synthesized_scenario"));
+        if(Operation==TEXT("safe_stop")&&Definition&&Definition->Type==EJson::Object&&
+           Is(Next,TEXT("synthesized_scenario"),EJson::Null)&&
+           MRCoreJson::Equal(Field(Next,TEXT("scenario_ids")),Field(Accepted,TEXT("scenario_ids"))))
+            Next->SetField(TEXT("synthesized_scenario"),Definition);
+        Accepted=Next;
         DesiredRoles=MRCoreJson::Copy(R.Request->GetObjectField(TEXT("role_assignments")));++PlanRevision;
     }
     auto Queue=[&](const Object& C,int32 Index,const FString& Reason)

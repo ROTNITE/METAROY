@@ -41,7 +41,14 @@ Object RoleDefinition(const Object& Scenario,const FString& Role)
 {
     if(!Is(Scenario,TEXT("roles"),EJson::Array))return nullptr;
     for(const auto& V:Scenario->GetArrayField(TEXT("roles")))
+    {
         if(V->Type==EJson::Object&&Text(V->AsObject(),TEXT("id"))==Role)return V->AsObject();
+        // Listing 3 allows bare role identifiers. Such a declaration does
+        // not grant a capability or override per-command validation.
+        if(V->Type==EJson::String&&V->AsString()==Role&&!Role.IsEmpty())
+            return Obj({{TEXT("id"),Str(Role)},{TEXT("required_capabilities"),Arr({})},
+                {TEXT("minimum"),Num(0)},{TEXT("maximum"),Num(256)}});
+    }
     return nullptr;
 }
 
@@ -99,10 +106,18 @@ bool ParametersMatch(const Object& Schema,const Value& Data,int32 Depth=0)
     return (Type==TEXT("boolean")&&Data->Type==EJson::Boolean)||(Type==TEXT("null")&&Data->Type==EJson::Null);
 }
 
-bool DeclaredShape(const Object& Scenario)
+bool DeclaredShape(const Object& Scenario,bool AllowBase=false)
 {
     if(Text(Scenario,TEXT("id")).IsEmpty()||Text(Scenario,TEXT("version")).IsEmpty()||Text(Scenario,TEXT("title")).IsEmpty())return false;
     for(const FString& Key:{TEXT("game_model"),TEXT("applicability")})if(!Is(Scenario,Key,EJson::Object))return false;
+    const bool Base=AllowBase&&!Scenario->HasField(TEXT("execution_rules"));
+    if(Base)
+    {
+        const auto Game=Scenario->GetObjectField(TEXT("game_model"));
+        TArray<FString> Players;
+        if(Text(Game,TEXT("class")).IsEmpty()||!ReadIds(Game,TEXT("players"),Players)||
+           Text(Game,TEXT("information_structure")).IsEmpty()||Text(Game,TEXT("stability_criterion")).IsEmpty())return false;
+    }
     const auto Applicability=Scenario->GetObjectField(TEXT("applicability"));
     for(const FString& Key:{TEXT("entry"),TEXT("continuation"),TEXT("exit"),TEXT("emergency_exit")})
     {
@@ -116,6 +131,12 @@ bool DeclaredShape(const Object& Scenario)
         TSet<FString> Ids;
         for(const auto& V:Scenario->GetArrayField(Key))
         {
+            if(Base&&V->Type==EJson::String&&Key!=TEXT("constraints"))
+            {
+                const FString Id=V->AsString();
+                if(Id.IsEmpty()||Ids.Contains(Id))return false;
+                Ids.Add(Id);continue;
+            }
             if(V->Type!=EJson::Object)return false;
             const auto Entry=V->AsObject();
             const FString Id=Text(Entry,TEXT("id"));
@@ -256,19 +277,24 @@ FString FMRCoreRuntime::ValidatePlan(const Object& Request,FString& Code) const
     else if(Operation==TEXT("synthesize"))
     {
         if(!HasSynth||NewIds.Num()!=1||ScenarioCatalog.Contains(NewIds[0])||Text(Synth->AsObject(),TEXT("id"))!=NewIds[0]||
-            !DeclaredShape(Synth->AsObject())||SameDefinition||!BoundedProgram(Synth->AsObject(),Parameters))
+            !DeclaredShape(Synth->AsObject(),true)||SameDefinition||!BoundedProgram(Synth->AsObject(),Parameters))
             return TEXT("Synthesize requires a new, valid scenario declaration");
     }
     else if(Operation==TEXT("safe_stop"))
     {
-        if(SamePlan)return TEXT("");
+        // A stop of the currently accepted plan must not require the
+        // orchestrator to resend an optional synthesized declaration.
+        if(SamePlan||(SameIds&&SameRoles&&SameParameters&&SameMembership&&!HasSynth))return TEXT("");
         if(HasSynth||NewIds!=TArray<FString>{TEXT("safe_degradation")})return TEXT("Safe stop requires a safe degradation plan");
     }
     else return TEXT("Unknown operation");
     const bool Composite=NewIds.Num()>1;
     const auto Groups=Is(Parameters,TEXT("by_scenario"),EJson::Object)?Parameters->GetObjectField(TEXT("by_scenario")):nullptr;
     const bool Disjoint=Is(Parameters,TEXT("disjoint_agent_assignments"),EJson::Boolean)&&Parameters->GetBoolField(TEXT("disjoint_agent_assignments"));
-    if(Composite&&(!Groups||Groups->Values.Num()!=NewIds.Num()))return TEXT("Each composed scenario needs its own parameters");
+    // Empty base parameters mean each member uses its own defaults. This
+    // remains subject to each member's required fields and compatibility.
+    if(Composite&&((Groups&&Groups->Values.Num()!=NewIds.Num())||
+                  (!Groups&&!Parameters->Values.IsEmpty())))return TEXT("Each composed scenario needs its own parameters");
     if(Selected->HasField(TEXT("scenario_participants")))
     {
         if(!Is(Selected,TEXT("scenario_participants"),EJson::Object))return TEXT("Invalid scenario participants");
@@ -287,7 +313,7 @@ FString FMRCoreRuntime::ValidatePlan(const Object& Request,FString& Code) const
         const auto Scenario=Declaration(ScenarioCatalog,Selected,Id);
         if(!Scenario)return TEXT("Unknown scenario");
         for(const FString& Other:NewIds)if(Other!=Id&&!Contains(Scenario,TEXT("compatible_with"),Other))return TEXT("Incompatible scenario composition");
-        const auto Data=Composite?Field(Groups,Id):Json(Parameters);
+        const auto Data=Composite&&Groups?Field(Groups,Id):Json(Parameters);
         const auto Schema=Field(Scenario,TEXT("parameter_schema"));
         if(!Data||Data->Type!=EJson::Object||(Schema&&(Schema->Type!=EJson::Object||!ParametersMatch(Schema->AsObject(),Data))))
             return TEXT("Invalid scenario parameters");
@@ -307,7 +333,9 @@ FString FMRCoreRuntime::ValidatePlan(const Object& Request,FString& Code) const
         }
         for(const auto& Entry:Scenario->GetArrayField(TEXT("roles")))
         {
-            const auto Rule=Entry->AsObject();const int32 Count=Counts.FindRef(Text(Rule,TEXT("id")));
+            const auto Rule=Entry->Type==EJson::String?RoleDefinition(Scenario,Entry->AsString()):Entry->AsObject();
+            if(!Rule)return TEXT("Invalid scenario role");
+            const int32 Count=Counts.FindRef(Text(Rule,TEXT("id")));
             if(Count<Rule->GetNumberField(TEXT("minimum"))||Count>Rule->GetNumberField(TEXT("maximum")))
                 return TEXT("Scenario role cardinality is invalid");
         }

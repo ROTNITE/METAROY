@@ -335,8 +335,12 @@ void FMRCoreRuntime::UpdateCommands()
         if(C.FinalStatus==TEXT("completed")&&World->Targets.IsValidIndex(C.TargetIndex)&&!C.TargetReport)
         {
             const auto& T=World->Targets[C.TargetIndex];
-            const bool Loaded=T.bAssigned&&World->Agents.ContainsByPredicate([&](const AMRAgent* Carrier)
-                {return Carrier->bCarrying&&Carrier->TargetIndex==C.TargetIndex;});
+            const AMRAgent* ActualCarrier=nullptr;
+            if(T.bAssigned&&!T.bRescued)
+                for(const AMRAgent* Carrier:World->Agents)
+                    if(Carrier&&Carrier->bCarrying&&Carrier->TargetIndex==C.TargetIndex)
+                    {ActualCarrier=Carrier;break;}
+            const bool Loaded=ActualCarrier!=nullptr;
             C.TargetEpoch=T.ObservationEpoch;
             C.TargetReport=Obj({{TEXT("id"),Str(FString::Printf(TEXT("person-%d"),T.Id))},
                 {TEXT("kind"),Str(TEXT("person"))},{TEXT("status"),Str(T.bRescued?TEXT("resolved"):TEXT("confirmed"))},
@@ -345,6 +349,7 @@ void FMRCoreRuntime::UpdateCommands()
                 {TEXT("priority"),Num(T.Priority)},{TEXT("evacuation_state"),Str(T.bRescued?TEXT("evacuated"):Loaded?TEXT("loaded"):TEXT("waiting"))},
                 {TEXT("aid_received"),Num(ReceivedKits.FindRef(C.TargetIndex))},{TEXT("aid_required"),Num(3)}});
             TargetSupport(World,T,C.TargetReport);
+            C.TargetReport->SetField(TEXT("carrier_id"),ActualCarrier?Str(ActualCarrier->AgentKey()):Null());
             if(World->Environment.bRevisedDisasters&&T.bRescued&&!T.MedicalHandoverCommand.IsEmpty())
                 C.TargetReport->SetStringField(TEXT("medical_handover_command_id"),T.MedicalHandoverCommand);
             if(ExplorationScene)C.TargetVisual=ExplorationScene->CaptureTarget(C.TargetIndex,Time());
