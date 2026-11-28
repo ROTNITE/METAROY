@@ -160,6 +160,11 @@ private:
     UPROPERTY() TObjectPtr<UInstancedStaticMeshComponent> MudTracks;
     TArray<FVector> MudTrackPositions;
     double NextMudTrackCleanup=0;
+    int32 MudVisualRevision=-1;
+    TMap<FIntPoint,uint16> MudVisualMasks;
+    TMap<FIntPoint,TWeakObjectPtr<UProceduralMeshComponent>> MudVisualMeshes;
+    void RefreshMudSurfaces();
+    void InvalidateMudGround(const FBox& Bounds);
     bool ReadCityLayout(const FString& File);
     bool ValidateCompetitionLayout() const;
     void BuildCompetitionAnnex();

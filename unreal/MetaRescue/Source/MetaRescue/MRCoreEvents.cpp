@@ -333,6 +333,7 @@ void AMRWorld::ResetCoreEventEffects()
     MudTracks=nullptr;
     MudTrackPositions.Empty();
     NextMudTrackCleanup=0;
+    MudVisualMasks.Empty();MudVisualMeshes.Empty();MudVisualRevision=-1;
     HazardVisuals.Empty();
     EventTargetIndices.Empty();
     DustEffect=nullptr;

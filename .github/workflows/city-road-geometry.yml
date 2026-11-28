@@ -8,6 +8,11 @@ on:
       - 'unreal/MetaRescue/Source/MetaRescue/MRStreetSignals.cpp'
       - 'unreal/MetaRescue/Source/MetaRescue/MRWorld.h'
       - 'tools/street_geometry_probe.cpp'
+      - 'tools/mud_contour_probe.cpp'
+      - 'unreal/MetaRescue/Source/MetaRescue/MRMud*'
+      - 'unreal/MetaRescue/Source/MetaRescue/MRDistrictEvents.cpp'
+      - 'unreal/MetaRescue/Source/MetaRescue/MRCoreEvents.cpp'
+      - 'unreal/MetaRescue/Source/MetaRescue/MRUrbanTerrain.cpp'
       - '.github/workflows/city-road-geometry.yml'
   workflow_dispatch:
 permissions:
@@ -27,6 +32,8 @@ jobs:
         run: |
           c++ -std=c++17 -O2 -Wall -Wextra -Werror -pedantic -Iunreal/MetaRescue/Source/MetaRescue tools/street_geometry_probe.cpp -o "$RUNNER_TEMP/street_geometry_probe"
           "$RUNNER_TEMP/street_geometry_probe"
+          c++ -std=c++17 -O2 -Wall -Wextra -Werror -pedantic -Iunreal/MetaRescue/Source/MetaRescue tools/mud_contour_probe.cpp -o "$RUNNER_TEMP/mud_contour_probe"
+          "$RUNNER_TEMP/mud_contour_probe"
       - name: Install pinned dependencies
         run: python -m pip install -r requirements.txt
       - name: Verify unchanged street layout and physical support
@@ -34,3 +41,4 @@ jobs:
           python -B -X utf8 -m unittest discover -s tests -p test_city_streets.py -v
           python -B -X utf8 -m unittest discover -s tests -p test_urban_terrain.py -v
           python -B -X utf8 -m unittest discover -s tests -p test_road_support_recovery.py -v
+          python -B -X utf8 -m unittest discover -s tests -p test_disaster_v2.py -v

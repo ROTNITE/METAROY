@@ -340,6 +340,7 @@ void AMRWorld::DamageUrbanRoad(const FMRDisturbance& Event)
 {
     if(!UrbanTerrain||!UrbanTerrain->Damage(Event))return;
     const auto Cavity=UrbanTerrain->Cavities.Last();const int32 First=Generated.Num();
+    InvalidateMudGround(Cavity.Bounds());
     if(UrbanWater)UrbanWater->TerrainChanged(Cavity.Bounds());
     FRandomStream Rng(FCrc::StrCrc32(*Event.Id)^uint32(Seed));
     auto* Asphalt=MRSceneMaterial(LoadObject<UMaterialInterface>(nullptr,TEXT("/Game/Materials/M_QuarterAsphalt.M_QuarterAsphalt")));
