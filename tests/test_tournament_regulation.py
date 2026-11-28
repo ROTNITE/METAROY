@@ -237,6 +237,21 @@ class TournamentAdversarialTests(TestCase):
         second = next(c for c in policy.decide(next_obs)['commands'] if c['agent_id'] == scout['id'])
         self.assertEqual(second['action'], 'inspect')
 
+    def test_carrier_preserves_its_position_until_a_reachable_scout_finds_work(self):
+        obs = checker.make_synthetic_obs(0)
+        scout, rover = obs['agents']
+        rover['capabilities'] = ['move', 'sense', 'carry']
+        rover['available_actions'] = [{'action': action} for action in ('move','observe','pickup','hold')]
+        target = {**obs['targets'][0], 'status': 'confirmed', 'position': list(rover['position'])}
+        obs['targets'] = []
+        policy = TournamentPolicy()
+        def actions(frame, agent):
+            return [command['action'] for command in policy.decide(frame)['commands'] if command['agent_id'] == agent['id']]
+        self.assertEqual(actions(obs, scout), ['observe'])
+        self.assertEqual(actions(obs, rover), ['hold'])
+        next_obs = {**obs, 'request_id': 'confirmed-work', 'time': 1., 'targets': [target]}
+        self.assertEqual(actions(next_obs, rover), ['pickup'])
+
     def test_survey_advances_after_a_near_waypoint_and_keeps_native_sensor_default(self):
         obs = checker.make_synthetic_obs(0)
         scout = obs['agents'][0]

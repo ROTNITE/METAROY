@@ -309,7 +309,7 @@ class TournamentPolicy:
         params = {'target': list(waypoint)} if waypoint is not None else None
         return ('move', params) if params and self._supports(agent, 'move', params) else None
 
-    def _command(self, obs, zones, budget, agent, claimed, inspect):
+    def _command(self, obs, zones, budget, agent, claimed, inspect, *, scout_available):
         aid = agent['id']
         p = _position(agent['position'])
         rules = list(_hard_rules(obs, agent))
@@ -428,6 +428,8 @@ class TournamentPolicy:
         if (obs['network']['connectivity_score'] < .6 and not agent['communication'].get('relay_enabled') and
                 (cmd := action('relay', {'enabled': True}))):
             return cmd
+        if not targets and scout_available and agent['kind'] == 'ground' and 'carry' in agent['capabilities']:
+            return action('hold')
         if not any(a['action'] == 'observe' for a in agent['available_actions']):
             # A carrier with no search capability should preserve its energy
             # while scouts discover work, rather than roaming a survey grid.
@@ -665,10 +667,20 @@ class TournamentPolicy:
             zones = [(z, _zone_shape(z)) for z in obs['zones']]
             budget = RouteBudget(len(zones))
             claimed = set(self.cargo.values())
+            scout_available = False
+            for scout in active:
+                if (scout['kind'] != 'aerial' or scout['status'] == 'busy' or
+                        'sense' not in scout['capabilities'] or not any(
+                            row['action'] == 'observe' for row in scout['available_actions'])):
+                    continue
+                energy, reserve = _reserve(scout, _hard_rules(obs, scout))
+                if energy > reserve + .05:
+                    scout_available = True
+                    break
             for agent in active[:256]:
                 if inspect is not None and agent['id'] not in roles:
                     continue
-                if cmd := self._command(obs, zones, budget, agent, claimed, inspect):
+                if cmd := self._command(obs, zones, budget, agent, claimed, inspect, scout_available=scout_available):
                     name, args = cmd
                     aid = agent['id']
                     if name == 'move':
