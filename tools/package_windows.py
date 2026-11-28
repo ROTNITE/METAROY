@@ -26,6 +26,7 @@ TOOLS = ('run_product.py', 'product_session.py', 'run_mission.py', 'native_archi
 ENTRYPOINTS = ('run_product.py', 'product_session.py', 'run_mission.py',
                'run_native_series.py', 'series_plan.py', 'issue_operator.py', 'verify_distribution_zip.py')
 MODULE_ENTRYPOINTS = ('tools.m5_lab', 'tools.m5_trial', 'tools.run_interop',
+                      'environment.main', 'controller.server', 'conformance.check_tournament',
                       'conformance.reference_environment', 'conformance.reference_controller')
 REQUIRED_SCENARIO = ('core-scenarios-v1.json', 'quarter.json', 'scenario.json',
                      'watercraft-hydrostatics-r1.json')

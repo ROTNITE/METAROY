@@ -46,7 +46,7 @@ void FMRCoreRuntime::BeginEpisode(const FPending& R)
     for(AMRAgent* A:World->Agents)
     {
         A->ResetForEpisode(InitialPoses.FindChecked(A->AgentKey()),Unlimited);
-        SensorRadius.Add(A->AgentKey(),A->bAerial?45:A->Kind()==TEXT("infrastructure")?35:A->MediumLimits.IsValid?12:16);
+        SensorRadius.Add(A->AgentKey(),DefaultSensorRadius(A));
     }
     ResetTeamActions();
     ResetServices();
@@ -167,8 +167,7 @@ FString FMRCoreRuntime::ValidateCommand(const Object& C) const
     }
     else if(Action==TEXT("observe"))
     {
-        const FString Kind=Text(Known,TEXT("kind"));const auto* Actor=FindAgent(Agent);
-        const double Maximum=Kind==TEXT("aerial")?45:Kind==TEXT("infrastructure")?35:Actor&&Actor->MediumLimits.IsValid?12:16;
+        const double Maximum=DefaultSensorRadius(FindAgent(Agent));
         if(P->HasField(TEXT("radius"))&&(!Is(P,TEXT("radius"),EJson::Number)||
             P->GetNumberField(TEXT("radius"))<=0||P->GetNumberField(TEXT("radius"))>Maximum))
             return TEXT("invalid_sensor_radius");

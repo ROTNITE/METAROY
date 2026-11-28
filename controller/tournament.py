@@ -28,6 +28,8 @@ ROUTE_RULES = {'position_bounds', 'zone_access', 'domain_access', 'restricted_zo
                'minimum_separation', 'collision', 'risk_limit'}
 RESOURCE_RULES = {'minimum_energy_reserve', 'resource_minimum', 'resource_reserve'}
 REVISIT_SECONDS = 30.
+SURVEY_ARRIVAL_M = 2.
+MOVE_RETRY_SECONDS = 5.
 TARGET_STATES = {'detected', 'suspected', 'confirmed'}
 
 
@@ -204,8 +206,9 @@ class TournamentPolicy:
         self.unavailable_scenarios = set()
         self.previous = None
         self.cache = OrderedDict()
-        self.scan_attempts = set()
+        self.initial_scans = set()
         self.scan_times = {}
+        self.last_moves = {}
         self.pickup_attempts = {}
         self.inspection_attempts = {}
         self.cargo = {}
@@ -318,6 +321,14 @@ class TournamentPolicy:
         def go(goal):
             return self._move(obs, zones, budget, agent, goal)
         def observe():
+            declarations = [row for row in agent['available_actions'] if row['action'] == 'observe']
+            if self.public and 'observe' in self.public.actions:
+                declarations.append(self.public.actions['observe'])
+            for row in declarations:
+                schema = row.get('parameters_schema')
+                properties = schema.get('properties') if isinstance(schema, dict) else None
+                if isinstance(properties, dict) and 'radius' in properties and (cmd := action('observe')):
+                    return cmd
             return action('observe', {'radius': 10.}) or action('observe')
         if any(rule.get('type', rule.get('id')) not in ROUTE_RULES | RESOURCE_RULES for rule in rules):
             # Never execute an action under an unknown mandatory constraint.
@@ -339,10 +350,13 @@ class TournamentPolicy:
             if agent['status'] == 'busy' and not any(a['action'] in ('move', 'handover') for a in agent['available_actions']):
                 return None
             for s in sorted((s for s in stations if s['kind'] == 'base_station'), key=lambda s: math.dist(p, s['position'])):
-                if math.dist(p, s['position']) <= 1.:
+                station = _position(s['position'])
+                if agent['kind'] == 'ground' and abs(station[2]-p[2]) <= 1.25:
+                    station = (*station[:2], p[2])
+                if math.dist(p, station) <= 1.:
                     if cmd := action('handover', {'station_id': s['id']}):
                         return cmd
-                elif cmd := go(_position(s['position'])):
+                elif cmd := go(station):
                     return cmd
             return None if agent['status'] == 'busy' else action('hold')
         if agent['status'] == 'busy':
@@ -391,7 +405,9 @@ class TournamentPolicy:
                             for e in obs['events']))
                     attempt = self.inspection_attempts.get((aid, tid))
                     ready_to_retry = attempt is None or math.dist(attempt[1], p) >= 1. or obs['time']-attempt[0] >= 10.
-                    if (math.dist(p, goal) <= radius or provenance) and (not inspection or ready_to_retry):
+                    approach = (*goal[:2], p[2]) if (name == 'pickup' and agent['kind'] == 'ground' and
+                                                     abs(goal[2]-p[2]) <= 1.25) else goal
+                    if (math.dist(p, approach) <= radius or provenance) and (not inspection or ready_to_retry):
                         if name == 'pickup':
                             self.pickup_attempts[tid] = aid
                         if inspection:
@@ -405,38 +421,36 @@ class TournamentPolicy:
                     if cmd := go(goal):
                         claimed.add(tid)
                         return cmd
-        if obs['network']['connectivity_score'] < .6 and (cmd := action('relay', {'enabled': True})):
+        if (obs['network']['connectivity_score'] < .6 and not agent['communication'].get('relay_enabled') and
+                (cmd := action('relay', {'enabled': True}))):
             return cmd
         if not any(a['action'] == 'observe' for a in agent['available_actions']):
             # A carrier with no search capability should preserve its energy
             # while scouts discover work, rather than roaming a survey grid.
             return action('hold')
-        scan = (aid, tuple(round(x, 2) for x in p))
-        if scan not in self.scan_attempts and (cmd := observe()):
-            if len(self.scan_attempts) >= 4096:
-                self.scan_attempts.clear()
-                self.scan_times.clear()
-            self.scan_attempts.add(scan)
-            self.scan_times[scan] = obs['time']
+        if aid not in self.initial_scans and (cmd := observe()):
+            self.initial_scans.add(aid)
             return cmd
-        mission_points = {goal for task in obs['mission']['objectives'] if task.get('type') == 'search'
+        mission_points = {goal for task in obs['mission']['objectives'] if task.get('type') in ('search', 'search_and_evacuate')
                           and task.get('status') not in ('completed', 'failed', 'cancelled')
                           and (goal := _position(task.get('position'))) is not None}
-        if agent['kind'] == 'aerial':
-            mission_points = {(*goal[:2], max(p[2], goal[2])) for goal in mission_points}
+        if agent['kind'] in ('ground', 'surface_water'):
+            mission_points = {(*goal[:2], p[2]) for goal in mission_points}
         candidates = set(mission_points)
         for zone, shape in zones:
             if shape is None or zone['type'] != MEDIA.get(agent['kind']) or not _access(zone, agent['kind']) or zone['risk'] >= 1:
                 continue
             lo, hi = shape.minimum, shape.maximum
             z = min(hi[2], max(lo[2], p[2]))
-            if agent['kind'] == 'aerial' and z-lo[2] < 2. and hi[2]-lo[2] > 4.:
+            if agent['kind'] == 'aerial' and hi[2]-lo[2] > 4.:
                 z = lo[2]+min(15., (hi[2]-lo[2])*.25)
             for x in (.2, .5, .8):
                 for y in (.2, .5, .8):
                     candidates.add((lo[0]+x*(hi[0]-lo[0]), lo[1]+y*(hi[1]-lo[1]), z))
         def scan_key(q):
-            return aid, tuple(round(x, 2) for x in q)
+            if agent['kind'] in ('ground', 'surface_water'):
+                q = q[:2]
+            return aid, tuple(round(x*2) for x in q)
         # Complete novel coverage first, then revisit the oldest locations so
         # targets that appear later are not permanently skipped.
         for goal in sorted(candidates, key=lambda q: (self.scan_times.get(scan_key(q), -1.),
@@ -444,9 +458,10 @@ class TournamentPolicy:
             stamp = self.scan_times.get(scan_key(goal), -math.inf)
             if obs['time'] - stamp < REVISIT_SECONDS:
                 continue
-            if math.dist(p, goal) < .05:
+            if math.dist(p, goal) <= SURVEY_ARRIVAL_M:
                 if cmd := observe():
-                    self.scan_attempts.add(scan_key(goal))
+                    if len(self.scan_times) >= 4096:
+                        self.scan_times.pop(next(iter(self.scan_times)))
                     self.scan_times[scan_key(goal)] = obs['time']
                     return cmd
             elif cmd := go(goal):
@@ -602,6 +617,8 @@ class TournamentPolicy:
                 # Keep the accepted plan and route only reachable actors.
                 reasons.append('connectivity_degraded')
         commands = []
+        self.initial_scans.intersection_update(known)
+        self.last_moves = {aid: intent for aid, intent in self.last_moves.items() if aid in known}
         if not stop:
             targets = {t['id']: t for t in obs['targets']}
             # A sent pickup is not an acknowledgement, and a bare 'carried'
@@ -638,11 +655,20 @@ class TournamentPolicy:
                     continue
                 if cmd := self._command(obs, zones, budget, agent, claimed, inspect):
                     name, args = cmd
+                    aid = agent['id']
+                    if name == 'move':
+                        last = self.last_moves.get(aid)
+                        if (last and obs['time']-last[0] < MOVE_RETRY_SECONDS and
+                                math.dist(last[1], args['target']) <= .25):
+                            continue
+                        self.last_moves[aid] = (obs['time'], args['target'])
+                    elif name not in ('observe', 'relay'):
+                        self.last_moves.pop(aid, None)
                     if self.public:
                         args = self.public.command_parameters(name, args)
                         name = self.public.wire_action(name)
                     if inspect is None or name in synth['allowed_actions']:
-                        commands.append({'agent_id': agent['id'], 'action': name, 'parameters': args})
+                        commands.append({'agent_id': aid, 'action': name, 'parameters': args})
         result = decision(obs, commands=commands, operation=operation, selected=_config(ids, params, synth),
                           roles=roles, previous=previous)
         quality = obs['observation_quality']['global_completeness']

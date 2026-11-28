@@ -17,6 +17,14 @@ AMRAgent* FMRCoreRuntime::FindAgent(const FString& Id) const
 int32 FMRCoreRuntime::FindTarget(const FString& Id) const
 {for(int32 I=0;I<World->Targets.Num();I++)if(Id==FString::Printf(TEXT("person-%d"),World->Targets[I].Id))return I;return -1;}
 
+double FMRCoreRuntime::DefaultSensorRadius(const AMRAgent* A)
+{
+    if(!A)return 16;
+    if(A->bAerial)return 45;
+    if(A->Kind()==TEXT("infrastructure"))return 35;
+    return A->MediumLimits.IsValid?12:16;
+}
+
 Object FMRCoreRuntime::AgentSnapshot(AMRAgent* A,double ObservedAt) const
 {
     const auto* Signal=Signals.Find(A->AgentKey());
@@ -40,7 +48,15 @@ Object FMRCoreRuntime::AgentSnapshot(AMRAgent* A,double ObservedAt) const
     if(Operating)
     {
         Add(TEXT("send_message"));
-        if(A->CanSense()){Add(TEXT("observe"));Add(TEXT("relay"));if(!Charging)Add(TEXT("inspect"));}
+        if(A->CanSense())
+        {
+            const auto Radius=Obj({{TEXT("type"),Str(TEXT("number"))},{TEXT("exclusiveMinimum"),Num(0)},
+                {TEXT("maximum"),Num(DefaultSensorRadius(A))}});
+            const auto Schema=Obj({{TEXT("type"),Str(TEXT("object"))},
+                {TEXT("properties"),Json(Obj({{TEXT("radius"),Json(Radius)}}))}});
+            Actions.Add(Json(Obj({{TEXT("action"),Str(TEXT("observe"))},{TEXT("parameters_schema"),Json(Schema)}})));
+            Add(TEXT("relay"));if(!Charging)Add(TEXT("inspect"));
+        }
         if(A->CanMove())
         {
             Add(TEXT("hold"));

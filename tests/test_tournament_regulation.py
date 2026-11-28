@@ -84,13 +84,13 @@ class TournamentPolicyTests(TestCase):
         policy = TournamentPolicy()
         original = checker.make_synthetic_obs(0, episode_id='first')
         policy.decide(original)
-        policy.scan_attempts.add(('foreign-agent', (1, 2, 3)))
+        policy.scan_times[('foreign-agent', (1, 2, 3))] = 0.
         policy.cargo['foreign-agent'] = 'foreign-target'
         second = checker.make_synthetic_obs(0, episode_id='second')
         second = checker.PublicNormalizer(seed=987).forward_obs(second)
         result = policy.decide(second)
         self.assertNotIn('foreign-agent', policy.cargo)
-        self.assertNotIn(('foreign-agent', (1, 2, 3)), policy.scan_attempts)
+        self.assertNotIn(('foreign-agent', (1, 2, 3)), policy.scan_times)
         self.assertEqual(result['previous_configuration']['role_assignments'], {})
         self.assertFalse(checker.validate_decision_struct(result, second, strict_axis=True)[0])
         self.assertEqual(set(result['role_assignments']) - {a['id'] for a in second['agents']}, set())
@@ -220,6 +220,41 @@ class TournamentAdversarialTests(TestCase):
         decision = policy.decide(next_obs)
         self.assertIn({'agent_id': scout['id'], 'action': 'move',
                        'parameters': {'target': aim}}, decision['commands'])
+
+    def test_survey_advances_after_a_near_waypoint_and_keeps_native_sensor_default(self):
+        obs = checker.make_synthetic_obs(0)
+        scout = obs['agents'][0]
+        scout['position'] = [68.32, 17.1, 12.]
+        next(a for a in scout['available_actions'] if a['action'] == 'observe')['parameters_schema'] = {
+            'type': 'object', 'properties': {'radius': {'type': 'number', 'maximum': 45.}},
+        }
+        obs['targets'] = []
+        near, onward = [68., 17., 12.], [67., 28., 12.]
+        obs['mission']['objectives'] = [
+            {'id': name, 'type': 'search', 'status': 'active', 'position': position}
+            for name, position in (('near', near), ('onward', onward))]
+        policy = TournamentPolicy()
+        def command(t):
+            current = {**obs, 'request_id': f'survey-{t}', 'time': t}
+            return next(c for c in policy.decide(current)['commands'] if c['agent_id'] == scout['id'])
+        self.assertEqual(command(0)['parameters'], {})
+        self.assertEqual(command(1)['action'], 'observe')
+        self.assertEqual(command(2)['parameters'], {'target': onward})
+
+    def test_unchanged_move_intent_does_not_cancel_the_active_motion_each_step(self):
+        obs = checker.make_synthetic_obs(0)
+        scout = obs['agents'][0]
+        obs['targets'] = []
+        aim = [68., 17., scout['position'][2]]
+        obs['mission']['objectives'] = [{'id': 'search', 'type': 'search', 'position': aim}]
+        policy = TournamentPolicy()
+        def actions(t):
+            current = {**obs, 'request_id': f'motion-{t}', 'time': t}
+            return [c['action'] for c in policy.decide(current)['commands'] if c['agent_id'] == scout['id']]
+        self.assertEqual(actions(0), ['observe'])
+        self.assertEqual(actions(1), ['move'])
+        self.assertEqual(actions(2), [])
+        self.assertEqual(actions(8), ['move'])
 
     def test_malformed_nested_input_rejected_not_crash(self):
         for key, value in (('status', []), ('evacuation_state', {}), ('position', [1,2]), ('carrier_id', [])):

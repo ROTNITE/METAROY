@@ -295,6 +295,7 @@ private:
     TSharedPtr<FJsonObject> ChargeState(const FString& StationId) const;
     void Snapshot(const FString& RequestId);
     TSharedPtr<FJsonObject> AgentSnapshot(AMRAgent* Agent,double ObservedAt) const;
+    static double DefaultSensorRadius(const AMRAgent* Agent);
     TSharedPtr<FJsonObject> Capabilities() const;
     TSharedPtr<FJsonObject> EpisodeResponse(const FString& RequestId,bool StepResponse) const;
     FString ValidateDecision(const TSharedPtr<FJsonObject>& Request,FString& Code) const;
