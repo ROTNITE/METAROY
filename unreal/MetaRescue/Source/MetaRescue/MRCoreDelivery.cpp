@@ -111,7 +111,7 @@ void FMRCoreRuntime::DeliverReports()
         if(R.Due<0)
         {
             if(!H){++I;continue;}
-            R.Due=Time()+Latency*(*H);
+            R.Due=Time()+ReportDelay(R,*H);
         }
         if(Time()+1.e-9<R.Due){++I;continue;}
         if(!H){R.Due=-1;++I;continue;}
@@ -120,7 +120,7 @@ void FMRCoreRuntime::DeliverReports()
             Record(TEXT("message_dropped"),Obj({{TEXT("message_id"),Str(R.MessageId)},{TEXT("source_id"),Str(R.Agent)},
                 {TEXT("attempt"),Num(R.Attempts)},{TEXT("reason"),Str(TEXT("packet_loss"))}}),false);
             if(R.Kind==EPacket::Pose||R.Attempts>=3){RemoveReport(I);continue;}
-            R.Due=Time()+.5+Latency*(*H);++I;continue;
+            R.Due=Time()+.5+ReportDelay(R,*H);++I;continue;
         }
         if(R.Kind==EPacket::Exploration)DeliverExplorationReport(R);
         else if(R.Kind==EPacket::Hazard)DeliverHazardReport(R);

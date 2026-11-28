@@ -1,4 +1,5 @@
 #include "MRAgent.h"
+#include "MRCoreRuntime.h"
 #include "MRWorld.h"
 #include "Components/BoxComponent.h"
 #include "Components/StaticMeshComponent.h"
@@ -152,10 +153,15 @@ bool AMRAgent::IsHoldingStable() const
 }
 void AMRAgent::OnAgentHit(UPrimitiveComponent*,AActor* Other,UPrimitiveComponent*,FVector Impulse,const FHitResult&)
 {
-    if(Cast<AMRAgent>(Other)&&((Mission&&Mission->bRescueQuarter)||Impulse.Size()>1))
+    auto* Vehicle=Cast<AMRAgent>(Other);
+    if(Vehicle&&((Mission&&Mission->bRescueQuarter)||Impulse.Size()>1))
     {
         AgentContacts++;
-        if(Mission)Mission->AppendEvent(TEXT("agent_vehicle_contact"),AgentId);
+        if(Mission)
+        {
+            Mission->AppendEvent(TEXT("agent_vehicle_contact"),AgentId);
+            if(Mission->CoreRuntime)Mission->CoreRuntime->NoteVehicleContact(this,Vehicle);
+        }
     }
 }
 FVector AMRAgent::PlannedVelocity() const

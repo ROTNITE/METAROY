@@ -36,6 +36,7 @@ void FMRCoreRuntime::BeginEpisode(const FPending& R)
     Clock.Reset();SensorSamples=TelemetrySamples=0;OverviewFrame=0;
     Substeps.Reset();SubstepWindowsStarted=0;
     Status=TEXT("running");OutcomeReason.Empty();Closed=false;SafeStopRequested=false;
+    SafetyViolations=0;VehicleContactAt.Reset();SafetyOccupancies.Reset();
     KnownAgents.Empty();KnownTargets.Empty();AgentReceived.Empty();ActualConfigurations.Empty();Reports.Empty();ReportCounts.Empty();Commands.Empty();ReplayKeys.Empty();
     KnownZones.Empty();StepEvents.Empty();SurfaceObservedAt.Empty();SensorRadius.Empty();StaleAlerts.Empty();DegradationAlerts.Empty();
     EventViews.Empty();ScheduledViews.Empty();ViewStartedAt=-1;
@@ -243,6 +244,7 @@ void FMRCoreRuntime::Step(const FPending& R)
     FString Code;const FString Invalid=ValidateDecision(R.Request,Code);if(!Invalid.IsEmpty()){Reject(Code,Invalid);return;}
     const FString Operation=Text(R.Request,TEXT("operation"));
     const auto& Input=R.Request->GetArrayField(TEXT("commands"));
+    const auto Synth=Field(R.Request->GetObjectField(TEXT("selected_configuration")),TEXT("synthesized_scenario"));
     TArray<FString> Reasons;Reasons.SetNum(Input.Num());TArray<TArray<int32>> Groups;TSet<int32> Grouped;
     if(Is(R.Request,TEXT("metaevolution"),EJson::Object))
     {
@@ -273,7 +275,13 @@ void FMRCoreRuntime::Step(const FPending& R)
     for(int32 I=0;I<Input.Num();I++)
     {
         const auto Command=Input[I]->AsObject();
-        Reasons[I]=ValidateCommand(Command);if(!Grouped.Contains(I))Groups.Add({I});
+        Reasons[I]=Operation==TEXT("safe_stop")&&Text(Command,TEXT("action"))!=TEXT("hold")?
+            TEXT("safe_stop_requires_hold"):ValidateCommand(Command);
+        if(Reasons[I].IsEmpty()&&Operation!=TEXT("safe_stop")&&Synth&&Synth->Type==EJson::Object&&
+           !Synth->AsObject()->GetArrayField(TEXT("allowed_actions")).ContainsByPredicate([&](const Value& Action)
+               {return Action->AsString()==Text(Command,TEXT("action"));}))
+            Reasons[I]=TEXT("action_not_declared_by_synthesized_scenario");
+        if(!Grouped.Contains(I))Groups.Add({I});
         if(!Reasons[I].IsEmpty())continue;
         const FString Action=Text(Command,TEXT("action")),Agent=Text(Command,TEXT("agent_id"));
         if(Exclusive(Action))++ExclusiveCounts.FindOrAdd(Agent);
@@ -361,8 +369,16 @@ void FMRCoreRuntime::Step(const FPending& R)
     if(Operation==TEXT("safe_stop"))
     {
         SafeStopRequested=true;
-        for(AMRAgent* A:World->Agents)if(A->CanMove())Queue(Obj({{TEXT("agent_id"),Str(A->AgentKey())},{TEXT("action"),Str(TEXT("hold"))},
-            {TEXT("parameters"),Json(Obj())}}),InternalIndex--,TEXT(""));
+        // The simulator owns the emergency brake, including partitioned actors.
+        // Do not present this local intervention as a delivered radio command.
+        for(AMRAgent* A:World->Agents)if(A->CanMove())
+        {
+            const FString Key=Id+TEXT(":emergency_hold:")+A->AgentKey();
+            A->Hold(Key);
+            LastMotionSequence.Add(A->AgentKey(),++CommandSequence);
+            Record(TEXT("physical_emergency_hold"),Obj({{TEXT("agent_id"),Str(A->AgentKey())},
+                {TEXT("decision_id"),Str(Id)},{TEXT("command_id"),Str(Key)}}),false);
+        }
     }
     Record(TEXT("decision"),R.Request);
     if(!StorageError.IsEmpty())

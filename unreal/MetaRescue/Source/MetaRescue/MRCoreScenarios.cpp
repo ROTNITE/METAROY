@@ -279,6 +279,9 @@ FString FMRCoreRuntime::ValidatePlan(const Object& Request,FString& Code) const
         if(!HasSynth||NewIds.Num()!=1||ScenarioCatalog.Contains(NewIds[0])||Text(Synth->AsObject(),TEXT("id"))!=NewIds[0]||
             !DeclaredShape(Synth->AsObject(),true)||SameDefinition||!BoundedProgram(Synth->AsObject(),Parameters))
             return TEXT("Synthesize requires a new, valid scenario declaration");
+        const auto Actions=Capabilities()->GetObjectField(TEXT("supported_actions"));
+        for(const auto& Action:Synth->AsObject()->GetArrayField(TEXT("allowed_actions")))
+            if(!Actions->HasField(Action->AsString()))return TEXT("Synthesized scenario declares an unavailable action");
     }
     else if(Operation==TEXT("safe_stop"))
     {
@@ -293,7 +296,8 @@ FString FMRCoreRuntime::ValidatePlan(const Object& Request,FString& Code) const
     const bool Disjoint=Is(Parameters,TEXT("disjoint_agent_assignments"),EJson::Boolean)&&Parameters->GetBoolField(TEXT("disjoint_agent_assignments"));
     // Empty base parameters mean each member uses its own defaults. This
     // remains subject to each member's required fields and compatibility.
-    if(Composite&&((Groups&&Groups->Values.Num()!=NewIds.Num())||
+    if(Composite&&((Parameters->HasField(TEXT("by_scenario"))&&!Groups)||
+                  (Groups&&Groups->Values.Num()!=NewIds.Num())||
                   (!Groups&&!Parameters->Values.IsEmpty())))return TEXT("Each composed scenario needs its own parameters");
     if(Selected->HasField(TEXT("scenario_participants")))
     {

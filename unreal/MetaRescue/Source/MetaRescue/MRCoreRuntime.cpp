@@ -440,6 +440,7 @@ void FMRCoreRuntime::AfterPhysics(UWorld* InWorld,ELevelTick TickType,float Dt)
     if(Time()+1.e-9>=(TelemetrySamples+1)/10.)UpdateNetwork();
     if(Time()+1.e-9>=(SensorSamples+1)*.5){++SensorSamples;GatherReports();}
     DeliverReports();UpdateCommands();
+    TrackSafetyOccupancies();
     TrackSubsteps();
     if(Time()+1.e-9>=(TelemetrySamples+1)/10.)
     {

@@ -30,6 +30,7 @@ public:
     bool Start(int32 Port);
     void Stop();
     void BeforePhysics(float Dt);
+    void NoteVehicleContact(const AMRAgent* A,const AMRAgent* B);
     double Time() const {return Clock.Time();}
     bool ReadyForInterface() const {return Ready;}
     TSharedPtr<FJsonObject> ObservationForInterface() const {return CachedObservation;}
@@ -96,6 +97,10 @@ private:
     void SaveFrameProfile();
     bool Started=false,Ready=false,ActiveStep=false,Closed=false;
     bool SafeStopRequested=false;
+    int32 SafetyViolations=0;
+    TMap<FString,double> VehicleContactAt;
+    TSet<FString> SafetyOccupancies;
+    void TrackSafetyOccupancies();
     bool OldFixedStep=false;
     bool Realtime=false,OldFixedFrameRate=false;
 #if PLATFORM_WINDOWS
@@ -255,6 +260,7 @@ private:
     void RemoveReport(int32 Index);
     bool PacketLost(const FString& Agent,EPacket Kind,int64 Sequence,int32 Attempt) const;
     void QueueAck(FCommand& Command,double Delay);
+    double ReportDelay(const FReport& Packet,int32 HopsCount) const;
     void GatherReports();
     void ResetExplorationScene();
     void RefreshExplorationView();

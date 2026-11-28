@@ -270,6 +270,8 @@ Object FMRCoreRuntime::Capabilities() const
     auto Result=Obj({{TEXT("protocol_version"),Str(TEXT("1.0"))},{TEXT("environment_id"),Str(TEXT("metarescue_unreal"))},
         {TEXT("profile"),Json(Obj({{TEXT("id"),Str(TEXT("metaevolution"))},{TEXT("version"),Str(TEXT("1.0"))},{TEXT("document_revision"),Str(TEXT("1.1"))}}))},
         {TEXT("implementation_stage"),Str(TEXT("physical_core_vertical_slice"))},
+        {TEXT("coordinates"),Json(Obj({{TEXT("unit"),Str(TEXT("meter"))},
+            {TEXT("axes"),Strings({TEXT("x"),TEXT("y"),TEXT("z")})}}))},
         {TEXT("orbital_sensor"),Json(Orbital)},
         {TEXT("agent_kinds"),Strings({TEXT("aerial"),TEXT("ground"),TEXT("underground"),TEXT("surface_water"),
             TEXT("underwater"),TEXT("infrastructure"),TEXT("digital"),TEXT("operator")})},
@@ -379,7 +381,8 @@ void FMRCoreRuntime::DeclareZones()
         const double Size=Layout->GetNumberField(TEXT("size_m"));
         auto Bounds=[&](double Low,double High){return Obj({{TEXT("min"),Point(FVector(0,0,Low))},
                                                            {TEXT("max"),Point(FVector(Size,Size,High))}});};
-        Add(TEXT("map-surface"),TEXT("land"),Bounds(-.12,.08),{Str(TEXT("ground"))});
+        // The public position is the chassis centre, above the drivable surface.
+        Add(TEXT("map-surface"),TEXT("land"),Bounds(-.12,1.5),{Str(TEXT("ground"))});
         Add(TEXT("map-airspace"),TEXT("air"),Bounds(0,90),{Str(TEXT("aerial"))});
     }
     int32 Index=0;
@@ -497,7 +500,7 @@ void FMRCoreRuntime::Snapshot(const FString& RequestId)
         (Status==TEXT("success")?1.0:0.0);
     auto Metrics=Obj({{TEXT("known_targets"),Num(KnownTargets.Num())},{TEXT("confirmed_evacuations"),Num(Rescued)},
         {TEXT("targets_total"),Num(TotalTargets)},{TEXT("targets_rescued"),Num(PhysicallySaved)},
-        {TEXT("mission_completion"),Num(Completion)}});
+        {TEXT("mission_completion"),Num(Completion)},{TEXT("safety_violations"),Num(SafetyViolations)}});
     const double ReachableRatio=Agents.IsEmpty()?0:double(Reachable)/Agents.Num();
     auto Plan=Obj({{TEXT("revision"),Num(PlanRevision)},{TEXT("plan_revision"),Num(PlanRevision)},
         {TEXT("accepted_configuration"),Json(Accepted)},{TEXT("desired_role_assignments"),Json(DesiredRoles)},

@@ -98,12 +98,30 @@ bool FMRCoreRuntime::PacketLost(const FString& Agent,EPacket Kind,int64 Sequence
     return Radio.GetFraction()>=Signal->Success;
 }
 
+double FMRCoreRuntime::ReportDelay(const FReport& Packet,int32 HopsCount) const
+{
+    const double RadioDelay=Latency*HopsCount;
+    if(Packet.Kind!=EPacket::Target||!Is(Accepted,TEXT("parameters"),EJson::Object))return RadioDelay;
+    const auto Parameters=Accepted->GetObjectField(TEXT("parameters"));
+    double Bias=1.;
+    Parameters->TryGetNumberField(TEXT("priority_bias"),Bias);
+    if(Is(Parameters,TEXT("by_scenario"),EJson::Object))
+        for(const auto& Member:Parameters->GetObjectField(TEXT("by_scenario"))->Values)
+        {
+            double MemberBias=1.;
+            if(Member.Value->Type==EJson::Object&&Member.Value->AsObject()->TryGetNumberField(TEXT("priority_bias"),MemberBias))
+                Bias=FMath::Max(Bias,MemberBias);
+        }
+    const double Priority=FMath::Clamp(Packet.Data->GetNumberField(TEXT("priority"))/3.,0.,1.);
+    return RadioDelay+Latency*(FMath::Clamp(Bias,1.,2.)-1.)*(1.-Priority);
+}
+
 void FMRCoreRuntime::QueueReport(FReport Packet)
 {
     if(Packet.MessageId.IsEmpty())Packet.MessageId=FGuid::NewGuid().ToString(EGuidFormats::Digits);
     const auto* Route=Hops.Find(Packet.Agent);
     Packet.Deadline=Time()+ReportTtlSeconds;
-    Packet.Due=Route?Time()+Latency*(*Route):-1;
+    Packet.Due=Route?Time()+ReportDelay(Packet,*Route):-1;
     if(Packet.Kind==EPacket::Pose&&!Route)
     {
         const int32 Old=Reports.IndexOfByPredicate([&](const FReport& R){return R.Agent==Packet.Agent&&R.Kind==EPacket::Pose&&R.Due<0;});
