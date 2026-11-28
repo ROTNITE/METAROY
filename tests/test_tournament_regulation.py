@@ -1,5 +1,6 @@
 """Organizer admission suite plus independent boundary regressions."""
 from copy import deepcopy
+from concurrent.futures import ThreadPoolExecutor
 from threading import Thread
 from unittest import TestCase
 
@@ -48,6 +49,24 @@ class TournamentHTTPTests(TestCase):
         code, failure, _, _ = checker.http_json(self.ctrl_url, 'POST', path, {})
         self.assertEqual(code, 422)
         self.assertEqual(failure['error']['code'], 'INVALID_REQUEST')
+
+    def test_concurrent_replay_of_retired_episode_does_not_restore_it(self):
+        path = '/v1/controller/decide'
+        old = checker.make_synthetic_obs(0, episode_id='retired-old')
+        new = checker.make_synthetic_obs(0, episode_id='retired-new')
+        _, first, _, _ = checker.http_json(self.ctrl_url, 'POST', path, old)
+        code, _, _, _ = checker.http_json(self.ctrl_url, 'POST', path, new)
+        self.assertEqual(code, 200)
+        def send(obs):
+            code, body, _, _ = checker.http_json(self.ctrl_url, 'POST', path, obs)
+            return code, body
+        with ThreadPoolExecutor(4) as workers:
+            replay = list(workers.map(send, [old]*4))
+        self.assertEqual(replay, [(200, first)]*4)
+        changed = {**old, 'request_id': 'retired-delayed', 'time': 2.}
+        code, error = send(changed)
+        self.assertEqual((code, error['error']['code']), (422, 'UNKNOWN_EPISODE'))
+        self.assertEqual(self.ctrl.policy.episode, new['episode_id'])
 
 
 class TournamentPolicyTests(TestCase):

@@ -11,7 +11,9 @@ import math
 from threading import RLock
 
 from contracts.protocol import OBSERVATION, DECISION, ProtocolError, validate
+from controller.declared_scenarios import SCENARIO_SEMANTICS, choose_declared
 from controller.decisions import decision
+from controller.public_core import PublicCore
 from controller.public_geometry import geometry, segments
 from controller.public_route import RouteBudget, detour
 from controller.navigation import point
@@ -165,23 +167,6 @@ def _loaded_owner(target, known):
     return None
 
 
-def _supports(agent, action, params):
-    for row in agent['available_actions']:
-        if row['action'] != action:
-            continue
-        schema = row.get('parameters_schema')
-        if schema is None:
-            return True
-        if not isinstance(schema, dict):
-            continue
-        try:
-            validate(params, schema, 'INVALID_COMMAND')
-            return True
-        except ProtocolError:
-            pass
-    return False
-
-
 def _directives(obs):
     items = list(obs['mission']['directives'])
     items += [e['parameters'] for e in obs['events']
@@ -197,14 +182,26 @@ def _config(ids, params=None, synth=None):
     return {'scenario_ids': list(ids), 'parameters': params or {}, 'synthesized_scenario': synth}
 
 
+def _fingerprint(value):
+    return hashlib.sha256(json.dumps(value, sort_keys=True).encode()).hexdigest()
+
+
 class TournamentPolicy:
-    def __init__(self):
+    def __init__(self, core_mode='strict'):
+        self.core_mode = core_mode
         self.lock = RLock()
         self.records = deque(maxlen=4096)
+        self.retired_episodes = OrderedDict()
+        self.replies = OrderedDict()
         self._reset(None)
 
     def _reset(self, episode):
         self.episode = episode
+        self.public = None
+        self.capabilities = None
+        self.scenarios = {}
+        self.operations = set()
+        self.unavailable_scenarios = set()
         self.previous = None
         self.cache = OrderedDict()
         self.scan_attempts = set()
@@ -212,6 +209,31 @@ class TournamentPolicy:
         self.pickup_attempts = {}
         self.cargo = {}
         self.time = -1.
+
+    def _supports(self, agent, action, params):
+        declared = self.public.actions.get(action) if self.public else {}
+        if declared is None:
+            return False
+        required = declared.get('required_capabilities', [])
+        if not isinstance(required, list) or any(not isinstance(cap, str) for cap in required) or not set(required) <= set(agent['capabilities']):
+            return False
+        declarations = [row for row in agent['available_actions'] if row['action'] == action]
+        if not declarations:
+            return False
+        wire = self.public.command_parameters(action, params) if self.public else params
+        for row in declarations:
+            schemas = [declared[key] for key in ('parameters_schema',) if key in declared]
+            if 'parameters_schema' in row:
+                schemas.append(row['parameters_schema'])
+            try:
+                for schema in schemas:
+                    if not isinstance(schema, dict):
+                        raise ProtocolError('INVALID_COMMAND', 'Invalid public action schema')
+                    validate(wire, schema, 'INVALID_COMMAND')
+                return True
+            except ProtocolError:
+                continue
+        return False
 
     def _clear(self, obs, zones, agent, start, end):
         kind = agent['kind']
@@ -282,7 +304,7 @@ class TournamentPolicy:
             return self._clear(obs, zones, agent, a, b)
         waypoint = goal if budget.test(clear, start, goal) else detour(start, goal, zones, agent['kind'], clear, budget)
         params = {'target': list(waypoint)} if waypoint is not None else None
-        return ('move', params) if params and _supports(agent, 'move', params) else None
+        return ('move', params) if params and self._supports(agent, 'move', params) else None
 
     def _command(self, obs, zones, budget, agent, claimed, inspect):
         aid = agent['id']
@@ -291,7 +313,7 @@ class TournamentPolicy:
         energy, reserve = _reserve(agent, rules)
         def action(name, params=None):
             params = params or {}
-            return (name, params) if _supports(agent, name, params) else None
+            return (name, params) if self._supports(agent, name, params) else None
         def go(goal):
             return self._move(obs, zones, budget, agent, goal)
         if any(rule.get('type', rule.get('id')) not in ROUTE_RULES | RESOURCE_RULES for rule in rules):
@@ -323,7 +345,7 @@ class TournamentPolicy:
         if agent['status'] == 'busy':
             # Busy without confirmed custody may be in the middle of service.
             return None
-        if inspect is not None and agent['kind'] == 'aerial' and _supports(agent, 'move', {'target': list(p)}):
+        if inspect is not None and agent['kind'] == 'aerial' and self._supports(agent, 'move', {'target': list(p)}):
             goal = (*inspect[:2], p[2])
             if math.dist(p, goal) > 2. and (cmd := go(goal)):
                 return cmd
@@ -354,7 +376,7 @@ class TournamentPolicy:
                         isinstance(success.get('resource_id'), str) and type(success.get('amount_at_least')) is int):
                         choices.insert(0, ('deliver', {**params, 'resource_id': success['resource_id'], 'amount': success['amount_at_least']}))
                 for name, args in choices:
-                    if not _supports(agent, name, args):
+                    if not self._supports(agent, name, args):
                         continue
                     radius = 1. if name == 'pickup' else 2.
                     if math.dist(p, goal) <= radius:
@@ -406,12 +428,41 @@ class TournamentPolicy:
         return action('observe', {'radius': 10.}) or action('observe') or action('hold')
 
     def decide(self, body):
-        obs = public_observation(body)
+        wrapped = isinstance(body, dict) and 'observation' in body
+        source = body['observation'] if wrapped else body
+        declared = body.get('capabilities') if wrapped else None
+        raw_episode = source.get('episode_id') if isinstance(source, dict) else None
+        raw_request = source.get('request_id') if isinstance(source, dict) else None
         with self.lock:
-            if self.episode != obs['episode_id']:
+            belongs = self.episode == raw_episode
+            if isinstance(raw_episode, str) and raw_episode in self.retired_episodes:
+                cached = self.replies.get((raw_episode, raw_request)) if isinstance(raw_request, str) else None
+                if cached and cached[0] == _fingerprint(source) and (declared is None or cached[1] == _fingerprint(declared)):
+                    return deepcopy(cached[2])
+                raise ProtocolError('UNKNOWN_EPISODE', 'Observation belongs to a retired episode')
+            if belongs and declared is not None and declared != self.capabilities:
+                raise ProtocolError('INVALID_REQUEST', 'Public capability declaration changed within the episode')
+            public = self.public if belongs else None
+            if not belongs and declared is not None:
+                public = PublicCore(declared, mode=self.core_mode)
+                if not public.identity and (self.core_mode == 'strict' or not public.compatibility):
+                    raise ProtocolError('INVALID_REQUEST', 'Tournament coordinates must use XYZ meters')
+            raw = public.wire_observation(source) if public else source
+            obs = public_observation(raw)
+            if public:
+                obs = public.view(obs)
+            if not belongs:
+                if self.episode is not None:
+                    self.retired_episodes[self.episode] = None
+                    if len(self.retired_episodes) > 4096:
+                        self.retired_episodes.popitem(last=False)
                 self._reset(obs['episode_id'])
+                if public:
+                    self.public, self.capabilities = public, deepcopy(declared)
+                    self.scenarios = declared.get('supported_scenarios', {})
+                    self.operations = set(declared.get('supported_operations', ()))
             rid = obs['request_id']
-            fingerprint = hashlib.sha256(json.dumps(obs, sort_keys=True, ensure_ascii=False).encode()).hexdigest()
+            fingerprint = _fingerprint(obs)
             if rid in self.cache:
                 old, result = self.cache[rid]
                 if old != fingerprint:
@@ -426,6 +477,9 @@ class TournamentPolicy:
             self.cache[rid] = (fingerprint, deepcopy(result))
             if len(self.cache) > 128:
                 self.cache.popitem(last=False)
+            self.replies[(obs['episode_id'], rid)] = (_fingerprint(source), _fingerprint(self.capabilities), deepcopy(result))
+            if len(self.replies) > 512:
+                self.replies.popitem(last=False)
             self.records.append(deepcopy(result))
             return result
 
@@ -435,7 +489,7 @@ class TournamentPolicy:
         active = sorted((a for a in agents if a['status'] in ('active', 'degraded', 'busy') and
                          a['communication'].get('reachable', a['communication'].get('connected', True)) is not False),
                         key=lambda a: (a['kind'], _position(a['position']) or (), a['id']))
-        reported = list(dict.fromkeys(s for a in agents for s in a['scenario_ids']))
+        reported = sorted({s for a in agents for s in a['scenario_ids']})
         reported_roles = {a['id']: a['role'] for a in agents if a['role'] is not None}
         previous = deepcopy(self.previous)
         if previous is None:
@@ -459,26 +513,44 @@ class TournamentPolicy:
                 if inspect is not None:
                     break
         reasons = ['public_observation_only']
+        evaluations = None
         events = {e['type'] for e in obs['events'] if e['status'] in ('new','active')}
         low = any(_energy(a)[0] <= _energy(a)[1] + .05 for a in active)
         if stop:
             operation = 'safe_stop'
             reasons.append('operator_stop')
+        elif self.public and SCENARIO_SEMANTICS in self.public.extensions and inspect is None:
+            self.previous = previous
+            operation, selected, assigned, evaluations = choose_declared(self, obs, active, ids)
+            if operation == 'modify' and assigned != roles:
+                operation, selected, assigned = 'keep', None, None
+            if selected is not None:
+                ids, params, synth = (selected[key] for key in ('scenario_ids', 'parameters', 'synthesized_scenario'))
+                roles = assigned if assigned is not None else roles
+            reasons.append('published_scenario_semantics')
         elif inspect is not None:
             sid = 'public_inspection_' + hashlib.sha256(repr(inspect).encode()).hexdigest()[:12]
             if ids == [sid] and synth:
                 operation = 'keep'
             else:
                 operation, ids, params = 'synthesize', [sid], {}
+                inspection_actions = ('move', 'observe', 'inspect', 'hold')
                 synth = {'id': sid, 'version': '1.0', 'title': 'Public inspection',
                          'game_model': {'class': 'coalition', 'players': ['scout'],
                                         'information_structure': 'partial', 'stability_criterion': 'utility_non_decreasing'},
                          'applicability': {'entry': [], 'continuation': [], 'exit': [], 'emergency_exit': []},
                          'roles': ['scout'], 'objectives': ['inspect'], 'constraints': [],
-                         'allowed_actions': ['move', 'observe', 'inspect'], 'transition_targets': [],
+                         'allowed_actions': [self.public.wire_action(action) if self.public else action
+                                             for action in inspection_actions
+                                             if not self.public or action in self.public.actions],
+                         'transition_targets': [],
                          'metrics': ['mission_completion', 'safety_violations']}
                 roles = {a['id']: 'scout' for a in active if a['kind'] == 'aerial' and 'sense' in a['capabilities']}
             reasons.append('operator_inspection')
+        elif synth is not None and synth['title'] == 'Public inspection':
+            operation, ids, params, synth = 'switch', ['coverage_search'], {}, None
+            roles = {a['id']: 'scout' for a in active if {'sense', 'move'} <= set(a['capabilities'])}
+            reasons.append('operator_inspection_finished')
         elif len(reported) > 1 and self.previous is not None and set(ids) != set(reported):
             operation, ids, params, synth = 'compose', reported, {'by_scenario': {s: {} for s in reported}}, None
             reasons.append('complementary_public_scenarios')
@@ -536,14 +608,22 @@ class TournamentPolicy:
             budget = RouteBudget(len(zones))
             claimed = set(self.cargo.values())
             for agent in active[:256]:
+                if inspect is not None and agent['id'] not in roles:
+                    continue
                 if cmd := self._command(obs, zones, budget, agent, claimed, inspect):
-                    commands.append({'agent_id': agent['id'], 'action': cmd[0], 'parameters': cmd[1]})
+                    name, args = cmd
+                    if self.public:
+                        args = self.public.command_parameters(name, args)
+                        name = self.public.wire_action(name)
+                    if inspect is None or name in synth['allowed_actions']:
+                        commands.append({'agent_id': agent['id'], 'action': name, 'parameters': args})
         result = decision(obs, commands=commands, operation=operation, selected=_config(ids, params, synth),
                           roles=roles, previous=previous)
         quality = obs['observation_quality']['global_completeness']
         risk = max((z['risk'] for z in obs['zones'] if z['type'] not in BLOCKING), default=0.)
-        result['candidate_evaluations'] = [{'scenario_id': sid, 'applicable': True, 'utility': quality,
-                                             'risk': risk, 'selected': True} for sid in ids]
+        result['candidate_evaluations'] = evaluations if evaluations is not None else [
+            {'scenario_id': sid, 'applicable': True, 'utility': quality, 'risk': risk, 'selected': True}
+            for sid in ids]
         result['constraint_checks'] = [{'constraint_id': 'public_route', 'status': 'unknown'},
                                        {'constraint_id': 'minimum_energy_reserve', 'status': 'unknown' if low else 'passed'}]
         result['explanation'] = {'observation_refs': [obs['request_id']], 'reason_codes': reasons,

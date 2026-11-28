@@ -4,12 +4,39 @@ import json
 from threading import Thread
 from unittest import TestCase
 
-from conformance.check_tournament import check_pair
-from conformance.reference_environment import serve
+from conformance.check_tournament import PublicNormalizer, check_pair, http_json
+from conformance.reference_environment import Trial, serve
 from controller.server import TournamentServer
 
 
 class TournamentIndependentMatrix(TestCase):
+    def test_public_capabilities_supply_semantics_without_changing_the_peer(self):
+        for profile in ('C', 'D', 'J'):
+            with self.subTest(profile=profile), TournamentServer(0, core_mode='declared' if profile == 'J' else 'strict') as controller:
+                worker = Thread(target=controller.serve_forever, daemon=True)
+                worker.start()
+                try:
+                    peer = Trial(profile)
+                    result = peer.reset({'request_id': 'initial', 'seed': 89725187,
+                                         'mission': {'id': 'search_and_rescue', 'parameters': {}}})
+                    normalize = PublicNormalizer(seed=89725187)
+                    url = f'http://127.0.0.1:{controller.server_port}'
+                    for step in range(200):
+                        observation = normalize.forward_obs(result['observation'])
+                        body = {'observation': observation}
+                        if step == 0:
+                            body['capabilities'] = peer.capabilities()
+                        status, request, error, _ = http_json(url, 'POST', '/v1/controller/decide', body)
+                        self.assertEqual(status, 200, error)
+                        result = peer.step(normalize.backward_decision(request))
+                        if peer.status != 'running':
+                            break
+                    self.assertEqual(peer.status, 'success')
+                    self.assertEqual(len(peer.private_handover), len(peer.targets))
+                finally:
+                    controller.shutdown()
+                    worker.join()
+
     def test_reference_profiles(self):
         rows = []
         # The reference model predates the new regulation; some profiles

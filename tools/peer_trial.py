@@ -186,7 +186,7 @@ def summary(report):
     return selected
 
 
-def trial(peer, direction, mode, seed, engine='planar', *, tournament=False):
+def trial(peer, direction, mode, seed, engine='planar', *, tournament=False, max_steps=20, evidence_dir=None):
     rel, expected, base = PEERS[peer]
     package = ROOT / rel
     row = {"peer":peer,"direction":direction,"mode":mode,"seed":seed,
@@ -237,14 +237,22 @@ def trial(peer, direction, mode, seed, engine='planar', *, tournament=False):
                             raise RuntimeError("our tournament server: "+str(error)) from error
                         env_url, ctrl_url = (url,own_url) if direction=="outbound" else (own_url,url)
                         report = work / "organizer-report.json"
-                        args = [sys.executable,"-B","-X","utf8","conformance/check_tournament.py",
+                        args = [sys.executable,"-B","-X","utf8"]
+                        if evidence_dir is not None:
+                            name = f'{peer}-{direction}-{seed}'
+                            args += ["-m","tools.tournament_trace","--trace",str(evidence_dir/(name+".http.jsonl"))]
+                        else:
+                            args.append("conformance/check_tournament.py")
+                        args += [
                                 "pair","--env-url",env_url,"--ctrl-url",ctrl_url,
                                 "--normalize","--strict","--seed",str(seed),
-                                "--max-steps","20","--timeout","15","--json-out",str(report)]
+                                "--max-steps",str(max_steps),"--timeout","15","--json-out",str(report)]
                         runner = subprocess.Popen(args,cwd=ROOT,env=env,stdout=rlog,
                                                   stderr=subprocess.STDOUT,start_new_session=True)
-                        row["runner_exit"] = runner.wait(timeout=90)
+                        row["runner_exit"] = runner.wait(timeout=90 if max_steps==20 else 240)
                         data = json.loads(report.read_bytes())
+                        if evidence_dir is not None:
+                            shutil.copyfile(report,evidence_dir/(name+".report.json"))
                         row.update(admitted=data["admitted"], pass_count=data["pass"],
                                    warn_count=data["warn"], fail_count=data["fail"],
                                    exchange="passed" if data["admitted"] and row["runner_exit"]==0 else "failed")
@@ -314,14 +322,26 @@ def main():
     parser.add_argument("--seed",type=int,action="append")
     parser.add_argument("--mode",choices=("strict","declared"),default="strict")
     parser.add_argument("--engine",choices=("planar","reference"),default="planar")
+    parser.add_argument("--tournament-only",action="store_true",help="run only the organizer's strict normalized pair")
+    parser.add_argument("--max-steps",type=int,default=20,help="organizer pair step limit")
+    parser.add_argument("--evidence-dir",type=Path,help="save organizer HTTP diagnostics and full JSON reports locally")
     options = parser.parse_args()
     if options.peer=="atlas" and options.direction=="outbound":
         parser.error("Atlas archive contains no standalone environment")
-    rows = [trial(options.peer,options.direction,options.mode,seed,options.engine) for seed in options.seed or SEEDS]
+    if not 5 <= options.max_steps <= 2000:
+        parser.error("--max-steps must be in 5..2000")
+    if options.tournament_only and (options.mode!='strict' or options.engine!='planar'):
+        parser.error("--tournament-only uses strict RPC with the planar environment")
+    if options.evidence_dir:
+        options.evidence_dir=options.evidence_dir.resolve()
+        options.evidence_dir.mkdir(parents=True,exist_ok=True)
+    rows = [] if options.tournament_only else [
+        trial(options.peer,options.direction,options.mode,seed,options.engine) for seed in options.seed or SEEDS]
     print(json.dumps({"completed_trials":len(rows),"passed_exchanges":sum(r.get("exchange")=="passed" for r in rows),
                       "all_inputs_preserved":all(r["archive_preserved"] for r in rows)},ensure_ascii=False),flush=True)
     if options.mode == 'strict' and options.engine == 'planar':
-        tournament_rows = [trial(options.peer,options.direction,options.mode,seed,options.engine,tournament=True)
+        tournament_rows = [trial(options.peer,options.direction,options.mode,seed,options.engine,tournament=True,
+                                 max_steps=options.max_steps,evidence_dir=options.evidence_dir)
                            for seed in options.seed or SEEDS]
         print(json.dumps({'measurement':'organizer_normalized_strict_rpc',
                           'completed_trials':len(tournament_rows),

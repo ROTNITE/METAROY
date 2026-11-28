@@ -6,14 +6,15 @@ from urllib.parse import urlsplit
 
 from contracts.protocol import MAX_BODY_BYTES, OPERATIONS, ProtocolError, encode, strict_json
 from controller.tournament import TournamentPolicy
+from controller.public_core import CORE_MODES
 
 
 class TournamentServer(ThreadingHTTPServer):
     daemon_threads = True
     allow_reuse_address = False
 
-    def __init__(self, port=8100, host='127.0.0.1'):
-        self.policy = TournamentPolicy()
+    def __init__(self, port=8100, host='127.0.0.1', *, core_mode='strict'):
+        self.policy = TournamentPolicy(core_mode)
         super().__init__((host, port), Handler)
 
     def server_bind(self):
@@ -38,7 +39,8 @@ class Handler(BaseHTTPRequestHandler):
                              'controller_id': 'metarescue_public_tournament', 'supported_operations': list(OPERATIONS)})
         elif route == '/v1/controller/logs':
             with self.server.policy.lock:
-                self._send(200, {'protocol_version': '1.0', 'records': list(self.server.policy.records)})
+                records = list(self.server.policy.records)
+            self._send(200, {'protocol_version': '1.0', 'records': records})
         else:
             self._send(404, ProtocolError('INVALID_REQUEST', 'Unknown controller route').response())
 
@@ -50,7 +52,10 @@ class Handler(BaseHTTPRequestHandler):
         try:
             if self.headers.get_content_type() != 'application/json':
                 raise ProtocolError('INVALID_REQUEST', 'Expected application/json')
-            length = int(self.headers.get('Content-Length', 0))
+            lengths = self.headers.get_all('Content-Length', [])
+            if len(lengths) != 1 or self.headers.get('Transfer-Encoding') is not None:
+                raise ProtocolError('INVALID_REQUEST', 'Expected exactly one Content-Length and no Transfer-Encoding')
+            length = int(lengths[0])
             if not 0 < length <= MAX_BODY_BYTES:
                 raise ProtocolError('INVALID_REQUEST', 'Expected a bounded observation body')
             wire = self.rfile.read(length)
@@ -88,8 +93,9 @@ def main():
     parser = ArgumentParser(description=__doc__)
     parser.add_argument('--port', type=int, default=8100)
     parser.add_argument('--host', default='127.0.0.1', help='Bind only to a trusted tournament network')
+    parser.add_argument('--core-mode', choices=CORE_MODES, default='strict')
     args = parser.parse_args()
-    with TournamentServer(args.port, args.host) as server:
+    with TournamentServer(args.port, args.host, core_mode=args.core_mode) as server:
         print(f'http://{args.host}:{server.server_port}', flush=True)
         try:
             server.serve_forever()
