@@ -5,6 +5,9 @@
 #include "MRWorld.h"
 #include "Misc/Guid.h"
 #include "MRExplorationScene.h"
+#if WITH_DEV_AUTOMATION_TESTS
+#include "Misc/AutomationTest.h"
+#endif
 
 using namespace MRCoreValues;
 
@@ -13,6 +16,12 @@ namespace
 constexpr int32 MaxPacketsPerAgent=128;
 constexpr double ReportTtlSeconds=30;
 constexpr double AckTtlSeconds=10;
+
+double PriorityReportDelay(double RadioDelay,double LinkLatency,double Bias,double Priority)
+{
+    const double NormalizedPriority=FMath::Clamp(Priority,0.,1.);
+    return RadioDelay+LinkLatency*(FMath::Clamp(Bias,1.,2.)-1.)*(1.-NormalizedPriority);
+}
 }
 
 void FMRCoreRuntime::UpdateNetwork()
@@ -112,9 +121,23 @@ double FMRCoreRuntime::ReportDelay(const FReport& Packet,int32 HopsCount) const
             if(Member.Value->Type==EJson::Object&&Member.Value->AsObject()->TryGetNumberField(TEXT("priority_bias"),MemberBias))
                 Bias=FMath::Max(Bias,MemberBias);
         }
-    const double Priority=FMath::Clamp(Packet.Data->GetNumberField(TEXT("priority"))/3.,0.,1.);
-    return RadioDelay+Latency*(FMath::Clamp(Bias,1.,2.)-1.)*(1.-Priority);
+    return PriorityReportDelay(RadioDelay,Latency,Bias,Packet.Data->GetNumberField(TEXT("priority")));
 }
+
+#if WITH_DEV_AUTOMATION_TESTS
+IMPLEMENT_SIMPLE_AUTOMATION_TEST(FMRTournamentPriorityDelayTest,"MetaRescue.Core.TournamentPriorityDelay",
+    EAutomationTestFlags::EditorContext|EAutomationTestFlags::EngineFilter)
+
+bool FMRTournamentPriorityDelayTest::RunTest(const FString& Parameters)
+{
+    constexpr double Radio=.4,Link=.2;
+    TestEqual(TEXT("Unbiased delivery keeps the radio delay"),PriorityReportDelay(Radio,Link,1.,.25),Radio);
+    TestEqual(TEXT("Highest normalized priority keeps the radio delay"),PriorityReportDelay(Radio,Link,2.,1.),Radio);
+    TestTrue(TEXT("Lower priority adds a proportional scheduling delay"),
+        FMath::IsNearlyEqual(PriorityReportDelay(Radio,Link,2.,.25),.55));
+    return true;
+}
+#endif
 
 FString FMRCoreRuntime::NextObservationId(const TCHAR* Kind)
 {
