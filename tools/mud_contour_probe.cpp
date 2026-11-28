@@ -19,7 +19,7 @@ int main()
     int Count=0;
     for(unsigned Bits=0;Bits<512;++Bits)
     {
-        const auto Mask=std::uint16_t(Bits)|Single;
+        const auto Mask=std::uint16_t(Bits|Single);
         for(int I=0;I<=10;++I)for(int J=0;J<=10;++J)
         {
             const double X=I*50.,Y=J*50.;

@@ -191,6 +191,36 @@ class TournamentAdversarialTests(TestCase):
         result = TournamentPolicy().decide(obs)
         self.assertFalse(any(c['agent_id'] == obs['agents'][1]['id'] and c['action'] != 'hold' for c in result['commands']))
 
+    def test_perception_uses_report_source_and_waits_for_confirmation(self):
+        obs = checker.make_synthetic_obs(0)
+        observer = obs['agents'][0]
+        target = obs['targets'][0]
+        observer['available_actions'].append({'action': 'confirm'})
+        obs['mission']['objectives'].append({'id': 'verify-targets', 'type': 'confirm', 'status': 'active'})
+        obs['events'] = [{'id': 'discovery', 'type': 'target_detected', 'time': 0.,
+                          'source': observer['id'], 'targets': [target['id']],
+                          'parameters': {}, 'confidence': .9, 'status': 'new'}]
+        policy = TournamentPolicy()
+        result = policy.decide(obs)
+        self.assertIn({'agent_id': observer['id'], 'action': 'confirm',
+                       'parameters': {'target_id': target['id']}}, result['commands'])
+        self.assertFalse(any(cmd['action'] == 'deliver' for cmd in result['commands']))
+        self.assertEqual(policy.cargo, {})
+
+    def test_search_waypoint_has_priority_over_generic_coverage(self):
+        obs = checker.make_synthetic_obs(0)
+        scout = obs['agents'][0]
+        obs['targets'] = []
+        aim = [68., 17., scout['position'][2]]
+        obs['mission']['objectives'] = [{'id': 'public-search', 'type': 'search',
+                                        'status': 'active', 'position': aim}]
+        policy = TournamentPolicy()
+        policy.decide(obs)
+        next_obs = {**obs, 'request_id': 'public-search-next', 'time': 2.}
+        decision = policy.decide(next_obs)
+        self.assertIn({'agent_id': scout['id'], 'action': 'move',
+                       'parameters': {'target': aim}}, decision['commands'])
+
     def test_malformed_nested_input_rejected_not_crash(self):
         for key, value in (('status', []), ('evacuation_state', {}), ('position', [1,2]), ('carrier_id', [])):
             obs = checker.make_synthetic_obs(0)

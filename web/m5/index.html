@@ -38,7 +38,7 @@
         </div>
         <div class="settings">
           <div><label for="profile">Сценарий 3D-эталона</label><select id="profile"><option value="K">K · скрытые цели, препятствие</option><option value="A">A · базовая миссия</option></select></div>
-          <div><label for="mode">Совместимость</label><select id="mode"><option value="strict">Strict · строгий Core</option><option value="declared">Declared · объявленные адаптеры</option><option value="both">Оба режима · сравнение</option></select></div>
+          <div><label for="mode">Режим лаборатории Core</label><select id="mode"><option value="strict">Strict · строгий Core</option><option value="declared">Declared · объявленные адаптеры</option><option value="both">Оба режима · сравнение</option></select></div>
         </div>
         <label for="seeds">Seed мира <span class="muted">(до 10 значений)</span></label>
         <input id="seeds" value="89725161" required autocomplete="off" inputmode="numeric">
@@ -93,7 +93,7 @@
       <button type="button" class="secondary" id="pair-row-prev" disabled>↑ Контроллеры</button><span id="pair-row-page" class="muted"></span><button type="button" class="secondary" id="pair-row-next" disabled>Контроллеры ↓</button>
       <button type="button" class="secondary" id="pair-col-prev" disabled>← Среды</button><span id="pair-col-page" class="muted"></span><button type="button" class="secondary" id="pair-col-next" disabled>Среды →</button>
     </div>
-    <p class="muted small">Ячейки — диагностические суммы попыток, не официальный Q/M5. «—» означает отсутствие испытаний по фильтру.</p>
+    <p class="muted small">Ячейки показывают диагностические результаты Core. Турнирный допуск проверяется через check_tournament.py. «—» означает отсутствие испытаний по фильтру.</p>
     <div class="matrix-controls pair-detail"><strong id="pair-filter">Конфигурации всех пар</strong><button type="button" class="secondary" id="pair-clear" disabled>Сбросить выбор пары</button></div>
     <div class="table-wrap"><table><thead><tr><th>Контроллер → среда</th><th>Профиль / режим / seed</th><th>Попытки</th><th>Обмен</th><th>Миссия</th><th>Все эвакуированы / истина</th><th>Входы сохранены</th><th></th></tr></thead><tbody id="matrix"><tr><td colspan="8" class="empty">Нет сохранённых испытаний.</td></tr></tbody></table></div>
     <div class="pager"><button type="button" class="secondary" id="matrix-prev" disabled>← Назад</button><span id="matrix-page" class="muted" role="status">0 конфигураций</span><button type="button" class="secondary" id="matrix-next" disabled>Далее →</button></div>

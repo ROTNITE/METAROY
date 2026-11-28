@@ -28,7 +28,7 @@ ROUTE_RULES = {'position_bounds', 'zone_access', 'domain_access', 'restricted_zo
                'minimum_separation', 'collision', 'risk_limit'}
 RESOURCE_RULES = {'minimum_energy_reserve', 'resource_minimum', 'resource_reserve'}
 REVISIT_SECONDS = 30.
-TARGET_STATES = {'detected', 'suspected', 'confirmed', 'delivered'}
+TARGET_STATES = {'detected', 'suspected', 'confirmed'}
 
 
 def _position(value):
@@ -207,6 +207,7 @@ class TournamentPolicy:
         self.scan_attempts = set()
         self.scan_times = {}
         self.pickup_attempts = {}
+        self.inspection_attempts = {}
         self.cargo = {}
         self.time = -1.
 
@@ -316,6 +317,8 @@ class TournamentPolicy:
             return (name, params) if self._supports(agent, name, params) else None
         def go(goal):
             return self._move(obs, zones, budget, agent, goal)
+        def observe():
+            return action('observe', {'radius': 10.}) or action('observe')
         if any(rule.get('type', rule.get('id')) not in ROUTE_RULES | RESOURCE_RULES for rule in rules):
             # Never execute an action under an unknown mandatory constraint.
             return action('hold')
@@ -350,10 +353,12 @@ class TournamentPolicy:
             if math.dist(p, goal) > 2. and (cmd := go(goal)):
                 return cmd
             if math.dist(p, goal) <= 2.:
-                return action('observe', {'radius': 10.}) or action('observe') or action('hold')
+                return observe() or action('hold')
         targets = sorted((t for t in obs['targets'] if t.get('status') in TARGET_STATES and
                           t.get('evacuation_state') not in CARRIED | {'evacuated'} and _position(t.get('position')) is not None),
                          key=lambda t: (-_number(t.get('priority')), math.dist(p, t['position']), t['id']))
+        needs_confirmation = any(task.get('type') == 'confirm' and task.get('status') != 'completed'
+                                 for task in obs['mission']['objectives'])
         if not obs['observation_quality']['contradiction_count']:
             for target in targets:
                 tid = target['id']
@@ -368,7 +373,7 @@ class TournamentPolicy:
                     choices += [('confirm', params), ('inspect', params)]
                 if target['status'] == 'confirmed':
                     choices += [('pickup', params)]
-                if target['status'] in ('detected', 'confirmed', 'delivered'):
+                if target['status'] == 'confirmed' or (target['status'] == 'detected' and not needs_confirmation):
                     choices += [('rescue', params), ('deliver', params)]
                 for obj in obs['mission']['objectives']:
                     success = obj.get('success_conditions', {})
@@ -379,12 +384,25 @@ class TournamentPolicy:
                     if not self._supports(agent, name, args):
                         continue
                     radius = 1. if name == 'pickup' else 2.
-                    if math.dist(p, goal) <= radius:
+                    inspection = name in ('confirm', 'inspect')
+                    provenance = inspection and (
+                        target.get('source_id') == aid or any(
+                            e['type'] == 'target_detected' and e['source'] == aid and tid in e['targets']
+                            for e in obs['events']))
+                    attempt = self.inspection_attempts.get((aid, tid))
+                    ready_to_retry = attempt is None or math.dist(attempt[1], p) >= 1. or obs['time']-attempt[0] >= 10.
+                    if (math.dist(p, goal) <= radius or provenance) and (not inspection or ready_to_retry):
                         if name == 'pickup':
                             self.pickup_attempts[tid] = aid
+                        if inspection:
+                            self.inspection_attempts[aid, tid] = (obs['time'], p)
                         claimed.add(tid)
                         return name, args
-                    if cmd := go(goal if agent['kind'] != 'aerial' else (*goal[:2], p[2])):
+                    if agent['kind'] == 'aerial':
+                        # Close the actual 3D sensing gap after a nearby attempt.
+                        altitude = min(p[2], goal[2]+8.) if inspection and attempt else p[2]
+                        goal = (*goal[:2], altitude)
+                    if cmd := go(goal):
                         claimed.add(tid)
                         return cmd
         if obs['network']['connectivity_score'] < .6 and (cmd := action('relay', {'enabled': True})):
@@ -394,19 +412,26 @@ class TournamentPolicy:
             # while scouts discover work, rather than roaming a survey grid.
             return action('hold')
         scan = (aid, tuple(round(x, 2) for x in p))
-        if scan not in self.scan_attempts and (cmd := action('observe', {'radius': 10.}) or action('observe')):
+        if scan not in self.scan_attempts and (cmd := observe()):
             if len(self.scan_attempts) >= 4096:
                 self.scan_attempts.clear()
                 self.scan_times.clear()
             self.scan_attempts.add(scan)
             self.scan_times[scan] = obs['time']
             return cmd
-        candidates = set()
+        mission_points = {goal for task in obs['mission']['objectives'] if task.get('type') == 'search'
+                          and task.get('status') not in ('completed', 'failed', 'cancelled')
+                          and (goal := _position(task.get('position'))) is not None}
+        if agent['kind'] == 'aerial':
+            mission_points = {(*goal[:2], max(p[2], goal[2])) for goal in mission_points}
+        candidates = set(mission_points)
         for zone, shape in zones:
             if shape is None or zone['type'] != MEDIA.get(agent['kind']) or not _access(zone, agent['kind']) or zone['risk'] >= 1:
                 continue
             lo, hi = shape.minimum, shape.maximum
             z = min(hi[2], max(lo[2], p[2]))
+            if agent['kind'] == 'aerial' and z-lo[2] < 2. and hi[2]-lo[2] > 4.:
+                z = lo[2]+min(15., (hi[2]-lo[2])*.25)
             for x in (.2, .5, .8):
                 for y in (.2, .5, .8):
                     candidates.add((lo[0]+x*(hi[0]-lo[0]), lo[1]+y*(hi[1]-lo[1]), z))
@@ -414,18 +439,19 @@ class TournamentPolicy:
             return aid, tuple(round(x, 2) for x in q)
         # Complete novel coverage first, then revisit the oldest locations so
         # targets that appear later are not permanently skipped.
-        for goal in sorted(candidates, key=lambda q: (self.scan_times.get(scan_key(q), -1.), math.dist(p, q), q))[:48]:
+        for goal in sorted(candidates, key=lambda q: (self.scan_times.get(scan_key(q), -1.),
+                                                     q not in mission_points, math.dist(p, q), q))[:48]:
             stamp = self.scan_times.get(scan_key(goal), -math.inf)
             if obs['time'] - stamp < REVISIT_SECONDS:
                 continue
             if math.dist(p, goal) < .05:
-                if cmd := action('observe', {'radius': 10.}) or action('observe'):
+                if cmd := observe():
                     self.scan_attempts.add(scan_key(goal))
                     self.scan_times[scan_key(goal)] = obs['time']
                     return cmd
             elif cmd := go(goal):
                 return cmd
-        return action('observe', {'radius': 10.}) or action('observe') or action('hold')
+        return observe() or action('hold')
 
     def decide(self, body):
         wrapped = isinstance(body, dict) and 'observation' in body
