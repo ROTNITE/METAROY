@@ -489,7 +489,7 @@ class TournamentPolicy:
             operation, ids, params, synth = 'select', ['coverage_search'], {}, None
             roles = {a['id']: 'scout' for a in active if 'sense' in a['capabilities'] and 'move' in a['capabilities']}
             reasons.append('initial_public_search')
-        elif ('connectivity_loss' in events or obs['network']['connectivity_score'] < .6) and ids != ['coordination_reconfiguration']:
+        elif 'connectivity_loss' in events and ids != ['coordination_reconfiguration']:
             operation, ids, params, synth = 'switch', ['coordination_reconfiguration'], {}, None
             roles = {a['id']: 'scout' for a in active if 'sense' in a['capabilities'] and 'move' in a['capabilities']}
             reasons.append('connectivity_reconfiguration')
@@ -499,6 +499,10 @@ class TournamentPolicy:
         else:
             operation = 'keep'
             reasons.append('continue_public_plan')
+            if obs['network']['connectivity_score'] < .6:
+                # A connectivity metric alone does not declare a new scenario.
+                # Keep the accepted plan and route only reachable actors.
+                reasons.append('connectivity_degraded')
         commands = []
         if not stop:
             targets = {t['id']: t for t in obs['targets']}
@@ -513,20 +517,20 @@ class TournamentPolicy:
                     owner = _loaded_owner(target, known)
                     # Legacy public observations can report a loaded target at
                     # the carrier's pose without publishing a carrier ID. A
-                    # matching pickup intent plus unique observed co-location
+                    # matching pickup intent plus a unique actor within public pickup range
                     # is a planning hypothesis, never a completed goal. Do
                     # not resolve ambiguous custody by the order of agent IDs.
                     if owner is None and target.get('evacuation_state') in CARRIED:
                         attempted = self.pickup_attempts.get(tid)
                         pose = _position(target.get('position'))
                         possible = [a['id'] for a in agents if pose is not None and 'carry' in a['capabilities']
-                                    and _position(a['position']) is not None and math.dist(a['position'], pose) <= 1e-6]
+                                    and _position(a['position']) is not None and math.dist(a['position'], pose) <= 1. + 1e-9]
                         if possible == [attempted]:
                             owner = attempted
                     if owner is not None:
                         self.cargo[owner] = tid
             for tid, aid in list(self.pickup_attempts.items()):
-                if aid not in known or targets.get(tid, {}).get('evacuation_state') in CARRIED | {'evacuated'}:
+                if aid not in known or tid in self.cargo.values() or targets.get(tid, {}).get('evacuation_state') == 'evacuated':
                     self.pickup_attempts.pop(tid, None)
             zones = [(z, _zone_shape(z)) for z in obs['zones']]
             budget = RouteBudget(len(zones))

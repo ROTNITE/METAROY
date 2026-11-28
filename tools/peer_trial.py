@@ -11,6 +11,7 @@ import json
 import os
 import re
 import signal
+import socket
 import shutil
 import subprocess
 import sys
@@ -46,6 +47,14 @@ def command(peer, component, port, work):
         return py + ["controller.py", "serve", "--host", "127.0.0.1", "--port", str(port),
                      "--log", str(work / "peer-controller.jsonl")]
     return ["npm", "run", "start:" + component]
+
+
+def local_port():
+    # A fresh ephemeral loopback port avoids TIME_WAIT conflicts between
+    # isolated episodes. The container has no external network peers.
+    with socket.socket(socket.AF_INET,socket.SOCK_STREAM) as listener:
+        listener.bind(('127.0.0.1',0))
+        return listener.getsockname()[1]
 
 
 def ready(process, component, ports, deadline):
@@ -202,7 +211,7 @@ def trial(peer, direction, mode, seed, engine='planar', *, tournament=False):
                 # installed dependency tree and partner ZIP untouched.
                 shutil.copytree('/opt/peer-dependencies/node_modules',cwd/'node_modules',symlinks=True)
             component = "environment" if direction == "outbound" else "controller"
-            port = 18080
+            port = local_port() if tournament else 18080
             ports = (port,8000,8001,8080,8081,3000,3001,9000,9001,8130,8131) if peer == "v9" else (port,)
             env = offline_env(work,port)
             with (work / "peer.log").open("wb") as plog, (work / "runner.log").open("wb") as rlog:
@@ -215,12 +224,17 @@ def trial(peer, direction, mode, seed, engine='planar', *, tournament=False):
                     # the partner. The new organizer checker owns the loop.
                     own_component = "controller" if direction == "outbound" else "environment"
                     own_module = "controller.server" if direction == "outbound" else "environment.server"
+                    own_port = local_port()
                     with (work / "our-server.log").open("wb") as own_log:
                         our_process = subprocess.Popen(
-                            [sys.executable, "-B", "-X", "utf8", "-m", own_module, "--port", "18440"],
-                            cwd=ROOT, env=offline_env(work,18440), stdout=own_log,
+                            [sys.executable, "-B", "-X", "utf8", "-m", own_module, "--port", str(own_port)],
+                            cwd=ROOT, env=offline_env(work,own_port), stdout=own_log,
                             stderr=subprocess.STDOUT, start_new_session=True)
-                        own_url = ready(our_process,own_component,(18440,),time.monotonic()+12)
+                        try:
+                            own_url = ready(our_process,own_component,(own_port,),time.monotonic()+12)
+                        except (RuntimeError,TimeoutError) as error:
+                            row["own_startup_diagnostic"] = startup_diagnostic(work/"our-server.log")
+                            raise RuntimeError("our tournament server: "+str(error)) from error
                         env_url, ctrl_url = (url,own_url) if direction=="outbound" else (own_url,url)
                         report = work / "organizer-report.json"
                         args = [sys.executable,"-B","-X","utf8","conformance/check_tournament.py",
@@ -252,6 +266,11 @@ def trial(peer, direction, mode, seed, engine='planar', *, tournament=False):
                                 status=re.search(r"HTTP (\d{3})",detail)
                                 if status: row["first_http_status"]=int(status.group(1))
                                 row["diagnostic"] = item["check"]
+                                if "контроллер не вернул" in detail: row["failure_phase"]="decide"
+                                elif "среда отклонила" in detail: row["failure_phase"]="step"
+                                elif "наблюдение" in detail: row["failure_phase"]="observation"
+                                code=re.search(r'"code"\s*:\s*"([A-Z_]{1,60})"',detail)
+                                if code: row["error_code"]=code.group(1)
                                 break
                 else:
                     args = [sys.executable,"-B","-X","utf8","tools/run_interop.py",
