@@ -677,7 +677,8 @@ class TournamentPolicy:
                 if energy > reserve + .05:
                     scout_available = True
                     break
-            for agent in active[:256]:
+            # Protected return trips get the shared route budget before routine survey.
+            for agent in sorted(active, key=lambda item: item['id'] not in self.cargo)[:256]:
                 if inspect is not None and agent['id'] not in roles:
                     continue
                 if cmd := self._command(obs, zones, budget, agent, claimed, inspect, scout_available=scout_available):

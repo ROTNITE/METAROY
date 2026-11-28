@@ -3,11 +3,13 @@ from copy import deepcopy
 from concurrent.futures import ThreadPoolExecutor
 from threading import Thread
 from unittest import TestCase
+from unittest.mock import patch
 
 from conformance import check_tournament as checker
 from contracts.protocol import ProtocolError
 from controller.server import TournamentServer
 from controller.tournament import TournamentPolicy
+from controller.public_route import RouteBudget
 from environment.server import PlanarServer
 from environment.world import World, capabilities
 
@@ -251,6 +253,25 @@ class TournamentAdversarialTests(TestCase):
         self.assertEqual(actions(obs, rover), ['hold'])
         next_obs = {**obs, 'request_id': 'confirmed-work', 'time': 1., 'targets': [target]}
         self.assertEqual(actions(next_obs, rover), ['pickup'])
+
+    def test_loaded_carrier_gets_route_budget_before_background_survey(self):
+        obs = checker.make_synthetic_obs(0)
+        scout, rover = obs['agents']
+        rover['available_actions'] = [{'action': 'move'}, {'action': 'handover'}]
+        rover['position'] = [32., 22., .43]
+        target = obs['targets'][0]
+        target.update(evacuation_state='loaded', carrier_id=rover['id'], position=list(rover['position']))
+        obs['zones'] = [zone for zone in obs['zones'] if zone['type'] in ('land', 'air')]
+        obs['mission']['objectives'] = [{'id': 'background-search', 'type': 'search',
+                                        'position': [68., 17., scout['position'][2]]}]
+        policy = TournamentPolicy()
+        policy._reset(obs['episode_id'])
+        policy.scan_times[(scout['id'], tuple(round(value, 2) for value in scout['position']))] = 0.
+        budget = RouteBudget(2)
+        budget.remaining = 1
+        with patch('controller.tournament.RouteBudget', return_value=budget):
+            commands = policy.decide(obs)['commands']
+        self.assertTrue(any(c['agent_id'] == rover['id'] and c['action'] == 'move' for c in commands))
 
     def test_survey_advances_after_a_near_waypoint_and_keeps_native_sensor_default(self):
         obs = checker.make_synthetic_obs(0)
