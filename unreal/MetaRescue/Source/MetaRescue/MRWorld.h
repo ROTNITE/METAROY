@@ -20,6 +20,7 @@ class FMRUrbanWater;
 class FMRWatercraftHydro;
 class UBoxComponent;
 struct FMRWaterSample;
+namespace MRStreetGeometry {class Index;}
 
 USTRUCT(BlueprintType)
 struct FMRSurfaceState
@@ -167,7 +168,7 @@ private:
     void BuildWatercraftSlips();
     void SpawnWatercraft();
     TSharedPtr<FMRWatercraftHydro> WatercraftPhysicsProfile;
-    void BuildIrregularStreets(const FBox& BaseBox);
+    void BuildIrregularStreets(const FBox& BaseBox,const MRStreetGeometry::Index* StreetVisuals);
     void BuildStreetSignals(const FBox& BaseBox,const TMap<FString,FVector>& Positions);
     void TickStreetSignals();
     EMRStreetPhase StreetPhase(const FMRStreetArm& Signal) const;
