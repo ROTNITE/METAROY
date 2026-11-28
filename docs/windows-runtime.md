@@ -40,6 +40,31 @@ $auditPath = Join-Path $env:METARESCUE_OUTPUT 'offline-usage.json'
 
 Core 1.0 описан в `Core-1.0.md`. Локальный интерфейс аналитики запускается вместе с приложением. Контрольные суммы файлов поставки указаны в `SHA256.json`. В режиме LIVE укажите общий путь журнала в `METARESCUE_LIVE_BUDGET` и настройте ключ отдельно от каталога поставки.
 
+## Турнирный HTTP-режим
+
+В первом PowerShell запустите среду из корня распаковки. Если стенд будет
+принимать несколько эпизодов, оставьте процесс среды запущенным после `close`.
+При наличии `presets/recovery.private.json` его можно передать в `--layout`
+для отдельной проверки сценария отказа. Обычный запуск открывает штатную карту.
+
+```powershell
+$env:METARESCUE_OUTPUT = Join-Path (Get-Location) 'output'
+.\python\python.exe -B -X utf8 -m environment.main --port 8130 --headless
+```
+
+Во втором PowerShell запустите контроллер с `POST /v1/controller/decide`.
+Оба процесса должны отдать статус `ready`. Цикл эпизода ведёт оркестратор.
+
+```powershell
+.\python\python.exe -B -X utf8 -m controller.server --port 8100
+```
+
+Из третьего PowerShell выполните самопроверку оригинальным скриптом.
+
+```powershell
+.\python\python.exe -B -X utf8 conformance/check_tournament.py selftest --env-url http://127.0.0.1:8130 --ctrl-url http://127.0.0.1:8100 --seed 42 --max-steps 20 --strict --json-out output/tournament-42.json
+```
+
 ## Сборка из исходников
 
 `tools/package_windows.py` создаёт поставку Shipping по умолчанию. Для стендовой
