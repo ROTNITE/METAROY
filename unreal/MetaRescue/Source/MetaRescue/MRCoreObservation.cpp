@@ -490,7 +490,14 @@ void FMRCoreRuntime::Snapshot(const FString& RequestId)
         {TEXT("type"),Str(TEXT("search_and_evacuate"))}}))})},{TEXT("priorities"),Arr(Priorities)},{TEXT("directives"),Arr(Orders)},
         {TEXT("constraints"),Arr({})},{TEXT("status"),Str(Status==TEXT("success")?TEXT("completed"):Status==TEXT("running")?TEXT("active"):Status==TEXT("safe_stopped")?TEXT("safe_stopped"):TEXT("failed"))},
         {TEXT("termination"),Json(Obj({{TEXT("horizon"),Num(Horizon)},{TEXT("reason"),OutcomeReason.IsEmpty()?Null():Str(OutcomeReason)}}))}});
-    auto Metrics=Obj({{TEXT("known_targets"),Num(KnownTargets.Num())},{TEXT("confirmed_evacuations"),Num(Rescued)}});
+    // Physical outcome accounting is separate from delivered perception.
+    // No target coordinates or private identifiers are exported here.
+    const int32 TotalTargets=World->Targets.Num(),PhysicallySaved=World->SavedCount();
+    const double Completion=TotalTargets>0?FMath::Clamp(double(PhysicallySaved)/TotalTargets,0.0,1.0):
+        (Status==TEXT("success")?1.0:0.0);
+    auto Metrics=Obj({{TEXT("known_targets"),Num(KnownTargets.Num())},{TEXT("confirmed_evacuations"),Num(Rescued)},
+        {TEXT("targets_total"),Num(TotalTargets)},{TEXT("targets_rescued"),Num(PhysicallySaved)},
+        {TEXT("mission_completion"),Num(Completion)}});
     const double ReachableRatio=Agents.IsEmpty()?0:double(Reachable)/Agents.Num();
     auto Plan=Obj({{TEXT("revision"),Num(PlanRevision)},{TEXT("plan_revision"),Num(PlanRevision)},
         {TEXT("accepted_configuration"),Json(Accepted)},{TEXT("desired_role_assignments"),Json(DesiredRoles)},
