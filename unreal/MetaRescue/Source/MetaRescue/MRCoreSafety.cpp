@@ -7,16 +7,24 @@
 
 using namespace MRCoreValues;
 
+namespace
+{
+bool IsNewContact(TMap<FString,double>& ContactTimes,const FString& Pair,double Now)
+{
+    const double* Last=ContactTimes.Find(Pair);
+    const bool NewContact=!Last||Now-*Last>=.25;
+    ContactTimes.Add(Pair,Now);
+    return NewContact;
+}
+}
+
 void FMRCoreRuntime::NoteVehicleContact(const AMRAgent* A,const AMRAgent* B)
 {
     if(!ActiveStep||A==B)return;
     FString First=A->AgentKey(),Second=B->AgentKey();
     if(Second<First)Swap(First,Second);
     const FString Key=First+TEXT("|")+Second;
-    const double* Last=VehicleContactAt.Find(Key);
-    const bool NewContact=!Last||Time()-*Last>=.25;
-    VehicleContactAt.Add(Key,Time());
-    if(!NewContact)return;
+    if(!IsNewContact(VehicleContactAt,Key,Time()))return;
     ++SafetyViolations;
     Record(TEXT("safety_violation"),Obj({{TEXT("kind"),Str(TEXT("vehicle_contact"))},
         {TEXT("agents"),Arr({Str(First),Str(Second)})},{TEXT("total"),Num(SafetyViolations)}}),false);
@@ -62,3 +70,22 @@ void FMRCoreRuntime::TrackSafetyOccupancies()
     }
     SafetyOccupancies=MoveTemp(Current);
 }
+
+#if WITH_DEV_AUTOMATION_TESTS
+#include "Misc/AutomationTest.h"
+IMPLEMENT_SIMPLE_AUTOMATION_TEST(FMRCoreSafetyContactTest,"MetaRescue.Core.TournamentSafetyContacts",
+    EAutomationTestFlags::EditorContext|EAutomationTestFlags::EngineFilter)
+
+bool FMRCoreSafetyContactTest::RunTest(const FString& Parameters)
+{
+    TMap<FString,double> Contacts;
+    TestTrue(TEXT("First physical contact is counted"),IsNewContact(Contacts,TEXT("a|b"),1.));
+    TestFalse(TEXT("Second physics callback for the pair is deduplicated"),IsNewContact(Contacts,TEXT("a|b"),1.));
+    TestFalse(TEXT("Continuous contact is deduplicated"),IsNewContact(Contacts,TEXT("a|b"),1.125));
+    TestTrue(TEXT("Other pairs are independent"),IsNewContact(Contacts,TEXT("a|c"),1.125));
+    TestTrue(TEXT("A new impact after separation is counted"),IsNewContact(Contacts,TEXT("a|b"),1.375));
+    Contacts.Reset();
+    TestTrue(TEXT("The same pair is counted in a new episode"),IsNewContact(Contacts,TEXT("a|b"),0.));
+    return true;
+}
+#endif
