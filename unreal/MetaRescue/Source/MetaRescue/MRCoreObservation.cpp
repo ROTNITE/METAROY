@@ -490,8 +490,19 @@ void FMRCoreRuntime::Snapshot(const FString& RequestId)
     if(World->bCityLayout)for(const auto& Row:World->CityLayout->GetArrayField(TEXT("infrastructure")))
     {
         const auto Node=Row->AsObject();
+        auto Position=Field(Node,TEXT("position"));
+        if(Text(Node,TEXT("id"))==TEXT("rescue-base")&&Is(World->CityLayout,TEXT("base"),EJson::Object))
+        {
+            // The station's service point is on the validated driving apron.
+            // World->Base remains the radio origin and centre of the handover radius.
+            const auto Base=World->CityLayout->GetObjectField(TEXT("base"));
+            FVector Min=FVector::ZeroVector,Max=FVector::ZeroVector;
+            const FVector Service=(World->Base+FVector(0,-370,0))/100.;
+            if(MRCoreJson::Point(Field(Base,TEXT("min")),Min)&&MRCoreJson::Point(Field(Base,TEXT("max")),Max)&&
+                FBox(Min,Max).IsInsideOrOnXY(Service))Position=Point(Service);
+        }
         auto Entry=Obj({{TEXT("id"),Field(Node,TEXT("id"))},{TEXT("kind"),Field(Node,TEXT("kind"))},
-            {TEXT("position"),Field(Node,TEXT("position"))},{TEXT("status"),Str(TEXT("active"))},
+            {TEXT("position"),Position},{TEXT("status"),Str(TEXT("active"))},
             {TEXT("capabilities"),Strings({Text(Node,TEXT("kind"))})},{TEXT("resources"),Json(Obj())},
             {TEXT("communication"),Json(Obj())},{TEXT("constraints"),Arr({})}});
         if(auto Charge=ChargeState(Text(Node,TEXT("id"))))
