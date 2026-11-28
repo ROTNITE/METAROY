@@ -1,0 +1,37 @@
+name: Build measured ruin window candidate
+on:
+  push:
+    branches: [chatgpt/city-road-visual-repair]
+    paths:
+      - 'unreal/tools/prepare_ruin_windows_r2.py'
+      - '.github/workflows/city-ruin-windows.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  blender-candidate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 22
+    env:
+      GIT_LFS_SKIP_SMUDGE: '1'
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          lfs: false
+      - name: Fetch exact input meshes and textures only
+        run: git lfs pull --include="blender/prepared/v2/Building/Building.blend,blender/prepared/v2/Building/textures/T_0_T_Building_BaseColor.png,blender/prepared/v2/Building/textures/T_1_T_Building_ORM.png,blender/prepared/v2/Building/textures/T_2_T_Building_Normal.png,blender/prepared/v3/GlazingKit/textures/T_0_GlassV3_CrackDirt_Mask.png" --exclude=""
+      - name: Install Blender
+        run: |
+          sudo apt-get update -qq
+          sudo apt-get install -y --no-install-recommends blender
+          blender --version
+      - name: Generate and verify the candidate
+        run: blender -b --python-exit-code 1 --python unreal/tools/prepare_ruin_windows_r2.py -- --output "$RUNNER_TEMP/ruin-repair" --preview
+      - name: Confirm source and working tree remained unchanged
+        run: git diff --exit-code
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: ruin-windows-r2-candidate
+          path: ${{ runner.temp }}/ruin-repair/BuildingVariantsR2
+          retention-days: 7
