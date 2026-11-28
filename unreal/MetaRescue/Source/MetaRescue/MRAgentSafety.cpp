@@ -134,6 +134,27 @@ bool AMRAgent::AcceptRoute(const FString& Id,const TArray<FVector>& Points,bool 
     if(!bAerial&&TargetIndex<0)State=TEXT("external_route");
     StopReason.Empty();return true;
 }
+
+bool AMRAgent::AcceptCoreMove(const FString& Id,const FVector& Goal,const TArray<FVector>& DockExit)
+{
+    TArray<FVector> Points;
+    if(!DockExit.IsEmpty()&&FVector::DistSquared2D(Goal,Dock)>FMath::Square(150.))
+    {
+        if(Path.IsValidIndex(PathIndex)&&PathIndex<DockDeparturePoints)
+            Points.Append(Path.GetData()+PathIndex,DockDeparturePoints-PathIndex);
+        else if(FVector::DistSquared2D(GetActorLocation(),Dock)<=FMath::Square(150.))
+            Points=DockExit;
+        for(int32 Index=0;Index<Points.Num();++Index)
+            if(FVector::DistSquared2D(Points[Index],Goal)<FMath::Square(20.))
+            {Points.SetNum(Index);break;}
+    }
+    const int32 RemainingDeparture=Points.Num();
+    Points.Add(Goal);
+    if(!AcceptRoute(Id,Points))return false;
+    DockDeparturePoints=RemainingDeparture;
+    return true;
+}
+
 bool AMRAgent::Hold(const FString& Id)
 {
     if(Id.IsEmpty())return false;

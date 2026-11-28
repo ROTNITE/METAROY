@@ -113,7 +113,7 @@ void AMRAgent::Initialize(AMRWorld* InWorld, int32 InId, bool Aerial, const TArr
 
 void AMRAgent::SetWaypoints(const TArray<FVector>& Waypoints)
 {
-    Path=Waypoints;PathIndex=0;
+    Path=Waypoints;PathIndex=0;DockDeparturePoints=0;
     bPreciseFinalStop=false;
     RoutePriorityOrigin=GetActorLocation();
     bReverseInitialLeg=!bAerial&&!Path.IsEmpty()&&FVector::Dist2D(GetActorLocation(),Dock)<450&&

@@ -78,6 +78,7 @@ public:
     float SafetyRadius() const { return bRescueWatercraft?255.f:bAerial?165.f:145.f+80.f*RampDeployment; }
     FString AgentKey() const { return PublicId.IsEmpty()?FString::Printf(TEXT("%s_%d"),bAerial?TEXT("aerial"):TEXT("ground"),AgentId):PublicId; }
     bool AcceptRoute(const FString& Id,const TArray<FVector>& PointsCm,bool PreciseStop=false);
+    bool AcceptCoreMove(const FString& Id,const FVector& Goal,const TArray<FVector>& DockExit);
     bool Hold(const FString& Id);
     bool IsHoldingStable() const;
     void ResetForEpisode(const FTransform& Pose,bool UnlimitedEnergy);
@@ -128,6 +129,7 @@ private:
     void DriveWatercraft(float Dt);
     TArray<FVector> Path;
     int32 PathIndex = 0;
+    int32 DockDeparturePoints = 0;
     float ServiceRemaining = 0;
     float WatercraftUnstableSeconds = 0;
     float WatercraftBlockedLiftSeconds = 0;

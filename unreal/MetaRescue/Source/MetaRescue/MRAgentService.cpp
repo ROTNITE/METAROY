@@ -14,7 +14,7 @@ void AMRAgent::ForgetCompletedCoreCommand(const FString& Id)
 
 void AMRAgent::ResetForEpisode(const FTransform& Pose,bool UnlimitedEnergy)
 {
-    AcceptedCommands.Empty();Path.Empty();PathIndex=0;TargetIndex=-1;
+    AcceptedCommands.Empty();Path.Empty();PathIndex=0;DockDeparturePoints=0;TargetIndex=-1;
     bCarrying=false;bExternalHold=false;bRouteBlocked=false;bReverseInitialLeg=false;bFaulted=false;
     FailureReason.Empty();SpeedFactor=SensorFactor=1;
     CommandId.Empty();StopReason.Empty();StopObstacle.Empty();SensedBlocker=FBox(ForceInit);IntendedVelocity=FVector::ZeroVector;

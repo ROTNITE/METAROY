@@ -208,13 +208,35 @@ void FMRCoreRuntime::UpdateCommands()
                     Success=true;C.FinalStatus=TEXT("completed");
                 }
                 else if(C.Action==TEXT("hold"))Success=A->Hold(C.Key);
-                else if(C.Action==TEXT("move")||C.Action==TEXT("follow_route"))
+                else if(C.Action==TEXT("move"))
+                {
+                    FVector Goal=FVector::ZeroVector;
+                    MRCoreJson::Point(Field(C.Parameters,TEXT("target")),Goal);
+                    TArray<FVector> DockExit;
+                    if(World->bCityLayout&&A->Kind()==TEXT("ground"))
+                        for(const auto& Value:World->CityLayout->GetArrayField(TEXT("spawns")))
+                        {
+                            const auto Spawn=Value->AsObject();
+                            if(Text(Spawn,TEXT("id"))!=C.Agent||!Is(Spawn,TEXT("dock"),EJson::Number)||
+                                !Is(Spawn,TEXT("exit"),EJson::Array))continue;
+                            for(const auto& Waypoint:Spawn->GetArrayField(TEXT("exit")))
+                            {
+                                FVector Point=FVector::ZeroVector;
+                                if(MRCoreJson::Point(Waypoint,Point))DockExit.Add(FVector(Point.X*100,Point.Y*100,A->Dock.Z));
+                            }
+                            break;
+                        }
+                    // The hardware-level departure assists any controller's move.
+                    // Each leg still passes the regular physical safety checks.
+                    Success=A->AcceptCoreMove(C.Key,Goal*100,DockExit);
+                }
+                else if(C.Action==TEXT("follow_route"))
                 {
                     TArray<FVector> Points;
-                    if(C.Action==TEXT("move")){FVector P;MRCoreJson::Point(Field(C.Parameters,TEXT("target")),P);Points.Add(P*100);}
-                    else for(const auto& V:C.Parameters->GetArrayField(TEXT("waypoints"))){FVector P;MRCoreJson::Point(V,P);Points.Add(P*100);}
+                    for(const auto& V:C.Parameters->GetArrayField(TEXT("waypoints")))
+                    {FVector P=FVector::ZeroVector;MRCoreJson::Point(V,P);Points.Add(P*100);}
                     bool PreciseStop=false;
-                    if(C.Action==TEXT("follow_route"))C.Parameters->TryGetBoolField(TEXT("precise_stop"),PreciseStop);
+                    C.Parameters->TryGetBoolField(TEXT("precise_stop"),PreciseStop);
                     Success=A->AcceptRoute(C.Key,Points,PreciseStop);
                 }
                 else if(C.Action==TEXT("observe"))
