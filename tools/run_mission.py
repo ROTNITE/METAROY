@@ -26,7 +26,7 @@ from controller.baselines import BASELINES
 from controller.client import EnvironmentClient
 from controller.net65 import PATROL_MODES
 from controller.policy import PAIRS
-from controller.profiles import CONTROLLER_PROFILES, COUNTERFACTUAL, STANDARD, select_patrol
+from controller.profiles import CONTROLLER_PROFILES, COUNTERFACTUAL_PROFILES, STANDARD, select_patrol
 from environment.config import Settings
 from environment.disturbances import validate_tape as validate_disturbances
 from environment.events import validate_tape
@@ -72,7 +72,7 @@ def run(args):
     rescue_initializer=getattr(args,'rescue_initializer','heuristic')
     controller_profile=getattr(args,'controller_profile',STANDARD)
     scout_patrol=select_patrol(controller_profile,args.policy,getattr(args,'scout_patrol',None))
-    if controller_profile==COUNTERFACTUAL:rescue_initializer='assignment'
+    if controller_profile in COUNTERFACTUAL_PROFILES:rescue_initializer='assignment'
     frame_profile=getattr(args,'frame_profile',False)
     demo_render=getattr(args,'demo_render',False)
     if scout_patrol not in PATROL_MODES or scout_patrol!='core' and args.policy in BASELINES:

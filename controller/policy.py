@@ -12,7 +12,8 @@ from controller.native_patrol import solve as solve_net65
 from controller.net65 import MAX_PLAN_AGE_S, PATROL_MODES, due, horizon_of, scan_ages
 from controller.optimization import optimize_rescue,optimize_scout
 from controller.problem_builder import ProblemBuilder,mobiles
-from controller.profiles import COUNTERFACTUAL, STANDARD, select_patrol
+from controller.profiles import COUNTERFACTUAL_PROFILES, FULLFLEET, STANDARD, select_patrol
+from controller.fullfleet.native import delayed_forecast, refine_plan
 from controller.strategies import continuation_forecast,propose
 
 PAIRS={'greedy_greedy':('greedy','greedy'),'frontier_local':('frontier','local'),
@@ -75,7 +76,8 @@ class EvolutionPolicy(FixedWorkflow):
         self.planning_surfaces=()
         self.scout_patrol=scout_patrol
         self.counterfactual=None
-        if controller_profile==COUNTERFACTUAL:
+        self.fullfleet_enabled=controller_profile==FULLFLEET
+        if controller_profile in COUNTERFACTUAL_PROFILES:
             from controller.counterfactual_native import NativeCounterfactual
             self.counterfactual=NativeCounterfactual()
         self._reset_patrol()
@@ -176,10 +178,15 @@ class EvolutionPolicy(FixedWorkflow):
     def _solve_rescue(self,builder,observation,jobs,profile=None,patrol_context=None):
         began=time.perf_counter();problem=builder.rescue(observation,jobs);kind=PAIRS[self.pair][1]
         candidates=[];profile=profile or self.strategy_profile;strategy_gate=None
+        fullfleet=False
+        if self.fullfleet_enabled:
+            from controller.counterfactual_native import allowed
+            fullfleet=allowed(observation)
         if self.strategy_candidates_enabled and kind=='nsga2':
             scout_tasks=builder.hazard_patrol(observation,*patrol_context) if patrol_context and problem.n and problem.m else ()
             candidates=propose(problem,self.seed,population=self.budgets[2],generations=self.budgets[3],
-                               cooperative_scout_tasks=scout_tasks,rescue_initializer=self.rescue_initializer)
+                               cooperative_scout_tasks=scout_tasks,rescue_initializer=self.rescue_initializer,
+                               **({'fullfleet':True} if fullfleet else {}))
             plan=next((p for p in candidates if p['id']==profile),None)
             if candidates and (plan is None or (plan['id']!='balanced' and not plan['eligible'])):
                 strategy_gate={'requested_profile':profile,'reason':plan['gate_reason'] if plan else 'UNKNOWN_PROFILE'}
@@ -192,9 +199,14 @@ class EvolutionPolicy(FixedWorkflow):
         elif problem.m:plan=heuristic_rescue(problem,kind)
         else:plan={'routes':{},'stats':{'algorithm':kind,'evaluations':0,'reason':'no_available_crew'}}
         if problem.n and problem.m and 'genome' in plan and 'forecast' not in plan:
+            if fullfleet:plan=refine_plan(problem,plan)
             _,tasks=problem.simulate(plan['genome'])
-            continuations,forecast=continuation_forecast(tasks,problem.targets,problem.now,problem.horizon)
+            continuations,forecast=(delayed_forecast(problem,tasks) if fullfleet else
+                                    continuation_forecast(tasks,problem.targets,problem.now,problem.horizon))
             plan={**plan,'continuations':continuations,'forecast':forecast}
+        if self.fullfleet_enabled and 'fullfleet' not in plan:
+            plan={**plan,'fullfleet':{'model':'native-fullfleet-repair-v1','evaluated':0,'changed':False,
+                                     'reason':'public_constraints_or_directives' if not fullfleet else 'no_feasible_problem'}}
         return {'plan':plan,'strategy_candidates':candidates,'strategy_gate':strategy_gate,
                 'based_agents':{a['id']:deepcopy(a) for a in mobiles(observation,'ground')},
                 'based_jobs':deepcopy(jobs),'based_on_time':observation['time'],

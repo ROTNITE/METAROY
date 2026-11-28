@@ -29,7 +29,7 @@ from controller.operator_input import OperatorInput
 from controller.operational import OperationalControl
 from controller.net65 import PATROL_MODES
 from controller.portable import PortablePolicy
-from controller.profiles import CONTROLLER_PROFILES, COUNTERFACTUAL, STANDARD, select_patrol
+from controller.profiles import CONTROLLER_PROFILES, COUNTERFACTUAL, COUNTERFACTUAL_PROFILES, FULLFLEET, STANDARD, select_patrol
 from controller.public_core import CORE_MODES, STEP_DEDUPLICATION
 from controller.m5_progress import Progress
 
@@ -76,7 +76,7 @@ def main():
         args.scout_patrol=select_patrol(args.controller_profile,args.policy,args.scout_patrol)
     except ValueError as error:
         parser.error(str(error))
-    if args.controller_profile==COUNTERFACTUAL:
+    if args.controller_profile in COUNTERFACTUAL_PROFILES:
         args.rescue_initializer='assignment'
     # Validate the origin before it is persisted in the run manifest.
     EnvironmentClient(args.environment)
@@ -186,7 +186,11 @@ def main():
             if portable:
                 if isinstance(policy, EvolutionPolicy):
                     policy.close()
-                if args.controller_profile==COUNTERFACTUAL:
+                if (args.controller_profile==FULLFLEET and public.identity and
+                        capabilities.get('environment_id')=='metarescue_planar_reference'):
+                    from controller.fullfleet.integration import make_portable
+                    policy=make_portable(capabilities,args.policy,scout_patrol=args.scout_patrol,public=public)
+                elif args.controller_profile==COUNTERFACTUAL:
                     from controller.counterfactual_final import CounterfactualValuePolicy
                     policy=CounterfactualValuePolicy(capabilities,args.policy,scout_patrol=args.scout_patrol,public=public)
                 else:
@@ -194,7 +198,13 @@ def main():
             elif args.contest_coordination:
                 coordinator=ScenarioCoordinator(capabilities)
             manifest['policy_profile'] = 'core_1_0' if portable else 'metarescue'
-            record('policy_profile', {'name': manifest['policy_profile'],'controller_profile':args.controller_profile})
+            profile_record={'name':manifest['policy_profile'],'controller_profile':args.controller_profile}
+            if args.controller_profile==FULLFLEET:
+                profile_record.update(effective_controller=type(policy).__name__,
+                                      effective_ai_mode='OFF' if portable else args.ai_mode)
+                manifest.update(effective_controller=profile_record['effective_controller'],
+                                effective_ai_mode=profile_record['effective_ai_mode'])
+            record('policy_profile', profile_record)
             record('observation',observation)
             for item in communications.observe(observation):record('agent_communication',item)
             health.update(status='ready',episode_id=episode_id,policy=args.policy,scout_patrol=args.scout_patrol,

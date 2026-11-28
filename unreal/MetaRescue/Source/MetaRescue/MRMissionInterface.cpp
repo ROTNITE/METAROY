@@ -212,9 +212,9 @@ private:
                 }
             }));
         Add(Algorithms,TEXT("Профиль контроллера"),Combo(TEXT("controller"),TEXT("controller_profile"),
-            {{TEXT("standard"),TEXT("Штатный")},{TEXT("counterfactual-value"),TEXT("Counterfactual Value")}},[this](const FString& Value)
+            {{TEXT("standard"),TEXT("Штатный")},{TEXT("counterfactual-value"),TEXT("Counterfactual Value")},{TEXT("cf-full-fleet-fast"),TEXT("CF FullFleet Fast")}},[this](const FString& Value)
             {
-                if(Value!=TEXT("counterfactual-value"))return;
+                if(Value!=TEXT("counterfactual-value")&&Value!=TEXT("cf-full-fleet-fast"))return;
                 const auto Controller=Group(TEXT("controller"));
                 Controller->SetStringField(TEXT("policy"),TEXT("nsga2_nsga2"));
                 Controller->SetStringField(TEXT("scout_patrol"),TEXT("net65"));

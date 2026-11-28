@@ -6,6 +6,7 @@ An AI may select an offered ID; it cannot supply its own evaluation numbers.
 from dataclasses import replace
 
 from controller.optimization import PROFILE_SEED_OFFSETS,RescueProblem,optimize_rescue
+from controller.fullfleet.native import delayed_forecast, refine_plan
 
 PROFILES={
     'balanced':{'time_weight':1.,'energy_weight':.12,'priority_mode':'normal','scout_mode':'coverage'},
@@ -58,7 +59,7 @@ def worthwhile(candidate,baseline,minimum_gain=.002):
     return False,'NO_MEASURABLE_GAIN'
 
 
-def propose(problem,seed,*,population=26,generations=17,cooperative_scout_tasks=(),rescue_initializer='heuristic'):
+def propose(problem,seed,*,population=26,generations=17,cooperative_scout_tasks=(),rescue_initializer='heuristic',fullfleet=False):
     if not problem.n or not problem.m:return []
     proposals=[]
     for profile,parameters in PROFILES.items():
@@ -69,8 +70,10 @@ def propose(problem,seed,*,population=26,generations=17,cooperative_scout_tasks=
                               now=problem.now,first_trips=problem.first,available_now=problem.available_now)
         plan=optimize_rescue(working,seed+int(problem.now*100)+PROFILE_SEED_OFFSETS[profile],
                             population=population,generations=generations,policy=profile,initializer=rescue_initializer)
+        if fullfleet:plan=refine_plan(problem,plan)
         raw,tasks=problem.simulate(plan['genome'])
-        continuations,forecast=continuation_forecast(tasks,problem.targets,problem.now,problem.horizon)
+        continuations,forecast=(delayed_forecast(problem,tasks) if fullfleet else
+                                continuation_forecast(tasks,problem.targets,problem.now,problem.horizon))
         scout_tasks=list(cooperative_scout_tasks) if profile=='cooperative' else []
         if scout_tasks:
             extra=sum(task['estimated_energy_wh'] for task in scout_tasks)
@@ -85,5 +88,6 @@ def propose(problem,seed,*,population=26,generations=17,cooperative_scout_tasks=
                 for r,c in enumerate(problem.crew)},
             'pareto':plan['pareto'],'stats':plan['stats'],'estimated_from':'delivered_targets_and_known_geometry_only'})
         if 'initializer' in plan:proposals[-1]['initializer']=plan['initializer']
+        if 'fullfleet' in plan:proposals[-1]['fullfleet']=plan['fullfleet']
     for p in proposals:p['eligible'],p['gate_reason']=worthwhile(p,proposals[0])
     return proposals
