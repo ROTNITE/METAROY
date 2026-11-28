@@ -237,6 +237,32 @@ Unreal с теми же четырьмя seed. Все 16 испытаний до
 Доказательство физической перевозки человека формируется отдельно в нативном
 журнале Unreal и независимой модели A–K.
 
+## Поставка Win64 Shipping
+
+`tools/package_windows.py` собрал комплект с Unreal Engine 5.8.4 и
+турнирным RPC ревизии `0001b29`. BuildCookRun завершил build, cook, stage,
+Pak/IoStore и архивирование с кодом 0. Пакет использует собственный
+Python 3.14.3. На коротком нативном стенде оригинальный чекер под
+CPython 3.9.13 повторил 138 PASS, 0 WARN, 0 FAIL на seed 42, 777 и 123456.
+Журналы и SHA-256 фактического EXE в `shipping-terminal/tournament-smoke/`.
+
+Отдельный запуск комплектных модулей `environment.main` и
+`controller.server` на штатной карте без `--layout` прошёл
+`pair --normalize --strict` на seed 42. За 20 шагов получены 84 принятых
+результата команд и 0 отклонений. Оба health вернули ready, режим
+`--exit-on-close` завершил среду с кодом 0. Свидетельства в
+`shipping-terminal/launcher-smoke/`.
+
+`tools/verify_distribution_zip.py` сверил CRC и SHA-256 всех 1243 файлов,
+состав архива и совпадение обязательных файлов Scenario. ZIP размером
+1 793 748 506 байт находится в `shipping-terminal/MetaEvolution-Rescue-Win64-Tournament.zip`.
+SHA-256 `e9eb95e38133c0c48fe653b8166ff8c8badace6cc6a27aa2a55c6271600cfa24`.
+Отчёты `shipping-terminal/BuildCookRun.log`, `build-manifest.json` и
+`archive-verification.json` сохранены. При cook материал листвы
+`M_tree_small_02_leaves_cc4c1f85ba` получил стандартный материал Unreal
+из-за несовпадения типа сэмплера текстуры. Нативные тесты Win64 были
+headless. Технический допуск и целостность ZIP проверялись отдельно.
+
 ## Пояснительные записки
 
 Основная записка отредактирована из редактируемого исходника от 28 ноября.
@@ -264,6 +290,7 @@ python -B -X utf8 -m controller.server --port 8100
 py -3.9 -I -S -B -X utf8 conformance/check_tournament.py selftest --env-url http://127.0.0.1:8130 --ctrl-url http://127.0.0.1:8100 --max-steps 20 --seed 42 --strict --json-out tournament-42.json
 py -3.9 -I -S -B -X utf8 conformance/check_tournament.py pair --env-url http://127.0.0.1:8130 --ctrl-url http://127.0.0.1:8100 --max-steps 480 --seed 2026 --normalize --strict --json-out tournament-native-mission-2026.json
 python -B -X utf8 -m tools.tournament_native_probe --env-url http://127.0.0.1:8130 --seed 2026 --output native-probe.json
+python -B -X utf8 tools/verify_distribution_zip.py 'D:/MetaRescue-output/tournament-20261128/shipping-terminal/MetaEvolution-Rescue-Win64-Tournament.zip'
 ```
 
 Запускать серверы в отдельных процессах. Повторить строгую проверку на seed
