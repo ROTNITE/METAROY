@@ -1,4 +1,5 @@
 #include "MRStreetSignals.h"
+#include "MRStreetGeometry.h"
 #include "MRWorld.h"
 #include "MRCoreRuntime.h"
 #include "MRCoreJson.h"
@@ -23,20 +24,22 @@ FIntPoint StreetBin(FVector P)
 }
 }
 
-void AMRWorld::BuildStreetSignals(const FBox& BaseBox,const TMap<FString,FVector>& Positions)
+void AMRWorld::BuildStreetSignals(const FBox& BaseBox,const TMap<FString,FVector>& Positions,const MRStreetGeometry::Index* StreetVisuals)
 {
-    struct FLink {FVector Outward;double Width,Length;};
+    struct FLink {FVector Outward;double Width,Length;std::size_t RoadIndex;};
     TMap<FString,TArray<FLink>> Links;
     const auto Graph=CityLayout->GetObjectField(TEXT("road_graph"));
+    std::size_t RoadIndex=0;
     for(const auto& Value:Graph->GetArrayField(TEXT("edges")))
     {
         const auto Edge=Value->AsObject();
+        const auto Index=RoadIndex++;
         if(Text(Edge,TEXT("street_class"))==TEXT("access"))continue;
         const FString A=Text(Edge,TEXT("from")),B=Text(Edge,TEXT("to"));
         const FVector Delta=Positions.FindChecked(B)-Positions.FindChecked(A);
         const double Width=Edge->GetNumberField(TEXT("width_m"))*100;
-        Links.FindOrAdd(A).Add({Delta.GetSafeNormal2D(),Width,Delta.Size2D()});
-        Links.FindOrAdd(B).Add({-Delta.GetSafeNormal2D(),Width,Delta.Size2D()});
+        Links.FindOrAdd(A).Add({Delta.GetSafeNormal2D(),Width,Delta.Size2D(),Index});
+        Links.FindOrAdd(B).Add({-Delta.GetSafeNormal2D(),Width,Delta.Size2D(),Index});
     }
     StreetSignalOff=LoadObject<UMaterialInterface>(nullptr,
         TEXT("/Game/RescueAssets/LibraryV3/TrafficSignalV1/Materials/M_TrafficSignalV1_RedOff.M_TrafficSignalV1_RedOff"));
@@ -77,6 +80,7 @@ void AMRWorld::BuildStreetSignals(const FBox& BaseBox,const TMap<FString,FVector
         return false;
     };
     TSet<FIntPoint> Served;
+    int32 CrosswalkApproaches=0;
     for(const auto& Value:Graph->GetArrayField(TEXT("nodes")))
     {
         const FString Id=Text(Value->AsObject(),TEXT("id"));
@@ -86,7 +90,8 @@ void AMRWorld::BuildStreetSignals(const FBox& BaseBox,const TMap<FString,FVector
         if(BaseBox.ExpandBy(1200.).IsInsideXY(Center))continue;
         const double Spacing=Revised?6500.:8800.;
         const FIntPoint Block(FMath::FloorToInt(Center.X/Spacing),FMath::FloorToInt(Center.Y/Spacing));
-        if(Served.Contains(Block))continue;
+        const bool AlreadyControlled=Served.Contains(Block);
+        if(AlreadyControlled&&!Revised)continue;
         double Width=0;
         for(const auto& Arm:*Arms)Width=FMath::Max(Width,Arm.Width);
         const double Crossing=Width*.5+220,Stop=Crossing+240;
@@ -94,7 +99,7 @@ void AMRWorld::BuildStreetSignals(const FBox& BaseBox,const TMap<FString,FVector
         const double Size=CityLayout->GetNumberField(TEXT("size_m"))*100;
         if(Center.X<Stop+150||Center.Y<Stop+150||Center.X>Size-Stop-150||Center.Y>Size-Stop-150)continue;
         TArray<FVector> Poles;
-        for(const auto& Arm:*Arms)
+        if(!AlreadyControlled)for(const auto& Arm:*Arms)
         {
             const FVector Right(Arm.Outward.Y,-Arm.Outward.X,0);
             bool Placed=false;
@@ -114,10 +119,14 @@ void AMRWorld::BuildStreetSignals(const FBox& BaseBox,const TMap<FString,FVector
             }
             if(!Placed)break;
         }
-        if(Poles.Num()!=Arms->Num())continue;
-        Served.Add(Block);
-        if(Revised)for(const auto& Pole:Poles)
-            IndexBounds(Occupied.Emplace(Pole-FVector(45,45,0),Pole+FVector(45,45,350)));
+        const bool Controlled=Poles.Num()==Arms->Num();
+        if(!Controlled&&(!Revised||!FApp::CanEverRender()))continue;
+        if(Controlled)
+        {
+            Served.Add(Block);
+            if(Revised)for(const auto& Pole:Poles)
+                IndexBounds(Occupied.Emplace(Pole-FVector(45,45,0),Pole+FVector(45,45,350)));
+        }
         // All markings at this junction share one render-only mesh. Every
         // vertex follows graded ground; terrain damage cuts the same mesh
         // through the existing overlay mechanism and reset restores it.
@@ -148,6 +157,28 @@ void AMRWorld::BuildStreetSignals(const FBox& BaseBox,const TMap<FString,FVector
             const FVector Right(Arm.Outward.Y,-Arm.Outward.X,0);
             const FVector Cross=Center+Arm.Outward*Crossing;
             const FVector Line=Center+Arm.Outward*Stop;
+            // An unregulated junction can still have a real zebra crossing.
+            // Check the entire marking against neighbouring carriageways;
+            // skip an ambiguous acute crossing rather than painting over it.
+            bool Zebra=true;
+            if(StreetVisuals)
+            {
+                const FVector A=Cross-Arm.Outward*79,B=Cross+Arm.Outward*79;
+                const auto Free=StreetVisuals->Free({A.X,A.Y},{B.X,B.Y},Arm.Width*.5-10,Arm.RoadIndex,2);
+                Zebra=Free.size()==1&&Free.front().Begin<.01&&Free.front().End>=157.99;
+            }
+            if(FApp::CanEverRender()&&Zebra)
+            {
+                ++CrosswalkApproaches;
+                const FRotator Turn=Arm.Outward.Rotation();
+                for(double At=-Arm.Width*.5+45;At<Arm.Width*.5-15;At+=68)
+                {
+                    FVector Stripe=Cross+Right*At;Stripe.Z=InitialGroundHeightCm(Stripe)+2.1;
+                    if(Revised)Mark(Stripe,Arm.Outward,Right,158,36);
+                    else Shape(TEXT("Cube"),Stripe,FVector(158,36,.3),TEXT("MI_Paint"),Turn,false)->ComponentTags.Add(TEXT("CityStreetMarking"));
+                }
+            }
+            if(!Controlled)continue;
             const FVector Pole=Poles[ArmIndex];
             auto& Signal=StreetSignals.AddDefaulted_GetRef();
             Signal.Center=Center;Signal.Outward=Arm.Outward;Signal.PowerPoint=Pole;
@@ -164,12 +195,6 @@ void AMRWorld::BuildStreetSignals(const FBox& BaseBox,const TMap<FString,FVector
                 StreetSignalBins.FindOrAdd(FIntPoint(X,Y)).Add(StreetSignals.Num()-1);
             if(!FApp::CanEverRender())continue;
             const FRotator Turn=Arm.Outward.Rotation();
-            for(double At=-Arm.Width*.5+45;At<Arm.Width*.5-15;At+=68)
-            {
-                FVector Stripe=Cross+Right*At;Stripe.Z=InitialGroundHeightCm(Stripe)+2.1;
-                if(Revised)Mark(Stripe,Arm.Outward,Right,158,36);
-                else Shape(TEXT("Cube"),Stripe,FVector(158,36,.3),TEXT("MI_Paint"),Turn,false)->ComponentTags.Add(TEXT("CityStreetMarking"));
-            }
             FVector StopLine=Line+Right*(Arm.Width*.25);StopLine.Z=InitialGroundHeightCm(StopLine)+2.3;
             if(Revised)Mark(StopLine,Arm.Outward,Right,32,Arm.Width*.5-18);
             else Shape(TEXT("Cube"),StopLine,FVector(32,Arm.Width*.5-18,.3),TEXT("MI_Paint"),Turn,false)->ComponentTags.Add(TEXT("CityStreetMarking"));
@@ -204,6 +229,7 @@ void AMRWorld::BuildStreetSignals(const FBox& BaseBox,const TMap<FString,FVector
         }
     }
     UE_LOG(LogTemp,Display,TEXT("MR_STREET_SIGNALS junctions=%d controlled_approaches=%d"),Served.Num(),StreetSignals.Num());
+    if(FApp::CanEverRender())UE_LOG(LogTemp,Display,TEXT("MR_STREET_ZEBRA approaches=%d"),CrosswalkApproaches);
 }
 
 EMRStreetPhase AMRWorld::StreetPhase(const FMRStreetArm& Signal) const

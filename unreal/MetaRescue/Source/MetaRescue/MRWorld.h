@@ -169,7 +169,7 @@ private:
     void SpawnWatercraft();
     TSharedPtr<FMRWatercraftHydro> WatercraftPhysicsProfile;
     void BuildIrregularStreets(const FBox& BaseBox,const MRStreetGeometry::Index* StreetVisuals);
-    void BuildStreetSignals(const FBox& BaseBox,const TMap<FString,FVector>& Positions);
+    void BuildStreetSignals(const FBox& BaseBox,const TMap<FString,FVector>& Positions,const MRStreetGeometry::Index* StreetVisuals);
     void TickStreetSignals();
     EMRStreetPhase StreetPhase(const FMRStreetArm& Signal) const;
     TArray<FMRStreetArm> StreetSignals;

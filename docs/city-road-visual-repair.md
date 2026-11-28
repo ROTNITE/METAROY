@@ -24,3 +24,10 @@ model time 0 from overview and street level; verify crossing/curb continuity,
 centre paint and material appearance; execute the existing road damage,
 flood, mud and reset probes; verify no change in route support, visibility
 and collision. Portable geometry tests do not certify rendered output.
+
+Zebra generation is now independent of the existing traffic-signal spacing
+and pole placement in revised cities: eligible uncontrolled junctions can
+have crossings. The full stripe envelope is tested against neighbouring
+roads. Signal selection, stop distance, phases and rover speed logic remain
+unchanged. Narrow/ambiguous intersections are not decorated with unsafe
+crossings. No new signal-driven traffic behaviour is introduced.

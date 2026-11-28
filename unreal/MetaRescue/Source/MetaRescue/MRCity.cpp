@@ -892,19 +892,34 @@ void AMRWorld::BuildIrregularStreets(const FBox& BaseBox,const MRStreetGeometry:
     if(StreetVisuals)
     {
         TMap<FString,int32> Degree;
-        TMap<FString,double> MaximumWidth;
+        TMap<FString,double> MaximumWidth,MinimumLength;
         for(const auto& Row:Graph->GetArrayField(TEXT("edges")))
         {
             const auto Edge=Row->AsObject();
             if(Edge->GetStringField(TEXT("street_class"))==TEXT("access"))continue;
             const double Width=Edge->GetNumberField(TEXT("width_m"))*100;
-            for(const FString& Id:{Edge->GetStringField(TEXT("from")),Edge->GetStringField(TEXT("to"))})
-            {++Degree.FindOrAdd(Id);MaximumWidth.FindOrAdd(Id)=FMath::Max(MaximumWidth.FindRef(Id),Width);}
+            const FString A=Edge->GetStringField(TEXT("from")),B=Edge->GetStringField(TEXT("to"));
+            const double Length=FVector::Dist2D(Positions.FindChecked(A),Positions.FindChecked(B));
+            for(const FString& Id:{A,B})
+            {
+                ++Degree.FindOrAdd(Id);MaximumWidth.FindOrAdd(Id)=FMath::Max(MaximumWidth.FindRef(Id),Width);
+                if(auto* Previous=MinimumLength.Find(Id))*Previous=FMath::Min(*Previous,Length);
+                else MinimumLength.Add(Id,Length);
+            }
         }
         // Keep paint clear of zebra/stop lines; the crossing itself is
         // generated independently by BuildStreetSignals.
-        for(const auto& Entry:Degree)if(Entry.Value>=3)
-            MarkClearance.Add(Entry.Key,MaximumWidth.FindChecked(Entry.Key)*.5+540);
+        if(CityLayout->HasTypedField<EJson::Number>(TEXT("street_controls_revision")))
+            for(const auto& Entry:Degree)if(Entry.Value>=3)
+            {
+                const double Width=MaximumWidth.FindChecked(Entry.Key),Stop=Width*.5+460;
+                const FVector Center=Positions.FindChecked(Entry.Key);
+                const double Size=CityLayout->GetNumberField(TEXT("size_m"))*100;
+                if(MinimumLength.FindChecked(Entry.Key)>=2*(Stop+240)&&
+                    !BaseBox.ExpandBy(1200.).IsInsideXY(Center)&&
+                    Center.X>=Stop+150&&Center.Y>=Stop+150&&Center.X<=Size-Stop-150&&Center.Y<=Size-Stop-150)
+                    MarkClearance.Add(Entry.Key,Stop+80);
+            }
     }
     const auto Pave=[&](const FVector& Start,const FVector& End,double Width,bool Avenue,bool Footway,
                        std::size_t RoadIndex=MRStreetGeometry::Index::None,double StartClear=0,double EndClear=0)
@@ -1145,7 +1160,7 @@ void AMRWorld::BuildIrregularStreets(const FBox& BaseBox,const MRStreetGeometry:
         for(const FString& Id:{A,B})JunctionWidths.FindOrAdd(Id)=FMath::Max(JunctionWidths.FindRef(Id),Width);
     }
     if(bDisasterCity&&CityLayout->HasTypedField<EJson::Number>(TEXT("street_controls_revision")))
-        BuildStreetSignals(BaseBox,Positions);
+        BuildStreetSignals(BaseBox,Positions,StreetVisuals);
     else if(bShowProps)
     {
         auto* RedOff=LoadObject<UMaterialInterface>(nullptr,TEXT("/Game/RescueAssets/LibraryV3/TrafficSignalV1/Materials/M_TrafficSignalV1_RedOff.M_TrafficSignalV1_RedOff"));
