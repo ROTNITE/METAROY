@@ -19,7 +19,7 @@ jobs:
         with:
           lfs: false
       - name: Fetch only the prepared ruin source
-        run: git lfs pull --include="blender/prepared/v2/Building/Building.blend" --exclude=""
+        run: git lfs pull --include="blender/prepared/v2/Building/Building.blend,blender/prepared/v2/Building/textures/T_0_T_Building_BaseColor.png" --exclude=""
       - name: Install Blender
         run: |
           sudo apt-get update -qq

@@ -47,7 +47,14 @@ def inspect(source,output,log_preview=False):
     tree=BVHTree.FromPolygons(vertices,triangles,all_triangles=True)
     tex=bpy.data.images.get('T_Building_BaseColor')
     if tex is None:raise RuntimeError('Expected baked facade BaseColor texture missing')
+    if not tex.size[0] or not tex.size[1]:
+        # The source records a path on the original workstation. Resolve
+        # the reviewed exported texture relative to the actual checkout.
+        exported=source.parent/'textures/T_0_T_Building_BaseColor.png'
+        if not exported.is_file():raise RuntimeError('Prepared facade texture missing: '+str(exported))
+        tex=bpy.data.images.load(str(exported),check_existing=False)
     tw,th=tex.size
+    if tw<1 or th<1:raise RuntimeError('Facade texture did not decode')
     pixels=array('f',[0])*(tw*th*4);tex.pixels.foreach_get(pixels)
     bounds=[[min(v[i] for v in vertices),max(v[i] for v in vertices)] for i in range(3)]
     output.mkdir(parents=True,exist_ok=True)
