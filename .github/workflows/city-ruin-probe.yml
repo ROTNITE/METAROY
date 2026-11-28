@@ -1,0 +1,35 @@
+name: Ruin source facade inspection
+on:
+  push:
+    branches: [chatgpt/city-road-visual-repair]
+    paths:
+      - 'unreal/tools/probe_ruin_facades.py'
+      - '.github/workflows/city-ruin-probe.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  source-facades:
+    runs-on: ubuntu-latest
+    timeout-minutes: 18
+    env:
+      GIT_LFS_SKIP_SMUDGE: '1'
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          lfs: false
+      - name: Fetch only the prepared ruin source
+        run: git lfs pull --include="blender/prepared/v2/Building/Building.blend" --exclude=""
+      - name: Install Blender
+        run: |
+          sudo apt-get update -qq
+          sudo apt-get install -y --no-install-recommends blender
+          blender --version
+      - name: Inspect source facades with actual mesh and UVs
+        run: blender -b --python-exit-code 1 --python unreal/tools/probe_ruin_facades.py -- --output "$RUNNER_TEMP/ruin-facades" --log-preview
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: ruin-facade-diagnostics
+          path: ${{ runner.temp }}/ruin-facades
+          retention-days: 7
