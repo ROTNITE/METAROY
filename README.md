@@ -91,6 +91,28 @@ python -B -X utf8 -m tools.m5_lab --output ./m5-results
 Автозапуск чужих архивов из браузера и нативная приёмка пока не входят
 в подтверждённый объём UI. Подробности и ограничения: [лаборатория M5](docs/m5-interface.md).
 
+## Турнирный HTTP Core 1.0 (регламент 28.11.2026)
+
+Из корня checkout, в двух отдельных терминалах после установки requirements.txt:
+
+```powershell
+python -B -X utf8 -m environment.server --port 8000
+python -B -X utf8 -m controller.server --port 8100
+```
+
+В третьем терминале:
+
+```powershell
+python -B -X utf8 conformance/check_tournament.py selftest --env-url http://127.0.0.1:8000 --ctrl-url http://127.0.0.1:8100 --seed 42 --max-steps 20 --strict --json-out tournament-42.json
+```
+
+Повторить на seed 777 и 123456. Это проверка планарной Python-модели
+и нового observation-only контроллера; нативная UE-среда проверяется
+отдельно, а прежний автономный клиент не заменяется этим запуском.
+[Нормативный регламент](conformance/REGULATION_TECH.md) и
+[границы доказательств, текущие результаты](docs/universal-core.md).
+Строгий допуск пары не означает достижения физической цели.
+
 ## Документы
 
 - [Net65, демонстрация и двусторонняя проверка](docs/net65-runtime.md).

@@ -551,6 +551,16 @@ class AssessmentBoundary(TestCase):
             result=load_assessments(path)
             self.assertAlmostEqual(result['value'],.3)
             self.assertFalse(result['official'])
+            self.assertTrue(result['historical_formula'])
+            document=json.loads(path.read_text())
+            document['team_id']='A'
+            path.write_text(json.dumps(document))
+            result=load_assessments(path)
+            self.assertAlmostEqual(result['value'],.68)
+            self.assertEqual(result['weights'],{'outbound':.7,'inbound':.3})
+            self.assertFalse(result['official'])
+            self.assertEqual(result['outbound']['required_pairs'],1)
+            self.assertEqual(result['inbound']['required_pairs'],1)
         self.assertEqual(csv_cell('=SUM(1,2)'),"'=SUM(1,2)")
 
 

@@ -35,7 +35,7 @@ from controller.m5_progress import read_page as read_progress_page,read_referenc
 from controller.ai import atomic_json,file_lock
 from controller.client import EnvironmentClient
 from tools.run_interop import controller_call,ROOT
-from tools.m5_score import aggregate_m5
+from tools.m5_score import aggregate_m5, aggregate_tournament_m5
 from tools.m5_matrix import build_matrix,pair_grid
 from tools.m5_spec import checked_mission_parameters
 from environment.main import DEFAULT_OUTPUT
@@ -310,12 +310,19 @@ def load_assessments(path):
     if path.stat().st_size>MAX_REQUEST*16:
         raise ValueError('Assessment file exceeds size limit')
     document=strict_json(path.read_bytes(),maximum_bytes=MAX_REQUEST*16)
-    if not isinstance(document,dict) or set(document)!={'controllers','environments','assessments','method_id'}:
+    base={'controllers','environments','assessments','method_id'}
+    if not isinstance(document,dict) or set(document) not in (base,base|{'team_id'}):
         raise ValueError('Invalid external Q assessment document')
     if not isinstance(document['assessments'],list):
         raise ValueError('Expected list of pair assessments')
-    return aggregate_m5(document['controllers'],document['environments'],
+    if 'team_id' in document:
+        return aggregate_tournament_m5(document['controllers'],document['environments'],
+                                       document['assessments'],method_id=document['method_id'],
+                                       team_id=document['team_id'])
+    result=aggregate_m5(document['controllers'],document['environments'],
                         document['assessments'],method_id=document['method_id'])
+    result['historical_formula']=True
+    return result
 
 
 class Lab:

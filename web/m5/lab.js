@@ -347,9 +347,15 @@ async function init(){
   try{const session=await api('/api/session');token=session.token;registry=session.registry;
     const assessment=session.assessed_m5;
     if(assessment){
-      byId('assessed-score').textContent=assessment.value===null?
-        'Q: оценено '+assessment.assessed_pairs+' из '+assessment.required_pairs+' внешних пар.':
-        'Расчёт из предоставленных Q: '+assessment.value.toFixed(4)+' ('+assessment.numerator.toFixed(3)+' / '+assessment.denominator+'). Не оценка жюри.';
+      if(assessment.weights&&assessment.outbound&&assessment.inbound){
+        const direction=d=>d.value===null?(d.assessed_pairs+'/'+d.required_pairs+' пар, не подтверждено'):d.value.toFixed(4);
+        byId('assessed-score').textContent='M5 (70/30, расчёт из предоставленных Q): '+(assessment.value===null?'не подтверждён':assessment.value.toFixed(4))+
+          '. Исходящая: '+direction(assessment.outbound)+'. Входящая: '+direction(assessment.inbound)+'. Не оценка жюри.';
+      }else{
+        byId('assessed-score').textContent=assessment.value===null?
+          'Историческая формула Q: оценено '+assessment.assessed_pairs+' из '+assessment.required_pairs+' внешних пар.':
+          'Исторический расчёт Q: '+assessment.value.toFixed(4)+' ('+assessment.numerator.toFixed(3)+' / '+assessment.denominator+'). Не актуальный M5 и не оценка жюри.';
+      }
     }
     selectOptions('controller');selectOptions('environment');await refresh();refreshTimer=setInterval(refresh,1400);}
   catch(error){byId('form-message').textContent=error.message;}
