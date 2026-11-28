@@ -1,5 +1,6 @@
 #include "MRWorld.h"
 #include "MRDisasterFade.h"
+#include "MRMudContour.h"
 #include "MRAgent.h"
 #include "Components/StaticMeshComponent.h"
 #include "Components/InstancedStaticMeshComponent.h"
@@ -405,7 +406,10 @@ void AMRWorld::ApplyDisturbance(const FMRDisturbance& E)
         GroundedAssembly(TEXT("Manhole"),E.Source,FRotator::ZeroRotator,FVector::OneVector,TEXT(""));
         LeakEffect=VFX(TEXT("PipeLeak"),E.Source+FVector(0,0,35),FVector(1.2,1.2,1.05));
     }
-    if((E.Kind==EMRDisturbance::Flood&&!HydraulicFlood)||E.Kind==EMRDisturbance::Mud||E.Kind==EMRDisturbance::RoadDamage)
+    // Revised mud is rendered from the union of active footprints at the
+    // event boundary. Its authoritative cells and contact costs stay intact.
+    if((E.Kind==EMRDisturbance::Flood&&!HydraulicFlood)||
+        (E.Kind==EMRDisturbance::Mud&&!(bDisasterCity&&Environment.bRevisedDisasters))||E.Kind==EMRDisturbance::RoadDamage)
         for(const auto Cell:E.Cells)
         {
             const FVector P=FMRDistrictEnvironment::Center(Cell);
@@ -551,6 +555,7 @@ void AMRWorld::StampMudTrack(const FVector& From,const FVector& To,const FVector
 
 void AMRWorld::TickHazardVisuals(float Dt)
 {
+    if(bDisasterCity&&Environment.bRevisedDisasters)RefreshMudSurfaces();
     if(MudTracks&&Environment.Time>=NextMudTrackCleanup)
     {
         NextMudTrackCleanup=Environment.Time+1;

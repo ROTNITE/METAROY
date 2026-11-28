@@ -2,6 +2,7 @@
 #include "MRBuildingWindows.h"
 #include "MRGradedTerrain.h"
 #include "MRUrbanTerrain.h"
+#include "MRStreetGeometry.h"
 #include "MRUrbanWater.h"
 #include "MRCityAssets.h"
 #include "MRCoreJson.h"
@@ -52,6 +53,42 @@ struct FCityCoverMesh
     TArray<FVector2D> UV;
     TArray<int32> Triangles;
 };
+MRStreetGeometry::Point StreetXY(FVector P){return {P.X,P.Y};}
+
+// Keep blocker IDs in graph order, including the four continuations.
+// Junction blockers match the actual square patches built below.
+MRStreetGeometry::Index CityStreetVisualIndex(const TSharedPtr<FJsonObject>& Layout,const FBox& Base)
+{
+    MRStreetGeometry::Index Index;
+    const auto Graph=Layout->GetObjectField(TEXT("road_graph"));
+    TMap<FString,FVector> Positions;TMap<FString,double> Widths;
+    for(const auto& Value:Graph->GetArrayField(TEXT("nodes")))
+    {
+        const auto Node=Value->AsObject();
+        Positions.Add(Node->GetStringField(TEXT("id")),CityPoint(Node->GetArrayField(TEXT("position"))));
+    }
+    for(const auto& Value:Graph->GetArrayField(TEXT("edges")))
+    {
+        const auto Edge=Value->AsObject();
+        const FString A=Edge->GetStringField(TEXT("from")),B=Edge->GetStringField(TEXT("to"));
+        const double W=Edge->GetNumberField(TEXT("width_m"))*100;
+        Index.Add(StreetXY(Positions.FindChecked(A)),StreetXY(Positions.FindChecked(B)),W);
+        for(const auto& Id:{A,B})Widths.FindOrAdd(Id)=FMath::Max(Widths.FindRef(Id),W);
+    }
+    for(const auto& Value:Graph->GetArrayField(TEXT("entrances")))
+    {
+        const auto Gate=Value->AsObject();const auto& D=Gate->GetArrayField(TEXT("outward"));
+        const FVector A=Positions.FindChecked(Gate->GetStringField(TEXT("node_id")));
+        Index.Add(StreetXY(A),StreetXY(A+FVector(D[0]->AsNumber(),D[1]->AsNumber(),0)*6500),1000);
+    }
+    for(const auto& Entry:Widths)
+    {
+        const FVector P=Positions.FindChecked(Entry.Key),D(Entry.Value*.5,0,0);
+        if(!Base.IsInsideXY(P))Index.Add(StreetXY(P-D),StreetXY(P+D),Entry.Value);
+    }
+    Index.Add({Base.Min.X,Base.GetCenter().Y},{Base.Max.X,Base.GetCenter().Y},Base.GetSize().Y);
+    return Index;
+}
 }
 
 bool AMRWorld::ReadCityLayout(const FString& File)
@@ -219,7 +256,10 @@ void AMRWorld::BuildCity()
     BuildCompetitionAnnex();
     BuildWatercraftSlips();
     TArray<float> Axes;
-    if(bIrregularCity)BuildIrregularStreets(BaseBox);
+    TUniquePtr<MRStreetGeometry::Index> StreetVisuals;
+    if(bDisasterCity&&Environment.bRevisedDisasters)
+        StreetVisuals=MakeUnique<MRStreetGeometry::Index>(CityStreetVisualIndex(CityLayout,BaseBox));
+    if(bIrregularCity)BuildIrregularStreets(BaseBox,StreetVisuals.Get());
     else for(const auto& V:CityLayout->GetArrayField(TEXT("road_axes_m")))Axes.Add(V->AsNumber()*100);
     for(float Axis:Axes)
     {
@@ -285,7 +325,16 @@ void AMRWorld::BuildCity()
             const double Length=FVector::Dist2D(Threshold,DoorWalk);
             if(Length>5&&Length<1600)
             {
-                if(bDisasterCity)UrbanRoadPatch(Threshold,DoorWalk,186,.7,TEXT("M_QuarterPaving"));
+                if(StreetVisuals)
+                {
+                    // A frontage path is allowed to meet a sidewalk, never to
+                    // paint a white strip across another carriageway.
+                    const auto Free=StreetVisuals->Free(StreetXY(Threshold),StreetXY(DoorWalk),93,
+                        MRStreetGeometry::Index::None,2);
+                    if(!Free.empty()&&Free.front().Begin<.01&&Free.front().End>5)
+                        UrbanRoadPatch(Threshold,Threshold+Direction*Free.front().End,186,.7,TEXT("M_QuarterPaving"));
+                }
+                else if(bDisasterCity)UrbanRoadPatch(Threshold,DoorWalk,186,.7,TEXT("M_QuarterPaving"));
                 else Shape("Cube",(Threshold+DoorWalk)*.5+FVector(0,0,.7),FVector(Length,186,.4),
                            "M_QuarterPaving",Direction.Rotation(),false);
             }
@@ -830,7 +879,7 @@ void AMRWorld::PrepareCityBuildingViews()
     EventInspections.Sort([](const FMRInspection& A,const FMRInspection& B){return A.Time<B.Time;});
 }
 
-void AMRWorld::BuildIrregularStreets(const FBox& BaseBox)
+void AMRWorld::BuildIrregularStreets(const FBox& BaseBox,const MRStreetGeometry::Index* StreetVisuals)
 {
     const auto Graph=CityLayout->GetObjectField(TEXT("road_graph"));
     TMap<FString,FVector> Positions;TMap<FString,double> JunctionWidths;
@@ -839,7 +888,41 @@ void AMRWorld::BuildIrregularStreets(const FBox& BaseBox)
         const auto Node=Row->AsObject();
         Positions.Add(Node->GetStringField(TEXT("id")),CityPoint(Node->GetArrayField(TEXT("position"))));
     }
-    const auto Pave=[&](const FVector& Start,const FVector& End,double Width,bool Avenue,bool Footway)
+    TMap<FString,double> MarkClearance;
+    if(StreetVisuals)
+    {
+        TMap<FString,int32> Degree;
+        TMap<FString,double> MaximumWidth,MinimumLength;
+        for(const auto& Row:Graph->GetArrayField(TEXT("edges")))
+        {
+            const auto Edge=Row->AsObject();
+            if(Edge->GetStringField(TEXT("street_class"))==TEXT("access"))continue;
+            const double Width=Edge->GetNumberField(TEXT("width_m"))*100;
+            const FString A=Edge->GetStringField(TEXT("from")),B=Edge->GetStringField(TEXT("to"));
+            const double Length=FVector::Dist2D(Positions.FindChecked(A),Positions.FindChecked(B));
+            for(const FString& Id:{A,B})
+            {
+                ++Degree.FindOrAdd(Id);MaximumWidth.FindOrAdd(Id)=FMath::Max(MaximumWidth.FindRef(Id),Width);
+                if(auto* Previous=MinimumLength.Find(Id))*Previous=FMath::Min(*Previous,Length);
+                else MinimumLength.Add(Id,Length);
+            }
+        }
+        // Keep paint clear of zebra/stop lines; the crossing itself is
+        // generated independently by BuildStreetSignals.
+        if(CityLayout->HasTypedField<EJson::Number>(TEXT("street_controls_revision")))
+            for(const auto& Entry:Degree)if(Entry.Value>=3)
+            {
+                const double Width=MaximumWidth.FindChecked(Entry.Key),Stop=Width*.5+460;
+                const FVector Center=Positions.FindChecked(Entry.Key);
+                const double Size=CityLayout->GetNumberField(TEXT("size_m"))*100;
+                if(MinimumLength.FindChecked(Entry.Key)>=2*(Stop+240)&&
+                    !BaseBox.ExpandBy(1200.).IsInsideXY(Center)&&
+                    Center.X>=Stop+150&&Center.Y>=Stop+150&&Center.X<=Size-Stop-150&&Center.Y<=Size-Stop-150)
+                    MarkClearance.Add(Entry.Key,Stop+80);
+            }
+    }
+    const auto Pave=[&](const FVector& Start,const FVector& End,double Width,bool Avenue,bool Footway,
+                       std::size_t RoadIndex=MRStreetGeometry::Index::None,double StartClear=0,double EndClear=0)
     {
         const FVector Delta=End-Start;
         const double Length=Delta.Size2D();if(Length<2)return;
@@ -850,6 +933,98 @@ void AMRWorld::BuildIrregularStreets(const FBox& BaseBox)
         // render layers retain their original flat terrain.
         if(bDisasterCity)UrbanRoadPatch(Start,End,Width,.4,TEXT("M_QuarterAsphalt"));
         else Shape("Cube",Middle+FVector(0,0,1.2),FVector(Length,Width,1),"M_QuarterAsphalt",Turn,false);
+        if(StreetVisuals)
+        {
+            if(!Footway||Length<=2)return;
+            FCityCoverMesh Paint,Curbs;
+            // Each street has at most one render-only mesh. It participates
+            // in the existing procedural cut/reset overlay path, not in
+            // mission collision or a rigid module spanning a cavity.
+            const auto Ribbon=[&](FCityCoverMesh& Batch,double From,double To,double LateralA,double LateralB,double ZA,double ZB)
+            {
+                if(To-From<2)return;
+                if(LateralA>LateralB){Swap(LateralA,LateralB);Swap(ZA,ZB);}
+                const int32 Steps=FMath::Max(1,FMath::CeilToInt((To-From)/50));
+                const int32 First=Batch.Vertices.Num();
+                for(int32 I=0;I<=Steps;++I)
+                {
+                    const FVector Q=Start+Along*(From+(To-From)*double(I)/Steps);
+                    for(int32 J=0;J<2;++J)
+                    {
+                        FVector V=Q+Normal*(J?LateralB:LateralA);
+                        const double DX=InitialGroundHeightCm(V+FVector(50,0,0))-InitialGroundHeightCm(V-FVector(50,0,0));
+                        const double DY=InitialGroundHeightCm(V+FVector(0,50,0))-InitialGroundHeightCm(V-FVector(0,50,0));
+                        const double Rise=(ZB-ZA)/(LateralB-LateralA);
+                        V.Z=InitialGroundHeightCm(V)+(J?ZB:ZA);
+                        Batch.Vertices.Add(V);Batch.Normals.Add(FVector(-DX/100-Normal.X*Rise,-DY/100-Normal.Y*Rise,1).GetSafeNormal());
+                        Batch.UV.Add(FVector2D(V.X,V.Y)/100);
+                    }
+                }
+                for(int32 I=0;I<Steps;++I)
+                {
+                    const int32 A=First+I*2;
+                    Batch.Triangles.Append({A,A+1,A+2,A+2,A+1,A+3});
+                }
+            };
+            for(double Side:{-1.,1.})
+            {
+                const FVector Shoulder=Normal*Side*(Width*.5+75);
+                // Sweep the *whole* 140 cm sidewalk, not merely its centre.
+                // This covers oblique junctions, access roads and other
+                // non-incident crossings. Keep the existing support height.
+                for(const auto Span:StreetVisuals->Free(StreetXY(Start+Shoulder),StreetXY(End+Shoulder),70,RoadIndex,2))
+                {
+                    const double From=Span.Begin,To=Span.End;
+                    if(To-From<60)continue;
+                    UrbanRoadPatch(Start+Shoulder+Along*From,Start+Shoulder+Along*To,140,.8,TEXT("M_QuarterPaving"));
+                    if(FApp::CanEverRender())
+                    {
+                        const double Edge=Width*.5;
+                        Ribbon(Curbs,From,To,Side*(Edge+5),Side*(Edge+12),1.2,9);
+                        Ribbon(Curbs,From,To,Side*(Edge+12),Side*(Edge+23),9,9);
+                        Ribbon(Curbs,From,To,Side*(Edge+23),Side*(Edge+30),9,1.2);
+                    }
+                }
+            }
+            if(FApp::CanEverRender())
+            {
+                // Both ordinary streets and avenues have a visible centre
+                // line. Do not mark the narrow access/service driveways.
+                for(const auto Span:StreetVisuals->Free(StreetXY(Start),StreetXY(End),6,RoadIndex,12))
+                {
+                    const double From=FMath::Max(Span.Begin,StartClear),To=FMath::Min(Span.End,Length-EndClear);
+                    for(double At=From+65;At+170<=To;At+=440)
+                        Ribbon(Paint,At,At+170,-6,6,2.8,2.8);
+                }
+                if(Avenue)for(double Side:{-1.,1.})
+                {
+                    const double Offset=Side*(Width*.5-18);
+                    for(const auto Span:StreetVisuals->Free(StreetXY(Start+Normal*Offset),StreetXY(End+Normal*Offset),4,RoadIndex,12))
+                    {
+                        const double From=FMath::Max(Span.Begin,StartClear),To=FMath::Min(Span.End,Length-EndClear);
+                        Ribbon(Paint,From,To,Offset-4,Offset+4,2.8,2.8);
+                    }
+                }
+                if(!Paint.Vertices.IsEmpty()||!Curbs.Vertices.IsEmpty())
+                {
+                    auto* Mesh=NewObject<UProceduralMeshComponent>(this);
+                    AddInstanceComponent(Mesh);Mesh->SetupAttachment(GetRootComponent());
+                    Mesh->SetMobility(EComponentMobility::Static);Mesh->SetCollisionEnabled(ECollisionEnabled::NoCollision);
+                    Mesh->SetCastShadow(false);Mesh->SetAffectDistanceFieldLighting(false);
+                    const auto Section=[&](int32 Id,const FCityCoverMesh& Batch,const TCHAR* Name)
+                    {
+                        if(Batch.Vertices.IsEmpty())return;
+                        const FString Path=FString(TEXT("/Game/Materials/"))+Name+TEXT(".")+Name;
+                        Mesh->SetMaterial(Id,MRCityMaterial(MRSceneMaterial(LoadObject<UMaterialInterface>(nullptr,*Path))));
+                        Mesh->CreateMeshSection_LinearColor(Id,Batch.Vertices,Batch.Triangles,Batch.Normals,Batch.UV,{},{},false);
+                    };
+                    Section(0,Paint,TEXT("MI_Paint"));Section(1,Curbs,TEXT("MI_Concrete"));
+                    Mesh->ComponentTags={TEXT("CityStreetMarking"),TEXT("CityRoadDecoration"),TEXT("NoMissionCollision")};
+                    Generated.Add(Mesh);
+                }
+            }
+            return;
+        }
         if(Footway&&Length>500)for(double Side:{-1.,1.})
         {
             const FVector Shoulder=Middle+Normal*Side*(Width/2+75);
@@ -907,6 +1082,7 @@ void AMRWorld::BuildIrregularStreets(const FBox& BaseBox)
         }
     };
     int32 RoadModules=0,PoweredSignals=0,DarkSignals=0;
+    std::size_t RoadIndex=0;
     for(const auto& Row:Graph->GetArrayField(TEXT("edges")))
     {
         const int32 FirstRoadPart=Generated.Num();
@@ -973,7 +1149,9 @@ void AMRWorld::BuildIrregularStreets(const FBox& BaseBox)
                 }
             }
         }
-        if(!bReplaced||bDisasterCity)Pave(Start,End,Width,Avenue,Kind!=TEXT("access"));
+        if(!bReplaced||bDisasterCity)Pave(Start,End,Width,Avenue,Kind!=TEXT("access"),RoadIndex,
+            MarkClearance.FindRef(A),MarkClearance.FindRef(B));
+        ++RoadIndex;
         if(bDisasterCity)
         {
             const FName RoadId(*(TEXT("road-")+A+TEXT("-")+B));
@@ -982,7 +1160,7 @@ void AMRWorld::BuildIrregularStreets(const FBox& BaseBox)
         for(const FString& Id:{A,B})JunctionWidths.FindOrAdd(Id)=FMath::Max(JunctionWidths.FindRef(Id),Width);
     }
     if(bDisasterCity&&CityLayout->HasTypedField<EJson::Number>(TEXT("street_controls_revision")))
-        BuildStreetSignals(BaseBox,Positions);
+        BuildStreetSignals(BaseBox,Positions,StreetVisuals);
     else if(bShowProps)
     {
         auto* RedOff=LoadObject<UMaterialInterface>(nullptr,TEXT("/Game/RescueAssets/LibraryV3/TrafficSignalV1/Materials/M_TrafficSignalV1_RedOff.M_TrafficSignalV1_RedOff"));
@@ -1038,7 +1216,7 @@ void AMRWorld::BuildIrregularStreets(const FBox& BaseBox)
     {
         const auto Gate=Row->AsObject();const auto& Direction=Gate->GetArrayField(TEXT("outward"));
         const FVector Start=Positions.FindChecked(Gate->GetStringField(TEXT("node_id")));
-        Pave(Start,Start+FVector(Direction[0]->AsNumber(),Direction[1]->AsNumber(),0)*6500,1000,true,true);
+        Pave(Start,Start+FVector(Direction[0]->AsNumber(),Direction[1]->AsNumber(),0)*6500,1000,true,true,RoadIndex++);
     }
 }
 

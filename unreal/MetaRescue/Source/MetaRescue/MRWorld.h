@@ -20,6 +20,7 @@ class FMRUrbanWater;
 class FMRWatercraftHydro;
 class UBoxComponent;
 struct FMRWaterSample;
+namespace MRStreetGeometry {class Index;}
 
 USTRUCT(BlueprintType)
 struct FMRSurfaceState
@@ -159,6 +160,11 @@ private:
     UPROPERTY() TObjectPtr<UInstancedStaticMeshComponent> MudTracks;
     TArray<FVector> MudTrackPositions;
     double NextMudTrackCleanup=0;
+    int32 MudVisualRevision=-1;
+    TMap<FIntPoint,uint16> MudVisualMasks;
+    TMap<FIntPoint,TWeakObjectPtr<UProceduralMeshComponent>> MudVisualMeshes;
+    void RefreshMudSurfaces();
+    void InvalidateMudGround(const FBox& Bounds);
     bool ReadCityLayout(const FString& File);
     bool ValidateCompetitionLayout() const;
     void BuildCompetitionAnnex();
@@ -167,8 +173,8 @@ private:
     void BuildWatercraftSlips();
     void SpawnWatercraft();
     TSharedPtr<FMRWatercraftHydro> WatercraftPhysicsProfile;
-    void BuildIrregularStreets(const FBox& BaseBox);
-    void BuildStreetSignals(const FBox& BaseBox,const TMap<FString,FVector>& Positions);
+    void BuildIrregularStreets(const FBox& BaseBox,const MRStreetGeometry::Index* StreetVisuals);
+    void BuildStreetSignals(const FBox& BaseBox,const TMap<FString,FVector>& Positions,const MRStreetGeometry::Index* StreetVisuals);
     void TickStreetSignals();
     EMRStreetPhase StreetPhase(const FMRStreetArm& Signal) const;
     TArray<FMRStreetArm> StreetSignals;
