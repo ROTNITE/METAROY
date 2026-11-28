@@ -7,7 +7,7 @@ import math
 from random import Random
 import uuid
 
-from contracts.protocol import ID, POINT, ProtocolError, object_schema, validate, validate_decision
+from contracts.protocol import ID, POINT, OPERATIONS, ProtocolError, object_schema, validate, validate_decision
 from environment.geometry import segment_clear
 
 
@@ -35,9 +35,11 @@ ACTIONS = {
     'hold': ('move', object_schema({})),
 }
 SCENARIOS = {
-    name: {'roles': [{'id': 'scout', 'required_capabilities': ['sense']}],
+    name: {'roles': [{'id': 'scout', 'required_capabilities': ['sense']},
+                     {'id': 'executor', 'required_capabilities': ['carry']},
+                     {'id': 'rescuer', 'required_capabilities': ['carry']}],
            'parameters_schema': object_schema({})}
-    for name in ('coverage_search', 'sector_recheck')
+    for name in ('coverage_search', 'sector_recheck', 'coordination_reconfiguration')
 }
 
 
@@ -47,7 +49,7 @@ def capabilities(*, estimates=True):
               'mission_ids': ['search_and_rescue'], 'agent_kinds': ['aerial', 'ground'],
               'coordinates': {'unit': 'meter', 'axes': ['x', 'y', 'z']},
               'time_model': {'external_step': 1, 'wall_pacing': 'accelerated'},
-              'supported_operations': ['keep', 'select', 'switch', 'safe_stop'],
+              'supported_operations': list(OPERATIONS),
               'supported_scenarios': SCENARIOS,
               'supported_actions': {action: {'required_capabilities': [required], 'parameters_schema': schema}
                                     for action, (required, schema) in ACTIONS.items()},
@@ -95,6 +97,8 @@ class World:
         self.status = 'running'
         self.closed = False
         self.configuration = {'scenario_ids': [], 'role_assignments': {}}
+        self.synthesized = {}
+        self.scenario_parameters = {}
         self.journal = []
         self.replays = {}
         self.ack_queue = []
@@ -175,7 +179,9 @@ class World:
                                         'stale_data_ratio': 0. if connected else .5, 'contradiction_count': 0,
                                         'unknown_state_ratio': 0. if connected else .5},
                 'constraints': [], 'events': list(self.events),
-                'metrics': {'confirmed_evacuations': sum(t['evacuation_state'] == 'evacuated' for t in targets),
+                'metrics': {'mission_completion': sum(p.custody == self.base for p in self.people.values()) / len(self.people),
+                            'safety_violations': 0,
+                            'confirmed_evacuations': sum(t['evacuation_state'] == 'evacuated' for t in targets),
                             'known_people': len(targets), 'energy_fraction_spent': sum(1. - e for e in self.energy.values())}}
 
     def response(self, request_id, *, step=False):
@@ -183,7 +189,8 @@ class World:
         response = {k: observation[k] for k in ('protocol_version', 'episode_id', 'request_id', 'time')}
         response.update(status=self.status, observation=observation)
         if step:
-            response.update(command_results=list(self.records), events=list(self.events), metrics=observation['metrics'])
+            response.update(command_results=list(self.records), events=list(self.events), metrics=observation['metrics'],
+                            done=self.status != 'running')
         return response
 
     def _clear(self, start, end):
@@ -215,6 +222,24 @@ class World:
         elif action == 'observe' and agent.energy - SCAN_COST < MINIMUM:
             raise ProtocolError('RESOURCE_EXHAUSTED', 'Scan would spend the energy reserve')
 
+    @staticmethod
+    def _synthesis(selected):
+        # Listing 3 base declaration: no project-specific graph is required.
+        strings = {'type': 'array', 'items': ID}
+        array = {'type': 'array'}
+        schema = object_schema({'id': ID, 'version': ID, 'title': ID,
+            'game_model': object_schema({'class': ID, 'players': array,
+                'information_structure': ID, 'stability_criterion': ID}),
+            'applicability': object_schema({name: array for name in ('entry', 'continuation', 'exit', 'emergency_exit')}),
+            'roles': {'type': 'array', 'items': {'anyOf': [ID, object_schema({'id': ID})]}},
+            'objectives': array, 'constraints': array, 'allowed_actions': strings,
+            'transition_targets': strings, 'metrics': array})
+        scenario = selected['synthesized_scenario']
+        validate(scenario, schema, 'INVALID_SCENARIO')
+        if selected['scenario_ids'] != [scenario['id']]:
+            raise ProtocolError('INVALID_SCENARIO', 'Synthesis ID does not match selection')
+        return scenario
+
     def step(self, decision, body_sha, declarations):
         identifier = decision.get('decision_id')
         if isinstance(identifier, str) and identifier in self.replays:
@@ -227,26 +252,59 @@ class World:
         validate_decision(decision, self.observation(decision.get('request_id')), declarations)
         operation = decision['operation']
         selected = decision['selected_configuration']
+        ids = selected['scenario_ids']
+        roles = decision['role_assignments']
+        previous = decision['previous_configuration']
+        old_ids = self.configuration['scenario_ids']
+        old_roles = self.configuration['role_assignments']
         if (operation not in declarations['supported_operations'] or
-                decision['previous_configuration'] != self.configuration):
+                set(previous['scenario_ids']) != set(old_ids) or previous['role_assignments'] != old_roles):
             raise ProtocolError('INVALID_SCENARIO', 'Decision does not match the active 2D scenario')
-        if operation in ('select', 'switch'):
-            if len(selected['scenario_ids']) != 1 or selected['scenario_ids'][0] not in SCENARIOS:
+        if len(ids) != len(set(ids)):
+            raise ProtocolError('INVALID_SCENARIO', 'Duplicate scenario membership')
+        catalog = {**SCENARIOS, **self.synthesized}
+        new_scenario = None
+        if operation == 'synthesize':
+            new_scenario = self._synthesis(selected)
+            if new_scenario['id'] in SCENARIOS:
+                raise ProtocolError('INVALID_SCENARIO', 'Synthesis cannot replace a declared scenario')
+            if new_scenario['id'] in self.synthesized and self.synthesized[new_scenario['id']] != new_scenario:
+                raise ProtocolError('INVALID_SCENARIO', 'Synthesis cannot redefine an existing scenario ID')
+            catalog[new_scenario['id']] = new_scenario
+        if operation != 'safe_stop':
+            if any(sid not in catalog for sid in ids):
                 raise ProtocolError('INVALID_SCENARIO', 'Unknown 2D scenario')
-            if any(role != 'scout' or self.agents[owner].kind != 'aerial'
-                   for owner, role in decision['role_assignments'].items()):
-                raise ProtocolError('INVALID_SCENARIO', 'Invalid 2D scenario role')
-            validate(selected['parameters'], SCENARIOS[selected['scenario_ids'][0]]['parameters_schema'], 'INVALID_SCENARIO')
-        elif operation == 'keep' and (selected['scenario_ids'] != self.configuration['scenario_ids'] or
-                                     decision['role_assignments'] != self.configuration['role_assignments']):
-            raise ProtocolError('INVALID_SCENARIO', 'Keep must retain the active configuration')
+            if operation in ('select', 'switch') and len(ids) != 1 or operation == 'compose' and len(ids) < 2:
+                raise ProtocolError('INVALID_SCENARIO', 'Invalid scenario cardinality')
+            if operation in ('keep', 'modify') and (set(ids) != set(old_ids) or roles != old_roles):
+                raise ProtocolError('INVALID_SCENARIO', 'Operation must retain scenario membership and roles')
+            role_specs = {}
+            for sid in ids:
+                for spec in catalog[sid]['roles']:
+                    spec = {'id': spec} if isinstance(spec, str) else spec
+                    role_specs.setdefault(spec['id'], []).append(set(spec.get('required_capabilities', [])))
+            for owner, role in roles.items():
+                caps = {'move', 'sense' if self.agents[owner].kind == 'aerial' else 'carry'}
+                if not any(required <= caps for required in role_specs.get(role, [])):
+                    raise ProtocolError('INVALID_SCENARIO', 'Invalid 2D scenario role')
+            for sid in ids:
+                params = selected['parameters']
+                if 'by_scenario' in params:
+                    groups = params['by_scenario']
+                    if not isinstance(groups, dict) or set(groups) != set(ids):
+                        raise ProtocolError('INVALID_SCENARIO', 'Invalid composite parameters')
+                    params = groups[sid]
+                validate(params, catalog[sid].get('parameters_schema', object_schema({})), 'INVALID_SCENARIO')
         owners = [row['agent_id'] for row in decision['commands']]
         if len(owners) != len(set(owners)) or operation == 'safe_stop' and owners:
             raise ProtocolError('INVALID_COMMAND', 'Expected one action per agent and a command-free safe stop')
         for command in decision['commands']:
             self._validate_action(command)
-        if operation in ('select', 'switch'):
-            self.configuration = {'scenario_ids': selected['scenario_ids'], 'role_assignments': decision['role_assignments']}
+        if new_scenario is not None:
+            self.synthesized[new_scenario['id']] = deepcopy(new_scenario)
+        if operation not in ('keep', 'safe_stop'):
+            self.configuration = {'scenario_ids': list(ids), 'role_assignments': dict(roles)}
+            self.scenario_parameters = deepcopy(selected['parameters'])
 
         self.events, self.records = [], []
         for index, command in enumerate(decision['commands']):
