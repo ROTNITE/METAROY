@@ -1,6 +1,8 @@
 """Aggregate externally assessed Q values without inventing a scoring rubric.
 
-Main specification section 12.6: sum of cross-team Q / (|C| * |E|).
+Historical main specification section 12.6: sum of cross-team Q / (|C| * |E|).
+The November 28 tournament regulation adds a per-team 70/30 directional
+weighting; use aggregate_tournament_m5 for that explicitly labelled estimate.
 A team ID determines diagonal exclusion; all component IDs are distinct
 within each role. Missing evidence is not a zero and never a verified score.
 """
@@ -52,3 +54,33 @@ def aggregate_m5(controllers,environments,assessments,*,method_id=None):
             'required_pairs':len(pairs),'assessed_pairs':len(values),
             'missing_pairs':[{'controller_id':c,'environment_id':e} for c,e in missing],
             'excluded_same_team_pairs':denominator-len(pairs)}
+
+
+def aggregate_tournament_m5(controllers,environments,assessments,*,team_id,method_id=None):
+    """Directional estimate from supplied Q, not an official organizer score.
+
+    REGULATION_TECH section 5: 70% outbound, 30% inbound. The precise
+    organizer Q rubric is not provided. Average across registered external
+    pairs in each direction only; missing required assessments remain unknown.
+    """
+    controllers=_registry(controllers,'controller')
+    environments=_registry(environments,'environment')
+    if not isinstance(team_id,str) or not team_id.strip():
+        raise ValueError('team_id must be a nonempty string')
+    rows=list(assessments)
+    # Reuse the legacy input/provenance validation, but not its denominator.
+    aggregate_m5(controllers,environments,rows,method_id=method_id)
+    values={(row['controller_id'],row['environment_id']):row['q'] for row in rows}
+    def direction(outbound):
+        pairs=sorted((c,e) for c,ct in controllers.items() for e,et in environments.items()
+                     if ((ct==team_id and et!=team_id) if outbound else (ct!=team_id and et==team_id)))
+        missing=[(c,e) for c,e in pairs if (c,e) not in values]
+        return {'value':fsum(values[p] for p in pairs)/len(pairs) if pairs and not missing else None,
+                'required_pairs':len(pairs),'assessed_pairs':len(pairs)-len(missing),
+                'missing_pairs':[{'controller_id':c,'environment_id':e} for c,e in missing]}
+    outbound,inbound=direction(True),direction(False)
+    ready=outbound['value'] is not None and inbound['value'] is not None
+    return {'value':.7*outbound['value']+.3*inbound['value'] if ready else None,
+            'status':'estimated_from_supplied_q' if ready else 'unverified',
+            'official':False,'team_id':team_id,'method_id':method_id,
+            'weights':{'outbound':.7,'inbound':.3},'outbound':outbound,'inbound':inbound}

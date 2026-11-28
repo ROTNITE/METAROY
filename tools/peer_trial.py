@@ -177,13 +177,15 @@ def summary(report):
     return selected
 
 
-def trial(peer, direction, mode, seed, engine='planar'):
+def trial(peer, direction, mode, seed, engine='planar', *, tournament=False):
     rel, expected, base = PEERS[peer]
     package = ROOT / rel
     row = {"peer":peer,"direction":direction,"mode":mode,"seed":seed,
            "engine":engine if direction=='inbound' else 'partner', "archive_sha256":expected}
+    if tournament:
+        row['measurement'] = 'organizer_normalized_strict_rpc'
     begin = time.monotonic()
-    process = runner = None
+    process = runner = our_process = None
     with tempfile.TemporaryDirectory(prefix="peer-trial-") as directory:
         work = Path(directory)
         try:
@@ -208,30 +210,75 @@ def trial(peer, direction, mode, seed, engine='planar'):
                                            env=env, stdout=plog, stderr=subprocess.STDOUT, start_new_session=True)
                 url = ready(process,component,ports,time.monotonic()+12)
                 row["health_reached"] = True
-                args = [sys.executable,"-B","-X","utf8","tools/run_interop.py",
-                        "our-controller" if direction=="outbound" else "our-environment",
-                        "--seed",str(seed),"--timeout","35","--core-mode",mode,
-                        "--input-package",str(package),"--output",str(work / "report")]
-                if direction == "outbound":
-                    args += ["--environment",url]
+                if tournament:
+                    # No path aliases, schema adapters, or modifications of
+                    # the partner. The new organizer checker owns the loop.
+                    own_component = "controller" if direction == "outbound" else "environment"
+                    own_module = "controller.server" if direction == "outbound" else "environment.server"
+                    with (work / "our-server.log").open("wb") as own_log:
+                        our_process = subprocess.Popen(
+                            [sys.executable, "-B", "-X", "utf8", "-m", own_module, "--port", "18440"],
+                            cwd=ROOT, env=offline_env(work,18440), stdout=own_log,
+                            stderr=subprocess.STDOUT, start_new_session=True)
+                        own_url = ready(our_process,own_component,(18440,),time.monotonic()+12)
+                        env_url, ctrl_url = (url,own_url) if direction=="outbound" else (own_url,url)
+                        report = work / "organizer-report.json"
+                        args = [sys.executable,"-B","-X","utf8","conformance/check_tournament.py",
+                                "pair","--env-url",env_url,"--ctrl-url",ctrl_url,
+                                "--normalize","--strict","--seed",str(seed),
+                                "--max-steps","20","--timeout","15","--json-out",str(report)]
+                        runner = subprocess.Popen(args,cwd=ROOT,env=env,stdout=rlog,
+                                                  stderr=subprocess.STDOUT,start_new_session=True)
+                        row["runner_exit"] = runner.wait(timeout=90)
+                        data = json.loads(report.read_bytes())
+                        row.update(admitted=data["admitted"], pass_count=data["pass"],
+                                   warn_count=data["warn"], fail_count=data["fail"],
+                                   exchange="passed" if data["admitted"] and row["runner_exit"]==0 else "failed")
+                        # Report only check names, bounded status codes and
+                        # counts; raw foreign response bodies remain private.
+                        row["checks"] = [{"check": item["check"],"status": item["status"]}
+                                         for item in data["checks"]]
+                        for item in data["checks"]:
+                            if item["status"]=="PASS" and item["check"]=="Стыковочный прогон":
+                                detail=item.get("detail","")
+                                status=re.search(r"итог=([a-z_]+)",detail)
+                                steps=re.search(r"шагов=(\d+)",detail)
+                                accepted=re.search(r"accepted=(\d+)",detail)
+                                if status: row["status"]=status.group(1)
+                                if steps: row["steps"]=int(steps.group(1))
+                                if accepted: row["accepted"]=int(accepted.group(1))
+                            elif item["status"] in ("FAIL","WARN"):
+                                detail=item.get("detail","")
+                                status=re.search(r"HTTP (\d{3})",detail)
+                                if status: row["first_http_status"]=int(status.group(1))
+                                row["diagnostic"] = item["check"]
+                                break
                 else:
-                    endpoint = "decision" if peer in ("lab","atlas") else "decide"
-                    args += ["--controller",url,"--mode","decide","--engine",engine,
-                             "--environment-port","18440","--decide-path",endpoint,
-                             "--decision-timeout","7"]
-                    if peer=="v9":
-                        args += ["--decide-profile","metaroi-v9"]
-                runner = subprocess.Popen(args,cwd=ROOT,env=env,stdout=rlog,stderr=subprocess.STDOUT,
-                                          start_new_session=True)
-                row["runner_exit"] = runner.wait(timeout=50)
-                report = work / "report" / "report.json"
-                if not report.is_file():
-                    raise RuntimeError("trial runner did not produce report")
-                row.update(summary(json.loads(report.read_bytes())))
+                    args = [sys.executable,"-B","-X","utf8","tools/run_interop.py",
+                            "our-controller" if direction=="outbound" else "our-environment",
+                            "--seed",str(seed),"--timeout","35","--core-mode",mode,
+                            "--input-package",str(package),"--output",str(work / "report")]
+                    if direction == "outbound":
+                        args += ["--environment",url]
+                    else:
+                        endpoint = "decision" if peer in ("lab","atlas") else "decide"
+                        args += ["--controller",url,"--mode","decide","--engine",engine,
+                                 "--environment-port","18440","--decide-path",endpoint,
+                                 "--decision-timeout","7"]
+                        if peer=="v9":
+                            args += ["--decide-profile","metaroi-v9"]
+                    runner = subprocess.Popen(args,cwd=ROOT,env=env,stdout=rlog,stderr=subprocess.STDOUT,
+                                              start_new_session=True)
+                    row["runner_exit"] = runner.wait(timeout=50)
+                    report = work / "report" / "report.json"
+                    if not report.is_file():
+                        raise RuntimeError("trial runner did not produce report")
+                    row.update(summary(json.loads(report.read_bytes())))
         except (OSError,ValueError,RuntimeError,subprocess.SubprocessError) as error:
             row.update(exchange="failed",error=str(error)[:240])
         finally:
             stop(runner)
+            stop(our_process)
             stop(process)
             if not row.get("health_reached"):
                 row.update(startup_diagnostic(work/"peer.log"))
@@ -254,6 +301,14 @@ def main():
     rows = [trial(options.peer,options.direction,options.mode,seed,options.engine) for seed in options.seed or SEEDS]
     print(json.dumps({"completed_trials":len(rows),"passed_exchanges":sum(r.get("exchange")=="passed" for r in rows),
                       "all_inputs_preserved":all(r["archive_preserved"] for r in rows)},ensure_ascii=False),flush=True)
+    if options.mode == 'strict' and options.engine == 'planar':
+        tournament_rows = [trial(options.peer,options.direction,options.mode,seed,options.engine,tournament=True)
+                           for seed in options.seed or SEEDS]
+        print(json.dumps({'measurement':'organizer_normalized_strict_rpc',
+                          'completed_trials':len(tournament_rows),
+                          'admitted_pairs':sum(r.get('admitted',False) for r in tournament_rows),
+                          'all_inputs_preserved':all(r['archive_preserved'] for r in tournament_rows)},ensure_ascii=False),flush=True)
+        rows += tournament_rows
     # This is a measurement job, not a normative acceptance gate. Negative
     # interoperability findings are deliberately preserved, not hidden.
     return 0 if all(r["archive_preserved"] for r in rows) else 1

@@ -1,5 +1,5 @@
 from unittest import TestCase
-from tools.m5_score import aggregate_m5
+from tools.m5_score import aggregate_m5, aggregate_tournament_m5
 
 
 class M5Score(TestCase):
@@ -45,3 +45,30 @@ class M5Score(TestCase):
         result=aggregate_m5({'c':'ours'},{'e':'ours'},[],method_id='agreed-rubric')
         self.assertIsNone(result['value'])
         self.assertEqual(result['required_pairs'],0)
+
+
+    def test_tournament_directional_weights(self):
+        rows=[self.assessment(q=.8),self.assessment('other-c','our-e',.2)]
+        result=aggregate_tournament_m5(self.controllers,self.environments,rows,team_id='ours',method_id='agreed-rubric')
+        self.assertAlmostEqual(result['value'],.62)
+        self.assertEqual(result['outbound']['value'],.8)
+        self.assertEqual(result['inbound']['value'],.2)
+        self.assertFalse(result['official'])
+
+    def test_tournament_missing_direction_is_unknown(self):
+        result=aggregate_tournament_m5(self.controllers,self.environments,[self.assessment()],team_id='ours',method_id='agreed-rubric')
+        self.assertIsNone(result['value'])
+        self.assertIsNone(result['inbound']['value'])
+        self.assertEqual(result['inbound']['required_pairs'],1)
+
+    def test_tournament_unequal_direction_denominators(self):
+        envs={**self.environments,'extra-e':'third'}
+        rows=[self.assessment(q=.8),self.assessment(e='extra-e',q=.2),self.assessment('other-c','our-e',.6)]
+        result=aggregate_tournament_m5(self.controllers,envs,rows,team_id='ours',method_id='agreed-rubric')
+        self.assertAlmostEqual(result['value'],.53)
+        self.assertEqual(result['outbound']['required_pairs'],2)
+        self.assertEqual(result['inbound']['required_pairs'],1)
+
+    def test_tournament_rejects_bad_provenance(self):
+        with self.assertRaises(ValueError):
+            aggregate_tournament_m5(self.controllers,self.environments,[self.assessment(evidence=[])],team_id='ours',method_id='agreed-rubric')
